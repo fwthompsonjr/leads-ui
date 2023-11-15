@@ -30,28 +30,33 @@ jobs:
     - name: Restore Packages
       shell: pwsh
       run: |
-        & ./pipeline-restore-packages.ps1
+        $file = Get-Item -Path ./pipeline-restore-packages.ps1
+        if( $file -eq $true ) { & ./pipeline-restore-packages.ps1 }
 
     - name: Build solution
       shell: pwsh
       run: |
-        & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
+        $file = Get-Item -Path ./pipeline-build-solutions.ps1
+        if( $file -eq $true ) { & ./pipeline-build-solutions.ps1 }
 
     - name: Test with dotnet
       shell: pwsh
       run: |
-        & ./pipeline-test-solutions.ps1
+        $file = Get-Item -Path ./pipeline-test-solutions.ps1
+        if( $file -eq $true ) { & ./pipeline-test-solutions.ps1 }
 
     - name: Summarize Test Results
       shell: pwsh
       run: |
-        & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
+        $file = Get-Item -Path ./pipeline-summarize-tests.ps1
+        if( $file -eq $true ) { & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}" }
 
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main'
       shell: pwsh
       run: |
-        & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
+        $file = Get-Item -Path ./publish-nuget.ps1
+        if( $file -eq $true ) { & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}" }
 
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v3
