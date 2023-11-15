@@ -1,0 +1,67 @@
+# This workflow will build a .NET framework project(s)
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: CI .NET Framework
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
+
+    - name: Set Release Version
+      run: |
+          echo "BUILD_VERSION=${{format('{0}.{1}', steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+
+    - name: Echo Release Version
+      run: echo ${{ env.BUILD_VERSION }}
+
+    - name: Restore Packages
+      shell: pwsh
+      run: |
+        $file = Get-Item -Path ./pipeline-restore-packages.ps1
+        if( $file -eq $true ) { & ./pipeline-restore-packages.ps1 }
+
+    - name: Build solution
+      shell: pwsh
+      run: |
+        $file = Get-Item -Path ./pipeline-build-solutions.ps1
+        if( $file -eq $true ) { & ./pipeline-build-solutions.ps1 }
+
+    - name: Test with dotnet
+      shell: pwsh
+      run: |
+        $file = Get-Item -Path ./pipeline-test-solutions.ps1
+        if( $file -eq $true ) { & ./pipeline-test-solutions.ps1 }
+
+    - name: Summarize Test Results
+      shell: pwsh
+      run: |
+        $file = Get-Item -Path ./pipeline-summarize-tests.ps1
+        if( $file -eq $true ) { & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}" }
+
+    - name: Publish MyGet Packages
+      if: github.ref == 'refs/heads/main'
+      shell: pwsh
+      run: |
+        $file = Get-Item -Path ./publish-nuget.ps1
+        if( $file -eq $true ) { & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}" }
+
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: ~/**/*.trx
+      # Use always() to always run this step to publish test results when there are test failures
+      if: ${{ always() }}
