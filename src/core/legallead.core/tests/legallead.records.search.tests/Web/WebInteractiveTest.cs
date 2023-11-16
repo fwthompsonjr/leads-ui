@@ -17,7 +17,7 @@ namespace legallead.records.search.Tests
         public void CanInitialize()
         {
             var settings = SettingsManager.GetNavigation();
-            var sttg = settings[0];
+            var sttg = settings.First();
             var startDate = DateTime.Now.AddMonths(-5);
             var endingDate = DateTime.Now.AddMonths(-4);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -40,7 +40,7 @@ namespace legallead.records.search.Tests
             var search = new DirectorySearch(di, "*chrome.exe", 2);
             var found = search.FileList;
             Assert.IsTrue(found.Any());
-            Console.WriteLine(found[0]);
+            Console.WriteLine(found.First());
         }
 
 
@@ -62,7 +62,7 @@ namespace legallead.records.search.Tests
             }
 
             var settings = SettingsManager.GetNavigation();
-            var sttg = settings[0];
+            var sttg = settings.First();
             var startDate = DateTime.Now.Date.AddDays(-4);
             var endingDate = DateTime.Now.Date.AddDays(-1);
             var keyZero = new WebNavigationKey { Name = "SearchComboIndex", Value = "2" };
@@ -81,21 +81,21 @@ namespace legallead.records.search.Tests
                 };
             // add key for combo-index
 
-            var searchTypeIndex = sttg.Keys.Find(x => x.Name.Equals("SearchComboIndex"));
+            var searchTypeIndex = sttg.Keys.FirstOrDefault(x => x.Name.Equals("SearchComboIndex"));
             if (searchTypeIndex == null)
             {
                 sttg.Keys.Add(keyZero);
             }
             // add key for case-search
 
-            var caseTypeIndex = sttg.Keys.Find(x => x.Name.Equals("CaseSearchType"));
+            var caseTypeIndex = sttg.Keys.FirstOrDefault(x => x.Name.Equals("CaseSearchType"));
             if (caseTypeIndex == null)
             {
                 sttg.Keys.Add(caseSearch);
             }
             // add key for district-search
 
-            var districtTypeIndex = sttg.Keys.Find(x => x.Name.Equals("DistrictSearchType"));
+            var districtTypeIndex = sttg.Keys.FirstOrDefault(x => x.Name.Equals("DistrictSearchType"));
             if (districtTypeIndex == null)
             {
                 sttg.Keys.Add(districtSearch);
@@ -118,7 +118,7 @@ namespace legallead.records.search.Tests
             }
 
             var settings = SettingsManager.GetNavigation();
-            var sttg = settings[0];
+            var sttg = settings.First();
             var startDate = DateTime.Now.Date.AddDays(-4);
             var endingDate = DateTime.Now.Date.AddDays(-1);
             var webactive = new WebInteractive(sttg, startDate, endingDate);

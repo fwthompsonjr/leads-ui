@@ -7,6 +7,12 @@ namespace legallead.records.search.Classes
 {
     public class CollinWebInteractive : TarrantWebInteractive
     {
+        private class AddressCondition
+        {
+            public string Name { get; set; }
+            public bool IsViolation { get; set; }
+        }
+
         public CollinWebInteractive(WebNavigationParameter parameters) : base(parameters)
         {
         }
@@ -37,6 +43,7 @@ namespace legallead.records.search.Classes
                 string navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile);
                 List<string> sources = navigationFile.Split(',').ToList();
                 List<HLinkDataRow> cases = new();
+                List<PersonAddress>? people = new();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
                 CaseTypeSelectionDto caseTypes = CaseTypeSelectionDto.GetDto(CommonKeyIndexes.CollinCountyCaseType);
                 int caseTypeId = GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex);
@@ -52,7 +59,7 @@ namespace legallead.records.search.Classes
                         StringComparison.CurrentCultureIgnoreCase));
                 searchSelect.Locator.Query = selectedCase.Options[searchTypeId].Query;
                 webFetch = SearchWeb(results, steps, startingDate, startingDate,
-                    ref cases, out List<PersonAddress>? people);
+                    ref cases, out people);
                 peopleList.AddRange(people);
                 webFetch.PeopleList = peopleList;
                 startingDate = startingDate.AddDays(1);
@@ -117,8 +124,8 @@ namespace legallead.records.search.Classes
             }
             finally
             {
-                driver?.Quit();
-                driver?.Dispose();
+                driver.Quit();
+                driver.Dispose();
             }
         }
 
@@ -229,10 +236,13 @@ namespace legallead.records.search.Classes
         {
             IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
             IWebElement? elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
-            if (criminalLink != null && elementCaseName != null)
+            if (criminalLink != null)
             {
-                linkData.CriminalCaseStyle = elementCaseName.Text;
-                linkData.IsCriminal = true;
+                if (elementCaseName != null)
+                {
+                    linkData.CriminalCaseStyle = elementCaseName.Text;
+                    linkData.IsCriminal = true;
+                }
             }
             IWebElement probateLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.ProbateLinkXpath));
             if (probateLink != null)

@@ -10,7 +10,6 @@ using System.Xml;
 using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
-using Shouldly;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -59,9 +58,7 @@ namespace legallead.records.search.Tests.Data
         {
             const string testFile = @"C:/Code/SandBox/RecordSearch/legallead.records.search.Tests/bin/Debug/xml/data/data_rqst_dentoncounty_04152019_04172019.xml";
             var settings = SettingsManager.GetNavigation();
-            settings.ShouldNotBeNull();
-            var sttg = settings[0];
-            sttg.ShouldNotBeNull();
+            var sttg = settings.First();
             var startDate = DateTime.Now.Date.AddDays(-2);
             var endingDate = DateTime.Now.Date.AddDays(0);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -142,7 +139,7 @@ namespace legallead.records.search.Tests.Data
                 return;
             }
 
-            var failing = noPlantiffList[0];
+            var failing = noPlantiffList.First();
             var actual = failing.Plantiff;
 
         }
@@ -297,8 +294,8 @@ namespace legallead.records.search.Tests.Data
         private static string GetAppDirectoryName()
         {
 
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            return Path.GetDirectoryName(execName) ?? string.Empty;
+            var execName = new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath;
+            return Path.GetDirectoryName(execName);
         }
     }
 }
