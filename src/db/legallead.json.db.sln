@@ -5,32 +5,35 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "component", "component", "{4F942182-3616-4455-A351-DE833903FB1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.json.db", "component\legallead.json.db\legallead.json.db.csproj", "{634429D8-7490-48CD-9C4C-476B276F7C45}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DF44824A-99E2-4C3B-A976-9652CDF3BBAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.json.db.tests", "tests\legallead.json.db.tests\legallead.json.db.tests.csproj", "{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.json.db", "component\legallead.json.db.csproj", "{771FFD39-C3B4-45E3-B401-464211488892}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.json.db.tests", "tests\legallead.json.db.tests.csproj", "{693E1414-7C5F-4992-B881-9BACDE2E4857}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{771FFD39-C3B4-45E3-B401-464211488892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{771FFD39-C3B4-45E3-B401-464211488892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{771FFD39-C3B4-45E3-B401-464211488892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{771FFD39-C3B4-45E3-B401-464211488892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693E1414-7C5F-4992-B881-9BACDE2E4857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693E1414-7C5F-4992-B881-9BACDE2E4857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693E1414-7C5F-4992-B881-9BACDE2E4857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693E1414-7C5F-4992-B881-9BACDE2E4857}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{634429D8-7490-48CD-9C4C-476B276F7C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{634429D8-7490-48CD-9C4C-476B276F7C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{634429D8-7490-48CD-9C4C-476B276F7C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{634429D8-7490-48CD-9C4C-476B276F7C45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{634429D8-7490-48CD-9C4C-476B276F7C45} = {4F942182-3616-4455-A351-DE833903FB1B}
-		{B9E0E183-6D52-4BB8-B0A0-3E7401F7E85A} = {DF44824A-99E2-4C3B-A976-9652CDF3BBAA}
+		{771FFD39-C3B4-45E3-B401-464211488892} = {4F942182-3616-4455-A351-DE833903FB1B}
+		{693E1414-7C5F-4992-B881-9BACDE2E4857} = {DF44824A-99E2-4C3B-A976-9652CDF3BBAA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F64C83C4-DEE3-4336-8408-2FA573FEAD3F}
 	EndGlobalSection
 EndGlobal
