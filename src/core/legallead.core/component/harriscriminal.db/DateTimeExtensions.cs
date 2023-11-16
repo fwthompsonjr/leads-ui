@@ -9,7 +9,7 @@ namespace legallead.harriscriminal.db
             string dateFormat,
             DateTime dateDefault)
         {
-            if (string.IsNullOrEmpty(input) | string.IsNullOrEmpty(dateFormat))
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(dateFormat))
             {
                 return dateDefault;
             }
@@ -27,7 +27,7 @@ namespace legallead.harriscriminal.db
             string dateFormat,
             string dateDefault)
         {
-            if (string.IsNullOrEmpty(input) | string.IsNullOrEmpty(dateFormat))
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(dateFormat))
             {
                 return dateDefault;
             }

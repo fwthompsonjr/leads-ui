@@ -11,7 +11,7 @@ namespace legallead.harriscriminal.db
         {
             var db = Startup.CaseStyles.DataList;
             var fileDate = filingDate.ToString("M/d/yyyy", GetCulture);
-            return db.Any(f => f.FileDate.Equals(fileDate, Oic));
+            return db.Exists(f => f.FileDate.Equals(fileDate, Oic));
         }
 
         public static bool HasDetail(DateTime filingDate)
@@ -24,13 +24,13 @@ namespace legallead.harriscriminal.db
             var fileDate = filingDate.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
             foreach (var dataset in db)
             {
-                var found = dataset.Data.Any(a => a.FilingDate.Equals(fileDate, Oic));
+                var found = dataset.Data.Exists(a => a.FilingDate.Equals(fileDate, Oic));
                 if (!found)
                 {
                     continue;
                 }
 
-                found = dataset.Data.Any(a =>
+                found = dataset.Data.Exists(a =>
                     a.FilingDate.Equals(fileDate, Oic));
                 if (found)
                 {
@@ -50,13 +50,13 @@ namespace legallead.harriscriminal.db
             var fileDate = filingDate.ToString("M/d/yyyy", CultureInfo.InvariantCulture);
             foreach (var dataset in db)
             {
-                var found = dataset.Data.Any(a => a.FilingDate.Equals(fileDate, Oic));
+                var found = dataset.Data.Exists(a => a.FilingDate.Equals(fileDate, Oic));
                 if (!found)
                 {
                     continue;
                 }
 
-                found = dataset.Data.Any(a =>
+                found = dataset.Data.Exists(a =>
                     a.FilingDate.Equals(fileDate, Oic) &&
                     a.CaseNumber.Equals(caseNumber, Oic));
                 if (found)
