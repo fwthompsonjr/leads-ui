@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using legallead.records.search.Classes;
 using legallead.records.search.Dto;
+using Shouldly;
 
 namespace legallead.records.search.Tests
 {
@@ -62,7 +63,7 @@ namespace legallead.records.search.Tests
             var parms = SettingsManager.GetNavigation();
             Assert.IsNotNull(parms);
             Assert.IsTrue(parms.Count > 0);
-            var sttg = parms.First();
+            var sttg = parms[0];
             var startDate = DateTime.Now.AddDays(-3);
             var endingDate = DateTime.Now.AddDays(-1);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -79,7 +80,7 @@ namespace legallead.records.search.Tests
             var parms = SettingsManager.GetNavigation();
             Assert.IsNotNull(parms);
             Assert.IsTrue(parms.Count > 0);
-            var sttg = parms.First();
+            var sttg = parms[0];
             var startDate = DateTime.Now.AddDays(-3);
             var endingDate = DateTime.Now.AddDays(-1);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -97,7 +98,7 @@ namespace legallead.records.search.Tests
             var parms = SettingsManager.GetNavigation();
             Assert.IsNotNull(parms);
             Assert.IsTrue(parms.Count > 0);
-            var sttg = parms.First();
+            var sttg = parms[0];
             var startDate = DateTime.Now.AddDays(-3);
             var endingDate = DateTime.Now.AddDays(-1);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -114,7 +115,7 @@ namespace legallead.records.search.Tests
             var parms = SettingsManager.GetNavigation();
             Assert.IsNotNull(parms);
             Assert.IsTrue(parms.Count > 0);
-            var sttg = parms.First();
+            var sttg = parms[0];
             var startDate = DateTime.Now.AddDays(-3);
             var endingDate = DateTime.Now.AddDays(-1);
             var webactive = new WebInteractive(sttg, startDate, endingDate);
@@ -138,7 +139,7 @@ namespace legallead.records.search.Tests
             var parms = SettingsManager.GetNavigation();
             Assert.IsNotNull(parms);
             Assert.IsTrue(parms.Count > 0);
-            var sttg = parms.First();
+            var sttg = parms[0];
             var dataRw = new Models.HLinkDataRow
             {
                 Address = "1234 Somewhare",
@@ -162,6 +163,7 @@ namespace legallead.records.search.Tests
             const string lineBreak = @"<br/>";
             const string addressLine = @"c/o Corporation Service Company<br/>  211 E. 7th Street, Suite 620<br/>  Austin, TX 78701-3218";
             var addresses = addressLine.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
+            addresses.ShouldNotBeNull();
             addresses.ForEach(a => a.Trim());
             addresses.ForEach(Console.WriteLine);
         }

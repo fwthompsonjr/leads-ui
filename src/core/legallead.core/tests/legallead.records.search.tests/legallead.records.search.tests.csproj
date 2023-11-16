@@ -27,4 +27,49 @@
 		<PackageReference Include="Shouldly" Version="4.2.1" />
 		<PackageReference Include="StructureMap" Version="4.7.1" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Json\collin-civil-and-family-case-parameter.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collin-criminal-case-parameter.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collin-justice-case-parameter.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collin-probate-case-parameter.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_civil_family.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_criminal_civil_family.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_criminal_criminal.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_criminal_justice.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_criminal_probate.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_justice.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\collincounty_probate.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\tarrantcounty_all_ccl.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\tarrantcounty_all_jp.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Json\tarrantcounty_all_probate.csv">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>

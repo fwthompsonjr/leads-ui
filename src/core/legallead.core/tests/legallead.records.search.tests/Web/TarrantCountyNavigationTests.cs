@@ -37,8 +37,8 @@ namespace legallead.records.search.Tests
                 .GetNavigation().Find(x => x.Id == 10);
             var datelist = new List<string> { "startDate", "endDate" };
             var keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
-            keys.First().Value = startingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
-            keys.Last().Value = endingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
+            keys[0].Value = startingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
+            keys[^1].Value = endingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
             Assert.IsNotNull(settings);
 
         }
@@ -85,7 +85,7 @@ namespace legallead.records.search.Tests
                             item.ExpectedValue = endingDate.Date.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
                         }
                     }
-                    var action = ElementActions.FirstOrDefault(x => x.ActionName.Equals(item.ActionName));
+                    var action = ElementActions.Find(x => x.ActionName.Equals(item.ActionName));
                     if (action == null)
                     {
                         continue;
