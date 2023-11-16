@@ -32,12 +32,12 @@
 
         private static string GetDate(string dateFiled, string dateFormat)
         {
-            var currentDate = DateTime.Now.ToString("s");
+            string currentDate = DateTime.Now.ToString("s");
             if (string.IsNullOrEmpty(dateFiled) | string.IsNullOrEmpty(dateFormat))
             {
                 dateFiled = currentDate;
             }
-            var date = dateFiled.ToExactDate(dateFormat, DateTime.MaxValue);
+            DateTime date = dateFiled.ToExactDate(dateFormat, DateTime.MaxValue);
             if (date != DateTime.MaxValue)
             {
                 return date.ToString("s");

@@ -131,7 +131,7 @@ namespace legallead.records.search.Db
                 Current.Messages = new List<HccMessage>();
             }
 
-            var nextMessage = Current.Messages.LastOrDefault() ?? new HccMessage();
+            HccMessage nextMessage = Current.Messages.LastOrDefault() ?? new HccMessage();
             Current.Messages.Add(new HccMessage
             {
                 Date = DateTime.Now,

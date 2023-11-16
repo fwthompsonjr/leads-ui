@@ -25,11 +25,11 @@ namespace legallead.records.search.Dto
     public static class WebDriverDtoExtensions
     {
         private static string _dtoContent;
-        private static string DtoContent => _dtoContent ?? (_dtoContent = Get());
+        private static string DtoContent => _dtoContent ??= Get();
 
         private static string Get()
         {
-            var dataFile = DataFile();
+            string dataFile = DataFile();
             return File.ReadAllText(dataFile);
         }
 
@@ -40,7 +40,7 @@ namespace legallead.records.search.Dto
                 return dto;
             }
 
-            var content = DtoContent;
+            string content = DtoContent;
             return JConn.DeserializeObject<WebDriverDto>(content);
         }
 
@@ -76,7 +76,7 @@ namespace legallead.records.search.Dto
                 throw new ArgumentOutOfRangeException(nameof(dto));
             }
 
-            var dataFile = DataFile();
+            string dataFile = DataFile();
             if (File.Exists(dataFile))
             {
                 File.Delete(dataFile);
@@ -98,8 +98,8 @@ namespace legallead.records.search.Dto
         {
             const string fileSuffix = "webDrivers";
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,

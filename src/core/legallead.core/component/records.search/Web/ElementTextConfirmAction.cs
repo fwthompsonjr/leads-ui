@@ -16,7 +16,7 @@
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var selector = Byy.CssSelector(item.Locator.Query);
+            Byy selector = Byy.CssSelector(item.Locator.Query);
             GetAssertion.MatchText(selector,
                 item.DisplayName, item.ExpectedValue);
         }

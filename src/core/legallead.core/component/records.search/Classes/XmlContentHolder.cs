@@ -4,7 +4,6 @@ using System.Xml;
 
 namespace legallead.records.search.Classes
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
     public class XmlContentHolder
     {
         public string FileName { get; set; }
@@ -52,7 +51,7 @@ namespace legallead.records.search.Classes
 
         public List<PersonAddress> GetPersonAddresses()
         {
-            var people = People;
+            XmlNode people = People;
             if (people == null)
             {
                 return null;
@@ -63,10 +62,10 @@ namespace legallead.records.search.Classes
                 return new List<PersonAddress>();
             }
 
-            var addressList = new List<PersonAddress>();
-            foreach (var personNode in people.ChildNodes.Cast<XmlNode>())
+            List<PersonAddress> addressList = new();
+            foreach (XmlNode personNode in people.ChildNodes.Cast<XmlNode>())
             {
-                var addressPerson = PersonAddress.ConvertFrom(personNode);
+                PersonAddress addressPerson = PersonAddress.ConvertFrom(personNode);
                 if (addressPerson == null)
                 {
                     continue;
@@ -120,18 +119,12 @@ namespace legallead.records.search.Classes
                 throw new ArgumentNullException(nameof(dta));
             }
 
-            if (CharacterData == null)
-            {
-                CharacterData = new StringBuilder("");
-            }
+            CharacterData ??= new StringBuilder("");
 
-            if (CharacterPeople == null)
-            {
-                CharacterPeople = new StringBuilder("");
-            }
+            CharacterPeople ??= new StringBuilder("");
 
-            var openTable = @"<table style='border-collapse: collapse; border: 1px solid black;'>";
-            var opnTable = openTable + @"<tr style='border: 1px solid black;'>";
+            string openTable = @"<table style='border-collapse: collapse; border: 1px solid black;'>";
+            string opnTable = openTable + @"<tr style='border: 1px solid black;'>";
             opnTable += Environment.NewLine;
             opnTable += @"<td colspan='2' style='border: 1px solid black;'>Case Results</td></tr>";
             opnTable += Environment.NewLine;
@@ -139,26 +132,26 @@ namespace legallead.records.search.Classes
             const string fmttbl = @"{0}{1}{2}";
             CleanHtml(dta.Data);
             CharacterData.AppendLine(dta.Data);
-            var cnode = (XmlCDataSection)Data.FirstChild;
+            XmlCDataSection? cnode = (XmlCDataSection)Data.FirstChild;
             cnode.Data = string.Format(
                 CultureInfo.CurrentCulture,
                 fmttbl,
                 openTable,
                 CharacterData.ToString(),
                 closeTable);
-            var person = People.FirstChild.CloneNode(true);
+            XmlNode person = People.FirstChild.CloneNode(true);
             if (dta.IsCriminal & dta.IsMapped)
             {
                 // System.Diagnostics.Debugger.Break();
             }
             person.ChildNodes[0].InnerText = dta.Defendant;
-            var addressNode = person.ChildNodes[1];
+            XmlNode? addressNode = person.ChildNodes[1];
             ((XmlCDataSection)(addressNode.FirstChild)).Data = dta.Address;
             ParseAddressInformation(dta.Address, addressNode);
             person = MapExtraData(dta, person);
             People.AppendChild(person);
 
-            var personHtml = PersonHtml(dta);
+            string personHtml = PersonHtml(dta);
             if (!string.IsNullOrEmpty(personHtml))
             {
                 personHtml = personHtml.Replace(@"<tr>", @"<tr style='border: 1px solid black;'>");
@@ -193,27 +186,27 @@ namespace legallead.records.search.Classes
                 return addressNode;
             }
 
-            var addresses = address.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
+            List<string> addresses = address.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
             if (addresses.Count <= 1 || addresses.Count > 4)
             {
                 return addressNode;
             }
 
-            var zipNode = addressNode.SelectSingleNode("zip");
-            var addressA = addressNode.SelectSingleNode("addressA");
-            var addressB = addressNode.SelectSingleNode("addressB");
-            var addressC = addressNode.SelectSingleNode("addressC");
+            XmlNode? zipNode = addressNode.SelectSingleNode("zip");
+            XmlNode? addressA = addressNode.SelectSingleNode("addressA");
+            XmlNode? addressB = addressNode.SelectSingleNode("addressB");
+            XmlNode? addressC = addressNode.SelectSingleNode("addressC");
             // append a cdata section
-            var ndes = new List<XmlNode> { zipNode, addressA, addressB, addressC };
-            foreach (var item in ndes)
+            List<XmlNode> ndes = new() { zipNode, addressA, addressB, addressC };
+            foreach (XmlNode item in ndes)
             {
-                var cdta = item.OwnerDocument.CreateCDataSection(string.Empty);
+                XmlCDataSection cdta = item.OwnerDocument.CreateCDataSection(string.Empty);
                 item.AppendChild(cdta);
             }
             addresses = RemoveBlank(addresses);
-            var firstItem = addresses.First().Trim().ToUpper(CultureInfo.CurrentCulture);
-            var lastItem = addresses.Last().Trim().ToUpper(CultureInfo.CurrentCulture);
-            var middleItem = GetMiddleAddress(addresses).Trim().ToUpper(CultureInfo.CurrentCulture);
+            string firstItem = addresses[0].Trim().ToUpper(CultureInfo.CurrentCulture);
+            string lastItem = addresses[^1].Trim().ToUpper(CultureInfo.CurrentCulture);
+            string middleItem = GetMiddleAddress(addresses).Trim().ToUpper(CultureInfo.CurrentCulture);
             ((XmlCDataSection)(zipNode.FirstChild)).Data = ParseZipCode(lastItem);
             ((XmlCDataSection)(addressC.FirstChild)).Data = lastItem;
             ((XmlCDataSection)(addressA.FirstChild)).Data = firstItem;
@@ -223,7 +216,7 @@ namespace legallead.records.search.Classes
 
         private static string ParseZipCode(string lastItem)
         {
-            var pieces = lastItem.Split(' ').ToList();
+            List<string> pieces = lastItem.Split(' ').ToList();
             return pieces.Last();
         }
 
@@ -234,10 +227,10 @@ namespace legallead.records.search.Classes
                 return person;
             }
 
-            var fields = "case,dateFiled,court,caseType,caseStyle".Split(',').ToList();
-            foreach (var fieldName in fields)
+            List<string> fields = "case,dateFiled,court,caseType,caseStyle".Split(',').ToList();
+            foreach (string? fieldName in fields)
             {
-                var targetNode = person.SelectSingleNode(fieldName);
+                XmlNode? targetNode = person.SelectSingleNode(fieldName);
                 if (targetNode == null)
                 {
                     continue;
@@ -260,9 +253,9 @@ namespace legallead.records.search.Classes
 
             try
             {
-                var doc = XmlDocProvider.GetDoc(rawHtml);
-                var firstChild = doc.DocumentElement.FirstChild;
-                var hlink = firstChild.SelectSingleNode("a");
+                XmlDocument doc = XmlDocProvider.GetDoc(rawHtml);
+                XmlNode? firstChild = doc.DocumentElement.FirstChild;
+                XmlNode? hlink = firstChild.SelectSingleNode("a");
                 if (hlink == null)
                 {
                     return rawHtml;
@@ -299,8 +292,8 @@ namespace legallead.records.search.Classes
 
         private static List<string> RemoveBlank(List<string> data)
         {
-            var result = new List<string>();
-            foreach (var addr in data)
+            List<string> result = new();
+            foreach (string addr in data)
             {
                 if (string.IsNullOrEmpty(addr))
                 {
@@ -324,7 +317,7 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            var addr = string.Empty;
+            string addr = string.Empty;
             for (int i = 1; i < middle.Count - 1; i++)
             {
                 if (!string.IsNullOrEmpty(addr))

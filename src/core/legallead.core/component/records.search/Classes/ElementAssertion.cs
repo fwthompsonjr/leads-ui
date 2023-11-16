@@ -3,8 +3,6 @@ using OpenQA.Selenium.Support.UI;
 
 namespace legallead.records.search.Classes
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types",
-        Justification = "Exception thrown from this method will stop automation.")]
     public class ElementAssertion
     {
         public ElementAssertion(IWebDriver driver)
@@ -26,22 +24,22 @@ namespace legallead.records.search.Classes
 
         public void SetSelectedIndex(By selector, string elementName, int selectedIndex)
         {
-            var cmmd = CommonKeyIndexes.SetSelectElementIndex;
+            string cmmd = CommonKeyIndexes.SetSelectElementIndex;
             Console.WriteLine(cmmd, elementName, selectedIndex);
-            var elementToClick = PageDriver.FindElement(selector);
-            var id = elementToClick.GetAttribute(CommonKeyIndexes.IdLowerCase);
-            var command = string.Format(
+            IWebElement elementToClick = PageDriver.FindElement(selector);
+            string id = elementToClick.GetAttribute(CommonKeyIndexes.IdLowerCase);
+            string command = string.Format(
                 CultureInfo.CurrentCulture, CommonKeyIndexes.GetElementSetIndex,
                 id, selectedIndex);
-            var changecommand = string.Format(
+            string changecommand = string.Format(
                 CultureInfo.CurrentCulture, CommonKeyIndexes.ElementFireOnChange,
                 id);
-            var optionName = string.Format(
+            string optionName = string.Format(
                 CultureInfo.CurrentCulture, CommonKeyIndexes.ElementGetOptionText,
                 id, selectedIndex);
 
-            var jse = (IJavaScriptExecutor)PageDriver;
-            var rsp = jse.ExecuteScript(optionName);
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)PageDriver;
+            object rsp = jse.ExecuteScript(optionName);
             Console.WriteLine(CommonKeyIndexes.SetSelectOptionIndex, rsp.ToString());
             jse.ExecuteScript(command);
             jse.ExecuteScript(changecommand);
@@ -52,11 +50,9 @@ namespace legallead.records.search.Classes
             Console.WriteLine(CommonKeyIndexes.WaitingForElement, elementName);
             try
             {
-                var wait = new WebDriverWait(PageDriver, TimeSpan.FromSeconds(secondsWait));
+                WebDriverWait wait = new(PageDriver, TimeSpan.FromSeconds(secondsWait));
 #pragma warning disable 618
-#pragma warning disable 436
                 wait.Until(ExpectedConditions.ElementIsVisible(selector));
-#pragma warning restore 436
 #pragma warning restore 618
             }
             catch (Exception)
@@ -70,11 +66,9 @@ namespace legallead.records.search.Classes
             Console.WriteLine(CommonKeyIndexes.WaitingForElement, elementName);
             try
             {
-                var wait = new WebDriverWait(PageDriver, TimeSpan.FromSeconds(secondsWait));
+                WebDriverWait wait = new(PageDriver, TimeSpan.FromSeconds(secondsWait));
 #pragma warning disable 618
-#pragma warning disable 436
                 wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(selector));
-#pragma warning restore 436
 #pragma warning restore 618
             }
             catch (Exception)
@@ -90,8 +84,8 @@ namespace legallead.records.search.Classes
                 return false;
             }
 
-            var found = PageDriver.FindElement(selector, 10);
-            var message = string.Format(
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string message = string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ElementTextNotFound, elementName, searchString);
             if (!found.Text.Contains(searchString))
@@ -110,8 +104,8 @@ namespace legallead.records.search.Classes
                 return false;
             }
 
-            var found = PageDriver.FindElement(selector, 10);
-            var message = string.Format(
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string message = string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ElementMatchTextNotFound, elementName, searchString, found.Text);
             if (!found.Text.Equals(searchString, StringComparison.CurrentCulture))
@@ -129,13 +123,13 @@ namespace legallead.records.search.Classes
                 return false;
             }
 
-            var found = PageDriver.FindElement(selector, 10);
-            var classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
-            var allClasses = classes.Split(' ');
-            var message = string.Format(
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
+            string[] allClasses = classes.Split(' ');
+            string message = string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ElementClassNotFound, elementName, className);
-            var hasClass = allClasses.Any(x => x.Equals(className, StringComparison.CurrentCultureIgnoreCase));
+            bool hasClass = allClasses.Any(x => x.Equals(className, StringComparison.CurrentCultureIgnoreCase));
             if (!hasClass)
             {
                 Console.WriteLine(message);
@@ -150,17 +144,17 @@ namespace legallead.records.search.Classes
                 return false;
             }
 
-            var found = PageDriver.FindElement(selector, 10);
-            var classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
-            var allClasses = classes.Split(' ');
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
+            string[] allClasses = classes.Split(' ');
             return allClasses.Any(x => x.Equals(className, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public bool ContainsAttribute(By selector, string attributeName, string attributeValue)
         {
-            var found = PageDriver.FindElement(selector, 10);
-            var actual = found.GetAttribute(attributeName) ?? string.Empty;
-            var message = string.Format(
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string actual = found.GetAttribute(attributeName) ?? string.Empty;
+            string message = string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ElementAttributeNotFound,
                 found.GetAttribute(CommonKeyIndexes.IdLowerCase),
@@ -172,7 +166,7 @@ namespace legallead.records.search.Classes
                 return true;
             }
 
-            var hasAttribute = actual.Equals(attributeValue, StringComparison.CurrentCultureIgnoreCase);
+            bool hasAttribute = actual.Equals(attributeValue, StringComparison.CurrentCultureIgnoreCase);
             if (!hasAttribute)
             {
                 Console.WriteLine(message);
@@ -187,13 +181,13 @@ namespace legallead.records.search.Classes
                 return false;
             }
 
-            var found = PageDriver.FindElement(selector, 10);
-            var classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
-            var allClasses = classes.Split(' ');
-            var message = string.Format(
+            IWebElement found = PageDriver.FindElement(selector, 10);
+            string classes = found.GetAttribute(CommonKeyIndexes.ClassAttribute) ?? string.Empty;
+            string[] allClasses = classes.Split(' ');
+            string message = string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ClassNameFound, elementName, className);
-            var hasClass = allClasses.Any(x => x.Equals(className, StringComparison.CurrentCultureIgnoreCase));
+            bool hasClass = allClasses.Any(x => x.Equals(className, StringComparison.CurrentCultureIgnoreCase));
             if (hasClass)
             {
                 Console.WriteLine(message);
@@ -204,7 +198,7 @@ namespace legallead.records.search.Classes
         public void Navigate(string target)
         {
             Console.WriteLine(CommonKeyIndexes.NavigateToUrlMessage, target);
-            var newUri = new Uri(target);
+            Uri newUri = new(target);
             PageDriver.Navigate().GoToUrl(newUri);
         }
 
@@ -218,7 +212,7 @@ namespace legallead.records.search.Classes
             try
             {
                 Console.WriteLine(CommonKeyIndexes.ClickingOnElement, controlId);
-                var jse = (IJavaScriptExecutor)PageDriver;
+                IJavaScriptExecutor jse = (IJavaScriptExecutor)PageDriver;
                 jse.ExecuteScript(string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ClickElementJs, controlId));
@@ -238,21 +232,15 @@ namespace legallead.records.search.Classes
         {
             try
             {
-                if (controlId == null)
-                {
-                    controlId = string.Empty;
-                }
+                controlId ??= string.Empty;
 
-                if (controlValue == null)
-                {
-                    controlValue = string.Empty;
-                }
+                controlValue ??= string.Empty;
 
                 Console.WriteLine(CommonKeyIndexes.SettingControlValue, controlId,
                     controlId.Equals(CommonKeyIndexes.Password,
                         StringComparison.CurrentCultureIgnoreCase) ?
                         CommonKeyIndexes.PasswordMask : controlValue);
-                var jse = (IJavaScriptExecutor)PageDriver;
+                IJavaScriptExecutor jse = (IJavaScriptExecutor)PageDriver;
                 jse.ExecuteScript(string.Format(
                 CultureInfo.CurrentCulture,
                 CommonKeyIndexes.ControlSetValue, controlId, controlValue));
@@ -270,24 +258,24 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         internal IWebElement Process(WebInteractive data, bool isCriminalSearch = false)
         {
-            var dteFmt = CommonKeyIndexes.DateTimeShort;
-            var startDate = data.StartDate.ToString(dteFmt, CultureInfo.CurrentCulture.DateTimeFormat);
-            var endDate = data.EndingDate.ToString(dteFmt, CultureInfo.CurrentCulture.DateTimeFormat);
-            var searchTypeIndex = data.Parameters.Keys
-                .FirstOrDefault(x => x.Name.Equals(CommonKeyIndexes.SearchComboIndex,
+            string dteFmt = CommonKeyIndexes.DateTimeShort;
+            string startDate = data.StartDate.ToString(dteFmt, CultureInfo.CurrentCulture.DateTimeFormat);
+            string endDate = data.EndingDate.ToString(dteFmt, CultureInfo.CurrentCulture.DateTimeFormat);
+            Models.WebNavigationKey? searchTypeIndex = data.Parameters.Keys
+                .Find(x => x.Name.Equals(CommonKeyIndexes.SearchComboIndex,
                 StringComparison.CurrentCultureIgnoreCase));
-            var searchTypeId = searchTypeIndex == null ? 0 : Convert.ToInt32(searchTypeIndex.Value,
+            int searchTypeId = searchTypeIndex == null ? 0 : Convert.ToInt32(searchTypeIndex.Value,
                 CultureInfo.CurrentCulture);
-            var caseTypeIndex = data.Parameters.Keys
-                .FirstOrDefault(x => x.Name.Equals(CommonKeyIndexes.CaseSearchType,
+            Models.WebNavigationKey? caseTypeIndex = data.Parameters.Keys
+                .Find(x => x.Name.Equals(CommonKeyIndexes.CaseSearchType,
                 StringComparison.CurrentCultureIgnoreCase));
-            var caseType = caseTypeIndex == null ? string.Empty : caseTypeIndex.Value;
-            var districtSearchFlag = data.Parameters.Keys
-                .FirstOrDefault(x => x.Name.Equals(CommonKeyIndexes.DistrictSearchType,
+            string caseType = caseTypeIndex == null ? string.Empty : caseTypeIndex.Value;
+            Models.WebNavigationKey? districtSearchFlag = data.Parameters.Keys
+                .Find(x => x.Name.Equals(CommonKeyIndexes.DistrictSearchType,
                 StringComparison.CurrentCultureIgnoreCase));
-            var districtType = districtSearchFlag == null ? string.Empty : districtSearchFlag.Value;
-            var isDistrictSearch = districtSearchFlag != null;
-            var itms = data.Parameters.Instructions;
+            string districtType = districtSearchFlag == null ? string.Empty : districtSearchFlag.Value;
+            bool isDistrictSearch = districtSearchFlag != null;
+            List<Models.WebNavInstruction> itms = data.Parameters.Instructions;
             if (!isDistrictSearch)
             {
                 itms.RemoveAll(x => x.FriendlyName.StartsWith(CommonKeyIndexes.DistrictDash, StringComparison.CurrentCultureIgnoreCase));
@@ -304,14 +292,14 @@ namespace legallead.records.search.Classes
                 searchTypeId.ToString(CultureInfo.CurrentCulture)));
             if (!string.IsNullOrEmpty(caseType))
             {
-                var crimalLink = data.Parameters.Keys
-                    .FirstOrDefault(x => x.Name.Equals(CommonKeyIndexes.CriminalLinkQuery,
+                Models.WebNavigationKey? crimalLink = data.Parameters.Keys
+                    .Find(x => x.Name.Equals(CommonKeyIndexes.CriminalLinkQuery,
                     StringComparison.CurrentCultureIgnoreCase));
                 if (isCriminalSearch && crimalLink != null)
                 {
                     caseType = crimalLink.Value;
                 }
-                var caseSearchItems = itms.FindAll(x =>
+                List<Models.WebNavInstruction> caseSearchItems = itms.FindAll(x =>
                     x.FriendlyName.Equals(CommonKeyIndexes.SearchHyperlink,
                         StringComparison.CurrentCultureIgnoreCase));
 
@@ -319,28 +307,28 @@ namespace legallead.records.search.Classes
             }
             if (!string.IsNullOrEmpty(districtType))
             {
-                var districtItems = itms.FindAll(x =>
+                List<Models.WebNavInstruction> districtItems = itms.FindAll(x =>
                     x.FriendlyName.Equals(CommonKeyIndexes.DistrictHyperlink,
                         StringComparison.CurrentCultureIgnoreCase));
                 districtItems.ForEach(x => x.Value = districtType);
             }
-            var navigations = GetNavigationBases(startDate);
+            List<ElementNavigationBase> navigations = GetNavigationBases(startDate);
             // ?SetComboIndex
-            foreach (var item in itms)
+            foreach (Models.WebNavInstruction item in itms)
             {
                 Console.WriteLine(
                     CommonKeyIndexes.WebNavInstructionMessage,
                     item.Name,
                     item.FriendlyName,
                     item.Value);
-                var navigator = navigations.FirstOrDefault(f =>
+                ElementNavigationBase? navigator = navigations.Find(f =>
                     f.Name.Equals(item.Name, StringComparison.CurrentCultureIgnoreCase));
                 if (navigator == null)
                 {
                     continue;
                 }
 
-                var webElement = navigator.Execute(item);
+                IWebElement webElement = navigator.Execute(item);
                 if (webElement != null)
                 {
                     return webElement;
@@ -351,7 +339,7 @@ namespace legallead.records.search.Classes
 
         protected List<ElementNavigationBase> GetNavigationBases(string startDate)
         {
-            var list = ElementNavigations;
+            List<ElementNavigationBase> list = ElementNavigations;
             list.ForEach(x =>
             {
                 x.StartDate = startDate;
@@ -363,16 +351,16 @@ namespace legallead.records.search.Classes
         private static List<ElementNavigationBase> _navigationElements;
 
         private static List<ElementNavigationBase> ElementNavigations =>
-            _navigationElements ?? (_navigationElements = GetNavigators());
+_navigationElements ??= GetNavigators();
 
         private static List<ElementNavigationBase> GetNavigators()
         {
-            var type = typeof(ElementNavigationBase);
-            var types = AppDomain.CurrentDomain.GetAssemblies()
+            Type type = typeof(ElementNavigationBase);
+            List<Type> types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
                 .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
                 .ToList();
-            var commands = new List<ElementNavigationBase>();
+            List<ElementNavigationBase> commands = new();
             types.ForEach(f => commands.Add((ElementNavigationBase)Activator.CreateInstance(f)));
             return commands;
         }

@@ -93,20 +93,19 @@ namespace legallead.records.search.Dto
                 {
                     return null;
                 }
-                switch (index)
+                return index switch
                 {
-                    case 0: return Index.ToString("D", CultureInfo.InvariantCulture);
-                    case 1: return CaseNumber;
-                    case 2: return Style;
-                    case 3: return FileDate;
-                    case 4: return Court;
-                    case 5: return Status;
-                    case 6: return TypeOfActionOrOffense;
-                    case 7: return Defendant;
-                    case 8: return Plantiff;
-                    default:
-                        return null;
-                }
+                    0 => Index.ToString("D", CultureInfo.InvariantCulture),
+                    1 => CaseNumber,
+                    2 => Style,
+                    3 => FileDate,
+                    4 => Court,
+                    5 => Status,
+                    6 => TypeOfActionOrOffense,
+                    7 => Defendant,
+                    8 => Plantiff,
+                    _ => null,
+                };
             }
             set
             {
@@ -135,7 +134,7 @@ namespace legallead.records.search.Dto
         {
             get
             {
-                var index =
+                int index =
                     FieldNames
                     .FindIndex(x => x.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
                 if (index < 0 || index > FieldNames.Count - 1)
@@ -146,7 +145,7 @@ namespace legallead.records.search.Dto
             }
             set
             {
-                var index =
+                int index =
                     FieldNames
                     .FindIndex(x => x.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
                 if (index < 0 || index > FieldNames.Count)

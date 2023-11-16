@@ -33,13 +33,10 @@ namespace legallead.records.search.Classes
 
             public virtual void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
-                var steps = new List<NavigationStep>();
-                var navigationFile = Web.GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile); // "navigation.control.file");
-                var sources = navigationFile.Split(',').ToList();
-                if (caseOverrideId == null)
-                {
-                    caseOverrideId = TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Justice of Peace", Ccic)).Id;
-                }
+                List<NavigationStep> steps = new();
+                string navigationFile = Web.GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile); // "navigation.control.file");
+                List<string> sources = navigationFile.Split(',').ToList();
+                caseOverrideId ??= TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Justice of Peace", Ccic)).Id;
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
                 SetupParameters(steps, caseOverrideId, out people, out XmlContentHolder results, out List<HLinkDataRow> cases);
                 webFetch = Web.SearchWeb(results, steps, startingDate, startingDate, ref cases, out people);
@@ -55,9 +52,9 @@ namespace legallead.records.search.Classes
                 cases = new List<HLinkDataRow>();
                 people = new List<PersonAddress>();
 
-                var caseTypeId = caseTypeOverrideId ?? Web.GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex); // "caseTypeSelectedIndex");
+                int caseTypeId = caseTypeOverrideId ?? Web.GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex); // "caseTypeSelectedIndex");
                 // set special item values
-                var caseTypeSelect = steps.First(x => x.ActionName.Equals(CommonKeyIndexes.SetSelectValue, StringComparison.CurrentCultureIgnoreCase));
+                NavigationStep caseTypeSelect = steps.First(x => x.ActionName.Equals(CommonKeyIndexes.SetSelectValue, StringComparison.CurrentCultureIgnoreCase));
                 caseTypeSelect.ExpectedValue = caseTypeId.ToString(CultureInfo.CurrentCulture);
             }
         }
@@ -72,7 +69,7 @@ namespace legallead.records.search.Classes
 
             public override void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
-                var overrideId = TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Probate", Ccic)).Id;
+                int overrideId = TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Probate", Ccic)).Id;
                 base.Fetch(startingDate, out webFetch, out people, overrideId);
             }
         }
@@ -87,7 +84,7 @@ namespace legallead.records.search.Classes
 
             public override void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
-                var overrideId = TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Court Court at Law", Ccic)).Id;
+                int overrideId = TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Court Court at Law", Ccic)).Id;
                 base.Fetch(startingDate, out webFetch, out people, overrideId);
             }
         }
@@ -103,9 +100,9 @@ namespace legallead.records.search.Classes
 
             public override void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
-                var steps = new List<NavigationStep>();
-                var navigationFile = Web.GetParameterValue<string>("navigation.control.alternate.file");
-                var sources = navigationFile.Split(',').ToList();
+                List<NavigationStep> steps = new();
+                string navigationFile = Web.GetParameterValue<string>("navigation.control.alternate.file");
+                List<string> sources = navigationFile.Split(',').ToList();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
                 SetupParameters(steps, null, out people, out XmlContentHolder results, out List<HLinkDataRow> cases);
                 webFetch = Web.SearchWeb(FetchType.Criminal, results, steps, startingDate, startingDate, ref cases, out people);
@@ -125,7 +122,7 @@ namespace legallead.records.search.Classes
             {
                 const string criminal = "criminal";
                 const StringComparison ccic = StringComparison.CurrentCultureIgnoreCase;
-                var fetchers = new List<ITarrantWebFetch>
+                List<ITarrantWebFetch> fetchers = new()
                 {
                     new NonCriminalFetch(Web),
                     new NonCrimalFetchProbateCourt(Web),
@@ -137,7 +134,7 @@ namespace legallead.records.search.Classes
                     case 0:
                         fetchers = fetchers.FindAll(x =>
                         {
-                            var lowered = x.Name.ToLower(CultureInfo.CurrentCulture);
+                            string lowered = x.Name.ToLower(CultureInfo.CurrentCulture);
                             return lowered.StartsWith(criminal, ccic);
                         });
                         break;
@@ -145,7 +142,7 @@ namespace legallead.records.search.Classes
                     case 2:
                         fetchers = fetchers.FindAll(x =>
                         {
-                            var lowered = x.Name.ToLower(CultureInfo.CurrentCulture);
+                            string lowered = x.Name.ToLower(CultureInfo.CurrentCulture);
                             return !lowered.StartsWith(criminal, ccic);
                         });
                         break;

@@ -20,9 +20,9 @@ namespace legallead.records.search.Web
 
         public WebNavigationParameter GetSettings(int index)
         {
-            var websites = SettingsManager.GetNavigation();
+            List<WebNavigationParameter> websites = SettingsManager.GetNavigation();
 
-            var siteData = websites.First(x => x.Id == index);
+            WebNavigationParameter siteData = websites.First(x => x.Id == index);
             return siteData;
         }
 

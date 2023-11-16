@@ -10,8 +10,6 @@ using System.Text.RegularExpressions;
 
 namespace legallead.records.search.Web
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2234:Pass system uri objects instead of strings",
-        Justification = "<Pending>")]
     [ExcludeFromCodeCoverage]
     public class HarrisCriminalCaseStyle : HarrisCriminalData
     {
@@ -264,9 +262,9 @@ namespace legallead.records.search.Web
         /// <returns></returns>
         public List<HarrisCriminalStyleDto> GetCases(IWebDriver driver, DateTime startDate, DateTime endDate)
         {
-            var result = new List<HarrisCriminalStyleDto>();
-            var interval = startDate.Subtract(endDate);
-            var list = HarrisCaseDateDto.BuildList(
+            List<HarrisCriminalStyleDto> result = new();
+            TimeSpan interval = startDate.Subtract(endDate);
+            List<HarrisCaseDateDto> list = HarrisCaseDateDto.BuildList(
                 startDate,
                 interval,
                 Convert.ToInt32(Math.Abs(interval.TotalDays)));
@@ -281,7 +279,7 @@ namespace legallead.records.search.Web
                 return result;
             }
 
-            foreach (var dto in list)
+            foreach (HarrisCaseDateDto dto in list)
             {
                 result.Append(PopulateDates(dto));
             }
@@ -297,9 +295,9 @@ namespace legallead.records.search.Web
         /// <returns></returns>
         public List<HarrisCriminalStyleDto> GetCases(IWebDriver driver, DateTime startDate, int totalDays = 180)
         {
-            var result = new List<HarrisCriminalStyleDto>();
-            var interval = new TimeSpan(-7, 0, 0, 0);
-            var list = HarrisCaseDateDto.BuildList(startDate, interval, totalDays);
+            List<HarrisCriminalStyleDto> result = new();
+            TimeSpan interval = new(-7, 0, 0, 0);
+            List<HarrisCaseDateDto> list = HarrisCaseDateDto.BuildList(startDate, interval, totalDays);
             driver = GetOrSetInternalDriver(driver);
             driver.Navigate().GoToUrl(url);
             driver.WaitForNavigation();
@@ -311,7 +309,7 @@ namespace legallead.records.search.Web
                 return result;
             }
 
-            foreach (var dto in list)
+            foreach (HarrisCaseDateDto dto in list)
             {
                 result.Append(PopulateDates(dto));
             }
@@ -326,8 +324,8 @@ namespace legallead.records.search.Web
         /// <returns></returns>
         public List<HarrisCriminalStyleDto> GetData(IWebDriver driver, HarrisCaseSearchDto searchDto)
         {
-            var result = new List<HarrisCriminalStyleDto>();
-            var caseNumber = searchDto?.CaseNumber ?? string.Empty;
+            List<HarrisCriminalStyleDto> result = new();
+            string caseNumber = searchDto?.CaseNumber ?? string.Empty;
             driver = GetOrSetInternalDriver(driver);
             driver.Navigate().GoToUrl(url);
             driver.WaitForNavigation();
@@ -338,13 +336,13 @@ namespace legallead.records.search.Web
             {
                 return result;
             }
-            var txCaseNumber = driver.FindElement(Selectors.CaseNumber);
+            IWebElement txCaseNumber = driver.FindElement(Selectors.CaseNumber);
             driver.ClickAndOrSetText(txCaseNumber, caseNumber);
             if (!driver.IsElementPresent(Selectors.Search))
             {
                 return result;
             }
-            var btnSearch = driver.FindElement(Selectors.Search);
+            IWebElement btnSearch = driver.FindElement(Selectors.Search);
             driver.ClickAndOrSetText(btnSearch);
             PopulateWhenPresent(Selectors.StartDate, searchDto?.DateFiled, 0);
             PopulateWhenPresent(Selectors.EndDate, searchDto?.DateFiled, 1);
@@ -352,10 +350,10 @@ namespace legallead.records.search.Web
             {
                 return result;
             }
-            var rows = driver.FindElements(Selectors.TableRows).ToList();
-            foreach (var item in rows)
+            List<IWebElement> rows = driver.FindElements(Selectors.TableRows).ToList();
+            foreach (IWebElement? item in rows)
             {
-                var dto = ReadTable(rows, item);
+                HarrisCriminalStyleDto dto = ReadTable(rows, item);
                 if (dto != null) { result.Add(dto); }
             }
             return result;
@@ -365,10 +363,7 @@ namespace legallead.records.search.Web
         {
             if (driver == null)
             {
-                if (TheDriver == null)
-                {
-                    TheDriver = GetDriver();
-                }
+                TheDriver ??= GetDriver();
                 driver = TheDriver;
             }
             else
@@ -385,28 +380,28 @@ namespace legallead.records.search.Web
             {
                 return;
             }
-            var culture = CultureInfo.InvariantCulture;
-            var style = DateTimeStyles.AssumeLocal;
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            DateTimeStyles style = DateTimeStyles.AssumeLocal;
             if (!DateTime.TryParseExact(dateFiled, "MM/dd/yyyy", culture, style, out DateTime date))
             {
                 return;
             }
-            var control = TheDriver.FindElement(selector, 1);
+            IWebElement control = TheDriver.FindElement(selector, 1);
             if (control == null)
             {
                 return;
             }
-            var dateFmt = date.AddDays(incrementDays).ToString("MM/dd/yyyy", culture);
+            string dateFmt = date.AddDays(incrementDays).ToString("MM/dd/yyyy", culture);
             TheDriver.SetText(control, dateFmt);
         }
 
         private string TryGetCompleteHtml(int recordCount, DateTime stopDateTime)
         {
-            var html = TheDriver.FindElement(Selectors.PrintTable).GetAttribute("outerHTML");
-            var doc = new HtmlDocument();
+            string html = TheDriver.FindElement(Selectors.PrintTable).GetAttribute("outerHTML");
+            HtmlDocument doc = new();
             doc.LoadHtml(html);
-            var parentNode = doc.DocumentNode.FirstChild;
-            var nodes = parentNode.SelectNodes("tr[@style]").Cast<HtmlNode>().ToList();
+            HtmlNode parentNode = doc.DocumentNode.FirstChild;
+            List<HtmlNode> nodes = parentNode.SelectNodes("tr[@style]").Cast<HtmlNode>().ToList();
             if (nodes.Count == recordCount | stopDateTime < DateTime.Now)
             {
                 return html;
@@ -429,7 +424,7 @@ namespace legallead.records.search.Web
                 return notfound;
             }
 
-            var count = text.Split(' ').ToList().Last().Replace(".", "");
+            string count = text.Split(' ').Last().Replace(".", "");
             if (int.TryParse(count, out int rcount))
             {
                 return rcount;
@@ -445,17 +440,17 @@ namespace legallead.records.search.Web
             const string status = "Active - CRIMINAL";
             string[] controlNames = new string[] { "Case Status", "Print Button", "Print Results Table" };
 
-            var driver = TheDriver;
-            var executor = (IJavaScriptExecutor)driver;
-            var currentWindow = driver.CurrentWindowHandle;
-            var culture = CultureInfo.InvariantCulture;
-            var dates = new List<DateTime> { dateDto.StartDate, dateDto.EndDate };
-            var startDate = dates.Min().ToString(format, culture);
-            var endingDate = dates.Max().ToString(format, culture);
-            var fsStartDate = dates.Min().ToString(fileFormat, culture);
-            var fsEndingDate = dates.Max().ToString(fileFormat, culture);
-            var result = new List<HarrisCriminalStyleDto>();
-            var threeMinutes = TimeSpan.FromSeconds(180);
+            IWebDriver driver = TheDriver;
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+            string currentWindow = driver.CurrentWindowHandle;
+            CultureInfo culture = CultureInfo.InvariantCulture;
+            List<DateTime> dates = new() { dateDto.StartDate, dateDto.EndDate };
+            string startDate = dates.Min().ToString(format, culture);
+            string endingDate = dates.Max().ToString(format, culture);
+            string fsStartDate = dates.Min().ToString(fileFormat, culture);
+            string fsEndingDate = dates.Max().ToString(fileFormat, culture);
+            List<HarrisCriminalStyleDto> result = new();
+            TimeSpan threeMinutes = TimeSpan.FromSeconds(180);
             string strFileName = $"{fsStartDate}_{fsEndingDate}_HarrisCriminalStyleDto.json";
             if (DataPersistence.FileExists(strFileName))
             {
@@ -470,8 +465,8 @@ namespace legallead.records.search.Web
             {
                 throw new ElementNotInteractableException($"{controlNames[0]} Element is not found.");
             }
-            var btnSearch = driver.FindElement(Selectors.Search);
-            var cboCaseStatus = new SelectElement(driver.FindElement(Selectors.CaseStatus));
+            IWebElement btnSearch = driver.FindElement(Selectors.Search);
+            SelectElement cboCaseStatus = new(driver.FindElement(Selectors.CaseStatus));
             cboCaseStatus.SelectByText(status);
 
             // submit form ... this occassionally can take longer than 30 seconds
@@ -480,13 +475,13 @@ namespace legallead.records.search.Web
             btnSearch.Click();
             driver.WaitForNavigation();
             const string searchRecordCount = "//*[@id=\"ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder2_ContentPlaceHolder2_recCountCas\"]";
-            var recordCount = GetRecordCount(driver.FindElement(By.XPath(searchRecordCount)).Text);
+            int recordCount = GetRecordCount(driver.FindElement(By.XPath(searchRecordCount)).Text);
             // print results to new window
             if (!IsElementPresent(driver, Selectors.Print, controlNames[1]))
             {
                 throw new ElementNotInteractableException($"{controlNames[1]} Element is not found.");
             }
-            var btnPrint = driver.FindElement(Selectors.Print);
+            IWebElement btnPrint = driver.FindElement(Selectors.Print);
             driver.ClickAndOrSetText(btnPrint);
             string printWindowHandle = FindWindow(driver, currentWindow);
             driver.SwitchTo().Window(printWindowHandle);
@@ -497,33 +492,33 @@ namespace legallead.records.search.Web
                 throw new ElementNotInteractableException($"{controlNames[2]} Element is not found.");
             }
 
-            var tableHtml =
+            string tableHtml =
                 recordCount < 0 ?
                 driver.FindElement(Selectors.PrintTable).GetAttribute("outerHTML") :
                 string.Empty;
 
-            var waitFor = TimeSpan.FromSeconds(30);
-            var stopDateTime = DateTime.Now.Add(waitFor);
+            TimeSpan waitFor = TimeSpan.FromSeconds(30);
+            DateTime stopDateTime = DateTime.Now.Add(waitFor);
             while (string.IsNullOrEmpty(tableHtml))
             {
                 tableHtml = TryGetCompleteHtml(recordCount, stopDateTime);
             }
-            var doc = new HtmlDocument();
+            HtmlDocument doc = new();
             doc.LoadHtml(tableHtml);
-            var parentNode = doc.DocumentNode.FirstChild;
-            var nodes = parentNode.SelectNodes("tr[@style]").Cast<HtmlNode>().ToList();
-            var rowdata = nodes.Select(x => x.ChildNodes.Cast<HtmlNode>().ToList())
+            HtmlNode parentNode = doc.DocumentNode.FirstChild;
+            List<HtmlNode> nodes = parentNode.SelectNodes("tr[@style]").Cast<HtmlNode>().ToList();
+            List<List<HtmlNode>> rowdata = nodes.Select(x => x.ChildNodes.Cast<HtmlNode>().ToList())
                 .ToList();
-            var rowinfo = new List<IEnumerable<string>>();
+            List<IEnumerable<string>> rowinfo = new();
             rowdata.ForEach(r =>
             {
-                var txts = r.Select(c => c.InnerText);
+                IEnumerable<string> txts = r.Select(c => c.InnerText);
                 rowinfo.Add(txts);
             });
 
-            foreach (var item in rowinfo)
+            foreach (IEnumerable<string> item in rowinfo)
             {
-                var dto = ReadTable(rowinfo, item);
+                HarrisCriminalStyleDto dto = ReadTable(rowinfo, item);
                 if (dto != null) { result.Add(dto); }
             }
 
@@ -557,13 +552,13 @@ namespace legallead.records.search.Web
 
             dto.Style = Regex.Replace(dto.Style, @"\u00A0", " ");
             dto.Style = Regex.Replace(dto.Style, @"&nbsp;", " ");
-            var parser = new CaseStyleDbParser { Data = dto.Style };
+            CaseStyleDbParser parser = new() { Data = dto.Style };
             if (!parser.CanParse())
             {
                 return dto;
             }
 
-            var parseResult = parser.Parse();
+            ParseCaseStyleDbDto parseResult = parser.Parse();
             dto.Style = parseResult.CaseData;
             dto.Plantiff = parseResult.Plantiff;
             dto.Defendant = parseResult.Defendant;
@@ -591,17 +586,17 @@ namespace legallead.records.search.Web
             try
             {
                 const int timeout = 5;
-                var bxSearch = IsElementPresent(driver, Selectors.CaseNumber, "Case Number");
+                bool bxSearch = IsElementPresent(driver, Selectors.CaseNumber, "Case Number");
                 if (bxSearch)
                 {
                     return;
                 }
                 string currentWindow = driver.CurrentWindowHandle;
-                var frame = driver.FindElement(Selectors.IFrame);
+                IWebElement frame = driver.FindElement(Selectors.IFrame);
                 driver.SwitchTo().Frame(frame);
-                var txUserName = driver.FindElement(Selectors.UserName);
-                var txPassword = driver.FindElement(Selectors.Password);
-                var btnLogin = driver.FindElement(Selectors.Login, timeout);
+                IWebElement txUserName = driver.FindElement(Selectors.UserName);
+                IWebElement txPassword = driver.FindElement(Selectors.Password);
+                IWebElement btnLogin = driver.FindElement(Selectors.Login, timeout);
 
                 driver.ClickAndOrSetText(txUserName, uid);
                 driver.ClickAndOrSetText(txPassword, pwd);
@@ -609,9 +604,7 @@ namespace legallead.records.search.Web
                 driver.SwitchTo().Window(currentWindow);
                 driver.WaitForNavigation();
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 // hide these exceptions
                 return;
@@ -621,9 +614,9 @@ namespace legallead.records.search.Web
         [ExcludeFromCodeCoverage]
         private static HarrisCriminalStyleDto ReadTable(List<IWebElement> rows, IWebElement item)
         {
-            var index = rows.IndexOf(item);
+            int index = rows.IndexOf(item);
             if (index == 0) { return default; }
-            var cells = item.FindElements(By.TagName("td"));
+            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> cells = item.FindElements(By.TagName("td"));
             if (cells.Count < 6) { return default; } // in the print layout there are separator rows
             return Parse(new HarrisCriminalStyleDto
             {
@@ -640,8 +633,8 @@ namespace legallead.records.search.Web
         [ExcludeFromCodeCoverage]
         private static HarrisCriminalStyleDto ReadTable(List<IEnumerable<string>> rows, IEnumerable<string> item)
         {
-            var index = rows.IndexOf(item);
-            var data = item.ToList();
+            int index = rows.IndexOf(item);
+            List<string> data = item.ToList();
             return Parse(new HarrisCriminalStyleDto
             {
                 Index = index,
@@ -658,8 +651,8 @@ namespace legallead.records.search.Web
         private static string FindWindow(IWebDriver driver, string topWindowHandle)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
-            var handles = driver.WindowHandles.ToList();
-            return handles.FirstOrDefault(a => !a.Equals(topWindowHandle, oic));
+            List<string> handles = driver.WindowHandles.ToList();
+            return handles.Find(a => !a.Equals(topWindowHandle, oic));
         }
 
         [ExcludeFromCodeCoverage]
@@ -667,7 +660,7 @@ namespace legallead.records.search.Web
         {
             try
             {
-                var assertion = new ElementAssertion(driver);
+                ElementAssertion assertion = new(driver);
                 assertion.WaitForElementExist(by, friendlyName);
                 driver.FindElement(by);
                 return true;

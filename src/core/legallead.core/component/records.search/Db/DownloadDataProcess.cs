@@ -4,8 +4,8 @@
     {
         protected override HccProcess Execute(IProgress<HccProcess> progress, HccProcess process)
         {
-            var actions = GetEnumerableOfType<BaseAction>("header", process).ToList();
-            foreach (var item in actions)
+            List<BaseAction> actions = GetEnumerableOfType<BaseAction>("header", process).ToList();
+            foreach (BaseAction? item in actions)
             {
                 if (actions.IndexOf(item) > 0)
                 {

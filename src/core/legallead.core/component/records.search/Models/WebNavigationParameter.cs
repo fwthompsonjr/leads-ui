@@ -3,7 +3,6 @@ using System.Text;
 
 namespace legallead.records.search.Models
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
     public class WebNavigationParameter
     {
         public int Id { get; set; }
@@ -24,7 +23,6 @@ namespace legallead.records.search.Models
         public string Value { get; set; }
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
     public class NavInstruction
     {
         public IList<WebNavInstruction> NavInstructions { get; set; }
@@ -98,7 +96,7 @@ namespace legallead.records.search.Models
                 }
                 if (fieldName.ToLower(CultureInfo.CurrentCulture).Equals("casestyle", comparison))
                 {
-                    return CaseStyle ?? (CaseStyle = GetFromData());
+                    return CaseStyle ??= GetFromData();
                 }
                 return string.Empty;
             }
@@ -145,15 +143,15 @@ namespace legallead.records.search.Models
                 return null;
             }
 
-            var webHelper = new WebInteractive();
-            var data = new StringBuilder(Data).ToString();
+            WebInteractive webHelper = new();
+            string data = new StringBuilder(Data).ToString();
             if (data.Contains("<img"))
             {
                 data = webHelper.RemoveElement(data, "<img");
                 Data = data;
             }
-            var doc = XmlDocProvider.GetDoc(data);
-            var node = doc.FirstChild.ChildNodes[1];
+            System.Xml.XmlDocument doc = XmlDocProvider.GetDoc(data);
+            System.Xml.XmlNode? node = doc.FirstChild.ChildNodes[1];
             if (node == null)
             {
                 return string.Empty;

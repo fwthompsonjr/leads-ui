@@ -16,9 +16,9 @@ namespace legallead.records.search.Classes
             {
                 throw new ArgumentNullException(nameof(item));
             }
-            var indexes = item.Value.Split(comma);
-            var idx = indexes[0];
-            var txt = indexes[1];
+            string[] indexes = item.Value.Split(comma);
+            string idx = indexes[0];
+            string txt = indexes[1];
             if (item.FriendlyName.Equals(CommonKeyIndexes.DateFiledOnTextBox,
                 StringComparison.CurrentCultureIgnoreCase))
             {

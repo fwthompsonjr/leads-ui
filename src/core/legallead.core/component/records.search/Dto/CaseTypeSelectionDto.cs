@@ -20,7 +20,6 @@ namespace legallead.records.search.Dto
         public string Name { get; set; }
         public string Query { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
         public List<Option> Options { get; set; }
     }
 
@@ -33,17 +32,15 @@ namespace legallead.records.search.Dto
 
     public class CaseTypeSelectionDto
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
         public List<DropDown> DropDowns { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
         public List<CaseSearchType> CaseSearchTypes { get; set; }
 
         public static CaseTypeSelectionDto GetDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -52,7 +49,7 @@ namespace legallead.records.search.Dto
             {
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);
             }
-            var data = File.ReadAllText(dataFile);
+            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<CaseTypeSelectionDto>(data);
         }
     }
@@ -66,7 +63,7 @@ namespace legallead.records.search.Dto
                 return null;
             }
 
-            var result = new List<DropDown>();
+            List<DropDown> result = new();
             options.ForEach(o =>
             {
                 result.Add(new DropDown { Id = o.Id, Name = o.Name, Query = o.Query });

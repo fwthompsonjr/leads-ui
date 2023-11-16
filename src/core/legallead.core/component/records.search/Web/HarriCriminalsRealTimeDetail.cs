@@ -11,17 +11,17 @@ namespace legallead.records.search.Web
         public void GetCaseDetails(IWebDriver driver, List<HarrisCriminalDto> details, DateTime runDate, string currentWindow)
         {
             // read case detail
-            var searchable = GetElementsOrFail(By.XPath(searchLinks));
+            List<IWebElement> searchable = GetElementsOrFail(By.XPath(searchLinks));
             // read case details
             searchable.ForEach(s =>
             {
                 if (searchable.IndexOf(s) != 0)
                 {
                     driver.ClickAndOrSetText(s);
-                    var newWindow = driver.WindowHandles.ToList()
-                        .FirstOrDefault(h => !h.Equals(currentWindow, StringComparison.OrdinalIgnoreCase));
+                    string? newWindow = driver.WindowHandles.ToList()
+                        .Find(h => !h.Equals(currentWindow, StringComparison.OrdinalIgnoreCase));
                     driver.SwitchTo().Window(newWindow);
-                    var cdResults = GetElementsOrFail(By.XPath(resultGrid))
+                    List<HtmlDocument?> cdResults = GetElementsOrFail(By.XPath(resultGrid))
                         .Select(x => ToHtmlDocument(x.GetAttribute("outerHTML")))
                         .ToList()
                         .FindAll(f => f != null);
@@ -44,7 +44,7 @@ namespace legallead.records.search.Web
             }
             const string tbl = "//table";
             const string tr = "//tr";
-            var rows = new PopUpTable
+            PopUpTable rows = new()
             {
                 Index = details.Count + 1,
                 RunDate = runDate,
@@ -54,7 +54,7 @@ namespace legallead.records.search.Web
                 DefendantMetrics = cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[1]?.SelectNodes(tr)?.ToList(),
                 Court = cdResults[2]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList()
             };
-            var dto = rows.CriminalDto();
+            HarrisCriminalDto dto = rows.CriminalDto();
             if (dto == null)
             {
                 return;
@@ -67,7 +67,7 @@ namespace legallead.records.search.Web
         {
             try
             {
-                var doc = new HtmlDocument();
+                HtmlDocument doc = new();
                 doc.LoadHtml(table);
                 return doc;
             }

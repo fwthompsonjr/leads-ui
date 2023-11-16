@@ -17,21 +17,17 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var selector = Byy.CssSelector(item.Locator.Query);
+            OpenQA.Selenium.IWebDriver driver = GetWeb;
+            Byy selector = Byy.CssSelector(item.Locator.Query);
             if (!int.TryParse(item.ExpectedValue, out int number))
             {
                 return;
             }
 
-            var matches = driver.FindElements(selector);
-            if (matches == null)
-            {
-                throw new ArgumentOutOfRangeException(item.DisplayName,
+            System.Collections.ObjectModel.ReadOnlyCollection<OpenQA.Selenium.IWebElement> matches = driver.FindElements(selector) ?? throw new ArgumentOutOfRangeException(item.DisplayName,
                     string.Format(
                     "Expected element collection {0} not found",
                     item.DisplayName));
-            }
             if (matches.Count != number)
             {
                 throw new ArgumentOutOfRangeException(item.DisplayName,

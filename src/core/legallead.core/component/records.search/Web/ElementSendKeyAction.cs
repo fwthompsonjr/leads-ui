@@ -18,17 +18,17 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var selector = Byy.CssSelector(item.Locator.Query);
-            var elementToClick = driver.FindElement(selector);
+            IWebDriver driver = GetWeb;
+            Byy selector = Byy.CssSelector(item.Locator.Query);
+            IWebElement elementToClick = driver.FindElement(selector);
             if (string.IsNullOrEmpty(item.DisplayName))
             {
                 return;
             }
 
-            var objText = item.ExpectedValue;
+            string objText = item.ExpectedValue;
             elementToClick.Click();
-            var jse = (IJavaScriptExecutor)driver;
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript("arguments[0].blur();", elementToClick);
         }
     }

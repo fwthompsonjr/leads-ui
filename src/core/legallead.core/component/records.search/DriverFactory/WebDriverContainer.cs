@@ -20,8 +20,8 @@ namespace legallead.records.search.DriverFactory
         {
             get
             {
-                return _container ?? (_container =
-                  new Container(new WebDriverRegistry()));
+                return _container ??=
+                  new Container(new WebDriverRegistry());
             }
         }
     }

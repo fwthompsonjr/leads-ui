@@ -13,7 +13,7 @@
                 return null;
             }
 
-            var bo = new HarrisCriminalStyleBo();
+            HarrisCriminalStyleBo bo = new();
             FieldNames.ForEach(f => { bo[f] = dto[f]; });
             return bo;
         }
@@ -37,12 +37,12 @@
             {
                 return default;
             }
-            var data = search.Split(Environment.NewLine.ToCharArray());
-            foreach (var line in data)
+            string[] data = search.Split(Environment.NewLine.ToCharArray());
+            foreach (string line in data)
             {
                 if (!line.StartsWith(search, StringComparison.OrdinalIgnoreCase))
                 {
-                    var result = line.Replace(search, "").Trim();
+                    string result = line.Replace(search, "").Trim();
                     return result;
                 }
             }

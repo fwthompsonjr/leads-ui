@@ -19,18 +19,18 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var userDto = UserAccessDto.GetDto(item.ExpectedValue);
-            var pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey);
-            var userId = pwordUser.Split('|');
-            var selections = item.Locator.Query.Split('|');
-            var idx = 0;
-            foreach (var itm in selections)
+            IWebDriver driver = GetWeb;
+            UserAccessDto userDto = UserAccessDto.GetDto(item.ExpectedValue);
+            string pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey);
+            string[] userId = pwordUser.Split('|');
+            string[] selections = item.Locator.Query.Split('|');
+            int idx = 0;
+            foreach (string itm in selections)
             {
-                var selector = Byy.CssSelector(itm.Trim());
-                var elementToClick = driver.FindElement(selector);
+                Byy selector = Byy.CssSelector(itm.Trim());
+                IWebElement elementToClick = driver.FindElement(selector);
                 IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
-                var command = $"arguments[0].value = '{userId[idx]}'";
+                string command = $"arguments[0].value = '{userId[idx]}'";
                 executor.ExecuteScript("arguments[0].focus();", elementToClick);
                 executor.ExecuteScript(command, elementToClick);
                 executor.ExecuteScript("arguments[0].blur();", elementToClick);

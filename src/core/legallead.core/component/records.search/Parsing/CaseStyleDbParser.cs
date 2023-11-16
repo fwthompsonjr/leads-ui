@@ -57,7 +57,7 @@ namespace legallead.records.search.Parsing
         /// <returns></returns>
         public virtual ParseCaseStyleDbDto Parse()
         {
-            var response = new ParseCaseStyleDbDto { Data = Data };
+            ParseCaseStyleDbDto response = new() { Data = Data };
             if (!CanParse())
             {
                 return response;
@@ -68,7 +68,7 @@ namespace legallead.records.search.Parsing
                 return response;
             }
 
-            var caseData = ExtractField(DataExtractType.CaseData, Data);
+            string caseData = ExtractField(DataExtractType.CaseData, Data);
             response.CaseData = caseData;
             response.Defendant = ExtractField(DataExtractType.Defendant, caseData);
             response.Plantiff = ExtractField(DataExtractType.Plantiff, caseData);
@@ -77,7 +77,7 @@ namespace legallead.records.search.Parsing
 
         private static string ExtractField(DataExtractType extractType, string data)
         {
-            var response = string.Empty;
+            string response = string.Empty;
             if (string.IsNullOrEmpty(data))
             {
                 return response;
@@ -86,18 +86,18 @@ namespace legallead.records.search.Parsing
             switch (extractType)
             {
                 case DataExtractType.CaseData:
-                    var a = data.IndexOf("(", Oic);
+                    int a = data.IndexOf("(", Oic);
                     if (a < 0)
                     {
                         return data.Trim();
                     }
 
-                    response = data.Substring(0, a).Trim();
+                    response = data[..a].Trim();
                     return response;
 
                 case DataExtractType.Defendant:
                 case DataExtractType.Plantiff:
-                    var b = data.IndexOf(_searchKeyWord, Oic);
+                    int b = data.IndexOf(_searchKeyWord, Oic);
                     if (b < 0)
                     {
                         return data;
@@ -105,9 +105,9 @@ namespace legallead.records.search.Parsing
 
                     if (extractType == DataExtractType.Plantiff)
                     {
-                        return data.Substring(0, b).Trim();
+                        return data[..b].Trim();
                     }
-                    response = data.Substring(b + _searchKeyWord.Length).Trim();
+                    response = data[(b + _searchKeyWord.Length)..].Trim();
                     return response;
 
                 default:

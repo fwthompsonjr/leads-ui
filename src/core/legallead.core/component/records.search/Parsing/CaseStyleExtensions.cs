@@ -14,13 +14,13 @@ namespace legallead.records.search.Parsing
                 return Array.Empty<HLinkDataRow>();
             }
 
-            var data = new List<HLinkDataRow>();
-            var parser = DbParser;
-            foreach (var item in cases)
+            List<HLinkDataRow> data = new();
+            CaseStyleDbParser parser = DbParser;
+            foreach (CaseStyleDb item in cases)
             {
                 parser.Data = item.Style;
 
-                var dta = new HLinkDataRow
+                HLinkDataRow dta = new()
                 {
                     WebsiteId = 40,
                     DateFiled = item.FileDate,
@@ -31,7 +31,7 @@ namespace legallead.records.search.Parsing
                 };
                 if (parser.CanParse())
                 {
-                    var parsed = parser.Parse();
+                    Dto.ParseCaseStyleDbDto parsed = parser.Parse();
                     dta.CaseStyle = parsed.CaseData;
                     dta.Defendant = parsed.Defendant;
                 }
@@ -47,20 +47,20 @@ namespace legallead.records.search.Parsing
                 return Array.Empty<PersonAddress>();
             }
 
-            var matched = dtos;
-            var drow = FromCase(dataRow);
+            List<HarrisCriminalDto> matched = dtos;
+            PersonAddress drow = FromCase(dataRow);
             if (matched == null || !matched.Any())
             {
                 return new PersonAddress[] { drow };
             }
 
-            var records = new List<PersonAddress>();
-            var parser = DbParser;
+            List<PersonAddress> records = new();
+            CaseStyleDbParser parser = DbParser;
             parser.Data = dataRow.CaseStyle;
-            var parsed = parser.Parse();
-            foreach (var item in matched)
+            Dto.ParseCaseStyleDbDto parsed = parser.Parse();
+            foreach (HarrisCriminalDto item in matched)
             {
-                var dto = new PersonAddress
+                PersonAddress dto = new()
                 {
                     Name = item.DefendantName,
                     Address1 = $"{item.DefendantStreetNumber} {item.DefendantStreetName}",
@@ -95,11 +95,11 @@ namespace legallead.records.search.Parsing
                 return new PersonAddress();
             }
 
-            var parser = DbParser;
+            CaseStyleDbParser parser = DbParser;
             parser.Data = dataRow.CaseStyle;
-            var parsed = parser.Parse();
-            var canParse = parser.CanParse();
-            var name = canParse ? parsed.Defendant : notFoundName;
+            Dto.ParseCaseStyleDbDto parsed = parser.Parse();
+            bool canParse = parser.CanParse();
+            string name = canParse ? parsed.Defendant : notFoundName;
             if (string.IsNullOrEmpty(name))
             {
                 name = notFoundName;

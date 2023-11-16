@@ -8,7 +8,7 @@ namespace legallead.records.search.Classes
         {
             get
             {
-                return _versionNames ?? (_versionNames = GetNames());
+                return _versionNames ??= GetNames();
             }
         }
 
@@ -16,14 +16,14 @@ namespace legallead.records.search.Classes
         {
             get
             {
-                return _fileVersion ?? (_fileVersion = GetFileVersion());
+                return _fileVersion ??= GetFileVersion();
             }
         }
 
         public VersionNameProvider()
         {
             // when the assembly-file-version contains pre-release
-            var isPreRelease = FileVersion.EndsWith($"~{VersionNames.Last()}",
+            bool isPreRelease = FileVersion.EndsWith($"~{VersionNames.Last()}",
                 System.StringComparison.CurrentCultureIgnoreCase);
             Name = isPreRelease ?
                 CommonKeyIndexes.FutureKeyWord :

@@ -14,7 +14,7 @@ namespace legallead.records.search.DriverFactory
         /// <returns></returns>
         public IWebDriver GetWebDriver(bool headless = false)
         {
-            var driver = GetDefaultDriver();
+            IWebDriver driver = GetDefaultDriver();
             if (driver != null)
             {
                 return driver;
@@ -34,9 +34,7 @@ namespace legallead.records.search.DriverFactory
             {
                 return new FirefoxDriver();
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return null;
             }
@@ -53,7 +51,7 @@ namespace legallead.records.search.DriverFactory
                 return _driverFileName;
             }
 
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
             if (!Directory.Exists(execName))
             {

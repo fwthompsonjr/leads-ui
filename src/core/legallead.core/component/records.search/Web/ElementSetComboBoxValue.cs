@@ -19,11 +19,11 @@
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var selector = Byy.CssSelector(item.Locator.Query);
-            var elementToClick = driver.FindElement(selector);
-            var id = elementToClick.GetAttribute("id");
-            var getElement = string.Format("document.getElementById('{0}')", id);
+            IWebDriver driver = GetWeb;
+            Byy selector = Byy.CssSelector(item.Locator.Query);
+            IWebElement elementToClick = driver.FindElement(selector);
+            string id = elementToClick.GetAttribute("id");
+            string getElement = string.Format("document.getElementById('{0}')", id);
             var jv = new
             {
                 setIndex = $"{getElement}.selectedIndex={item.ExpectedValue};",
@@ -35,10 +35,10 @@
                 return;
             }
             //document.getElementById('personlist').value=Person_ID;
-            var jse = (IJavaScriptExecutor)driver;
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript(jv.setIndex);
             jse.ExecuteScript(jv.change);
-            var objText = Convert.ToString(jse.ExecuteScript(jv.optionText));
+            string? objText = Convert.ToString(jse.ExecuteScript(jv.optionText));
             Console.WriteLine($"Object {id} option value set to: {objText}");
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }
         }

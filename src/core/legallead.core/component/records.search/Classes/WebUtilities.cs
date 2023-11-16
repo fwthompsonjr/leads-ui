@@ -18,12 +18,12 @@ namespace legallead.records.search.Classes
         /// <returns>A list of case information including person information associated to each case</returns>
         public static List<HLinkDataRow> GetCases(WebInteractive data)
         {
-            var fetchers = new List<ICaseFetch>
+            List<ICaseFetch> fetchers = new()
             {
                 new NonCriminalCaseFetch(data),
                 new CriminalCaseFetch(data)
             };
-            var cases = new List<HLinkDataRow>();
+            List<HLinkDataRow> cases = new();
             fetchers.ForEach(f => cases.AddRange(f.GetCases()));
             return cases;
         }
@@ -36,19 +36,19 @@ namespace legallead.records.search.Classes
             helper.Navigate(navTo);
             // this is where denton county does it's data fetching..... i think
             // todo: allow criminal hyperlink click modification...
-            var parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch); // "isCriminalSearch");
-            var isCriminalSearch = parameter != null &&
+            WebNavigationKey parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch); // "isCriminalSearch");
+            bool isCriminalSearch = parameter != null &&
                 parameter.Value.Equals(CommonKeyIndexes.NumberOne, StringComparison.CurrentCultureIgnoreCase);
             tbResult = helper.Process(data, isCriminalSearch);
-            var rows = tbResult.FindElements(By.TagName("tr"));
-            foreach (var rw in rows)
+            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> rows = tbResult.FindElements(By.TagName("tr"));
+            foreach (IWebElement? rw in rows)
             {
-                var html = rw.GetAttribute("outerHTML");
-                var link = TryFindElement(rw, By.TagName("a"));
-                var tdCaseStyle = TryFindElement(rw, By.XPath("td[2]"));
-                var caseStyle = tdCaseStyle == null ? string.Empty : tdCaseStyle.Text;
-                var address = link == null ? string.Empty : link.GetAttribute("href");
-                var dataRow = new HLinkDataRow { Data = html, WebAddress = address, IsCriminal = isCriminalSearch };
+                string html = rw.GetAttribute("outerHTML");
+                IWebElement? link = TryFindElement(rw, By.TagName("a"));
+                IWebElement tdCaseStyle = TryFindElement(rw, By.XPath("td[2]"));
+                string caseStyle = tdCaseStyle == null ? string.Empty : tdCaseStyle.Text;
+                string address = link == null ? string.Empty : link.GetAttribute("href");
+                HLinkDataRow dataRow = new() { Data = html, WebAddress = address, IsCriminal = isCriminalSearch };
                 if (link != null)
                 {
                     dataRow.Case = link.Text.Trim();
@@ -69,7 +69,7 @@ namespace legallead.records.search.Classes
         /// <param name="linkData">the html of the source case result record</param>
         internal static void Find(IWebDriver driver, HLinkDataRow linkData)
         {
-            var finders = new List<FindDefendantBase>
+            List<FindDefendantBase> finders = new()
             {
                 new FindDefendantNavigation(),
                 new FindMultipleDefendantMatch(),
@@ -82,7 +82,7 @@ namespace legallead.records.search.Classes
                 new FindDefendantByGuardianMatch(),
                 new NoFoundMatch()
             };
-            foreach (var finder in finders)
+            foreach (FindDefendantBase finder in finders)
             {
                 finder.Find(driver, linkData);
                 if (finder.CanFind)
@@ -98,10 +98,10 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static IWebDriver GetWebDriver()
         {
-            var wdriver = (new WebDriverDto().Get()).WebDrivers;
-            var driver = wdriver.Drivers.Where(d => d.Id == wdriver.SelectedIndex).FirstOrDefault();
-            var container = WebDriverContainer.GetContainer;
-            var provider = container.GetInstance<IWebDriverProvider>(driver.Name);
+            WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
+            Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
+            StructureMap.Container container = WebDriverContainer.GetContainer;
+            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver.Name);
             return provider.GetWebDriver();
         }
 
@@ -122,16 +122,11 @@ namespace legallead.records.search.Classes
             {
                 return parent.FindElement(by);
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return null;
             }
         }
-
-        // private const int SW_HIDE = 0;
-        // private const int SW_SHOW = 5;
 
         private static string _chromeBinaryName;
 
@@ -142,30 +137,30 @@ namespace legallead.records.search.Classes
                 return _chromeBinaryName;
             }
 
-            var settings = ConfigurationManager.AppSettings
+            List<string?> settings = ConfigurationManager.AppSettings
                 .AllKeys.ToList().FindAll(x => x.StartsWith("chrome.exe.location",
                 StringComparison.CurrentCultureIgnoreCase))
                 .Select(x => ConfigurationManager.AppSettings[x])
                 .ToList().FindAll(x => File.Exists(x));
             if (settings.Any())
             {
-                _chromeBinaryName = settings.First();
+                _chromeBinaryName = settings[0];
                 return _chromeBinaryName;
             }
 
             DirectoryInfo di = new(@"c:\");
-            var search = new DirectorySearch(di, "*chrome.exe", 2);
-            var found = search.FileList;
+            DirectorySearch search = new(di, "*chrome.exe", 2);
+            List<string> found = search.FileList;
             if (found.Any())
             {
-                _chromeBinaryName = found.First();
+                _chromeBinaryName = found[0];
                 return _chromeBinaryName;
             }
             search = new DirectorySearch(di, "*chrome.exe");
             found = search.FileList;
             if (found.Any())
             {
-                _chromeBinaryName = found.First();
+                _chromeBinaryName = found[0];
                 return _chromeBinaryName;
             }
             _chromeBinaryName = string.Empty;

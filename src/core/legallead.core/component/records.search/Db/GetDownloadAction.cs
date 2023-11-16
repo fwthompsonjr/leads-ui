@@ -15,15 +15,15 @@ namespace legallead.records.search.Db
         {
             ReportProgress = progress;
             Start();
-            var fileName = GetDownload();
+            string fileName = GetDownload();
             Information($"File {fileName}. Downloaded");
             End();
         }
 
         private string GetDownload()
         {
-            using var obj = new HarrisCriminalData();
-            var result = obj.GetData(WebDriver);
+            using HarrisCriminalData obj = new();
+            string result = obj.GetData(WebDriver);
             return result;
         }
     }

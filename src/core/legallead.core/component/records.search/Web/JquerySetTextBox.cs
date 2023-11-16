@@ -17,17 +17,17 @@
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var selector = item.Locator.Query;
+            IWebDriver driver = GetWeb;
+            string selector = item.Locator.Query;
             if (string.IsNullOrEmpty(selector))
             {
                 return;
             }
 
-            var objText = item.ExpectedValue;
-            var command = $"$('{selector}').val('{objText}');";
+            string objText = item.ExpectedValue;
+            string command = $"$('{selector}').val('{objText}');";
 
-            var jse = (IJavaScriptExecutor)driver;
+            IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript(command);
 
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }

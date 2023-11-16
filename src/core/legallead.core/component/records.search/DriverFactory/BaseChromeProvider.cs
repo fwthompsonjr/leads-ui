@@ -24,8 +24,8 @@ namespace legallead.records.search.DriverFactory
         /// <returns></returns>
         protected static ChromeOptions GetChromeOptions()
         {
-            var options = new ChromeOptions();
-            var binaryName = BinaryFileName();
+            ChromeOptions options = new();
+            string binaryName = BinaryFileName();
             if (!string.IsNullOrEmpty(binaryName))
             {
                 options.BinaryLocation = binaryName;
@@ -62,7 +62,7 @@ namespace legallead.records.search.DriverFactory
                 return _driverFileName;
             }
 
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
             if (!Directory.Exists(execName))
             {
@@ -84,7 +84,7 @@ namespace legallead.records.search.DriverFactory
                 return _downloadPath;
             }
 
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
             if (!Directory.Exists(execName))
             {

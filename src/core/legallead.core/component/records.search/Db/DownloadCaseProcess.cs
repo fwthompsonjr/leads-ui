@@ -6,10 +6,10 @@ namespace legallead.records.search.Db
     {
         protected override HccProcess Execute(IProgress<HccProcess> progress, HccProcess process)
         {
-            var actions = GetEnumerableOfType<BaseAction>("detail", process).ToList();
-            foreach (var item in actions)
+            List<BaseAction> actions = GetEnumerableOfType<BaseAction>("detail", process).ToList();
+            foreach (BaseAction? item in actions)
             {
-                if (actions.IndexOf(item) > 0)
+                if (actions.IndexOf(item) != 0)
                 {
                     item.WebDriver = actions[0].WebDriver;
                 }

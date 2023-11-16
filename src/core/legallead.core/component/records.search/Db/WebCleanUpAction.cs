@@ -19,7 +19,7 @@ namespace legallead.records.search.Db
             End();
         }
 
-        private void CleanUp()
+        private static void CleanUp()
         {
             try
             {
@@ -37,9 +37,9 @@ namespace legallead.records.search.Db
 
         private static void KillChrome()
         {
-            var processes = Process.GetProcessesByName("chrome")
+            IEnumerable<Process> processes = Process.GetProcessesByName("chrome")
                 .Where(_ => !_.MainWindowHandle.Equals(IntPtr.Zero));
-            foreach (var process in processes)
+            foreach (Process? process in processes)
             {
                 process.Kill();
             }
@@ -47,7 +47,7 @@ namespace legallead.records.search.Db
 
         private static void KillProcess(string processName)
         {
-            foreach (var process in Process.GetProcessesByName(processName))
+            foreach (Process process in Process.GetProcessesByName(processName))
             {
                 process.Kill();
             }

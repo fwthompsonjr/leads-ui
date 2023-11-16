@@ -19,7 +19,7 @@ namespace legallead.records.search.Classes
             }
 
             FileInfo fileInfo = new(outputFileName);
-            var macro = new ExcelMacroBase { FileName = outputFileName, Package = pck };
+            ExcelMacroBase macro = new() { FileName = outputFileName, Package = pck };
             macro.AppendModule();
             pck.SaveAs(fileInfo);
         }
@@ -32,7 +32,7 @@ namespace legallead.records.search.Classes
             {
                 return _macroCode;
             }
-            var sbb = new StringBuilder();
+            StringBuilder sbb = new();
             sbb.AppendLine("Option Explicit");
             sbb.AppendLine("");
             sbb.AppendLine("Public Sub RemoveHardReturnFromCurrentColumn()");
@@ -110,14 +110,14 @@ namespace legallead.records.search.Classes
                     return;
                 }
 
-                var ccic = StringComparison.CurrentCultureIgnoreCase;
-                var extension = Path.GetExtension(FileName);
+                StringComparison ccic = StringComparison.CurrentCultureIgnoreCase;
+                string extension = Path.GetExtension(FileName);
                 if (!extension.Equals(CommonKeyIndexes.ExtensionXlsm, ccic))
                 {
                     return;
                 }
 
-                var pck = Package;
+                ExcelPackage pck = Package;
                 // Add VBA Code
                 pck.Workbook.CreateVBAProject();         // Can not append VBA Projects.Multiple "Code" can be added. See "https://github.com/pruiz/EPPlus/blob/master/SampleApp/Sample15.cs".
                 pck.Workbook.CodeModule.Name = "Module1";

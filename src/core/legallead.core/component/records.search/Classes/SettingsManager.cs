@@ -7,7 +7,6 @@ namespace legallead.records.search.Classes
 {
     public static class XmlDocProvider
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Object is being passed to caller and must not be disposed.")]
         public static XmlDocument GetDoc(string xml)
         {
             XmlDocument doc = new() { XmlResolver = null };
@@ -19,11 +18,9 @@ namespace legallead.records.search.Classes
 
         public static XmlDocument Load(string fileName)
         {
-            using (var reader = new StreamReader(fileName))
-            {
-                var content = reader.ReadToEnd();
-                return GetDoc(content);
-            }
+            using StreamReader reader = new(fileName);
+            string content = reader.ReadToEnd();
+            return GetDoc(content);
         }
     }
 
@@ -32,7 +29,6 @@ namespace legallead.records.search.Classes
     {
         #region Fields
 
-        // private string _fileContent;
         private string _layoutContent;
 
         private string _excelFileName;
@@ -45,7 +41,7 @@ namespace legallead.records.search.Classes
         /// <value>The excel format file.</value>
         public string ExcelFormatFile
         {
-            get { return _excelFileName ?? (_excelFileName = GetExcelFileName()); }
+            get { return _excelFileName ??= GetExcelFileName(); }
         }
 
         /// <summary>
@@ -67,7 +63,7 @@ namespace legallead.records.search.Classes
         /// </value>
         public string Layout
         {
-            get { return _layoutContent ?? (_layoutContent = LoadFile("caselayout.xml")); }
+            get { return _layoutContent ??= LoadFile("caselayout.xml"); }
         }
 
         #endregion Properties
@@ -79,17 +75,17 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static List<WebNavigationParameter> GetNavigation()
         {
-            var data = Content;
+            string data = Content;
 
-            var doc = XmlDocProvider.GetDoc(data);
+            XmlDocument doc = XmlDocProvider.GetDoc(data);
             if (doc.DocumentElement == null)
             {
                 return null;
             }
 
-            var parent = doc.DocumentElement.SelectSingleNode("setting[@name='Websites']");
-            var response = new List<WebNavigationParameter>();
-            foreach (var node in parent.ChildNodes)
+            XmlNode? parent = doc.DocumentElement.SelectSingleNode("setting[@name='Websites']");
+            List<WebNavigationParameter> response = new();
+            foreach (object? node in parent.ChildNodes)
             {
                 response.Add(MapFrom((XmlNode)node));
             }
@@ -104,14 +100,14 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static List<ExcelColumnLayout> GetColumnLayouts(int id, string sectionName)
         {
-            var data = Content;
-            var doc = XmlDocProvider.GetDoc(data);
+            string data = Content;
+            XmlDocument doc = XmlDocProvider.GetDoc(data);
             if (doc.DocumentElement == null)
             {
                 return null;
             }
 
-            var parent = doc.DocumentElement.SelectSingleNode(
+            XmlNode? parent = doc.DocumentElement.SelectSingleNode(
                 string.Format(
                     CultureInfo.CurrentCulture,
                     "layouts/layout[@id='{0}' and @name='{1}']",
@@ -131,7 +127,7 @@ namespace legallead.records.search.Classes
                 return null;
             }
 
-            var columnNode = parent.FirstChild;
+            XmlNode? columnNode = parent.FirstChild;
             if (columnNode == null)
             {
                 return null;
@@ -142,9 +138,9 @@ namespace legallead.records.search.Classes
                 return null;
             }
 
-            var layoutList = new List<ExcelColumnLayout>();
-            var columnList = columnNode.ChildNodes.Cast<XmlNode>().ToList();
-            foreach (var column in columnList)
+            List<ExcelColumnLayout> layoutList = new();
+            List<XmlNode> columnList = columnNode.ChildNodes.Cast<XmlNode>().ToList();
+            foreach (XmlNode? column in columnList)
             {
                 layoutList.Add(new ExcelColumnLayout
                 {
@@ -170,35 +166,35 @@ namespace legallead.records.search.Classes
             }
 
             const string dfmt = "MMddyyyy";
-            var fileName = GetFileName(settingFile);
-            var targetFile = fileName;
-            var idx = 0;
-            var cultureInfo = CultureInfo.CurrentCulture;
-            var numberInfo = cultureInfo.NumberFormat;
+            string fileName = GetFileName(settingFile);
+            string targetFile = fileName;
+            int idx = 0;
+            CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+            NumberFormatInfo numberInfo = cultureInfo.NumberFormat;
             while (File.Exists(targetFile))
             {
                 idx += 1;
-                var cleaned = Path.GetFileNameWithoutExtension(fileName);
+                string cleaned = Path.GetFileNameWithoutExtension(fileName);
                 cleaned = string.Format(cultureInfo, "{0}_{1}.xml", cleaned, idx.ToString("D9", numberInfo));
                 targetFile = string.Format(cultureInfo, "{0}/{1}", Path.GetDirectoryName(fileName), cleaned);
             }
             fileName = targetFile;
-            using (var sw = new StreamWriter(fileName))
+            using (StreamWriter sw = new(fileName))
             {
                 sw.Write(Layout);
                 sw.Close();
             }
-            var content = string.Empty;
-            using (var reader = new StreamReader(fileName))
+            string content = string.Empty;
+            using (StreamReader reader = new(fileName))
             {
                 content = reader.ReadToEnd();
             }
-            var doc = XmlDocProvider.GetDoc(content);
-            var nde = doc.DocumentElement.SelectSingleNode(@"parameters");
-            var nds = new List<XmlNode>(nde.ChildNodes.Cast<XmlNode>());
-            foreach (var item in nds)
+            XmlDocument doc = XmlDocProvider.GetDoc(content);
+            XmlNode? nde = doc.DocumentElement.SelectSingleNode(@"parameters");
+            List<XmlNode> nds = new(nde.ChildNodes.Cast<XmlNode>());
+            foreach (XmlNode item in nds)
             {
-                var attrName = item.Attributes.GetNamedItem("name").Value;
+                string? attrName = item.Attributes.GetNamedItem("name").Value;
                 switch (attrName)
                 {
                     case "Website":
@@ -235,7 +231,7 @@ namespace legallead.records.search.Classes
 
         private static WebNavigationParameter MapFrom(XmlNode node)
         {
-            var parameter = new WebNavigationParameter
+            WebNavigationParameter parameter = new()
             {
                 Id = Convert.ToInt32(
                     node.Attributes.GetNamedItem("id").Value,
@@ -245,29 +241,29 @@ namespace legallead.records.search.Classes
                 Instructions = new List<WebNavInstruction>(),
                 CaseInstructions = new List<WebNavInstruction>()
             };
-            foreach (var item in node.ChildNodes)
+            foreach (object? item in node.ChildNodes)
             {
-                var nde = (XmlNode)item;
+                XmlNode nde = (XmlNode)item;
                 parameter.Keys.Add(new WebNavigationKey
                 {
                     Name = nde.Attributes.GetNamedItem("name").Value,
                     Value = ((XmlCDataSection)nde.FirstChild).Data
                 });
             }
-            var qpath = string.Format(
+            string qpath = string.Format(
                 CultureInfo.CurrentCulture,
                 "directions/instructions[@id={0}]", parameter.Id);
 
-            var instructions = node.OwnerDocument
+            XmlNode? instructions = node.OwnerDocument
                 .DocumentElement.SelectSingleNode(qpath);
             if (instructions == null)
             {
                 return parameter;
             }
 
-            foreach (var item in instructions.ChildNodes)
+            foreach (object? item in instructions.ChildNodes)
             {
-                var nde = (XmlNode)item;
+                XmlNode nde = (XmlNode)item;
                 parameter.Instructions.Add(new WebNavInstruction
                 {
                     Name = nde.Attributes.GetNamedItem("name").Value,
@@ -288,9 +284,9 @@ namespace legallead.records.search.Classes
                 return parameter;
             }
 
-            foreach (var item in instructions.ChildNodes)
+            foreach (object? item in instructions.ChildNodes)
             {
-                var nde = (XmlNode)item;
+                XmlNode nde = (XmlNode)item;
                 parameter.CaseInstructions.Add(new WebNavInstruction
                 {
                     Name = nde.Attributes.GetNamedItem("name").Value,
@@ -311,9 +307,9 @@ namespace legallead.records.search.Classes
         /// <returns>the contents of specified file as string</returns>
         private static string LoadFile(string fileName)
         {
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
-            var targetFile = new Uri(string.Format(
+            string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\xml\{1}", execName, fileName)).AbsolutePath;
             return !File.Exists(targetFile) ?
@@ -324,12 +320,12 @@ namespace legallead.records.search.Classes
         private static string GetXmlContent(string fileName)
         {
             const string tilde = "~";
-            var quote = '"'.ToString();
+            string quote = '"'.ToString();
 
             switch (fileName)
             {
                 case "settings.xml":
-                    var sb = new StringBuilder();
+                    StringBuilder sb = new();
                     sb.AppendLine("<?xml version=~1.0~ encoding=~utf-8~ ?>".Replace(tilde, quote));
                     sb.AppendLine("<settings>".Replace(tilde, quote));
                     sb.AppendLine("<setting name=~Websites~>".Replace(tilde, quote));
@@ -533,7 +529,7 @@ namespace legallead.records.search.Classes
                     return sb.ToString();
 
                 case "caselayout.xml":
-                    var sbb = new StringBuilder();
+                    StringBuilder sbb = new();
                     sbb.AppendLine("<?xml version=~1.0~ encoding=~utf-8~?>".Replace(tilde, quote));
                     sbb.AppendLine("<search>".Replace(tilde, quote));
                     sbb.AppendLine("<parameters>".Replace(tilde, quote));
@@ -603,17 +599,17 @@ namespace legallead.records.search.Classes
         {
             // settingFile.StartDate.ToString("MMddyyyy")
             const string dfmt = "MMddyyyy";
-            var dteStart = settingFile.StartDate.ToString(dfmt, CultureInfo.CurrentCulture.DateTimeFormat);
-            var dteEnding = settingFile.EndingDate.ToString(dfmt, CultureInfo.CurrentCulture.DateTimeFormat);
-            var fileName = string.Format(
+            string dteStart = settingFile.StartDate.ToString(dfmt, CultureInfo.CurrentCulture.DateTimeFormat);
+            string dteEnding = settingFile.EndingDate.ToString(dfmt, CultureInfo.CurrentCulture.DateTimeFormat);
+            string fileName = string.Format(
                 CultureInfo.CurrentCulture,
                 "data_rqst_{2}_{0}_{1}.xml",
                 dteStart,
                 dteEnding,
                 settingFile.Parameters.Name.Replace(" ", "").ToLower(CultureInfo.CurrentCulture));
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
-            var targetPath = new Uri(string.Format(
+            string targetPath = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\xml\", execName)).AbsolutePath;
             if (!Directory.Exists(targetPath))
@@ -629,7 +625,7 @@ namespace legallead.records.search.Classes
                 Directory.CreateDirectory(targetPath);
             }
 
-            var targetFile = new Uri(string.Format(
+            string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\xml\data\{1}", execName, fileName)).AbsolutePath;
             return targetFile;
@@ -641,9 +637,9 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         private static string GetExcelFileName()
         {
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
-            var targetFile = new Uri(string.Format(
+            string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\Utilities\CourtRecordSearch.xlsm", execName)).AbsolutePath;
             if (!File.Exists(targetFile))
@@ -660,28 +656,28 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static string GetAppFolderName()
         {
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             return Path.GetDirectoryName(execName);
         }
 
         public static List<WebNavInstruction> GetInstructions(int siteId)
         {
-            var instructions = new List<WebNavInstruction>();
-            var content = Content;
-            var doc = XmlDocProvider.GetDoc(content);
+            List<WebNavInstruction> instructions = new();
+            string content = Content;
+            XmlDocument doc = XmlDocProvider.GetDoc(content);
 
-            var qpath = string.Format(
+            string qpath = string.Format(
                 CultureInfo.CurrentCulture,
                 "directions/instructions[@id={0}]", siteId);
-            var data = doc.DocumentElement.SelectSingleNode(qpath);
+            XmlNode? data = doc.DocumentElement.SelectSingleNode(qpath);
             if (data == null)
             {
                 return instructions;
             }
 
-            foreach (var item in data.ChildNodes)
+            foreach (object? item in data.ChildNodes)
             {
-                var nde = (XmlNode)item;
+                XmlNode nde = (XmlNode)item;
                 instructions.Add(new WebNavInstruction
                 {
                     Name = nde.Attributes.GetNamedItem("name").Value,

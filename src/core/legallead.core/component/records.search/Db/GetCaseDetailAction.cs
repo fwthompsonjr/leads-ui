@@ -21,24 +21,24 @@ namespace legallead.records.search.Db
 
             ReportProgress = progress;
             Start();
-            var fileName = GetDownload(MnDate, MxDate);
+            List<HarrisCriminalStyleDto> fileName = GetDownload(MnDate, MxDate);
             Information($"File {fileName}. Downloaded");
             End();
         }
 
         private int GetOptionValue()
         {
-            var data = GetOption();
-            var list = data.Values.ToList();
-            var listId = data.Index.GetValueOrDefault(0);
-            var indexId = Convert.ToInt32(list[listId], CultureInfo.CurrentCulture);
+            HccOptionDto data = GetOption();
+            List<string> list = data.Values.ToList();
+            int listId = data.Index.GetValueOrDefault(0);
+            int indexId = Convert.ToInt32(list[listId], CultureInfo.CurrentCulture);
             return -1 * indexId;
         }
 
-        private HccOptionDto GetOption()
+        private static HccOptionDto GetOption()
         {
-            var data = DataOptions.Read();
-            var list = JsonConvert.DeserializeObject<List<HccOptionDto>>(data)
+            string data = DataOptions.Read();
+            HccOptionDto? list = JsonConvert.DeserializeObject<List<HccOptionDto>>(data)
                 .Where(a => a.Type.Equals("settings", StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault(b => b.Id.Equals(110));
             return list;
@@ -46,8 +46,8 @@ namespace legallead.records.search.Db
 
         private List<Dto.HarrisCriminalStyleDto> GetDownload(DateTime mnDate, DateTime mxDate)
         {
-            using var obj = new HarrisCriminalCaseStyle();
-            var records = obj.GetCases(WebDriver, mnDate, mxDate);
+            using HarrisCriminalCaseStyle obj = new();
+            List<HarrisCriminalStyleDto> records = obj.GetCases(WebDriver, mnDate, mxDate);
             return records;
         }
     }

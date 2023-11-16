@@ -6,8 +6,6 @@ namespace legallead.records.search.DriverFactory
 {
     public class ChromeOlderProvider : BaseChromeProvider, IWebDriverProvider
     {
-        private const string ChromeLocationMessage = "Chrome executable location:\n {0}";
-
         public string Name => "Chrome Legacy";
 
         /// <summary>
@@ -16,15 +14,15 @@ namespace legallead.records.search.DriverFactory
         /// <returns></returns>
         public IWebDriver GetWebDriver(bool headless = false)
         {
-            var options = GetChromeOptions();
+            ChromeOptions options = GetChromeOptions();
             if (headless)
             {
                 options.AddArgument("headless");
             }
             try
             {
-                var legacy = $"{GetDriverFileName()}\\Legacy";
-                var driver = new ChromeDriver(legacy, options);
+                string legacy = $"{GetDriverFileName()}\\Legacy";
+                ChromeDriver driver = new(legacy, options);
                 return driver;
             }
             catch (Exception)

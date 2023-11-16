@@ -64,7 +64,7 @@ namespace SeleniumTests
             }
         }
 
-        private bool IsElementPresent(By by)
+        private static bool IsElementPresent(By by)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace SeleniumTests
             }
         }
 
-        private bool IsAlertPresent()
+        private static bool IsAlertPresent()
         {
             try
             {

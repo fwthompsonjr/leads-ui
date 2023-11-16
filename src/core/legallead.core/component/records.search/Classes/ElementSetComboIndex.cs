@@ -16,8 +16,8 @@ namespace legallead.records.search.Classes
             {
                 throw new ArgumentNullException(nameof(item));
             }
-            var parms = item.Value.Split(comma);
-            var parmId = parms[0];
+            string[] parms = item.Value.Split(comma);
+            string parmId = parms[0];
             if (!int.TryParse(parms[1], out int parmIndex))
             {
                 parmIndex = 0;

@@ -10,7 +10,7 @@ namespace legallead.records.search.Db
 
         public virtual void Process(IProgress<HccProcess> progress)
         {
-            var process = HccProcess.LastOrDefault(LoweredName);
+            HccProcess? process = HccProcess.LastOrDefault(LoweredName);
             if (process != null) return;
             try
             {

@@ -19,7 +19,6 @@
         public string Subtype { get; set; }
         public string Style { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
         public IList<CaseDataAddress> CaseDataAddresses { get; set; }
     }
 }

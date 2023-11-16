@@ -11,14 +11,13 @@ namespace legallead.records.search.Dto
 
     public class DataPointLocatorDto
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
         public IList<DataPoint> DataPoints { get; set; }
 
         public static DataPointLocatorDto GetDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -27,7 +26,7 @@ namespace legallead.records.search.Dto
             {
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);
             }
-            var data = File.ReadAllText(dataFile);
+            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<DataPointLocatorDto>(data);
         }
 

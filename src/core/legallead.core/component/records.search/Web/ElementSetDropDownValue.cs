@@ -19,19 +19,19 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var selector = Byy.CssSelector(item.Locator.Query);
-            var elementToClick = driver.FindElement(selector);
+            OpenQA.Selenium.IWebDriver driver = GetWeb;
+            Byy selector = Byy.CssSelector(item.Locator.Query);
+            OpenQA.Selenium.IWebElement elementToClick = driver.FindElement(selector);
             // lets get this item as a SELECT
-            var dropDown = new DrpDwn(elementToClick);
+            DrpDwn dropDown = new(elementToClick);
             if (string.IsNullOrEmpty(item.DisplayName))
             {
                 return;
             }
 
-            var objText = item.ExpectedValue;
-            var mxIndex = dropDown.Options.Count - 1;
-            var selectedIndex = System.Convert.ToInt32(objText);
+            string objText = item.ExpectedValue;
+            int mxIndex = dropDown.Options.Count - 1;
+            int selectedIndex = System.Convert.ToInt32(objText);
             if (selectedIndex > mxIndex)
             {
                 selectedIndex = mxIndex;

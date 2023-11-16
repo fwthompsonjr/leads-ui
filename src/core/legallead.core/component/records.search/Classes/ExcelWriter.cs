@@ -16,7 +16,7 @@ namespace legallead.records.search.Classes
 
         private IExcelFileWriter FileWriter
         {
-            get { return _fileWriter ?? (_fileWriter = new ExcelFileWriter()); }
+            get { return _fileWriter ??= new ExcelFileWriter(); }
             set { _fileWriter = value; }
         }
 
@@ -36,32 +36,29 @@ namespace legallead.records.search.Classes
                 fetchResult.WebsiteId = 1;
             }
 
-            var writer = new ExcelWriter();
-            var extXml = CommonKeyIndexes.ExtensionXml;
-            var extFile = CommonKeyIndexes.ExtensionXlsx;
-            var tmpFileName = fetchResult.Result.Replace(extXml, extFile);
+            ExcelWriter writer = new();
+            string extXml = CommonKeyIndexes.ExtensionXml;
+            string extFile = CommonKeyIndexes.ExtensionXlsx;
+            string tmpFileName = fetchResult.Result.Replace(extXml, extFile);
             if (true)
             {
-                // Debug.Assert(fetchResult.PeopleList.Count > 0);
-                var htmlCaseList = fetchResult.CaseList;
+                string htmlCaseList = fetchResult.CaseList;
                 Debug.Assert(string.IsNullOrEmpty(htmlCaseList) == false);
             }
 
-            using (var workBook = writer.ConvertToPersonTable(
+            using ExcelPackage workBook = writer.ConvertToPersonTable(
                 addressList: fetchResult.PeopleList,
                 worksheetName: "Addresses",
                 saveFile: false,
                 outputFileName: tmpFileName,
-                websiteId: fetchResult.WebsiteId))
-            {
-                writer.ConvertToDataTable(
-                excelPackage: workBook,
-                htmlTable: fetchResult.CaseList,
-                worksheetName: "CaseData",
-                saveFile: true,
-                outputFileName: tmpFileName,
                 websiteId: fetchResult.WebsiteId);
-            }
+            writer.ConvertToDataTable(
+            excelPackage: workBook,
+            htmlTable: fetchResult.CaseList,
+            worksheetName: "CaseData",
+            saveFile: true,
+            outputFileName: tmpFileName,
+            websiteId: fetchResult.WebsiteId);
         }
 
         public ExcelPackage ConvertToPersonTable(
@@ -82,24 +79,24 @@ namespace legallead.records.search.Classes
                 throw new ArgumentNullException(nameof(worksheetName));
             }
 
-            var countyName = SettingsManager
+            string countyName = SettingsManager
                 .GetNavigation().Find(x => x.Id == websiteId)
                 .Name.Replace("County", "")
                 .Replace("Criminal", "")
                 .Trim();
-            var pck = excelPackage ?? new ExcelPackage();
-            var wsDt = pck.Workbook.Worksheets.Add(worksheetName);
-            var rowIndex = 1;
+            ExcelPackage pck = excelPackage ?? new ExcelPackage();
+            ExcelWorksheet wsDt = pck.Workbook.Worksheets.Add(worksheetName);
+            int rowIndex = 1;
             int countyIndex = 0;
             int courtAddressIndex = 0;
             int courtNameId = 10;
-            var specialList = new Dictionary<string, string>
+            Dictionary<string, string> specialList = new()
             {
                 { "firstname", "fname" },
                 { "lastname", "lname" }
             };
             List<string> localFieldList = default;
-            foreach (var item in addressList)
+            foreach (PersonAddress item in addressList)
             {
                 if (addressList.IndexOf(item) == 0)
                 {
@@ -113,10 +110,10 @@ namespace legallead.records.search.Classes
                 if (rowIndex == 1)
                 {
                     // write header
-                    var headerIndex = 1;
-                    foreach (var field in localFieldList)
+                    int headerIndex = 1;
+                    foreach (string field in localFieldList)
                     {
-                        var heading = wsDt.Cells[rowIndex, headerIndex];
+                        ExcelRange heading = wsDt.Cells[rowIndex, headerIndex];
                         heading.Value = field;
                         headerIndex++;
                     }
@@ -127,13 +124,13 @@ namespace legallead.records.search.Classes
                     wsDt.Cells[rowIndex, courtAddressIndex].Value = "CourtAddress";
                     rowIndex++;
                 }
-                var culture = CultureInfo.CurrentCulture;
+                CultureInfo culture = CultureInfo.CurrentCulture;
                 for (int i = 0; i < localFieldList.Count; i++)
                 {
-                    var field = localFieldList[i];
-                    var fieldName = specialList.ContainsKey(field) & websiteId == 30 ? specialList[field] : field;
-                    var content = item[fieldName];
-                    var cleaner = new StringBuilder(content);
+                    string field = localFieldList[i];
+                    string fieldName = specialList.ContainsKey(field) & websiteId == 30 ? specialList[field] : field;
+                    string content = item[fieldName];
+                    StringBuilder cleaner = new(content);
                     cleaner.Replace(Environment.NewLine, " ");
                     cleaner.Replace(((char)10).ToString(culture), " ");
                     cleaner.Replace(((char)13).ToString(culture), " ");
@@ -157,8 +154,8 @@ namespace legallead.records.search.Classes
         private static string LookupCountyAddress(int websiteId, string value)
         {
             const StringComparison ccic = StringComparison.CurrentCultureIgnoreCase;
-            var list = SearchSettingDto.GetCourtLookupList.CourtLocations;
-            var court = list.FirstOrDefault(
+            IList<CourtLocation> list = SearchSettingDto.GetCourtLookupList.CourtLocations;
+            CourtLocation? court = list.FirstOrDefault(
                 c => c.Id.Equals(websiteId.ToString("0", new System.Globalization.NumberFormatInfo()), ccic));
             if (court == null)
             {
@@ -173,7 +170,7 @@ namespace legallead.records.search.Classes
                 .Where(a => string.IsNullOrEmpty(a.Name))
                 .ToList()
                 .ForEach(b => b.Name = string.Empty);
-            var courtLocation = court.Courts
+            Court? courtLocation = court.Courts
                 .FirstOrDefault(a =>
                     a.Name.Equals(value, ccic)
                     | a.FullName.Equals(value, ccic));
@@ -182,7 +179,7 @@ namespace legallead.records.search.Classes
                 return courtLocation.Address;
             }
 
-            var blankLocation = court.Courts
+            Court? blankLocation = court.Courts
                 .FirstOrDefault(a => a.Name.Equals("default", ccic));
 
             return blankLocation != null ? blankLocation.Address : string.Empty;
@@ -196,28 +193,28 @@ namespace legallead.records.search.Classes
             string outputFileName = "",
             int websiteId = 1)
         {
-            var pck = excelPackage ?? new ExcelPackage();
+            ExcelPackage pck = excelPackage ?? new ExcelPackage();
 
-            var namedStyle = pck.Workbook.Styles.CreateNamedStyle("HyperLink");
+            OfficeOpenXml.Style.XmlAccess.ExcelNamedStyleXml namedStyle = pck.Workbook.Styles.CreateNamedStyle("HyperLink");
             namedStyle.Style.Font.UnderLine = true;
             namedStyle.Style.Font.Color.SetColor(Color.Blue);
-            var wsDt = pck.Workbook.Worksheets.Add(worksheetName);
-            var webNav = SettingsManager.GetNavigation()
-                 .FirstOrDefault(n => n.Id.Equals(websiteId));
-            var hyperPrefix = webNav?.Keys.FirstOrDefault(h => h.Name.Equals("hlinkUri", StringComparison.CurrentCultureIgnoreCase));
+            ExcelWorksheet wsDt = pck.Workbook.Worksheets.Add(worksheetName);
+            WebNavigationParameter? webNav = SettingsManager.GetNavigation()
+                 .Find(n => n.Id.Equals(websiteId));
+            WebNavigationKey? hyperPrefix = webNav?.Keys.Find(h => h.Name.Equals("hlinkUri", StringComparison.CurrentCultureIgnoreCase));
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.AppendLine("<html>");
             sb.AppendLine("<body id='body-wrapper'>");
             sb.AppendLine(htmlTable);
             sb.AppendLine("</body>");
             sb.AppendLine("</html>");
             // HTML-table to an excel worksheet
-            var doc = XmlDocProvider.GetDoc(sb.ToString());
-            var body = doc.DocumentElement.SelectSingleNode("body");
-            var table = body.FirstChild;
-            var rows = table.ChildNodes.Cast<XmlNode>().ToList();
-            var rowIndex = 1;
+            XmlDocument doc = XmlDocProvider.GetDoc(sb.ToString());
+            XmlNode? body = doc.DocumentElement.SelectSingleNode("body");
+            XmlNode? table = body.FirstChild;
+            List<XmlNode> rows = table.ChildNodes.Cast<XmlNode>().ToList();
+            int rowIndex = 1;
             rowIndex = GenerateExcelOutput(wsDt, hyperPrefix, rows, rowIndex, table, websiteId);
             // format rows
             ApplyGridFormatting(websiteId, "caselayout", wsDt, rows);
@@ -248,7 +245,7 @@ namespace legallead.records.search.Classes
 
             rowIndex++;
 
-            foreach (var item in table.ChildNodes.Cast<XmlNode>().ToList())
+            foreach (XmlNode? item in table.ChildNodes.Cast<XmlNode>().ToList())
             {
                 wsDt.Cells[rowIndex, Case].Value = item.ChildNodes[Case - 1].InnerText;
                 wsDt.Cells[rowIndex, Style].Value = item.ChildNodes[Style - 1].InnerText;
@@ -273,19 +270,19 @@ namespace legallead.records.search.Classes
             {
                 return GenerateExcelOutput(wsDt, table);
             }
-            foreach (var item in rows)
+            foreach (XmlNode item in rows)
             {
-                var colIndex = 1;
-                var tdCollection = item.InnerXml.Contains("<th") ?
+                int colIndex = 1;
+                List<XmlNode> tdCollection = item.InnerXml.Contains("<th") ?
                     item.SelectNodes("th").Cast<XmlNode>().ToList() :
                     item.SelectNodes("td").Cast<XmlNode>().ToList();
                 if (tdCollection != null)
                 {
-                    foreach (var td in tdCollection)
+                    foreach (XmlNode? td in tdCollection)
                     {
-                        var sbb = new StringBuilder();
-                        var nodeList = td.ChildNodes.Cast<XmlNode>().ToList();
-                        var target = wsDt.Cells[rowIndex, colIndex];
+                        StringBuilder sbb = new();
+                        List<XmlNode> nodeList = td.ChildNodes.Cast<XmlNode>().ToList();
+                        ExcelRange target = wsDt.Cells[rowIndex, colIndex];
                         nodeList
                             .ForEach(n => sbb.Append(n.InnerText.Trim() + " "));
                         target.Value = sbb.ToString().Trim();
@@ -295,19 +292,19 @@ namespace legallead.records.search.Classes
                             continue;
                         }
                         // does this node contain a hyperlink?
-                        var hyperlink = nodeList.FirstOrDefault(x => x.Name.Equals("a", StringComparison.CurrentCultureIgnoreCase));
+                        XmlNode? hyperlink = nodeList.Find(x => x.Name.Equals("a", StringComparison.CurrentCultureIgnoreCase));
                         if (hyperlink == null)
                         {
                             continue;
                         }
 
-                        var txHref = hyperlink.Attributes.GetNamedItem("href");
+                        XmlNode? txHref = hyperlink.Attributes.GetNamedItem("href");
                         if (txHref == null)
                         {
                             continue;
                         }
 
-                        var hlink = string.Format(
+                        string hlink = string.Format(
                             CultureInfo.CurrentCulture,
                             @"{0}{1}", hyperPrefix.Value, txHref.InnerText);
                         target.Hyperlink = new System.Uri(hlink);
@@ -319,14 +316,14 @@ namespace legallead.records.search.Classes
             return rowIndex;
         }
 
-        private void ApplyGridFormatting<T>(int websiteId,
+        private static void ApplyGridFormatting<T>(int websiteId,
             string sectionName,
             ExcelWorksheet wsDt,
             System.Collections.Generic.List<T> rows)
         {
             const int rowIndex = 1;
-            var isCaseLayout = "people" == sectionName;
-            var columns = SettingsManager.GetColumnLayouts(websiteId, sectionName);
+            bool isCaseLayout = "people" == sectionName;
+            List<ExcelColumnLayout>? columns = SettingsManager.GetColumnLayouts(websiteId, sectionName);
             if (columns != null)
             {
                 // format first row
@@ -342,10 +339,10 @@ namespace legallead.records.search.Classes
                 }
             }
             // apply borders
-            var rcount = websiteId == 30 & sectionName == "caselayout" ? rows.Count + 1 : rows.Count;
-            var ccount = isCaseLayout ? columns.Count + 2 : columns.Count;
-            var rngCells = wsDt.Cells[1, 1, rcount, ccount];
-            var rngTopRow = wsDt.Cells[1, 1, 1, ccount];
+            int rcount = websiteId == 30 & sectionName == "caselayout" ? rows.Count + 1 : rows.Count;
+            int ccount = isCaseLayout ? columns.Count + 2 : columns.Count;
+            ExcelRange rngCells = wsDt.Cells[1, 1, rcount, ccount];
+            ExcelRange rngTopRow = wsDt.Cells[1, 1, 1, ccount];
             const OfficeOpenXml.Style.ExcelBorderStyle xlThin = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
             // set header background color

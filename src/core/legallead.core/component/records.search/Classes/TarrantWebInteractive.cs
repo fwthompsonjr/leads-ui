@@ -25,7 +25,7 @@ namespace legallead.records.search.Classes
 
         public TarrantWebInteractive(WebNavigationParameter parameters, DateTime startDate, DateTime endingDate) : base(parameters, startDate, endingDate)
         {
-            var formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
+            DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
             SetParameterValue(CommonKeyIndexes.StartDate,
                 startDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate));
             SetParameterValue(CommonKeyIndexes.EndDate,
@@ -38,20 +38,20 @@ namespace legallead.records.search.Classes
         {
             // settings have been retrieved from the constructor
             // get any output file to store data from extract
-            var startingDate = GetParameterValue<DateTime>(CommonKeyIndexes.StartDate);
-            var endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
-            var customSearch = GetParameterValue<int>(CommonKeyIndexes.CriminalCaseInclusion); // "criminalCaseInclusion");
-            var peopleList = new List<PersonAddress>();
+            DateTime startingDate = GetParameterValue<DateTime>(CommonKeyIndexes.StartDate);
+            DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
+            int customSearch = GetParameterValue<int>(CommonKeyIndexes.CriminalCaseInclusion);
+            List<PersonAddress> peopleList = new();
             WebFetchResult webFetch = null;
-            var fetchers = (new FetchProvider(this)).GetFetches(customSearch);
-            var formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
+            List<ITarrantWebFetch> fetchers = (new FetchProvider(this)).GetFetches(customSearch);
+            DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
             while (startingDate.CompareTo(endingDate) <= 0)
             {
                 SetParameterValue(CommonKeyIndexes.StartDate,
                     startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate));
                 SetParameterValue(CommonKeyIndexes.EndDate,
                     startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate));
-                foreach (var obj in fetchers)
+                foreach (ITarrantWebFetch obj in fetchers)
                 {
                     obj.Fetch(startingDate, out webFetch, out List<PersonAddress> people);
                     peopleList.AddRange(people);
@@ -101,17 +101,17 @@ namespace legallead.records.search.Classes
 
             try
             {
-                var fetched = Search(results, steps, startingDate, endingDate, ref cases, out people, driver);
+                WebFetchResult fetched = Search(results, steps, startingDate, endingDate, ref cases, out people, driver);
                 if (customSearchType != 2)
                 {
                     return fetched;
                 }
 
-                var caseList = cases.ToList();
+                List<HLinkDataRow> caseList = cases.ToList();
                 people = fetched.PeopleList;
                 people.ForEach(p =>
                 {
-                    var source = caseList.FirstOrDefault(c => c.Case.Equals(p.CaseNumber, StringComparison.CurrentCultureIgnoreCase));
+                    HLinkDataRow? source = caseList.Find(c => c.Case.Equals(p.CaseNumber, StringComparison.CurrentCultureIgnoreCase));
                     if (source == null)
                     {
                         return;
@@ -122,13 +122,12 @@ namespace legallead.records.search.Classes
                         return;
                     }
 
-                    var dto = DataPointLocatorDto.Load(source.PageHtml);
+                    DataPointLocatorDto dto = DataPointLocatorDto.Load(source.PageHtml);
                     p.CaseStyle = dto.DataPoints
                         .First(f =>
                             f.Name.Equals(CommonKeyIndexes.CaseStyle,
                             StringComparison.CurrentCultureIgnoreCase)).Result;
                 });
-                // people = ExtractPeople(cases);
 
                 return new WebFetchResult
                 {
@@ -157,16 +156,16 @@ namespace legallead.records.search.Classes
             out List<PersonAddress> people,
             IWebDriver driver)
         {
-            var assertion = new ElementAssertion(driver);
-            var caseList = string.Empty;
-            var formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
+            ElementAssertion assertion = new(driver);
+            string caseList = string.Empty;
+            DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
             ElementActions.ForEach(x => x.GetAssertion = assertion);
             ElementActions.ForEach(x => x.GetWeb = driver);
 
-            foreach (var item in steps)
+            foreach (NavigationStep item in steps)
             {
                 // if item action-name = 'set-text'
-                var actionName = item.ActionName;
+                string actionName = item.ActionName;
                 if (item.ActionName.Equals(CommonKeyIndexes.SetText,
                     StringComparison.CurrentCultureIgnoreCase))
                 {
@@ -184,8 +183,8 @@ namespace legallead.records.search.Classes
                             endingDate.Date.ToString(CommonKeyIndexes.DateTimeShort, formatDate);
                     }
                 }
-                var action = ElementActions
-                    .FirstOrDefault(x =>
+                IElementActionBase? action = ElementActions
+                    .Find(x =>
                     x.ActionName.Equals(item.ActionName,
                     StringComparison.CurrentCultureIgnoreCase));
                 if (action == null)
@@ -224,11 +223,11 @@ namespace legallead.records.search.Classes
                 return new List<PersonAddress>();
             }
 
-            var list = new List<PersonAddress>();
-            foreach (var item in cases)
+            List<PersonAddress> list = new();
+            foreach (HLinkDataRow item in cases)
             {
-                var styleInfo = GetCaseStyle(item);
-                var person = new PersonAddress
+                string styleInfo = GetCaseStyle(item);
+                PersonAddress person = new()
                 {
                     Name = item.Defendant,
                     CaseNumber = item.Case,
@@ -285,17 +284,17 @@ namespace legallead.records.search.Classes
                 return cases;
             }
 
-            var htmlAction = (ElementGetHtmlAction)action;
-            var isProbate = htmlAction.IsProbateSearch;
-            var isJustice = htmlAction.IsJusticeSearch;
+            ElementGetHtmlAction htmlAction = (ElementGetHtmlAction)action;
+            bool isProbate = htmlAction.IsProbateSearch;
+            bool isJustice = htmlAction.IsJusticeSearch;
 
             // create a list of hlinkdatarows from table
-            var caseData = RemoveElement(action.OuterHtml, "<img");
+            string caseData = RemoveElement(action.OuterHtml, "<img");
             // remove colspan? <colgroup>
             caseData = RemoveTag(caseData, "colgroup");
             // load cases into [cases] object
 
-            var newcases = LoadFromHtml(caseData);
+            List<HLinkDataRow> newcases = LoadFromHtml(caseData);
             newcases.FindAll(x => !x.IsProbate).ForEach(c => c.IsProbate = isProbate);
             newcases.FindAll(x => !x.IsJustice).ForEach(c => c.IsJustice = isJustice);
             // map case information using file xpath
@@ -314,7 +313,7 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            var doc = XmlDocProvider.GetDoc(item.Data);
+            XmlDocument doc = XmlDocProvider.GetDoc(item.Data);
             if (!doc.FirstChild.HasChildNodes)
             {
                 return string.Empty;
@@ -325,8 +324,8 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            var colIndex = Parameters.Id == 10 ? 2 : 2;
-            var node = doc.FirstChild.ChildNodes[colIndex];
+            int colIndex = Parameters.Id == 10 ? 2 : 2;
+            XmlNode? node = doc.FirstChild.ChildNodes[colIndex];
             if (node == null)
             {
                 return string.Empty;
@@ -337,9 +336,9 @@ namespace legallead.records.search.Classes
 
         protected static PersonAddress ParseAddress(string address, PersonAddress person)
         {
-            var separator = @"<br/>";
-            var pipe = '|';
-            var pipeString = "|";
+            string separator = @"<br/>";
+            char pipe = '|';
+            string pipeString = "|";
             const string noMatch = "No Match Found|Not Matched 00000";
             if (person == null)
             {
@@ -350,19 +349,19 @@ namespace legallead.records.search.Classes
             address = new StringBuilder(address.Trim()).Replace(separator, pipeString).ToString();
             if (address.EndsWith(pipeString, StringComparison.CurrentCultureIgnoreCase))
             {
-                address = address.Substring(0, address.Length - 1);
+                address = address[..^1];
             }
-            var pieces = address.Split(pipe)
+            List<string> pieces = address.Split(pipe)
                 .ToList().FindAll(s => !string.IsNullOrEmpty(s));
             if (!pieces.Any())
             {
                 return person;
             }
-            person.Address1 = pieces.First().Trim();
-            person.Address3 = pieces.Last().Trim();
+            person.Address1 = pieces[0].Trim();
+            person.Address3 = pieces[^1].Trim();
             if (pieces.Count > 2)
             {
-                var mx = pieces.Count - 1;
+                int mx = pieces.Count - 1;
                 person.Address2 = string.Empty;
                 for (int i = 1; i < mx; i++)
                 {
@@ -372,7 +371,7 @@ namespace legallead.records.search.Classes
                         person.Address2, pieces[i].Trim()).Trim();
                 }
             }
-            var zipPart = person.Address3.Split(' ').ToList();
+            List<string> zipPart = person.Address3.Split(' ').ToList();
             person.Zip = zipPart.Last();
 
             return person;
@@ -380,30 +379,30 @@ namespace legallead.records.search.Classes
 
         private static void GetAddressInformation(IWebDriver driver, TarrantWebInteractive jsonWebInteractive, HLinkDataRow linkData)
         {
-            var fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);//"hlinkUri");
-            var xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath); // "personNodeXpath");
-            var helper = new ElementAssertion(driver);
+            string fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
+            string xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath);
+            ElementAssertion helper = new(driver);
             helper.Navigate(string.Format(CultureInfo.CurrentCulture,
                 fmt, linkData.WebAddress));
             driver.WaitForNavigation();
-            var tdName = TryFindElement(driver, By.XPath(xpath));
+            IWebElement tdName = TryFindElement(driver, By.XPath(xpath));
             if (tdName == null)
             {
                 return;
             }
 
             linkData.Defendant = tdName.GetAttribute(CommonKeyIndexes.InnerText);
-            var parent = tdName.FindElement(By.XPath(CommonKeyIndexes.ParentElement));
+            IWebElement parent = tdName.FindElement(By.XPath(CommonKeyIndexes.ParentElement));
             linkData.Address = parent.Text;
             try
             {
                 // check or set IsCriminal attribute of linkData object
-                var criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+                IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
                 if (criminalLink != null) { linkData.IsCriminal = true; }
                 // get row index of this element ... and then go one row beyond...
-                var ridx = parent.GetAttribute(CommonKeyIndexes.RowIndex);
-                var table = parent.FindElement(By.XPath(CommonKeyIndexes.ParentElement));
-                var trCol = table.FindElements(By.TagName(CommonKeyIndexes.TrElement));
+                string ridx = parent.GetAttribute(CommonKeyIndexes.RowIndex);
+                IWebElement table = parent.FindElement(By.XPath(CommonKeyIndexes.ParentElement));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> trCol = table.FindElements(By.TagName(CommonKeyIndexes.TrElement));
                 if (!int.TryParse(ridx, out int r))
                 {
                     return;
@@ -412,19 +411,20 @@ namespace legallead.records.search.Classes
                 parent = GetAddressRow(parent, trCol); // put this row-index into config... it can change
                 linkData.Address = new StringBuilder(parent.Text)
                     .Replace(Environment.NewLine, "<br/>").ToString();
-                var findCase = new FindCaseDataPoint();
+                FindCaseDataPoint findCase = new();
                 findCase.Find(driver, linkData);
                 driver.Navigate().Back();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
         }
 
         private static void AppendToResult(string fileName, string caseData, string xpath)
         {
-            var doc = XmlDocProvider.Load(fileName);
-            var ndeCase = doc.DocumentElement.SelectSingleNode(xpath);
+            XmlDocument doc = XmlDocProvider.Load(fileName);
+            XmlNode? ndeCase = doc.DocumentElement.SelectSingleNode(xpath);
             if (ndeCase == null)
             {
                 return;
@@ -439,18 +439,18 @@ namespace legallead.records.search.Classes
 
         private static List<HLinkDataRow> LoadFromHtml(string caseData)
         {
-            var caseList = new List<HLinkDataRow>();
+            List<HLinkDataRow> caseList = new();
             XmlDocument doc = XmlDocProvider.GetDoc(caseData);
-            var trElements = doc.FirstChild.ChildNodes[0].SelectNodes("tr").Cast<XmlNode>().ToList();
-            foreach (var trow in trElements)
+            List<XmlNode> trElements = doc.FirstChild.ChildNodes[0].SelectNodes("tr").Cast<XmlNode>().ToList();
+            foreach (XmlNode? trow in trElements)
             {
-                var link = trow.SelectSingleNode("td/a");
+                XmlNode? link = trow.SelectSingleNode("td/a");
                 if (link == null)
                 {
                     continue;
                 }
 
-                var href = link.Attributes.GetNamedItem("href");
+                XmlNode? href = link.Attributes.GetNamedItem("href");
                 if (href == null)
                 {
                     continue;
@@ -469,19 +469,19 @@ namespace legallead.records.search.Classes
         private List<HLinkDataRow> AppendCourtInformation(List<HLinkDataRow> caseList
             )
         {
-            var parameterId = Parameters.Id;
-            var contents = SettingsManager.Content;
-            var doc = XmlDocProvider.GetDoc(contents);
+            int parameterId = Parameters.Id;
+            string contents = SettingsManager.Content;
+            XmlDocument doc = XmlDocProvider.GetDoc(contents);
             List<XmlNode> caseInspetor = GetCaseInspector(parameterId, doc);
-            var probateInspector = GetCaseInspector(parameterId, doc, "probate");
-            var justiceInspector = GetCaseInspector(parameterId, doc, "justice");
-            //var caseInfo = doc.DocumentElement.SelectSingleNode("");
-            foreach (var item in caseList)
+            List<XmlNode> probateInspector = GetCaseInspector(parameterId, doc, "probate");
+            List<XmlNode> justiceInspector = GetCaseInspector(parameterId, doc, "justice");
+
+            foreach (HLinkDataRow item in caseList)
             {
-                var data = item.Data;
-                var dcc = XmlDocProvider.GetDoc(data);
-                var trow = dcc.ChildNodes[0];
-                var inspector = item.IsProbate ? probateInspector : caseInspetor;
+                string data = item.Data;
+                XmlDocument dcc = XmlDocProvider.GetDoc(data);
+                XmlNode? trow = dcc.ChildNodes[0];
+                List<XmlNode> inspector = item.IsProbate ? probateInspector : caseInspetor;
                 if (item.IsJustice) { inspector = justiceInspector; }
                 if (!MapCourtAttributes(item, trow, inspector))
                 {
@@ -495,10 +495,10 @@ namespace legallead.records.search.Classes
 
         private static bool MapCourtAttributes(HLinkDataRow item, XmlNode trow, List<XmlNode> inspector)
         {
-            foreach (var search in inspector)
+            foreach (XmlNode search in inspector)
             {
-                var node = trow.SelectSingleNode(search.InnerText);
-                var keyName = search.Attributes.GetNamedItem("name").InnerText;
+                XmlNode? node = trow.SelectSingleNode(search.InnerText);
+                string keyName = search.Attributes.GetNamedItem("name").InnerText;
                 item[keyName] = string.Empty;
                 if (node == null)
                 {
@@ -516,7 +516,7 @@ namespace legallead.records.search.Classes
         {
             try
             {
-                var inspector = doc.DocumentElement.SelectSingleNode("directions").SelectNodes("caseInspection")
+                List<XmlNode> inspector = doc.DocumentElement.SelectSingleNode("directions").SelectNodes("caseInspection")
                     .Cast<XmlNode>().ToList()
                     .FindAll(x => x.Attributes.GetNamedItem("id").Value == parameterId
                         .ToString(CultureInfo.CurrentCulture.NumberFormat))
@@ -546,7 +546,7 @@ namespace legallead.records.search.Classes
 
             int colIndex = 3;
             parent = trCol[colIndex];
-            var txt = string.IsNullOrEmpty(parent.Text) ? "" : parent.Text.Trim();
+            string txt = string.IsNullOrEmpty(parent.Text) ? "" : parent.Text.Trim();
             if (string.IsNullOrEmpty(txt))
             {
                 parent = trCol[colIndex - 1];
@@ -559,9 +559,6 @@ namespace legallead.records.search.Classes
         /// <param name="parent">The parent web browser instance.</param>
         /// <param name="by">The by condition used to locate the element</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design",
-            "CA1031:Do not catch general exception types",
-            Justification = "Returning a NULL allows the caller to handle")]
         internal static IWebElement TryFindElement(IWebDriver parent, By by)
         {
             try
@@ -580,12 +577,12 @@ namespace legallead.records.search.Classes
 
         protected static List<IElementActionBase> ElementActions
         {
-            get { return elementActions ?? (elementActions = GetActions()); }
+            get { return elementActions ??= GetActions(); }
         }
 
         protected static List<IElementActionBase> GetActions()
         {
-            var container =
+            StructureMap.Container container =
             ActionElementContainer.GetContainer;
             return container.GetAllInstances<IElementActionBase>().ToList();
         }
@@ -593,8 +590,8 @@ namespace legallead.records.search.Classes
         protected static NavigationInstructionDto GetAppSteps(string suffix = "")
         {
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -604,20 +601,20 @@ namespace legallead.records.search.Classes
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            var data = File.ReadAllText(dataFile);
+            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data);
         }
 
         private static TarrantCourtDropDownDto _tarrantComboBxValue;
 
-        protected static TarrantCourtDropDownDto TarrantComboBxValue => _tarrantComboBxValue ?? (_tarrantComboBxValue = GetComboBoxValues());
+        protected static TarrantCourtDropDownDto TarrantComboBxValue => _tarrantComboBxValue ??= GetComboBoxValues();
 
         public static TarrantCourtDropDownDto GetComboBoxValues()
         {
             const string dataFormat = @"{0}\xml\{1}.json";
             const string suffix = "tarrantCourtSearchDropDown";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -627,7 +624,7 @@ namespace legallead.records.search.Classes
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            var data = File.ReadAllText(dataFile);
+            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data);
         }
 

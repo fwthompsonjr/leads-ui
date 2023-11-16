@@ -8,8 +8,6 @@ namespace legallead.records.search.Addressing
     {
         public override bool CanFind { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types",
-            Justification = "Exception thrown from this method will stop automation.")]
         public override void Find(IWebDriver driver, HLinkDataRow linkData)
         {
             if (driver == null)
@@ -22,9 +20,9 @@ namespace legallead.records.search.Addressing
                 throw new System.ArgumentNullException(nameof(linkData));
             }
 
-            var searchType = "Petitioner";
+            string searchType = "Petitioner";
             CanFind = false;
-            var tdName = TryFindElement(driver, By.XPath(
+            IWebElement tdName = TryFindElement(driver, By.XPath(
                 string.Format(CultureInfo.CurrentCulture, IndexKeyNames.ThContainsText, searchType)));
             // this instance can find
             if (tdName == null)
@@ -32,17 +30,17 @@ namespace legallead.records.search.Addressing
                 return;
             }
 
-            var parent = tdName.FindElement(By.XPath(IndexKeyNames.ParentElement));
-            var rowLabel = parent.FindElements(By.TagName(IndexKeyNames.ThElement))[1];
+            IWebElement parent = tdName.FindElement(By.XPath(IndexKeyNames.ParentElement));
+            IWebElement rowLabel = parent.FindElements(By.TagName(IndexKeyNames.ThElement))[1];
             linkData.Defendant = rowLabel.GetAttribute(IndexKeyNames.InnerText);
             CanFind = true;
             linkData.Address = parent.Text;
             try
             {
                 // get row index of this element ... and then go one row beyond...
-                var ridx = parent.GetAttribute(IndexKeyNames.RowIndex);
-                var table = parent.FindElement(By.XPath(IndexKeyNames.ParentElement));
-                var trCol = table.FindElements(By.TagName(IndexKeyNames.TrElement)).ToList();
+                string ridx = parent.GetAttribute(IndexKeyNames.RowIndex);
+                IWebElement table = parent.FindElement(By.XPath(IndexKeyNames.ParentElement));
+                List<IWebElement> trCol = table.FindElements(By.TagName(IndexKeyNames.TrElement)).ToList();
                 if (!int.TryParse(ridx, out int r))
                 {
                     return;
@@ -51,8 +49,9 @@ namespace legallead.records.search.Addressing
                 MapElementAddress(linkData, rowLabel, table, trCol, r,
                     searchType.ToLower(CultureInfo.CurrentCulture));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
         }
     }

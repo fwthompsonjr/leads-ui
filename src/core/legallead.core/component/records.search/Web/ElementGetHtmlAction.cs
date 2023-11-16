@@ -17,25 +17,25 @@ namespace legallead.records.search.Web
 
         public override void Act(NavigationStep item)
         {
-            var helper = new CollinWebInteractive();
-            var selector = GetSelector(item);
-            var element = GetWeb.FindElement(selector);
-            var outerHtml = element.GetAttribute("outerHTML");
+            CollinWebInteractive helper = new();
+            By selector = GetSelector(item);
+            IWebElement element = GetWeb.FindElement(selector);
+            string outerHtml = element.GetAttribute("outerHTML");
             outerHtml = helper.RemoveElement(outerHtml, "<img");
             // remove colspan? <colgroup>
             outerHtml = helper.RemoveTag(outerHtml, "colgroup");
             // remove the image tags now
 
             OuterHtml = outerHtml;
-            var probateLinkXpath = CommonKeyIndexes.ProbateLinkXpath;
-            var justiceLinkXpath = probateLinkXpath.Replace("'Probate'", "'Justice'");
-            var probateLink =
+            string probateLinkXpath = CommonKeyIndexes.ProbateLinkXpath;
+            string justiceLinkXpath = probateLinkXpath.Replace("'Probate'", "'Justice'");
+            IWebElement probateLink =
                 GetWeb.TryFindElement(
                     By.XPath(probateLinkXpath));
-            var justiceLocation =
+            IWebElement justiceLocation =
                 GetWeb.TryFindElement(
                     By.XPath(justiceLinkXpath));
-            var isCollinCounty = GetWeb.Url.Contains("co.collin.tx.us");
+            bool isCollinCounty = GetWeb.Url.Contains("co.collin.tx.us");
 
             IsProbateSearch = probateLink != null;
             IsJusticeSearch = isCollinCounty && justiceLocation != null;

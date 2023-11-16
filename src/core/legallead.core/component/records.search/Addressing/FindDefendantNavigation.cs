@@ -5,8 +5,6 @@ using OpenQA.Selenium;
 
 namespace legallead.records.search.Addressing
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types",
-        Justification = "Exception thrown from this method will stop automation.")]
     public class FindDefendantNavigation : FindDefendantBase
     {
         public override bool CanFind { get; set; }
@@ -24,13 +22,13 @@ namespace legallead.records.search.Addressing
             }
 
             CanFind = false;
-            var helper = new ElementAssertion(driver);
+            ElementAssertion helper = new(driver);
             helper.Navigate(linkData.WebAddress);
             driver.WaitForNavigation();
             // get criminal hyperlink
             // //a[contains(text(),'Criminal')]
-            var criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
-            var elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
+            IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+            IWebElement? elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
             if (criminalLink != null)
             {
                 if (elementCaseName != null)
@@ -47,12 +45,12 @@ namespace legallead.records.search.Addressing
                 GetTable(driver, By.XPath(@"//div[contains(text(),'Party Information')]"));
         }
 
-        private string GetTable(IWebDriver driver, By by)
+        private static string GetTable(IWebDriver driver, By by)
         {
             try
             {
-                var dv = driver.FindElement(by);
-                var parent = dv.FindElement(By.XPath(IndexKeyNames.ParentElement));
+                IWebElement dv = driver.FindElement(by);
+                IWebElement parent = dv.FindElement(By.XPath(IndexKeyNames.ParentElement));
                 while (parent.TagName != "table")
                 {
                     parent = parent.FindElement(By.XPath(IndexKeyNames.ParentElement));

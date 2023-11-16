@@ -21,12 +21,12 @@ namespace legallead.records.search.Db
             End();
         }
 
-        private IWebDriver GetDriver(bool headless)
+        private static IWebDriver GetDriver(bool headless)
         {
-            var wdriver = (new WebDriverDto().Get()).WebDrivers;
-            var driver = wdriver.Drivers.Where(d => d.Id == wdriver.SelectedIndex).FirstOrDefault();
-            var container = WebDriverContainer.GetContainer;
-            var provider = container.GetInstance<IWebDriverProvider>(driver.Name);
+            WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
+            Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
+            StructureMap.Container container = WebDriverContainer.GetContainer;
+            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver.Name);
             return provider.GetWebDriver(headless);
         }
     }

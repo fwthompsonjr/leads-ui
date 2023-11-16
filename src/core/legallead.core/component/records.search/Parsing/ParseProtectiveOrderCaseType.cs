@@ -27,8 +27,8 @@ namespace legallead.records.search.Parsing
                 return false;
             }
 
-            var lowered = CaseData.ToLower(System.Globalization.CultureInfo.CurrentCulture);
-            var firstAnd = lowered.Substring(SearchFor.Length).IndexOf(" and ", comparison);
+            string lowered = CaseData.ToLower(System.Globalization.CultureInfo.CurrentCulture);
+            int firstAnd = lowered[SearchFor.Length..].IndexOf(" and ", comparison);
             if (firstAnd < 0)
             {
                 return false;
@@ -40,7 +40,7 @@ namespace legallead.records.search.Parsing
         public virtual ParseCaseDataResponseDto Parse()
         {
             const string and = " and ";
-            var response = new ParseCaseDataResponseDto { CaseData = CaseData };
+            ParseCaseDataResponseDto response = new() { CaseData = CaseData };
             if (!CanParse())
             {
                 return response;
@@ -51,26 +51,26 @@ namespace legallead.records.search.Parsing
                 return response;
             }
 
-            var fullName = CaseData.ToLower(System.Globalization.CultureInfo.CurrentCulture);
+            string fullName = CaseData.ToLower(System.Globalization.CultureInfo.CurrentCulture);
             if (!fullName.StartsWith(SearchFor, comparison))
             {
                 return response;
             }
 
-            var findItIndex = fullName.IndexOf(SearchFor, comparison);
+            int findItIndex = fullName.IndexOf(SearchFor, comparison);
             if (findItIndex < 0)
             {
                 return response;
             }
             //response.Defendant = CaseData.Substring(findItIndex).Trim();
-            fullName = CaseData.Substring(SearchFor.Length).Trim();
-            var splitIndex = fullName.IndexOf(and, comparison);
+            fullName = CaseData[SearchFor.Length..].Trim();
+            int splitIndex = fullName.IndexOf(and, comparison);
             if (splitIndex < 0)
             {
                 response.Plantiff = fullName.Trim();
                 return response;
             }
-            response.Plantiff = fullName.Substring(fullName.IndexOf(and, comparison)).Replace(and, string.Empty).Trim(); ;
+            response.Plantiff = fullName[fullName.IndexOf(and, comparison)..].Replace(and, string.Empty).Trim(); ;
             return response;
         }
     }

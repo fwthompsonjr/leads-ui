@@ -26,7 +26,7 @@ namespace legallead.records.search.Web
                 throw new ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
+            IWebDriver driver = GetWeb;
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             IsOverlaid = false;
 
@@ -45,7 +45,7 @@ namespace legallead.records.search.Web
             {
                 if (HasNoData())
                 {
-                    var empty = new CaseRowData
+                    CaseRowData empty = new()
                     {
                         FileDate = GetFileDateFromPage(),
                         CaseDataAddresses = new List<CaseDataAddress>()
@@ -56,18 +56,18 @@ namespace legallead.records.search.Web
                     rowData.Add(empty);
                     break;
                 }
-                var rows = driver.FindElements(Byy.CssSelector(rowSelector)).ToList();
+                List<IWebElement> rows = driver.FindElements(Byy.CssSelector(rowSelector)).ToList();
                 rows.ForEach(row =>
                 {
-                    var caseData = new CaseRowData();
-                    var cells = row.FindElements(Byy.TagName("td")).ToList();
-                    for (var i = 1; i <= 8; i++)
+                    CaseRowData caseData = new();
+                    List<IWebElement> cells = row.FindElements(Byy.TagName("td")).ToList();
+                    for (int i = 1; i <= 8; i++)
                     {
-                        var cell = cells[i];
+                        IWebElement cell = cells[i];
                         switch (i)
                         {
                             case 1:
-                                var doclinks = cell.FindElement(Byy.CssSelector("a.doclinks"));
+                                IWebElement doclinks = cell.FindElement(Byy.CssSelector("a.doclinks"));
                                 executor.ExecuteScript("arguments[0].scrollIntoView(true);", doclinks);
                                 caseData.Case = doclinks.Text;
                                 break;
@@ -97,12 +97,12 @@ namespace legallead.records.search.Web
                                 break;
 
                             case 8:
-                                var hlink = cell.FindElement(Byy.TagName("a"));
-                                var link = hlink.GetAttribute("onclick");
-                                var n = link.IndexOf("x-", comparisonType: ccic) + 1;
-                                link = link.Substring(n);
+                                IWebElement hlink = cell.FindElement(Byy.TagName("a"));
+                                string link = hlink.GetAttribute("onclick");
+                                int n = link.IndexOf("x-", comparisonType: ccic) + 1;
+                                link = link[n..];
                                 n = link.IndexOf(".", comparisonType: ccic);
-                                link = link.Substring(1, n - 1);
+                                link = link[1..n];
                                 executor.ExecuteScript("arguments[0].click();", hlink);
                                 caseData.CaseDataAddresses = GetAddresses(link);
                                 rowData.Add(caseData);
@@ -127,17 +127,17 @@ namespace legallead.records.search.Web
 
         private bool NavigateNextPage()
         {
-            var cssPagerLink = "a.pgr";
-            var driver = GetWeb;
+            string cssPagerLink = "a.pgr";
+            IWebDriver driver = GetWeb;
             // if there are paging hyperlinks then their might be a next page
-            var paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
+            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
             if (paging == null)
             {
                 return false;
             }
 
-            var list = paging.Cast<IWebElement>().ToList();
-            var next = list.FirstOrDefault(a => a.Text.Contains("Next"));
+            List<IWebElement> list = paging.Cast<IWebElement>().ToList();
+            IWebElement? next = list.Find(a => a.Text.Contains("Next"));
             if (next == null)
             {
                 return false;
@@ -156,9 +156,9 @@ namespace legallead.records.search.Web
         private string GetFileDateFromPage()
         {
             const string dte = "MM/dd/yyyy";
-            var cssSelector = "#ctl00_ContentPlaceHolder1_txtDateFrom";
-            var found = GetWeb.TryFindElement(Byy.CssSelector(cssSelector));
-            var dateMin = DateTime.MinValue.ToString(dte, CultureInfo.CurrentCulture);
+            string cssSelector = "#ctl00_ContentPlaceHolder1_txtDateFrom";
+            IWebElement found = GetWeb.TryFindElement(Byy.CssSelector(cssSelector));
+            string dateMin = DateTime.MinValue.ToString(dte, CultureInfo.CurrentCulture);
             if (found == null)
             {
                 return dateMin;
@@ -172,16 +172,16 @@ namespace legallead.records.search.Web
 
         private List<CaseDataAddress> GetAddresses(string search)
         {
-            var data = new List<CaseDataAddress>();
-            var driver = GetWeb;
-            var div = driver.FindElement(Byy.CssSelector("div[id*='" + search + "']"));
-            var elements = div.FindElements(Byy.CssSelector("table[rules='rows'] tr[align='center']")).ToList();
+            List<CaseDataAddress> data = new();
+            IWebDriver driver = GetWeb;
+            IWebElement div = driver.FindElement(Byy.CssSelector("div[id*='" + search + "']"));
+            List<IWebElement> elements = div.FindElements(Byy.CssSelector("table[rules='rows'] tr[align='center']")).ToList();
 
-            for (var i = 0; i < elements.Count; i++)
+            for (int i = 0; i < elements.Count; i++)
             {
-                var row = elements[i];
-                var tds = row.FindElements(Byy.TagName("td")).ToList();
-                var obj = new CaseDataAddress
+                IWebElement row = elements[i];
+                List<IWebElement> tds = row.FindElements(Byy.TagName("td")).ToList();
+                CaseDataAddress obj = new()
                 {
                     Case = HtmlDecode(tds[0].Text.Trim()),
                     Role = HtmlDecode(tds[1].Text.Trim()),
@@ -196,8 +196,8 @@ namespace legallead.records.search.Web
         private static string HtmlDecode(string input)
         {
             const string pipe = " | ";
-            var cleaned = System.Net.WebUtility.HtmlDecode(input);
-            var sb = new StringBuilder(cleaned);
+            string cleaned = System.Net.WebUtility.HtmlDecode(input);
+            StringBuilder sb = new(cleaned);
             sb.Replace("<br>", pipe);
             sb.Replace("<br/>", pipe);
             sb.Replace("<br />", pipe);
@@ -207,9 +207,9 @@ namespace legallead.records.search.Web
         protected bool HasNoData()
         {
             // #ctl00_ContentPlaceHolder1_lblListViewCasesEmptyMsg:visible
-            var cssNoData = "ctl00_ContentPlaceHolder1_lblListViewCasesEmptyMsg";
-            var driver = GetWeb;
-            var found = driver.TryFindElement(Byy.Id(cssNoData));
+            string cssNoData = "ctl00_ContentPlaceHolder1_lblListViewCasesEmptyMsg";
+            IWebDriver driver = GetWeb;
+            IWebElement found = driver.TryFindElement(Byy.Id(cssNoData));
             if (found == null)
             {
                 return false;
@@ -218,23 +218,21 @@ namespace legallead.records.search.Web
             return found.Displayed;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design",
-            "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         protected bool HasNextPage()
         {
             try
             {
-                var cssPagerLink = "a.pgr";
-                var driver = GetWeb;
+                string cssPagerLink = "a.pgr";
+                IWebDriver driver = GetWeb;
                 // if there are paging hyperlinks then their might be a next page
-                var paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
                 if (paging == null)
                 {
                     return false;
                 }
 
-                var list = paging.Cast<IWebElement>().ToList();
-                var next = list.FirstOrDefault(a => a.Text.Contains("Next"));
+                List<IWebElement> list = paging.Cast<IWebElement>().ToList();
+                IWebElement? next = list.Find(a => a.Text.Contains("Next"));
                 if (next == null)
                 {
                     return false;

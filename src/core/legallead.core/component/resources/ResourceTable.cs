@@ -17,7 +17,7 @@ namespace legallead.resources
         {
             get
             {
-                if (string.IsNullOrEmpty(_resourceFileName) | !File.Exists(_resourceFileName))
+                if (string.IsNullOrEmpty(_resourceFileName) || !File.Exists(_resourceFileName))
                 {
                     _resourceFileName = Path.Combine(
                         AppFolder, ResourceFolder, ResourceFile);
@@ -32,13 +32,13 @@ namespace legallead.resources
             }
         }
 
-        public static string AppFolder => _appFolder ?? (_appFolder = GetAppFolderName());
+        public static string AppFolder => _appFolder ??= GetAppFolderName();
 
-        public static ResourceMap Map => _resourceMap ?? (_resourceMap = GetResourceMap());
+        public static ResourceMap Map => _resourceMap ??= GetResourceMap();
 
         private static List<int> _resourceTypeList;
 
-        private static List<int> ResourceTypeList => _resourceTypeList ?? (_resourceTypeList = GetResourceTypeIdList());
+        private static List<int> ResourceTypeList => _resourceTypeList ??= GetResourceTypeIdList();
 
         /// <summary>
         /// Gets the name of the application directory.
@@ -98,7 +98,6 @@ namespace legallead.resources
             if (!File.Exists(resourceFile))
             {
                 return GetMapFromBuilder();
-                // throw new FileNotFoundException("Unable to locate resource table.", resourceFile);
             }
             return GetMapFromFile();
         }
@@ -111,11 +110,9 @@ namespace legallead.resources
 
         private static ResourceMap GetMapFromFile()
         {
-            using (var reader = new StreamReader(ResourceFileName))
-            {
-                var data = reader.ReadToEnd();
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data);
-            }
+            using var reader = new StreamReader(ResourceFileName);
+            var data = reader.ReadToEnd();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data);
         }
 
         private static List<int> GetResourceTypeIdList()

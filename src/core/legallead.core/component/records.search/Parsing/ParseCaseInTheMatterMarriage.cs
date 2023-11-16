@@ -30,8 +30,8 @@ namespace legallead.records.search.Parsing
                 return false;
             }
 
-            var lowered = CaseData.ToLower(CCulture.CurrentCulture);
-            var firstAnd = lowered.Substring(SearchFor.Length).IndexOf(" and ", comparison);
+            string lowered = CaseData.ToLower(CCulture.CurrentCulture);
+            int firstAnd = lowered[SearchFor.Length..].IndexOf(" and ", comparison);
             if (firstAnd < 0)
             {
                 return false;
@@ -43,7 +43,7 @@ namespace legallead.records.search.Parsing
         public virtual ParseCaseDataResponseDto Parse()
         {
             const string and = " and ";
-            var response = new ParseCaseDataResponseDto { CaseData = CaseData };
+            ParseCaseDataResponseDto response = new() { CaseData = CaseData };
             if (!CanParse())
             {
                 return response;
@@ -54,40 +54,40 @@ namespace legallead.records.search.Parsing
                 return response;
             }
 
-            var fullName = CaseData.ToLower(CCulture.CurrentCulture);
+            string fullName = CaseData.ToLower(CCulture.CurrentCulture);
             if (!fullName.StartsWith(SearchFor, comparison))
             {
                 return response;
             }
 
-            var findItIndex = fullName.IndexOf(SearchFor, comparison);
+            int findItIndex = fullName.IndexOf(SearchFor, comparison);
             if (findItIndex < 0)
             {
                 return response;
             }
 
             CaseData = CaseData.Replace(" And ", and);
-            fullName = CaseData.Substring(SearchFor.Length);
-            var splitIndex = fullName.IndexOf(and, comparison);
+            fullName = CaseData[SearchFor.Length..];
+            int splitIndex = fullName.IndexOf(and, comparison);
             if (splitIndex < 0)
             {
                 response.Defendant = fullName.Trim();
                 response.Plantiff = string.Empty;
                 return response;
             }
-            fullName = fullName.Substring(0, splitIndex);
+            fullName = fullName[..splitIndex];
             response.Defendant = fullName.Trim();
-            fullName = CaseData.Substring(SearchFor.Length).Replace(fullName, "").Trim();
+            fullName = CaseData[SearchFor.Length..].Replace(fullName, "").Trim();
             fullName = GetWords(fullName, and);
             response.Plantiff = fullName;
             return response;
         }
 
-        private string GetWords(string fullName, string and)
+        private static string GetWords(string fullName, string and)
         {
-            var final = string.Empty;
-            var pieces = fullName.Split(' ');
-            foreach (var piece in pieces)
+            string final = string.Empty;
+            string[] pieces = fullName.Split(' ');
+            foreach (string piece in pieces)
             {
                 if (piece.Trim() == and.Trim())
                 {

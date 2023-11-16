@@ -8,10 +8,7 @@ namespace legallead.records.search.Dto
 
         public GenericSettingDto(string name)
         {
-            if (_settings == null)
-            {
-                _settings = new Dictionary<string, GenericSetting>();
-            }
+            _settings ??= new Dictionary<string, GenericSetting>();
             if (!_settings.ContainsKey(name))
             {
                 _settings.Add(name, new GenericSetting { Name = name });
@@ -42,11 +39,11 @@ namespace legallead.records.search.Dto
             set
             {
                 _name = value;
-                var fileSuffix = value;
-                var searchSettingFileNotFound = CommonKeyIndexes.SearchSettingFileNotFound;
+                string fileSuffix = value;
+                string searchSettingFileNotFound = CommonKeyIndexes.SearchSettingFileNotFound;
                 const string dataFormat = @"{0}\xml\{1}.json";
-                var appDirectory = ContextManagment.AppDirectory;
-                var dataFile = string.Format(
+                string appDirectory = ContextManagment.AppDirectory;
+                string dataFile = string.Format(
                     CultureInfo.CurrentCulture,
                     dataFormat,
                     appDirectory,
@@ -67,15 +64,15 @@ namespace legallead.records.search.Dto
 
         public SearchSettingDto GetDto()
         {
-            var parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(Content);
+            Example? parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(Content);
             return parent.SearchSetting;
         }
 
         public void Save(SearchSettingDto source)
         {
-            var dataFile = DataFile;
-            var parent = new Example { SearchSetting = source };
-            var data = Newtonsoft.Json.JsonConvert.SerializeObject(parent,
+            string dataFile = DataFile;
+            Example parent = new() { SearchSetting = source };
+            string data = Newtonsoft.Json.JsonConvert.SerializeObject(parent,
                 Newtonsoft.Json.Formatting.Indented);
             if (File.Exists(dataFile)) { File.Delete(dataFile); }
             using (StreamWriter sw = new(dataFile))

@@ -38,22 +38,22 @@
                 throw new ArgumentOutOfRangeException(nameof(rangeInDays));
             }
             rangeInDays = Math.Abs(rangeInDays);
-            var obj = new HarrisCaseDateDto
+            HarrisCaseDateDto obj = new()
             {
                 StartDate = startDate,
                 Interval = interval
             };
-            var list = new List<HarrisCaseDateDto> { obj };
-            var top = obj.StartDate;
+            List<HarrisCaseDateDto> list = new() { obj };
+            DateTime top = obj.StartDate;
             TimeSpan compared;
             try
             {
                 do
                 {
-                    var item = list.Last();
-                    var dto = new HarrisCaseDateDto { Interval = obj.Interval, StartDate = item.EndDate };
+                    HarrisCaseDateDto item = list.Last();
+                    HarrisCaseDateDto dto = new() { Interval = obj.Interval, StartDate = item.EndDate };
                     list.Add(dto);
-                    var bottom = list.Last().EndDate;
+                    DateTime bottom = list.Last().EndDate;
                     compared = top.Subtract(bottom);
                 } while (Math.Abs(compared.TotalDays) < rangeInDays);
             }

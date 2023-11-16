@@ -19,7 +19,7 @@ namespace legallead.records.search.Models
         {
             get
             {
-                return _fieldNames ?? (_fieldNames = FieldNames.ToLower(CultureInfo.CurrentCulture));
+                return _fieldNames ??= FieldNames.ToLower(CultureInfo.CurrentCulture);
             }
         }
 
@@ -27,8 +27,7 @@ namespace legallead.records.search.Models
         {
             get
             {
-                return _fieldList ?? (
-                  _fieldList = LoweredFieldNames.Split(',').ToList());
+                return                   _fieldList ??= LoweredFieldNames.Split(',').ToList();
             }
         }
 
@@ -38,9 +37,9 @@ namespace legallead.records.search.Models
 
         private List<ICaseDataParser> GetCaseDataParses()
         {
-            var caseType = string.IsNullOrEmpty(CaseType) ?
+            string caseType = string.IsNullOrEmpty(CaseType) ?
                 string.Empty : CaseType.Trim();
-            var caseStyle = string.IsNullOrEmpty(CaseStyle) ?
+            string caseStyle = string.IsNullOrEmpty(CaseStyle) ?
                 string.Empty : CaseStyle.Trim();
             return new List<ICaseDataParser>
             {
@@ -146,16 +145,16 @@ namespace legallead.records.search.Models
                 return string.Empty;
             }
 
-            var fullName = Name;
+            string fullName = Name;
             if (!fullName.Contains(','))
             {
                 return postionId == 0 ? fullName : string.Empty;
             }
 
-            var nameParts = fullName.Split(',');
-            var lastName = nameParts[0];
-            var findIt = string.Format(CultureInfo.CurrentCulture, "{0}{1}", lastName, ',');
-            var firstName = fullName.Remove(0, findIt.Length).Trim();
+            string[] nameParts = fullName.Split(',');
+            string lastName = nameParts[0];
+            string findIt = string.Format(CultureInfo.CurrentCulture, "{0}{1}", lastName, ',');
+            string firstName = fullName.Remove(0, findIt.Length).Trim();
             if (firstName.Contains(' '))
             {
                 nameParts = firstName.Split(' ');
@@ -181,14 +180,14 @@ namespace legallead.records.search.Models
                 return string.Empty;
             }
 
-            var providers = GetCaseDataParses().FindAll(x => x.CanParse());
+            List<ICaseDataParser> providers = GetCaseDataParses().FindAll(x => x.CanParse());
             if (!providers.Any())
             {
                 return string.Empty;
             }
 
-            var response = string.Empty;
-            foreach (var parser in providers)
+            string response = string.Empty;
+            foreach (ICaseDataParser parser in providers)
             {
                 response = parser.Parse().Plantiff;
                 if (!string.IsNullOrEmpty(response))
@@ -220,7 +219,7 @@ namespace legallead.records.search.Models
                     return string.Empty;
                 }
 
-                var keyName = indexName.ToLower(CultureInfo.CurrentCulture);
+                string keyName = indexName.ToLower(CultureInfo.CurrentCulture);
                 if (!FieldList.Contains(keyName))
                 {
                     return string.Empty;
@@ -284,7 +283,7 @@ namespace legallead.records.search.Models
                     return;
                 }
 
-                var keyName = indexName.ToLower(CultureInfo.CurrentCulture);
+                string keyName = indexName.ToLower(CultureInfo.CurrentCulture);
                 if (!FieldList.Contains(keyName))
                 {
                     return;
@@ -399,9 +398,9 @@ namespace legallead.records.search.Models
                 return string.Empty;
             }
 
-            var lowerNodeName = nodeName.ToLower(CultureInfo.CurrentCulture);
-            var addressNode = personNode.ChildNodes[1].InnerText.Trim();
-            var addressFields = "address1,address2,address3,zip".Split(',').ToList();
+            string lowerNodeName = nodeName.ToLower(CultureInfo.CurrentCulture);
+            string addressNode = personNode.ChildNodes[1].InnerText.Trim();
+            List<string> addressFields = "address1,address2,address3,zip".Split(',').ToList();
             if (addressFields.Contains(lowerNodeName) && string.IsNullOrEmpty(addressNode))
             {
                 return string.Empty;
@@ -410,15 +409,15 @@ namespace legallead.records.search.Models
             switch (lowerNodeName)
             {
                 case "address1":
-                    var first = GetAddressList(addressNode);
+                    List<string> first = GetAddressList(addressNode);
                     return first.First();
 
                 case "address2":
-                    var middle = GetAddressList(addressNode);
+                    List<string> middle = GetAddressList(addressNode);
                     return GetMiddleAddress(middle);
 
                 case "address3":
-                    var second = GetAddressList(addressNode);
+                    List<string> second = GetAddressList(addressNode);
                     if (second.Count < 2)
                     {
                         return string.Empty;
@@ -427,13 +426,13 @@ namespace legallead.records.search.Models
                     return second.Last();
 
                 case "zip":
-                    var parts = addressNode
+                    string parts = addressNode
                         .Replace("<br/>", "~")
                         .Replace("<br />", "~").Split('~').ToList().Last();
                     return parts.Split(' ').Last();
 
                 case "case":
-                    var caseNode = personNode.SelectSingleNode("case");
+                    XmlNode? caseNode = personNode.SelectSingleNode("case");
                     if (caseNode == null)
                     {
                         return string.Empty;
@@ -441,7 +440,7 @@ namespace legallead.records.search.Models
                     return ((XmlCDataSection)caseNode.ChildNodes[0]).Data;
 
                 case "court":
-                    var courtNode = personNode.SelectSingleNode("court");
+                    XmlNode? courtNode = personNode.SelectSingleNode("court");
                     if (courtNode == null)
                     {
                         return string.Empty;
@@ -450,7 +449,7 @@ namespace legallead.records.search.Models
                     return ((XmlCDataSection)courtNode.ChildNodes[0]).Data;
 
                 case "datefiled":
-                    var filedNode = personNode.SelectSingleNode("dateFiled");
+                    XmlNode? filedNode = personNode.SelectSingleNode("dateFiled");
                     if (filedNode == null)
                     {
                         return string.Empty;
@@ -459,7 +458,7 @@ namespace legallead.records.search.Models
                     return ((XmlCDataSection)filedNode.ChildNodes[0]).Data;
 
                 case "casetype":
-                    var caseTypeNode = personNode.SelectSingleNode("caseType");
+                    XmlNode? caseTypeNode = personNode.SelectSingleNode("caseType");
                     if (caseTypeNode == null)
                     {
                         return string.Empty;
@@ -468,7 +467,7 @@ namespace legallead.records.search.Models
                     return ((XmlCDataSection)caseTypeNode.ChildNodes[0]).Data;
 
                 case "casestyle":
-                    var caseStyleNode = personNode.SelectSingleNode("caseStyle");
+                    XmlNode? caseStyleNode = personNode.SelectSingleNode("caseStyle");
                     if (caseStyleNode == null)
                     {
                         return string.Empty;
@@ -489,7 +488,7 @@ namespace legallead.records.search.Models
                 return string.Empty;
             }
 
-            var addr = string.Empty;
+            string addr = string.Empty;
             for (int i = 1; i < middle.Count - 1; i++)
             {
                 if (!string.IsNullOrEmpty(addr))
@@ -508,7 +507,7 @@ namespace legallead.records.search.Models
                 return null;
             }
 
-            var addr = new PersonAddress()
+            PersonAddress addr = new()
             {
                 Name = TryGet(personNode, "name"),
                 Zip = TryGet(personNode, "address", "zip"),
@@ -526,7 +525,7 @@ namespace legallead.records.search.Models
 
         private static string TryGet(XmlNode personNode, string nodeName)
         {
-            var node = personNode.SelectSingleNode(nodeName);
+            XmlNode? node = personNode.SelectSingleNode(nodeName);
             if (node == null)
             {
                 return string.Empty;
@@ -539,7 +538,7 @@ namespace legallead.records.search.Models
         {
             try
             {
-                var node = personNode.SelectSingleNode(nodeName);
+                XmlNode? node = personNode.SelectSingleNode(nodeName);
                 if (node == null)
                 {
                     return string.Empty;
@@ -553,8 +552,8 @@ namespace legallead.records.search.Models
                 {
                     if (childNodeName.StartsWith("address", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        var fullAddress = ((XmlCDataSection)(node.ChildNodes[0])).Data;
-                        var addressList = GetAddressList(fullAddress);
+                        string fullAddress = ((XmlCDataSection)(node.ChildNodes[0])).Data;
+                        List<string> addressList = GetAddressList(fullAddress);
                         switch (childNodeName)
                         {
                             case "addressA":
@@ -571,7 +570,7 @@ namespace legallead.records.search.Models
                         }
                     }
                 }
-                var childNode = node.SelectSingleNode(childNodeName);
+                XmlNode? childNode = node.SelectSingleNode(childNodeName);
                 if (childNode == null)
                 {
                     return string.Empty;
@@ -584,9 +583,7 @@ namespace legallead.records.search.Models
 
                 return ((XmlCDataSection)(childNode.ChildNodes[0])).Data;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return string.Empty;
             }
@@ -594,12 +591,12 @@ namespace legallead.records.search.Models
 
         private static List<string> GetAddressList(string address)
         {
-            var result = new List<string>();
-            var data = address
+            List<string> result = new();
+            List<string> data = address
                 .Replace("<br>", "~")
                 .Replace("<br/>", "~")
                 .Replace("<br />", "~").Split('~').ToList();
-            foreach (var addr in data)
+            foreach (string? addr in data)
             {
                 if (string.IsNullOrEmpty(addr))
                 {

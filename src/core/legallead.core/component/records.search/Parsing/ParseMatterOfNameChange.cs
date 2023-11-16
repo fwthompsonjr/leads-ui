@@ -35,7 +35,7 @@ namespace legallead.records.search.Parsing
 
         public virtual ParseCaseDataResponseDto Parse()
         {
-            var response = new ParseCaseDataResponseDto { CaseData = CaseData };
+            ParseCaseDataResponseDto response = new() { CaseData = CaseData };
             if (!CanParse())
             {
                 return response;
@@ -46,20 +46,20 @@ namespace legallead.records.search.Parsing
                 return response;
             }
 
-            var fullName = CaseData.ToLower(CCulture.CurrentCulture);
+            string fullName = CaseData.ToLower(CCulture.CurrentCulture);
             if (!fullName.StartsWith(SearchFor, comparison))
             {
                 return response;
             }
 
-            var findItIndex = fullName.IndexOf(SearchFor, comparison);
+            int findItIndex = fullName.IndexOf(SearchFor, comparison);
             if (findItIndex < 0)
             {
                 return response;
             }
             //response.Defendant = CaseData.Substring(findItIndex).Trim();
             response.Plantiff =
-                CaseData.Substring(SearchFor.Length).Trim();
+                CaseData[SearchFor.Length..].Trim();
             return response;
         }
     }

@@ -20,13 +20,13 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var userDto = UserAccessDto.GetDto(item.ExpectedValue);
-            var pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey);
-            var userId = pwordUser.Split('|');
-            var selections = item.Locator.Query.Split('|');
-            var script = new StringBuilder();
-            var line = Environment.NewLine;
+            IWebDriver driver = GetWeb;
+            UserAccessDto userDto = UserAccessDto.GetDto(item.ExpectedValue);
+            string pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey);
+            string[] userId = pwordUser.Split('|');
+            string[] selections = item.Locator.Query.Split('|');
+            StringBuilder script = new();
+            string line = Environment.NewLine;
             script.AppendFormat(CultureInfo.CurrentCulture, "document.getElementById('UserName').value = '{0}'{1}", userId[0], line);
             script.AppendFormat(CultureInfo.CurrentCulture, "document.getElementById('Password').value = '{0}'{1}", userId[1], line);
 
@@ -34,10 +34,10 @@ namespace legallead.records.search.Web
             executor.ExecuteScript(script.ToString());
             Thread.Sleep(500);
 
-            foreach (var itm in selections)
+            foreach (string itm in selections)
             {
-                var selector = Byy.CssSelector(itm.Trim());
-                var elementToClick = driver.FindElement(selector);
+                Byy selector = Byy.CssSelector(itm.Trim());
+                IWebElement elementToClick = driver.FindElement(selector);
                 executor.ExecuteScript("arguments[0].focus();", elementToClick);
                 Thread.Sleep(300);
                 executor.ExecuteScript("arguments[0].blur();", elementToClick);

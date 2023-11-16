@@ -63,18 +63,18 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            var provider = CultureInfo.CurrentCulture;
-            var openTg = string.Format(provider, CommonKeyIndexes.OpenHtmlTag, tagName);
-            var closeTg = string.Format(provider, CommonKeyIndexes.CloseHtmlTag, tagName);
-            var idx = tableHtml.IndexOf(openTg, comparisonIngore);
+            CultureInfo provider = CultureInfo.CurrentCulture;
+            string openTg = string.Format(provider, CommonKeyIndexes.OpenHtmlTag, tagName);
+            string closeTg = string.Format(provider, CommonKeyIndexes.CloseHtmlTag, tagName);
+            int idx = tableHtml.IndexOf(openTg, comparisonIngore);
             if (idx < 0)
             {
                 return tableHtml;
             }
 
-            var eidx = tableHtml.IndexOf(closeTg, comparisonIngore);
-            var firstHalf = tableHtml.Substring(0, idx);
-            var secHalf = tableHtml.Substring(eidx + closeTg.Length);
+            int eidx = tableHtml.IndexOf(closeTg, comparisonIngore);
+            string firstHalf = tableHtml[..idx];
+            string secHalf = tableHtml[(eidx + closeTg.Length)..];
             return string.Concat(firstHalf, secHalf);
         }
 
@@ -103,13 +103,13 @@ namespace legallead.records.search.Classes
                 return tableHtml;
             }
 
-            var idx = tableHtml.IndexOf(tagName, comparisonIngore);
+            int idx = tableHtml.IndexOf(tagName, comparisonIngore);
             while (idx > 0)
             {
-                var firstPart = tableHtml.Substring(0, idx);
-                var lastPart = tableHtml.Substring(idx);
-                var cidx = lastPart.IndexOf(CommonKeyIndexes.ImageCloseTag, comparisonIngore);
-                tableHtml = string.Concat(firstPart, lastPart.Substring(cidx));
+                string firstPart = tableHtml[..idx];
+                string lastPart = tableHtml[idx..];
+                int cidx = lastPart.IndexOf(CommonKeyIndexes.ImageCloseTag, comparisonIngore);
+                tableHtml = string.Concat(firstPart, lastPart[cidx..]);
                 idx = tableHtml.IndexOf(tagName, comparisonIngore);
             }
             return tableHtml;
@@ -126,13 +126,13 @@ namespace legallead.records.search.Classes
             {
                 return string.Empty;
             };
-            var contents = File.ReadAllText(result);
+            string contents = File.ReadAllText(result);
             if (contents.Contains(CommonKeyIndexes.ImageOpenTag))
             {
                 contents = RemoveElement(contents, CommonKeyIndexes.ImageOpenTag);
             }
-            var doc = XmlDocProvider.GetDoc(contents);
-            var ndeCase = doc.DocumentElement.SelectSingleNode(CommonKeyIndexes.CaseDataXpath);
+            XmlDocument doc = XmlDocProvider.GetDoc(contents);
+            XmlNode? ndeCase = doc.DocumentElement.SelectSingleNode(CommonKeyIndexes.CaseDataXpath);
             if (ndeCase == null)
             {
                 return string.Empty;
@@ -175,13 +175,13 @@ namespace legallead.records.search.Classes
                 return default;
             }
 
-            var item = Parameters.Keys.First(k => k.Name.Equals(keyName, comparisonIngore));
+            WebNavigationKey item = Parameters.Keys.First(k => k.Name.Equals(keyName, comparisonIngore));
             if (item == null)
             {
                 return default;
             }
 
-            var obj = Convert.ChangeType(item.Value, typeof(T), CultureInfo.CurrentCulture);
+            object obj = Convert.ChangeType(item.Value, typeof(T), CultureInfo.CurrentCulture);
             return (T)obj;
         }
 
@@ -202,7 +202,7 @@ namespace legallead.records.search.Classes
                 return;
             }
 
-            var item = Parameters.Keys.First(k => k.Name.Equals(keyName, comparisonIngore));
+            WebNavigationKey item = Parameters.Keys.First(k => k.Name.Equals(keyName, comparisonIngore));
             if (item == null)
             {
                 return;
@@ -227,12 +227,12 @@ namespace legallead.records.search.Classes
             DateTime startingDate,
             DateTime endingDate)
         {
-            var settings = SettingsManager
+            WebNavigationParameter? settings = SettingsManager
                 .GetNavigation().Find(x => x.Id == id);
-            var datelist = new List<string> { CommonKeyIndexes.StartDate, CommonKeyIndexes.EndDate };
-            var keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
-            keys.First().Value = startingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
-            keys.Last().Value = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
+            List<string> datelist = new() { CommonKeyIndexes.StartDate, CommonKeyIndexes.EndDate };
+            List<WebNavigationKey> keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
+            keys[0].Value = startingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
+            keys[keys.Count - 1].Value = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
             return settings;
         }
 

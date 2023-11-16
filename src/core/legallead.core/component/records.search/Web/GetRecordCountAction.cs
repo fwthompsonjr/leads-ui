@@ -11,8 +11,8 @@ namespace legallead.records.search.Web
 
         public override void Act(NavigationStep item)
         {
-            var selector = GetSelector(item);
-            var element = GetWeb.TryFindElement(selector);
+            OpenQA.Selenium.By selector = GetSelector(item);
+            OpenQA.Selenium.IWebElement element = GetWeb.TryFindElement(selector);
             if (element != null)
             {
                 Console.WriteLine("Search found {0} records.", element.Text);

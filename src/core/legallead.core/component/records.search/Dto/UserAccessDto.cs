@@ -5,9 +5,6 @@ namespace legallead.records.search.Dto
 {
     public class UserAccessDtoCollection
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage",
-            "CA2227:Collection properties should be read only",
-            Justification = "<Pending>")]
         public List<UserAccessDto> AccessDtos { get; set; }
     }
 
@@ -38,8 +35,8 @@ namespace legallead.records.search.Dto
         public static List<UserAccessDto> GetListDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -49,8 +46,8 @@ namespace legallead.records.search.Dto
                 throw new FileNotFoundException(CommonKeyIndexes.SearchSettingFileNotFound,
                     dataFile);
             }
-            var data = File.ReadAllText(dataFile);
-            var colUsers = JConn.DeserializeObject<List<UserAccessDto>>(data);
+            string data = File.ReadAllText(dataFile);
+            List<UserAccessDto>? colUsers = JConn.DeserializeObject<List<UserAccessDto>>(data);
             if (colUsers == null)
             {
                 return null;
@@ -62,8 +59,8 @@ namespace legallead.records.search.Dto
         public static UserAccessDto GetDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -72,8 +69,8 @@ namespace legallead.records.search.Dto
             {
                 throw new FileNotFoundException(CommonKeyIndexes.SearchSettingFileNotFound, dataFile);
             }
-            var data = File.ReadAllText(dataFile);
-            var colUsers = JConn.DeserializeObject<List<UserAccessDto>>(data);
+            string data = File.ReadAllText(dataFile);
+            List<UserAccessDto>? colUsers = JConn.DeserializeObject<List<UserAccessDto>>(data);
             if (colUsers == null)
             {
                 return null;
@@ -89,19 +86,19 @@ namespace legallead.records.search.Dto
 
         public static UserAccessDto CreateCredential(string cleared, string userKey, string targetFile)
         {
-            var decoded = CryptoEngine.Encrypt(cleared, userKey);
-            var dto = new UserAccessDto
+            string decoded = CryptoEngine.Encrypt(cleared, userKey);
+            UserAccessDto dto = new()
             {
                 UserKey = userKey,
                 UserGuid = decoded,
                 CreateDate = DateTime.Now.ToLongDateString()
             };
-            var list = GetListDto(targetFile);
+            List<UserAccessDto> list = GetListDto(targetFile);
             list.Add(dto);
 
             const string dataFormat = @"{0}\xml\{1}.json";
-            var appDirectory = ContextManagment.AppDirectory;
-            var dataFile = string.Format(
+            string appDirectory = ContextManagment.AppDirectory;
+            string dataFile = string.Format(
                 CultureInfo.CurrentCulture,
                 dataFormat,
                 appDirectory,
@@ -135,7 +132,7 @@ namespace legallead.records.search.Dto
                 return null;
             }
 
-            var decoded = CryptoEngine.Decrypt(dto.UserGuid, dto.UserKey);
+            string decoded = CryptoEngine.Decrypt(dto.UserGuid, dto.UserKey);
             return decoded.Split('|').ToList();
         }
     }

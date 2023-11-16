@@ -7,7 +7,7 @@ namespace legallead.records.search.Db
     public static class DataPersistence
     {
         internal static string _appFolder;
-        internal static string AppFolder => _appFolder ?? (_appFolder = GetAppFolderName());
+        internal static string AppFolder => _appFolder ??= GetAppFolderName();
 
         /// <summary>
         /// Gets the name of the application directory.
@@ -15,7 +15,7 @@ namespace legallead.records.search.Db
         /// <returns></returns>
         private static string GetAppFolderName()
         {
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
+            string execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             return Path.GetDirectoryName(execName);
         }
 
@@ -27,7 +27,7 @@ namespace legallead.records.search.Db
         /// <value>
         /// The data folder.
         /// </value>
-        public static string DataFolder => _dataFolder ?? (_dataFolder = GetDataFolderName());
+        public static string DataFolder => _dataFolder ??= GetDataFolderName();
 
         /// <summary>
         /// Gets the name of the application data directory.
@@ -36,8 +36,8 @@ namespace legallead.records.search.Db
         [ExcludeFromCodeCoverage]
         private static string GetDataFolderName()
         {
-            var parentName = AppFolder;
-            var dataFolder = Path.Combine(parentName, "_db", "_downloads");
+            string parentName = AppFolder;
+            string dataFolder = Path.Combine(parentName, "_db", "_downloads");
             if (Directory.Exists(dataFolder))
             {
                 return dataFolder;
@@ -53,12 +53,10 @@ namespace legallead.records.search.Db
             {
                 return default;
             }
-            var targetFile = Path.Combine(DataFolder, fileName);
-            using (var reader = new StreamReader(targetFile))
-            {
-                var content = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<T>(content);
-            }
+            string targetFile = Path.Combine(DataFolder, fileName);
+            using StreamReader reader = new(targetFile);
+            string content = reader.ReadToEnd();
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         public static void Save(string fileName, object data)
@@ -73,18 +71,16 @@ namespace legallead.records.search.Db
                 throw new ArgumentNullException(nameof(data));
             }
 
-            var targetFile = Path.Combine(DataFolder, fileName);
+            string targetFile = Path.Combine(DataFolder, fileName);
             if (File.Exists(targetFile))
             {
                 throw new ArgumentOutOfRangeException(nameof(fileName));
             }
 
-            var content = JsonConvert.SerializeObject(data);
-            using (var writer = new StreamWriter(targetFile))
-            {
-                writer.Write(content);
-                writer.Close();
-            }
+            string content = JsonConvert.SerializeObject(data);
+            using StreamWriter writer = new(targetFile);
+            writer.Write(content);
+            writer.Close();
         }
 
         public static bool FileExists(string fileName)
@@ -94,7 +90,7 @@ namespace legallead.records.search.Db
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            var targetFile = Path.Combine(DataFolder, fileName);
+            string targetFile = Path.Combine(DataFolder, fileName);
             return File.Exists(targetFile);
         }
     }

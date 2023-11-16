@@ -50,14 +50,14 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public override WebFetchResult Fetch()
         {
-            var results = new SettingsManager().GetOutput(this);
-            var data = WebUtilities.GetCases(this);
+            XmlContentHolder results = new SettingsManager().GetOutput(this);
+            List<HLinkDataRow> data = WebUtilities.GetCases(this);
 
             Result = results.FileName;
-            foreach (var dta in data)
+            foreach (HLinkDataRow dta in data)
             {
                 AppendExtraCaseInfo(dta);
-                var caseStyle = dta[CommonKeyIndexes.CaseStyle]; // "CaseStyle"];
+                string caseStyle = dta[CommonKeyIndexes.CaseStyle]; // "CaseStyle"];
                 results.Append(dta);
             }
             // change output of this item.
@@ -67,8 +67,8 @@ namespace legallead.records.search.Classes
             data.FindAll(x => x.IsCriminal & x.IsMapped & !string.IsNullOrEmpty(x.CriminalCaseStyle))
                 .ForEach(y => y.CaseStyle = y.CriminalCaseStyle);
 
-            var caseList = ReadFromFile(Result);
-            var personAddresses = results.GetPersonAddresses();
+            string caseList = ReadFromFile(Result);
+            List<PersonAddress> personAddresses = results.GetPersonAddresses();
             personAddresses = MapCaseStyle(data, personAddresses);
             personAddresses = CleanUp(personAddresses);
             return new WebFetchResult
@@ -79,14 +79,14 @@ namespace legallead.records.search.Classes
             };
         }
 
-        private List<PersonAddress> CleanUp(List<PersonAddress> personAddresses)
+        private static List<PersonAddress> CleanUp(List<PersonAddress> personAddresses)
         {
-            var found = personAddresses
+            List<PersonAddress> found = personAddresses
                 .FindAll(f =>
                 f.Address1.Equals("Pro Se", StringComparison.CurrentCultureIgnoreCase));
             if (found.Any())
             {
-                foreach (var item in found)
+                foreach (PersonAddress item in found)
                 {
                     item.Zip = CommonKeyIndexes.NonAddressZipCode; // "00000";
                     item.Address1 = CommonKeyIndexes.NonAddressLine1;// "No Address Found";
@@ -100,7 +100,7 @@ namespace legallead.records.search.Classes
 
             if (found.Any())
             {
-                foreach (var item in found)
+                foreach (PersonAddress item in found)
                 {
                     item.Zip = CommonKeyIndexes.NonAddressZipCode;
                 }
@@ -114,7 +114,7 @@ namespace legallead.records.search.Classes
         /// <param name="data">The data.</param>
         /// <param name="personAddresses">The person addresses.</param>
         /// <returns></returns>
-        private List<PersonAddress> MapCaseStyle(List<HLinkDataRow> data,
+        private static List<PersonAddress> MapCaseStyle(List<HLinkDataRow> data,
             List<PersonAddress> personAddresses)
         {
             if (personAddresses == null)
@@ -128,15 +128,15 @@ namespace legallead.records.search.Classes
             }
 
             data = data.FindAll(x => !string.IsNullOrEmpty(x.Case));
-            foreach (var person in personAddresses)
+            foreach (PersonAddress person in personAddresses)
             {
-                var caseNumber = person.CaseNumber;
+                string caseNumber = person.CaseNumber;
                 if (string.IsNullOrEmpty(caseNumber))
                 {
                     continue;
                 }
 
-                var dataRow = data.Find(x => x.Case.Equals(caseNumber,
+                HLinkDataRow? dataRow = data.Find(x => x.Case.Equals(caseNumber,
                     StringComparison.CurrentCultureIgnoreCase));
                 if (dataRow == null)
                 {
@@ -160,13 +160,13 @@ namespace legallead.records.search.Classes
         /// <param name="dta">The dta.</param>
         private void AppendExtraCaseInfo(HLinkDataRow dta)
         {
-            var tableHtml = dta.Data;
+            string tableHtml = dta.Data;
             if (tableHtml.Contains(CommonKeyIndexes.ImageOpenTag))
             {
                 tableHtml = RemoveElement(tableHtml, CommonKeyIndexes.ImageOpenTag);
             }
-            var doc = XmlDocProvider.GetDoc(tableHtml);
-            var instructions = SearchSettingDto.GetNonCriminalMapping()
+            XmlDocument doc = XmlDocProvider.GetDoc(tableHtml);
+            List<WebNavInstruction> instructions = SearchSettingDto.GetNonCriminalMapping()
                     .NavInstructions
                     .ToList();
             // if doc.DocumentElement.ChildNodes.Count == 4
@@ -177,15 +177,15 @@ namespace legallead.records.search.Classes
                     .NavInstructions
                     .ToList();
             }
-            var caseStyle = CommonKeyIndexes.CaseStyle.ToLower(CultureInfo.CurrentCulture);
-            foreach (var item in instructions)
+            string caseStyle = CommonKeyIndexes.CaseStyle.ToLower(CultureInfo.CurrentCulture);
+            foreach (WebNavInstruction? item in instructions)
             {
                 if (dta.IsCriminal & item.Value.Equals(caseStyle, StringComparison.CurrentCultureIgnoreCase))
                 {
                     continue;
                 }
 
-                var node = TryFindNode(doc, item.Value);
+                XmlNode node = TryFindNode(doc, item.Value);
                 if (node == null)
                 {
                     continue;
@@ -206,12 +206,10 @@ namespace legallead.records.search.Classes
         {
             try
             {
-                var node = doc.FirstChild.SelectSingleNode(xpath);
+                XmlNode? node = doc.FirstChild.SelectSingleNode(xpath);
                 return node;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return null;
             }

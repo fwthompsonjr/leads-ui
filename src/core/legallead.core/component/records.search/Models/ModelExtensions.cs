@@ -18,13 +18,13 @@ namespace legallead.records.search.Models
                 return null;
             }
 
-            var dest = new List<HLinkDataRow>();
-            var defentdants = source.CaseDataAddresses
+            List<HLinkDataRow> dest = new();
+            List<CaseDataAddress> defentdants = source.CaseDataAddresses
                 .Where(x => x.Role.Equals(Defendant, ccic))
                 .ToList();
-            foreach (var person in defentdants)
+            foreach (CaseDataAddress? person in defentdants)
             {
-                var row = new HLinkDataRow
+                HLinkDataRow row = new()
                 {
                     WebsiteId = source.RowId,
                     Address = GetAddress(person),
@@ -48,16 +48,16 @@ namespace legallead.records.search.Models
                 throw new ArgumentNullException(nameof(source));
             }
 
-            var pipe = '|';
-            var pipeString = "|";
+            char pipe = '|';
+            string pipeString = "|";
             const string noMatch = "No Person Associated";
-            var person = source.Party;
+            string person = source.Party;
             if (string.IsNullOrEmpty(person)) { person = noMatch; }
             if (person.EndsWith(pipeString, ccic))
             {
                 person = person[..^1];
             }
-            var pieces = person.Split(pipe)
+            List<string> pieces = person.Split(pipe)
                 .ToList().FindAll(s => !string.IsNullOrEmpty(s));
             if (!pieces.Any())
             {
@@ -73,10 +73,10 @@ namespace legallead.records.search.Models
                 throw new ArgumentNullException(nameof(source));
             }
 
-            var pipe = '|';
-            var pipeString = "|";
+            char pipe = '|';
+            string pipeString = "|";
             const string noMatch = "No Match Found|Not Matched 00000";
-            var address = source.Party;
+            string address = source.Party;
             if (string.IsNullOrEmpty(address))
             {
                 return noMatch;
@@ -86,7 +86,7 @@ namespace legallead.records.search.Models
             {
                 address = address[..^1];
             }
-            var pieces = address.Split(pipe)
+            List<string> pieces = address.Split(pipe)
                 .ToList().FindAll(s => !string.IsNullOrEmpty(s));
             if (!pieces.Any())
             {
@@ -102,7 +102,7 @@ namespace legallead.records.search.Models
                     continue;
                 }
 
-                var piece = pieces[i].Trim();
+                string piece = pieces[i].Trim();
                 if (string.IsNullOrEmpty(address))
                 {
                     address = piece;
@@ -117,7 +117,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this List<CaseRowData> source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.Append("<table>");
             source?.ForEach(s =>
                 {
@@ -129,7 +129,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this CaseRowData source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.AppendLine("<tr>");
             template.AppendLine("<td>[Case]</td>");
             template.AppendLine("<td>[Style]</td>");
@@ -155,7 +155,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this HLinkDataRow source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.AppendLine("<tr>");
             template.AppendLine("<td>[Case]</td>");
             template.AppendLine("<td>[Style]</td>");
@@ -181,7 +181,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this List<HLinkDataRow> source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.Append("<table>");
             source?.ForEach(s =>
                 {
@@ -193,7 +193,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this PersonAddress source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.AppendLine("<tr>");
             template.AppendLine("<td>[Case]</td>");
             template.AppendLine("<td>[Style]</td>");
@@ -218,7 +218,7 @@ namespace legallead.records.search.Models
 
         public static string ToHtml(this List<PersonAddress> source)
         {
-            var template = new StringBuilder();
+            StringBuilder template = new();
             template.Append("<table>");
             source?.ForEach(s =>
                 {
@@ -242,7 +242,7 @@ namespace legallead.records.search.Models
 
             string zipCode = source.Zip.Trim();
             zipCode = zipCode.Replace(((char)160).ToString(), " ");
-            var pieces = zipCode.Split(' ').ToList();
+            List<string> pieces = zipCode.Split(' ').ToList();
             if (!pieces.Any())
             {
                 source.Zip = zipCode;
@@ -265,7 +265,7 @@ namespace legallead.records.search.Models
             }
 
             string fullName = source.Name.Trim();
-            var pieces = fullName.Split(' ').ToList();
+            List<string> pieces = fullName.Split(' ').ToList();
             if (!pieces.Any())
             {
                 source.CalcFirstName = source.Name;
@@ -273,7 +273,7 @@ namespace legallead.records.search.Models
                 return source;
             }
             source.CalcFirstName = pieces[0];
-            var lasts = pieces.GetRange(1, pieces.Count - 1).ToList();
+            List<string> lasts = pieces.GetRange(1, pieces.Count - 1).ToList();
             source.CalcLastName = string.Join(" ", lasts);
             return source;
         }

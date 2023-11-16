@@ -4,8 +4,6 @@ using System.Text;
 
 namespace legallead.records.search.Addressing
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types",
-        Justification = "Exception thrown from this method will stop automation.")]
     public class FindDefendantByPrId : FindDefendantBase
     {
         public override bool CanFind { get; set; }
@@ -23,7 +21,7 @@ namespace legallead.records.search.Addressing
             }
 
             CanFind = false;
-            var tdName = TryFindElement(driver, By.XPath(@"//*[@id='PIr11']"));
+            IWebElement tdName = TryFindElement(driver, By.XPath(@"//*[@id='PIr11']"));
             // this instance can find
             if (tdName == null)
             {
@@ -31,8 +29,8 @@ namespace legallead.records.search.Addressing
             }
 
             linkData.Defendant = tdName.GetAttribute("innerText");
-            var parent = tdName.FindElement(By.XPath(IndexKeyNames.ParentElement));
-            var rowLabel = parent.FindElements(By.TagName(IndexKeyNames.ThElement))[0];
+            IWebElement parent = tdName.FindElement(By.XPath(IndexKeyNames.ParentElement));
+            IWebElement rowLabel = parent.FindElements(By.TagName(IndexKeyNames.ThElement))[0];
             if (rowLabel.Text.Trim()
                 .ToLower(System.Globalization.CultureInfo.CurrentCulture) != "defendant")
             {
@@ -43,9 +41,9 @@ namespace legallead.records.search.Addressing
             try
             {
                 // get row index of this element ... and then go one row beyond...
-                var ridx = parent.GetAttribute(IndexKeyNames.RowIndex);
-                var table = parent.FindElement(By.XPath(IndexKeyNames.ParentElement));
-                var trCol = table.FindElements(By.TagName(IndexKeyNames.TrElement));
+                string ridx = parent.GetAttribute(IndexKeyNames.RowIndex);
+                IWebElement table = parent.FindElement(By.XPath(IndexKeyNames.ParentElement));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> trCol = table.FindElements(By.TagName(IndexKeyNames.TrElement));
                 if (!int.TryParse(ridx, out int r))
                 {
                     return;
@@ -54,8 +52,9 @@ namespace legallead.records.search.Addressing
                 parent = GetAddressRow(parent, trCol); // put this row-index into config... it can change
                 linkData.Address = new StringBuilder(parent.Text).Replace(Environment.NewLine, "<br/>").ToString();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
         }
     }

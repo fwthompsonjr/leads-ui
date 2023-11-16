@@ -1,6 +1,5 @@
 ﻿namespace legallead.records.search.Models
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "<Pending>")]
     public class WebFetchResult
     {
         public int WebsiteId { get; set; }

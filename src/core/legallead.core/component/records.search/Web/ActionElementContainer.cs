@@ -20,8 +20,8 @@ namespace legallead.records.search.Web
         {
             get
             {
-                return _container ?? (_container =
-                  new Container(new ActionElementRegistry()));
+                return _container ??=
+                  new Container(new ActionElementRegistry());
             }
         }
     }

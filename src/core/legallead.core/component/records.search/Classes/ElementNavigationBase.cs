@@ -13,9 +13,9 @@ namespace legallead.records.search.Classes
         {
             get
             {
-                var typeName = GetType().Name;
-                var startAt = element.Length;
-                return typeName.Substring(startAt);
+                string typeName = GetType().Name;
+                int startAt = element.Length;
+                return typeName[startAt..];
             }
         }
 

@@ -18,11 +18,11 @@
                 return;
             }
 
-            foreach (var item in ProgramLocations)
+            foreach (string item in ProgramLocations)
             {
                 SearchProgram(new DirectoryInfo(item), ProgramList);
             }
-            foreach (var item in ProgramList)
+            foreach (string item in ProgramList)
             {
                 if (FileList.Contains(item))
                 {
@@ -40,7 +40,6 @@
 
         public string Search { get; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private void SearchDirectory(DirectoryInfo dir_info, List<string> file_list)
         {
             try
@@ -50,22 +49,24 @@
                     SearchDirectory(subdir_info, file_list);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
             try
             {
-                var files = (string.IsNullOrEmpty(Search) ?
+                List<string> files = (string.IsNullOrEmpty(Search) ?
                     dir_info.EnumerateFiles() :
                     dir_info.EnumerateFiles(Search))
                     .Select(f => f.FullName).ToList();
-                foreach (var file_info in files)
+                foreach (string? file_info in files)
                 {
                     file_list.Add(file_info);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -83,7 +84,6 @@
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private void SearchProgram(DirectoryInfo dir_info, List<string> file_list)
         {
             try
@@ -93,22 +93,24 @@
                     SearchProgram(subdir_info, file_list);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
             try
             {
-                var files = (string.IsNullOrEmpty(Search) ?
+                List<string> files = (string.IsNullOrEmpty(Search) ?
                     dir_info.EnumerateFiles() :
                     dir_info.EnumerateFiles(Search))
                     .Select(f => f.FullName).ToList();
-                foreach (var file_info in files)
+                foreach (string? file_info in files)
                 {
                     file_list.Add(file_info);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
             }
         }
     }

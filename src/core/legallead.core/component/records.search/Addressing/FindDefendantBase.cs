@@ -42,7 +42,7 @@ namespace legallead.records.search.Addressing
 
             int colIndex = 3;
             parent = trCol[colIndex];
-            var parentTxt = string.IsNullOrEmpty(parent.Text) ? string.Empty : parent.Text;
+            string parentTxt = string.IsNullOrEmpty(parent.Text) ? string.Empty : parent.Text;
             if (string.IsNullOrEmpty(parentTxt))
             {
                 parent = trCol[colIndex - 1];
@@ -83,16 +83,16 @@ namespace legallead.records.search.Addressing
 
             if (string.IsNullOrEmpty(keyword)) { keyword = "defendant"; }
             const StringComparison currentCase = StringComparison.CurrentCultureIgnoreCase;
-            var cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
-            var address = string.Empty;
-            var addressHtml = string.Empty;
-            var findKey = keyword.ToLower(cultureInfo);
+            CultureInfo cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
+            string address = string.Empty;
+            string addressHtml = string.Empty;
+            string findKey = keyword.ToLower(cultureInfo);
             if (!elements.Any())
             {
                 return string.Empty;
             }
 
-            var rowIndex = 0;
+            int rowIndex = 0;
             while (address.ToLower(cultureInfo).StartsWith(findKey, currentCase) | string.IsNullOrEmpty(address))
             {
                 if (rowIndex > elements.Count - 1)
@@ -100,14 +100,14 @@ namespace legallead.records.search.Addressing
                     break;
                 }
 
-                var currentRow = elements[rowIndex];
-                var cells = currentRow.FindElements(By.TagName(IndexKeyNames.TdElement)).ToList();
-                var firstTd = cells.Any() ? cells[0] : null;
+                IWebElement currentRow = elements[rowIndex];
+                List<IWebElement> cells = currentRow.FindElements(By.TagName(IndexKeyNames.TdElement)).ToList();
+                IWebElement? firstTd = cells.Any() ? cells[0] : null;
                 addressHtml = firstTd != null ? firstTd.GetAttribute("innerHTML").Trim() : string.Empty;
                 address = currentRow.GetAttribute("innerText")
                     .Replace(Environment.NewLine, CommonKeyIndexes.BrElementTag).Trim();
                 rowIndex += 1;
-                var headings = currentRow.FindElements(By.TagName(IndexKeyNames.ThElement));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> headings = currentRow.FindElements(By.TagName(IndexKeyNames.ThElement));
 
                 if (headings != null && headings.Count > 1)
                 {
@@ -129,12 +129,12 @@ namespace legallead.records.search.Addressing
             }
             // custom clean ups for collin-county
             const string noBr = @"<nobr>";
-            var br = CommonKeyIndexes.BrElementTag;
+            string br = CommonKeyIndexes.BrElementTag;
             if (addressHtml.IndexOf(noBr, currentCase) < 0)
             {
                 return address;
             }
-            var endOfLine = addressHtml.IndexOf(noBr, currentCase);
+            int endOfLine = addressHtml.IndexOf(noBr, currentCase);
             addressHtml = addressHtml[..endOfLine];
             addressHtml = new StringBuilder(addressHtml)
                 .Replace("&nbsp;", " ")
@@ -171,13 +171,13 @@ namespace legallead.records.search.Addressing
                 throw new ArgumentNullException(nameof(trCol));
             }
 
-            var nextTh = table.FindElements(By.TagName(IndexKeyNames.ThElement)).ToList().FirstOrDefault(x => x.Location.Y > rowLabel.Location.Y);
-            var mxRowIndex = nextTh == null ? r : Convert.ToInt32(nextTh.FindElement(By.XPath(IndexKeyNames.ParentElement)).GetAttribute(IndexKeyNames.RowIndex),
+            IWebElement? nextTh = table.FindElements(By.TagName(IndexKeyNames.ThElement)).FirstOrDefault(x => x.Location.Y > rowLabel.Location.Y);
+            int mxRowIndex = nextTh == null ? r : Convert.ToInt32(nextTh.FindElement(By.XPath(IndexKeyNames.ParentElement)).GetAttribute(IndexKeyNames.RowIndex),
                 CultureInfo.CurrentCulture.NumberFormat);
             while (r <= mxRowIndex)
             {
-                var currentRow = trCol[r];
-                var tdElements = currentRow.FindElements(By.TagName(IndexKeyNames.TdElement)).ToList();
+                IWebElement currentRow = trCol[r];
+                List<IWebElement> tdElements = currentRow.FindElements(By.TagName(IndexKeyNames.TdElement)).ToList();
                 tdElements = tdElements.FindAll(x => x.Location.X >= rowLabel.Location.X & x.Location.X < (rowLabel.Location.X + rowLabel.Size.Width));
                 linkData.Address = GetAddress(tdElements, searchTitle);
                 if (!string.IsNullOrEmpty(linkData.Address))

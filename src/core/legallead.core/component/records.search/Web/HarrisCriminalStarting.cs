@@ -28,10 +28,7 @@ namespace legallead.records.search.Web
 
         public static async Task StartAsync(IEnumerable<CriminalStartType> startTypes = null)
         {
-            if (startTypes == null)
-            {
-                startTypes = DefaultStart;
-            }
+            startTypes ??= DefaultStart;
             IWebDriver driver = GetDriver(true);
             try
             {
@@ -57,13 +54,11 @@ namespace legallead.records.search.Web
 
         private static async Task FetchLastDownloadAsync(IWebDriver driver)
         {
-            using (var obj = new HarrisCriminalData())
-            {
-                string result = null;
-                await Task.Run(() => { result = obj.GetData(driver); }).ConfigureAwait(false);
-                Debug.Assert(result != null);
-                Debug.Assert(File.Exists(result));
-            }
+            using HarrisCriminalData obj = new();
+            string result = null;
+            await Task.Run(() => { result = obj.GetData(driver); }).ConfigureAwait(false);
+            Debug.Assert(result != null);
+            Debug.Assert(File.Exists(result));
         }
 
         private static async Task FetchCaseStylesAsync(IWebDriver driver)
@@ -73,29 +68,27 @@ namespace legallead.records.search.Web
             DateTime MxDate = DateTime.Now.AddDays(-1).Date;
             DateTime MnDate = MxDate.AddDays(interval);
             List<KeyValuePair<DateTime, DateTime>> dtes = GetDateRange(interval, cycleId, MxDate, MnDate);
-            using (var obj = new HarrisCriminalCaseStyle())
+            using HarrisCriminalCaseStyle obj = new();
+            List<HarrisCriminalStyleDto> result = new();
+            foreach (KeyValuePair<DateTime, DateTime> dateRange in dtes)
             {
-                var result = new List<HarrisCriminalStyleDto>();
-                foreach (var dateRange in dtes)
+                List<HarrisCriminalStyleDto> records = await Task.Run(() =>
                 {
-                    var records = await Task.Run(() =>
-                    {
-                        return obj.GetCases(driver, dateRange.Key, dateRange.Value);
-                    }).ConfigureAwait(false);
-                    result.Append(records);
-                }
+                    return obj.GetCases(driver, dateRange.Key, dateRange.Value);
+                }).ConfigureAwait(false);
+                result.Append(records);
             }
         }
 
         private static List<KeyValuePair<DateTime, DateTime>> GetDateRange(int interval, int cycleId, DateTime MxDate, DateTime MnDate)
         {
-            var dtes = new List<KeyValuePair<DateTime, DateTime>>
+            List<KeyValuePair<DateTime, DateTime>> dtes = new()
             {
                 new KeyValuePair<DateTime, DateTime>(MnDate, MxDate)
             };
             while (dtes.Count < cycleId)
             {
-                var item = dtes.Last();
+                KeyValuePair<DateTime, DateTime> item = dtes.Last();
                 dtes.Add(new KeyValuePair<DateTime, DateTime>(item.Key.AddDays(interval), item.Key));
             }
 
@@ -105,18 +98,18 @@ namespace legallead.records.search.Web
         private static IWebDriver GetDriver(bool headless = false)
         {
             const string title = "chrome";
-            var culture = CultureInfo.CurrentCulture;
-            var provider = new ChromeOlderProvider();
-            var originalList = ListProcess(title).Split(',')
+            CultureInfo culture = CultureInfo.CurrentCulture;
+            ChromeOlderProvider provider = new();
+            IEnumerable<int> originalList = ListProcess(title).Split(',')
                 .Select(x => Convert.ToInt32(x.Trim(), culture));
 
             IWebDriver driver = provider.GetWebDriver();
             if (headless)
             {
-                var processIndexes = ListProcess(title);
+                string processIndexes = ListProcess(title);
                 Debug.WriteLine(title);
                 Debug.WriteLine(processIndexes);
-                var list = processIndexes.Split(',')
+                IEnumerable<int> list = processIndexes.Split(',')
                 .Select(x => Convert.ToInt32(x.Trim(), culture))
                 .Where(y => !originalList.Contains(y));
                 Debug.WriteLine(string.Join(" - ", list));
@@ -130,7 +123,7 @@ namespace legallead.records.search.Web
 
         private static void KillProcess(string processName)
         {
-            foreach (var process in Process.GetProcessesByName(processName))
+            foreach (Process process in Process.GetProcessesByName(processName))
             {
                 process.Kill();
             }
@@ -138,8 +131,8 @@ namespace legallead.records.search.Web
 
         private static string ListProcess(string processName)
         {
-            var processes = Process.GetProcessesByName(processName);
-            var handles = processes
+            Process[] processes = Process.GetProcessesByName(processName);
+            IEnumerable<int> handles = processes
                 .Select(p => p.MainWindowHandle.ToInt32())
                 .Where(x => x > 0);
             return string.Join(", ", handles);

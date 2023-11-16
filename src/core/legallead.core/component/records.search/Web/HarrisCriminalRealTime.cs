@@ -22,12 +22,12 @@ namespace legallead.records.search.Web
         {
             driver ??= GetDriver();
             TheDriver = driver;
-            var pager = GetElementsOrFail(By.CssSelector(tbPager)).FirstOrDefault();
+            IWebElement? pager = GetElementsOrFail(By.CssSelector(tbPager)).FirstOrDefault();
             // get the expected record count
             int count = GetPageCount(pager, By.CssSelector(recordCount));
             int totalCount = GetRecordCount(By.Id(totalRecordCount));
-            var cases = new List<HarrisCriminalStyleDto>();
-            var runDate = DateTime.Now;
+            List<HarrisCriminalStyleDto> cases = new();
+            DateTime runDate = DateTime.Now;
             for (int r = 1; r <= count; r++)
             {
                 if (r != 1)
@@ -36,28 +36,28 @@ namespace legallead.records.search.Web
                     pager = GetElementsOrFail(By.CssSelector(tbPager)).FirstOrDefault();
                     ClickPageHyperlink(pager.FindElements(By.CssSelector(pagerLink)).ToList(), r);
                 }
-                var table = GetElementOrFail(By.CssSelector(dataTable)).GetAttribute("outerHTML");
-                var doc = new HtmlDocument();
+                string table = GetElementOrFail(By.CssSelector(dataTable)).GetAttribute("outerHTML");
+                HtmlDocument doc = new();
                 doc.LoadHtml(table);
-                var parentNode = doc.DocumentNode.FirstChild;
-                var nodes = parentNode.SelectNodes("//tr").Cast<HtmlNode>().ToList();
+                HtmlNode parentNode = doc.DocumentNode.FirstChild;
+                List<HtmlNode> nodes = parentNode.SelectNodes("//tr").Cast<HtmlNode>().ToList();
                 // read case header
                 nodes.ForEach(n =>
                 {
                     if (nodes.IndexOf(n) != 0)
                     {
-                        var cells = n.SelectNodes("td").Cast<HtmlNode>().ToList();
+                        List<HtmlNode> cells = n.SelectNodes("td").Cast<HtmlNode>().ToList();
                         AppendCases(cases, cells, totalCount);
                     }
                 });
             }
-            var parser = new CaseStyleDbParser();
+            CaseStyleDbParser parser = new();
             cases.ForEach(c =>
             {
                 parser.Data = c.Style;
                 if (parser.CanParse())
                 {
-                    var parseResult = parser.Parse();
+                    ParseCaseStyleDbDto parseResult = parser.Parse();
                     c.Style = parseResult.CaseData;
                     c.Plantiff = parseResult.Plantiff;
                     c.Defendant = parseResult.Defendant;
@@ -73,7 +73,7 @@ namespace legallead.records.search.Web
                 return;
             }
 
-            var dto = new HarrisCriminalStyleDto
+            HarrisCriminalStyleDto dto = new()
             {
                 Index = cases.Count + 1,
                 CaseNumber = GetCaseNumber(GetNumeric(cells[0].InnerText.Trim())),
@@ -98,7 +98,7 @@ namespace legallead.records.search.Web
                 return text;
             }
 
-            var pieces = text.Split(separator.ToCharArray());
+            string[] pieces = text.Split(separator.ToCharArray());
             return $"{pieces.First()}-{pieces.Last()}";
         }
 
@@ -117,15 +117,15 @@ namespace legallead.records.search.Web
             {
                 return string.Empty;
             }
-            var anchor = node.SelectSingleNode("a");
-            var strong = anchor.SelectSingleNode("strong");
-            var text = strong.InnerText;
+            HtmlNode anchor = node.SelectSingleNode("a");
+            HtmlNode strong = anchor.SelectSingleNode("strong");
+            string text = strong.InnerText;
             return text.Split('(')[0].Trim();
         }
 
         private void ClickPageHyperlink(List<IWebElement> links, int pageId)
         {
-            foreach (var item in links)
+            foreach (IWebElement item in links)
             {
                 if (int.TryParse(item.Text.Trim(), out int index) && index == pageId)
                 {
@@ -137,8 +137,8 @@ namespace legallead.records.search.Web
 
         private static int GetPageCount(IWebElement pager, By by)
         {
-            var element = pager.FindElement(by);
-            var item = element.Text.Split(' ').ToList().Last();
+            IWebElement element = pager.FindElement(by);
+            string item = element.Text.Split(' ').Last();
             if (int.TryParse(item, out int rc))
             {
                 return rc;
@@ -148,8 +148,8 @@ namespace legallead.records.search.Web
 
         private int GetRecordCount(By by)
         {
-            var element = TheDriver.FindElement(by);
-            var item = element.Text.Split(' ').ToList().Last().Replace(".", "");
+            IWebElement element = TheDriver.FindElement(by);
+            string item = element.Text.Split(' ').Last().Replace(".", "");
             if (int.TryParse(item, out int rc))
             {
                 return rc;
@@ -159,7 +159,7 @@ namespace legallead.records.search.Web
 
         private IWebElement GetElementOrFail(By by)
         {
-            var isFound = TheDriver.IsElementPresent(by);
+            bool isFound = TheDriver.IsElementPresent(by);
             if (isFound)
             {
                 return TheDriver.FindElement(by);
@@ -169,7 +169,7 @@ namespace legallead.records.search.Web
 
         protected List<IWebElement> GetElementsOrFail(By by)
         {
-            var isFound = TheDriver.AreElementsPresent(by);
+            bool isFound = TheDriver.AreElementsPresent(by);
             if (isFound)
             {
                 return TheDriver.FindElements(by).ToList();
@@ -196,7 +196,7 @@ namespace legallead.records.search.Web
                 {
                     return null;
                 }
-                var dto = new HarrisCriminalDto
+                HarrisCriminalDto dto = new()
                 {
                     Index = Index,
                     DateDatasetProduced = RunDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
@@ -215,7 +215,7 @@ namespace legallead.records.search.Web
                     DefendantPlaceOfBirth = TryFindRow(DefendantMetrics, "Place Of Birth"),
                     DefUSCitizenFlag = TryFindRow(DefendantBio, "Place Of Birth")
                 };
-                var fullAddress = TryFindRow(DefendantAddress, "Address");
+                string fullAddress = TryFindRow(DefendantAddress, "Address");
                 UpdateAddress(dto, fullAddress);
                 return dto;
             }
@@ -226,22 +226,22 @@ namespace legallead.records.search.Web
                 {
                     return;
                 }
-                var parsed = fullAddress.Split(' ');
+                string[] parsed = fullAddress.Split(' ');
                 _ = parsed.Last();
                 // return
             }
 
             private static string TryFindRow(List<HtmlNode> table, string heading)
             {
-                var found = table.Find(f =>
+                HtmlNode? found = table.Find(f =>
                 {
-                    var cell = f.SelectNodes("td[@style='font-weight: bold']")?.ToList();
+                    List<HtmlNode>? cell = f.SelectNodes("td[@style='font-weight: bold']")?.ToList();
                     if (cell == null)
                     {
                         return false;
                     }
 
-                    var target = cell.Find(c => c.InnerText.Trim().Equals(heading, StringComparison.OrdinalIgnoreCase));
+                    HtmlNode? target = cell.Find(c => c.InnerText.Trim().Equals(heading, StringComparison.OrdinalIgnoreCase));
                     return target != null;
                 });
                 if (found == null)
@@ -249,7 +249,7 @@ namespace legallead.records.search.Web
                     return string.Empty;
                 }
 
-                var data = found.ParentNode.SelectNodes("//td")?.ToList().Last();
+                HtmlNode? data = found.ParentNode.SelectNodes("//td")?.Last();
                 if (data == null)
                 {
                     return string.Empty;

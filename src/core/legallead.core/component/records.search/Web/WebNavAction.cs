@@ -15,8 +15,8 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            var driver = GetWeb;
-            var uri = new Uri(item.Locator.Query);
+            OpenQA.Selenium.IWebDriver driver = GetWeb;
+            Uri uri = new(item.Locator.Query);
             driver.Navigate().GoToUrl(uri);
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }
         }

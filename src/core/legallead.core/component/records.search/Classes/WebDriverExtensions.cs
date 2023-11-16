@@ -17,14 +17,14 @@ namespace legallead.records.search.Classes
                 return driver.FindElement(by);
             }
 
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeoutInSeconds));
+            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(timeoutInSeconds));
             wait.Until(drv => drv.FindElement(by).Displayed);
             return driver.FindElement(by);
         }
 
         public static void WaitForNavigation(this IWebDriver driver)
         {
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(30));
 
             wait.Until(driver1 => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
         }
@@ -45,7 +45,7 @@ namespace legallead.records.search.Classes
             executor.ExecuteScript("arguments[0].click();", elementToClick);
             if (!string.IsNullOrEmpty(objText))
             {
-                var script = string.Format(CultureInfo.InvariantCulture, "arguments[0].value = '{0}';", objText);
+                string script = string.Format(CultureInfo.InvariantCulture, "arguments[0].value = '{0}';", objText);
                 executor.ExecuteScript(script, elementToClick);
             }
         }
@@ -79,7 +79,7 @@ namespace legallead.records.search.Classes
             }
 
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
-            var script = string.Format(CultureInfo.InvariantCulture, "arguments[0].value = '{0}';", objText);
+            string script = string.Format(CultureInfo.InvariantCulture, "arguments[0].value = '{0}';", objText);
             executor.ExecuteScript(script, elementToClick);
         }
 
@@ -92,7 +92,7 @@ namespace legallead.records.search.Classes
 
             try
             {
-                var assertion = new ElementAssertion(driver);
+                ElementAssertion assertion = new(driver);
                 assertion.WaitForElementExist(by, "Element");
                 driver.FindElement(by);
                 return true;
@@ -112,14 +112,12 @@ namespace legallead.records.search.Classes
 
             try
             {
-                var assertion = new ElementAssertion(driver);
+                ElementAssertion assertion = new(driver);
                 assertion.WaitForElementsToExist(by, "ElementCollection", 5);
                 driver.FindElements(by);
                 return true;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 // intentional to catch all exceptions
                 return false;

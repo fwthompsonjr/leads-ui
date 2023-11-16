@@ -28,7 +28,7 @@ namespace legallead.records.search.Tools
             int size = GetWindowTextLength(hWnd);
             if (size > 0)
             {
-                var builder = new StringBuilder(size + 1);
+                StringBuilder builder = new(size + 1);
                 GetWindowText(hWnd, builder, builder.Capacity);
                 return builder.ToString();
             }
