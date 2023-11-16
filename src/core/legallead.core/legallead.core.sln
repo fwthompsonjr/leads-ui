@@ -5,11 +5,11 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harris.Criminal.Db", "component\Harris.Criminal.Db\Harris.Criminal.Db.csproj", "{399261E9-5E3F-4A35-A98A-F6372DF00488}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harris.Criminal.Db.Tests", "tests\Harris.Criminal.Db.Tests\Harris.Criminal.Db.Tests.csproj", "{17458C95-58ED-4A7A-96CD-B90CC159F7A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db", "component\harriscriminal.db\legallead.harriscriminal.db.csproj", "{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db.tests", "tests\harriscriminal.db.tests\legallead.harriscriminal.db.tests.csproj", "{9E87208A-1126-43FB-A8F3-7656B46F85B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,21 +17,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{399261E9-5E3F-4A35-A98A-F6372DF00488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{399261E9-5E3F-4A35-A98A-F6372DF00488}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{399261E9-5E3F-4A35-A98A-F6372DF00488}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{399261E9-5E3F-4A35-A98A-F6372DF00488}.Release|Any CPU.Build.0 = Release|Any CPU
-		{17458C95-58ED-4A7A-96CD-B90CC159F7A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{17458C95-58ED-4A7A-96CD-B90CC159F7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{17458C95-58ED-4A7A-96CD-B90CC159F7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{17458C95-58ED-4A7A-96CD-B90CC159F7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{399261E9-5E3F-4A35-A98A-F6372DF00488} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
-		{17458C95-58ED-4A7A-96CD-B90CC159F7A0} = {FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7} = {FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1D899A1-E010-46C7-AEAE-3F3119AED6E4}
