@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db", "component\harriscriminal.db\legallead.harriscriminal.db.csproj", "{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db.tests", "tests\harriscriminal.db.tests\legallead.harriscriminal.db.tests.csproj", "{9E87208A-1126-43FB-A8F3-7656B46F85B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.resources", "component\resources\legallead.resources.csproj", "{49DEDE5B-74E9-4C51-B383-534FAF7A81BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search", "component\records.search\legallead.records.search.csproj", "{45757FC1-1601-4A22-9FE5-E4EFCF835004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{8B679B84-4F7C-4398-AD70-D7438D576125}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45757FC1-1601-4A22-9FE5-E4EFCF835004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45757FC1-1601-4A22-9FE5-E4EFCF835004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45757FC1-1601-4A22-9FE5-E4EFCF835004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45757FC1-1601-4A22-9FE5-E4EFCF835004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B679B84-4F7C-4398-AD70-D7438D576125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B679B84-4F7C-4398-AD70-D7438D576125}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B679B84-4F7C-4398-AD70-D7438D576125}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B679B84-4F7C-4398-AD70-D7438D576125}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E2BB3CE4-FDA6-497A-A7F6-F64AF80E58A8} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
+		{9E87208A-1126-43FB-A8F3-7656B46F85B7} = {FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}
+		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
+		{45757FC1-1601-4A22-9FE5-E4EFCF835004} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
+		{8B679B84-4F7C-4398-AD70-D7438D576125} = {FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1D899A1-E010-46C7-AEAE-3F3119AED6E4}
+	EndGlobalSection
+EndGlobal
