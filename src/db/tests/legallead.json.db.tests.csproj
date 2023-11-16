@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\component\legallead.json.db\legallead.json.db.csproj" />
+    <ProjectReference Include="..\component\legallead.json.db.csproj" />
   </ItemGroup>
 
   <ItemGroup>
