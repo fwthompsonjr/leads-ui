@@ -26,7 +26,7 @@ namespace legallead.records.search.Db
             WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
             Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
             StructureMap.Container container = WebDriverContainer.GetContainer;
-            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver.Name);
+            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver?.Name ?? string.Empty);
             return provider.GetWebDriver(headless);
         }
     }

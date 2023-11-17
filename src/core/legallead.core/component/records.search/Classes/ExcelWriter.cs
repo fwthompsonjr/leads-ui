@@ -312,7 +312,10 @@ namespace legallead.records.search.Classes
                         string hlink = string.Format(
                             CultureInfo.CurrentCulture,
                             @"{0}{1}", hyperPrefix.Value, txHref.InnerText);
-                        target.Hyperlink = new System.Uri(hlink);
+                        if (Uri.TryCreate(hlink, UriKind.RelativeOrAbsolute, out var url))
+                        {
+                            target.Hyperlink = url;
+                        }
                     }
                 }
                 rowIndex++;
@@ -320,6 +323,8 @@ namespace legallead.records.search.Classes
 
             return rowIndex;
         }
+
+
 
         private static void ApplyGridFormatting<T>(int websiteId,
             string sectionName,

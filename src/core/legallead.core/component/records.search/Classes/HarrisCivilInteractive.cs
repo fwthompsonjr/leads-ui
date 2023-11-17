@@ -9,12 +9,6 @@ namespace legallead.records.search.Classes
 {
     public class HarrisCivilInteractive : TarrantWebInteractive
     {
-        private class AddressCondition
-        {
-            public string Name { get; set; }
-            public bool IsViolation { get; set; }
-        }
-
         public HarrisCivilInteractive(WebNavigationParameter parameters) : base(parameters)
         {
         }

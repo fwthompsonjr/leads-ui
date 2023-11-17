@@ -4,7 +4,7 @@ namespace legallead.records.search.Dto
 {
     public class GenericSettingDto : SearchSettingDto
     {
-        private static Dictionary<string, GenericSetting> _settings;
+        private static Dictionary<string, GenericSetting>? _settings;
 
         public GenericSettingDto(string name)
         {
@@ -20,22 +20,24 @@ namespace legallead.records.search.Dto
 
         public new void Save(SearchSettingDto source)
         {
+            if (_settings == null) return;
             _settings[Name].Save(source);
         }
 
         public new SearchSettingDto GetDto()
         {
+            if (_settings == null) return new();
             return _settings[Name].GetDto();
         }
     }
 
     public class GenericSetting
     {
-        private string _name;
+        private string? _name;
 
         public string Name
         {
-            get { return _name; }
+            get { return _name ?? string.Empty; }
             set
             {
                 _name = value;
@@ -58,13 +60,13 @@ namespace legallead.records.search.Dto
             }
         }
 
-        public string DataFile { get; private set; }
+        public string DataFile { get; private set; } = string.Empty;
 
-        public string Content { get; private set; }
+        public string Content { get; private set; } = string.Empty;
 
         public SearchSettingDto GetDto()
         {
-            Example? parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(Content);
+            Example parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(Content) ?? new();
             return parent.SearchSetting;
         }
 
