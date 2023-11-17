@@ -27,7 +27,7 @@ namespace legallead.records.search.Addressing
             driver.WaitForNavigation();
             // get criminal hyperlink
             // //a[contains(text(),'Criminal')]
-            IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+            IWebElement? criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
             IWebElement? elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
             if (criminalLink != null)
             {

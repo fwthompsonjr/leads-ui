@@ -4,14 +4,14 @@ namespace legallead.records.search.Db
 {
     public abstract class BaseAction
     {
-        private string _name;
+        private string? _name;
 
-        public BaseAction(HccProcess process)
+        protected BaseAction(HccProcess process)
         {
             Current = process;
         }
 
-        public virtual IWebDriver WebDriver { get; set; }
+        public virtual IWebDriver? WebDriver { get; set; }
 
         public virtual HccProcess Current { get; }
 
@@ -22,8 +22,6 @@ namespace legallead.records.search.Db
         public DateTime? EndTime { get; private set; }
 
         public abstract TimeSpan EstimatedDuration { get; }
-
-        public TimeSpan Elapsed => DateTime.Now.Subtract(StartTime.GetValueOrDefault(DateTime.Now));
 
         public async Task ExecuteAsync(IProgress<HccProcess> progress)
         {

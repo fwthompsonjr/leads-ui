@@ -48,7 +48,7 @@ namespace legallead.records.search.DriverFactory
             }
 
             _binaryName = WebUtilities.GetChromeBinary();
-            return _binaryName;
+            return _binaryName ?? string.Empty;
         }
 
         /// <summary>

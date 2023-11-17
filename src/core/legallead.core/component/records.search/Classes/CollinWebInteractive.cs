@@ -27,14 +27,14 @@ namespace legallead.records.search.Classes
             DateTime startingDate = GetParameterValue<DateTime>(CommonKeyIndexes.StartDate);
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
             List<PersonAddress> peopleList = new();
-            WebFetchResult webFetch = null;
+            WebFetchResult? webFetch = null;
             while (startingDate.CompareTo(endingDate) <= 0)
             {
                 XmlContentHolder results = new SettingsManager().GetOutput(this);
 
                 // need to open the navigation file(s)
                 List<NavigationStep> steps = new();
-                string navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile);
+                string navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile) ?? string.Empty;
                 List<string> sources = navigationFile.Split(',').ToList();
                 List<HLinkDataRow> cases = new();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
@@ -57,7 +57,7 @@ namespace legallead.records.search.Classes
                 webFetch.PeopleList = peopleList;
                 startingDate = startingDate.AddDays(1);
             }
-            return webFetch;
+            return webFetch ?? new();
         }
 
         private WebFetchResult SearchWeb(XmlContentHolder results, List<NavigationStep> steps, DateTime startingDate, DateTime endingDate, ref List<HLinkDataRow> cases, out List<PersonAddress> people)
@@ -124,14 +124,9 @@ namespace legallead.records.search.Classes
 
         protected override List<PersonAddress> ExtractPeople(List<HLinkDataRow> cases)
         {
-            if (cases == null)
+            if (cases == null || !cases.Any())
             {
-                return null;
-            }
-
-            if (!cases.Any())
-            {
-                return new List<PersonAddress>();
+                return new();
             }
 
             List<PersonAddress> list = new();
@@ -211,7 +206,7 @@ namespace legallead.records.search.Classes
                 return;
             }
 
-            string fmt = GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
+            string fmt = GetParameterValue<string>(CommonKeyIndexes.HlinkUri) ?? string.Empty;
             ElementAssertion helper = new(driver);
             helper.Navigate(string.Format(CultureInfo.CurrentCulture, fmt, linkData.WebAddress));
             driver.WaitForNavigation();

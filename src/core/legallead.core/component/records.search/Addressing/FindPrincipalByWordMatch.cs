@@ -22,7 +22,7 @@ namespace legallead.records.search.Addressing
 
             string searchType = "Principal";
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(
+            IWebElement? tdName = TryFindElement(driver, By.XPath(
                 string.Format(
                     CultureInfo.CurrentCulture,
                     IndexKeyNames.ThContainsText, searchType)));

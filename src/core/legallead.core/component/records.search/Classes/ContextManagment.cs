@@ -32,7 +32,7 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         private static string GetAppDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         }
     }
 }

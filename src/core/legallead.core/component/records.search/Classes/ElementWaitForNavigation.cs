@@ -5,7 +5,7 @@ namespace legallead.records.search.Classes
 {
     public class ElementWaitForNavigation : ElementNavigationBase
     {
-        public override IWebElement Execute(WebNavInstruction item)
+        public override IWebElement? Execute(WebNavInstruction item)
         {
             if (Assertion == null)
             {

@@ -8,8 +8,8 @@ namespace legallead.records.search.Dto
 #pragma warning restore CA1716 // Identifiers should not match keywords
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Query { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Query { get; set; } = string.Empty;
 
         public bool IsDefault { get; set; }
     }
@@ -17,24 +17,24 @@ namespace legallead.records.search.Dto
     public class DropDown
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Query { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Query { get; set; } = string.Empty;
 
-        public List<Option> Options { get; set; }
+        public List<Option> Options { get; set; } = new();
     }
 
     public class CaseSearchType
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Query { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Query { get; set; } = string.Empty;
     }
 
     public class CaseTypeSelectionDto
     {
-        public List<DropDown> DropDowns { get; set; }
+        public List<DropDown> DropDowns { get; set; } = new();
 
-        public List<CaseSearchType> CaseSearchTypes { get; set; }
+        public List<CaseSearchType> CaseSearchTypes { get; set; } = new();
 
         public static CaseTypeSelectionDto GetDto(string fileSuffix)
         {
@@ -50,13 +50,13 @@ namespace legallead.records.search.Dto
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);
             }
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<CaseTypeSelectionDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<CaseTypeSelectionDto>(data) ?? new();
         }
     }
 
     public static class DropDownOptionExtensions
     {
-        public static List<DropDown> ToDropDown(this List<Option> options)
+        public static List<DropDown>? ToDropDown(this List<Option> options)
         {
             if (options == null)
             {

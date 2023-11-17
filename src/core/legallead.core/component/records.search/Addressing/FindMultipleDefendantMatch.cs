@@ -19,12 +19,9 @@ namespace legallead.records.search.Addressing
             {
                 throw new System.ArgumentNullException(nameof(linkData));
             }
-            // driver.FindElement(By.XPath("//th[contains(text(),'Principal')]"))
-            // todo: CV-2019-02188-JP... exmple of a case with multiple defendants...
-            // create a lookup for multiples
             const string xpath = @"//th[contains(text(),'Defendant')]";
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(xpath));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(xpath));
             // this instance can find
             if (tdName == null)
             {
@@ -55,7 +52,7 @@ namespace legallead.records.search.Addressing
                         return;
                     }
 
-                    IWebElement? nextTh = table.FindElements(By.TagName(IndexKeyNames.ThElement)).ToList().FirstOrDefault(x => x.Location.Y > rowLabel.Location.Y);
+                    IWebElement? nextTh = table.FindElements(By.TagName(IndexKeyNames.ThElement)).FirstOrDefault(x => x.Location.Y > rowLabel.Location.Y);
                     int mxRowIndex = nextTh == null ? r :
                         Convert.ToInt32(
                             nextTh.FindElement(By.XPath(IndexKeyNames.ParentElement)).GetAttribute(IndexKeyNames.RowIndex),
@@ -78,8 +75,9 @@ namespace legallead.records.search.Addressing
                         return;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                 }
             }
             linkData.Address = NoFoundMatch.GetNoMatch(linkData.Address);

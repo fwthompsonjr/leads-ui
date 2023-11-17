@@ -19,12 +19,12 @@ namespace legallead.records.search.Classes
             }
         }
 
-        public string StartDate { get; set; }
+        public string StartDate { get; set; } = string.Empty;
 
-        public ElementAssertion Assertion { get; set; }
+        public ElementAssertion? Assertion { get; set; }
 
-        public abstract IWebElement Execute(WebNavInstruction item);
+        public abstract IWebElement? Execute(WebNavInstruction item);
 
-        protected IWebDriver PageDriver => Assertion?.PageDriver;
+        protected IWebDriver? PageDriver => Assertion?.PageDriver;
     }
 }

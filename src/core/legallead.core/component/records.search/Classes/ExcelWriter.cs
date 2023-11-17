@@ -12,7 +12,7 @@ namespace legallead.records.search.Classes
 {
     public class ExcelWriter
     {
-        private IExcelFileWriter _fileWriter;
+        private IExcelFileWriter? _fileWriter;
 
         private IExcelFileWriter FileWriter
         {
@@ -20,9 +20,9 @@ namespace legallead.records.search.Classes
             set { _fileWriter = value; }
         }
 
-        public ExcelWriter(IExcelFileWriter fileWriter = null)
+        public ExcelWriter(IExcelFileWriter? fileWriter = null)
         {
-            FileWriter = fileWriter;
+            FileWriter = fileWriter ?? new ExcelFileWriter();
         }
 
         public static void WriteToExcel(WebFetchResult fetchResult)
@@ -43,7 +43,7 @@ namespace legallead.records.search.Classes
             if (true)
             {
                 string htmlCaseList = fetchResult.CaseList;
-                Debug.Assert(string.IsNullOrEmpty(htmlCaseList) == false);
+                Debug.Assert(!string.IsNullOrEmpty(htmlCaseList));
             }
 
             using ExcelPackage workBook = writer.ConvertToPersonTable(
@@ -64,7 +64,7 @@ namespace legallead.records.search.Classes
         public ExcelPackage ConvertToPersonTable(
             List<PersonAddress> addressList,
             string worksheetName,
-            ExcelPackage excelPackage = null,
+            ExcelPackage? excelPackage = null,
             bool saveFile = false,
             string outputFileName = "",
             int websiteId = 1)
@@ -81,7 +81,7 @@ namespace legallead.records.search.Classes
 
             string countyName = SettingsManager
                 .GetNavigation().Find(x => x.Id == websiteId)
-                .Name.Replace("County", "")
+                !.Name.Replace("County", "")
                 .Replace("Criminal", "")
                 .Trim();
             ExcelPackage pck = excelPackage ?? new ExcelPackage();
@@ -95,7 +95,7 @@ namespace legallead.records.search.Classes
                 { "firstname", "fname" },
                 { "lastname", "lname" }
             };
-            List<string> localFieldList = default;
+            List<string>? localFieldList = default;
             foreach (PersonAddress item in addressList)
             {
                 if (addressList.IndexOf(item) == 0)
@@ -107,6 +107,7 @@ namespace legallead.records.search.Classes
                         localFieldList.RemoveAt(localFieldList.Count - 1);
                     }
                 }
+                if (localFieldList == null) break;
                 if (rowIndex == 1)
                 {
                     // write header
@@ -138,11 +139,9 @@ namespace legallead.records.search.Classes
                     content = cleaner.ToString().Trim();
                     wsDt.Cells[rowIndex, i + 1].Value = content;
                 }
-
+                var cellvalue = Convert.ToString(wsDt.Cells[rowIndex, courtNameId].Value) ?? "";
                 wsDt.Cells[rowIndex, countyIndex].Value = countyName;
-                wsDt.Cells[rowIndex, courtAddressIndex].Value =
-                    LookupCountyAddress(websiteId,
-                    wsDt.Cells[rowIndex, courtNameId].Value.ToString());
+                wsDt.Cells[rowIndex, courtAddressIndex].Value = LookupCountyAddress(websiteId, cellvalue);
                 rowIndex++;
             }
             addressList.Add(new PersonAddress());
@@ -188,7 +187,7 @@ namespace legallead.records.search.Classes
         public ExcelPackage ConvertToDataTable(
             string htmlTable,
             string worksheetName,
-            ExcelPackage excelPackage = null,
+            ExcelPackage? excelPackage = null,
             bool saveFile = false,
             string outputFileName = "",
             int websiteId = 1)
@@ -211,17 +210,23 @@ namespace legallead.records.search.Classes
             sb.AppendLine("</html>");
             // HTML-table to an excel worksheet
             XmlDocument doc = XmlDocProvider.GetDoc(sb.ToString());
-            XmlNode? body = doc.DocumentElement.SelectSingleNode("body");
-            XmlNode? table = body.FirstChild;
-            List<XmlNode> rows = table.ChildNodes.Cast<XmlNode>().ToList();
+            XmlNode? body = doc.DocumentElement!.SelectSingleNode("body");
+            XmlNode? table = body!.FirstChild;
+            List<XmlNode> rows = table!.ChildNodes.Cast<XmlNode>().ToList();
             int rowIndex = 1;
-            rowIndex = GenerateExcelOutput(wsDt, hyperPrefix, rows, rowIndex, table, websiteId);
+            rowIndex = GenerateExcelOutput(wsDt, hyperPrefix ?? new(), rows, rowIndex, table, websiteId);
             // format rows
             ApplyGridFormatting(websiteId, "caselayout", wsDt, rows);
 
             // save data
             if (saveFile) { FileWriter.SaveAs(pck, outputFileName); }
             return pck;
+        }
+        private static string GetNodeInnerText(XmlNode? node, int index)
+        {
+            if (node == null || !node.HasChildNodes || node.ChildNodes.Count < index) return string.Empty;
+            var child = node.ChildNodes[index];
+            return child?.InnerText ?? string.Empty;
         }
 
         private static int GenerateExcelOutput(ExcelWorksheet wsDt,
@@ -247,12 +252,12 @@ namespace legallead.records.search.Classes
 
             foreach (XmlNode? item in table.ChildNodes.Cast<XmlNode>().ToList())
             {
-                wsDt.Cells[rowIndex, Case].Value = item.ChildNodes[Case - 1].InnerText;
-                wsDt.Cells[rowIndex, Style].Value = item.ChildNodes[Style - 1].InnerText;
-                wsDt.Cells[rowIndex, DateFiled].Value = item.ChildNodes[DateFiled - 1].InnerText;
-                wsDt.Cells[rowIndex, Court].Value = item.ChildNodes[Court - 1].InnerText;
-                wsDt.Cells[rowIndex, CaseType].Value = item.ChildNodes[CaseType - 1].InnerText;
-                wsDt.Cells[rowIndex, Status].Value = item.ChildNodes[Status - 1].InnerText;
+                wsDt.Cells[rowIndex, Case].Value = GetNodeInnerText(item, Case - 1);
+                wsDt.Cells[rowIndex, Style].Value = GetNodeInnerText(item, Style - 1);
+                wsDt.Cells[rowIndex, DateFiled].Value = GetNodeInnerText(item, DateFiled - 1);
+                wsDt.Cells[rowIndex, Court].Value = GetNodeInnerText(item, Court - 1);
+                wsDt.Cells[rowIndex, CaseType].Value = GetNodeInnerText(item, CaseType - 1);
+                wsDt.Cells[rowIndex, Status].Value = GetNodeInnerText(item, Status - 1);
                 rowIndex++;
             }
 
@@ -273,9 +278,9 @@ namespace legallead.records.search.Classes
             foreach (XmlNode item in rows)
             {
                 int colIndex = 1;
-                List<XmlNode> tdCollection = item.InnerXml.Contains("<th") ?
-                    item.SelectNodes("th").Cast<XmlNode>().ToList() :
-                    item.SelectNodes("td").Cast<XmlNode>().ToList();
+                List<XmlNode>? tdCollection = item.InnerXml.Contains("<th") ?
+                    item.SelectNodes("th")?.Cast<XmlNode>().ToList() :
+                    item.SelectNodes("td")?.Cast<XmlNode>().ToList();
                 if (tdCollection != null)
                 {
                     foreach (XmlNode? td in tdCollection)
@@ -298,7 +303,7 @@ namespace legallead.records.search.Classes
                             continue;
                         }
 
-                        XmlNode? txHref = hyperlink.Attributes.GetNamedItem("href");
+                        XmlNode? txHref = hyperlink.Attributes?.GetNamedItem("href");
                         if (txHref == null)
                         {
                             continue;
@@ -338,6 +343,7 @@ namespace legallead.records.search.Classes
                     wsDt.Column(columns.Count + 1).Width = columns[10].ColumnWidth;
                 }
             }
+            if (columns == null) return;
             // apply borders
             int rcount = websiteId == 30 & sectionName == "caselayout" ? rows.Count + 1 : rows.Count;
             int ccount = isCaseLayout ? columns.Count + 2 : columns.Count;

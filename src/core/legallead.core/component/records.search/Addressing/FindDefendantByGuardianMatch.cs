@@ -24,7 +24,7 @@ namespace legallead.records.search.Addressing
             string searchType = "Guardian";
             // driver.FindElement(By.XPath("//th[contains(text(),'Principal')]"))
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(
+            IWebElement? tdName = TryFindElement(driver, By.XPath(
                 string.Format(
                     CultureInfo.CurrentCulture,
                     IndexKeyNames.ThContainsText, searchType)));

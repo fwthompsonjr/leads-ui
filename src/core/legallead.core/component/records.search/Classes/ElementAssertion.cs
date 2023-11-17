@@ -3,6 +3,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace legallead.records.search.Classes
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor", "S6605:Collection-specific \"Exists\" method should be used instead of the \"Any\" extension", Justification = "<Pending>")]
     public class ElementAssertion
     {
         public ElementAssertion(IWebDriver driver)
@@ -256,7 +257,7 @@ namespace legallead.records.search.Classes
         /// </summary>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-        internal IWebElement Process(WebInteractive data, bool isCriminalSearch = false)
+        internal IWebElement? Process(WebInteractive data, bool isCriminalSearch = false)
         {
             string dteFmt = CommonKeyIndexes.DateTimeShort;
             string startDate = data.StartDate.ToString(dteFmt, CultureInfo.CurrentCulture.DateTimeFormat);
@@ -313,7 +314,7 @@ namespace legallead.records.search.Classes
                 districtItems.ForEach(x => x.Value = districtType);
             }
             List<ElementNavigationBase> navigations = GetNavigationBases(startDate);
-            // ?SetComboIndex
+
             foreach (Models.WebNavInstruction item in itms)
             {
                 Console.WriteLine(
@@ -328,7 +329,7 @@ namespace legallead.records.search.Classes
                     continue;
                 }
 
-                IWebElement webElement = navigator.Execute(item);
+                IWebElement? webElement = navigator.Execute(item);
                 if (webElement != null)
                 {
                     return webElement;
@@ -348,10 +349,9 @@ namespace legallead.records.search.Classes
             return list;
         }
 
-        private static List<ElementNavigationBase> _navigationElements;
+        private static List<ElementNavigationBase>? _navigationElements;
 
-        private static List<ElementNavigationBase> ElementNavigations =>
-_navigationElements ??= GetNavigators();
+        private static List<ElementNavigationBase> ElementNavigations => _navigationElements ??= GetNavigators();
 
         private static List<ElementNavigationBase> GetNavigators()
         {
@@ -361,8 +361,18 @@ _navigationElements ??= GetNavigators();
                 .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
                 .ToList();
             List<ElementNavigationBase> commands = new();
-            types.ForEach(f => commands.Add((ElementNavigationBase)Activator.CreateInstance(f)));
+            types.ForEach(f => {
+                var item = GetInstance(f);
+                if (item != null) commands.Add(item);
+                });
             return commands;
+        }
+
+        private static ElementNavigationBase? GetInstance(Type type)
+        {
+            var obj = Activator.CreateInstance(type);
+            if (obj is not ElementNavigationBase nav) return null;
+            return nav;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace legallead.records.search.Addressing
             string defendant = IndexKeyNames.Defendant;
             string defendantXpath = string.Format(CultureInfo.CurrentCulture,
                 IndexKeyNames.ThContainsText, defendant);
-            IWebElement tdName = TryFindElement(driver, By.XPath(defendantXpath));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(defendantXpath));
             // this instance can find
             if (tdName == null)
             {

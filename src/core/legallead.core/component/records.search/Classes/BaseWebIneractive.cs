@@ -15,7 +15,7 @@ namespace legallead.records.search.Classes
         /// <value>
         /// The parameters.
         /// </value>
-        public WebNavigationParameter Parameters { get; set; }
+        public WebNavigationParameter Parameters { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the start date.
@@ -39,7 +39,7 @@ namespace legallead.records.search.Classes
         /// <value>
         /// The result.
         /// </value>
-        public string Result { get; set; }
+        public string Result { get; set; } = string.Empty;
 
         #endregion Properties
 
@@ -125,14 +125,14 @@ namespace legallead.records.search.Classes
             if (!File.Exists(result))
             {
                 return string.Empty;
-            };
+            }
             string contents = File.ReadAllText(result);
             if (contents.Contains(CommonKeyIndexes.ImageOpenTag))
             {
                 contents = RemoveElement(contents, CommonKeyIndexes.ImageOpenTag);
             }
             XmlDocument doc = XmlDocProvider.GetDoc(contents);
-            XmlNode? ndeCase = doc.DocumentElement.SelectSingleNode(CommonKeyIndexes.CaseDataXpath);
+            XmlNode? ndeCase = doc.DocumentElement!.SelectSingleNode(CommonKeyIndexes.CaseDataXpath);
             if (ndeCase == null)
             {
                 return string.Empty;
@@ -142,8 +142,8 @@ namespace legallead.records.search.Classes
             {
                 return string.Empty;
             }
-
-            return ((XmlCDataSection)ndeCase.ChildNodes[0]).Data;
+            if (ndeCase.ChildNodes[0] is not XmlCDataSection section) return string.Empty;
+            return section.Data;
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace legallead.records.search.Classes
         /// <typeparam name="T"></typeparam>
         /// <param name="keyName">Name of the key.</param>
         /// <returns></returns>
-        internal T GetParameterValue<T>(string keyName)
+        internal T? GetParameterValue<T>(string keyName)
         {
             if (Parameters == null)
             {
@@ -230,9 +230,10 @@ namespace legallead.records.search.Classes
             WebNavigationParameter? settings = SettingsManager
                 .GetNavigation().Find(x => x.Id == id);
             List<string> datelist = new() { CommonKeyIndexes.StartDate, CommonKeyIndexes.EndDate };
+            if (settings == null) return new();
             List<WebNavigationKey> keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
             keys[0].Value = startingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
-            keys[keys.Count - 1].Value = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
+            keys[^1].Value = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
             return settings;
         }
 
