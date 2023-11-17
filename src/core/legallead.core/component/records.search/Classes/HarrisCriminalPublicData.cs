@@ -10,14 +10,11 @@ namespace SeleniumTests
     {
         private static IWebDriver? driver;
         private StringBuilder? verificationErrors;
-        private static string? baseURL;
-        private bool acceptNextAlert = true;
 
         [ClassInitialize]
         public static void InitializeClass(TestContext testContext)
         {
             driver = new FirefoxDriver();
-            baseURL = "https://www.google.com/";
         }
 
         [ClassCleanup]
@@ -25,9 +22,8 @@ namespace SeleniumTests
         {
             try
             {
-                //driver.Quit();// quit does not close the window
-                driver.Close();
-                driver.Dispose();
+                driver?.Close();
+                driver?.Dispose();
             }
             catch (Exception)
             {
@@ -44,6 +40,7 @@ namespace SeleniumTests
         [TestCleanup]
         public void CleanupTest()
         {
+            if (verificationErrors == null) return;
             Assert.AreEqual("", verificationErrors.ToString());
         }
 
@@ -52,6 +49,7 @@ namespace SeleniumTests
         {
             try
             {
+                if (driver == null) throw new NullReferenceException();
                 driver.Navigate().GoToUrl("https://www.hcdistrictclerk.com/Common/e-services/PublicDatasets.aspx");
                 driver.FindElement(By.XPath("//div[contains(string(), \"CrimFilingsWithFutureSettings\")]")).Click();
                 driver.FindElement(By.XPath("//div[@id='ctl00_ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder2_ContentPlaceHolder2_blah']/table/tbody/tr[58]/td[3]/a/u/b")).Click();
@@ -61,54 +59,6 @@ namespace SeleniumTests
                 Console.WriteLine(ex);
                 Assert.Inconclusive("unexpected exception.");
                 throw;
-            }
-        }
-
-        private static bool IsElementPresent(By by)
-        {
-            try
-            {
-                driver.FindElement(by);
-                return true;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
-        }
-
-        private static bool IsAlertPresent()
-        {
-            try
-            {
-                driver.SwitchTo().Alert();
-                return true;
-            }
-            catch (NoAlertPresentException)
-            {
-                return false;
-            }
-        }
-
-        private string CloseAlertAndGetItsText()
-        {
-            try
-            {
-                IAlert alert = driver.SwitchTo().Alert();
-                string alertText = alert.Text;
-                if (acceptNextAlert)
-                {
-                    alert.Accept();
-                }
-                else
-                {
-                    alert.Dismiss();
-                }
-                return alertText;
-            }
-            finally
-            {
-                acceptNextAlert = true;
             }
         }
     }

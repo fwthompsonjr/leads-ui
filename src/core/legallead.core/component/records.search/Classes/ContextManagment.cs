@@ -10,7 +10,7 @@ namespace legallead.records.search.Classes
         /// <summary>
         /// The application directory
         /// </summary>
-        private static string _appDirectory;
+        private static string? _appDirectory;
 
         /// <summary>
         /// Gets the application directory.

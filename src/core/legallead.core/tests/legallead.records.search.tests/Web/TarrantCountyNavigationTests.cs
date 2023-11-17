@@ -35,6 +35,7 @@ namespace legallead.records.search.Tests
             var endingDate = DateTime.Now.AddDays(-2);
             var settings = SettingsManager
                 .GetNavigation().Find(x => x.Id == 10);
+            Assert.IsNotNull(settings);
             var datelist = new List<string> { "startDate", "endDate" };
             var keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
             keys[0].Value = startingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
@@ -45,6 +46,8 @@ namespace legallead.records.search.Tests
 
         [TestMethod]
         [TestCategory("tarrant.county.actions")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sleep in Unit Tests", 
+            "S2925:\"Thread.Sleep\" should not be used in tests", Justification = "Needed to allow web driver navigation")]
         public void CanGetTarrtantCountInstructions()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
@@ -65,7 +68,6 @@ namespace legallead.records.search.Tests
                 var startingDate = DateTime.Now.AddDays(-2);
                 var endingDate = DateTime.Now.AddDays(-2);
 
-                // driver = GetAuthenicatedDriver(driver);
                 ElementActions.ForEach(x => x.GetAssertion = assertion);
                 ElementActions.ForEach(x => x.GetWeb = driver);
                 Thread.Sleep(1500);
@@ -203,7 +205,7 @@ namespace legallead.records.search.Tests
 
         #region Element Navigation Helpers
 
-        private List<IElementActionBase> elementActions;
+        private List<IElementActionBase>? elementActions;
 
         private List<IElementActionBase> ElementActions
         {
@@ -216,7 +218,7 @@ namespace legallead.records.search.Tests
             return container.GetAllInstances<IElementActionBase>().ToList();
         }
 
-        private NavigationInstructionDto GetAppSteps(string suffix = "")
+        private static NavigationInstructionDto GetAppSteps(string suffix = "")
         {
             const string dataFormat = @"{0}\xml\{1}.json";
             var appDirectory = ContextManagment.AppDirectory;
@@ -227,7 +229,7 @@ namespace legallead.records.search.Tests
                 suffix);
             Assert.IsTrue(File.Exists(dataFile));
             var data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
 
         }
         #endregion

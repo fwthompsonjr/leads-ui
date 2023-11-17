@@ -24,7 +24,7 @@ namespace legallead.records.search.Classes
                 new CriminalCaseFetch(data)
             };
             List<HLinkDataRow> cases = new();
-            fetchers.ForEach(f => cases.AddRange(f.GetCases()));
+            fetchers.ForEach(f => cases.AddRange(f.GetLinkedCases()));
             return cases;
         }
 
@@ -34,9 +34,8 @@ namespace legallead.records.search.Classes
         {
             IWebElement tbResult;
             helper.Navigate(navTo);
-            // this is where denton county does it's data fetching..... i think
-            // todo: allow criminal hyperlink click modification...
-            WebNavigationKey parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch); // "isCriminalSearch");
+
+            WebNavigationKey parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch);
             bool isCriminalSearch = parameter != null &&
                 parameter.Value.Equals(CommonKeyIndexes.NumberOne, StringComparison.CurrentCultureIgnoreCase);
             tbResult = helper.Process(data, isCriminalSearch);
@@ -45,7 +44,7 @@ namespace legallead.records.search.Classes
             {
                 string html = rw.GetAttribute("outerHTML");
                 IWebElement? link = TryFindElement(rw, By.TagName("a"));
-                IWebElement tdCaseStyle = TryFindElement(rw, By.XPath("td[2]"));
+                IWebElement? tdCaseStyle = TryFindElement(rw, By.XPath("td[2]"));
                 string caseStyle = tdCaseStyle == null ? string.Empty : tdCaseStyle.Text;
                 string address = link == null ? string.Empty : link.GetAttribute("href");
                 HLinkDataRow dataRow = new() { Data = html, WebAddress = address, IsCriminal = isCriminalSearch };
@@ -98,14 +97,14 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static IWebDriver GetWebDriver()
         {
-            WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
+            WebDrivers wdriver = new WebDriverDto().Get().WebDrivers;
             Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
             StructureMap.Container container = WebDriverContainer.GetContainer;
-            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver.Name);
+            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver?.Name ?? string.Empty);
             return provider.GetWebDriver();
         }
 
-        public static string GetChromeBinary()
+        public static string? GetChromeBinary()
         {
             return ChromeBinaryFileName();
         }
@@ -116,7 +115,7 @@ namespace legallead.records.search.Classes
         /// <param name="parent">The parent element.</param>
         /// <param name="by">The by condition used to locate the element</param>
         /// <returns></returns>
-        private static IWebElement TryFindElement(IWebElement parent, By by)
+        private static IWebElement? TryFindElement(IWebElement parent, By by)
         {
             try
             {
@@ -128,9 +127,9 @@ namespace legallead.records.search.Classes
             }
         }
 
-        private static string _chromeBinaryName;
+        private static string? _chromeBinaryName;
 
-        private static string ChromeBinaryFileName()
+        private static string? ChromeBinaryFileName()
         {
             if (_chromeBinaryName != null)
             {
@@ -138,7 +137,7 @@ namespace legallead.records.search.Classes
             }
 
             List<string?> settings = ConfigurationManager.AppSettings
-                .AllKeys.ToList().FindAll(x => x.StartsWith("chrome.exe.location",
+                .AllKeys.ToList().FindAll(x => (x ?? "").StartsWith("chrome.exe.location",
                 StringComparison.CurrentCultureIgnoreCase))
                 .Select(x => ConfigurationManager.AppSettings[x])
                 .ToList().FindAll(x => File.Exists(x));

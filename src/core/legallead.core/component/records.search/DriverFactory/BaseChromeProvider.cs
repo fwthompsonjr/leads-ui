@@ -6,9 +6,9 @@ namespace legallead.records.search.DriverFactory
 {
     public abstract class BaseChromeProvider
     {
-        private static string _binaryName;
-        private static string _driverFileName;
-        private static string _downloadPath;
+        private static string? _binaryName;
+        private static string? _driverFileName;
+        private static string? _downloadPath;
 
         /// <summary>
         /// Gets the download path.

@@ -75,7 +75,6 @@ namespace legallead.records.search.UnitTests.Data
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Faker_GeneratesUniqueDate()
         {
             if (Faker == null) return;
@@ -150,7 +149,8 @@ namespace legallead.records.search.UnitTests.Data
         {
             if (Faker == null) return;
             var obj = Faker.Generate();
-            DataPersistence.GetContent<TmpData>(obj.FileName).ShouldBeNull();
+            var fname = DataPersistence.GetContent<TmpData>(obj.FileName);
+            Assert.AreEqual(0, fname.Id);
         }
 
         [TestMethod]

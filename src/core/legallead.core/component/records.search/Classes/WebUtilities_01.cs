@@ -7,7 +7,7 @@ namespace legallead.records.search.Classes
     {
         protected interface ICaseFetch
         {
-            List<HLinkDataRow> GetCases();
+            List<HLinkDataRow> GetLinkedCases();
         }
 
         protected class NonCriminalCaseFetch : ICaseFetch
@@ -19,16 +19,16 @@ namespace legallead.records.search.Classes
                 Data = data;
             }
 
-            public virtual List<HLinkDataRow> GetCases()
+            public virtual List<HLinkDataRow> GetLinkedCases()
             {
                 if (DataRows == null)
                 {
                     return new List<HLinkDataRow>();
                 }
-                WebNavigationKey parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch); // "isCriminalSearch");
+                WebNavigationKey parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch);
                 if (parameter != null)
                 {
-                    parameter.Value = CommonKeyIndexes.NumberZero; // "0";
+                    parameter.Value = CommonKeyIndexes.NumberZero;
                 }
                 List<HLinkDataRow> cases = Search(GetNavigationAddress(), DataRows);
                 return cases;
@@ -43,10 +43,8 @@ namespace legallead.records.search.Classes
                         cases ??= new List<HLinkDataRow>();
 
                         WebInteractive data = Data;
-                        IWebElement tbResult = null;
                         ElementAssertion helper = new(driver);
-                        //
-                        tbResult = GetCaseData(data, ref cases, navTo, helper);
+                        _ = GetCaseData(data, ref cases, navTo, helper);
                         GetPersonData(cases, driver, data);
                     }
                     catch
@@ -83,10 +81,9 @@ namespace legallead.records.search.Classes
 
                 List<HLinkDataRow> people = cases.FindAll(x => !string.IsNullOrEmpty(x.WebAddress));
                 people.ForEach(d => Find(driver, d));
-                int found = people.Count(p => !string.IsNullOrEmpty(p.Defendant));
             }
 
-            protected List<HLinkDataRow> DataRows
+            protected List<HLinkDataRow>? DataRows
             {
                 get
                 {
@@ -140,19 +137,19 @@ namespace legallead.records.search.Classes
 
             private WebNavigationKey GetBaseUri()
             {
-                return GetParameter(Data, CommonKeyIndexes.BaseUri); // "baseUri");
+                return GetParameter(Data, CommonKeyIndexes.BaseUri) ?? new();
             }
 
             private WebNavigationKey GetQuery()
             {
-                return GetParameter(Data, CommonKeyIndexes.Query); // "query");
+                return GetParameter(Data, CommonKeyIndexes.Query) ?? new();
             }
 
-            protected string GetNavigationAddress()
+            protected string? GetNavigationAddress()
             {
                 WebNavigationKey? target = GetBaseUri();
                 WebNavigationKey? query = GetQuery();
-                if (target == null | query == null)
+                if (target == null || query == null)
                 {
                     return null;
                 }
@@ -161,7 +158,7 @@ namespace legallead.records.search.Classes
                     CommonKeyIndexes.QueryString, target.Value, query.Value);
             }
 
-            private List<HLinkDataRow> _dataRows;
+            private List<HLinkDataRow>? _dataRows;
         }
 
         protected class CriminalCaseFetch : NonCriminalCaseFetch
@@ -171,7 +168,7 @@ namespace legallead.records.search.Classes
             {
             }
 
-            public override List<HLinkDataRow> GetCases()
+            public override List<HLinkDataRow> GetLinkedCases()
             {
                 if (DataRows == null)
                 {
@@ -182,19 +179,19 @@ namespace legallead.records.search.Classes
                     return new List<HLinkDataRow>();
                 }
 
-                WebNavigationKey parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch); // "isCriminalSearch");
+                WebNavigationKey? parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch);
                 if (parameter != null)
                 {
-                    parameter.Value = CommonKeyIndexes.NumberOne; // "1";
+                    parameter.Value = CommonKeyIndexes.NumberOne;
                 }
-                ModifyInstructions(CommonKeyIndexes.CriminalLinkQuery); //"criminalLinkQuery");
-                List<HLinkDataRow> cases = Search(GetNavigationAddress(), DataRows);
+                ModifyInstructions(CommonKeyIndexes.CriminalLinkQuery);
+                List<HLinkDataRow> cases = Search(GetNavigationAddress() ?? string.Empty, DataRows);
                 cases.ForEach(c => c.IsCriminal = true);
                 return cases;
             }
         }
 
-        internal static WebNavigationKey GetParameter(
+        internal static WebNavigationKey? GetParameter(
             WebInteractive data,
             string parameterName)
         {

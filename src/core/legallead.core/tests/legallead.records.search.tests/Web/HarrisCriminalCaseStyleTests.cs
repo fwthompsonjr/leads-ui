@@ -36,8 +36,8 @@ namespace legallead.records.search.Tests
                     });
                 var list = dtos.GroupBy(x => x.UniqueIndex()).Select(x => x.FirstOrDefault());
                 CaseNumbers = list.Take(MxCaseNumbers).ToList();
-                MaximumFileDate = list.Max(x => x.DateFiled);
-                MinimumFileDate = list.Min(x => x.DateFiled);
+                MaximumFileDate = list.Max(x => x!.DateFiled ?? string.Empty);
+                MinimumFileDate = list.Min(x => x!.DateFiled ?? string.Empty);
             }
         }
 

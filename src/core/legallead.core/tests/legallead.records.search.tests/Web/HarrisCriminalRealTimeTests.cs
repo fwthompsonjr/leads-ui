@@ -11,11 +11,11 @@ namespace legallead.records.search.UnitTests.Web
     [TestClass]
     public class HarrisCriminalRealTimeTests
     {
-        private static string _srcDirectory;
-        private static string _srcFile;
+        private static string? _srcDirectory;
+        private static string? _srcFile;
         private static string SrcDirectoryName => _srcDirectory ??= SrcDir();
         private static string SrcFile => _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
-        private IWebDriver GetDriver;
+        private IWebDriver? GetDriver;
 
         [TestInitialize]
         public void Setup()
@@ -54,7 +54,9 @@ namespace legallead.records.search.UnitTests.Web
             var obj = new HarrisCriminalRealTime();
             try
             {
-                var result = obj.IteratePages(GetDriver);
+                var driver = GetDriver;
+                Assert.IsNotNull(driver);
+                var result = obj.IteratePages(driver);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
                 Assert.AreEqual(expected, result.Count);
@@ -71,7 +73,7 @@ namespace legallead.records.search.UnitTests.Web
         private static string SrcDir()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return Path.GetDirectoryName(assembly.Location);
+            return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
         }
     }
 }

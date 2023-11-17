@@ -8,7 +8,7 @@ namespace legallead.records.search.Web
     /// </summary>
     public static class ActionElementContainer
     {
-        private static Container _container;
+        private static Container? _container;
 
         /// <summary>
         /// Gets the get container.

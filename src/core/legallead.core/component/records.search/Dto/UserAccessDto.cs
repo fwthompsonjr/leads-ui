@@ -5,14 +5,14 @@ namespace legallead.records.search.Dto
 {
     public class UserAccessDtoCollection
     {
-        public List<UserAccessDto> AccessDtos { get; set; }
+        public List<UserAccessDto> AccessDtos { get; set; } = new();
     }
 
     public class UserAccessDto
     {
-        public string CreateDate { get; set; }
-        public string UserGuid { get; set; }
-        public string UserKey { get; set; }
+        public string CreateDate { get; set; } = string.Empty;
+        public string UserGuid { get; set; } = string.Empty;
+        public string UserKey { get; set; } = string.Empty;
 
         public DateTime? CreatedDate
         {
@@ -23,7 +23,7 @@ namespace legallead.records.search.Dto
                     return null;
                 }
 
-                if (!DateTime.TryParse(CreateDate, out DateTime createdDate))
+                if (!DateTime.TryParse(CreateDate, CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out DateTime createdDate))
                 {
                     return null;
                 }
@@ -32,7 +32,9 @@ namespace legallead.records.search.Dto
             }
         }
 
-        public static List<UserAccessDto> GetListDto(string fileSuffix)
+        public string UserData { get; set; } = string.Empty;
+
+        public static List<UserAccessDto>? GetListDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
             string appDirectory = ContextManagment.AppDirectory;
@@ -56,7 +58,7 @@ namespace legallead.records.search.Dto
             return colUsers;
         }
 
-        public static UserAccessDto GetDto(string fileSuffix)
+        public static UserAccessDto? GetDto(string fileSuffix)
         {
             const string dataFormat = @"{0}\xml\{1}.json";
             string appDirectory = ContextManagment.AppDirectory;
@@ -81,20 +83,21 @@ namespace legallead.records.search.Dto
                 return new UserAccessDto();
             }
 
-            return colUsers.Last();
+            return colUsers[^1];
         }
 
         public static UserAccessDto CreateCredential(string cleared, string userKey, string targetFile)
         {
-            string decoded = CryptoEngine.Encrypt(cleared, userKey);
+            string decoded = CryptoEngine.Encrypt(cleared, userKey, out var data64);
             UserAccessDto dto = new()
             {
                 UserKey = userKey,
                 UserGuid = decoded,
+                UserData = data64,
                 CreateDate = DateTime.Now.ToLongDateString()
             };
-            List<UserAccessDto> list = GetListDto(targetFile);
-            list.Add(dto);
+            var list = GetListDto(targetFile);
+            list?.Add(dto);
 
             const string dataFormat = @"{0}\xml\{1}.json";
             string appDirectory = ContextManagment.AppDirectory;
@@ -115,24 +118,17 @@ namespace legallead.records.search.Dto
             return dto;
         }
 
-        public static List<string> GetCredential(UserAccessDto dto)
+        public static List<string>? GetCredential(UserAccessDto dto)
         {
-            if (dto == null)
+            if (dto == null ||
+                string.IsNullOrEmpty(dto.UserGuid) || 
+                string.IsNullOrEmpty(dto.UserKey) || 
+                string.IsNullOrEmpty(dto.UserData))
             {
                 return null;
             }
 
-            if (string.IsNullOrEmpty(dto.UserGuid))
-            {
-                return null;
-            }
-
-            if (string.IsNullOrEmpty(dto.UserKey))
-            {
-                return null;
-            }
-
-            string decoded = CryptoEngine.Decrypt(dto.UserGuid, dto.UserKey);
+            string decoded = CryptoEngine.Decrypt(dto.UserGuid, dto.UserKey, dto.UserData);
             return decoded.Split('|').ToList();
         }
     }

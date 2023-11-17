@@ -39,7 +39,7 @@ namespace legallead.records.search.Dto
             get { return _courtJson ??= GetCourtLookup(); }
         }
 
-        private static CourtLookup _courtJson;
+        private static CourtLookup? _courtJson;
 
         private static CourtLookup GetCourtLookup()
         {
@@ -52,24 +52,21 @@ namespace legallead.records.search.Dto
         {
             string dataFile = NonCriminalMappingFile();
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
 
         public static NavInstruction GetCriminalMapping()
         {
-            // if (_criminalInstructions != null) return _criminalInstructions;
             string dataFile = CriminalMappingFile();
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data);
-            // _criminalInstructions = Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data);
-            // return _criminalInstructions;
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
 
         public static SearchSettingDto GetDto()
         {
             string dataFile = DataFile();
             string data = File.ReadAllText(dataFile);
-            Example? parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(data);
+            Example? parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(data) ?? new();
             return parent.SearchSetting;
         }
 

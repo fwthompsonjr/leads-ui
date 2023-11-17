@@ -83,8 +83,7 @@ namespace legallead.records.search.Classes
             }
             finally
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
             }
         }
 
@@ -138,14 +137,13 @@ namespace legallead.records.search.Classes
             }
             catch (Exception)
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
+                driver?.Dispose();
                 throw;
             }
             finally
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
             }
         }
 
@@ -314,7 +312,7 @@ namespace legallead.records.search.Classes
             }
 
             XmlDocument doc = XmlDocProvider.GetDoc(item.Data);
-            if (!doc.FirstChild.HasChildNodes)
+            if (!doc.FirstChild!.HasChildNodes)
             {
                 return string.Empty;
             }
@@ -324,7 +322,7 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            int colIndex = Parameters.Id == 10 ? 2 : 2;
+            int colIndex = 2;
             XmlNode? node = doc.FirstChild.ChildNodes[colIndex];
             if (node == null)
             {
@@ -372,7 +370,7 @@ namespace legallead.records.search.Classes
                 }
             }
             List<string> zipPart = person.Address3.Split(' ').ToList();
-            person.Zip = zipPart.Last();
+            person.Zip = zipPart[^1];
 
             return person;
         }
@@ -573,7 +571,7 @@ namespace legallead.records.search.Classes
 
         #region Element Action Helpers
 
-        private static List<IElementActionBase> elementActions;
+        private static List<IElementActionBase>? elementActions;
 
         protected static List<IElementActionBase> ElementActions
         {

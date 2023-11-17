@@ -57,7 +57,7 @@ namespace legallead.records.search.Addressing
         /// <param name="parent">The parent web browser instance.</param>
         /// <param name="by">The by condition used to locate the element</param>
         /// <returns></returns>
-        protected static IWebElement TryFindElement(IWebDriver parent, By by)
+        protected static IWebElement? TryFindElement(IWebDriver parent, By by)
         {
             try
             {
@@ -109,13 +109,10 @@ namespace legallead.records.search.Addressing
                 rowIndex += 1;
                 System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> headings = currentRow.FindElements(By.TagName(IndexKeyNames.ThElement));
 
-                if (headings != null && headings.Count > 1)
+                if (headings != null && headings.Count > 1 && !address.ToLower(cultureInfo).StartsWith(findKey, currentCase))
                 {
-                    if (!address.ToLower(cultureInfo).StartsWith(findKey, currentCase))
-                    {
-                        address = string.Empty;
-                        break;
-                    }
+                    address = string.Empty;
+                    break;
                 }
                 if (firstTd != null &&
                     string.IsNullOrEmpty(firstTd.GetAttribute("headers")))
