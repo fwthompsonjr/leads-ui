@@ -4,6 +4,7 @@ using Shouldly;
 using System;
 using System.Globalization;
 using legallead.records.search.Parsing;
+using System.Net.Http.Headers;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -13,28 +14,27 @@ namespace legallead.records.search.Tests.Data
 
         private class SytleData
         {
-            public string Header { get; set; }
-            public string Separator { get; set; }
-            public string Person { get; set; }
-            public string Spn { get; set; }
-            public string Dob { get; set; }
+            public string Header { get; set; } = string.Empty;
+            public string Separator { get; set; } = string.Empty;
+            public string Person { get; set; } = string.Empty;
+            public string Spn { get; set; } = string.Empty;
+            public string Dob { get; set; } = string.Empty;
 
             public string CaseStyle => $"{Header} {Separator} {Person}";
 
-            public override string ToString()
+            public override string? ToString()
             {
                 var resp = $"{Header} {Separator} {Person} (SPN: {Spn}) (DOB: {Dob})";
                 if (string.IsNullOrEmpty(resp))
                 {
                     return base.ToString();
                 }
-
                 return resp;
             }
         }
 
-        private Faker<SytleData> FakeData;
-        private CaseStyleDbParser Parser;
+        private Faker<SytleData>? FakeData;
+        private CaseStyleDbParser? Parser;
 
         [TestInitialize]
         public void Setup()
@@ -50,19 +50,22 @@ namespace legallead.records.search.Tests.Data
                     .RuleFor(f => f.Spn, r => r.Random.Int(100000, 9999999).ToString("d8", CultureInfo.CurrentCulture))
                     .RuleFor(f => f.Dob, r => r.Date.Between(dobStart, dobEnd).ToString("MM/dd/yyyy", CultureInfo.CurrentCulture));
             }
+            if (FakeData == null) return;
             var data = FakeData.Generate();
-            Parser = new CaseStyleDbParser { Data = data.ToString() };
+            Parser = new CaseStyleDbParser { Data = data.ToString() ?? string.Empty };
         }
 
         [TestMethod]
         public void CanParse_WithVs()
         {
+            if (Parser == null) return;
             Parser.CanParse().ShouldBeTrue();
         }
 
         [TestMethod]
         public void CanParse_WithoutData_IsFalse()
         {
+            if (Parser == null) return;
             Parser.Data = string.Empty;
             Parser.CanParse().ShouldBeFalse();
         }
@@ -70,19 +73,21 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanParse_WithoutVs_IsFalse()
         {
+            if (FakeData == null || Parser == null) return;
             var dto = FakeData.Generate();
             dto.Separator = "versus";
-            Parser.Data = dto.ToString();
+            Parser.Data = dto.ToString() ?? string.Empty;
             Parser.CanParse().ShouldBeFalse();
         }
 
         [TestMethod]
         public void Parser_CanExtract_Defendant()
         {
+            if (FakeData == null || Parser == null) return;
             var dto = FakeData.Generate(10);
             foreach (var item in dto)
             {
-                Parser.Data = item.ToString();
+                Parser.Data = item.ToString() ?? string.Empty;
                 var expected = item.Person;
                 var response = Parser.Parse();
                 response.Defendant.ShouldBe(expected);
@@ -92,8 +97,9 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Parser_CanExtract_Defendant_Once()
         {
+            if (FakeData == null || Parser == null) return;
             var item = FakeData.Generate();
-            Parser.Data = item.ToString();
+            Parser.Data = item.ToString() ?? string.Empty;
             var expected = item.Person;
             var response = Parser.Parse();
             response.Defendant.ShouldBe(expected);
@@ -102,10 +108,11 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Parser_CanExtract_CaseStyle()
         {
+            if (FakeData == null || Parser == null) return;
             var dto = FakeData.Generate(10);
             foreach (var item in dto)
             {
-                Parser.Data = item.ToString();
+                Parser.Data = item.ToString() ?? string.Empty;
                 var expected = item.CaseStyle;
                 var response = Parser.Parse();
                 response.CaseData.ShouldBe(expected);
@@ -115,8 +122,9 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Parser_CanExtract_CaseStyle_Once()
         {
+            if (FakeData == null || Parser == null) return;
             var item = FakeData.Generate();
-            Parser.Data = item.ToString();
+            Parser.Data = item.ToString() ?? string.Empty;
             var expected = item.CaseStyle;
             var response = Parser.Parse();
             response.CaseData.ShouldBe(expected);
@@ -125,10 +133,11 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Parser_CanExtract_Plantiff()
         {
+            if (FakeData == null || Parser == null) return;
             var dto = FakeData.Generate(10);
             foreach (var item in dto)
             {
-                Parser.Data = item.ToString();
+                Parser.Data = item.ToString() ?? string.Empty;
                 var expected = item.Header;
                 var response = Parser.Parse();
                 response.Plantiff.ShouldBe(expected);
@@ -138,8 +147,9 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Parser_CanExtract_Plantiff_Once()
         {
+            if (FakeData == null || Parser == null) return;
             var item = FakeData.Generate();
-            Parser.Data = item.ToString();
+            Parser.Data = item.ToString()!;
             var expected = item.Header;
             var response = Parser.Parse();
             response.Plantiff.ShouldBe(expected);

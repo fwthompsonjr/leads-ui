@@ -8,9 +8,9 @@ namespace SeleniumTests
     [TestClass]
     public class PublicData
     {
-        private static IWebDriver driver;
-        private StringBuilder verificationErrors;
-        private static string baseURL;
+        private static IWebDriver? driver;
+        private StringBuilder? verificationErrors;
+        private static string? baseURL;
         private bool acceptNextAlert = true;
 
         [ClassInitialize]

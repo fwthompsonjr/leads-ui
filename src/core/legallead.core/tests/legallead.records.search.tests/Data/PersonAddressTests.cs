@@ -48,7 +48,7 @@ namespace legallead.records.search.Tests.Data
             rootNode.AppendChild(fragment);
             // what do i do with these line-breaks?
             // how is that going to translate into Excel?
-            var dto = PersonAddress.ConvertFrom(rootNode.FirstChild);
+            var dto = PersonAddress.ConvertFrom(rootNode.FirstChild!);
 
             Assert.IsNotNull(dto);
         }
@@ -84,7 +84,7 @@ namespace legallead.records.search.Tests.Data
                 var node = TryFindNode(doc, item.Value);
                 Assert.IsNotNull(node, $"{item.FriendlyName} is null");
                 Assert.IsFalse(string.IsNullOrEmpty(node.InnerText), $"{item.FriendlyName} is blank or empty");
-                // if (item.Name.Equals("CaseStyle")) continue;
+
                 Assert.AreEqual(expectedList[indx++].CommandType, node.InnerText,
                     $"{item.FriendlyName} not matched. ");
             }
@@ -143,27 +143,25 @@ namespace legallead.records.search.Tests.Data
             }
 
             var failing = noPlantiffList[0];
-            var actual = failing.Plantiff;
+            _ = failing.Plantiff;
 
         }
 
 
-        private XmlNode TryFindNode(XmlDocument doc, string xpath)
+        private static XmlNode? TryFindNode(XmlDocument doc, string xpath)
         {
             try
             {
-                var node = doc.FirstChild.SelectSingleNode(xpath);
+                var node = doc.FirstChild!.SelectSingleNode(xpath);
                 return node;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 return null;
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
-        private string CriminalRow()
+        private static string CriminalRow()
         {
 
             return " <tr> " + Environment.NewLine +
@@ -199,7 +197,7 @@ namespace legallead.records.search.Tests.Data
             " </tr>";
         }
 
-        private string NonCriminalRow()
+        private static string NonCriminalRow()
         {
             return "<tr> " + Environment.NewLine +
             "<td index='1' nowrap='true' valign='top'>" + Environment.NewLine +
@@ -214,7 +212,7 @@ namespace legallead.records.search.Tests.Data
             "</td>" + Environment.NewLine +
             "</tr>";
         }
-        private IList<WebNavInstruction> ExpectedCriminalValues()
+        private static IList<WebNavInstruction> ExpectedCriminalValues()
         {
             var caseInstructions = SearchSettingDto.GetCriminalMapping();
             foreach (var item in caseInstructions.NavInstructions)
@@ -244,7 +242,7 @@ namespace legallead.records.search.Tests.Data
         }
 
 
-        private IList<WebNavInstruction> ExpectedNonCriminalValues()
+        private static IList<WebNavInstruction> ExpectedNonCriminalValues()
         {
             var caseInstructions = SearchSettingDto.GetCriminalMapping();
             foreach (var item in caseInstructions.NavInstructions)
@@ -275,22 +273,19 @@ namespace legallead.records.search.Tests.Data
 
 
 
-        private List<PersonAddress> SamplePersonAddress()
+        private static List<PersonAddress> SamplePersonAddress()
         {
             const string jsFile = @"Json\collincounty_probate.csv";
             var appFile = GetAppDirectoryName();
             appFile = Path.Combine(appFile, jsFile);
-            using (var reader = new StreamReader(appFile))
-            using (var csv = new CsvReader(reader))
-            {
-                var dto = csv.GetRecords<PersonAddressDto>().ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<PersonAddressDto, PersonAddress>());
-                var mapper = config.CreateMapper();
-                var people = new List<PersonAddress>();
-                dto.ForEach(x => people.Add(mapper.Map<PersonAddress>(x)));
-                return people;
-            }
-            // return null;
+            using var reader = new StreamReader(appFile);
+            using var csv = new CsvReader(reader);
+            var dto = csv.GetRecords<PersonAddressDto>().ToList();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<PersonAddressDto, PersonAddress>());
+            var mapper = config.CreateMapper();
+            var people = new List<PersonAddress>();
+            dto.ForEach(x => people.Add(mapper.Map<PersonAddress>(x)));
+            return people;
         }
 
 

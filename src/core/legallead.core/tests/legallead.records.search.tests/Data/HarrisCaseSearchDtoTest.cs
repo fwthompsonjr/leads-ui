@@ -11,7 +11,7 @@ namespace legallead.records.search.Tests.Data
     [TestClass]
     public class HarrisCaseSearchDtoTest
     {
-        private Faker<HarrisCaseSearchDto> DtoFaker;
+        private Faker<HarrisCaseSearchDto>? DtoFaker;
         const string datefmt = "MM/dd/yyyy";
         [TestInitialize]
         public void Setup()
@@ -38,6 +38,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanInit()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
@@ -45,6 +46,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanGenerate_UniqueIndex()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             var fileDate = obj.DateFiled.ToExactDate(datefmt, DateTime.MaxValue);
             var expected = $"{fileDate:s}~{obj.CaseNumber}~{obj.Court}";
@@ -55,6 +57,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_CaseNumber()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate(2);
             var expected = obj[1].CaseNumber;
             obj[0].CaseNumber = expected;
@@ -64,6 +67,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_DateFiled()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate(2);
             var expected = obj[1].DateFiled;
             obj[0].DateFiled = expected;
@@ -73,6 +77,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_Court()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate(2);
             var expected = obj[1].Court;
             obj[0].Court = expected;
@@ -82,6 +87,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_DateFormat()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate(2);
             var expected = obj[1].DateFormat;
             obj[0].DateFormat = expected;

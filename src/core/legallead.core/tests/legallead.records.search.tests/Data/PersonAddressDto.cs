@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -13,8 +11,8 @@ namespace legallead.records.search.Tests.Data
             @"Address1,Address2,Address3," +
             @"Case Number,Date Filed,Court," +
             @"Case Type,case style,plantiff";
-        private string _fieldNames;
-        private List<string> _fieldList;
+        private string? _fieldNames;
+        private List<string>? _fieldList;
 
         protected string LoweredFieldNames
         {
@@ -28,7 +26,7 @@ namespace legallead.records.search.Tests.Data
         {
             get
             {
-                return                   _fieldList ??= LoweredFieldNames.Split(',').ToList();
+                return _fieldList ??= LoweredFieldNames.Split(',').ToList();
             }
         }
 
@@ -36,20 +34,20 @@ namespace legallead.records.search.Tests.Data
 
         #region Properties
 
-        public string Name { get; set; }
-        public string Zip { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string Address3 { get; set; }
-        public string CaseNumber { get; set; }
-        public string DateFiled { get; set; }
-        public string Court { get; set; }
-        public string CaseType { get; set; }
-        public string CaseStyle { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Zip { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string Address2 { get; set; } = string.Empty;
+        public string Address3 { get; set; } = string.Empty;
+        public string CaseNumber { get; set; } = string.Empty;
+        public string DateFiled { get; set; } = string.Empty;
+        public string Court { get; set; } = string.Empty;
+        public string CaseType { get; set; } = string.Empty;
+        public string CaseStyle { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
 
-        public string Plantiff { get; set; }
+        public string Plantiff { get; set; } = string.Empty;
         public bool IsValid
         {
             get

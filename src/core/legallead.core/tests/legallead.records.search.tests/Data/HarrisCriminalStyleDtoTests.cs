@@ -10,7 +10,7 @@ namespace legallead.records.search.Tests.Data
     [TestClass]
     public class HarrisCriminalStyleDtoTests
     {
-        private Faker<HarrisCriminalStyleDto> DtoFaker;
+        private Faker<HarrisCriminalStyleDto>? DtoFaker;
 
         [TestInitialize]
         public void Setup()
@@ -43,6 +43,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanInit()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
@@ -56,6 +57,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Indexer_Get()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
 
             obj.Index.ToString(CultureInfo.CurrentCulture).ShouldBe(obj[0]);
@@ -77,6 +79,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Indexer_Set()
         {
+            if (DtoFaker == null) return;
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];

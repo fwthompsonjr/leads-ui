@@ -11,7 +11,7 @@ namespace legallead.records.search.Tests.Data
     [TestClass]
     public class HarrisCaseDateDtoTests
     {
-        private Faker<HarrisCaseDateDto> DtoFaker;
+        private Faker<HarrisCaseDateDto>? DtoFaker;
 
         [TestInitialize]
         public void Setup()
@@ -20,7 +20,6 @@ namespace legallead.records.search.Tests.Data
             {
                 var minDate = DateTime.Now.Date.AddYears(-2);
                 var maxDate = minDate.AddYears(2);
-                var interval = new TimeSpan(days: -7, hours: 0, minutes: 0, seconds: 0);
                 DtoFaker = new Faker<HarrisCaseDateDto>()
                     .RuleFor(x => x.Interval, y =>
                     {
@@ -43,6 +42,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanInit()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
@@ -50,6 +50,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_Interval()
         {
+            if (DtoFaker == null) return;
             var interval = new TimeSpan(days: -10, hours: 0, minutes: 30, seconds: 0);
             var obj = DtoFaker.Generate();
 
@@ -60,6 +61,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanSet_StartDate()
         {
+            if (DtoFaker == null) return;
             var list = DtoFaker.Generate(5);
             var obj = list[4];
             var expectedDate = list[0].StartDate;
@@ -70,6 +72,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanGet_EndDate()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             var expectedDate = obj.StartDate.Add(obj.Interval);
             obj.EndDate.ShouldBe(expectedDate);
@@ -78,6 +81,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanGet_StartingDate()
         {
+            if (DtoFaker == null) return;
             var format = HarrisCaseDateDto.DateFormat;
             var obj = DtoFaker.Generate();
             var expectedDate = obj.StartDate.ToString(format);
@@ -87,6 +91,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanGet_EndingDate()
         {
+            if (DtoFaker == null) return;
             var format = HarrisCaseDateDto.DateFormat;
             var obj = DtoFaker.Generate();
             var expectedDate = obj.StartDate.Add(obj.Interval).ToString(format, CultureInfo.CurrentCulture);
@@ -96,15 +101,16 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanEnumerate_StartToEnd()
         {
+            if (DtoFaker == null) return;
             var totalDays = 7 * 4 * 6;
             var interval = new TimeSpan(-7, 0, 0, 0);
             var obj = DtoFaker.Generate();
             var list = HarrisCaseDateDto.BuildList(obj.StartDate, interval, totalDays);
             list.Any().ShouldBeTrue();
             list.Count.ShouldBeGreaterThan(1);
-            list.First().StartDate.ShouldBe(obj.StartDate);
-            list.Last().StartDate.ShouldBeLessThan(obj.StartDate);
-            Math.Abs(list.First().StartDate.Subtract(list.Last().EndDate).TotalDays)
+            list[0].StartDate.ShouldBe(obj.StartDate);
+            list[^1].StartDate.ShouldBeLessThan(obj.StartDate);
+            Math.Abs(list[0].StartDate.Subtract(list[^1].EndDate).TotalDays)
                 .ShouldBeGreaterThanOrEqualTo(totalDays);
         }
 
@@ -112,6 +118,7 @@ namespace legallead.records.search.Tests.Data
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CanEnumerate_NoDay_Throws_Exception()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             var interval = new TimeSpan(10, 0, 0);
             _ = HarrisCaseDateDto.BuildList(obj.StartDate, interval, 49);
@@ -121,6 +128,7 @@ namespace legallead.records.search.Tests.Data
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CanEnumerate_NoRange_Throws_Exception()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             var interval = new TimeSpan(5, 12, 0, 0);
             _ = HarrisCaseDateDto.BuildList(obj.StartDate, interval, 0);

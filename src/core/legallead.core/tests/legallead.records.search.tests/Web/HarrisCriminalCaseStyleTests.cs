@@ -16,9 +16,9 @@ namespace legallead.records.search.Tests
     public class HarrisCriminalCaseStyleTests : TestingBase
     {
         private readonly int MxCaseNumbers = 10;
-        private List<HarrisCaseSearchDto> CaseNumbers;
-        private string MaximumFileDate;
-        private string MinimumFileDate;
+        private List<HarrisCaseSearchDto?>? CaseNumbers;
+        private string? MaximumFileDate;
+        private string? MinimumFileDate;
         [TestInitialize]
         public void Setup()
         {
@@ -26,6 +26,7 @@ namespace legallead.records.search.Tests
             {
                 Startup.Downloads.Read();
                 var datalist = Startup.Downloads.DataList.FirstOrDefault();
+                if (datalist == null) return;
                 var dtos = datalist.Data.Select(x =>
                     new HarrisCaseSearchDto
                     {
@@ -41,7 +42,7 @@ namespace legallead.records.search.Tests
         }
 
         [TestMethod]
-        public void Download_HasACorrectTarget()
+        public void DownloadHasACorrectTarget()
         {
             var folder = HarrisCriminalCaseStyle.DownloadFolder;
             folder.ShouldNotBeNullOrEmpty();
@@ -50,13 +51,15 @@ namespace legallead.records.search.Tests
 
         [TestMethod]
         [TestCategory("Integration Only")]
-        public void CaseStyle_CanGetSingleRecord()
+        public void CaseStyleCanGetSingleRecord()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");
             }
-            var caseNumber = CaseNumbers.Last();
+            if (CaseNumbers == null) return;
+            var caseNumber = CaseNumbers[^1];
+            caseNumber.ShouldNotBeNull();
             var dto = new HarrisCaseSearchDto { CaseNumber = caseNumber.CaseNumber };
             var obj = new HarrisCriminalCaseStyle();
             IWebDriver driver = GetDriver();
@@ -77,12 +80,13 @@ namespace legallead.records.search.Tests
 
         [TestMethod]
         [TestCategory("Integration Only")]
-        public async Task CaseStyle_CanGet_Bulk()
+        public async Task CaseStyleCanGetBulkAsync()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");
             }
+            if (MaximumFileDate == null) return;
             const string fmt = "yyyyMMdd";
             DateTime dateBase = DateTime.MaxValue;
             var dtmin = MaximumFileDate.ToExactDate(fmt, dateBase).AddDays(-10);
@@ -112,7 +116,7 @@ namespace legallead.records.search.Tests
 
         [TestMethod]
         [TestCategory("Integration Only")]
-        public async Task CaseStyle_Can_StartAsync()
+        public async Task CaseStyleCanStartAsync()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
@@ -132,7 +136,7 @@ namespace legallead.records.search.Tests
 
         [TestMethod]
         [TestCategory("Integration Only")]
-        public async Task CaseStyle_CanGet_RealTime()
+        public async Task CaseStyleCanGetRealTimeAsync()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
@@ -159,8 +163,9 @@ namespace legallead.records.search.Tests
             }
         }
         [TestMethod]
-        public void CanParse_Min_Max()
+        public void CanParseMinMax()
         {
+            if (MinimumFileDate == null || MaximumFileDate == null) return;
             const string fmt = "yyyyMMdd";
             DateTime dateBase = DateTime.MaxValue;
             var dtmin = MinimumFileDate.ToExactDate(fmt, dateBase);
