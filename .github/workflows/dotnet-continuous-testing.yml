@@ -14,6 +14,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v4
+      with:
+      # Repository name with owner. For example, actions/checkout
+      # Default: ${{ github.repository }}
+        repository: '${{ github.repository }}'
+
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
       if: github.event_name != 'pull_request'
