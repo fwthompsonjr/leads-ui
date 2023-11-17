@@ -15,10 +15,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-      # Repository name with owner. For example, actions/checkout
-      # Default: ${{ github.repository }}
-        repository: '${{ github.repository }}'
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
+  
+    - name: Set Release Version
+      run: |
+          echo "BUILD_VERSION=${{format('{0}.{1}', steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
 
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
