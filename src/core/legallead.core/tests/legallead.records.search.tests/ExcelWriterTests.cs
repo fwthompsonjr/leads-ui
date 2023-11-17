@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using Shouldly;
 
 namespace legallead.records.search.Tests
 {
@@ -161,21 +162,19 @@ namespace legallead.records.search.Tests
         {
             const string fileName = "tarrantSample.json";
             var dir = SettingsManager.GetAppFolderName();
-            dir = new DirectoryInfo(dir).Parent.FullName;
-            dir = new DirectoryInfo(dir).Parent.FullName;
-            dir = new DirectoryInfo(dir).Parent.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
             dir = Path.Combine(dir, fileName);
             if (File.Exists(dir))
             {
                 return;
             }
-
+            File.Exists(dir).ShouldBeTrue();
             var people = SamplePeople().Take(2);
-            using (var writer = new StreamWriter(dir))
-            {
-                writer.WriteLine(Newtonsoft.Json.JsonConvert
-                    .SerializeObject(people, Newtonsoft.Json.Formatting.Indented));
-            }
+            using var writer = new StreamWriter(dir);
+            writer.WriteLine(Newtonsoft.Json.JsonConvert
+                .SerializeObject(people, Newtonsoft.Json.Formatting.Indented));
 
         }
     }

@@ -291,7 +291,6 @@ namespace legallead.records.search.Tests.Data
 
         private static string GetAppDirectoryName()
         {
-
             var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             return Path.GetDirectoryName(execName) ?? string.Empty;
         }

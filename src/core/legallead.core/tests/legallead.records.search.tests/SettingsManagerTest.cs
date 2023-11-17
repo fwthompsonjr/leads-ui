@@ -151,7 +151,8 @@ namespace legallead.records.search.Tests
             doc.LoadXml(dataRw.Data);
             foreach (var item in sttg.CaseInstructions)
             {
-                var node = doc.FirstChild.SelectSingleNode(item.Value);
+                var node = doc.FirstChild!.SelectSingleNode(item.Value);
+                node.ShouldNotBeNull();
                 Console.WriteLine("Attribute: {0}, Value: {1}", item.Name, node.InnerText);
             }
         }

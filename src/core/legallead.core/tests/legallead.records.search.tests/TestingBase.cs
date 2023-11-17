@@ -8,7 +8,7 @@ namespace legallead.records.search.Tests
     public class TestingBase
     {
 
-        private IWebDriver _currentWebDriver;
+        private IWebDriver? _currentWebDriver;
         protected IWebDriver CurrentWebDriver
         {
             set { _currentWebDriver = value; }

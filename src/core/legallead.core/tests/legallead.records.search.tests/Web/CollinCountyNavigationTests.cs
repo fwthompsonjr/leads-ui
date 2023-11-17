@@ -37,9 +37,9 @@ namespace legallead.records.search.Tests
         {
             var caseTypes = CaseTypeSelectionDto.GetDto("collinCountyCaseType");
             Assert.IsNotNull(caseTypes);
-            Assert.IsTrue(caseTypes.DropDowns.Any(x => x.Id == 1));
-            var dropDown = caseTypes.DropDowns.First(x => x.Id == 1);
-            Assert.AreEqual(dropDown.Name, "probate courts");
+            Assert.IsTrue(caseTypes.DropDowns.Exists(x => x.Id == 1));
+            var dropDown = caseTypes.DropDowns.First(x => x.Id == 1) ?? new();
+            Assert.AreEqual("probate courts", dropDown.Name);
 
         }
 
@@ -179,7 +179,6 @@ namespace legallead.records.search.Tests
         private static WebNavigationParameter CreateOrLoadWebParameter(WebNavigationParameter webParameter, string jsFile)
         {
             // get key name 
-            // var cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
             if (!File.Exists(jsFile))
             {
                 return webParameter;
@@ -195,23 +194,19 @@ namespace legallead.records.search.Tests
 
         private static void CreateJsFile(WebNavigationParameter webParameter, string jsFile)
         {
-            using (var writer = new StreamWriter(jsFile))
-            {
-                writer.Write(
-                Newtonsoft.Json.JsonConvert.SerializeObject(webParameter));
-            }
+            using var writer = new StreamWriter(jsFile);
+            writer.Write(
+            Newtonsoft.Json.JsonConvert.SerializeObject(webParameter));
         }
 
         private static WebNavigationParameter ReadJsFile(string jsFile)
         {
-            using (var reader = new StreamReader(jsFile))
-            {
-                var content = reader.ReadToEnd();
-                var webParameter =
-                    Newtonsoft.Json.JsonConvert
-                    .DeserializeObject<WebNavigationParameter>(content);
-                return webParameter;
-            }
+            using var reader = new StreamReader(jsFile);
+            var content = reader.ReadToEnd();
+            var webParameter =
+                Newtonsoft.Json.JsonConvert
+                .DeserializeObject<WebNavigationParameter>(content) ?? new();
+            return webParameter;
         }
 
         private static string GetAppDirectoryName()
@@ -219,12 +214,12 @@ namespace legallead.records.search.Tests
 
             var navigation = new SettingsManager();
             var navFile = navigation.ExcelFormatFile;
-            var folder = Path.GetDirectoryName(navFile);
+            var folder = Path.GetDirectoryName(navFile) ?? string.Empty;
             while (new DirectoryInfo(folder).Name != "bin")
             {
-                folder = new DirectoryInfo(folder).Parent.FullName;
+                folder = new DirectoryInfo(folder).Parent!.FullName;
             }
-            return new DirectoryInfo(folder).Parent.FullName;
+            return new DirectoryInfo(folder).Parent!.FullName;
         }
 
         #endregion

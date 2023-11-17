@@ -59,7 +59,7 @@ namespace legallead.records.search.Db
             return JsonConvert.DeserializeObject<T>(content);
         }
 
-        public static void Save(string fileName, object data)
+        public static void Save(string fileName, object? data)
         {
             if (string.IsNullOrEmpty(fileName))
             {
