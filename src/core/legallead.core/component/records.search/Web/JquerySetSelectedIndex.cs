@@ -17,7 +17,8 @@
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
+            IWebDriver? driver = GetWeb;
+            if (driver == null) { return; }
             string selector = item.Locator.Query;
             if (string.IsNullOrEmpty(selector))
             {

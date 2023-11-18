@@ -7,22 +7,20 @@ namespace legallead.records.search.Dto
         [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("name")] public string Name { get; set; } = string.Empty;
 
-        [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonProperty("type")] public string Type { get; set; } = string.Empty;
 
         [JsonProperty("labels")]
-        public List<string> Labels { get; set; }
+        public List<string> Labels { get; set; } = new();
 
         [JsonProperty("index")]
         public int? Index { get; set; }
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [JsonProperty("values")]
-        public List<string> Values { get; set; }
+        public List<string> Values { get; set; } = new();
     }
 }

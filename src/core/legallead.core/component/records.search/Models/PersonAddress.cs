@@ -12,8 +12,8 @@ namespace legallead.records.search.Models
             @"Case Number,Date Filed,Court," +
             @"Case Type,case style,plantiff,FName,LName";
 
-        private string _fieldNames;
-        private List<string> _fieldList;
+        private string? _fieldNames;
+        private List<string>? _fieldList;
 
         protected string LoweredFieldNames
         {
@@ -27,7 +27,7 @@ namespace legallead.records.search.Models
         {
             get
             {
-                return                   _fieldList ??= LoweredFieldNames.Split(',').ToList();
+                return _fieldList ??= LoweredFieldNames.Split(',').ToList();
             }
         }
 

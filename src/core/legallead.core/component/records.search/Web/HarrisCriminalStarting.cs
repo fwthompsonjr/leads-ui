@@ -26,7 +26,7 @@ namespace legallead.records.search.Web
             return new List<CriminalStartType> { CriminalStartType.All }.AsEnumerable();
         }
 
-        public static async Task StartAsync(IEnumerable<CriminalStartType> startTypes = null)
+        public static async Task StartAsync(IEnumerable<CriminalStartType>? startTypes = null)
         {
             startTypes ??= DefaultStart;
             IWebDriver driver = GetDriver(true);
@@ -55,7 +55,7 @@ namespace legallead.records.search.Web
         private static async Task FetchLastDownloadAsync(IWebDriver driver)
         {
             using HarrisCriminalData obj = new();
-            string result = null;
+            string? result = null;
             await Task.Run(() => { result = obj.GetData(driver); }).ConfigureAwait(false);
             Debug.Assert(result != null);
             Debug.Assert(File.Exists(result));
@@ -88,7 +88,7 @@ namespace legallead.records.search.Web
             };
             while (dtes.Count < cycleId)
             {
-                KeyValuePair<DateTime, DateTime> item = dtes.Last();
+                KeyValuePair<DateTime, DateTime> item = dtes[^1];
                 dtes.Add(new KeyValuePair<DateTime, DateTime>(item.Key.AddDays(interval), item.Key));
             }
 

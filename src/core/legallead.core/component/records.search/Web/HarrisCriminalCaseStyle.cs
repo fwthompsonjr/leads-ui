@@ -54,16 +54,6 @@ namespace legallead.records.search.Web
             public const string Btn_Print = ContentPlaceHolder + "_lblPrintResult";
 
             /// <summary>
-            /// The textbox username
-            /// </summary>
-            public const string Text_UserName = "txtUserName";
-
-            /// <summary>
-            /// The textbox password
-            /// </summary>
-            public const string Text_Password = "txtPassword";
-
-            /// <summary>
             /// The textbox case number
             /// </summary>
             public const string Text_CaseNo = ContentPlaceHolder + "_tabSearch_tabCriminal_txtCrimCaseNumber";
@@ -84,16 +74,6 @@ namespace legallead.records.search.Web
             public const string Text_EndDate = ContentPlaceHolder + "_tabSearch_tabCriminal_txtCrimEndDate";
 
             /// <summary>
-            /// The textbox public image number
-            /// </summary>
-            public const string Text_PublicImageNbr = ContentPlaceHolder + "_tabSearch_tabCriminal_txtPubImgNbrCrim";
-
-            /// <summary>
-            /// The textbox pin number
-            /// </summary>
-            public const string Text_PinNbr = ContentPlaceHolder + "_txtPin";
-
-            /// <summary>
             /// The table search
             /// </summary>
             public static string Table_Search = @"//*[@id='" + Div_SearchResult + "']/table[1]/tbody/tr[4]/td/table/tbody";
@@ -107,11 +87,6 @@ namespace legallead.records.search.Web
             /// The table print
             /// </summary>
             public static string Table_Print = @"//table[@id='tblResults']/tbody";
-
-            /// <summary>
-            /// The table print rows
-            /// </summary>
-            public static string Table_PrintRows = Table_Print + "/tr[@style]";
         }
 
         private static class Selectors
@@ -138,7 +113,7 @@ namespace legallead.records.search.Web
             /// <value>
             /// The login.
             /// </value>
-            public static By Login => By.Id(Controls.Btn_Login);
+            public static By LoginButton => By.Id(Controls.Btn_Login);
 
             /// <summary>
             /// Gets the case number.
@@ -203,30 +178,6 @@ namespace legallead.records.search.Web
             /// The print table.
             /// </value>
             public static By PrintTable => By.XPath(Controls.Table_Print);
-
-            /// <summary>
-            /// Gets the print rows.
-            /// </summary>
-            /// <value>
-            /// The print rows.
-            /// </value>
-            public static By PrintRows => By.XPath(Controls.Table_PrintRows);
-
-            /// <summary>
-            /// Gets the textbox PIN number.
-            /// </summary>
-            /// <value>
-            /// The print rows.
-            /// </value>
-            public static By PinNbr => By.XPath(Controls.Text_PinNbr);
-
-            /// <summary>
-            /// Gets the textbox public image number.
-            /// </summary>
-            /// <value>
-            /// The print rows.
-            /// </value>
-            public static By PublicImageNbr => By.XPath(Controls.Text_PublicImageNbr);
 
             /// <summary>
             /// Gets the table.
@@ -353,7 +304,7 @@ namespace legallead.records.search.Web
             List<IWebElement> rows = driver.FindElements(Selectors.TableRows).ToList();
             foreach (IWebElement? item in rows)
             {
-                HarrisCriminalStyleDto dto = ReadTable(rows, item);
+                HarrisCriminalStyleDto? dto = ReadTable(rows, item);
                 if (dto != null) { result.Add(dto); }
             }
             return result;
@@ -374,7 +325,7 @@ namespace legallead.records.search.Web
             return driver;
         }
 
-        private void PopulateWhenPresent(By selector, string dateFiled, int incrementDays = 0)
+        private void PopulateWhenPresent(By selector, string? dateFiled, int incrementDays = 0)
         {
             if (string.IsNullOrEmpty(dateFiled))
             {
@@ -386,17 +337,18 @@ namespace legallead.records.search.Web
             {
                 return;
             }
-            IWebElement control = TheDriver.FindElement(selector, 1);
+            IWebElement? control = TheDriver?.FindElement(selector, 1);
             if (control == null)
             {
                 return;
             }
             string dateFmt = date.AddDays(incrementDays).ToString("MM/dd/yyyy", culture);
-            TheDriver.SetText(control, dateFmt);
+            TheDriver?.SetText(control, dateFmt);
         }
 
         private string TryGetCompleteHtml(int recordCount, DateTime stopDateTime)
         {
+            if (TheDriver == null) return string.Empty;
             string html = TheDriver.FindElement(Selectors.PrintTable).GetAttribute("outerHTML");
             HtmlDocument doc = new();
             doc.LoadHtml(html);
@@ -424,7 +376,7 @@ namespace legallead.records.search.Web
                 return notfound;
             }
 
-            string count = text.Split(' ').Last().Replace(".", "");
+            string count = text.Split(' ')[^1].Replace(".", "");
             if (int.TryParse(count, out int rcount))
             {
                 return rcount;
@@ -440,8 +392,8 @@ namespace legallead.records.search.Web
             const string status = "Active - CRIMINAL";
             string[] controlNames = new string[] { "Case Status", "Print Button", "Print Results Table" };
 
-            IWebDriver driver = TheDriver;
-            IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
+            var driver = TheDriver;
+            if (driver is not IJavaScriptExecutor executor) return new();
             string currentWindow = driver.CurrentWindowHandle;
             CultureInfo culture = CultureInfo.InvariantCulture;
             List<DateTime> dates = new() { dateDto.StartDate, dateDto.EndDate };
@@ -518,7 +470,7 @@ namespace legallead.records.search.Web
 
             foreach (IEnumerable<string> item in rowinfo)
             {
-                HarrisCriminalStyleDto dto = ReadTable(rowinfo, item);
+                HarrisCriminalStyleDto? dto = ReadTable(rowinfo, item);
                 if (dto != null) { result.Add(dto); }
             }
 
@@ -543,7 +495,7 @@ namespace legallead.records.search.Web
         }
 
         [ExcludeFromCodeCoverage]
-        private static HarrisCriminalStyleDto Parse(HarrisCriminalStyleDto dto)
+        private static HarrisCriminalStyleDto? Parse(HarrisCriminalStyleDto dto)
         {
             if (dto == null)
             {
@@ -596,7 +548,7 @@ namespace legallead.records.search.Web
                 driver.SwitchTo().Frame(frame);
                 IWebElement txUserName = driver.FindElement(Selectors.UserName);
                 IWebElement txPassword = driver.FindElement(Selectors.Password);
-                IWebElement btnLogin = driver.FindElement(Selectors.Login, timeout);
+                IWebElement btnLogin = driver.FindElement(Selectors.LoginButton, timeout);
 
                 driver.ClickAndOrSetText(txUserName, uid);
                 driver.ClickAndOrSetText(txPassword, pwd);
@@ -607,12 +559,11 @@ namespace legallead.records.search.Web
             catch (Exception)
             {
                 // hide these exceptions
-                return;
             }
         }
 
         [ExcludeFromCodeCoverage]
-        private static HarrisCriminalStyleDto ReadTable(List<IWebElement> rows, IWebElement item)
+        private static HarrisCriminalStyleDto? ReadTable(List<IWebElement> rows, IWebElement item)
         {
             int index = rows.IndexOf(item);
             if (index == 0) { return default; }
@@ -631,7 +582,7 @@ namespace legallead.records.search.Web
         }
 
         [ExcludeFromCodeCoverage]
-        private static HarrisCriminalStyleDto ReadTable(List<IEnumerable<string>> rows, IEnumerable<string> item)
+        private static HarrisCriminalStyleDto? ReadTable(List<IEnumerable<string>> rows, IEnumerable<string> item)
         {
             int index = rows.IndexOf(item);
             List<string> data = item.ToList();
@@ -652,7 +603,7 @@ namespace legallead.records.search.Web
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             List<string> handles = driver.WindowHandles.ToList();
-            return handles.Find(a => !a.Equals(topWindowHandle, oic));
+            return handles.Find(a => !a.Equals(topWindowHandle, oic)) ?? string.Empty;
         }
 
         [ExcludeFromCodeCoverage]

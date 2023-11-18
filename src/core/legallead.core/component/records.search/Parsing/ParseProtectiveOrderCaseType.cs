@@ -12,7 +12,7 @@ namespace legallead.records.search.Parsing
 
         public virtual string SearchFor => _searchKeyWord;
 
-        public string CaseData { get; set; }
+        public string CaseData { get; set; } = string.Empty;
 
         public virtual bool CanParse()
         {
@@ -62,7 +62,6 @@ namespace legallead.records.search.Parsing
             {
                 return response;
             }
-            //response.Defendant = CaseData.Substring(findItIndex).Trim();
             fullName = CaseData[SearchFor.Length..].Trim();
             int splitIndex = fullName.IndexOf(and, comparison);
             if (splitIndex < 0)
@@ -70,7 +69,7 @@ namespace legallead.records.search.Parsing
                 response.Plantiff = fullName.Trim();
                 return response;
             }
-            response.Plantiff = fullName[fullName.IndexOf(and, comparison)..].Replace(and, string.Empty).Trim(); ;
+            response.Plantiff = fullName[fullName.IndexOf(and, comparison)..].Replace(and, string.Empty).Trim();
             return response;
         }
     }

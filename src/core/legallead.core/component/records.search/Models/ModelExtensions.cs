@@ -15,7 +15,7 @@ namespace legallead.records.search.Models
         {
             if (source == null)
             {
-                return null;
+                return new();
             }
 
             List<HLinkDataRow> dest = new();
@@ -232,7 +232,7 @@ namespace legallead.records.search.Models
         {
             if (source == null)
             {
-                return null;
+                return new();
             }
 
             if (string.IsNullOrEmpty(source.Zip))
@@ -248,7 +248,7 @@ namespace legallead.records.search.Models
                 source.Zip = zipCode;
                 return source;
             }
-            source.Zip = pieces.Last();
+            source.Zip = pieces[^1];
             return source;
         }
 
@@ -256,7 +256,7 @@ namespace legallead.records.search.Models
         {
             if (source == null)
             {
-                return null;
+                throw new ArgumentNullException("source");
             }
 
             if (string.IsNullOrEmpty(source.Name))
