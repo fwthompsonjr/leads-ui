@@ -18,15 +18,14 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
+            IWebDriver? driver = GetWeb;
+            if (driver == null) { return; }
             Byy selector = Byy.CssSelector(item.Locator.Query);
             IWebElement elementToClick = driver.FindElement(selector);
             if (string.IsNullOrEmpty(item.DisplayName))
             {
                 return;
             }
-
-            string objText = item.ExpectedValue;
             elementToClick.Click();
             IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript("arguments[0].blur();", elementToClick);

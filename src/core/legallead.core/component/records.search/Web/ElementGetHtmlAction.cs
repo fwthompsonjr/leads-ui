@@ -1,8 +1,6 @@
 ﻿using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using OpenQA.Selenium;
-
-// using legallead.records.search.Classes.WebElementExtensions;
 namespace legallead.records.search.Web
 {
     public class ElementGetHtmlAction : ElementActionBase
@@ -17,10 +15,13 @@ namespace legallead.records.search.Web
 
         public override void Act(NavigationStep item)
         {
-            CollinWebInteractive helper = new();
-            By selector = GetSelector(item);
-            IWebElement element = GetWeb.FindElement(selector);
+            var driver = GetWeb;
+            By? selector = GetSelector(item);
+            if (driver == null || selector == null) return;
+            IWebElement? element = driver.FindElement(selector);
+            if (element == null) return;
             string outerHtml = element.GetAttribute("outerHTML");
+            CollinWebInteractive helper = new();
             outerHtml = helper.RemoveElement(outerHtml, "<img");
             // remove colspan? <colgroup>
             outerHtml = helper.RemoveTag(outerHtml, "colgroup");
@@ -30,12 +31,12 @@ namespace legallead.records.search.Web
             string probateLinkXpath = CommonKeyIndexes.ProbateLinkXpath;
             string justiceLinkXpath = probateLinkXpath.Replace("'Probate'", "'Justice'");
             IWebElement probateLink =
-                GetWeb.TryFindElement(
+                driver.TryFindElement(
                     By.XPath(probateLinkXpath));
             IWebElement justiceLocation =
-                GetWeb.TryFindElement(
+                driver.TryFindElement(
                     By.XPath(justiceLinkXpath));
-            bool isCollinCounty = GetWeb.Url.Contains("co.collin.tx.us");
+            bool isCollinCounty = driver.Url.Contains("co.collin.tx.us");
 
             IsProbateSearch = probateLink != null;
             IsJusticeSearch = isCollinCounty && justiceLocation != null;

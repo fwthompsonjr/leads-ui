@@ -449,21 +449,5 @@
         public static readonly string HarrisCivilCaseType =
             ResourceTable.GetText(ResourceType.ParameterName, ResourceKeyIndex.HarrisCivilCaseType);
 
-        /*
-         *
-
-        ResourceKeyIndex.HarrisCivilCaseType
-
-        public static readonly string HarrisCivilCaseType =
-            ResourceTable.GetText(ResourceType.ParameterName, ResourceKeyIndex.CollinCountyCaseType);
-
-        DateRangeMaxDays
-
-        public static readonly string TextAndAllFilesFilter =
-            ResourceTable.GetText(ResourceType.FormatString, ResourceKeyIndex.TextAndAllFilesFilter);
-        public static readonly string CaseExtractCompleteWouldYouLikeToView =
-            ResourceTable.GetText(ResourceType.FormatString, ResourceKeyIndex.CaseExtractCompleteWouldYouLikeToView);
-
-         */
     }
 }

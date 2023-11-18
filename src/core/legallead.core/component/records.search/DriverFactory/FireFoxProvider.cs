@@ -14,7 +14,7 @@ namespace legallead.records.search.DriverFactory
         /// <returns></returns>
         public IWebDriver GetWebDriver(bool headless = false)
         {
-            IWebDriver driver = GetDefaultDriver();
+            IWebDriver? driver = GetDefaultDriver();
             if (driver != null)
             {
                 return driver;

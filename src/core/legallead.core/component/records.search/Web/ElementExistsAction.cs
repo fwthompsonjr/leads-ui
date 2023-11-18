@@ -18,7 +18,7 @@ namespace legallead.records.search.Web
             }
 
             Byy selector = Byy.CssSelector(item.Locator.Query);
-            GetAssertion.WaitForElementExist(
+            GetAssertion?.WaitForElementExist(
                 selector,
                 string.Format("Looking for {0}", item.DisplayName));
         }

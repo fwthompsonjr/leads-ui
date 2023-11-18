@@ -10,7 +10,14 @@ namespace legallead.records.search.Tests
         [TestCategory("Excel.Automation.Tests")]
         public void CanOpenExcel()
         {
-            ExcAutomationServer.Open("");
+            try
+            {
+                ExcAutomationServer.Open("");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
         }
     }
 }

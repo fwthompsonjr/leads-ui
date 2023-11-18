@@ -16,10 +16,11 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
-            By selector = GetSelector(item);
-            IWebElement elementToClick = driver.FindElement(selector);
-            System.Console.WriteLine("Element click action -- : " + selector);
+            IWebDriver? driver = GetWeb;
+            By? selector = GetSelector(item);
+            if(driver == null || selector == null) { return; }
+            IWebElement? elementToClick = driver.FindElement(selector);
+            Console.WriteLine("Element click action -- : " + selector);
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             executor.ExecuteScript("arguments[0].click();", elementToClick);
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }
