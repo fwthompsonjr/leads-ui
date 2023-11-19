@@ -5,26 +5,26 @@ namespace legallead.records.search.Dto
 {
     public class Court
     {
-        public string Name { get; set; }
-        public string FullName { get; set; }
-        public string Address { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
     }
 
     public class CourtLocation
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
-        public IList<Court> Courts { get; set; }
+        public IList<Court> Courts { get; set; } = new List<Court>();
     }
 
     public class CourtLookup
     {
-        public IList<CourtLocation> CourtLocations { get; set; }
+        public IList<CourtLocation> CourtLocations { get; set; } = new List<CourtLocation>();
     }
 
     public class Example
     {
-        public SearchSettingDto SearchSetting { get; set; }
+        public SearchSettingDto SearchSetting { get; set; } = new();
     }
 
     public class SearchSettingDto
@@ -45,7 +45,7 @@ namespace legallead.records.search.Dto
         {
             string dataFile = CourtLookupFile();
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<CourtLookup>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<CourtLookup>(data) ?? new();
         }
 
         public static NavInstruction GetNonCriminalMapping()

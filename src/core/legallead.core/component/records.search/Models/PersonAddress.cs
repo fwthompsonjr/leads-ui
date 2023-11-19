@@ -66,16 +66,16 @@ namespace legallead.records.search.Models
 
         #region Properties
 
-        public string Name { get; set; }
-        public string Zip { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string Address3 { get; set; }
-        public string CaseNumber { get; set; }
-        public string DateFiled { get; set; }
-        public string Court { get; set; }
-        public string CaseType { get; set; }
-        public string CaseStyle { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Zip { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string Address2 { get; set; } = string.Empty;
+        public string Address3 { get; set; } = string.Empty;
+        public string CaseNumber { get; set; } = string.Empty;
+        public string DateFiled { get; set; } = string.Empty;
+        public string Court { get; set; } = string.Empty;
+        public string CaseType { get; set; } = string.Empty;
+        public string CaseStyle { get; set; } = string.Empty;
 
         public string FirstName
         {
@@ -92,14 +92,15 @@ namespace legallead.records.search.Models
                 return ParseFromFullName(1);
             }
         }
-
+        private string _plantiff = string.Empty;
         public string Plantiff
         {
             get
             {
-                return ParseFromCaseStyle(0);
+                _plantiff = ParseFromCaseStyle(0);
+                return _plantiff;
             }
-            set { }
+            set { _plantiff = value; }
         }
 
         public bool IsValid
@@ -125,9 +126,9 @@ namespace legallead.records.search.Models
             }
         }
 
-        public string Status { get; set; }
-        public string CalcFirstName { get; set; }
-        public string CalcLastName { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string CalcFirstName { get; set; } = string.Empty;
+        public string CalcLastName { get; set; } = string.Empty;
 
         #endregion Properties
 
@@ -195,7 +196,7 @@ namespace legallead.records.search.Models
                     return response;
                 }
             }
-            return providers.First().Parse().Plantiff;
+            return providers[0].Parse().Plantiff;
         }
 
         #endregion Methods
@@ -381,106 +382,6 @@ namespace legallead.records.search.Models
 
         #region Static Methods
 
-        public static string ConvertFrom(string nodeName, XmlNode personNode)
-        {
-            if (string.IsNullOrEmpty(nodeName))
-            {
-                return string.Empty;
-            }
-
-            if (personNode == null)
-            {
-                return string.Empty;
-            }
-
-            if (personNode.ChildNodes.Count < 2)
-            {
-                return string.Empty;
-            }
-
-            string lowerNodeName = nodeName.ToLower(CultureInfo.CurrentCulture);
-            string addressNode = personNode.ChildNodes[1].InnerText.Trim();
-            List<string> addressFields = "address1,address2,address3,zip".Split(',').ToList();
-            if (addressFields.Contains(lowerNodeName) && string.IsNullOrEmpty(addressNode))
-            {
-                return string.Empty;
-            }
-
-            switch (lowerNodeName)
-            {
-                case "address1":
-                    List<string> first = GetAddressList(addressNode);
-                    return first.First();
-
-                case "address2":
-                    List<string> middle = GetAddressList(addressNode);
-                    return GetMiddleAddress(middle);
-
-                case "address3":
-                    List<string> second = GetAddressList(addressNode);
-                    if (second.Count < 2)
-                    {
-                        return string.Empty;
-                    }
-
-                    return second.Last();
-
-                case "zip":
-                    string parts = addressNode
-                        .Replace("<br/>", "~")
-                        .Replace("<br />", "~").Split('~').ToList().Last();
-                    return parts.Split(' ').Last();
-
-                case "case":
-                    XmlNode? caseNode = personNode.SelectSingleNode("case");
-                    if (caseNode == null)
-                    {
-                        return string.Empty;
-                    }
-                    return ((XmlCDataSection)caseNode.ChildNodes[0]).Data;
-
-                case "court":
-                    XmlNode? courtNode = personNode.SelectSingleNode("court");
-                    if (courtNode == null)
-                    {
-                        return string.Empty;
-                    }
-
-                    return ((XmlCDataSection)courtNode.ChildNodes[0]).Data;
-
-                case "datefiled":
-                    XmlNode? filedNode = personNode.SelectSingleNode("dateFiled");
-                    if (filedNode == null)
-                    {
-                        return string.Empty;
-                    }
-
-                    return ((XmlCDataSection)filedNode.ChildNodes[0]).Data;
-
-                case "casetype":
-                    XmlNode? caseTypeNode = personNode.SelectSingleNode("caseType");
-                    if (caseTypeNode == null)
-                    {
-                        return string.Empty;
-                    }
-
-                    return ((XmlCDataSection)caseTypeNode.ChildNodes[0]).Data;
-
-                case "casestyle":
-                    XmlNode? caseStyleNode = personNode.SelectSingleNode("caseStyle");
-                    if (caseStyleNode == null)
-                    {
-                        return string.Empty;
-                    }
-
-                    return ((XmlCDataSection)caseStyleNode.ChildNodes[0]).Data;
-
-                default:
-                    break;
-            }
-            return string.Empty;
-        }
-
         private static string GetMiddleAddress(List<string> middle)
         {
             if (middle.Count < 3)
@@ -500,7 +401,7 @@ namespace legallead.records.search.Models
             return addr;
         }
 
-        public static PersonAddress ConvertFrom(XmlNode personNode)
+        public static PersonAddress? ConvertFrom(XmlNode personNode)
         {
             if (personNode == null)
             {
@@ -521,6 +422,105 @@ namespace legallead.records.search.Models
             };
 
             return addr;
+        }
+
+        public static string ConvertFrom(string nodeName, XmlNode personNode)
+        {
+            if (string.IsNullOrEmpty(nodeName))
+            {
+                return string.Empty;
+            }
+
+            if (personNode == null)
+            {
+                return string.Empty;
+            }
+
+            if (personNode.ChildNodes.Count < 2)
+            {
+                return string.Empty;
+            }
+
+            string lowerNodeName = nodeName.ToLower(CultureInfo.CurrentCulture);
+            string addressNode = personNode.ChildNodes[1]!.InnerText.Trim();
+            List<string> addressFields = "address1,address2,address3,zip".Split(',').ToList();
+            if (addressFields.Contains(lowerNodeName) && string.IsNullOrEmpty(addressNode))
+            {
+                return string.Empty;
+            }
+
+            switch (lowerNodeName)
+            {
+                case "address1":
+                    List<string> first = GetAddressList(addressNode);
+                    return first[0];
+
+                case "address2":
+                    List<string> middle = GetAddressList(addressNode);
+                    return GetMiddleAddress(middle);
+
+                case "address3":
+                    List<string> second = GetAddressList(addressNode);
+                    if (second.Count < 2)
+                    {
+                        return string.Empty;
+                    }
+
+                    return second[^1];
+
+                case "zip":
+                    string parts = addressNode
+                        .Replace("<br/>", "~")
+                        .Replace("<br />", "~").Split('~')[^1];
+                    return parts.Split(' ')[^1];
+
+                case "case":
+                    XmlNode? caseNode = personNode.SelectSingleNode("case");
+                    if (caseNode == null)
+                    {
+                        return string.Empty;
+                    }
+                    return ((XmlCDataSection)caseNode.ChildNodes[0]!).Data;
+                case "court":
+                    XmlNode? courtNode = personNode.SelectSingleNode("court");
+                    if (courtNode == null)
+                    {
+                        return string.Empty;
+                    }
+
+                    return ((XmlCDataSection)courtNode.ChildNodes[0]!).Data;
+
+                case "datefiled":
+                    XmlNode? filedNode = personNode.SelectSingleNode("dateFiled");
+                    if (filedNode == null)
+                    {
+                        return string.Empty;
+                    }
+
+                    return ((XmlCDataSection)filedNode.ChildNodes[0]!).Data;
+
+                case "casetype":
+                    XmlNode? caseTypeNode = personNode.SelectSingleNode("caseType");
+                    if (caseTypeNode == null)
+                    {
+                        return string.Empty;
+                    }
+
+                    return ((XmlCDataSection)caseTypeNode.ChildNodes[0]!).Data;
+
+                case "casestyle":
+                    XmlNode? caseStyleNode = personNode.SelectSingleNode("caseStyle");
+                    if (caseStyleNode == null)
+                    {
+                        return string.Empty;
+                    }
+
+                    return ((XmlCDataSection)caseStyleNode.ChildNodes[0]!).Data;
+
+                default:
+                    break;
+            }
+            return string.Empty;
         }
 
         private static string TryGet(XmlNode personNode, string nodeName)
@@ -546,21 +546,21 @@ namespace legallead.records.search.Models
 
                 if (string.IsNullOrEmpty(childNodeName))
                 {
-                    return ((XmlCDataSection)(node.ChildNodes[0])).Data;
+                    return ((XmlCDataSection)node.ChildNodes[0]!).Data;
                 }
                 else
                 {
                     if (childNodeName.StartsWith("address", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string fullAddress = ((XmlCDataSection)(node.ChildNodes[0])).Data;
+                        string fullAddress = ((XmlCDataSection)node.ChildNodes[0]!).Data;
                         List<string> addressList = GetAddressList(fullAddress);
                         switch (childNodeName)
                         {
                             case "addressA":
-                                return addressList.First();
+                                return addressList[0];
 
                             case "addressC":
-                                return addressList.Last();
+                                return addressList[^1];
 
                             case "addressB":
                                 return GetMiddleAddress(addressList);
@@ -581,7 +581,7 @@ namespace legallead.records.search.Models
                     return string.Empty;
                 }
 
-                return ((XmlCDataSection)(childNode.ChildNodes[0])).Data;
+                return ((XmlCDataSection)childNode.ChildNodes[0]!).Data;
             }
             catch (Exception)
             {

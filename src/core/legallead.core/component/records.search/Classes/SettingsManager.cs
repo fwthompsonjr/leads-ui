@@ -29,9 +29,9 @@ namespace legallead.records.search.Classes
     {
         #region Fields
 
-        private string _layoutContent;
+        private string? _layoutContent;
 
-        private string _excelFileName;
+        private string? _excelFileName;
 
         #endregion Fields
 
@@ -80,10 +80,11 @@ namespace legallead.records.search.Classes
             XmlDocument doc = XmlDocProvider.GetDoc(data);
             if (doc.DocumentElement == null)
             {
-                return null;
+                return new();
             }
 
             XmlNode? parent = doc.DocumentElement.SelectSingleNode("setting[@name='Websites']");
+            if (parent == null) return new();
             List<WebNavigationParameter> response = new();
             foreach (object? node in parent.ChildNodes)
             {
@@ -104,7 +105,7 @@ namespace legallead.records.search.Classes
             XmlDocument doc = XmlDocProvider.GetDoc(data);
             if (doc.DocumentElement == null)
             {
-                return null;
+                return new();
             }
 
             XmlNode? parent = doc.DocumentElement.SelectSingleNode(
@@ -124,18 +125,18 @@ namespace legallead.records.search.Classes
             }
             if (parent == null)
             {
-                return null;
+                return new();
             }
 
             XmlNode? columnNode = parent.FirstChild;
             if (columnNode == null)
             {
-                return null;
+                return new();
             }
 
             if (!columnNode.HasChildNodes)
             {
-                return null;
+                return new();
             }
 
             List<ExcelColumnLayout> layoutList = new();
@@ -144,9 +145,9 @@ namespace legallead.records.search.Classes
             {
                 layoutList.Add(new ExcelColumnLayout
                 {
-                    Name = column.Attributes.GetNamedItem("name").InnerText,
+                    Name = column.Attributes!.GetNamedItem("name")!.InnerText,
                     ColumnWidth = Convert.ToInt32(
-                        column.Attributes.GetNamedItem("columnWidth").InnerText,
+                        column.Attributes.GetNamedItem("columnWidth")!.InnerText,
                         CultureInfo.CurrentCulture.NumberFormat)
                 });
             }
@@ -190,11 +191,11 @@ namespace legallead.records.search.Classes
                 content = reader.ReadToEnd();
             }
             XmlDocument doc = XmlDocProvider.GetDoc(content);
-            XmlNode? nde = doc.DocumentElement.SelectSingleNode(@"parameters");
-            List<XmlNode> nds = new(nde.ChildNodes.Cast<XmlNode>());
+            XmlNode? nde = doc.DocumentElement!.SelectSingleNode(@"parameters");
+            List<XmlNode> nds = new(nde!.ChildNodes.Cast<XmlNode>());
             foreach (XmlNode item in nds)
             {
-                string? attrName = item.Attributes.GetNamedItem("name").Value;
+                string? attrName = item.Attributes?.GetNamedItem("name")?.Value;
                 switch (attrName)
                 {
                     case "Website":
@@ -234,9 +235,9 @@ namespace legallead.records.search.Classes
             WebNavigationParameter parameter = new()
             {
                 Id = Convert.ToInt32(
-                    node.Attributes.GetNamedItem("id").Value,
+                    node.Attributes!.GetNamedItem("id")!.Value,
                     CultureInfo.CurrentCulture.NumberFormat),
-                Name = node.Attributes.GetNamedItem("name").Value,
+                Name = node.Attributes?.GetNamedItem("name")?.Value ?? string.Empty,
                 Keys = new List<WebNavigationKey>(),
                 Instructions = new List<WebNavInstruction>(),
                 CaseInstructions = new List<WebNavInstruction>()
@@ -246,16 +247,15 @@ namespace legallead.records.search.Classes
                 XmlNode nde = (XmlNode)item;
                 parameter.Keys.Add(new WebNavigationKey
                 {
-                    Name = nde.Attributes.GetNamedItem("name").Value,
-                    Value = ((XmlCDataSection)nde.FirstChild).Data
+                    Name = nde.Attributes?.GetNamedItem("name")?.Value ?? string.Empty,
+                    Value = ((XmlCDataSection)nde.FirstChild!).Data
                 });
             }
             string qpath = string.Format(
                 CultureInfo.CurrentCulture,
                 "directions/instructions[@id={0}]", parameter.Id);
 
-            XmlNode? instructions = node.OwnerDocument
-                .DocumentElement.SelectSingleNode(qpath);
+            XmlNode? instructions = node.OwnerDocument?.DocumentElement?.SelectSingleNode(qpath);
             if (instructions == null)
             {
                 return parameter;
@@ -266,19 +266,18 @@ namespace legallead.records.search.Classes
                 XmlNode nde = (XmlNode)item;
                 parameter.Instructions.Add(new WebNavInstruction
                 {
-                    Name = nde.Attributes.GetNamedItem("name").Value,
-                    By = nde.Attributes.GetNamedItem("By").Value,
-                    CommandType = nde.Attributes.GetNamedItem("type").Value,
-                    FriendlyName = nde.Attributes.GetNamedItem("FriendlyName").Value,
-                    Value = ((XmlCDataSection)nde.FirstChild).Data
+                    Name = nde.Attributes?.GetNamedItem("name")?.Value ?? string.Empty,
+                    By = nde.Attributes?.GetNamedItem("By")?.Value ?? string.Empty,
+                    CommandType = nde.Attributes?.GetNamedItem("type")?.Value ?? string.Empty,
+                    FriendlyName = nde.Attributes?.GetNamedItem("FriendlyName")?.Value ?? string.Empty,
+                    Value = ((XmlCDataSection)nde.FirstChild!).Data
                 });
             }
 
             qpath = string.Format(
                 CultureInfo.CurrentCulture,
                 "directions/caseInspection[@id={0}]", parameter.Id);
-            instructions = node.OwnerDocument
-                .DocumentElement.SelectSingleNode(qpath);
+            instructions = node.OwnerDocument?.DocumentElement?.SelectSingleNode(qpath);
             if (instructions == null)
             {
                 return parameter;
@@ -289,11 +288,11 @@ namespace legallead.records.search.Classes
                 XmlNode nde = (XmlNode)item;
                 parameter.CaseInstructions.Add(new WebNavInstruction
                 {
-                    Name = nde.Attributes.GetNamedItem("name").Value,
-                    By = nde.Attributes.GetNamedItem("By").Value,
-                    CommandType = nde.Attributes.GetNamedItem("type").Value,
-                    FriendlyName = nde.Attributes.GetNamedItem("FriendlyName").Value,
-                    Value = ((XmlCDataSection)nde.FirstChild).Data
+                    Name = nde.Attributes?.GetNamedItem("name")?.Value ?? string.Empty,
+                    By = nde.Attributes?.GetNamedItem("By")?.Value ?? string.Empty,
+                    CommandType = nde.Attributes?.GetNamedItem("type")?.Value ?? string.Empty,
+                    FriendlyName = nde.Attributes?.GetNamedItem("FriendlyName")?.Value ?? string.Empty,
+                    Value = ((XmlCDataSection)nde.FirstChild!).Data
                 });
             }
 
@@ -657,7 +656,7 @@ namespace legallead.records.search.Classes
         public static string GetAppFolderName()
         {
             string execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            return Path.GetDirectoryName(execName);
+            return Path.GetDirectoryName(execName) ?? string.Empty;
         }
 
         public static List<WebNavInstruction> GetInstructions(int siteId)
@@ -669,7 +668,7 @@ namespace legallead.records.search.Classes
             string qpath = string.Format(
                 CultureInfo.CurrentCulture,
                 "directions/instructions[@id={0}]", siteId);
-            XmlNode? data = doc.DocumentElement.SelectSingleNode(qpath);
+            XmlNode? data = doc.DocumentElement?.SelectSingleNode(qpath);
             if (data == null)
             {
                 return instructions;
@@ -680,11 +679,11 @@ namespace legallead.records.search.Classes
                 XmlNode nde = (XmlNode)item;
                 instructions.Add(new WebNavInstruction
                 {
-                    Name = nde.Attributes.GetNamedItem("name").Value,
-                    By = nde.Attributes.GetNamedItem("By").Value,
-                    CommandType = nde.Attributes.GetNamedItem("type").Value,
-                    FriendlyName = nde.Attributes.GetNamedItem("FriendlyName").Value,
-                    Value = ((XmlCDataSection)nde.FirstChild).Data
+                    Name = nde.Attributes?.GetNamedItem("name")?.Value ?? string.Empty,
+                    By = nde.Attributes?.GetNamedItem("By")?.Value ?? string.Empty,
+                    CommandType = nde.Attributes?.GetNamedItem("type")?.Value ?? string.Empty,
+                    FriendlyName = nde.Attributes?.GetNamedItem("FriendlyName")?.Value ?? string.Empty,
+                    Value = ((XmlCDataSection)nde.FirstChild!).Data
                 });
             }
             return instructions;
