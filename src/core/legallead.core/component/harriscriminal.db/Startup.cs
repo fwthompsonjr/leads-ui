@@ -10,7 +10,7 @@ namespace legallead.harriscriminal.db
         private static string? _appFolder;
         internal static string AppFolder => _appFolder ??= GetAppFolderName();
 
-        public static string DataFolder => Downloads.DataFolder;
+        public static string DataFolder => Downloads.DatFolder;
 
         /// <summary>
         /// Gets the name of the application directory.
@@ -24,9 +24,9 @@ namespace legallead.harriscriminal.db
 
         public static void Read()
         {
-            References.Read();
-            Downloads.Read();
-            CaseStyles.Read();
+            References.ReadReferences();
+            Downloads.ReadFiles();
+            CaseStyles.ReadStyles();
         }
 
         public static Task ReadAsync(IProgress<bool> progress)
@@ -40,8 +40,8 @@ namespace legallead.harriscriminal.db
 
         public static void Reset()
         {
-            References.Read(true);
-            Downloads.Read();
+            References.ReadReferences(true);
+            Downloads.ReadFiles();
         }
 
         public static class Downloads
@@ -54,7 +54,7 @@ namespace legallead.harriscriminal.db
 
             private static string? _dataFolder;
 
-            internal static string DataFolder => _dataFolder ??= GetDataFolderName();
+            internal static string DatFolder => _dataFolder ??= GetDataFolderName();
 
             /// <summary>
             /// Gets the name of the application data directory.
@@ -70,14 +70,14 @@ namespace legallead.harriscriminal.db
 
             public static List<HarrisCountyListDto> DataList { get; private set; } = new();
 
-            public static void Read(bool reset = false)
+            public static void ReadFiles(bool reset = false)
             {
                 if (!reset && FileNames != null && DataList != null && FileNames.Count > 0)
                 {
                     return;
                 }
                 const string extn = "*CrimFilingsWithFutureSettings*.txt";
-                var directory = new DirectoryInfo(DataFolder);
+                var directory = new DirectoryInfo(DatFolder);
                 var files = directory.GetFiles(extn).ToList();
                 FileNames = files.Select(f => f.FullName).ToList();
                 FileNames.Sort((a, b) => b.CompareTo(a));
@@ -160,7 +160,7 @@ namespace legallead.harriscriminal.db
         {
             private static string? _dataFolder;
 
-            private static string DataFolder => _dataFolder ??= GetDataFolderName();
+            private static string DtFolder => _dataFolder ??= GetDataFolderName();
 
             /// <summary>
             /// Gets the name of the application data directory.
@@ -186,22 +186,22 @@ namespace legallead.harriscriminal.db
             /// Reads Reference Data and Stores in Memory
             /// </summary>
             /// <param name="reset"></param>
-            public static void Read(bool reset = false)
+            public static void ReadReferences(bool reset = false)
             {
                 if (!reset && FileNames != null && DataList != null && FileNames.Count > 0)
                 {
                     return;
                 }
                 const string extn = "*hcc.tables.*.json";
-                var directory = new DirectoryInfo(DataFolder);
+                var directory = new DirectoryInfo(DtFolder);
                 var files = directory.GetFiles(extn).ToList();
                 FileNames = files.Select(f => f.FullName).ToList();
                 var tables = new List<ReferenceTable>();
-                FileNames.ForEach(f => { tables.Add(Read<ReferenceTable>(f)); });
+                FileNames.ForEach(f => { tables.Add(GenericRead<ReferenceTable>(f)); });
                 DataList = tables;
             }
 
-            private static T Read<T>(string sourceFileName) where T : class, new()
+            private static T GenericRead<T>(string sourceFileName) where T : class, new()
             {
                 var content = GetFileContent(sourceFileName);
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content) ?? new();
@@ -218,7 +218,7 @@ namespace legallead.harriscriminal.db
         {
             private static string? _dataFolder;
 
-            private static string DataFolder => _dataFolder ??= GetDataFolderName();
+            private static string DaFolder => _dataFolder ??= GetDataFolderName();
 
             /// <summary>
             /// Gets the name of the application data directory.
@@ -244,7 +244,7 @@ namespace legallead.harriscriminal.db
             /// Reads Reference Data and Stores in Memory
             /// </summary>
             /// <param name="reset"></param>
-            public static void Read(bool reset = false)
+            public static void ReadStyles(bool reset = false)
             {
                 if (!reset && FileNames != null && DataList != null && FileNames.Count > 0)
                 {
@@ -252,16 +252,16 @@ namespace legallead.harriscriminal.db
                 }
 
                 const string extn = "*HarrisCriminalStyleDto.json";
-                var directory = new DirectoryInfo(DataFolder);
+                var directory = new DirectoryInfo(DaFolder);
                 var files = directory.GetFiles(extn).ToList();
                 FileNames = files.Select(f => f.FullName).ToList();
                 FileNames.Sort((a, b) => b.CompareTo(a));
                 var tables = new List<CaseStyleDb>();
-                FileNames.ForEach(f => { tables.AddRange(Read<List<CaseStyleDb>>(f)); });
+                FileNames.ForEach(f => { tables.AddRange(FileRead<List<CaseStyleDb>>(f)); });
                 DataList = tables;
             }
 
-            private static T Read<T>(string sourceFileName) where T : class, new()
+            private static T FileRead<T>(string sourceFileName) where T : class, new()
             {
                 var content = GetFileContent(sourceFileName);
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content) ?? new();

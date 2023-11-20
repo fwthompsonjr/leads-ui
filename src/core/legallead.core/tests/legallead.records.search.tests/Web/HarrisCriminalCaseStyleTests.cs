@@ -24,7 +24,7 @@ namespace legallead.records.search.Tests
         {
             if (CaseNumbers == null)
             {
-                Startup.Downloads.Read();
+                Startup.Downloads.ReadFiles();
                 var datalist = Startup.Downloads.DataList.FirstOrDefault();
                 if (datalist == null) return;
                 var dtos = datalist.Data.Select(x =>

@@ -22,7 +22,6 @@ namespace legallead.records.search.Classes
 
             protected static class FetchType
             {
-                public const int NonCriminal = 0;
                 public const int Criminal = 2;
             }
 
@@ -34,7 +33,13 @@ namespace legallead.records.search.Classes
             public virtual void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
                 List<NavigationStep> steps = new();
-                string navigationFile = Web.GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile); // "navigation.control.file");
+                string navigationFile = Web.GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile) ?? "";
+                if (string.IsNullOrEmpty(navigationFile))
+                {
+                    people = new();
+                    webFetch = new();
+                    return;
+                }
                 List<string> sources = navigationFile.Split(',').ToList();
                 caseOverrideId ??= TarrantComboBxValue.CourtMap.First(x => x.Name.Equals("Justice of Peace", Ccic)).Id;
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
@@ -52,7 +57,7 @@ namespace legallead.records.search.Classes
                 cases = new List<HLinkDataRow>();
                 people = new List<PersonAddress>();
 
-                int caseTypeId = caseTypeOverrideId ?? Web.GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex); // "caseTypeSelectedIndex");
+                int caseTypeId = caseTypeOverrideId ?? Web.GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex);
                 // set special item values
                 NavigationStep caseTypeSelect = steps.First(x => x.ActionName.Equals(CommonKeyIndexes.SetSelectValue, StringComparison.CurrentCultureIgnoreCase));
                 caseTypeSelect.ExpectedValue = caseTypeId.ToString(CultureInfo.CurrentCulture);
@@ -101,7 +106,13 @@ namespace legallead.records.search.Classes
             public override void Fetch(DateTime startingDate, out WebFetchResult webFetch, out List<PersonAddress> people, int? caseOverrideId = null)
             {
                 List<NavigationStep> steps = new();
-                string navigationFile = Web.GetParameterValue<string>("navigation.control.alternate.file");
+                string navigationFile = Web.GetParameterValue<string>("navigation.control.alternate.file") ?? string.Empty;
+                if(string.IsNullOrEmpty(navigationFile))
+                {
+                    people = new List<PersonAddress>();
+                    webFetch = new();
+                    return;
+                }
                 List<string> sources = navigationFile.Split(',').ToList();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
                 SetupParameters(steps, null, out people, out XmlContentHolder results, out List<HLinkDataRow> cases);

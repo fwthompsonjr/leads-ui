@@ -72,7 +72,7 @@ namespace legallead.records.search.Tests.Data
 
             for (int i = 33; i < 50; i++)
             {
-                obj[i].ShouldBeNull();
+                obj[i].ShouldBe("");
             }
         }
 

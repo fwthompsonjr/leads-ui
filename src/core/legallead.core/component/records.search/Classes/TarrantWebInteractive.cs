@@ -42,7 +42,7 @@ namespace legallead.records.search.Classes
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
             int customSearch = GetParameterValue<int>(CommonKeyIndexes.CriminalCaseInclusion);
             List<PersonAddress> peopleList = new();
-            WebFetchResult webFetch = null;
+            WebFetchResult webFetch = new();
             List<ITarrantWebFetch> fetchers = (new FetchProvider(this)).GetFetches(customSearch);
             DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
             while (startingDate.CompareTo(endingDate) <= 0)
@@ -211,12 +211,7 @@ namespace legallead.records.search.Classes
 
         protected virtual List<PersonAddress> ExtractPeople(List<HLinkDataRow> cases)
         {
-            if (cases == null)
-            {
-                return null;
-            }
-
-            if (!cases.Any())
+            if (cases == null || !cases.Any())
             {
                 return new List<PersonAddress>();
             }
@@ -377,8 +372,9 @@ namespace legallead.records.search.Classes
 
         private static void GetAddressInformation(IWebDriver driver, TarrantWebInteractive jsonWebInteractive, HLinkDataRow linkData)
         {
-            string fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
-            string xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath);
+            string? fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
+            string? xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath);
+            if (string.IsNullOrEmpty(fmt) || string.IsNullOrEmpty(xpath)) return;
             ElementAssertion helper = new(driver);
             helper.Navigate(string.Format(CultureInfo.CurrentCulture,
                 fmt, linkData.WebAddress));
@@ -422,7 +418,7 @@ namespace legallead.records.search.Classes
         private static void AppendToResult(string fileName, string caseData, string xpath)
         {
             XmlDocument doc = XmlDocProvider.Load(fileName);
-            XmlNode? ndeCase = doc.DocumentElement.SelectSingleNode(xpath);
+            XmlNode? ndeCase = doc.DocumentElement?.SelectSingleNode(xpath);
             if (ndeCase == null)
             {
                 return;
@@ -431,7 +427,7 @@ namespace legallead.records.search.Classes
             if (!ndeCase.HasChildNodes)
             {
                 return;
-            } ((XmlCDataSection)ndeCase.ChildNodes[0]).Data = caseData;
+            } ((XmlCDataSection)ndeCase.ChildNodes[0]!).Data = caseData;
             doc.Save(fileName);
         }
 
@@ -439,7 +435,8 @@ namespace legallead.records.search.Classes
         {
             List<HLinkDataRow> caseList = new();
             XmlDocument doc = XmlDocProvider.GetDoc(caseData);
-            List<XmlNode> trElements = doc.FirstChild.ChildNodes[0].SelectNodes("tr").Cast<XmlNode>().ToList();
+            List<XmlNode>? trElements = doc.FirstChild?.ChildNodes[0]?.SelectNodes("tr")?.Cast<XmlNode>().ToList();
+            if (trElements == null) return new();
             foreach (XmlNode? trow in trElements)
             {
                 XmlNode? link = trow.SelectSingleNode("td/a");
@@ -448,7 +445,7 @@ namespace legallead.records.search.Classes
                     continue;
                 }
 
-                XmlNode? href = link.Attributes.GetNamedItem("href");
+                XmlNode? href = link.Attributes?.GetNamedItem("href");
                 if (href == null)
                 {
                     continue;
@@ -496,15 +493,8 @@ namespace legallead.records.search.Classes
             foreach (XmlNode search in inspector)
             {
                 XmlNode? node = trow.SelectSingleNode(search.InnerText);
-                string keyName = search.Attributes.GetNamedItem("name").InnerText;
-                item[keyName] = string.Empty;
-                if (node == null)
-                {
-                    Console.WriteLine("Unable to locate element {0} with selector - {1}",
-                        search.Attributes.GetNamedItem("name").InnerText,
-                        search.InnerText);
-                    return false;
-                }
+                string? keyName = search.Attributes?.GetNamedItem("name")?.InnerText;
+                if (node == null || string.IsNullOrEmpty(keyName)) return false;
                 item[keyName] = node.InnerText;
             }
             return true;
@@ -514,9 +504,12 @@ namespace legallead.records.search.Classes
         {
             try
             {
-                List<XmlNode> inspector = doc.DocumentElement.SelectSingleNode("directions").SelectNodes("caseInspection")
-                    .Cast<XmlNode>().ToList()
-                    .FindAll(x => x.Attributes.GetNamedItem("id").Value == parameterId
+                List<XmlNode>? inspector = doc.DocumentElement?
+                    .SelectSingleNode("directions")?
+                    .SelectNodes("caseInspection")?
+                    .Cast<XmlNode>()?
+                    .ToList()?
+                    .FindAll(x => x.Attributes?.GetNamedItem("id")?.Value == parameterId
                         .ToString(CultureInfo.CurrentCulture.NumberFormat))
                     .Find(x => x.Attributes.GetNamedItem("type").Value == typeName)
                     .ChildNodes.Cast<XmlNode>().ToList();

@@ -44,7 +44,7 @@ namespace Harris.Criminal.UnitTests.Downloads
         public void Setup()
         {
             // on start load references
-            Startup.References.Read();
+            Startup.References.ReadReferences();
         }
 
         [TestMethod]

@@ -54,7 +54,7 @@ namespace legallead.records.search.Web
                 DefendantMetrics = GetNodes(cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[1]?.SelectNodes(tr)?.ToList()),
                 Court = GetNodes(cdResults[2]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList())
             };
-            HarrisCriminalDto dto = rows.CriminalDto();
+            HarrisCriminalDto? dto = rows.CriminalDto();
             if (dto == null)
             {
                 return;

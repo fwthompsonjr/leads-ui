@@ -17,7 +17,7 @@
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             foreach (HarrisCriminalStyleDto item in source)
             {
-                HarrisCriminalStyleDto? found = list.FirstOrDefault(f => f.CaseNumber.Equals(item.CaseNumber, oic) &
+                HarrisCriminalStyleDto? found = list.Find(f => f.CaseNumber.Equals(item.CaseNumber, oic) &
                     f.Court.Equals(item.Court, oic) &
                     f.FileDate.Equals(item.FileDate, oic));
                 if (found == null) { list.Add(item); }
