@@ -504,20 +504,20 @@ namespace legallead.records.search.Classes
         {
             try
             {
+                var pid = parameterId.ToString(CultureInfo.CurrentCulture.NumberFormat);
                 List<XmlNode>? inspector = doc.DocumentElement?
                     .SelectSingleNode("directions")?
                     .SelectNodes("caseInspection")?
                     .Cast<XmlNode>()?
                     .ToList()?
-                    .FindAll(x => x.Attributes?.GetNamedItem("id")?.Value == parameterId
-                        .ToString(CultureInfo.CurrentCulture.NumberFormat))
+                    .FindAll(x => x.Attributes?.GetNamedItem("id")?.Value == pid)
                     .Find(x => x.Attributes.GetNamedItem("type").Value == typeName)
                     .ChildNodes.Cast<XmlNode>().ToList();
-                return inspector;
+                return inspector ?? new();
             }
             catch
             {
-                return null;
+                return new();
             }
         }
 
@@ -550,7 +550,7 @@ namespace legallead.records.search.Classes
         /// <param name="parent">The parent web browser instance.</param>
         /// <param name="by">The by condition used to locate the element</param>
         /// <returns></returns>
-        internal static IWebElement TryFindElement(IWebDriver parent, By by)
+        internal static IWebElement? TryFindElement(IWebDriver parent, By by)
         {
             try
             {
@@ -593,10 +593,10 @@ namespace legallead.records.search.Classes
                     CommonKeyIndexes.NavigationFileNotFound);
             }
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
         }
 
-        private static TarrantCourtDropDownDto _tarrantComboBxValue;
+        private static TarrantCourtDropDownDto? _tarrantComboBxValue;
 
         protected static TarrantCourtDropDownDto TarrantComboBxValue => _tarrantComboBxValue ??= GetComboBoxValues();
 
@@ -616,7 +616,7 @@ namespace legallead.records.search.Classes
                     CommonKeyIndexes.NavigationFileNotFound);
             }
             string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data) ?? new();
         }
 
         #endregion Element Action Helpers
