@@ -33,7 +33,7 @@ function generateExecutionCommand( $solution ) {
             [System.IO.Directory]::CreateDirectory( $pathName ) | Out-Null
         }
         Write-Output "Running tests for : $shortName"
-        dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --no-restore --results-directory $pathName
+        dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --results-directory $pathName
         
         if ($LASTEXITCODE -ne 0) {
             ("Test $shortName failed." + [Environment]::NewLine) >> $errorsFile
