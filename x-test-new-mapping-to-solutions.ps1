@@ -11,8 +11,17 @@ function findNode( $name ) {
     return $null;
 }
 
-$testFile = "C:\_g\_fv-az658-243_2023-11-21_15_28_02.trx";
+$testFile = "C:\_g\_fv-az915-694_2023-11-21_17_32_54.trx";
 $content = [System.IO.File]::ReadAllText( $testFile );
 $xContent = [xml]$content;
 $results = findNode -name 'Results'
-($results -eq $null);
+$errors = "".Split(' ');
+foreach( $nde in $results.ChildNodes ) {
+    $outcome = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('outcome');
+    $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
+    if ( $outcome -eq $null ) { continue; }
+    if ($outcome.Value -eq "Passed") { continue; }
+    $errstring = "$($outcome.Value) : $($testName.Value)";
+    $errors += $errstring;
+}
+$errors | Sort-Object

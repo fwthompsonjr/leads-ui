@@ -214,6 +214,29 @@ function isEnumerable( $obj ) {
         return $false;
     }
 }
+function findNode( $name ) {
+    foreach( $nde in $xContent.DocumentElement.ChildNodes ) {
+        if( ([System.Xml.XmlNode]$nde).Name -eq $name ) { return $nde; }
+    }
+    return $null;
+}
+
+function getFailedTestList( $solution ) {
+    $content = [System.IO.File]::ReadAllText( $testFile );
+    $xContent = [xml]$content;
+    $results = findNode -name 'Results'
+    $errors = "".Split(' ');
+    foreach( $nde in $results.ChildNodes ) {
+        $outcome = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('outcome');
+        $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
+        if ( $outcome -eq $null ) { continue; }
+        if ($outcome.Value -eq "Passed") { continue; }
+        $errstring = "- $($outcome.Value) : $($testName.Value)   ";
+        $errors += $errstring;
+    }
+    $sorted = ($errors | Sort-Object);
+    return [string]::Join($sorted, [envionment]::NewLine);
+}
 
 function describeTest( $solution ) {
     $shortName = [system.io.path]::GetFileNameWithoutExtension( $solution )
@@ -232,6 +255,12 @@ function describeTest( $solution ) {
         $reportFinal = $reportFinal.Replace( "[$fname]", [system.convert]::ToString( $reportValues[$fname] ) )   
     }
     writeGitAction -content $reportFinal
+    ## write non-successful items
+    $edata = getFailedTestList -solution $solution
+    if([string]::IsNullOrWhiteSpace($edata) -eq false){
+        writeGitAction -content $edata
+    }
+
 }
 
 $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
