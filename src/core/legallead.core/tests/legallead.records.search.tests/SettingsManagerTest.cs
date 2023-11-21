@@ -165,7 +165,7 @@ namespace legallead.records.search.Tests
             const string addressLine = @"c/o Corporation Service Company<br/>  211 E. 7th Street, Suite 620<br/>  Austin, TX 78701-3218";
             var addresses = addressLine.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
             addresses.ShouldNotBeNull();
-            addresses.ForEach(a => a.Trim());
+            addresses = addresses.Select(a => a.Trim()).ToList();
             addresses.ForEach(Console.WriteLine);
         }
 
@@ -266,13 +266,13 @@ namespace legallead.records.search.Tests
             credential.ForEach(c => Console.Write(" {0}", c));
         }
 
-        private string TestDataRow()
+        private static string TestDataRow()
         {
             return @"<tr><td nowrap='true' valign='top'><a href='CaseDetail.aspx?CaseID=2490347' style='color: blue'>F18-88-16</a></td><td nowrap='true' valign='top'></td><td nowrap='true' valign='top'><div>Ortiz-Rosado, Giovanni</div><div>07/15/1993</div></td><td valign='top' nowrap='true'><div>01/05/2018</div><div>16th Judicial District Court</div><div>Shipman, Sherry</div></td><td valign='top' nowrap='true'><div>Felony by Indictment</div><div>Inactive: Disposed</div></td><td nowrap='true' valign='top'><div style='overflow: hidden'>Lesser Included Possession of a Controlled Substance </div></td></tr>";
         }
 
 
-        private string TestDataRow2()
+        private static string TestDataRow2()
         {
             var sb = new StringBuilder();
             sb.AppendLine("<tr>");

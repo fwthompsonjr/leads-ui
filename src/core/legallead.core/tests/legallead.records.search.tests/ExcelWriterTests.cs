@@ -13,7 +13,7 @@ namespace legallead.records.search.Tests
     [TestClass]
     public class ExcelWriterTests
     {
-        private string SampleTable()
+        private static string SampleTable()
         {
             return "<table style='border-collapse: collapse; border: 1px solid black;'>" +
                 "<tr><th class='ssSearchResultHeader' nowrap='true'><b>Case Number</b></th>" +
@@ -51,7 +51,7 @@ namespace legallead.records.search.Tests
                 "</tr>" +
                 "</table>";
         }
-        private List<PersonAddress> SamplePeople()
+        private static List<PersonAddress> SamplePeople()
         {
             int nbr = random.Next(5, 12);
             var data = new List<PersonAddress>();
@@ -68,7 +68,7 @@ namespace legallead.records.search.Tests
         }
 
         private const string ExcelFileCreatedMessage = "Excel file created at: {0}";
-        private static readonly Random random = new Random(DateTime.Now.Millisecond);
+        private static readonly Random random = new(DateTime.Now.Millisecond);
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

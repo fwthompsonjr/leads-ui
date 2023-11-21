@@ -133,8 +133,7 @@ namespace legallead.records.search.Classes
             const string fmttbl = @"{0}{1}{2}";
             CleanHtml(dta.Data);
             CharacterData.AppendLine(dta.Data);
-            var cnode = Data as XmlCDataSection;
-            if (cnode == null) return;
+            if (Data is not XmlCDataSection cnode) return;
             cnode.Data = string.Format(
                 CultureInfo.CurrentCulture,
                 fmttbl,

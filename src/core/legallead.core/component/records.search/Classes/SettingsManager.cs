@@ -412,17 +412,13 @@ namespace legallead.records.search.Classes
                     sb.AppendLine("    <instructions id=~1~>");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~Id~ FriendlyName=~Court-Type-Selection~><![CDATA[sbxControlID2]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetComboIndex~ By=~Id~ FriendlyName=~Court-Type-Selection~><![CDATA[sbxControlID2,?SetComboIndex]]></command>");
-                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Fami
-                    ly')]]]></command>");
-                    sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></comm
-                    and > ");
+                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>");
+                    sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command > ");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForNavigation~ By=~~ FriendlyName=~~><![CDATA[ ]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~Id~ FriendlyName=~District-Type-Selection~><![CDATA[sbxControlID2]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetComboIndex~ By=~Id~ FriendlyName=~District-Type-Selection~><![CDATA[sbxControlID2,?SetComboIndex]]></command>");
-                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]
-                    ]]></ command > ");
-sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>"
-);
+                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></ command > ");
+                    sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~Id~ FriendlyName=~Date-Filed-Radio-Button~><![CDATA[DateFiled]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetControlValue~ By=~Id~ FriendlyName=~Date-Filed-On-TextBox~><![CDATA[DateFiledOnAfter,?StartDate]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetControlValue~ By=~Id~ FriendlyName=~Date-Filed-Before-TextBox~><![CDATA[DateFiledOnBefore,?EndingDate]]></command>");
