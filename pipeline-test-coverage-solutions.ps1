@@ -2,7 +2,7 @@ param (
     [string]
     $buildConfigruation = 'Release',
     [string]
-    $searchPattern = '*test*.csproj',
+    $searchPattern = '*.sln',
     [string]
     $workspace = ''
 )
