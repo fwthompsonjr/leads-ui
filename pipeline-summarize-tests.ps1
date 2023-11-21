@@ -238,7 +238,7 @@ function getFailedTestList( $solution ) {
             $errors += $errstring;
         }
         $sorted = ($errors | Sort-Object);
-        $statstring = [string]::Join($sorted, [Environment]::NewLine);
+        $statstring = [string]::Join([Environment]::NewLine, $sorted);
         writeGitAction -content $statstring
     } catch {
          Write-Warning "ERROR: $($_.Exception.Message)"
