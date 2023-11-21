@@ -15,7 +15,9 @@ namespace legallead.records.search.UnitTests.Web
         private static string? _srcFile;
         private static string SrcDirectoryName => _srcDirectory ??= SrcDir();
         private static string SrcFile => _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
+#if DEBUG
         private IWebDriver? GetDriver;
+#endif
 
         [TestInitialize]
         public void Setup()
