@@ -182,7 +182,8 @@ namespace legallead.records.search.Web
 
         protected static IWebDriver GetDriver()
         {
-            WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
+            var dto = new WebDriverDto().Get() ?? new();
+            WebDrivers wdriver = dto.WebDrivers;
             Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
             StructureMap.Container container = WebDriverContainer.GetContainer;
             IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver?.Name ?? string.Empty);

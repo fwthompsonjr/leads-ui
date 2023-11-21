@@ -28,17 +28,20 @@ namespace legallead.records.search.Classes
             return cases;
         }
 
-        private static IWebElement GetCaseData(WebInteractive data,
+        private static IWebElement? GetCaseData(WebInteractive data,
             ref List<HLinkDataRow> cases,
             string navTo, ElementAssertion helper)
         {
-            IWebElement tbResult;
             helper.Navigate(navTo);
 
-            WebNavigationKey parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch);
+            WebNavigationKey? parameter = GetParameter(data, CommonKeyIndexes.IsCriminalSearch);
             bool isCriminalSearch = parameter != null &&
                 parameter.Value.Equals(CommonKeyIndexes.NumberOne, StringComparison.CurrentCultureIgnoreCase);
-            tbResult = helper.Process(data, isCriminalSearch);
+            IWebElement? tbResult = helper.Process(data, isCriminalSearch);
+            if (tbResult == null)
+            {
+                return null;
+            }
             System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> rows = tbResult.FindElements(By.TagName("tr"));
             foreach (IWebElement? rw in rows)
             {
@@ -97,7 +100,8 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         public static IWebDriver GetWebDriver()
         {
-            WebDrivers wdriver = new WebDriverDto().Get().WebDrivers;
+            var dto = new WebDriverDto().Get() ?? new();
+            WebDrivers wdriver = dto.WebDrivers;
             Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
             StructureMap.Container container = WebDriverContainer.GetContainer;
             IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver?.Name ?? string.Empty);

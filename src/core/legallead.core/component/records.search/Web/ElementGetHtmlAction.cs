@@ -30,12 +30,8 @@ namespace legallead.records.search.Web
             OuterHtml = outerHtml;
             string probateLinkXpath = CommonKeyIndexes.ProbateLinkXpath;
             string justiceLinkXpath = probateLinkXpath.Replace("'Probate'", "'Justice'");
-            IWebElement probateLink =
-                driver.TryFindElement(
-                    By.XPath(probateLinkXpath));
-            IWebElement justiceLocation =
-                driver.TryFindElement(
-                    By.XPath(justiceLinkXpath));
+            IWebElement? probateLink = driver.TryFindElement(By.XPath(probateLinkXpath));
+            IWebElement? justiceLocation = driver.TryFindElement(By.XPath(justiceLinkXpath));
             bool isCollinCounty = driver.Url.Contains("co.collin.tx.us");
 
             IsProbateSearch = probateLink != null;

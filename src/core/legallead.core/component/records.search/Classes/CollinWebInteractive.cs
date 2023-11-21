@@ -222,14 +222,14 @@ namespace legallead.records.search.Classes
 
         private static void FindDefendant(IWebDriver driver, ref HLinkDataRow linkData)
         {
-            IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+            IWebElement? criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
             IWebElement? elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
             if (criminalLink != null && elementCaseName != null)
             {
                 linkData.CriminalCaseStyle = elementCaseName.Text;
                 linkData.IsCriminal = true;
             }
-            IWebElement probateLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.ProbateLinkXpath));
+            IWebElement? probateLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.ProbateLinkXpath));
             if (probateLink != null)
             {
                 linkData.IsProbate = true;

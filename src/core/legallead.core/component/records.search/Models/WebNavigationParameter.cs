@@ -7,38 +7,38 @@ namespace legallead.records.search.Models
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public List<WebNavigationKey> Keys { get; set; }
+        public List<WebNavigationKey> Keys { get; set; } = new();
 
-        public List<WebNavInstruction> Instructions { get; set; }
+        public List<WebNavInstruction> Instructions { get; set; } = new();
 
-        public List<WebNavInstruction> CaseInstructions { get; set; }
+        public List<WebNavInstruction> CaseInstructions { get; set; } = new();
     }
 
     public class WebNavigationKey
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string Value { get; set; }
+        public string Value { get; set; } = string.Empty;
     }
 
     public class NavInstruction
     {
-        public IList<WebNavInstruction> NavInstructions { get; set; }
+        public IList<WebNavInstruction> NavInstructions { get; set; } = new List<WebNavInstruction>();
     }
 
     public class WebNavInstruction
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public string FriendlyName { get; set; }
+        public string FriendlyName { get; set; } = string.Empty;
 
-        public string By { get; set; }
+        public string By { get; set; } = string.Empty;
 
-        public string Value { get; set; }
+        public string Value { get; set; } = string.Empty;
 
-        public string CommandType { get; set; }
+        public string CommandType { get; set; } = string.Empty;
     }
 
     public class HLinkDataRow
@@ -46,25 +46,24 @@ namespace legallead.records.search.Models
         private const System.StringComparison comparison = System.StringComparison.CurrentCultureIgnoreCase;
 
         public int WebsiteId { get; set; }
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
 
-        public string WebAddress { get; set; }
+        public string WebAddress { get; set; } = string.Empty;
 
-        public string Defendant { get; set; }
+        public string Defendant { get; set; } = string.Empty;
 
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         public bool IsCriminal { get; set; }
         public bool IsMapped { get; set; }
-        public string Case { get; set; }
-        public string DateFiled { get; set; }
-        public string Court { get; set; }
-        public string CaseType { get; set; }
-        public string CaseStyle { get; set; }
-        public string PageHtml { get; internal set; }
+        public string Case { get; set; } = string.Empty;
+        public string DateFiled { get; set; } = string.Empty;
+        public string Court { get; set; } = string.Empty;
+        public string CaseType { get; set; } = string.Empty;
+        public string CaseStyle { get; set; } = string.Empty;
+        public string PageHtml { get; internal set; } = string.Empty;
 
-        public string CriminalCaseStyle
-        { get; set; }
+        public string CriminalCaseStyle { get; set; } = string.Empty;
 
         public bool IsProbate { get; internal set; }
         public bool IsJustice { get; internal set; }
@@ -130,9 +129,7 @@ namespace legallead.records.search.Models
                 if (fieldName.ToLower(CultureInfo.CurrentCulture).Equals("casestyle", comparison))
                 {
                     CaseStyle = value;
-                    return;
                 }
-                /* set the specified index to value here */
             }
         }
 
@@ -140,7 +137,7 @@ namespace legallead.records.search.Models
         {
             if (string.IsNullOrEmpty(Data))
             {
-                return null;
+                return string.Empty;
             }
 
             WebInteractive webHelper = new();
@@ -151,7 +148,7 @@ namespace legallead.records.search.Models
                 Data = data;
             }
             System.Xml.XmlDocument doc = XmlDocProvider.GetDoc(data);
-            System.Xml.XmlNode? node = doc.FirstChild.ChildNodes[1];
+            System.Xml.XmlNode? node = doc.FirstChild?.ChildNodes[1];
             if (node == null)
             {
                 return string.Empty;

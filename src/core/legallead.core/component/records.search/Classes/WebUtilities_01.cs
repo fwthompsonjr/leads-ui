@@ -25,7 +25,7 @@ namespace legallead.records.search.Classes
                 {
                     return new List<HLinkDataRow>();
                 }
-                WebNavigationKey parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch);
+                WebNavigationKey? parameter = GetParameter(Data, CommonKeyIndexes.IsCriminalSearch);
                 if (parameter != null)
                 {
                     parameter.Value = CommonKeyIndexes.NumberZero;
@@ -34,8 +34,9 @@ namespace legallead.records.search.Classes
                 return cases;
             }
 
-            protected List<HLinkDataRow> Search(string navTo, List<HLinkDataRow> cases)
+            protected List<HLinkDataRow> Search(string? navTo, List<HLinkDataRow> cases)
             {
+                if(string.IsNullOrEmpty(navTo)) { return cases; }
                 using (IWebDriver driver = GetWebDriver())
                 {
                     try
@@ -92,7 +93,7 @@ namespace legallead.records.search.Classes
                         return _dataRows;
                     }
 
-                    string navTo = GetNavigationAddress();
+                    var navTo = GetNavigationAddress();
                     if (string.IsNullOrEmpty(navTo))
                     {
                         return _dataRows;
@@ -105,7 +106,7 @@ namespace legallead.records.search.Classes
 
             protected bool IncludeCriminalRecords()
             {
-                WebNavigationKey criminalCase = GetParameter(Data, CommonKeyIndexes.CriminalCaseInclusion);
+                var criminalCase = GetParameter(Data, CommonKeyIndexes.CriminalCaseInclusion);
                 if (criminalCase == null)
                 {
                     return false;
@@ -123,7 +124,7 @@ namespace legallead.records.search.Classes
             {
                 string searchLink = CommonKeyIndexes.SearchHyperlink;
                 const StringComparison ccic = StringComparison.CurrentCultureIgnoreCase;
-                WebNavigationKey key = GetParameter(Data, keyName);
+                var key = GetParameter(Data, keyName);
                 if (key == null)
                 {
                     return;

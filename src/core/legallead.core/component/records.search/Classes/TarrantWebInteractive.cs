@@ -4,6 +4,7 @@ using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
 using OpenQA.Selenium;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Xml;
 
@@ -379,7 +380,7 @@ namespace legallead.records.search.Classes
             helper.Navigate(string.Format(CultureInfo.CurrentCulture,
                 fmt, linkData.WebAddress));
             driver.WaitForNavigation();
-            IWebElement tdName = TryFindElement(driver, By.XPath(xpath));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(xpath));
             if (tdName == null)
             {
                 return;
@@ -391,7 +392,7 @@ namespace legallead.records.search.Classes
             try
             {
                 // check or set IsCriminal attribute of linkData object
-                IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+                IWebElement? criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
                 if (criminalLink != null) { linkData.IsCriminal = true; }
                 // get row index of this element ... and then go one row beyond...
                 string ridx = parent.GetAttribute(CommonKeyIndexes.RowIndex);
@@ -488,8 +489,9 @@ namespace legallead.records.search.Classes
             return caseList;
         }
 
-        private static bool MapCourtAttributes(HLinkDataRow item, XmlNode trow, List<XmlNode> inspector)
+        private static bool MapCourtAttributes(HLinkDataRow item, XmlNode? trow, List<XmlNode> inspector)
         {
+            if (trow == null) return false;
             foreach (XmlNode search in inspector)
             {
                 XmlNode? node = trow.SelectSingleNode(search.InnerText);
@@ -505,20 +507,29 @@ namespace legallead.records.search.Classes
             try
             {
                 var pid = parameterId.ToString(CultureInfo.CurrentCulture.NumberFormat);
-                List<XmlNode>? inspector = doc.DocumentElement?
+                var nodes = doc.DocumentElement?
                     .SelectSingleNode("directions")?
                     .SelectNodes("caseInspection")?
-                    .Cast<XmlNode>()?
-                    .ToList()?
-                    .FindAll(x => x.Attributes?.GetNamedItem("id")?.Value == pid)
-                    .Find(x => x.Attributes.GetNamedItem("type").Value == typeName)
-                    .ChildNodes.Cast<XmlNode>().ToList();
+                    .Cast<XmlNode>();
+                if (nodes == null) return new();
+                var inspector = nodes
+                    .FirstOrDefault(x => GetAttributeValue(x, "id").Equals(pid) && GetAttributeValue(x, "type").Equals(typeName))
+                    ?.ChildNodes
+                    ?.Cast<XmlNode>()
+                    ?.ToList();
                 return inspector ?? new();
             }
             catch
             {
                 return new();
             }
+        }
+
+        private static string GetAttributeValue(XmlNode node, string named)
+        {
+            if (node.Attributes == null) return string.Empty;
+            if (node.Attributes.GetNamedItem(named) == null) return string.Empty;
+            return node.Attributes.GetNamedItem(named)?.Value ?? string.Empty;
         }
 
         /// <summary>
