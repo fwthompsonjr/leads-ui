@@ -228,19 +228,20 @@ function getFailedTestList( $solution ) {
         $results = findNode -name 'Results'
         $errors = "".Split(' ');
         foreach( $nde in $results.ChildNodes ) {
-            $outcome = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('outcome');
-            $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
+            $xmnode = ([System.Xml.XmlNode]$nde);
+            if ($xmnode.Attributes.Length -le 0) { continue; }
+            $outcome = $xmnode.Attributes.GetNamedItem('outcome');
+            $testName = $xmnode.Attributes.GetNamedItem('testName');
             if ( $outcome -eq $null ) { continue; }
-            if ($outcome.Value -eq "Passed") { continue; }
+            if ( $outcome.Value -eq "Passed") { continue; }
             $errstring = " - $($outcome.Value) : $($testName.Value)   ";
             $errors += $errstring;
         }
-        if ($errors.Length -le 0) { return; }
         $sorted = ($errors | Sort-Object);
         $statstring = [string]::Join($sorted, [envionment]::NewLine);
         writeGitAction -content $statstring
     } catch {
-        return;
+         Write-Warning "ERROR: $($_.Exception.Message)"
     }
 }
 
