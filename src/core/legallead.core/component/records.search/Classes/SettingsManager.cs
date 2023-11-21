@@ -10,13 +10,25 @@ namespace legallead.records.search.Classes
     {
         public static XmlDocument GetDoc(string xml)
         {
-            XmlDocument doc = new() { XmlResolver = null };
-            System.IO.StringReader sreader = new(xml);
-            XmlReader reader = XmlReader.Create(sreader, new XmlReaderSettings() { XmlResolver = null });
-            doc.Load(reader);
+            try
+            {
+                XmlDocument doc = new() { XmlResolver = null };
+                System.IO.StringReader sreader = new(xml);
+                XmlReader reader = XmlReader.Create(sreader, new XmlReaderSettings() { XmlResolver = null });
+                doc.Load(reader);
+                return doc;
+            }
+            catch (Exception)
+            {
+                return GetDocFromString(xml);
+            }
+        }
+        private static XmlDocument GetDocFromString(string xml)
+        {
+            XmlDocument doc = new();
+            doc.LoadXml(xml);
             return doc;
         }
-
         public static XmlDocument Load(string fileName)
         {
             using StreamReader reader = new(fileName);
@@ -318,7 +330,7 @@ namespace legallead.records.search.Classes
             return content;
         }
 
-        private static string GetXmlContent(string fileName)
+        public static string GetXmlContent(string fileName)
         {
             const string tilde = "~";
             string quote = '"'.ToString();
@@ -413,11 +425,11 @@ namespace legallead.records.search.Classes
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~Id~ FriendlyName=~Court-Type-Selection~><![CDATA[sbxControlID2]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetComboIndex~ By=~Id~ FriendlyName=~Court-Type-Selection~><![CDATA[sbxControlID2,?SetComboIndex]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>");
-                    sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command > ");
+                    sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~Search-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForNavigation~ By=~~ FriendlyName=~~><![CDATA[ ]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~Id~ FriendlyName=~District-Type-Selection~><![CDATA[sbxControlID2]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetComboIndex~ By=~Id~ FriendlyName=~District-Type-Selection~><![CDATA[sbxControlID2,?SetComboIndex]]></command>");
-                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></ command > ");
+                    sb.AppendLine("      <command type=~GetCases~ name=~WaitForElementExist~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~XPath~ FriendlyName=~District-Hyperlink~><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~Click~ By=~Id~ FriendlyName=~Date-Filed-Radio-Button~><![CDATA[DateFiled]]></command>");
                     sb.AppendLine("      <command type=~GetCases~ name=~SetControlValue~ By=~Id~ FriendlyName=~Date-Filed-On-TextBox~><![CDATA[DateFiledOnAfter,?StartDate]]></command>");
@@ -636,58 +648,57 @@ namespace legallead.records.search.Classes
 
                 case "caselayout.xml":
                     StringBuilder sbb = new();
-                    sbb.AppendLine("<?xml version=~1.0~ encoding=~utf-8~?>".Replace(tilde, quote));
-                    sbb.AppendLine("<search>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameters>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameter name=~Website~/>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameter name=~StartDate~/>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameter name=~EndDate~/>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameter name=~SearchDate~/>".Replace(tilde, quote));
-                    sbb.AppendLine("<parameter name=~SearchComplete~>false</parameter>".Replace(tilde, quote));
-                    sbb.AppendLine("</parameters>".Replace(tilde, quote));
-                    sbb.AppendLine("<!-- Name".Replace(tilde, quote));
-                    sbb.AppendLine("<results>".Replace(tilde, quote));
-                    sbb.AppendLine("<result name=~casedata~>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[".Replace(tilde, quote));
-                    sbb.AppendLine("]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</result>".Replace(tilde, quote));
-                    sbb.AppendLine("<result name=~peopledata~>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[".Replace(tilde, quote));
-                    sbb.AppendLine("]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</result>".Replace(tilde, quote));
-                    sbb.AppendLine("<result name=~person~>".Replace(tilde, quote));
-                    sbb.AppendLine("<people>".Replace(tilde, quote));
-                    sbb.AppendLine("<person>".Replace(tilde, quote));
-                    sbb.AppendLine("<name/>".Replace(tilde, quote));
-                    sbb.AppendLine("<address>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("".Replace(tilde, quote));
-                    sbb.AppendLine("<addressA/>".Replace(tilde, quote));
-                    sbb.AppendLine("<addressB/>".Replace(tilde, quote));
-                    sbb.AppendLine("<addressC/>".Replace(tilde, quote));
-                    sbb.AppendLine("<zip/>".Replace(tilde, quote));
-                    sbb.AppendLine("            ".Replace(tilde, quote));
-                    sbb.AppendLine("</address>".Replace(tilde, quote));
-                    sbb.AppendLine("<case>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</case>".Replace(tilde, quote));
-                    sbb.AppendLine("<dateFiled>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</dateFiled>".Replace(tilde, quote));
-                    sbb.AppendLine("<court>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</court>".Replace(tilde, quote));
-                    sbb.AppendLine("<caseType>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</caseType>".Replace(tilde, quote));
-                    sbb.AppendLine("<caseStyle>".Replace(tilde, quote));
-                    sbb.AppendLine("<![CDATA[]]>".Replace(tilde, quote));
-                    sbb.AppendLine("</caseStyle>".Replace(tilde, quote));
-                    sbb.AppendLine("</person>".Replace(tilde, quote));
-                    sbb.AppendLine("</people>".Replace(tilde, quote));
-                    sbb.AppendLine("</result>".Replace(tilde, quote));
-                    sbb.AppendLine("</results>".Replace(tilde, quote));
-                    sbb.AppendLine("</search>".Replace(tilde, quote));
+                    sbb.AppendLine("<?xml version=~1.0~ encoding=~utf-8~?>");
+                    sbb.AppendLine("<search>");
+                    sbb.AppendLine("  <parameters>");
+                    sbb.AppendLine("    <parameter name=~Website~/>");
+                    sbb.AppendLine("    <parameter name=~StartDate~/>");
+                    sbb.AppendLine("    <parameter name=~EndDate~/>");
+                    sbb.AppendLine("    <parameter name=~SearchDate~/>");
+                    sbb.AppendLine("    <parameter name=~SearchComplete~>false</parameter>");
+                    sbb.AppendLine("  </parameters>");
+                    sbb.AppendLine("  <!-- Name	Zip	Address1	Address2	Address3 -->");
+                    sbb.AppendLine("  <results>");
+                    sbb.AppendLine("    <result name=~casedata~>");
+                    sbb.AppendLine("      <![CDATA[");
+                    sbb.AppendLine("      ]]>");
+                    sbb.AppendLine("    </result>");
+                    sbb.AppendLine("    <result name=~peopledata~>");
+                    sbb.AppendLine("      <![CDATA[");
+                    sbb.AppendLine("      ]]>");
+                    sbb.AppendLine("    </result>");
+                    sbb.AppendLine("    <result name=~person~>");
+                    sbb.AppendLine("      <people>");
+                    sbb.AppendLine("        <person>");
+                    sbb.AppendLine("          <name/>");
+                    sbb.AppendLine("          <address>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("            <addressA/>");
+                    sbb.AppendLine("            <addressB/>");
+                    sbb.AppendLine("            <addressC/>");
+                    sbb.AppendLine("            <zip/>");
+                    sbb.AppendLine("          </address>");
+                    sbb.AppendLine("          <case>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("          </case>");
+                    sbb.AppendLine("          <dateFiled>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("          </dateFiled>");
+                    sbb.AppendLine("          <court>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("          </court>");
+                    sbb.AppendLine("          <caseType>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("          </caseType>");
+                    sbb.AppendLine("          <caseStyle>");
+                    sbb.AppendLine("            <![CDATA[]]>");
+                    sbb.AppendLine("          </caseStyle>");
+                    sbb.AppendLine("        </person>");
+                    sbb.AppendLine("      </people>");
+                    sbb.AppendLine("    </result>");
+                    sbb.AppendLine("  </results>");
+                    sbb.AppendLine("</search>");
+                    sbb.Replace(tilde, quote);
 
                     return sbb.ToString();
 

@@ -1,6 +1,4 @@
 ﻿using legallead.records.search.Models;
-using System;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 
@@ -172,7 +170,7 @@ namespace legallead.records.search.Classes
 
         private static void SetChildNodeText(XmlNode? node, string text)
         {
-            if(node == null || node.ChildNodes[0] is not XmlNode child) { return; }
+            if (node == null || node.ChildNodes[0] is not XmlNode child) { return; }
             child.InnerText = text;
         }
 
@@ -209,7 +207,7 @@ namespace legallead.records.search.Classes
             List<XmlNode?> ndes = new() { zipNode, addressA, addressB, addressC };
             foreach (XmlNode? item in ndes)
             {
-                if(item == null || item.OwnerDocument == null) { continue; }
+                if (item == null || item.OwnerDocument == null) { continue; }
                 XmlCDataSection cdta = item.OwnerDocument.CreateCDataSection(string.Empty);
                 item.AppendChild(cdta);
             }
