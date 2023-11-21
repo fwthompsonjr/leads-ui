@@ -3,6 +3,8 @@ param (
     $buildConfigruation = 'Release',
     [string]
     $searchPattern = '*test*.csproj'
+    [string]
+    $workspace = ''
 )
 
 function canEnumerate( $obj ) {
@@ -23,6 +25,7 @@ function generateExecutionCommand( $solution ) {
         $buildConfigruation = $args[1]
         $errorsFile = $args[2]
         $settingsFile = $args[3]
+        $workspace = $args[4]
         $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solution );
         $pathName = [System.IO.Path]::GetDirectoryName( $solution );
         $pathName = [System.IO.Path]::Combine( $pathName, "$shortName-0" );
@@ -30,7 +33,11 @@ function generateExecutionCommand( $solution ) {
             [System.IO.Directory]::CreateDirectory( $pathName ) | Out-Null
         }
         Write-Output "Running tests for : $shortName"
-        dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --collect "Code Coverage" --no-restore --results-directory $pathName
+        <#
+         dotnet coverage collect dotnet test --output ${{ github.workspace }}/Tests/Coverage --output-format cobertura
+        #>
+        dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --no-restore --results-directory $pathName
+        dotnet coverage collect dotnet test $solution --output "$workspace/Tests/Coverage" --no-restore --output-format cobertura
         
         if ($LASTEXITCODE -ne 0) {
             ("Test $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -38,7 +45,7 @@ function generateExecutionCommand( $solution ) {
     }
     return @{
         "text" = [string]::Join("", $arr)
-        "args" = @( $solution, $buildConfigruation, $errorsFile, $settingsFile )
+        "args" = @( $solution, $buildConfigruation, $errorsFile, $settingsFile, $workspace )
         "obj" = $command
         }
 

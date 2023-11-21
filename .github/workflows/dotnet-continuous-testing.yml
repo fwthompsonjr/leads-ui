@@ -22,6 +22,12 @@ jobs:
     - name: Set Release Version
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+  
+    - name: Install Tools
+      run: |
+          dotnet new tool-manifest
+          dotnet tool install dotnet-reportgenerator-globaltool
+          dotnet tool install dotnet-coverage
 
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
@@ -47,7 +53,7 @@ jobs:
       if: github.event_name != 'pull_request'
       shell: pwsh
       run: |
-        & ./pipeline-test-solutions.ps1
+        & ./pipeline-test-solutions.ps1 -workspace "${{ github.workspace }}"
 
     - name: Summarize Test Results
       if: github.event_name != 'pull_request'
@@ -55,9 +61,15 @@ jobs:
       run: |
         & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
 
-    - name: Upload dotnet test results
-      if: github.event_name != 'pull_request'
-      uses: actions/upload-artifact@v3
+    - name: Code Coverage Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        name: test-results
-        path: ~/**/*.trx
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '60 80'
