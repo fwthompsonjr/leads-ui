@@ -257,7 +257,7 @@ function describeTest( $solution ) {
     writeGitAction -content $reportFinal
     ## write non-successful items
     $edata = getFailedTestList -solution $solution
-    if([string]::IsNullOrWhiteSpace($edata) -eq false){
+    if([string]::IsNullOrWhiteSpace($edata) -eq $false){
         writeGitAction -content $edata
     }
 
