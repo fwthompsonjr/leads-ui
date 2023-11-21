@@ -7,7 +7,15 @@ namespace legallead.records.search.Db
     public static class DataPersistence
     {
         internal static string? _appFolder;
-        internal static string AppFolder => _appFolder ??= GetAppFolderName();
+        internal static string AppFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
+                _appFolder = GetAppFolderName();
+                return _appFolder;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the application directory.
@@ -27,7 +35,15 @@ namespace legallead.records.search.Db
         /// <value>
         /// The data folder.
         /// </value>
-        public static string DataFolder => _dataFolder ??= GetDataFolderName();
+        public static string DataFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_dataFolder)) return _dataFolder;
+                _dataFolder = GetDataFolderName();
+                return _dataFolder;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the application data directory.

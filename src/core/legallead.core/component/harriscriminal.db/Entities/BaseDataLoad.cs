@@ -16,11 +16,35 @@ namespace legallead.harriscriminal.db.Entities
         private static string? _appFolder;
         private static string? _dataFolder;
         private static string? _tableFolder;
-        public static string AppFolder => _appFolder ??= GetAppFolderName();
+        public static string AppFolder
+        {
+            get
+            {
+                if(!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
+                _appFolder = GetAppFolderName();
+                return _appFolder;
+            }
+        }
 
-        public static string DataFolder => _dataFolder ??= GetDataFolderName();
+        public static string DataFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_dataFolder)) return _dataFolder;
+                _dataFolder = GetDataFolderName();
+                return _dataFolder;
+            }
+        }
 
-        public static string TableFolder => _tableFolder ??= GetTableFolderName();
+        public static string TableFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_tableFolder)) return _tableFolder;
+                _tableFolder = GetTableFolderName();
+                return _tableFolder;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the application directory.

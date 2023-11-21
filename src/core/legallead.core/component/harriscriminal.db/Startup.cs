@@ -8,7 +8,15 @@ namespace legallead.harriscriminal.db
     public static class Startup
     {
         private static string? _appFolder;
-        internal static string AppFolder => _appFolder ??= GetAppFolderName();
+        internal static string AppFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
+                _appFolder = GetAppFolderName();
+                return _appFolder;
+            }
+        }
 
         public static string DataFolder => Downloads.DatFolder;
 
@@ -54,7 +62,15 @@ namespace legallead.harriscriminal.db
 
             private static string? _dataFolder;
 
-            internal static string DatFolder => _dataFolder ??= GetDataFolderName();
+            internal static string DatFolder
+            {
+                get
+                {
+                    if (!string.IsNullOrWhiteSpace(_dataFolder)) return _dataFolder;
+                    _dataFolder = GetDataFolderName();
+                    return _dataFolder;
+                }
+            }
 
             /// <summary>
             /// Gets the name of the application data directory.
