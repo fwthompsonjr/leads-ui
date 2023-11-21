@@ -232,14 +232,15 @@ function getFailedTestList( $solution ) {
             $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
             if ( $outcome -eq $null ) { continue; }
             if ($outcome.Value -eq "Passed") { continue; }
-            $errstring = "- $($outcome.Value) : $($testName.Value)   ";
+            $errstring = " - $($outcome.Value) : $($testName.Value)   ";
             $errors += $errstring;
         }
-        if ($errors.Length -eq 0) { return [string]::Empty; }
+        if ($errors.Length -le 0) { return; }
         $sorted = ($errors | Sort-Object);
-        return [string]::Join($sorted, [envionment]::NewLine);
+        $statstring = [string]::Join($sorted, [envionment]::NewLine);
+        writeGitAction -content $statstring
     } catch {
-        return [string]::Empty;
+        return;
     }
 }
 
@@ -260,12 +261,6 @@ function describeTest( $solution ) {
         $reportFinal = $reportFinal.Replace( "[$fname]", [system.convert]::ToString( $reportValues[$fname] ) )   
     }
     writeGitAction -content $reportFinal
-    ## write non-successful items
-    $edata = getFailedTestList -solution $solution
-    if([string]::IsNullOrWhiteSpace($edata) -eq $false){
-        writeGitAction -content $edata
-    }
-
 }
 
 $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
@@ -277,11 +272,13 @@ try {
     if( ( isEnumerable -obj $found ) -eq $false ) {
         $solutionFile = $found.FullName
         describeTest -solution $solutionFile
+        getFailedTestList -solution $solutionFile
         return;
     }
     $found.GetEnumerator() | ForEach-Object {
         $solutionFile = ([System.IO.FileInfo]$_).FullName
         describeTest -solution $solutionFile
+        getFailedTestList -solution $solutionFile
     }
 } catch {
     Write-Warning "ERROR: $($_.Exception.Message)"
