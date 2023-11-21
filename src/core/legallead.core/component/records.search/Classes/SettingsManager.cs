@@ -311,9 +311,10 @@ namespace legallead.records.search.Classes
             string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\xml\{1}", execName, fileName)).AbsolutePath;
-            return !File.Exists(targetFile) ?
-                GetXmlContent(fileName) :
-                File.ReadAllText(targetFile);
+            var backup = GetXmlContent(fileName);
+            var content = !File.Exists(targetFile) ? backup : File.ReadAllText(targetFile);
+            if (string.IsNullOrWhiteSpace(content)) { return backup; }
+            return content;
         }
 
         private static string GetXmlContent(string fileName)
