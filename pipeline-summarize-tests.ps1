@@ -222,20 +222,25 @@ function findNode( $name ) {
 }
 
 function getFailedTestList( $solution ) {
-    $content = [System.IO.File]::ReadAllText( $testFile );
-    $xContent = [xml]$content;
-    $results = findNode -name 'Results'
-    $errors = "".Split(' ');
-    foreach( $nde in $results.ChildNodes ) {
-        $outcome = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('outcome');
-        $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
-        if ( $outcome -eq $null ) { continue; }
-        if ($outcome.Value -eq "Passed") { continue; }
-        $errstring = "- $($outcome.Value) : $($testName.Value)   ";
-        $errors += $errstring;
+    try {
+        $txtcontent = [System.IO.File]::ReadAllText( $solution );
+        $xContent = [xml]$txtcontent;
+        $results = findNode -name 'Results'
+        $errors = "".Split(' ');
+        foreach( $nde in $results.ChildNodes ) {
+            $outcome = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('outcome');
+            $testName = ([System.Xml.XmlNode]$nde).Attributes.GetNamedItem('testName');
+            if ( $outcome -eq $null ) { continue; }
+            if ($outcome.Value -eq "Passed") { continue; }
+            $errstring = "- $($outcome.Value) : $($testName.Value)   ";
+            $errors += $errstring;
+        }
+        if ($errors.Length -eq 0) { return [string]::Empty; }
+        $sorted = ($errors | Sort-Object);
+        return [string]::Join($sorted, [envionment]::NewLine);
+    } catch {
+        return [string]::Empty;
     }
-    $sorted = ($errors | Sort-Object);
-    return [string]::Join($sorted, [envionment]::NewLine);
 }
 
 function describeTest( $solution ) {
