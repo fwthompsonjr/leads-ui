@@ -1,4 +1,6 @@
 ﻿using legallead.records.search.Models;
+using System;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 
@@ -140,13 +142,13 @@ namespace legallead.records.search.Classes
                 CharacterData.ToString(),
                 closeTable);
             var person = People?.FirstChild?.CloneNode(true);
-            if (person == null || !person.HasChildNodes || person.ChildNodes[0] == null)
+            SetChildNodeText(person, dta.Defendant);
+            XmlNode? addressNode = person?.ChildNodes[1];
+            if (addressNode?.FirstChild is XmlCDataSection section)
             {
-                return;
+                section.Data = dta.Address;
             }
-            person.ChildNodes[0].InnerText = dta.Defendant;
-            XmlNode? addressNode = person.ChildNodes[1];
-            ((XmlCDataSection)(addressNode.FirstChild)).Data = dta.Address;
+            if (person == null || addressNode == null) return;
             ParseAddressInformation(dta.Address, addressNode);
             person = MapExtraData(dta, person);
             People?.AppendChild(person);
@@ -156,15 +158,23 @@ namespace legallead.records.search.Classes
             {
                 personHtml = personHtml.Replace(@"<tr>", @"<tr style='border: 1px solid black;'>");
                 CharacterPeople.AppendLine(personHtml);
-                cnode = (XmlCDataSection)PeopleData.FirstChild;
-                cnode.Data = string.Format(
+                if (PeopleData?.FirstChild is XmlCDataSection cdat)
+                {
+                    cdat.Data = string.Format(
                     CultureInfo.CurrentCulture,
                     fmttbl,
                     opnTable,
                     CharacterPeople.ToString(),
                     closeTable);
+                }
             }
             Document.Save(FileName);
+        }
+
+        private static void SetChildNodeText(XmlNode? node, string text)
+        {
+            if(node == null || node.ChildNodes[0] is not XmlNode child) { return; }
+            child.InnerText = text;
         }
 
         private static void ParseAddressInformation(string address, XmlNode addressNode)
