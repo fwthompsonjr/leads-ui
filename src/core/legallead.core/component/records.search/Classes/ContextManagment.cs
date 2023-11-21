@@ -22,7 +22,9 @@ namespace legallead.records.search.Classes
         {
             get
             {
-                return _appDirectory ??= GetAppDirectory();
+                if (!string.IsNullOrEmpty(_appDirectory)) { return _appDirectory; }
+                _appDirectory = GetAppDirectory();
+                return _appDirectory;
             }
         }
 
