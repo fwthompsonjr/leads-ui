@@ -6,11 +6,11 @@ namespace legallead.records.search.Classes
 {
     public class XmlContentHolder
     {
-        public string FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
-        public XmlDocument Document { get; set; }
+        public XmlDocument Document { get; set; } = new XmlDocument();
 
-        public XmlNode Data
+        public XmlNode? Data
         {
             get
             {
@@ -19,11 +19,11 @@ namespace legallead.records.search.Classes
                     return null;
                 }
 
-                return Document.DocumentElement.SelectSingleNode(@"//results/result[@name='casedata']");
+                return Document.DocumentElement?.SelectSingleNode(@"//results/result[@name='casedata']");
             }
         }
 
-        public XmlNode PeopleData
+        public XmlNode? PeopleData
         {
             get
             {
@@ -32,11 +32,11 @@ namespace legallead.records.search.Classes
                     return null;
                 }
 
-                return Document.DocumentElement.SelectSingleNode(@"//results/result[@name='peopledata']");
+                return Document.DocumentElement?.SelectSingleNode(@"//results/result[@name='peopledata']");
             }
         }
 
-        public XmlNode People
+        public XmlNode? People
         {
             get
             {
@@ -45,16 +45,16 @@ namespace legallead.records.search.Classes
                     return null;
                 }
 
-                return Document.DocumentElement.SelectSingleNode(@"//results/result[@name='person']/people");
+                return Document.DocumentElement?.SelectSingleNode(@"//results/result[@name='person']/people");
             }
         }
 
         public List<PersonAddress> GetPersonAddresses()
         {
-            XmlNode people = People;
+            var people = People;
             if (people == null)
             {
-                return null;
+                return new();
             }
 
             if (!people.HasChildNodes)
@@ -65,7 +65,7 @@ namespace legallead.records.search.Classes
             List<PersonAddress> addressList = new();
             foreach (XmlNode personNode in people.ChildNodes.Cast<XmlNode>())
             {
-                PersonAddress addressPerson = PersonAddress.ConvertFrom(personNode);
+                var addressPerson = PersonAddress.ConvertFrom(personNode);
                 if (addressPerson == null)
                 {
                     continue;
@@ -73,14 +73,13 @@ namespace legallead.records.search.Classes
 
                 if (addressPerson.IsValid)
                 {
-                    // string caseSytle = addressPerson["CaseStyle"];
                     addressList.Add(addressPerson);
                 }
-                else if (!string.IsNullOrEmpty(personNode.ChildNodes[0].InnerText))
+                else if (!string.IsNullOrEmpty(personNode.ChildNodes[0]?.InnerText))
                 {
                     addressPerson = new PersonAddress
                     {
-                        Name = personNode.ChildNodes[0].InnerText,
+                        Name = personNode.ChildNodes[0]?.InnerText ?? string.Empty,
                         Address1 = PersonAddress.ConvertFrom("address1", personNode),
                         Address2 = PersonAddress.ConvertFrom("address2", personNode),
                         Address3 = PersonAddress.ConvertFrom("address3", personNode),
@@ -108,8 +107,8 @@ namespace legallead.records.search.Classes
             return addressList;
         }
 
-        protected StringBuilder CharacterData { get; set; }
-        protected StringBuilder CharacterPeople { get; set; }
+        protected StringBuilder CharacterData { get; set; } = new StringBuilder();
+        protected StringBuilder CharacterPeople { get; set; } = new StringBuilder();
         public int Id { get; internal set; }
 
         public void Append(Models.HLinkDataRow dta)
@@ -132,24 +131,25 @@ namespace legallead.records.search.Classes
             const string fmttbl = @"{0}{1}{2}";
             CleanHtml(dta.Data);
             CharacterData.AppendLine(dta.Data);
-            XmlCDataSection? cnode = (XmlCDataSection)Data.FirstChild;
+            var cnode = Data as XmlCDataSection;
+            if (cnode == null) return;
             cnode.Data = string.Format(
                 CultureInfo.CurrentCulture,
                 fmttbl,
                 openTable,
                 CharacterData.ToString(),
                 closeTable);
-            XmlNode person = People.FirstChild.CloneNode(true);
-            if (dta.IsCriminal & dta.IsMapped)
+            var person = People?.FirstChild?.CloneNode(true);
+            if (person == null || !person.HasChildNodes || person.ChildNodes[0] == null)
             {
-                // System.Diagnostics.Debugger.Break();
+                return;
             }
             person.ChildNodes[0].InnerText = dta.Defendant;
             XmlNode? addressNode = person.ChildNodes[1];
             ((XmlCDataSection)(addressNode.FirstChild)).Data = dta.Address;
             ParseAddressInformation(dta.Address, addressNode);
             person = MapExtraData(dta, person);
-            People.AppendChild(person);
+            People?.AppendChild(person);
 
             string personHtml = PersonHtml(dta);
             if (!string.IsNullOrEmpty(personHtml))
@@ -167,29 +167,29 @@ namespace legallead.records.search.Classes
             Document.Save(FileName);
         }
 
-        private static XmlNode ParseAddressInformation(string address, XmlNode addressNode)
+        private static void ParseAddressInformation(string address, XmlNode addressNode)
         {
             const string lineBreak = @"<br/>";
             if (addressNode == null)
             {
-                return addressNode;
+                return;
             }
 
             if (string.IsNullOrEmpty(address))
             {
-                return addressNode;
+                return;
             }
 
             address = address.Trim();
             if (string.IsNullOrEmpty(address))
             {
-                return addressNode;
+                return;
             }
 
             List<string> addresses = address.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
             if (addresses.Count <= 1 || addresses.Count > 4)
             {
-                return addressNode;
+                return;
             }
 
             XmlNode? zipNode = addressNode.SelectSingleNode("zip");
@@ -197,9 +197,10 @@ namespace legallead.records.search.Classes
             XmlNode? addressB = addressNode.SelectSingleNode("addressB");
             XmlNode? addressC = addressNode.SelectSingleNode("addressC");
             // append a cdata section
-            List<XmlNode> ndes = new() { zipNode, addressA, addressB, addressC };
-            foreach (XmlNode item in ndes)
+            List<XmlNode?> ndes = new() { zipNode, addressA, addressB, addressC };
+            foreach (XmlNode? item in ndes)
             {
+                if(item == null || item.OwnerDocument == null) { continue; }
                 XmlCDataSection cdta = item.OwnerDocument.CreateCDataSection(string.Empty);
                 item.AppendChild(cdta);
             }
@@ -207,17 +208,22 @@ namespace legallead.records.search.Classes
             string firstItem = addresses[0].Trim().ToUpper(CultureInfo.CurrentCulture);
             string lastItem = addresses[^1].Trim().ToUpper(CultureInfo.CurrentCulture);
             string middleItem = GetMiddleAddress(addresses).Trim().ToUpper(CultureInfo.CurrentCulture);
-            ((XmlCDataSection)(zipNode.FirstChild)).Data = ParseZipCode(lastItem);
-            ((XmlCDataSection)(addressC.FirstChild)).Data = lastItem;
-            ((XmlCDataSection)(addressA.FirstChild)).Data = firstItem;
-            ((XmlCDataSection)(addressB.FirstChild)).Data = middleItem;
-            return addressNode;
+            SetCDataValue(zipNode, ParseZipCode(lastItem));
+            SetCDataValue(addressC, lastItem);
+            SetCDataValue(addressA, firstItem);
+            SetCDataValue(addressB, middleItem);
         }
-
+        private static void SetCDataValue(XmlNode? node, string value)
+        {
+            if (node?.FirstChild is XmlCDataSection cdata)
+            {
+                cdata.Data = value;
+            }
+        }
         private static string ParseZipCode(string lastItem)
         {
             List<string> pieces = lastItem.Split(' ').ToList();
-            return pieces.Last();
+            return pieces[^1];
         }
 
         private static XmlNode MapExtraData(HLinkDataRow dta, XmlNode person)
@@ -234,41 +240,41 @@ namespace legallead.records.search.Classes
                 if (targetNode == null)
                 {
                     continue;
-                } ((XmlCDataSection)targetNode.FirstChild).Data = dta[fieldName];
+                }
+                SetCDataValue(targetNode, dta[fieldName]);
             }
             return person;
         }
 
-        private static string CleanHtml(string rawHtml)
+        private static void CleanHtml(string rawHtml)
         {
             if (string.IsNullOrEmpty(rawHtml))
             {
-                return rawHtml;
+                return;
             }
 
             if (!rawHtml.ToLower(CultureInfo.CurrentCulture).Contains("href="))
             {
-                return rawHtml;
+                return;
             }
 
             try
             {
                 XmlDocument doc = XmlDocProvider.GetDoc(rawHtml);
-                XmlNode? firstChild = doc.DocumentElement.FirstChild;
-                XmlNode? hlink = firstChild.SelectSingleNode("a");
-                if (hlink == null)
+                XmlNode? firstChild = doc.DocumentElement?.FirstChild;
+                XmlNode? hlink = firstChild?.SelectSingleNode("a");
+                if (firstChild == null || hlink == null)
                 {
-                    return rawHtml;
+                    return;
                 }
 
                 firstChild.InnerXml = string.Format(
                     CultureInfo.CurrentCulture,
                     "<span>{0}</span>", hlink.InnerText);
-                return doc.OuterXml;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return rawHtml;
+                Console.WriteLine(ex.Message);
             }
         }
 
