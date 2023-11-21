@@ -53,7 +53,7 @@ jobs:
       if: github.event_name != 'pull_request'
       shell: pwsh
       run: |
-        & ./pipeline-test-solutions.ps1 -workspace "${{ github.workspace }}"
+        & ./pipeline-test-coverage-solutions.ps1 -workspace "${{ github.workspace }}"
 
     - name: Summarize Test Results
       if: github.event_name != 'pull_request'

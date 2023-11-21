@@ -33,11 +33,7 @@ function generateExecutionCommand( $solution ) {
             [System.IO.Directory]::CreateDirectory( $pathName ) | Out-Null
         }
         Write-Output "Running tests for : $shortName"
-        <#
-         dotnet coverage collect dotnet test --output ${{ github.workspace }}/Tests/Coverage --output-format cobertura
-        #>
         dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --no-restore --results-directory $pathName
-        dotnet coverage collect dotnet test $solution --output "$workspace/Tests/Coverage" --no-restore --output-format cobertura
         
         if ($LASTEXITCODE -ne 0) {
             ("Test $shortName failed." + [Environment]::NewLine) >> $errorsFile
