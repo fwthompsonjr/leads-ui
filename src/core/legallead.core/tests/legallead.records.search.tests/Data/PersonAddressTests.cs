@@ -275,10 +275,10 @@ namespace legallead.records.search.Tests.Data
 
         private static List<PersonAddress> SamplePersonAddress()
         {
-            const string jsFile = @"Json\collincounty_probate.csv";
-            var appFile = GetAppDirectoryName();
-            appFile = Path.Combine(appFile, jsFile);
-            using var reader = new StreamReader(appFile);
+            var content = _sampleAddressText.Replace("~", '"'.ToString());
+            var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+            using MemoryStream stream = new (bytes);
+            using TextReader reader = new StreamReader(stream);
             using var csv = new CsvReader(reader);
             var dto = csv.GetRecords<PersonAddressDto>().ToList();
             var config = new MapperConfiguration(cfg => cfg.CreateMap<PersonAddressDto, PersonAddress>());
@@ -288,11 +288,22 @@ namespace legallead.records.search.Tests.Data
             return people;
         }
 
-
-        private static string GetAppDirectoryName()
-        {
-            var execName = Assembly.GetExecutingAssembly().Location;
-            return Path.GetDirectoryName(execName) ?? string.Empty;
-        }
+        private static readonly string _sampleAddressText = ("Name,FirstName,LastName,Zip,Address1,Address2,Address3,CaseNumber,DateFiled,Court,CaseType,CaseStyle,Plantiff,County,Cou" +
+            "rtAddress" + Environment.NewLine +
+            "~McCraw, Susan~,Susan,McCraw,00000,No Match Found,,Not Matched 00000,GA1-0260-2019,12/17/2019,Probate Courts,Probate - G" +
+            "uardianship for an Adult,In the Guardianship Of Jean Neal,Jean Neal,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~Hanna, Frank A.~,Frank,Hanna,94506,31 Lilly CT,,~Danville, CA 94506~,PB1-2039-2019,12/17/2019,Probate Courts,Probate -" +
+            "Small Estate Proceedings,In the Estate of Doris Hanna,,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~NORDYKE, CANDICE ANN~,CANDICE,NORDYKE,75033,8505 TANGLEROSE DR.,,~FRISCO, TX 75033~,PB1-2040-2019,12/17/2019,Probate Co" +
+            "urts,Probate - Independent Administration,In the Estate Of DAVID WAYNE WHITTEN,,Collin,~2100 Bloomdale Road, McKinney, T" +
+            "X 75071~" + Environment.NewLine +
+            "~AVERY, LUIS L.~,LUIS,AVERY,01740,397 Berlin Road,,~Bolton, MA 01740~,PB1-2041-2019,12/17/2019,Probate Courts,Probate -" +
+            "Independent Administration,In the Estate Of DONALD G. AVERY,,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~O'Neal, Sallianne~,Sallianne,O'Neal,76258,9110 Highway 377,,~Pilot Point, TX 76258~,PB1-2042-2019,12/17/2019,Probate Co" +
+            "urts,Probate - Independent Administration,In the Estate Of Patricia Ann O'Neal,,Collin,~2100 Bloomdale Road, McKinney, T" +
+            "X 75071~" + Environment.NewLine +
+            "~Nicks, David~,David,Nicks,75001,~c/o Dena L. Mathis, Mathis Legal PLLC~,~15851 Dallas Parkway, Suite 800~,~Dallas, TX 7" +
+            "5001~,PB1-2043-2019,12/17/2019,Probate Courts,Probate - Independent Administration,In the Estate Of Lori Ann Nicks,,Coll" +
+            "in,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine);
     }
 }

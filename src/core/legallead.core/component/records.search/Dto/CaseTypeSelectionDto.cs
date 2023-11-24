@@ -1,4 +1,5 @@
 ﻿using legallead.records.search.Classes;
+using System.Text;
 
 namespace legallead.records.search.Dto
 {
@@ -45,12 +46,110 @@ namespace legallead.records.search.Dto
                 dataFormat,
                 appDirectory,
                 fileSuffix);
-            if (!File.Exists(dataFile))
+            var fallback = GetFallbackContent(fileSuffix);
+            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            if (data.Length == 0 || !File.Exists(dataFile))
             {
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);
             }
-            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<CaseTypeSelectionDto>(data) ?? new();
+        }
+
+        private static string GetFallbackContent(string fileName)
+        {
+            var sbb = new StringBuilder();
+            const char tilde = '~';
+            const char qte = '"';
+            if(string.IsNullOrEmpty(fileName)) return string.Empty;
+            if (fileName.Equals("collinCountyCaseType"))
+            {
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~dropDowns~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 0,");
+                sbb.AppendLine("      ~name~: ~criminal courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~criminal case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption1 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 1,");
+                sbb.AppendLine("          ~name~: ~probate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption2 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 2,");
+                sbb.AppendLine("          ~name~: ~magistrate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption3 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 3,");
+                sbb.AppendLine("          ~name~: ~civil and family case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption4 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 4,");
+                sbb.AppendLine("          ~name~: ~justice of the peace case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption5 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 1,");
+                sbb.AppendLine("      ~name~: ~probate courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~probate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption2 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 2,");
+                sbb.AppendLine("      ~name~: ~magistrate courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~magistrate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption3 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 3,");
+                sbb.AppendLine("      ~name~: ~civil and family courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~civil and family case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption4 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 4,");
+                sbb.AppendLine("      ~name~: ~justice courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~justice of the peace case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption5 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            sbb.Replace(tilde, qte);
+            return sbb.ToString();
         }
     }
 
