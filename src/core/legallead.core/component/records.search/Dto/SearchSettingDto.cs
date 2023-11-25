@@ -106,9 +106,21 @@ namespace legallead.records.search.Dto
                 dataFormat,
                 appDirectory,
                 fileSuffix);
+            // create if not exists
             if (!File.Exists(dataFile))
             {
-                throw new FileNotFoundException(SearchSettingFileNotFound);
+                var sbb = new StringBuilder();
+                // denton-settings.json
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~SearchSetting~: {");
+                sbb.AppendLine("    ~CountySearchTypeId~: 0,");
+                sbb.AppendLine("    ~CountyCourtId~: 0,");
+                sbb.AppendLine("    ~DistrictCourtId~: 0,");
+                sbb.AppendLine("    ~DistrictSearchTypeId~: 0");
+                sbb.AppendLine("  }");
+                sbb.AppendLine("}");
+                sbb.Replace('~', '"');
+                File.WriteAllText(dataFile, sbb.ToString());
             }
             return dataFile;
         }
