@@ -293,7 +293,6 @@ try {
         getFailedTestList -solution $solutionFile
     }
     echoFailedTestCount
-    Write-Output "::set-env name=FAILED_TEST_COUNT::$failedTestCount"
 } catch {
     Write-Warning "ERROR: $($_.Exception.Message)"
 }
