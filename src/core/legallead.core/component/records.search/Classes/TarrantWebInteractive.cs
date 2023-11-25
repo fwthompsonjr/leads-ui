@@ -598,12 +598,14 @@ namespace legallead.records.search.Classes
                 dataFormat,
                 appDirectory,
                 suffix);
-            if (!File.Exists(dataFile))
+
+            var fallback = GetFallbackContent(suffix);
+            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
         }
 
@@ -621,15 +623,310 @@ namespace legallead.records.search.Classes
                 dataFormat,
                 appDirectory,
                 suffix);
-            if (!File.Exists(dataFile))
+            var fallback = GetFallbackContent(suffix);
+            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data) ?? new();
         }
 
         #endregion Element Action Helpers
+
+        #region Fallback Content
+
+
+        private static string GetFallbackContent(string fileName)
+        {
+            var sbb = new StringBuilder();
+            const char tilde = '~';
+            const char qte = '"';
+            if (string.IsNullOrEmpty(fileName)) return string.Empty;
+            if (fileName.Equals("tarrantCourtSearchDropDown"))
+            {
+                // tarrantCourtSearchDropDown.json
+                sbb.AppendLine("{");
+                sbb.AppendLine("	~name~: ~court type selections~,");
+                sbb.AppendLine("	~step~: {");
+                sbb.AppendLine("		~actionName~: ~set-select-value~,");
+                sbb.AppendLine("		~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("		~expectedValue~: ~1~,");
+                sbb.AppendLine("		~locator~: {");
+                sbb.AppendLine("			~find~: ~css~,");
+                sbb.AppendLine("			~query~: ~#sbxControlID2~");
+                sbb.AppendLine("		}");
+                sbb.AppendLine("	},");
+                sbb.AppendLine("	~courtMap~: [");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 1,");
+                sbb.AppendLine("			~name~: ~Justice of Peace~");
+                sbb.AppendLine("		},");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 2,");
+                sbb.AppendLine("			~name~: ~Court Court at Law~");
+                sbb.AppendLine("		},");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 0,");
+                sbb.AppendLine("			~name~: ~Probate~");
+                sbb.AppendLine("		}");
+                sbb.AppendLine("	]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("tarrantCountyMapping_1"))
+            {
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~steps~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~navigate~,");
+                sbb.AppendLine("      ~displayName~: ~open-website-base-uri~,");
+                sbb.AppendLine("      ~wait~: 1200,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~page~,");
+                sbb.AppendLine("        ~query~: ~https://odyssey.tarrantcounty.com/PublicAccess/default.aspx~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-records-hyperlink~,");
+                sbb.AppendLine("      ~expectedValue~: ~Case Records Search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td[2]/a[2]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~search-by-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expectedValue~: ~3~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~send-key~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expaectedValue~: ~K~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~startDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnAfter~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~endDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnBefore~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-record-count~,");
+                sbb.AppendLine("      ~displayName~: ~record-count~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[3]/tbody/tr[1]/td[2]/b~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-table-html~,");
+                sbb.AppendLine("      ~displayName~: ~get-case-data-table~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("tarrantCountyMapping_2"))
+            {
+                // tarrantCountyMapping_2
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~steps~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~navigate~,");
+                sbb.AppendLine("      ~displayName~: ~open-website-base-uri~,");
+                sbb.AppendLine("      ~wait~: 1200,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~page~,");
+                sbb.AppendLine("        ~query~: ~https://odyssey.tarrantcounty.com/PublicAccess/default.aspx~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~criminal-records-hyperlink~,");
+                sbb.AppendLine("      ~expectedValue~: ~Criminal Case Records~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~//a[@class='ssSearchHyperlink'][contains(text(),'Misdemeanors')]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~search-by-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-dropdown-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expectedValue~: ~5~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~send-key~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expaectedValue~: ~K~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~startDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnAfter~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~endDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnBefore~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-record-count~,");
+                sbb.AppendLine("      ~displayName~: ~record-count~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[3]/tbody/tr[1]/td[2]/b~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-table-html~,");
+                sbb.AppendLine("      ~displayName~: ~get-case-data-table~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            sbb.Replace(tilde, qte);
+            return sbb.ToString();
+        }
+        #endregion
+
     }
 }

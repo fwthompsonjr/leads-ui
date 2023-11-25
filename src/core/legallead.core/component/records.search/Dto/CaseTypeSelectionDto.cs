@@ -149,7 +149,7 @@ namespace legallead.records.search.Dto
                 sbb.AppendLine("}");
             }
             sbb.Replace(tilde, qte);
-            return sbb.ToString();
+            return sbb.ToString().Trim();
         }
     }
 
