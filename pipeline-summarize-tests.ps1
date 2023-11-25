@@ -253,6 +253,7 @@ function describeTest( $solution ) {
 
     Write-Output "Evaluating test project $testProject"
     processTestResultFile -name $solution
+    $failedTestCount += $reportValues['totalfailed'];
     $pctpassed = ( $reportValues['totalpassed'] + 0.00001 ) / ( ( $reportValues['totalfailed'] + $reportValues['totalpassed'] ) + 0.00001 ) * 100.00000001
     $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
     $reportFinal = $reportFinal.Replace( "[assemblyname]", $testProject );
@@ -267,13 +268,15 @@ function describeTest( $solution ) {
 $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
 ## find all files matching *.trx 
 try {
-
+    $failedTestCount = 0;
+    
     $di = [System.IO.DirectoryInfo]::new( $workingDir );
     $found = $di.GetFiles('*.trx', [System.IO.SearchOption]::AllDirectories)
     if( ( isEnumerable -obj $found ) -eq $false ) {
         $solutionFile = $found.FullName
         describeTest -solution $solutionFile
         getFailedTestList -solution $solutionFile
+        Write-Output "::set-env name=FAILED_TEST_COUNT::$failedTestCount"
         return;
     }
     $found.GetEnumerator() | ForEach-Object {
@@ -281,6 +284,7 @@ try {
         describeTest -solution $solutionFile
         getFailedTestList -solution $solutionFile
     }
+    Write-Output "::set-env name=FAILED_TEST_COUNT::$failedTestCount"
 } catch {
     Write-Warning "ERROR: $($_.Exception.Message)"
 }
