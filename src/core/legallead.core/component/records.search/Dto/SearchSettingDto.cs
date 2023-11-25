@@ -109,18 +109,25 @@ namespace legallead.records.search.Dto
             // create if not exists
             if (!File.Exists(dataFile))
             {
-                var sbb = new StringBuilder();
-                // denton-settings.json
-                sbb.AppendLine("{");
-                sbb.AppendLine("  ~SearchSetting~: {");
-                sbb.AppendLine("    ~CountySearchTypeId~: 0,");
-                sbb.AppendLine("    ~CountyCourtId~: 0,");
-                sbb.AppendLine("    ~DistrictCourtId~: 0,");
-                sbb.AppendLine("    ~DistrictSearchTypeId~: 0");
-                sbb.AppendLine("  }");
-                sbb.AppendLine("}");
-                sbb.Replace('~', '"');
-                File.WriteAllText(dataFile, sbb.ToString());
+                if (fileSuffix.Contains("denton-settings"))
+                {
+                    var sbb = new StringBuilder();
+                    // denton-settings.json
+                    sbb.AppendLine("{");
+                    sbb.AppendLine("  ~SearchSetting~: {");
+                    sbb.AppendLine("    ~CountySearchTypeId~: 0,");
+                    sbb.AppendLine("    ~CountyCourtId~: 0,");
+                    sbb.AppendLine("    ~DistrictCourtId~: 0,");
+                    sbb.AppendLine("    ~DistrictSearchTypeId~: 0");
+                    sbb.AppendLine("  }");
+                    sbb.AppendLine("}");
+                    sbb.Replace('~', '"');
+                    File.WriteAllText(dataFile, sbb.ToString());
+                }
+                else
+                {
+                    throw new FileNotFoundException(dataFile);
+                }
             }
             return dataFile;
         }
