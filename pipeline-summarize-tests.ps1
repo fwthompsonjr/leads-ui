@@ -266,6 +266,14 @@ function describeTest( $solution ) {
 }
 
 $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
+
+
+function echoFailedTestCount {
+    try {
+        echo "FAILED_TEST_COUNT::$failedTestCount" >> $GITHUB_ENV
+    } catch { }
+}
+
 ## find all files matching *.trx 
 try {
     $failedTestCount = 0;
@@ -276,7 +284,7 @@ try {
         $solutionFile = $found.FullName
         describeTest -solution $solutionFile
         getFailedTestList -solution $solutionFile
-        Write-Output "::set-env name=FAILED_TEST_COUNT::$failedTestCount"
+        echoFailedTestCount
         return;
     }
     $found.GetEnumerator() | ForEach-Object {
@@ -284,6 +292,7 @@ try {
         describeTest -solution $solutionFile
         getFailedTestList -solution $solutionFile
     }
+    echoFailedTestCount
     Write-Output "::set-env name=FAILED_TEST_COUNT::$failedTestCount"
 } catch {
     Write-Warning "ERROR: $($_.Exception.Message)"
