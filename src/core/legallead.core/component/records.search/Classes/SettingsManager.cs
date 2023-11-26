@@ -759,11 +759,6 @@ namespace legallead.records.search.Classes
             string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\Utilities\CourtRecordSearch.xlsm", execName)).AbsolutePath;
-            if (!File.Exists(targetFile))
-            {
-                return string.Empty;
-            }
-
             return targetFile;
         }
 
