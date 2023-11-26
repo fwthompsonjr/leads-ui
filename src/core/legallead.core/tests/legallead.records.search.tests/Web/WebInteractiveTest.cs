@@ -1,10 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.Tests
 {
@@ -32,11 +28,9 @@ namespace legallead.records.search.Tests
         [TestCategory("Web.Integration")]
         public void ValidateChromePathTest()
         {
-            if (!System.Diagnostics.Debugger.IsAttached)
-            {
-                Assert.Inconclusive("This method to be executed in debug mode only.");
-            }
-            DirectoryInfo di = new DirectoryInfo(@"c:\");
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            var rootDir = Directory.GetDirectoryRoot(baseDir);
+            DirectoryInfo di = new(rootDir);
             var search = new DirectorySearch(di, "*chrome.exe", 2);
             var found = search.FileList;
             Assert.IsTrue(found.Any());
