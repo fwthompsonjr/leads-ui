@@ -66,15 +66,40 @@ namespace legallead.records.search.Dto
 
         public static NavInstruction GetNonCriminalMapping()
         {
-            string dataFile = NonCriminalMappingFile();
-            string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+            try
+            {
+                string dataFile = NonCriminalMappingFile();
+                string data = File.ReadAllText(dataFile);
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+            }
+            catch
+            {
+                return GetAlternateNonCriminalMapping();
+            }
         }
 
+        public static NavInstruction GetAlternateNonCriminalMapping()
+        {
+            string data = FallbackJson.GetJs("dentonCaseCustomInstruction_1.json");
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+        }
         public static NavInstruction GetCriminalMapping()
         {
-            string dataFile = CriminalMappingFile();
-            string data = File.ReadAllText(dataFile);
+            try
+            {
+                string dataFile = CriminalMappingFile();
+                string data = File.ReadAllText(dataFile);
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+            }
+            catch (Exception)
+            {
+                return GetAlternateCriminalMapping();
+            }
+        }
+
+        public static NavInstruction GetAlternateCriminalMapping()
+        {
+            string data = FallbackJson.GetJs("dentonCaseCustomInstruction.json");
             return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
 
@@ -196,6 +221,82 @@ namespace legallead.records.search.Dto
                 var sbb = new StringBuilder();
                 switch (json)
                 {
+                    case "dentonCaseCustomInstruction_1.json":
+                        // dentonCaseCustomInstruction_1.json
+                        sbb.AppendLine("{");
+                        sbb.AppendLine("~NavInstructions~:");
+                        sbb.AppendLine("[");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~DateFiled~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Filing-Date-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[3]/div[1]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~Case~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Number-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[1]/a~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~Court~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Court-Name-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[3]/div[2]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~CaseType~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Type-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[4]/div[1]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~CaseStyle~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Style-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[2]~");
+                        sbb.AppendLine("	}");
+                        sbb.AppendLine("]");
+                        sbb.AppendLine("}");
+                        break;
+                    case "dentonCaseCustomInstruction.json":
+                        // dentonCaseCustomInstruction.json
+                        sbb.AppendLine("{");
+                        sbb.AppendLine("~NavInstructions~:");
+                        sbb.AppendLine("[");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~DateFiled~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Filing-Date-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[4]/div[1]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~Case~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Number-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[1]/a~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~Court~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Court-Name-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[4]/div[2]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~CaseType~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Type-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[5]/div[1]~");
+                        sbb.AppendLine("	},");
+                        sbb.AppendLine("	{");
+                        sbb.AppendLine("		~Name~: ~CaseStyle~,");
+                        sbb.AppendLine("		~By~ : ~XPath~,");
+                        sbb.AppendLine("		~FriendlyName~: ~Case-Style-Selection~,");
+                        sbb.AppendLine("		~Value~: ~td[6]~");
+                        sbb.AppendLine("	}");
+                        sbb.AppendLine("]");
+                        sbb.AppendLine("}");
+                        break;
                     case "courtAddress.json":
                         sbb.AppendLine("{");
                         sbb.AppendLine("  ~courtLocations~: [");

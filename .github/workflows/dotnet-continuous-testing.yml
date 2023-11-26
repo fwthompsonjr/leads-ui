@@ -35,18 +35,21 @@ jobs:
   
     - name: Restore Packages
       if: github.event_name != 'pull_request'
+      timeout-minutes: 3
       shell: pwsh
       run: |
         & ./pipeline-restore-packages.ps1
 
     - name: Build solution
       if: github.event_name != 'pull_request'
+      timeout-minutes: 3
       shell: pwsh
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Test with dotnet
       if: github.event_name != 'pull_request'
+      timeout-minutes: 3
       shell: pwsh
       run: |
         & ./pipeline-test-solutions.ps1
