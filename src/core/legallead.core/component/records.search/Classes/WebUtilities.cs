@@ -4,6 +4,7 @@ using legallead.records.search.Dto;
 using legallead.records.search.Models;
 using OpenQA.Selenium;
 using System.Configuration;
+using System.Runtime.InteropServices;
 
 namespace legallead.records.search.Classes
 {
@@ -110,7 +111,9 @@ namespace legallead.records.search.Classes
 
         public static string? GetChromeBinary()
         {
-            return ChromeBinaryFileName();
+            const string linuxChromLocation = @"/usr/bin/google-chrome";
+            bool isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+            return isLinux ? linuxChromLocation : ChromeBinaryFileName();
         }
 
         /// <summary>
