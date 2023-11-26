@@ -1,4 +1,5 @@
 ﻿using legallead.records.search.Classes;
+using System.Text;
 
 namespace legallead.records.search.Dto
 {
@@ -50,13 +51,10 @@ namespace legallead.records.search.Dto
                     dataFormat,
                     appDirectory,
                     fileSuffix);
-                if (!File.Exists(dataFile))
-                {
-                    throw new FileNotFoundException(searchSettingFileNotFound);
-                }
-
+                var fallback = Fallback(fileSuffix);
                 DataFile = dataFile;
-                Content = File.ReadAllText(dataFile);
+                Content = File.Exists(dataFile) ?
+                    File.ReadAllText(dataFile) : fallback;
             }
         }
 
@@ -82,6 +80,23 @@ namespace legallead.records.search.Dto
                 sw.Write(data);
             }
             Content = File.ReadAllText(dataFile);
+        }
+
+        private static string Fallback(string input)
+        {
+            var sbb = new StringBuilder();
+            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+            // harris-civil-settings.json
+            sbb.AppendLine("{");
+            sbb.AppendLine("  ~SearchSetting~: {");
+            sbb.AppendLine("    ~CountySearchTypeId~: 0,");
+            sbb.AppendLine("    ~CountyCourtId~: 0,");
+            sbb.AppendLine("    ~DistrictCourtId~: 0,");
+            sbb.AppendLine("    ~DistrictSearchTypeId~: 0");
+            sbb.AppendLine("  }");
+            sbb.AppendLine("}");
+            sbb.Replace('~', '"');
+            return sbb.ToString();
         }
     }
 }

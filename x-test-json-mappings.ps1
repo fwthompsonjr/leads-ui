@@ -4,7 +4,7 @@
     collinCountyUserMap.json
     tarrantCountyMapping_2
 #>
-$idx = 8;
+$idx = 9;
 $filenames = @(
     'courtAddress.json',
     'collinCountyCaseType.json',
@@ -14,7 +14,8 @@ $filenames = @(
     'tarrantCourtSearchDropDown.json'
     'denton-settings.json',
     'dentonCaseCustomInstruction.json',
-    'dentonCaseCustomInstruction_1.json');
+    'dentonCaseCustomInstruction_1.json',
+    'harris-civil-settings.json');
 $fname = $filenames[$idx];
 $fmt = 'sbb.AppendLine("{0}");'
 $srcfile = "C:\_g\lui\fwthompsonjr\leads-ui\src\shared\$fname";
