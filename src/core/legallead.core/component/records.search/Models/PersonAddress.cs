@@ -92,7 +92,9 @@ namespace legallead.records.search.Models
                 return ParseFromFullName(1);
             }
         }
+
         private string _plantiff = string.Empty;
+
         public string Plantiff
         {
             get
@@ -481,6 +483,7 @@ namespace legallead.records.search.Models
                         return string.Empty;
                     }
                     return ((XmlCDataSection)caseNode.ChildNodes[0]!).Data;
+
                 case "court":
                     XmlNode? courtNode = personNode.SelectSingleNode("court");
                     if (courtNode == null)

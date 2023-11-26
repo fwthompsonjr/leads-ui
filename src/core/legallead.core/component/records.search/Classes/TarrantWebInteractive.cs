@@ -4,7 +4,6 @@ using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
 using OpenQA.Selenium;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Xml;
 
@@ -637,7 +636,6 @@ namespace legallead.records.search.Classes
 
         #region Fallback Content
 
-
         private static string GetFallbackContent(string fileName)
         {
             var sbb = new StringBuilder();
@@ -926,7 +924,7 @@ namespace legallead.records.search.Classes
             sbb.Replace(tilde, qte);
             return sbb.ToString();
         }
-        #endregion
 
+        #endregion Fallback Content
     }
 }

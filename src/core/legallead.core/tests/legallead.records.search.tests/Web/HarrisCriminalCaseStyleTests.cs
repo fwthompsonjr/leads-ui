@@ -1,14 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using legallead.harriscriminal.db;
 using legallead.records.search.Dto;
 using legallead.records.search.Web;
-using legallead.harriscriminal.db;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using Shouldly;
 
 namespace legallead.records.search.Tests
 {
@@ -19,6 +14,7 @@ namespace legallead.records.search.Tests
         private List<HarrisCaseSearchDto?>? CaseNumbers;
         private string? MaximumFileDate;
         private string? MinimumFileDate;
+
         [TestInitialize]
         public void Setup()
         {
@@ -77,7 +73,6 @@ namespace legallead.records.search.Tests
             }
         }
 
-
         [TestMethod]
         [TestCategory("Integration Only")]
         public async Task CaseStyleCanGetBulkAsync()
@@ -111,8 +106,6 @@ namespace legallead.records.search.Tests
                 KillProcess("chromedriver");
             }
         }
-
-
 
         [TestMethod]
         [TestCategory("Integration Only")]
@@ -162,6 +155,7 @@ namespace legallead.records.search.Tests
                 KillProcess("chromedriver");
             }
         }
+
         [TestMethod]
         public void CanParseMinMax()
         {
@@ -174,6 +168,5 @@ namespace legallead.records.search.Tests
             dtmax.ShouldNotBe(dateBase);
             dtmin.ShouldBeLessThanOrEqualTo(dtmax);
         }
-
     }
 }

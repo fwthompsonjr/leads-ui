@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <search>
   <parameters>
-    <parameter name="Website"/>
-    <parameter name="StartDate"/>
-    <parameter name="EndDate"/>
-    <parameter name="SearchDate"/>
+    <parameter name="Website" />
+    <parameter name="StartDate" />
+    <parameter name="EndDate" />
+    <parameter name="SearchDate" />
     <parameter name="SearchComplete">false</parameter>
   </parameters>
   <!-- Name	Zip	Address1	Address2	Address3 -->
@@ -20,15 +20,14 @@
     <result name="person">
       <people>
         <person>
-          <name/>
+          <name />
           <address>
             <![CDATA[]]>
 
-            <addressA/>
-            <addressB/>
-            <addressC/>
-            <zip/>
-            
+            <addressA />
+            <addressB />
+            <addressC />
+            <zip />
           </address>
           <case>
             <![CDATA[]]>

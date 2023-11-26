@@ -16,11 +16,12 @@ namespace legallead.harriscriminal.db.Entities
         private static string? _appFolder;
         private static string? _dataFolder;
         private static string? _tableFolder;
+
         public static string AppFolder
         {
             get
             {
-                if(!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
+                if (!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
                 _appFolder = GetAppFolderName();
                 return _appFolder;
             }

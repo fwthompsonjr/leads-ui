@@ -1,7 +1,7 @@
 ﻿using Bogus;
+using legallead.records.search.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using legallead.records.search.Models;
 
 namespace legallead.records.search.UnitTests.Models
 {
@@ -30,7 +30,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanInit()
         {
-            if(DtoFaker == null) { return; }
+            if (DtoFaker == null) { return; }
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }

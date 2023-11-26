@@ -1,5 +1,4 @@
 ﻿using legallead.records.search.Models;
-using OpenQA.Selenium.Remote;
 using System.Reflection;
 using System.Text;
 using System.Xml;
@@ -23,12 +22,14 @@ namespace legallead.records.search.Classes
                 return GetDocFromString(xml);
             }
         }
+
         private static XmlDocument GetDocFromString(string xml)
         {
             XmlDocument doc = new();
             doc.LoadXml(xml);
             return doc;
         }
+
         public static XmlDocument Load(string fileName)
         {
             using StreamReader reader = new(fileName);

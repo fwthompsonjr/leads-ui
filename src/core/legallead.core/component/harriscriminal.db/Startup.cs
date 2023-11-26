@@ -8,6 +8,7 @@ namespace legallead.harriscriminal.db
     public static class Startup
     {
         private static string? _appFolder;
+
         internal static string AppFolder
         {
             get

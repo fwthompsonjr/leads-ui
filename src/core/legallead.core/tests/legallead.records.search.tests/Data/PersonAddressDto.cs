@@ -4,13 +4,13 @@ namespace legallead.records.search.Tests.Data
 {
     public class PersonAddressDto
     {
-
         #region FieldList Helpers
 
         private const string FieldNames = @"Name,FirstName,LastName,Zip," +
             @"Address1,Address2,Address3," +
             @"Case Number,Date Filed,Court," +
             @"Case Type,case style,plantiff";
+
         private string? _fieldNames;
         private List<string>? _fieldList;
 
@@ -30,7 +30,7 @@ namespace legallead.records.search.Tests.Data
             }
         }
 
-        #endregion
+        #endregion FieldList Helpers
 
         #region Properties
 
@@ -48,6 +48,7 @@ namespace legallead.records.search.Tests.Data
         public string LastName { get; set; } = string.Empty;
 
         public string Plantiff { get; set; } = string.Empty;
+
         public bool IsValid
         {
             get
@@ -71,7 +72,6 @@ namespace legallead.records.search.Tests.Data
             }
         }
 
-        #endregion
-
+        #endregion Properties
     }
 }

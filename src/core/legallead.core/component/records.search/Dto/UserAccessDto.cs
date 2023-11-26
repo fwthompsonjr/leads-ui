@@ -123,8 +123,8 @@ namespace legallead.records.search.Dto
         public static List<string>? GetCredential(UserAccessDto dto)
         {
             if (dto == null ||
-                string.IsNullOrEmpty(dto.UserGuid) || 
-                string.IsNullOrEmpty(dto.UserKey) || 
+                string.IsNullOrEmpty(dto.UserGuid) ||
+                string.IsNullOrEmpty(dto.UserKey) ||
                 string.IsNullOrEmpty(dto.UserData))
             {
                 return null;
@@ -133,7 +133,6 @@ namespace legallead.records.search.Dto
             string decoded = CryptoEngine.Decrypt(dto.UserGuid, dto.UserKey, dto.UserData);
             return decoded.Split('|').ToList();
         }
-
 
         private static string GetFallbackContent(string fileName)
         {

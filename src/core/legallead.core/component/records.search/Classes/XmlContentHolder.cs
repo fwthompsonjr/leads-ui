@@ -220,6 +220,7 @@ namespace legallead.records.search.Classes
             SetCDataValue(addressA, firstItem);
             SetCDataValue(addressB, middleItem);
         }
+
         private static void SetCDataValue(XmlNode? node, string value)
         {
             if (node?.FirstChild is XmlCDataSection cdata)
@@ -227,6 +228,7 @@ namespace legallead.records.search.Classes
                 cdata.Data = value;
             }
         }
+
         private static string ParseZipCode(string lastItem)
         {
             List<string> pieces = lastItem.Split(' ').ToList();

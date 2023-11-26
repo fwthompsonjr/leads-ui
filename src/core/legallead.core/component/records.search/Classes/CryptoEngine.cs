@@ -1,7 +1,5 @@
-﻿using System.Numerics;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Text.Unicode;
 
 namespace legallead.records.search.Classes
 {
@@ -24,7 +22,6 @@ namespace legallead.records.search.Classes
             var key64 = Convert.ToBase64String(inputArray, 0, inputArray.Length);
             return DecryptData(input, key64, vectorBase64);
         }
-
 
         private static string EncryptData(string plainText, string keyBase64, out string vectorBase64)
         {
@@ -52,7 +49,6 @@ namespace legallead.records.search.Classes
             return Convert.ToBase64String(encryptedData);
         }
 
-
         private static string DecryptData(string cipherText, string keyBase64, string vectorBase64)
         {
             using (Aes aesAlgorithm = Aes.Create())
@@ -64,7 +60,6 @@ namespace legallead.records.search.Classes
                 Console.WriteLine($"Aes Padding Mode: {aesAlgorithm.Padding}");
                 Console.WriteLine($"Aes Key Size : {aesAlgorithm.KeySize}");
                 Console.WriteLine($"Aes Block Size : {aesAlgorithm.BlockSize}");
-
 
                 // Create decryptor object
                 ICryptoTransform decryptor = aesAlgorithm.CreateDecryptor();
@@ -84,6 +79,5 @@ namespace legallead.records.search.Classes
                 }
             }
         }
-
     }
 }

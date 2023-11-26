@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using CsvHelper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml;
 using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System.Xml;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -21,7 +16,6 @@ namespace legallead.records.search.Tests.Data
         [TestCategory("Person.Data.Mapping")]
         public void CanSerializeXmlString()
         {
-
             var personData = "<person>" +
             "<name>Holland, Stephen</name>" +
             "<address><![CDATA[  387 West FRK<br/>  APT #2838<br/>  Irving, TX 75039]]>" +
@@ -67,8 +61,6 @@ namespace legallead.records.search.Tests.Data
             var webactive = new WebInteractive(sttg, startDate, endingDate);
             webactive.ReadFromFile(testFile);
         }
-
-
 
         [TestMethod]
         public void CanMapPersonNonCriminalCaseInfo()
@@ -144,9 +136,7 @@ namespace legallead.records.search.Tests.Data
 
             var failing = noPlantiffList[0];
             _ = failing.Plantiff;
-
         }
-
 
         private static XmlNode? TryFindNode(XmlDocument doc, string xpath)
         {
@@ -163,7 +153,6 @@ namespace legallead.records.search.Tests.Data
 
         private static string CriminalRow()
         {
-
             return " <tr> " + Environment.NewLine +
             " <td index='1' nowrap='true' valign='top'> " + Environment.NewLine +
             " <a href='CaseDetail.aspx?CaseID=2702640' style='color: blue'>19-1647J4</a> " + Environment.NewLine +
@@ -212,6 +201,7 @@ namespace legallead.records.search.Tests.Data
             "</td>" + Environment.NewLine +
             "</tr>";
         }
+
         private static IList<WebNavInstruction> ExpectedCriminalValues()
         {
             var caseInstructions = SearchSettingDto.GetCriminalMapping();
@@ -222,25 +212,29 @@ namespace legallead.records.search.Tests.Data
                     case "DateFiled":
                         item.CommandType = "12/03/2019";
                         break;
+
                     case "Case":
                         item.CommandType = "19-1647J4";
                         break;
+
                     case "Court":
                         item.CommandType = "Justice of the Peace Pct #4";
                         break;
+
                     case "CaseType":
                         item.CommandType = "Adult Traffic Citation";
                         break;
+
                     case "CaseStyle":
                         item.CommandType = "SPEEDING &gt;10% ABOVE POSTED LIMIT";
                         break;
+
                     default:
                         break;
                 }
             }
             return caseInstructions.NavInstructions;
         }
-
 
         private static IList<WebNavInstruction> ExpectedNonCriminalValues()
         {
@@ -252,18 +246,23 @@ namespace legallead.records.search.Tests.Data
                     case "DateFiled":
                         item.CommandType = "11/26/2019";
                         break;
+
                     case "Case":
                         item.CommandType = "BF-2019-01279";
                         break;
+
                     case "Court":
                         item.CommandType = "County Court At Law #2";
                         break;
+
                     case "CaseType":
                         item.CommandType = "Bond Forfeiture-Surety";
                         break;
+
                     case "CaseStyle":
                         item.CommandType = "State of Texas VS. Jennifer Dansheal Lee";
                         break;
+
                     default:
                         break;
                 }
@@ -271,13 +270,11 @@ namespace legallead.records.search.Tests.Data
             return caseInstructions.NavInstructions;
         }
 
-
-
         private static List<PersonAddress> SamplePersonAddress()
         {
             var content = _sampleAddressText.Replace("~", '"'.ToString());
             var bytes = System.Text.Encoding.UTF8.GetBytes(content);
-            using MemoryStream stream = new (bytes);
+            using MemoryStream stream = new(bytes);
             using TextReader reader = new StreamReader(stream);
             using var csv = new CsvReader(reader);
             var dto = csv.GetRecords<PersonAddressDto>().ToList();

@@ -18,7 +18,7 @@ namespace legallead.records.search.Web
 
             IWebDriver? driver = GetWeb;
             By? selector = GetSelector(item);
-            if(driver == null || selector == null) { return; }
+            if (driver == null || selector == null) { return; }
             IWebElement? elementToClick = driver.FindElement(selector);
             Console.WriteLine("Element click action -- : " + selector);
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;

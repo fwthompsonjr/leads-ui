@@ -3,7 +3,6 @@ using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Parsing;
 using OpenQA.Selenium;
-using System.Net.Http.Headers;
 
 namespace legallead.records.search.Web
 {

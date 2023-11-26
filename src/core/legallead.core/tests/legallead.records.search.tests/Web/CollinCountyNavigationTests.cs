@@ -1,20 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace legallead.records.search.Tests
 {
     [TestClass]
     public class CollinCountyNavigationTests
     {
-
-
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
@@ -40,7 +35,6 @@ namespace legallead.records.search.Tests
             Assert.IsTrue(caseTypes.DropDowns.Exists(x => x.Id == 1));
             var dropDown = caseTypes.DropDowns.First(x => x.Id == 1) ?? new();
             Assert.AreEqual("probate courts", dropDown.Name);
-
         }
 
         [TestMethod]
@@ -91,7 +85,6 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
         [TestMethod]
         [TestCategory("collin.county.actions")]
         [TestCategory("Web.Integration")]
@@ -117,7 +110,6 @@ namespace legallead.records.search.Tests
             Assert.IsNotNull(result);
             ExcelWriter.WriteToExcel(result);
         }
-
 
         [TestMethod]
         [TestCategory("collin.county.actions")]
@@ -145,7 +137,6 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
         [TestMethod]
         [TestCategory("collin.county.actions")]
         [TestCategory("Web.Integration")]
@@ -172,13 +163,11 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
-
         #region Static Helper Functions
 
         private static WebNavigationParameter CreateOrLoadWebParameter(WebNavigationParameter webParameter, string jsFile)
         {
-            // get key name 
+            // get key name
             if (!File.Exists(jsFile))
             {
                 return webParameter;
@@ -211,7 +200,6 @@ namespace legallead.records.search.Tests
 
         private static string GetAppDirectoryName()
         {
-
             var navigation = new SettingsManager();
             var navFile = navigation.ExcelFormatFile;
             var folder = Path.GetDirectoryName(navFile) ?? string.Empty;
@@ -222,6 +210,6 @@ namespace legallead.records.search.Tests
             return new DirectoryInfo(folder).Parent!.FullName;
         }
 
-        #endregion
+        #endregion Static Helper Functions
     }
 }

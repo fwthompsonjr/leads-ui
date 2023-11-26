@@ -1,20 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using legallead.records.search.DriverFactory;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using System.Diagnostics;
-using legallead.records.search.DriverFactory;
 
 namespace legallead.records.search.Tests
 {
     public class TestingBase
     {
-
         private IWebDriver? _currentWebDriver;
+
         protected IWebDriver CurrentWebDriver
         {
             set { _currentWebDriver = value; }
             get { return _currentWebDriver ??= GetDriver(); }
         }
-
 
         protected static IWebDriver GetDriver(bool headless = false)
         {
@@ -24,7 +23,6 @@ namespace legallead.records.search.Tests
             Assert.IsInstanceOfType(driver, typeof(IWebDriver));
             return driver;
         }
-
 
         protected static void KillProcess(string processName)
         {

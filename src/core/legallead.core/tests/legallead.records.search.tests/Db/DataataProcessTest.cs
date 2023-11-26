@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
+﻿using legallead.harriscriminal.db.Entities;
 using legallead.records.search.Db;
-using legallead.harriscriminal.db.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.UnitTests.Db
 {
@@ -29,7 +27,6 @@ namespace legallead.records.search.UnitTests.Db
             await Task.Run(() => process.Process(progress));
             Assert.IsNotNull(reported);
         }
-
 
         [TestMethod]
         public async Task CanExecuteDownloadCasesAsync()

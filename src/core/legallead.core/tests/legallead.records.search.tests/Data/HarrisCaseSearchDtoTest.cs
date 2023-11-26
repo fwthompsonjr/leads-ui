@@ -1,10 +1,9 @@
 ﻿using Bogus;
+using legallead.harriscriminal.db;
+using legallead.records.search.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
 using System.Globalization;
-using legallead.records.search.Dto;
-using legallead.harriscriminal.db;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -12,7 +11,8 @@ namespace legallead.records.search.Tests.Data
     public class HarrisCaseSearchDtoTest
     {
         private Faker<HarrisCaseSearchDto>? DtoFaker;
-        const string datefmt = "MM/dd/yyyy";
+        private const string datefmt = "MM/dd/yyyy";
+
         [TestInitialize]
         public void Setup()
         {

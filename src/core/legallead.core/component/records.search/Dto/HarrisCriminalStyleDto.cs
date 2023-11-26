@@ -6,15 +6,16 @@ namespace legallead.records.search.Dto
     public class HarrisCriminalStyleDto
     {
         public static ImmutableList<string> FieldNames => fieldNames;
+
         private static readonly ImmutableList<string> fieldNames =
-            ImmutableList.Create("Index", 
-                "CaseNumber", 
-                "Style", 
-                "FileDate", 
-                "Court", 
-                "Status", 
-                "TypeOfActionOrOffense", 
-                "Defendant", 
+            ImmutableList.Create("Index",
+                "CaseNumber",
+                "Style",
+                "FileDate",
+                "Court",
+                "Status",
+                "TypeOfActionOrOffense",
+                "Defendant",
                 "Plantiff");
 
         /// <summary>

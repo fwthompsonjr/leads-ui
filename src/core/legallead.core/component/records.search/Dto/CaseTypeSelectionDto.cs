@@ -60,7 +60,7 @@ namespace legallead.records.search.Dto
             var sbb = new StringBuilder();
             const char tilde = '~';
             const char qte = '"';
-            if(string.IsNullOrEmpty(fileName)) return string.Empty;
+            if (string.IsNullOrEmpty(fileName)) return string.Empty;
             if (fileName.Equals("collinCountyCaseType"))
             {
                 sbb.AppendLine("{");

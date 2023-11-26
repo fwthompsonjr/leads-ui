@@ -6,8 +6,9 @@ namespace legallead.harriscriminal.db.Tables
     public class CaseStyleDb
     {
         public static ImmutableList<string> FieldNames => fieldNames;
+
         private static readonly ImmutableList<string> fieldNames =
-            ImmutableList.Create("CaseNumber" ,"Style" , "FileDate", "Court", "Status", "TypeOfActionOrOffense");
+            ImmutableList.Create("CaseNumber", "Style", "FileDate", "Court", "Status", "TypeOfActionOrOffense");
 
         [JsonProperty("cnbr")]
         public string CaseNumber { get; set; } = string.Empty;

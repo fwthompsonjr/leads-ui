@@ -1,7 +1,5 @@
 ﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
-using OpenQA.Selenium;
-using System.Drawing.Imaging;
 using System.Text;
 
 namespace legallead.records.search.Dto
@@ -83,6 +81,7 @@ namespace legallead.records.search.Dto
             string data = FallbackJson.GetJs("dentonCaseCustomInstruction_1.json");
             return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
+
         public static NavInstruction GetCriminalMapping()
         {
             try
@@ -211,7 +210,6 @@ namespace legallead.records.search.Dto
         internal static readonly string SearchSettingFileNotFound
             = CommonKeyIndexes.SearchSettingFileNotFound;
 
-
         private static class FallbackJson
         {
             public static string GetJs(string json)
@@ -259,6 +257,7 @@ namespace legallead.records.search.Dto
                         sbb.AppendLine("]");
                         sbb.AppendLine("}");
                         break;
+
                     case "dentonCaseCustomInstruction.json":
                         // dentonCaseCustomInstruction.json
                         sbb.AppendLine("{");
@@ -297,6 +296,7 @@ namespace legallead.records.search.Dto
                         sbb.AppendLine("]");
                         sbb.AppendLine("}");
                         break;
+
                     case "courtAddress.json":
                         sbb.AppendLine("{");
                         sbb.AppendLine("  ~courtLocations~: [");
@@ -776,12 +776,7 @@ namespace legallead.records.search.Dto
                 }
                 sbb.Replace(tilde, quote);
                 return sbb.ToString();
-
             }
         }
-
     }
-
-
-
 }

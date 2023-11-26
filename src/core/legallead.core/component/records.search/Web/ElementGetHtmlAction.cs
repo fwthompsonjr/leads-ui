@@ -1,6 +1,7 @@
 ﻿using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using OpenQA.Selenium;
+
 namespace legallead.records.search.Web
 {
     public class ElementGetHtmlAction : ElementActionBase

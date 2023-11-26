@@ -36,7 +36,7 @@ namespace legallead.records.search.Classes
 
             protected List<HLinkDataRow> Search(string? navTo, List<HLinkDataRow> cases)
             {
-                if(string.IsNullOrEmpty(navTo)) { return cases; }
+                if (string.IsNullOrEmpty(navTo)) { return cases; }
                 using (IWebDriver driver = GetWebDriver())
                 {
                     try

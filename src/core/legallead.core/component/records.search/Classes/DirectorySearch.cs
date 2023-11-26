@@ -2,7 +2,6 @@
 {
     public class DirectorySearch
     {
-
         public DirectorySearch(DirectoryInfo directoryInfo, string search, int searchType = 0)
         {
             Info = directoryInfo ?? throw new ArgumentNullException(nameof(directoryInfo));

@@ -1,6 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.Tests
 {

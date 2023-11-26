@@ -1,15 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using System.Globalization;
 using System.Text;
 
 namespace legallead.records.search.Tests
@@ -42,12 +37,11 @@ namespace legallead.records.search.Tests
             keys[0].Value = startingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
             keys[^1].Value = endingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
             Assert.IsNotNull(settings);
-
         }
 
         [TestMethod]
         [TestCategory("tarrant.county.actions")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sleep in Unit Tests", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sleep in Unit Tests",
             "S2925:\"Thread.Sleep\" should not be used in tests", Justification = "Needed to allow web driver navigation")]
         public void CanGetTarrtantCountInstructions()
         {
@@ -62,7 +56,6 @@ namespace legallead.records.search.Tests
             var sources = fileName.Split(',').ToList();
             try
             {
-
                 var steps = new List<NavigationStep>();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
 
@@ -103,7 +96,6 @@ namespace legallead.records.search.Tests
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -112,7 +104,6 @@ namespace legallead.records.search.Tests
                 driver.Quit();
 
                 KillProcess("chromedriver");
-
             }
         }
 
@@ -135,9 +126,7 @@ namespace legallead.records.search.Tests
             Console.WriteLine(DataFileFoundMessage, result.Result);
             Assert.IsNotNull(result);
             ExcelWriter.WriteToExcel(result);
-
         }
-
 
         [TestMethod]
         [TestCategory("tarrant.county.actions")]
@@ -156,26 +145,22 @@ namespace legallead.records.search.Tests
             var result = interactive.Fetch();
             Assert.IsNotNull(result);
             ExcelWriter.WriteToExcel(result);
-
         }
 
         [TestMethod]
         [TestCategory("tarrant.county.actions")]
         public void CanNavigateSteps1()
         {
-
             var fileName = "tarrantCountyMapping_1";
             var steps = GetAppSteps(fileName);
             Assert.IsNotNull(steps);
             Assert.IsTrue(steps.Steps.Any());
         }
 
-
         [TestMethod]
         [TestCategory("tarrant.county.actions")]
         public void CanNavigateSteps2()
         {
-
             var fileName = "tarrantCountyMapping_2";
             var steps = GetAppSteps(fileName);
             Assert.IsNotNull(steps);
@@ -200,9 +185,8 @@ namespace legallead.records.search.Tests
             var filex = TarrantWebInteractive.GetComboBoxValues();
             Assert.IsNotNull(filex);
         }
-        #endregion
 
-
+        #endregion Unit Tests
 
         #region Element Navigation Helpers
 
@@ -492,6 +476,7 @@ namespace legallead.records.search.Tests
             sbb.Replace(tilde, qte);
             return sbb.ToString();
         }
-        #endregion
+
+        #endregion Element Navigation Helpers
     }
 }

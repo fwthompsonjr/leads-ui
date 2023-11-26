@@ -448,6 +448,5 @@
 
         public static readonly string HarrisCivilCaseType =
             ResourceTable.GetText(ResourceType.ParameterName, ResourceKeyIndex.HarrisCivilCaseType);
-
     }
 }

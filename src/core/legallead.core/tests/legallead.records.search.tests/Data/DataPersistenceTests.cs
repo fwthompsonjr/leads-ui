@@ -1,10 +1,7 @@
 ﻿using Bogus;
+using legallead.records.search.Db;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
-using System.IO;
-using System.Linq;
-using legallead.records.search.Db;
 
 namespace legallead.records.search.UnitTests.Data
 {
@@ -13,7 +10,7 @@ namespace legallead.records.search.UnitTests.Data
     {
         private class TmpData
         {
-            public int Id { get; set; } 
+            public int Id { get; set; }
             public string Name { get; set; } = string.Empty;
             public DateTime CreateDate { get; set; }
 
@@ -92,6 +89,7 @@ namespace legallead.records.search.UnitTests.Data
             var obj = Faker.Generate();
             DataPersistence.Save(string.Empty, obj.FileName);
         }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Save_RequiresData()

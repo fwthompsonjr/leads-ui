@@ -222,6 +222,7 @@ namespace legallead.records.search.Classes
             if (saveFile) { FileWriter.SaveAs(pck, outputFileName); }
             return pck;
         }
+
         private static string GetNodeInnerText(XmlNode? node, int index)
         {
             if (node == null || !node.HasChildNodes || node.ChildNodes.Count < index) return string.Empty;
@@ -323,8 +324,6 @@ namespace legallead.records.search.Classes
 
             return rowIndex;
         }
-
-
 
         private static void ApplyGridFormatting<T>(int websiteId,
             string sectionName,

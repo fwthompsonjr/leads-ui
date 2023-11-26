@@ -361,10 +361,11 @@ namespace legallead.records.search.Classes
                 .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
                 .ToList();
             List<ElementNavigationBase> commands = new();
-            types.ForEach(f => {
+            types.ForEach(f =>
+            {
                 var item = GetInstance(f);
                 if (item != null) commands.Add(item);
-                });
+            });
             return commands;
         }
 

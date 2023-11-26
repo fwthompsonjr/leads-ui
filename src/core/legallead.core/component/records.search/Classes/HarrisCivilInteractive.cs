@@ -116,7 +116,7 @@ namespace legallead.records.search.Classes
             {
                 return cases;
             }
-            
+
             HarrisCivilReadTable htmlAction = (HarrisCivilReadTable)action;
             List<HLinkDataRow> data = htmlAction.DataRows;
             if (data != null && data.Any())

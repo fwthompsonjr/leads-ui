@@ -1,10 +1,8 @@
 ﻿using Bogus;
+using legallead.records.search.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
 using System.Globalization;
-using System.Linq;
-using legallead.records.search.Dto;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -30,7 +28,6 @@ namespace legallead.records.search.Tests.Data
                     .RuleFor(x => x.StartDate, y => y.Date.Between(minDate, maxDate));
             }
         }
-
 
         [TestMethod]
         public void CanConstruct()

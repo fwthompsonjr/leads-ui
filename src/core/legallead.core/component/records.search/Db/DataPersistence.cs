@@ -7,6 +7,7 @@ namespace legallead.records.search.Db
     public static class DataPersistence
     {
         internal static string? _appFolder;
+
         internal static string AppFolder
         {
             get

@@ -1,9 +1,8 @@
 ﻿using Bogus;
+using legallead.records.search.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
 using System.Globalization;
-using legallead.records.search.Dto;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -47,6 +46,7 @@ namespace legallead.records.search.Tests.Data
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
+
         [TestMethod]
         public void HasFields()
         {
@@ -88,7 +88,6 @@ namespace legallead.records.search.Tests.Data
                 obj[i].ShouldNotBe(src[i]);
                 obj[i] = src[i];
             }
-
 
             obj.Index.ToString(CultureInfo.CurrentCulture).ShouldBe(src[0]);
             obj.CaseNumber.ShouldBe(src[1]);

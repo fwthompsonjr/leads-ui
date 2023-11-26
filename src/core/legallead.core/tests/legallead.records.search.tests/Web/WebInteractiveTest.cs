@@ -7,7 +7,6 @@ namespace legallead.records.search.Tests
     [TestClass]
     public class WebInteractiveTest
     {
-
         [TestMethod]
         [TestCategory("Web.Configuration.Validation")]
         public void CanInitialize()
@@ -23,11 +22,14 @@ namespace legallead.records.search.Tests
             Assert.AreEqual(endingDate, webactive.EndingDate);
         }
 
-
         [TestMethod]
         [TestCategory("Web.Integration")]
         public void ValidateChromePathTest()
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                Assert.Inconclusive("This method to be executed in debug mode only.");
+            }
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
             var rootDir = Directory.GetDirectoryRoot(baseDir);
             DirectoryInfo di = new(rootDir);
@@ -37,14 +39,12 @@ namespace legallead.records.search.Tests
             Console.WriteLine(found[0]);
         }
 
-
         [TestMethod]
         public async Task ValidatePathAsync()
         {
             var fileName = await Task.Run(() => WebUtilities.GetChromeBinary());
             Assert.IsFalse(string.IsNullOrEmpty(fileName));
         }
-
 
         [TestMethod]
         [TestCategory("Web.Integration")]
@@ -101,7 +101,6 @@ namespace legallead.records.search.Tests
             WriteToExcel(found);
         }
 
-
         [TestMethod]
         [TestCategory("Web.Integration")]
         public void CanFetchDentonCountyNormal()
@@ -121,6 +120,7 @@ namespace legallead.records.search.Tests
 
             WriteToExcel(found);
         }
+
         private void WriteToExcel(WebFetchResult found)
         {
             ExcelWriter.WriteToExcel(found);
@@ -129,7 +129,6 @@ namespace legallead.records.search.Tests
         private bool CanExecuteFetch()
         {
             return ExecutionManagement.CanExecuteFetch();
-
         }
     }
 }

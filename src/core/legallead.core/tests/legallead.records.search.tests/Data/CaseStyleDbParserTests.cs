@@ -1,17 +1,14 @@
 ﻿using Bogus;
+using legallead.records.search.Parsing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
 using System.Globalization;
-using legallead.records.search.Parsing;
-using System.Net.Http.Headers;
 
 namespace legallead.records.search.Tests.Data
 {
     [TestClass]
     public class CaseStyleDbParserTests
     {
-
         private class SytleData
         {
             public string Header { get; set; } = string.Empty;

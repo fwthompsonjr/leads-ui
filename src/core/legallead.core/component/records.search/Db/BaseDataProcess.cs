@@ -46,7 +46,7 @@ namespace legallead.records.search.Db
             foreach (var type in collection)
             {
                 T? tmpobj = (T)Activator.CreateInstance(type.DataType, constructorArgs)!;
-                if(tmpobj != null) { objects.Add(tmpobj); }
+                if (tmpobj != null) { objects.Add(tmpobj); }
             }
             return objects;
         }

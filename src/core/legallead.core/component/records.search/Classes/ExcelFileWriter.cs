@@ -123,7 +123,6 @@ namespace legallead.records.search.Classes
                 _macroCode = sbb.ToString();
                 return _macroCode;
             }
-
         }
     }
 }

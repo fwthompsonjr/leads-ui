@@ -107,7 +107,7 @@ namespace legallead.records.search.Classes
             {
                 List<NavigationStep> steps = new();
                 string navigationFile = Web.GetParameterValue<string>("navigation.control.alternate.file") ?? string.Empty;
-                if(string.IsNullOrEmpty(navigationFile))
+                if (string.IsNullOrEmpty(navigationFile))
                 {
                     people = new List<PersonAddress>();
                     webFetch = new();

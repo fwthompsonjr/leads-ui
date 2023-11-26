@@ -1,10 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using legallead.records.search.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
-using System;
-using System.IO;
 using System.Reflection;
-using legallead.records.search.Web;
 
 namespace legallead.records.search.UnitTests.Web
 {
@@ -34,6 +32,7 @@ namespace legallead.records.search.UnitTests.Web
             }
 #endif
         }
+
         [TestCleanup]
         public void CleanUp()
         {
@@ -68,7 +67,7 @@ namespace legallead.records.search.UnitTests.Web
                 Assert.Fail(ex.Message + Environment.NewLine + ex.StackTrace);
             }
 #else
-            Assert.Inconclusive("Test only runs in debug configuration.");            
+            Assert.Inconclusive("Test only runs in debug configuration.");
 #endif
         }
 
