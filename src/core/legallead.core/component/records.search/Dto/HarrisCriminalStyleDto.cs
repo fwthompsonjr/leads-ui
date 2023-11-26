@@ -1,11 +1,22 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Immutable;
 
 namespace legallead.records.search.Dto
 {
     public class HarrisCriminalStyleDto
     {
-        public static readonly List<string> FieldNames = ("Index," +
-            "CaseNumber,Style,FileDate,Court,Status,TypeOfActionOrOffense,Defendant,Plantiff").Split(',').ToList();
+        public static ImmutableList<string> FieldNames => fieldNames;
+
+        private static readonly ImmutableList<string> fieldNames =
+            ImmutableList.Create("Index",
+                "CaseNumber",
+                "Style",
+                "FileDate",
+                "Court",
+                "Status",
+                "TypeOfActionOrOffense",
+                "Defendant",
+                "Plantiff");
 
         /// <summary>
         /// Gets or sets the index.
@@ -22,7 +33,7 @@ namespace legallead.records.search.Dto
         /// The case number.
         /// </value>
         [JsonProperty("cnbr")]
-        public string CaseNumber { get; set; }
+        public string CaseNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the style.
@@ -31,7 +42,7 @@ namespace legallead.records.search.Dto
         /// The style.
         /// </value>
         [JsonProperty("style")]
-        public string Style { get; set; }
+        public string Style { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the file date.
@@ -39,8 +50,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The file date.
         /// </value>
-        [JsonProperty("fdt")]
-        public string FileDate { get; set; }
+        [JsonProperty("fdt")] public string FileDate { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the court.
@@ -48,8 +58,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The court.
         /// </value>
-        [JsonProperty("court")]
-        public string Court { get; set; }
+        [JsonProperty("court")] public string Court { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the status.
@@ -57,8 +66,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The status.
         /// </value>
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("status")] public string Status { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the type of action or offense.
@@ -66,8 +74,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The type of action or offense.
         /// </value>
-        [JsonProperty("toa")]
-        public string TypeOfActionOrOffense { get; set; }
+        [JsonProperty("toa")] public string TypeOfActionOrOffense { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the defendant.
@@ -75,7 +82,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The defendant.
         /// </value>
-        public string Defendant { get; set; }
+        public string Defendant { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the plantiff.
@@ -83,7 +90,7 @@ namespace legallead.records.search.Dto
         /// <value>
         /// The plantiff.
         /// </value>
-        public string Plantiff { get; set; }
+        public string Plantiff { get; set; } = string.Empty;
 
         public string this[int index]
         {
@@ -91,7 +98,7 @@ namespace legallead.records.search.Dto
             {
                 if (index < 0 || index > FieldNames.Count - 1)
                 {
-                    return null;
+                    return string.Empty;
                 }
                 return index switch
                 {
@@ -104,7 +111,7 @@ namespace legallead.records.search.Dto
                     6 => TypeOfActionOrOffense,
                     7 => Defendant,
                     8 => Plantiff,
-                    _ => null,
+                    _ => string.Empty,
                 };
             }
             set
@@ -139,7 +146,7 @@ namespace legallead.records.search.Dto
                     .FindIndex(x => x.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
                 if (index < 0 || index > FieldNames.Count - 1)
                 {
-                    return null;
+                    return string.Empty;
                 }
                 return this[index];
             }

@@ -28,7 +28,7 @@ namespace legallead.records.search.Parsing
         /// <value>
         /// The data.
         /// </value>
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
 
         /// <summary>
         /// Determines whether this instance can parse.

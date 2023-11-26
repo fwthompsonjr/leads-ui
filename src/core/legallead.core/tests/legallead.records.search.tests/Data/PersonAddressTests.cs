@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using CsvHelper;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Xml;
 using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using System.Xml;
 
 namespace legallead.records.search.Tests.Data
 {
@@ -21,7 +16,6 @@ namespace legallead.records.search.Tests.Data
         [TestCategory("Person.Data.Mapping")]
         public void CanSerializeXmlString()
         {
-
             var personData = "<person>" +
             "<name>Holland, Stephen</name>" +
             "<address><![CDATA[  387 West FRK<br/>  APT #2838<br/>  Irving, TX 75039]]>" +
@@ -48,7 +42,7 @@ namespace legallead.records.search.Tests.Data
             rootNode.AppendChild(fragment);
             // what do i do with these line-breaks?
             // how is that going to translate into Excel?
-            var dto = PersonAddress.ConvertFrom(rootNode.FirstChild);
+            var dto = PersonAddress.ConvertFrom(rootNode.FirstChild!);
 
             Assert.IsNotNull(dto);
         }
@@ -68,8 +62,6 @@ namespace legallead.records.search.Tests.Data
             webactive.ReadFromFile(testFile);
         }
 
-
-
         [TestMethod]
         public void CanMapPersonNonCriminalCaseInfo()
         {
@@ -84,7 +76,7 @@ namespace legallead.records.search.Tests.Data
                 var node = TryFindNode(doc, item.Value);
                 Assert.IsNotNull(node, $"{item.FriendlyName} is null");
                 Assert.IsFalse(string.IsNullOrEmpty(node.InnerText), $"{item.FriendlyName} is blank or empty");
-                // if (item.Name.Equals("CaseStyle")) continue;
+
                 Assert.AreEqual(expectedList[indx++].CommandType, node.InnerText,
                     $"{item.FriendlyName} not matched. ");
             }
@@ -143,29 +135,24 @@ namespace legallead.records.search.Tests.Data
             }
 
             var failing = noPlantiffList[0];
-            var actual = failing.Plantiff;
-
+            _ = failing.Plantiff;
         }
 
-
-        private XmlNode TryFindNode(XmlDocument doc, string xpath)
+        private static XmlNode? TryFindNode(XmlDocument doc, string xpath)
         {
             try
             {
-                var node = doc.FirstChild.SelectSingleNode(xpath);
+                var node = doc.FirstChild!.SelectSingleNode(xpath);
                 return node;
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 return null;
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
-        private string CriminalRow()
+        private static string CriminalRow()
         {
-
             return " <tr> " + Environment.NewLine +
             " <td index='1' nowrap='true' valign='top'> " + Environment.NewLine +
             " <a href='CaseDetail.aspx?CaseID=2702640' style='color: blue'>19-1647J4</a> " + Environment.NewLine +
@@ -199,7 +186,7 @@ namespace legallead.records.search.Tests.Data
             " </tr>";
         }
 
-        private string NonCriminalRow()
+        private static string NonCriminalRow()
         {
             return "<tr> " + Environment.NewLine +
             "<td index='1' nowrap='true' valign='top'>" + Environment.NewLine +
@@ -214,7 +201,8 @@ namespace legallead.records.search.Tests.Data
             "</td>" + Environment.NewLine +
             "</tr>";
         }
-        private IList<WebNavInstruction> ExpectedCriminalValues()
+
+        private static IList<WebNavInstruction> ExpectedCriminalValues()
         {
             var caseInstructions = SearchSettingDto.GetCriminalMapping();
             foreach (var item in caseInstructions.NavInstructions)
@@ -224,18 +212,23 @@ namespace legallead.records.search.Tests.Data
                     case "DateFiled":
                         item.CommandType = "12/03/2019";
                         break;
+
                     case "Case":
                         item.CommandType = "19-1647J4";
                         break;
+
                     case "Court":
                         item.CommandType = "Justice of the Peace Pct #4";
                         break;
+
                     case "CaseType":
                         item.CommandType = "Adult Traffic Citation";
                         break;
+
                     case "CaseStyle":
                         item.CommandType = "SPEEDING &gt;10% ABOVE POSTED LIMIT";
                         break;
+
                     default:
                         break;
                 }
@@ -243,8 +236,7 @@ namespace legallead.records.search.Tests.Data
             return caseInstructions.NavInstructions;
         }
 
-
-        private IList<WebNavInstruction> ExpectedNonCriminalValues()
+        private static IList<WebNavInstruction> ExpectedNonCriminalValues()
         {
             var caseInstructions = SearchSettingDto.GetCriminalMapping();
             foreach (var item in caseInstructions.NavInstructions)
@@ -254,18 +246,23 @@ namespace legallead.records.search.Tests.Data
                     case "DateFiled":
                         item.CommandType = "11/26/2019";
                         break;
+
                     case "Case":
                         item.CommandType = "BF-2019-01279";
                         break;
+
                     case "Court":
                         item.CommandType = "County Court At Law #2";
                         break;
+
                     case "CaseType":
                         item.CommandType = "Bond Forfeiture-Surety";
                         break;
+
                     case "CaseStyle":
                         item.CommandType = "State of Texas VS. Jennifer Dansheal Lee";
                         break;
+
                     default:
                         break;
                 }
@@ -273,32 +270,37 @@ namespace legallead.records.search.Tests.Data
             return caseInstructions.NavInstructions;
         }
 
-
-
-        private List<PersonAddress> SamplePersonAddress()
+        private static List<PersonAddress> SamplePersonAddress()
         {
-            const string jsFile = @"Json\collincounty_probate.csv";
-            var appFile = GetAppDirectoryName();
-            appFile = Path.Combine(appFile, jsFile);
-            using (var reader = new StreamReader(appFile))
-            using (var csv = new CsvReader(reader))
-            {
-                var dto = csv.GetRecords<PersonAddressDto>().ToList();
-                var config = new MapperConfiguration(cfg => cfg.CreateMap<PersonAddressDto, PersonAddress>());
-                var mapper = config.CreateMapper();
-                var people = new List<PersonAddress>();
-                dto.ForEach(x => people.Add(mapper.Map<PersonAddress>(x)));
-                return people;
-            }
-            // return null;
+            var content = _sampleAddressText.Replace("~", '"'.ToString());
+            var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+            using MemoryStream stream = new(bytes);
+            using TextReader reader = new StreamReader(stream);
+            using var csv = new CsvReader(reader);
+            var dto = csv.GetRecords<PersonAddressDto>().ToList();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<PersonAddressDto, PersonAddress>());
+            var mapper = config.CreateMapper();
+            var people = new List<PersonAddress>();
+            dto.ForEach(x => people.Add(mapper.Map<PersonAddress>(x)));
+            return people;
         }
 
-
-        private static string GetAppDirectoryName()
-        {
-
-            var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            return Path.GetDirectoryName(execName) ?? string.Empty;
-        }
+        private static readonly string _sampleAddressText = ("Name,FirstName,LastName,Zip,Address1,Address2,Address3,CaseNumber,DateFiled,Court,CaseType,CaseStyle,Plantiff,County,Cou" +
+            "rtAddress" + Environment.NewLine +
+            "~McCraw, Susan~,Susan,McCraw,00000,No Match Found,,Not Matched 00000,GA1-0260-2019,12/17/2019,Probate Courts,Probate - G" +
+            "uardianship for an Adult,In the Guardianship Of Jean Neal,Jean Neal,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~Hanna, Frank A.~,Frank,Hanna,94506,31 Lilly CT,,~Danville, CA 94506~,PB1-2039-2019,12/17/2019,Probate Courts,Probate -" +
+            "Small Estate Proceedings,In the Estate of Doris Hanna,,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~NORDYKE, CANDICE ANN~,CANDICE,NORDYKE,75033,8505 TANGLEROSE DR.,,~FRISCO, TX 75033~,PB1-2040-2019,12/17/2019,Probate Co" +
+            "urts,Probate - Independent Administration,In the Estate Of DAVID WAYNE WHITTEN,,Collin,~2100 Bloomdale Road, McKinney, T" +
+            "X 75071~" + Environment.NewLine +
+            "~AVERY, LUIS L.~,LUIS,AVERY,01740,397 Berlin Road,,~Bolton, MA 01740~,PB1-2041-2019,12/17/2019,Probate Courts,Probate -" +
+            "Independent Administration,In the Estate Of DONALD G. AVERY,,Collin,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine +
+            "~O'Neal, Sallianne~,Sallianne,O'Neal,76258,9110 Highway 377,,~Pilot Point, TX 76258~,PB1-2042-2019,12/17/2019,Probate Co" +
+            "urts,Probate - Independent Administration,In the Estate Of Patricia Ann O'Neal,,Collin,~2100 Bloomdale Road, McKinney, T" +
+            "X 75071~" + Environment.NewLine +
+            "~Nicks, David~,David,Nicks,75001,~c/o Dena L. Mathis, Mathis Legal PLLC~,~15851 Dallas Parkway, Suite 800~,~Dallas, TX 7" +
+            "5001~,PB1-2043-2019,12/17/2019,Probate Courts,Probate - Independent Administration,In the Estate Of Lori Ann Nicks,,Coll" +
+            "in,~2100 Bloomdale Road, McKinney, TX 75071~" + Environment.NewLine);
     }
 }

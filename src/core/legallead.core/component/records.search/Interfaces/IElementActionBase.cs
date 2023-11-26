@@ -18,7 +18,7 @@ namespace legallead.records.search.Interfaces
         /// <value>
         /// The get assertion.
         /// </value>
-        ElementAssertion GetAssertion { get; set; }
+        ElementAssertion? GetAssertion { get; set; }
 
         /// <summary>
         /// Gets or sets the get web.
@@ -26,7 +26,7 @@ namespace legallead.records.search.Interfaces
         /// <value>
         /// The get web.
         /// </value>
-        IWebDriver GetWeb { get; set; }
+        IWebDriver? GetWeb { get; set; }
 
         /// <summary>
         /// Acts the specified step.
@@ -42,6 +42,6 @@ namespace legallead.records.search.Interfaces
         /// </value>
         string OuterHtml { get; set; }
 
-        WebNavigationParameter GetSettings(int index);
+        WebNavigationParameter? GetSettings(int index);
     }
 }

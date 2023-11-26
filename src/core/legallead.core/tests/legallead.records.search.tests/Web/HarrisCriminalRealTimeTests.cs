@@ -1,21 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using legallead.records.search.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
-using System;
-using System.IO;
 using System.Reflection;
-using legallead.records.search.Web;
 
 namespace legallead.records.search.UnitTests.Web
 {
     [TestClass]
     public class HarrisCriminalRealTimeTests
     {
-        private static string _srcDirectory;
-        private static string _srcFile;
+        private static string? _srcDirectory;
+        private static string? _srcFile;
         private static string SrcDirectoryName => _srcDirectory ??= SrcDir();
         private static string SrcFile => _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
-        private IWebDriver GetDriver;
+#if DEBUG
+        private IWebDriver? GetDriver;
+#endif
 
         [TestInitialize]
         public void Setup()
@@ -32,6 +32,7 @@ namespace legallead.records.search.UnitTests.Web
             }
 #endif
         }
+
         [TestCleanup]
         public void CleanUp()
         {
@@ -54,7 +55,9 @@ namespace legallead.records.search.UnitTests.Web
             var obj = new HarrisCriminalRealTime();
             try
             {
-                var result = obj.IteratePages(GetDriver);
+                var driver = GetDriver;
+                Assert.IsNotNull(driver);
+                var result = obj.IteratePages(driver);
                 Assert.IsNotNull(result);
                 Assert.IsTrue(result.Count > 0);
                 Assert.AreEqual(expected, result.Count);
@@ -64,14 +67,14 @@ namespace legallead.records.search.UnitTests.Web
                 Assert.Fail(ex.Message + Environment.NewLine + ex.StackTrace);
             }
 #else
-            Assert.Inconclusive("Test only runs in debug configuration.");            
+            Assert.Inconclusive("Test only runs in debug configuration.");
 #endif
         }
 
         private static string SrcDir()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            return Path.GetDirectoryName(assembly.Location);
+            return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
         }
     }
 }

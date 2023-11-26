@@ -22,6 +22,7 @@ function generateExecutionCommand( $solution ) {
         $solution = $args[0]
         $buildConfigruation = $args[1]
         $errorsFile = $args[2]
+        $settingsFile = $args[3]
         $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solution );
         $pathName = [System.IO.Path]::GetDirectoryName( $solution );
         $pathName = [System.IO.Path]::Combine( $pathName, "$shortName-0" );
@@ -29,7 +30,7 @@ function generateExecutionCommand( $solution ) {
             [System.IO.Directory]::CreateDirectory( $pathName ) | Out-Null
         }
         Write-Output "Running tests for : $shortName"
-        dotnet test $solution --logger trx -c $buildConfigruation --no-restore --results-directory $pathName
+        dotnet test $solution --logger trx -c $buildConfigruation -s $settingsFile --collect "Code Coverage" --no-restore --results-directory $pathName
         
         if ($LASTEXITCODE -ne 0) {
             ("Test $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -37,7 +38,7 @@ function generateExecutionCommand( $solution ) {
     }
     return @{
         "text" = [string]::Join("", $arr)
-        "args" = @( $solution, $buildConfigruation, $errorsFile )
+        "args" = @( $solution, $buildConfigruation, $errorsFile, $settingsFile )
         "obj" = $command
         }
 
@@ -46,6 +47,8 @@ function generateExecutionCommand( $solution ) {
 $startedAt = [datetime]::UtcNow
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $errorsFile = [System.IO.Path]::Combine( $currentDir, "test-solution-error-file.txt" );
+$settingsFile = [System.IO.Path]::Combine( $currentDir, "src" );
+$settingsFile = [System.IO.Path]::Combine( $settingsFile, "CodeCoverage.runsettings" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
 $found = $di.GetFiles($searchPattern, [System.IO.SearchOption]::AllDirectories) | Where-Object { $_.Name.IndexOf( 'integration' ) -lt 0 }
 $commands = @();

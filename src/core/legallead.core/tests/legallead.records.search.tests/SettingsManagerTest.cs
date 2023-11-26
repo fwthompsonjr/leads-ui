@@ -1,11 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
+﻿using legallead.records.search.Classes;
+using legallead.records.search.Dto;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System.Text;
 using System.Xml;
-using legallead.records.search.Classes;
-using legallead.records.search.Dto;
-using Shouldly;
 
 namespace legallead.records.search.Tests
 {
@@ -19,7 +17,6 @@ namespace legallead.records.search.Tests
             var navigation = new SettingsManager();
             Assert.IsNotNull(navigation);
         }
-
 
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
@@ -36,7 +33,6 @@ namespace legallead.records.search.Tests
             Assert.IsFalse(string.IsNullOrEmpty(navigation.ExcelFormatFile));
         }
 
-
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
         public void CanGetNavigationLayout()
@@ -44,7 +40,6 @@ namespace legallead.records.search.Tests
             var navigation = new SettingsManager();
             Assert.IsFalse(string.IsNullOrEmpty(navigation.Layout));
         }
-
 
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
@@ -71,7 +66,6 @@ namespace legallead.records.search.Tests
             Assert.IsNotNull(dx);
         }
 
-
         [TestMethod]
         [TestCategory("Configuration.Integration")]
         public void CanGetGetOutputData()
@@ -88,7 +82,6 @@ namespace legallead.records.search.Tests
             Assert.IsNotNull(dx);
             Assert.IsNotNull(dx.Data);
         }
-
 
         [TestMethod]
         [TestCategory("Configuration.Integration")]
@@ -131,7 +124,6 @@ namespace legallead.records.search.Tests
             });
         }
 
-
         [TestMethod]
         [TestCategory("Configuration.Integration")]
         public void CanParseCaseInformation()
@@ -151,7 +143,8 @@ namespace legallead.records.search.Tests
             doc.LoadXml(dataRw.Data);
             foreach (var item in sttg.CaseInstructions)
             {
-                var node = doc.FirstChild.SelectSingleNode(item.Value);
+                var node = doc.FirstChild!.SelectSingleNode(item.Value);
+                node.ShouldNotBeNull();
                 Console.WriteLine("Attribute: {0}, Value: {1}", item.Name, node.InnerText);
             }
         }
@@ -164,7 +157,7 @@ namespace legallead.records.search.Tests
             const string addressLine = @"c/o Corporation Service Company<br/>  211 E. 7th Street, Suite 620<br/>  Austin, TX 78701-3218";
             var addresses = addressLine.Split(new string[] { lineBreak }, StringSplitOptions.None).ToList();
             addresses.ShouldNotBeNull();
-            addresses.ForEach(a => a.Trim());
+            addresses = addresses.Select(a => a.Trim()).ToList();
             addresses.ForEach(Console.WriteLine);
         }
 
@@ -191,7 +184,6 @@ namespace legallead.records.search.Tests
             Assert.IsTrue(settingDto.DistrictSearchTypeId == indexValue);
         }
 
-
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
         public void CanGetHarrisCivilSettings()
@@ -216,7 +208,6 @@ namespace legallead.records.search.Tests
             Assert.IsTrue(settingDto.DistrictCourtId == indexValue);
             Assert.IsTrue(settingDto.DistrictSearchTypeId == indexValue);
         }
-
 
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
@@ -252,7 +243,6 @@ namespace legallead.records.search.Tests
             Assert.IsNotNull(userDto);
         }
 
-
         [TestMethod]
         [TestCategory("Configuration.Mapping")]
         public void CanGetCollinCredential()
@@ -265,13 +255,50 @@ namespace legallead.records.search.Tests
             credential.ForEach(c => Console.Write(" {0}", c));
         }
 
-        private string TestDataRow()
+        [TestMethod]
+        [TestCategory("Configuration.Mapping")]
+        public void SettingsXmlFallbackContentCanBeRead()
+        {
+            var content = SettingsManager.GetXmlContent("settings.xml");
+            Assert.IsNotNull(content);
+            Assert.IsTrue(content.Any());
+        }
+
+        [TestMethod]
+        [TestCategory("Configuration.Mapping")]
+        public void SettingsXmlFallbackContentCanBeLoaded()
+        {
+            var content = SettingsManager.GetXmlContent("settings.xml");
+            Assert.IsNotNull(content);
+            var document = XmlDocProvider.GetDoc(content);
+            Assert.IsNotNull(document);
+        }
+
+        [TestMethod]
+        [TestCategory("Configuration.Mapping")]
+        public void CaseLayoutXmlFallbackContentCanBeRead()
+        {
+            var content = SettingsManager.GetXmlContent("caselayout.xml");
+            Assert.IsNotNull(content);
+            Assert.IsTrue(content.Any());
+        }
+
+        [TestMethod]
+        [TestCategory("Configuration.Mapping")]
+        public void CaseLayoutXmlFallbackContentCanBeLoaded()
+        {
+            var content = SettingsManager.GetXmlContent("caselayout.xml");
+            Assert.IsNotNull(content);
+            var document = XmlDocProvider.GetDoc(content);
+            Assert.IsNotNull(document);
+        }
+
+        private static string TestDataRow()
         {
             return @"<tr><td nowrap='true' valign='top'><a href='CaseDetail.aspx?CaseID=2490347' style='color: blue'>F18-88-16</a></td><td nowrap='true' valign='top'></td><td nowrap='true' valign='top'><div>Ortiz-Rosado, Giovanni</div><div>07/15/1993</div></td><td valign='top' nowrap='true'><div>01/05/2018</div><div>16th Judicial District Court</div><div>Shipman, Sherry</div></td><td valign='top' nowrap='true'><div>Felony by Indictment</div><div>Inactive: Disposed</div></td><td nowrap='true' valign='top'><div style='overflow: hidden'>Lesser Included Possession of a Controlled Substance </div></td></tr>";
         }
 
-
-        private string TestDataRow2()
+        private static string TestDataRow2()
         {
             var sb = new StringBuilder();
             sb.AppendLine("<tr>");

@@ -42,7 +42,7 @@ namespace legallead.records.search.Classes
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
             int customSearch = GetParameterValue<int>(CommonKeyIndexes.CriminalCaseInclusion);
             List<PersonAddress> peopleList = new();
-            WebFetchResult webFetch = null;
+            WebFetchResult webFetch = new();
             List<ITarrantWebFetch> fetchers = (new FetchProvider(this)).GetFetches(customSearch);
             DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
             while (startingDate.CompareTo(endingDate) <= 0)
@@ -83,8 +83,7 @@ namespace legallead.records.search.Classes
             }
             finally
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
             }
         }
 
@@ -138,14 +137,13 @@ namespace legallead.records.search.Classes
             }
             catch (Exception)
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
+                driver?.Dispose();
                 throw;
             }
             finally
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
             }
         }
 
@@ -213,12 +211,7 @@ namespace legallead.records.search.Classes
 
         protected virtual List<PersonAddress> ExtractPeople(List<HLinkDataRow> cases)
         {
-            if (cases == null)
-            {
-                return null;
-            }
-
-            if (!cases.Any())
+            if (cases == null || !cases.Any())
             {
                 return new List<PersonAddress>();
             }
@@ -314,7 +307,7 @@ namespace legallead.records.search.Classes
             }
 
             XmlDocument doc = XmlDocProvider.GetDoc(item.Data);
-            if (!doc.FirstChild.HasChildNodes)
+            if (!doc.FirstChild!.HasChildNodes)
             {
                 return string.Empty;
             }
@@ -324,7 +317,7 @@ namespace legallead.records.search.Classes
                 return string.Empty;
             }
 
-            int colIndex = Parameters.Id == 10 ? 2 : 2;
+            int colIndex = 2;
             XmlNode? node = doc.FirstChild.ChildNodes[colIndex];
             if (node == null)
             {
@@ -372,20 +365,21 @@ namespace legallead.records.search.Classes
                 }
             }
             List<string> zipPart = person.Address3.Split(' ').ToList();
-            person.Zip = zipPart.Last();
+            person.Zip = zipPart[^1];
 
             return person;
         }
 
         private static void GetAddressInformation(IWebDriver driver, TarrantWebInteractive jsonWebInteractive, HLinkDataRow linkData)
         {
-            string fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
-            string xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath);
+            string? fmt = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
+            string? xpath = jsonWebInteractive.GetParameterValue<string>(CommonKeyIndexes.PersonNodeXpath);
+            if (string.IsNullOrEmpty(fmt) || string.IsNullOrEmpty(xpath)) return;
             ElementAssertion helper = new(driver);
             helper.Navigate(string.Format(CultureInfo.CurrentCulture,
                 fmt, linkData.WebAddress));
             driver.WaitForNavigation();
-            IWebElement tdName = TryFindElement(driver, By.XPath(xpath));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(xpath));
             if (tdName == null)
             {
                 return;
@@ -397,7 +391,7 @@ namespace legallead.records.search.Classes
             try
             {
                 // check or set IsCriminal attribute of linkData object
-                IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+                IWebElement? criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
                 if (criminalLink != null) { linkData.IsCriminal = true; }
                 // get row index of this element ... and then go one row beyond...
                 string ridx = parent.GetAttribute(CommonKeyIndexes.RowIndex);
@@ -424,7 +418,7 @@ namespace legallead.records.search.Classes
         private static void AppendToResult(string fileName, string caseData, string xpath)
         {
             XmlDocument doc = XmlDocProvider.Load(fileName);
-            XmlNode? ndeCase = doc.DocumentElement.SelectSingleNode(xpath);
+            XmlNode? ndeCase = doc.DocumentElement?.SelectSingleNode(xpath);
             if (ndeCase == null)
             {
                 return;
@@ -433,7 +427,7 @@ namespace legallead.records.search.Classes
             if (!ndeCase.HasChildNodes)
             {
                 return;
-            } ((XmlCDataSection)ndeCase.ChildNodes[0]).Data = caseData;
+            } ((XmlCDataSection)ndeCase.ChildNodes[0]!).Data = caseData;
             doc.Save(fileName);
         }
 
@@ -441,7 +435,8 @@ namespace legallead.records.search.Classes
         {
             List<HLinkDataRow> caseList = new();
             XmlDocument doc = XmlDocProvider.GetDoc(caseData);
-            List<XmlNode> trElements = doc.FirstChild.ChildNodes[0].SelectNodes("tr").Cast<XmlNode>().ToList();
+            List<XmlNode>? trElements = doc.FirstChild?.ChildNodes[0]?.SelectNodes("tr")?.Cast<XmlNode>().ToList();
+            if (trElements == null) return new();
             foreach (XmlNode? trow in trElements)
             {
                 XmlNode? link = trow.SelectSingleNode("td/a");
@@ -450,7 +445,7 @@ namespace legallead.records.search.Classes
                     continue;
                 }
 
-                XmlNode? href = link.Attributes.GetNamedItem("href");
+                XmlNode? href = link.Attributes?.GetNamedItem("href");
                 if (href == null)
                 {
                     continue;
@@ -493,20 +488,14 @@ namespace legallead.records.search.Classes
             return caseList;
         }
 
-        private static bool MapCourtAttributes(HLinkDataRow item, XmlNode trow, List<XmlNode> inspector)
+        private static bool MapCourtAttributes(HLinkDataRow item, XmlNode? trow, List<XmlNode> inspector)
         {
+            if (trow == null) return false;
             foreach (XmlNode search in inspector)
             {
                 XmlNode? node = trow.SelectSingleNode(search.InnerText);
-                string keyName = search.Attributes.GetNamedItem("name").InnerText;
-                item[keyName] = string.Empty;
-                if (node == null)
-                {
-                    Console.WriteLine("Unable to locate element {0} with selector - {1}",
-                        search.Attributes.GetNamedItem("name").InnerText,
-                        search.InnerText);
-                    return false;
-                }
+                string? keyName = search.Attributes?.GetNamedItem("name")?.InnerText;
+                if (node == null || string.IsNullOrEmpty(keyName)) return false;
                 item[keyName] = node.InnerText;
             }
             return true;
@@ -516,18 +505,30 @@ namespace legallead.records.search.Classes
         {
             try
             {
-                List<XmlNode> inspector = doc.DocumentElement.SelectSingleNode("directions").SelectNodes("caseInspection")
-                    .Cast<XmlNode>().ToList()
-                    .FindAll(x => x.Attributes.GetNamedItem("id").Value == parameterId
-                        .ToString(CultureInfo.CurrentCulture.NumberFormat))
-                    .Find(x => x.Attributes.GetNamedItem("type").Value == typeName)
-                    .ChildNodes.Cast<XmlNode>().ToList();
-                return inspector;
+                var pid = parameterId.ToString(CultureInfo.CurrentCulture.NumberFormat);
+                var nodes = doc.DocumentElement?
+                    .SelectSingleNode("directions")?
+                    .SelectNodes("caseInspection")?
+                    .Cast<XmlNode>();
+                if (nodes == null) return new();
+                var inspector = nodes
+                    .FirstOrDefault(x => GetAttributeValue(x, "id").Equals(pid) && GetAttributeValue(x, "type").Equals(typeName))
+                    ?.ChildNodes
+                    ?.Cast<XmlNode>()
+                    ?.ToList();
+                return inspector ?? new();
             }
             catch
             {
-                return null;
+                return new();
             }
+        }
+
+        private static string GetAttributeValue(XmlNode node, string named)
+        {
+            if (node.Attributes == null) return string.Empty;
+            if (node.Attributes.GetNamedItem(named) == null) return string.Empty;
+            return node.Attributes.GetNamedItem(named)?.Value ?? string.Empty;
         }
 
         /// <summary>
@@ -559,7 +560,7 @@ namespace legallead.records.search.Classes
         /// <param name="parent">The parent web browser instance.</param>
         /// <param name="by">The by condition used to locate the element</param>
         /// <returns></returns>
-        internal static IWebElement TryFindElement(IWebDriver parent, By by)
+        internal static IWebElement? TryFindElement(IWebDriver parent, By by)
         {
             try
             {
@@ -573,7 +574,7 @@ namespace legallead.records.search.Classes
 
         #region Element Action Helpers
 
-        private static List<IElementActionBase> elementActions;
+        private static List<IElementActionBase>? elementActions;
 
         protected static List<IElementActionBase> ElementActions
         {
@@ -596,16 +597,18 @@ namespace legallead.records.search.Classes
                 dataFormat,
                 appDirectory,
                 suffix);
-            if (!File.Exists(dataFile))
+
+            var fallback = GetFallbackContent(suffix);
+            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
         }
 
-        private static TarrantCourtDropDownDto _tarrantComboBxValue;
+        private static TarrantCourtDropDownDto? _tarrantComboBxValue;
 
         protected static TarrantCourtDropDownDto TarrantComboBxValue => _tarrantComboBxValue ??= GetComboBoxValues();
 
@@ -619,15 +622,309 @@ namespace legallead.records.search.Classes
                 dataFormat,
                 appDirectory,
                 suffix);
-            if (!File.Exists(dataFile))
+            var fallback = GetFallbackContent(suffix);
+            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            string data = File.ReadAllText(dataFile);
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data) ?? new();
         }
 
         #endregion Element Action Helpers
+
+        #region Fallback Content
+
+        private static string GetFallbackContent(string fileName)
+        {
+            var sbb = new StringBuilder();
+            const char tilde = '~';
+            const char qte = '"';
+            if (string.IsNullOrEmpty(fileName)) return string.Empty;
+            if (fileName.Equals("tarrantCourtSearchDropDown"))
+            {
+                // tarrantCourtSearchDropDown.json
+                sbb.AppendLine("{");
+                sbb.AppendLine("	~name~: ~court type selections~,");
+                sbb.AppendLine("	~step~: {");
+                sbb.AppendLine("		~actionName~: ~set-select-value~,");
+                sbb.AppendLine("		~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("		~expectedValue~: ~1~,");
+                sbb.AppendLine("		~locator~: {");
+                sbb.AppendLine("			~find~: ~css~,");
+                sbb.AppendLine("			~query~: ~#sbxControlID2~");
+                sbb.AppendLine("		}");
+                sbb.AppendLine("	},");
+                sbb.AppendLine("	~courtMap~: [");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 1,");
+                sbb.AppendLine("			~name~: ~Justice of Peace~");
+                sbb.AppendLine("		},");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 2,");
+                sbb.AppendLine("			~name~: ~Court Court at Law~");
+                sbb.AppendLine("		},");
+                sbb.AppendLine("		{");
+                sbb.AppendLine("			~id~: 0,");
+                sbb.AppendLine("			~name~: ~Probate~");
+                sbb.AppendLine("		}");
+                sbb.AppendLine("	]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("tarrantCountyMapping_1"))
+            {
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~steps~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~navigate~,");
+                sbb.AppendLine("      ~displayName~: ~open-website-base-uri~,");
+                sbb.AppendLine("      ~wait~: 1200,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~page~,");
+                sbb.AppendLine("        ~query~: ~https://odyssey.tarrantcounty.com/PublicAccess/default.aspx~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-records-hyperlink~,");
+                sbb.AppendLine("      ~expectedValue~: ~Case Records Search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table/tbody/tr[2]/td/table/tbody/tr[1]/td[2]/a[2]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~search-by-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expectedValue~: ~3~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~send-key~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expaectedValue~: ~K~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~startDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnAfter~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~endDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnBefore~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-record-count~,");
+                sbb.AppendLine("      ~displayName~: ~record-count~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[3]/tbody/tr[1]/td[2]/b~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-table-html~,");
+                sbb.AppendLine("      ~displayName~: ~get-case-data-table~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("tarrantCountyMapping_2"))
+            {
+                // tarrantCountyMapping_2
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~steps~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~navigate~,");
+                sbb.AppendLine("      ~displayName~: ~open-website-base-uri~,");
+                sbb.AppendLine("      ~wait~: 1200,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~page~,");
+                sbb.AppendLine("        ~query~: ~https://odyssey.tarrantcounty.com/PublicAccess/default.aspx~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-selector~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~criminal-records-hyperlink~,");
+                sbb.AppendLine("      ~expectedValue~: ~Criminal Case Records~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~//a[@class='ssSearchHyperlink'][contains(text(),'Misdemeanors')]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~exists~,");
+                sbb.AppendLine("      ~displayName~: ~search-by-selector~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-dropdown-value~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expectedValue~: ~5~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~send-key~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~expaectedValue~: ~K~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchBy~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~startDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnAfter~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~endDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnBefore~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-record-count~,");
+                sbb.AppendLine("      ~displayName~: ~record-count~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[3]/tbody/tr[1]/td[2]/b~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-table-html~,");
+                sbb.AppendLine("      ~displayName~: ~get-case-data-table~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            sbb.Replace(tilde, qte);
+            return sbb.ToString();
+        }
+
+        #endregion Fallback Content
     }
 }

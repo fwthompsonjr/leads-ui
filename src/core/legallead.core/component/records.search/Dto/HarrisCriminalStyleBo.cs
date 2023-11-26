@@ -6,25 +6,13 @@
         public string StatusDefendant => GetString(Status, "Defendant:");
         public string StatusDisposition => GetString(Status, "Disposition:");
 
-        public static HarrisCriminalStyleBo MapFrom(HarrisCriminalStyleDto dto)
-        {
-            if (dto == null)
-            {
-                return null;
-            }
-
-            HarrisCriminalStyleBo bo = new();
-            FieldNames.ForEach(f => { bo[f] = dto[f]; });
-            return bo;
-        }
-
         private static DateTime? GetDate(string fileDate)
         {
             if (string.IsNullOrEmpty(fileDate))
             {
                 return default;
             }
-            if (DateTime.TryParse(fileDate, out DateTime date))
+            if (DateTime.TryParse(fileDate, CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out DateTime date))
             {
                 return date;
             }
@@ -35,7 +23,7 @@
         {
             if (string.IsNullOrEmpty(status) | string.IsNullOrEmpty(search))
             {
-                return default;
+                return string.Empty;
             }
             string[] data = search.Split(Environment.NewLine.ToCharArray());
             foreach (string line in data)
@@ -46,7 +34,7 @@
                     return result;
                 }
             }
-            return default;
+            return string.Empty;
         }
     }
 }

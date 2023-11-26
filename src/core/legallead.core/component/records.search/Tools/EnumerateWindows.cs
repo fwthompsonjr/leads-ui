@@ -42,7 +42,6 @@ namespace legallead.records.search.Tools
         ///    not be returned </param>
         public static IEnumerable<IntPtr> FindWindows(EnumWindowsProc filter)
         {
-            IntPtr found = IntPtr.Zero;
             List<IntPtr> windows = new();
 
             EnumWindows(delegate (IntPtr wnd, IntPtr param)

@@ -4,8 +4,6 @@ namespace legallead.records.search.Tests
 {
     public static class ExecutionManagement
     {
-
-
         public static bool CanExecuteFetch()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
@@ -25,7 +23,6 @@ namespace legallead.records.search.Tests
             }
 
             return canExec;
-
         }
     }
 }

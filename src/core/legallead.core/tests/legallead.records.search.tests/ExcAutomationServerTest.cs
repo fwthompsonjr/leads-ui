@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.Tests
 {
@@ -10,7 +10,14 @@ namespace legallead.records.search.Tests
         [TestCategory("Excel.Automation.Tests")]
         public void CanOpenExcel()
         {
-            ExcAutomationServer.Open("");
+            try
+            {
+                ExcAutomationServer.Open("");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
         }
     }
 }

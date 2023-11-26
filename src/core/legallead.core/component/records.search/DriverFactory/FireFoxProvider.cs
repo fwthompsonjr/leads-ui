@@ -14,21 +14,21 @@ namespace legallead.records.search.DriverFactory
         /// <returns></returns>
         public IWebDriver GetWebDriver(bool headless = false)
         {
-            IWebDriver driver = GetDefaultDriver();
+            IWebDriver? driver = GetDefaultDriver();
             if (driver != null)
             {
                 return driver;
-            };
+            }
             return new FirefoxDriver(GetDriverFileName());
         }
 
-        private static string _driverFileName;
+        private static string? _driverFileName;
 
         /// <summary>
         /// Gets the default driver.
         /// </summary>
         /// <returns></returns>
-        private static IWebDriver GetDefaultDriver()
+        private static IWebDriver? GetDefaultDriver()
         {
             try
             {

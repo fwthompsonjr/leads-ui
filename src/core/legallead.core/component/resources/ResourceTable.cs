@@ -9,9 +9,9 @@ namespace legallead.resources
         private const string ResourceFile = @"resource-table.json";
         private const string ResourceFolder = @"text";
 
-        private static string _appFolder;
-        private static string _resourceFileName;
-        private static ResourceMap _resourceMap;
+        private static string? _appFolder;
+        private static string? _resourceFileName;
+        private static ResourceMap? _resourceMap;
 
         public static string ResourceFileName
         {
@@ -36,7 +36,7 @@ namespace legallead.resources
 
         public static ResourceMap Map => _resourceMap ??= GetResourceMap();
 
-        private static List<int> _resourceTypeList;
+        private static List<int>? _resourceTypeList;
 
         private static List<int> ResourceTypeList => _resourceTypeList ??= GetResourceTypeIdList();
 
@@ -47,7 +47,7 @@ namespace legallead.resources
         private static string GetAppFolderName()
         {
             var execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            return Path.GetDirectoryName(execName);
+            return Path.GetDirectoryName(execName) ?? string.Empty;
         }
 
         public static IEnumerable<Resource> GetResources(ResourceType resourceType)
@@ -74,7 +74,7 @@ namespace legallead.resources
                 return string.Empty;
             }
 
-            if (item.Count() == 0)
+            if (!item.Any())
             {
                 return string.Empty;
             }
@@ -105,14 +105,14 @@ namespace legallead.resources
         private static ResourceMap GetMapFromBuilder()
         {
             var data = ResourceText.Text();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data) ?? new();
         }
 
         private static ResourceMap GetMapFromFile()
         {
             using var reader = new StreamReader(ResourceFileName);
             var data = reader.ReadToEnd();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ResourceMap>(data) ?? new();
         }
 
         private static List<int> GetResourceTypeIdList()

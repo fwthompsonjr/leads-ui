@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Immutable;
 
 namespace legallead.harriscriminal.db.Tables
 {
     public class CaseStyleDb
     {
-        public static readonly List<string> FieldNames = ("CaseNumber,Style,FileDate,Court,Status,TypeOfActionOrOffense").Split(',').ToList();
+        public static ImmutableList<string> FieldNames => fieldNames;
+
+        private static readonly ImmutableList<string> fieldNames =
+            ImmutableList.Create("CaseNumber", "Style", "FileDate", "Court", "Status", "TypeOfActionOrOffense");
 
         [JsonProperty("cnbr")]
         public string CaseNumber { get; set; } = string.Empty;

@@ -19,7 +19,8 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            OpenQA.Selenium.IWebDriver driver = GetWeb;
+            OpenQA.Selenium.IWebDriver? driver = GetWeb;
+            if (driver == null) return;
             Byy selector = Byy.CssSelector(item.Locator.Query);
             OpenQA.Selenium.IWebElement elementToClick = driver.FindElement(selector);
             // lets get this item as a SELECT

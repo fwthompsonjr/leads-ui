@@ -1,18 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
+using System.Globalization;
 
 namespace legallead.records.search.Tests
 {
     [TestClass]
     public class ExcelWriterTests
     {
-        private string SampleTable()
+        private static string SampleTable()
         {
             return "<table style='border-collapse: collapse; border: 1px solid black;'>" +
                 "<tr><th class='ssSearchResultHeader' nowrap='true'><b>Case Number</b></th>" +
@@ -50,7 +47,8 @@ namespace legallead.records.search.Tests
                 "</tr>" +
                 "</table>";
         }
-        private List<PersonAddress> SamplePeople()
+
+        private static List<PersonAddress> SamplePeople()
         {
             int nbr = random.Next(5, 12);
             var data = new List<PersonAddress>();
@@ -67,7 +65,8 @@ namespace legallead.records.search.Tests
         }
 
         private const string ExcelFileCreatedMessage = "Excel file created at: {0}";
-        private static readonly Random random = new Random(DateTime.Now.Millisecond);
+        private static readonly Random random = new(DateTime.Now.Millisecond);
+
         public static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -96,9 +95,7 @@ namespace legallead.records.search.Tests
 
             Assert.IsTrue(File.Exists(tmpFileName), "Expected Excel file was not found");
             Console.WriteLine(ExcelFileCreatedMessage, tmpFileName);
-
         }
-
 
         [TestMethod]
         [TestCategory("Excel.Automation.Tests")]
@@ -121,14 +118,12 @@ namespace legallead.records.search.Tests
 
             Assert.IsTrue(File.Exists(tmpFileName), "Expected Excel file was not found");
             Console.WriteLine(ExcelFileCreatedMessage, tmpFileName);
-
         }
 
         [TestMethod]
         [TestCategory("Excel.Automation.Tests")]
         public void CanWritePeopleAndTableLocal()
         {
-
             var writer = new ExcelWriter();
             var extn = CommonKeyIndexes.ExtensionXlsx;
             var tmpFileName = string.Format(
@@ -161,22 +156,19 @@ namespace legallead.records.search.Tests
         {
             const string fileName = "tarrantSample.json";
             var dir = SettingsManager.GetAppFolderName();
-            dir = new DirectoryInfo(dir).Parent.FullName;
-            dir = new DirectoryInfo(dir).Parent.FullName;
-            dir = new DirectoryInfo(dir).Parent.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
+            dir = new DirectoryInfo(dir).Parent!.FullName;
             dir = Path.Combine(dir, fileName);
             if (File.Exists(dir))
             {
                 return;
             }
-
+            File.Exists(dir).ShouldBeTrue();
             var people = SamplePeople().Take(2);
-            using (var writer = new StreamWriter(dir))
-            {
-                writer.WriteLine(Newtonsoft.Json.JsonConvert
-                    .SerializeObject(people, Newtonsoft.Json.Formatting.Indented));
-            }
-
+            using var writer = new StreamWriter(dir);
+            writer.WriteLine(Newtonsoft.Json.JsonConvert
+                .SerializeObject(people, Newtonsoft.Json.Formatting.Indented));
         }
     }
 }

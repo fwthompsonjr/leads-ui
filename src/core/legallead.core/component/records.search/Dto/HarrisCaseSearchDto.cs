@@ -2,12 +2,12 @@
 {
     public class HarrisCaseSearchDto
     {
-        private string _uniqueIndex;
-        public string CaseNumber { get; set; }
-        public string DateFiled { get; set; }
-        public string Court { get; set; }
+        private string? _uniqueIndex;
+        public string CaseNumber { get; set; } = string.Empty;
+        public string DateFiled { get; set; } = string.Empty;
+        public string Court { get; set; } = string.Empty;
 
-        public string DateFormat { get; set; }
+        public string DateFormat { get; set; } = string.Empty;
 
         public string UniqueIndex() => GetUniqueIndex();
 

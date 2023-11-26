@@ -57,7 +57,6 @@ namespace legallead.records.search.Classes
             foreach (HLinkDataRow dta in data)
             {
                 AppendExtraCaseInfo(dta);
-                string caseStyle = dta[CommonKeyIndexes.CaseStyle]; // "CaseStyle"];
                 results.Append(dta);
             }
             // change output of this item.
@@ -88,10 +87,10 @@ namespace legallead.records.search.Classes
             {
                 foreach (PersonAddress item in found)
                 {
-                    item.Zip = CommonKeyIndexes.NonAddressZipCode; // "00000";
-                    item.Address1 = CommonKeyIndexes.NonAddressLine1;// "No Address Found";
+                    item.Zip = CommonKeyIndexes.NonAddressZipCode;
+                    item.Address1 = CommonKeyIndexes.NonAddressLine1;
                     item.Address2 = string.Empty;
-                    item.Address3 = CommonKeyIndexes.NonAddressLine2; //"Not, Available 00000";
+                    item.Address3 = CommonKeyIndexes.NonAddressLine2;
                 }
             }
             found = personAddresses
@@ -117,14 +116,9 @@ namespace legallead.records.search.Classes
         private static List<PersonAddress> MapCaseStyle(List<HLinkDataRow> data,
             List<PersonAddress> personAddresses)
         {
-            if (personAddresses == null)
+            if (personAddresses == null || data == null)
             {
-                return personAddresses;
-            }
-
-            if (data == null)
-            {
-                return personAddresses;
+                return new();
             }
 
             data = data.FindAll(x => !string.IsNullOrEmpty(x.Case));
@@ -185,7 +179,7 @@ namespace legallead.records.search.Classes
                     continue;
                 }
 
-                XmlNode node = TryFindNode(doc, item.Value);
+                XmlNode? node = TryFindNode(doc, item.Value);
                 if (node == null)
                 {
                     continue;
@@ -202,11 +196,11 @@ namespace legallead.records.search.Classes
         /// <param name="doc">The document.</param>
         /// <param name="xpath">The xpath.</param>
         /// <returns></returns>
-        private static XmlNode TryFindNode(XmlDocument doc, string xpath)
+        private static XmlNode? TryFindNode(XmlDocument doc, string xpath)
         {
             try
             {
-                XmlNode? node = doc.FirstChild.SelectSingleNode(xpath);
+                XmlNode? node = doc.FirstChild?.SelectSingleNode(xpath);
                 return node;
             }
             catch (Exception)

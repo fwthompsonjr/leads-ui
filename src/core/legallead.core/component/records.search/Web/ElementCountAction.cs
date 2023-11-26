@@ -17,7 +17,8 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            OpenQA.Selenium.IWebDriver driver = GetWeb;
+            OpenQA.Selenium.IWebDriver? driver = GetWeb;
+            if (driver == null) { return; }
             Byy selector = Byy.CssSelector(item.Locator.Query);
             if (!int.TryParse(item.ExpectedValue, out int number))
             {

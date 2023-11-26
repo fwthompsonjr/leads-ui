@@ -23,7 +23,7 @@ namespace legallead.records.search.Classes
         public VersionNameProvider()
         {
             // when the assembly-file-version contains pre-release
-            bool isPreRelease = FileVersion.EndsWith($"~{VersionNames.Last()}",
+            bool isPreRelease = FileVersion.EndsWith($"~{VersionNames[^1]}",
                 System.StringComparison.CurrentCultureIgnoreCase);
             Name = isPreRelease ?
                 CommonKeyIndexes.FutureKeyWord :
@@ -35,8 +35,8 @@ namespace legallead.records.search.Classes
         private static string GetFileVersion()
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return fvi.FileVersion;
+            var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            return fvi.FileVersion ?? string.Empty;
         }
 
         private static List<string> GetNames()
@@ -46,7 +46,7 @@ namespace legallead.records.search.Classes
                 CommonKeyIndexes.FutureKeyWord };
         }
 
-        private static string _fileVersion;
-        private static List<string> _versionNames;
+        private static string? _fileVersion;
+        private static List<string>? _versionNames;
     }
 }

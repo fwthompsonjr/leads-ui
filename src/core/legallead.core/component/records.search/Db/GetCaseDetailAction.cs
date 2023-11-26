@@ -39,13 +39,14 @@ namespace legallead.records.search.Db
         {
             string data = DataOptions.Read();
             HccOptionDto? list = JsonConvert.DeserializeObject<List<HccOptionDto>>(data)
-                .Where(a => a.Type.Equals("settings", StringComparison.OrdinalIgnoreCase))
+                ?.Where(a => a.Type.Equals("settings", StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault(b => b.Id.Equals(110));
-            return list;
+            return list ?? new();
         }
 
         private List<Dto.HarrisCriminalStyleDto> GetDownload(DateTime mnDate, DateTime mxDate)
         {
+            if (WebDriver == null) return new();
             using HarrisCriminalCaseStyle obj = new();
             List<HarrisCriminalStyleDto> records = obj.GetCases(WebDriver, mnDate, mxDate);
             return records;

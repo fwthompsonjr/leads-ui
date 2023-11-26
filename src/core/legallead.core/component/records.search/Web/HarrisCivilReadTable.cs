@@ -17,7 +17,7 @@ namespace legallead.records.search.Web
         private const StringComparison ccic = StringComparison.CurrentCultureIgnoreCase;
         public override string ActionName => actionName;
 
-        public List<HLinkDataRow> DataRows { get; private set; }
+        public List<HLinkDataRow> DataRows { get; private set; } = new();
 
         public override void Act(NavigationStep item)
         {
@@ -26,7 +26,8 @@ namespace legallead.records.search.Web
                 throw new ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
+            IWebDriver? driver = GetWeb;
+            if (driver == null) return;
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             IsOverlaid = false;
 
@@ -128,7 +129,8 @@ namespace legallead.records.search.Web
         private bool NavigateNextPage()
         {
             string cssPagerLink = "a.pgr";
-            IWebDriver driver = GetWeb;
+            IWebDriver? driver = GetWeb;
+            if (driver == null) return false;
             // if there are paging hyperlinks then their might be a next page
             System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
             if (paging == null)
@@ -136,7 +138,7 @@ namespace legallead.records.search.Web
                 return false;
             }
 
-            List<IWebElement> list = paging.Cast<IWebElement>().ToList();
+            List<IWebElement> list = paging.ToList();
             IWebElement? next = list.Find(a => a.Text.Contains("Next"));
             if (next == null)
             {
@@ -157,13 +159,13 @@ namespace legallead.records.search.Web
         {
             const string dte = "MM/dd/yyyy";
             string cssSelector = "#ctl00_ContentPlaceHolder1_txtDateFrom";
-            IWebElement found = GetWeb.TryFindElement(Byy.CssSelector(cssSelector));
             string dateMin = DateTime.MinValue.ToString(dte, CultureInfo.CurrentCulture);
+            IWebElement? found = GetWeb?.TryFindElement(Byy.CssSelector(cssSelector));
             if (found == null)
             {
                 return dateMin;
             }
-            if (DateTime.TryParse(found.Text, out DateTime dtFrom))
+            if (DateTime.TryParse(found.Text, CultureInfo.CurrentCulture, DateTimeStyles.AssumeLocal, out DateTime dtFrom))
             {
                 return dtFrom.ToString(dte, CultureInfo.CurrentCulture);
             }
@@ -173,10 +175,10 @@ namespace legallead.records.search.Web
         private List<CaseDataAddress> GetAddresses(string search)
         {
             List<CaseDataAddress> data = new();
-            IWebDriver driver = GetWeb;
-            IWebElement div = driver.FindElement(Byy.CssSelector("div[id*='" + search + "']"));
-            List<IWebElement> elements = div.FindElements(Byy.CssSelector("table[rules='rows'] tr[align='center']")).ToList();
-
+            IWebDriver? driver = GetWeb;
+            IWebElement? div = driver?.FindElement(Byy.CssSelector("div[id*='" + search + "']"));
+            List<IWebElement>? elements = div?.FindElements(Byy.CssSelector("table[rules='rows'] tr[align='center']")).ToList();
+            if (elements == null) { return data; }
             for (int i = 0; i < elements.Count; i++)
             {
                 IWebElement row = elements[i];
@@ -208,8 +210,8 @@ namespace legallead.records.search.Web
         {
             // #ctl00_ContentPlaceHolder1_lblListViewCasesEmptyMsg:visible
             string cssNoData = "ctl00_ContentPlaceHolder1_lblListViewCasesEmptyMsg";
-            IWebDriver driver = GetWeb;
-            IWebElement found = driver.TryFindElement(Byy.Id(cssNoData));
+            IWebDriver? driver = GetWeb;
+            IWebElement? found = driver?.TryFindElement(Byy.Id(cssNoData));
             if (found == null)
             {
                 return false;
@@ -223,15 +225,15 @@ namespace legallead.records.search.Web
             try
             {
                 string cssPagerLink = "a.pgr";
-                IWebDriver driver = GetWeb;
+                IWebDriver? driver = GetWeb;
                 // if there are paging hyperlinks then their might be a next page
-                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> paging = driver.FindElements(Byy.CssSelector(cssPagerLink));
+                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement>? paging = driver?.FindElements(Byy.CssSelector(cssPagerLink));
                 if (paging == null)
                 {
                     return false;
                 }
 
-                List<IWebElement> list = paging.Cast<IWebElement>().ToList();
+                List<IWebElement> list = paging.ToList();
                 IWebElement? next = list.Find(a => a.Text.Contains("Next"));
                 if (next == null)
                 {

@@ -1,16 +1,15 @@
 ﻿using Bogus;
+using legallead.records.search.Dto;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using System;
 using System.Globalization;
-using legallead.records.search.Dto;
 
 namespace legallead.records.search.Tests.Data
 {
     [TestClass]
     public class HarrisCriminalStyleDtoTests
     {
-        private Faker<HarrisCriminalStyleDto> DtoFaker;
+        private Faker<HarrisCriminalStyleDto>? DtoFaker;
 
         [TestInitialize]
         public void Setup()
@@ -43,9 +42,11 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void CanInit()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
+
         [TestMethod]
         public void HasFields()
         {
@@ -56,6 +57,7 @@ namespace legallead.records.search.Tests.Data
         [TestMethod]
         public void Indexer_Get()
         {
+            if (DtoFaker == null) return;
             var obj = DtoFaker.Generate();
 
             obj.Index.ToString(CultureInfo.CurrentCulture).ShouldBe(obj[0]);
@@ -70,13 +72,14 @@ namespace legallead.records.search.Tests.Data
 
             for (int i = 33; i < 50; i++)
             {
-                obj[i].ShouldBeNull();
+                obj[i].ShouldBe("");
             }
         }
 
         [TestMethod]
         public void Indexer_Set()
         {
+            if (DtoFaker == null) return;
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];
@@ -85,7 +88,6 @@ namespace legallead.records.search.Tests.Data
                 obj[i].ShouldNotBe(src[i]);
                 obj[i] = src[i];
             }
-
 
             obj.Index.ToString(CultureInfo.CurrentCulture).ShouldBe(src[0]);
             obj.CaseNumber.ShouldBe(src[1]);

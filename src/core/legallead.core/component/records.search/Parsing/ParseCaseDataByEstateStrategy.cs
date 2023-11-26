@@ -8,7 +8,7 @@ namespace legallead.records.search.Parsing
 
         public virtual string SearchFor => _searchKeyWord;
 
-        public string CaseData { get; set; }
+        public string CaseData { get; set; } = string.Empty;
 
         public virtual bool CanParse()
         {

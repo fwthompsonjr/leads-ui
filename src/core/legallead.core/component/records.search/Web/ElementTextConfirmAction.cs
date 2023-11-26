@@ -17,7 +17,7 @@
             }
 
             Byy selector = Byy.CssSelector(item.Locator.Query);
-            GetAssertion.MatchText(selector,
+            GetAssertion?.MatchText(selector,
                 item.DisplayName, item.ExpectedValue);
         }
     }

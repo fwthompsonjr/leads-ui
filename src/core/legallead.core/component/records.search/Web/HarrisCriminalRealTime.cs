@@ -23,17 +23,18 @@ namespace legallead.records.search.Web
             driver ??= GetDriver();
             TheDriver = driver;
             IWebElement? pager = GetElementsOrFail(By.CssSelector(tbPager)).FirstOrDefault();
+            if (pager == null) return new();
             // get the expected record count
             int count = GetPageCount(pager, By.CssSelector(recordCount));
             int totalCount = GetRecordCount(By.Id(totalRecordCount));
             List<HarrisCriminalStyleDto> cases = new();
-            DateTime runDate = DateTime.Now;
             for (int r = 1; r <= count; r++)
             {
                 if (r != 1)
                 {
                     // find the pager element
                     pager = GetElementsOrFail(By.CssSelector(tbPager)).FirstOrDefault();
+                    if (pager == null) continue;
                     ClickPageHyperlink(pager.FindElements(By.CssSelector(pagerLink)).ToList(), r);
                 }
                 string table = GetElementOrFail(By.CssSelector(dataTable)).GetAttribute("outerHTML");
@@ -99,7 +100,7 @@ namespace legallead.records.search.Web
             }
 
             string[] pieces = text.Split(separator.ToCharArray());
-            return $"{pieces.First()}-{pieces.Last()}";
+            return $"{pieces[0]}-{pieces[^1]}";
         }
 
         private static string GetNumeric(string text)
@@ -125,6 +126,7 @@ namespace legallead.records.search.Web
 
         private void ClickPageHyperlink(List<IWebElement> links, int pageId)
         {
+            if (TheDriver == null) return;
             foreach (IWebElement item in links)
             {
                 if (int.TryParse(item.Text.Trim(), out int index) && index == pageId)
@@ -138,7 +140,7 @@ namespace legallead.records.search.Web
         private static int GetPageCount(IWebElement pager, By by)
         {
             IWebElement element = pager.FindElement(by);
-            string item = element.Text.Split(' ').Last();
+            string item = element.Text.Split(' ')[^1];
             if (int.TryParse(item, out int rc))
             {
                 return rc;
@@ -148,8 +150,9 @@ namespace legallead.records.search.Web
 
         private int GetRecordCount(By by)
         {
+            if (TheDriver == null) return 1;
             IWebElement element = TheDriver.FindElement(by);
-            string item = element.Text.Split(' ').Last().Replace(".", "");
+            string item = element.Text.Split(' ')[^1].Replace(".", "");
             if (int.TryParse(item, out int rc))
             {
                 return rc;
@@ -159,6 +162,7 @@ namespace legallead.records.search.Web
 
         private IWebElement GetElementOrFail(By by)
         {
+            if (TheDriver == null) throw new NoSuchElementException();
             bool isFound = TheDriver.IsElementPresent(by);
             if (isFound)
             {
@@ -169,6 +173,7 @@ namespace legallead.records.search.Web
 
         protected List<IWebElement> GetElementsOrFail(By by)
         {
+            if (TheDriver == null) throw new NoSuchElementException();
             bool isFound = TheDriver.AreElementsPresent(by);
             if (isFound)
             {
@@ -181,13 +186,13 @@ namespace legallead.records.search.Web
         {
             public int Index { get; set; }
             public DateTime RunDate { get; set; }
-            public List<HtmlNode> CauseSummary { get; set; }
-            public List<HtmlNode> DefendantBio { get; set; }
-            public List<HtmlNode> DefendantMetrics { get; set; }
-            public List<HtmlNode> Court { get; set; }
-            public List<HtmlNode> DefendantAddress { get; internal set; }
+            public List<HtmlNode> CauseSummary { get; set; } = new();
+            public List<HtmlNode> DefendantBio { get; set; } = new();
+            public List<HtmlNode> DefendantMetrics { get; set; } = new();
+            public List<HtmlNode> Court { get; set; } = new();
+            public List<HtmlNode> DefendantAddress { get; internal set; } = new();
 
-            public HarrisCriminalDto CriminalDto()
+            public HarrisCriminalDto? CriminalDto()
             {
                 if (CauseSummary == null ||
                     DefendantBio == null ||
@@ -227,8 +232,7 @@ namespace legallead.records.search.Web
                     return;
                 }
                 string[] parsed = fullAddress.Split(' ');
-                _ = parsed.Last();
-                // return
+                _ = parsed[^1];
             }
 
             private static string TryFindRow(List<HtmlNode> table, string heading)
@@ -249,7 +253,7 @@ namespace legallead.records.search.Web
                     return string.Empty;
                 }
 
-                HtmlNode? data = found.ParentNode.SelectNodes("//td")?.Last();
+                HtmlNode? data = found.ParentNode.SelectNodes("//td")?[^1];
                 if (data == null)
                 {
                     return string.Empty;

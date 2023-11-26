@@ -19,7 +19,7 @@ namespace legallead.records.search.Classes
         // Exceptions:
         //   T:OpenQA.Selenium.NoSuchElementException:
         //     If no element matches the criteria.
-        public static IWebElement TryFindElement(this IWebElement webElement, By by)
+        public static IWebElement? TryFindElement(this IWebElement webElement, By by)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace legallead.records.search.Classes
         // Exceptions:
         //   T:OpenQA.Selenium.NoSuchElementException:
         //     If no element matches the criteria.
-        public static IWebElement TryFindElement(this IWebDriver driver, By by)
+        public static IWebElement? TryFindElement(this IWebDriver driver, By by)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace legallead.records.search.Classes
         // Returns:
         //     A System.Collections.ObjectModel.ReadOnlyCollection`1 of all OpenQA.Selenium.IWebElement
         //     matching the current criteria, or an empty list if nothing matches.
-        public static ReadOnlyCollection<IWebElement> TryFindElements(this IWebDriver driver, By by)
+        public static ReadOnlyCollection<IWebElement>? TryFindElements(this IWebDriver driver, By by)
         {
             try
             {

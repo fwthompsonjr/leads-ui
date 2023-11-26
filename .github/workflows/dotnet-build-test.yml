@@ -34,16 +34,19 @@ jobs:
       run: echo ${{ env.BUILD_VERSION }}
 
     - name: Restore Packages
+      timeout-minutes: 10
       shell: pwsh
       run: |
         & ./pipeline-restore-packages.ps1
 
     - name: Build solution
+      timeout-minutes: 5
       shell: pwsh
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Test with dotnet
+      timeout-minutes: 5
       shell: pwsh
       run: |
         & ./pipeline-test-solutions.ps1

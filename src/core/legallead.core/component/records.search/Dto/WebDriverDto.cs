@@ -7,24 +7,24 @@ namespace legallead.records.search.Dto
     public class Driver
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public bool IsVerified { get; set; }
     }
 
     public class WebDrivers
     {
         public int SelectedIndex { get; set; }
-        public IList<Driver> Drivers { get; set; }
+        public IList<Driver> Drivers { get; set; } = new List<Driver>();
     }
 
     public class WebDriverDto
     {
-        public WebDrivers WebDrivers { get; set; }
+        public WebDrivers WebDrivers { get; set; } = new WebDrivers();
     }
 
     public static class WebDriverDtoExtensions
     {
-        private static string _dtoContent;
+        private static string? _dtoContent;
         private static string DtoContent => _dtoContent ??= Get();
 
         private static string Get()
@@ -33,7 +33,7 @@ namespace legallead.records.search.Dto
             return File.ReadAllText(dataFile);
         }
 
-        public static WebDriverDto Get(this WebDriverDto dto)
+        public static WebDriverDto? Get(this WebDriverDto dto)
         {
             if (dto == null)
             {
@@ -44,7 +44,7 @@ namespace legallead.records.search.Dto
             return JConn.DeserializeObject<WebDriverDto>(content);
         }
 
-        public static WebDriverDto Save(this WebDriverDto dto)
+        public static WebDriverDto? Save(this WebDriverDto dto)
         {
             if (dto == null)
             {

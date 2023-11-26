@@ -8,7 +8,7 @@ namespace legallead.records.search.DriverFactory
     /// </summary>
     public static class WebDriverContainer
     {
-        private static Container _container;
+        private static Container? _container;
 
         /// <summary>
         /// Gets the get container.

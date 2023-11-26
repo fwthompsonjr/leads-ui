@@ -10,7 +10,7 @@ namespace legallead.records.search.Classes
         /// <summary>
         /// The application directory
         /// </summary>
-        private static string _appDirectory;
+        private static string? _appDirectory;
 
         /// <summary>
         /// Gets the application directory.
@@ -22,7 +22,9 @@ namespace legallead.records.search.Classes
         {
             get
             {
-                return _appDirectory ??= GetAppDirectory();
+                if (!string.IsNullOrEmpty(_appDirectory)) { return _appDirectory; }
+                _appDirectory = GetAppDirectory();
+                return _appDirectory;
             }
         }
 
@@ -32,7 +34,7 @@ namespace legallead.records.search.Classes
         /// <returns></returns>
         private static string GetAppDirectory()
         {
-            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         }
     }
 }

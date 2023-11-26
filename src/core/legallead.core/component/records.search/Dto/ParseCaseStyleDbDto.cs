@@ -8,7 +8,7 @@
         /// <value>
         /// The data.
         /// </value>
-        public string Data { get; set; }
+        public string Data { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the case style as translated from data parameter.
@@ -16,7 +16,7 @@
         /// <value>
         /// The case data.
         /// </value>
-        public string CaseData { get; set; }
+        public string CaseData { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the defendant.
@@ -24,7 +24,7 @@
         /// <value>
         /// The defendant.
         /// </value>
-        public string Defendant { get; set; }
+        public string Defendant { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the plantiff.
@@ -32,6 +32,6 @@
         /// <value>
         /// The plantiff.
         /// </value>
-        public string Plantiff { get; set; }
+        public string Plantiff { get; set; } = string.Empty;
     }
 }

@@ -53,11 +53,6 @@ namespace legallead.records.search.Classes
                     foreach (HarrisCountyListDto dataset in db)
                     {
                         IEnumerable<HarrisCriminalDto> found = dataset.Data.Where(a => a.FilingDate.Equals(fileDate, Oic));
-                        if (found == null)
-                        {
-                            continue;
-                        }
-
                         details.AddRange(found);
                     }
                     List<HarrisCriminalDto> group = details.GroupBy(x => x.CaseNumber).Select(y => y.First()).ToList();
@@ -74,7 +69,7 @@ namespace legallead.records.search.Classes
                 peopleList.ForEach(p =>
                 {
                     p = p.ToCalculatedNames();
-                    p = p.ToCalculatedZip();
+                    p.ToCalculatedZip();
                 });
                 webFetch.PeopleList = peopleList;
                 webFetch.CaseList = peopleList.ToHtml();

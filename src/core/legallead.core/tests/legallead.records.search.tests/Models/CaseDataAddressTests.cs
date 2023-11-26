@@ -1,14 +1,14 @@
 ﻿using Bogus;
+using legallead.records.search.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
-using legallead.records.search.Models;
 
 namespace legallead.records.search.UnitTests.Models
 {
     [TestClass]
     public class CaseDataAddressTests
     {
-        private Faker<CaseDataAddress> DtoFaker;
+        private Faker<CaseDataAddress>? DtoFaker;
 
         [TestInitialize]
         public void Setup()
@@ -30,6 +30,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanInit()
         {
+            if (DtoFaker == null) { return; }
             var obj = DtoFaker.Generate();
             Assert.IsNotNull(obj);
         }
@@ -37,6 +38,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanSet_Case()
         {
+            if (DtoFaker == null) { return; }
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];
@@ -47,6 +49,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanSet_Role()
         {
+            if (DtoFaker == null) { return; }
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];
@@ -57,6 +60,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanSet_Party()
         {
+            if (DtoFaker == null) { return; }
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];
@@ -67,6 +71,7 @@ namespace legallead.records.search.UnitTests.Models
         [TestMethod]
         public void CanSet_Attorney()
         {
+            if (DtoFaker == null) { return; }
             var list = DtoFaker.Generate(2);
             var obj = list[0];
             var src = list[1];

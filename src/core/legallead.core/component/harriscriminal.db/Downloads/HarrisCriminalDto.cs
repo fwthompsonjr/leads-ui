@@ -4,7 +4,7 @@ namespace legallead.harriscriminal.db.Downloads
 {
     public class HarrisCriminalDto
     {
-        public static readonly List<string> AliasNames = ("index," +
+        private static readonly List<string> aliasNames = ("index," +
             "rundate,cdi,cas,fda,ins,cad,crt,cst,dst," +
             "bam,curr_off,curr_off_lit,curr_l_d," +
             "nda,cnc,rea,def_nam,def_spn,def_rac," +
@@ -13,7 +13,7 @@ namespace legallead.harriscriminal.db.Downloads
             "aty_nam,aty_spn,aty_coc,aty_coc_lit," +
             "def_birthplace,def_uscitizen").Split(',').ToList();
 
-        public static readonly List<string> FieldNames = ("Index," +
+        private static readonly List<string> fieldNames = ("Index," +
             "DateDatasetProduced,CourtDivisionIndicator,CaseNumber," +
             "FilingDate,InstrumentType,CaseDisposition,Court," +
             "CaseStatus,DefendantStatus,BondAmount,CurrentOffense," +
@@ -57,6 +57,10 @@ namespace legallead.harriscriminal.db.Downloads
         public string AttorneyConnectionLiteral { get; set; } = string.Empty;
         public string DefendantPlaceOfBirth { get; set; } = string.Empty;
         public string DefUSCitizenFlag { get; set; } = string.Empty;
+
+        public static List<string> AliasNames => aliasNames;
+
+        public static List<string> FieldNames => fieldNames;
 
         public string? this[int index]
         {

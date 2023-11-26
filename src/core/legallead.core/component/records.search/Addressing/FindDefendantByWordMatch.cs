@@ -9,9 +9,6 @@ namespace legallead.records.search.Addressing
 
         public override void Find(IWebDriver driver, HLinkDataRow linkData)
         {
-            // driver.FindElement(By.XPath("//th[contains(text(),'Principal')]"))
-            // todo: CV-2019-02188-JP... exmple of a case with multiple defendants...
-            // create a lookup for multiples
             if (driver == null)
             {
                 throw new System.ArgumentNullException(nameof(driver));
@@ -26,7 +23,7 @@ namespace legallead.records.search.Addressing
             string defendant = IndexKeyNames.Defendant;
             string defendantXpath = string.Format(CultureInfo.CurrentCulture,
                 IndexKeyNames.ThContainsText, defendant);
-            IWebElement tdName = TryFindElement(driver, By.XPath(defendantXpath));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(defendantXpath));
             // this instance can find
             if (tdName == null)
             {

@@ -19,9 +19,10 @@ namespace legallead.records.search.Web
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
-            UserAccessDto userDto = UserAccessDto.GetDto(item.ExpectedValue);
-            string pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey);
+            IWebDriver? driver = GetWeb;
+            if (driver == null) return;
+            UserAccessDto userDto = UserAccessDto.GetDto(item.ExpectedValue) ?? new();
+            string pwordUser = CryptoEngine.Decrypt(userDto.UserGuid, userDto.UserKey, userDto.UserData);
             string[] userId = pwordUser.Split('|');
             string[] selections = item.Locator.Query.Split('|');
             int idx = 0;

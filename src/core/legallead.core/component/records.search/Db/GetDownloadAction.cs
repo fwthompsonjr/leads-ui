@@ -23,8 +23,8 @@ namespace legallead.records.search.Db
         private string GetDownload()
         {
             using HarrisCriminalData obj = new();
-            string result = obj.GetData(WebDriver);
-            return result;
+            var result = obj.GetData(WebDriver);
+            return result ?? string.Empty;
         }
     }
 }

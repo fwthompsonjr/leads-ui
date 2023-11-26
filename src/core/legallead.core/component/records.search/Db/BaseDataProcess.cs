@@ -31,20 +31,22 @@ namespace legallead.records.search.Db
         {
             List<T> objects = new();
             Type actionable = typeof(DataActionAttribute);
-            var collection = Assembly.GetAssembly(typeof(T)).GetTypes()
+            var assm = Assembly.GetAssembly(typeof(T))!;
+            var collection = assm.GetTypes()
                 .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)))
                 .Where(x => x.GetCustomAttributes(actionable) != null)
                 .Select(y => new
                 {
                     DataType = y,
-                    CustomInfo = y.GetCustomAttributes(actionable).First() as DataActionAttribute
+                    CustomInfo = (y.GetCustomAttributes(actionable).First() as DataActionAttribute)!
                 })
                 .Where(z => z.CustomInfo.IsShared || z.CustomInfo.Name.Equals(processName, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             collection.Sort((a, b) => a.CustomInfo.ProcessId.CompareTo(b.CustomInfo.ProcessId));
             foreach (var type in collection)
             {
-                objects.Add((T)Activator.CreateInstance(type.DataType, constructorArgs));
+                T? tmpobj = (T)Activator.CreateInstance(type.DataType, constructorArgs)!;
+                if (tmpobj != null) { objects.Add(tmpobj); }
             }
             return objects;
         }

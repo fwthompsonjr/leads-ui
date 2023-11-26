@@ -1,6 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.Tests
 {
@@ -18,9 +17,9 @@ namespace legallead.records.search.Tests
             // dev.support.ticket@transcore.com
             const string saltLocal = "email.send.items";
             var toBeEncoded = "adm.thompson.recordsearch@gmail.com|234-record-search-432";
-            var pwd = CryptoEngine.Encrypt(toBeEncoded, saltLocal);
+            var pwd = CryptoEngine.Encrypt(toBeEncoded, saltLocal, out var base64);
             Console.WriteLine(string.Format("pwd: {0}", pwd));
-            var decoded = CryptoEngine.Decrypt(pwd, saltLocal);
+            var decoded = CryptoEngine.Decrypt(pwd, saltLocal, base64);
             Assert.IsTrue(decoded.Equals(toBeEncoded, StringComparison.CurrentCulture));
         }
     }

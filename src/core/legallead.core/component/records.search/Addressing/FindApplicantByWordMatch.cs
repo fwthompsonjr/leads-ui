@@ -23,7 +23,7 @@ namespace legallead.records.search.Addressing
             string searchType = IndexKeyNames.Applicant;
             CanFind = false;
             // IndexKeyNames.ThContainsText
-            IWebElement tdName = TryFindElement(driver, By.XPath(
+            IWebElement? tdName = TryFindElement(driver, By.XPath(
                 string.Format(CultureInfo.CurrentCulture, IndexKeyNames.ThContainsText, searchType)));
             // this instance can find
             if (tdName == null)

@@ -1,17 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.Tests
 {
     [TestClass]
     public class WebInteractiveTest
     {
-
         [TestMethod]
         [TestCategory("Web.Configuration.Validation")]
         public void CanInitialize()
@@ -27,7 +22,6 @@ namespace legallead.records.search.Tests
             Assert.AreEqual(endingDate, webactive.EndingDate);
         }
 
-
         [TestMethod]
         [TestCategory("Web.Integration")]
         public void ValidateChromePathTest()
@@ -36,13 +30,14 @@ namespace legallead.records.search.Tests
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");
             }
-            DirectoryInfo di = new DirectoryInfo(@"c:\");
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            var rootDir = Directory.GetDirectoryRoot(baseDir);
+            DirectoryInfo di = new(rootDir);
             var search = new DirectorySearch(di, "*chrome.exe", 2);
             var found = search.FileList;
             Assert.IsTrue(found.Any());
             Console.WriteLine(found[0]);
         }
-
 
         [TestMethod]
         public async Task ValidatePathAsync()
@@ -50,7 +45,6 @@ namespace legallead.records.search.Tests
             var fileName = await Task.Run(() => WebUtilities.GetChromeBinary());
             Assert.IsFalse(string.IsNullOrEmpty(fileName));
         }
-
 
         [TestMethod]
         [TestCategory("Web.Integration")]
@@ -107,7 +101,6 @@ namespace legallead.records.search.Tests
             WriteToExcel(found);
         }
 
-
         [TestMethod]
         [TestCategory("Web.Integration")]
         public void CanFetchDentonCountyNormal()
@@ -127,6 +120,7 @@ namespace legallead.records.search.Tests
 
             WriteToExcel(found);
         }
+
         private void WriteToExcel(WebFetchResult found)
         {
             ExcelWriter.WriteToExcel(found);
@@ -135,7 +129,6 @@ namespace legallead.records.search.Tests
         private bool CanExecuteFetch()
         {
             return ExecutionManagement.CanExecuteFetch();
-
         }
     }
 }

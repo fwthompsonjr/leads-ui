@@ -17,6 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{8B679B84-4F7C-4398-AD70-D7438D576125}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{94FC19EC-7A30-4EE2-BA63-7FD5904D1A67}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\CodeCoverage.runsettings = ..\..\CodeCoverage.runsettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

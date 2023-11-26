@@ -214,6 +214,36 @@ function isEnumerable( $obj ) {
         return $false;
     }
 }
+function findNode( $name ) {
+    foreach( $nde in $xContent.DocumentElement.ChildNodes ) {
+        if( ([System.Xml.XmlNode]$nde).Name -eq $name ) { return $nde; }
+    }
+    return $null;
+}
+
+function getFailedTestList( $solution ) {
+    try {
+        $txtcontent = [System.IO.File]::ReadAllText( $solution );
+        $xContent = [xml]$txtcontent;
+        $results = findNode -name 'Results'
+        $errors = "".Split(' ');
+        foreach( $nde in $results.ChildNodes ) {
+            $xmnode = ([System.Xml.XmlNode]$nde);
+            if ($xmnode.Attributes.Length -le 0) { continue; }
+            $outcome = $xmnode.Attributes.GetNamedItem('outcome');
+            $testName = $xmnode.Attributes.GetNamedItem('testName');
+            if ( $outcome -eq $null ) { continue; }
+            if ( $outcome.Value -eq "Passed") { continue; }
+            $errstring = " - $($outcome.Value) : $($testName.Value)   ";
+            $errors += $errstring;
+        }
+        $sorted = ($errors | Sort-Object);
+        $statstring = [string]::Join([Environment]::NewLine, $sorted);
+        writeGitAction -content $statstring
+    } catch {
+         Write-Warning "ERROR: $($_.Exception.Message)"
+    }
+}
 
 function describeTest( $solution ) {
     $shortName = [system.io.path]::GetFileNameWithoutExtension( $solution )
@@ -223,6 +253,7 @@ function describeTest( $solution ) {
 
     Write-Output "Evaluating test project $testProject"
     processTestResultFile -name $solution
+    $failedTestCount += $reportValues['totalfailed'];
     $pctpassed = ( $reportValues['totalpassed'] + 0.00001 ) / ( ( $reportValues['totalfailed'] + $reportValues['totalpassed'] ) + 0.00001 ) * 100.00000001
     $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
     $reportFinal = $reportFinal.Replace( "[assemblyname]", $testProject );
@@ -235,20 +266,33 @@ function describeTest( $solution ) {
 }
 
 $reportFinal = [string]::Join( [environment]::NewLine, $reportMd );
+
+
+function echoFailedTestCount {
+    try {
+        echo "FAILED_TEST_COUNT::$failedTestCount" >> $GITHUB_ENV
+    } catch { }
+}
+
 ## find all files matching *.trx 
 try {
-
+    $failedTestCount = 0;
+    
     $di = [System.IO.DirectoryInfo]::new( $workingDir );
     $found = $di.GetFiles('*.trx', [System.IO.SearchOption]::AllDirectories)
     if( ( isEnumerable -obj $found ) -eq $false ) {
         $solutionFile = $found.FullName
         describeTest -solution $solutionFile
+        getFailedTestList -solution $solutionFile
+        echoFailedTestCount
         return;
     }
     $found.GetEnumerator() | ForEach-Object {
         $solutionFile = ([System.IO.FileInfo]$_).FullName
         describeTest -solution $solutionFile
+        getFailedTestList -solution $solutionFile
     }
+    echoFailedTestCount
 } catch {
     Write-Warning "ERROR: $($_.Exception.Message)"
 }

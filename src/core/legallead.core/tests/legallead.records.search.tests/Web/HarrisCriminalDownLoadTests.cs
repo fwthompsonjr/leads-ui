@@ -1,11 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using legallead.records.search.Web;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using legallead.records.search.Web;
 
 namespace legallead.records.search.Tests
 {
@@ -42,7 +38,6 @@ namespace legallead.records.search.Tests
                 driver?.Quit();
                 KillProcess("chromedriver");
             }
-
         }
 
         [TestMethod]
@@ -70,7 +65,6 @@ namespace legallead.records.search.Tests
         [TestCategory("Integration Only")]
         public async Task Download_CanGet_Async()
         {
-
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");

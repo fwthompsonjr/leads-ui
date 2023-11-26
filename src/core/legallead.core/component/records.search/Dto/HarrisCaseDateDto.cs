@@ -50,10 +50,10 @@
             {
                 do
                 {
-                    HarrisCaseDateDto item = list.Last();
+                    HarrisCaseDateDto item = list[^1];
                     HarrisCaseDateDto dto = new() { Interval = obj.Interval, StartDate = item.EndDate };
                     list.Add(dto);
-                    DateTime bottom = list.Last().EndDate;
+                    DateTime bottom = list[^1].EndDate;
                     compared = top.Subtract(bottom);
                 } while (Math.Abs(compared.TotalDays) < rangeInDays);
             }

@@ -156,140 +156,140 @@
   <layouts>
     <layout id="1" name="caselayout">
       <columns>
-        <column name="Case Number" columnWidth="30"/>
-        <column name="Case Name" columnWidth="80"/>
-        <column name="Filed/Location/Judical Officer" columnWidth="40"/>
-        <column name="Type/Status" columnWidth="40"/>
-        <column name="Style" columnWidth="80"/>
+        <column name="Case Number" columnWidth="30" />
+        <column name="Case Name" columnWidth="80" />
+        <column name="Filed/Location/Judical Officer" columnWidth="40" />
+        <column name="Type/Status" columnWidth="40" />
+        <column name="Style" columnWidth="80" />
       </columns>
     </layout>
     <layout id="1" name="people">
       <columns>
-        <column name="Name" columnWidth="30"/>
-        <column name="FirstName" columnWidth="20"/>
-        <column name="LastName" columnWidth="20"/>
-        <column name="Zip" columnWidth="20"/>
-        <column name="Address1" columnWidth="30"/>
-        <column name="Address2" columnWidth="30"/>
-        <column name="Address3" columnWidth="30"/>
-        <column name="CaseNumber" columnWidth="30"/>
-        <column name="Date Filed" columnWidth="30"/>
-        <column name="Court" columnWidth="30"/>
-        <column name="Case Type" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Plantiff" columnWidth="30"/>
+        <column name="Name" columnWidth="30" />
+        <column name="FirstName" columnWidth="20" />
+        <column name="LastName" columnWidth="20" />
+        <column name="Zip" columnWidth="20" />
+        <column name="Address1" columnWidth="30" />
+        <column name="Address2" columnWidth="30" />
+        <column name="Address3" columnWidth="30" />
+        <column name="CaseNumber" columnWidth="30" />
+        <column name="Date Filed" columnWidth="30" />
+        <column name="Court" columnWidth="30" />
+        <column name="Case Type" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Plantiff" columnWidth="30" />
       </columns>
     </layout>
     <layout id="10" name="caselayout">
       <columns>
-        <column name="Case Number" columnWidth="30"/>
-        <column name="Case Name" columnWidth="80"/>
-        <column name="Filed/Location/Judical Officer" columnWidth="40"/>
-        <column name="Type/Status" columnWidth="40"/>
-        <column name="Style" columnWidth="80"/>
+        <column name="Case Number" columnWidth="30" />
+        <column name="Case Name" columnWidth="80" />
+        <column name="Filed/Location/Judical Officer" columnWidth="40" />
+        <column name="Type/Status" columnWidth="40" />
+        <column name="Style" columnWidth="80" />
       </columns>
     </layout>
     <layout id="10" name="people">
       <columns>
-        <column name="Name" columnWidth="30"/>
-        <column name="FirstName" columnWidth="20"/>
-        <column name="LastName" columnWidth="20"/>
-        <column name="Zip" columnWidth="20"/>
-        <column name="Address1" columnWidth="30"/>
-        <column name="Address2" columnWidth="30"/>
-        <column name="Address3" columnWidth="30"/>
-        <column name="CaseNumber" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Date Filed" columnWidth="30"/>
-        <column name="Court" columnWidth="30"/>
-        <column name="Case Type" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Plantiff" columnWidth="30"/>
+        <column name="Name" columnWidth="30" />
+        <column name="FirstName" columnWidth="20" />
+        <column name="LastName" columnWidth="20" />
+        <column name="Zip" columnWidth="20" />
+        <column name="Address1" columnWidth="30" />
+        <column name="Address2" columnWidth="30" />
+        <column name="Address3" columnWidth="30" />
+        <column name="CaseNumber" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Date Filed" columnWidth="30" />
+        <column name="Court" columnWidth="30" />
+        <column name="Case Type" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Plantiff" columnWidth="30" />
       </columns>
     </layout>
     <layout id="20" name="caselayout">
       <columns>
-        <column name="Case Number" columnWidth="30"/>
-        <column name="Case Name" columnWidth="80"/>
-        <column name="Filed/Location/Judical Officer" columnWidth="40"/>
-        <column name="Type/Status" columnWidth="40"/>
-        <column name="Style" columnWidth="80"/>
+        <column name="Case Number" columnWidth="30" />
+        <column name="Case Name" columnWidth="80" />
+        <column name="Filed/Location/Judical Officer" columnWidth="40" />
+        <column name="Type/Status" columnWidth="40" />
+        <column name="Style" columnWidth="80" />
       </columns>
     </layout>
     <layout id="20" name="people">
       <columns>
-        <column name="Name" columnWidth="30"/>
-        <column name="FirstName" columnWidth="20"/>
-        <column name="LastName" columnWidth="20"/>
-        <column name="Zip" columnWidth="20"/>
-        <column name="Address1" columnWidth="30"/>
-        <column name="Address2" columnWidth="30"/>
-        <column name="Address3" columnWidth="30"/>
-        <column name="CaseNumber" columnWidth="30"/>
-        <column name="Date Filed" columnWidth="30"/>
-        <column name="Court" columnWidth="30"/>
-        <column name="Case Type" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Plantiff" columnWidth="30"/>
+        <column name="Name" columnWidth="30" />
+        <column name="FirstName" columnWidth="20" />
+        <column name="LastName" columnWidth="20" />
+        <column name="Zip" columnWidth="20" />
+        <column name="Address1" columnWidth="30" />
+        <column name="Address2" columnWidth="30" />
+        <column name="Address3" columnWidth="30" />
+        <column name="CaseNumber" columnWidth="30" />
+        <column name="Date Filed" columnWidth="30" />
+        <column name="Court" columnWidth="30" />
+        <column name="Case Type" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Plantiff" columnWidth="30" />
       </columns>
     </layout>
     <layout id="30" name="caselayout">
       <columns>
-        <column name="Case Number" columnWidth="30"/>
-        <column name="Style" columnWidth="80"/>
-        <column name="Filed Date" columnWidth="40"/>
-        <column name="Court" columnWidth="15"/>
-        <column name="Case Type" columnWidth="80"/>
-        <column name="Status" columnWidth="20"/>
+        <column name="Case Number" columnWidth="30" />
+        <column name="Style" columnWidth="80" />
+        <column name="Filed Date" columnWidth="40" />
+        <column name="Court" columnWidth="15" />
+        <column name="Case Type" columnWidth="80" />
+        <column name="Status" columnWidth="20" />
       </columns>
     </layout>
     <layout id="30" name="people">
       <columns>
-        <column name="Name" columnWidth="30"/>
-        <column name="FirstName" columnWidth="20"/>
-        <column name="LastName" columnWidth="20"/>
-        <column name="Zip" columnWidth="20"/>
-        <column name="Address1" columnWidth="30"/>
-        <column name="Address2" columnWidth="30"/>
-        <column name="Address3" columnWidth="30"/>
-        <column name="CaseNumber" columnWidth="30"/>
-        <column name="Date Filed" columnWidth="30"/>
-        <column name="Court" columnWidth="30"/>
-        <column name="Case Type" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Plantiff" columnWidth="30"/>
+        <column name="Name" columnWidth="30" />
+        <column name="FirstName" columnWidth="20" />
+        <column name="LastName" columnWidth="20" />
+        <column name="Zip" columnWidth="20" />
+        <column name="Address1" columnWidth="30" />
+        <column name="Address2" columnWidth="30" />
+        <column name="Address3" columnWidth="30" />
+        <column name="CaseNumber" columnWidth="30" />
+        <column name="Date Filed" columnWidth="30" />
+        <column name="Court" columnWidth="30" />
+        <column name="Case Type" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Plantiff" columnWidth="30" />
       </columns>
     </layout>
     <layout id="40" name="caselayout">
       <columns>
-        <column name="Case Number" columnWidth="30"/>
-        <column name="Style" columnWidth="80"/>
-        <column name="Filed Date" columnWidth="40"/>
-        <column name="Court" columnWidth="15"/>
-        <column name="Case Type" columnWidth="80"/>
-        <column name="Status" columnWidth="20"/>
+        <column name="Case Number" columnWidth="30" />
+        <column name="Style" columnWidth="80" />
+        <column name="Filed Date" columnWidth="40" />
+        <column name="Court" columnWidth="15" />
+        <column name="Case Type" columnWidth="80" />
+        <column name="Status" columnWidth="20" />
       </columns>
     </layout>
     <layout id="40" name="people">
       <columns>
-        <column name="Name" columnWidth="30"/>
-        <column name="FirstName" columnWidth="20"/>
-        <column name="LastName" columnWidth="20"/>
-        <column name="Zip" columnWidth="20"/>
-        <column name="Address1" columnWidth="30"/>
-        <column name="Address2" columnWidth="30"/>
-        <column name="Address3" columnWidth="30"/>
-        <column name="CaseNumber" columnWidth="30"/>
-        <column name="Date Filed" columnWidth="30"/>
-        <column name="Court" columnWidth="30"/>
-        <column name="Case Type" columnWidth="30"/>
-        <column name="Case Style" columnWidth="30"/>
-        <column name="Plantiff" columnWidth="30"/>
+        <column name="Name" columnWidth="30" />
+        <column name="FirstName" columnWidth="20" />
+        <column name="LastName" columnWidth="20" />
+        <column name="Zip" columnWidth="20" />
+        <column name="Address1" columnWidth="30" />
+        <column name="Address2" columnWidth="30" />
+        <column name="Address3" columnWidth="30" />
+        <column name="CaseNumber" columnWidth="30" />
+        <column name="Date Filed" columnWidth="30" />
+        <column name="Court" columnWidth="30" />
+        <column name="Case Type" columnWidth="30" />
+        <column name="Case Style" columnWidth="30" />
+        <column name="Plantiff" columnWidth="30" />
       </columns>
     </layout>
   </layouts>
   <inactive>
-    <!-- 
+    <!--
     <keys id="30" name="Dallas County">
       <key name="baseUri"><![CDATA[https://courtsportal.dallascounty.org/DALLASPROD/Home/Dashboard/26]]></key>
       <key name="query"><![CDATA[ID=200&NodeID=1251,1252,1253,1254,1255,1256,1260,1270,1280,1265&NodeDesc=%20All%20District%20Courts%20]]></key>

@@ -22,7 +22,7 @@ namespace legallead.records.search.Addressing
 
             string searchType = "Respondent";
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(
+            IWebElement? tdName = TryFindElement(driver, By.XPath(
                 String.Format(IndexKeyNames.ThContainsText, searchType)));
             // this instance can find
             if (tdName == null)

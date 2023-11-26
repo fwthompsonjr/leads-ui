@@ -19,7 +19,8 @@
                 throw new System.ArgumentNullException(nameof(item));
             }
 
-            IWebDriver driver = GetWeb;
+            IWebDriver? driver = GetWeb;
+            if (driver == null) { return; }
             Byy selector = Byy.CssSelector(item.Locator.Query);
             IWebElement elementToClick = driver.FindElement(selector);
             string id = elementToClick.GetAttribute("id");
@@ -34,7 +35,6 @@
             {
                 return;
             }
-            //document.getElementById('personlist').value=Person_ID;
             IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript(jv.setIndex);
             jse.ExecuteScript(jv.change);

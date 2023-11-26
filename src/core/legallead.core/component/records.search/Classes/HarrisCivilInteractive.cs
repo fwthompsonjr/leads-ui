@@ -9,12 +9,6 @@ namespace legallead.records.search.Classes
 {
     public class HarrisCivilInteractive : TarrantWebInteractive
     {
-        private class AddressCondition
-        {
-            public string Name { get; set; }
-            public bool IsViolation { get; set; }
-        }
-
         public HarrisCivilInteractive(WebNavigationParameter parameters) : base(parameters)
         {
         }
@@ -37,23 +31,19 @@ namespace legallead.records.search.Classes
             int courtIndex = GetParameterValue<int>("courtIndex");
             int caseStatusIndex = GetParameterValue<int>("caseStatusIndex");
             List<PersonAddress> peopleList = new();
-            WebFetchResult webFetch = null;
+            WebFetchResult webFetch = new();
             while (startingDate.CompareTo(endingDate) <= 0)
             {
                 XmlContentHolder results = new SettingsManager().GetOutput(this);
 
                 // need to open the navigation file(s)
                 List<NavigationStep> steps = new();
-                string navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile);
+                string? navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile);
+                if (string.IsNullOrEmpty(navigationFile)) break;
                 List<string> sources = navigationFile.Split(',').ToList();
                 List<HLinkDataRow> cases = new();
-                List<PersonAddress>? people = new();
                 sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
-                CaseTypeSelectionDto caseTypes = CaseTypeSelectionDto.GetDto(CommonKeyIndexes.CollinCountyCaseType);
-                int caseTypeId = GetParameterValue<int>(CommonKeyIndexes.CaseTypeSelectedIndex);
-                int searchTypeId = GetParameterValue<int>(CommonKeyIndexes.SearchTypeSelectedIndex);
-                DropDown selectedCase = caseTypes.DropDowns[caseTypeId];
-                // set special item values
+
                 NavigationStep caseTypeSelect = steps.First(x =>
                     x.ActionName.Equals("jquery-set-selected-index", StringComparison.CurrentCultureIgnoreCase) &
                     x.DisplayName.Equals("court-drop-down list", StringComparison.CurrentCultureIgnoreCase));
@@ -75,12 +65,12 @@ namespace legallead.records.search.Classes
                     .ExpectedValue = startingDate.ToString("MM/dd/yyyy");
 
                 webFetch = SearchWeb(results, steps, startingDate, startingDate,
-                    ref cases, out people);
+                    ref cases, out var people);
                 peopleList.AddRange(people);
                 peopleList.ForEach(p =>
                 {
                     p = p.ToCalculatedNames();
-                    p = p.ToCalculatedZip();
+                    p.ToCalculatedZip();
                 });
                 webFetch.PeopleList = peopleList;
                 webFetch.CaseList = peopleList.ToHtml();
@@ -126,7 +116,7 @@ namespace legallead.records.search.Classes
             {
                 return cases;
             }
-            
+
             HarrisCivilReadTable htmlAction = (HarrisCivilReadTable)action;
             List<HLinkDataRow> data = htmlAction.DataRows;
             if (data != null && data.Any())
@@ -184,25 +174,20 @@ namespace legallead.records.search.Classes
             }
             catch (Exception)
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
+                driver?.Dispose();
                 throw;
             }
             finally
             {
-                driver.Quit();
-                driver.Dispose();
+                driver?.Quit();
+                driver?.Dispose();
             }
         }
 
         protected override List<PersonAddress> ExtractPeople(List<HLinkDataRow> cases)
         {
-            if (cases == null)
-            {
-                return null;
-            }
-
-            if (!cases.Any())
+            if (cases == null || !cases.Any())
             {
                 return new List<PersonAddress>();
             }
@@ -280,33 +265,27 @@ namespace legallead.records.search.Classes
                 return;
             }
 
-            string fmt = GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
-            ElementAssertion helper = new(driver);
-            helper.Navigate(string.Format(CultureInfo.CurrentCulture, fmt, linkData.WebAddress));
-            driver.WaitForNavigation();
-            // we have weird situation where the defendant is sometimes PIr11, PIr12
-            // heres where we will get the case style for criminal cases
-
-            FindDefendant(driver, ref linkData);
-
-            // can we get the case-style data here
-
+            var fmt = GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
+            if (!string.IsNullOrEmpty(fmt))
+            {
+                ElementAssertion helper = new(driver);
+                helper.Navigate(string.Format(CultureInfo.CurrentCulture, fmt, linkData.WebAddress));
+                driver.WaitForNavigation();
+                FindDefendant(driver, ref linkData);
+            }
             driver.Navigate().Back();
         }
 
         private static void FindDefendant(IWebDriver driver, ref HLinkDataRow linkData)
         {
-            IWebElement criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
+            IWebElement? criminalLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.CriminalLinkXpath));
             IWebElement? elementCaseName = TryFindElement(driver, By.XPath(CommonKeyIndexes.CaseStlyeBoldXpath));
-            if (criminalLink != null)
+            if (criminalLink != null && elementCaseName != null)
             {
-                if (elementCaseName != null)
-                {
-                    linkData.CriminalCaseStyle = elementCaseName.Text;
-                    linkData.IsCriminal = true;
-                }
+                linkData.CriminalCaseStyle = elementCaseName.Text;
+                linkData.IsCriminal = true;
             }
-            IWebElement probateLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.ProbateLinkXpath));
+            IWebElement? probateLink = TryFindElement(driver, By.XPath(CommonKeyIndexes.ProbateLinkXpath));
             if (probateLink != null)
             {
                 linkData.IsProbate = true;

@@ -21,7 +21,7 @@ namespace legallead.records.search.Addressing
             }
 
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(@"//*[@id='PIr11']"));
+            IWebElement? tdName = TryFindElement(driver, By.XPath(@"//*[@id='PIr11']"));
             // this instance can find
             if (tdName == null)
             {

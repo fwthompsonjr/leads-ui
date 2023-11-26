@@ -1,8 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
+﻿using legallead.harriscriminal.db.Entities;
 using legallead.records.search.Db;
-using legallead.harriscriminal.db.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace legallead.records.search.UnitTests.Db
 {
@@ -10,13 +8,13 @@ namespace legallead.records.search.UnitTests.Db
     public class DataataProcessTest
     {
         [TestMethod]
-        public async Task CanExecute_Download()
+        public async Task CanExecuteDownloadAsync()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");
             }
-            HccProcess reported = default;
+            HccProcess? reported = default;
             var process = new DownloadDataProcess();
             // The Progress<T> constructor captures our UI context,
             //  so the lambda will be run on the UI thread.
@@ -30,15 +28,14 @@ namespace legallead.records.search.UnitTests.Db
             Assert.IsNotNull(reported);
         }
 
-
         [TestMethod]
-        public async Task CanExecute_DownloadCases()
+        public async Task CanExecuteDownloadCasesAsync()
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 Assert.Inconclusive("This method to be executed in debug mode only.");
             }
-            HccProcess reported = default;
+            HccProcess? reported = default;
             var process = new DownloadCaseProcess();
             // The Progress<T> constructor captures our UI context,
             //  so the lambda will be run on the UI threa-

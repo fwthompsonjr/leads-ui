@@ -1,20 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Configuration;
+using System.Diagnostics;
 
 namespace legallead.records.search.Tests
 {
     [TestClass]
     public class CollinCountyNavigationTests
     {
-
-
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
@@ -37,10 +32,9 @@ namespace legallead.records.search.Tests
         {
             var caseTypes = CaseTypeSelectionDto.GetDto("collinCountyCaseType");
             Assert.IsNotNull(caseTypes);
-            Assert.IsTrue(caseTypes.DropDowns.Any(x => x.Id == 1));
-            var dropDown = caseTypes.DropDowns.First(x => x.Id == 1);
-            Assert.AreEqual(dropDown.Name, "probate courts");
-
+            Assert.IsTrue(caseTypes.DropDowns.Exists(x => x.Id == 1));
+            var dropDown = caseTypes.DropDowns.First(x => x.Id == 1) ?? new();
+            Assert.AreEqual("probate courts", dropDown.Name);
         }
 
         [TestMethod]
@@ -91,7 +85,6 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
         [TestMethod]
         [TestCategory("collin.county.actions")]
         [TestCategory("Web.Integration")]
@@ -117,7 +110,6 @@ namespace legallead.records.search.Tests
             Assert.IsNotNull(result);
             ExcelWriter.WriteToExcel(result);
         }
-
 
         [TestMethod]
         [TestCategory("collin.county.actions")]
@@ -145,7 +137,6 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
         [TestMethod]
         [TestCategory("collin.county.actions")]
         [TestCategory("Web.Integration")]
@@ -172,14 +163,11 @@ namespace legallead.records.search.Tests
             ExcelWriter.WriteToExcel(result);
         }
 
-
-
         #region Static Helper Functions
 
         private static WebNavigationParameter CreateOrLoadWebParameter(WebNavigationParameter webParameter, string jsFile)
         {
-            // get key name 
-            // var cultureInfo = System.Globalization.CultureInfo.CurrentCulture;
+            // get key name
             if (!File.Exists(jsFile))
             {
                 return webParameter;
@@ -195,38 +183,33 @@ namespace legallead.records.search.Tests
 
         private static void CreateJsFile(WebNavigationParameter webParameter, string jsFile)
         {
-            using (var writer = new StreamWriter(jsFile))
-            {
-                writer.Write(
-                Newtonsoft.Json.JsonConvert.SerializeObject(webParameter));
-            }
+            using var writer = new StreamWriter(jsFile);
+            writer.Write(
+            Newtonsoft.Json.JsonConvert.SerializeObject(webParameter));
         }
 
         private static WebNavigationParameter ReadJsFile(string jsFile)
         {
-            using (var reader = new StreamReader(jsFile))
-            {
-                var content = reader.ReadToEnd();
-                var webParameter =
-                    Newtonsoft.Json.JsonConvert
-                    .DeserializeObject<WebNavigationParameter>(content);
-                return webParameter;
-            }
+            using var reader = new StreamReader(jsFile);
+            var content = reader.ReadToEnd();
+            var webParameter =
+                Newtonsoft.Json.JsonConvert
+                .DeserializeObject<WebNavigationParameter>(content) ?? new();
+            return webParameter;
         }
 
         private static string GetAppDirectoryName()
         {
-
             var navigation = new SettingsManager();
             var navFile = navigation.ExcelFormatFile;
-            var folder = Path.GetDirectoryName(navFile);
+            var folder = Path.GetDirectoryName(navFile) ?? string.Empty;
             while (new DirectoryInfo(folder).Name != "bin")
             {
-                folder = new DirectoryInfo(folder).Parent.FullName;
+                folder = new DirectoryInfo(folder).Parent!.FullName;
             }
-            return new DirectoryInfo(folder).Parent.FullName;
+            return new DirectoryInfo(folder).Parent!.FullName;
         }
 
-        #endregion
+        #endregion Static Helper Functions
     }
 }

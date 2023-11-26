@@ -1,5 +1,8 @@
 ﻿namespace legallead.harriscriminal.db.Entities
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
+            "S6561:Avoid using \"DateTime.Now\" for benchmarking or timing operations",
+            Justification = "Will refactor at later date")]
     public class DataLoadDto
     {
         private TimeSpan _elapsed;

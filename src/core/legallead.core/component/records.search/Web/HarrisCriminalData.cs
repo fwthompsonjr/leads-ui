@@ -20,7 +20,7 @@ namespace legallead.records.search.Web
             { "download", "//tr[@id='" + div + "']/table/tbody/tr[58]/td[3]/a/u/b" }
         };
 
-        private static string _downloadFolder;
+        private static string? _downloadFolder;
 
         private static string DownloadTo => _downloadFolder ??= BaseChromeProvider.DownloadPath;
 
@@ -38,7 +38,7 @@ namespace legallead.records.search.Web
         /// <param name="driver">The driver.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">driver</exception>
-        public virtual string GetData(IWebDriver driver)
+        public virtual string? GetData(IWebDriver? driver)
         {
             string computedName = GetDownloadName();
             if (File.Exists(computedName))
@@ -51,17 +51,16 @@ namespace legallead.records.search.Web
                 IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
                 string address = Keys["address"];
                 string search = Keys["tr.monthly"];
-                string link = Keys["download"];
 
                 driver.Navigate().GoToUrl(address);
                 if (!driver.IsElementPresent(By.XPath(search)))
                 {
                     // get the latest file, if any
                     FileInfo? latestFile = GetFiles().FirstOrDefault();
-                    return latestFile?.FullName;
+                    return latestFile?.FullName ?? string.Empty;
                 }
                 IWebElement trElement = driver.FindElement(By.XPath(search));
-                IWebElement tdLast = trElement.FindElements(By.TagName("td")).Last();
+                IWebElement tdLast = trElement.FindElements(By.TagName("td"))[^1];
                 IWebElement anchor = tdLast.FindElement(By.TagName("a"));
                 string expectedFileName = GetDownloadName(anchor);
                 if (File.Exists(expectedFileName))
@@ -71,7 +70,7 @@ namespace legallead.records.search.Web
                 jse.ExecuteScript("arguments[0].click();", anchor);
                 DateTime trackingStart = DateTime.Now;
                 int timeout = 5 * 60; // allow five minutes
-                while (FileCreateComplete(trackingStart, timeout) == false)
+                while (!FileCreateComplete(trackingStart, timeout))
                 {
                     Thread.Sleep(500);
                     if (File.Exists(expectedFileName))
@@ -127,7 +126,7 @@ namespace legallead.records.search.Web
         {
             DateTime trackingEnd = startTime.AddSeconds(timeoutInSeconds);
             bool isTrackingTimeout = false;
-            if (trackingEnd < DateTime.Now) { isTrackingTimeout = true; };
+            if (trackingEnd < DateTime.Now) { isTrackingTimeout = true; }
 
             FileInfo[] files = new DirectoryInfo(DownloadTo).GetFiles("*.txt");
             if (!files.Any())
@@ -183,10 +182,11 @@ namespace legallead.records.search.Web
 
         protected static IWebDriver GetDriver()
         {
-            WebDrivers wdriver = (new WebDriverDto().Get()).WebDrivers;
+            var dto = new WebDriverDto().Get() ?? new();
+            WebDrivers wdriver = dto.WebDrivers;
             Driver? driver = wdriver.Drivers.FirstOrDefault(d => d.Id == wdriver.SelectedIndex);
             StructureMap.Container container = WebDriverContainer.GetContainer;
-            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver.Name);
+            IWebDriverProvider provider = container.GetInstance<IWebDriverProvider>(driver?.Name ?? string.Empty);
             bool showBrowser =
                 Convert.ToBoolean(
                 ConfigurationManager.AppSettings["harris.criminal.show.browser"] ?? "true",
@@ -194,7 +194,7 @@ namespace legallead.records.search.Web
             return provider.GetWebDriver(showBrowser);
         }
 
-        protected IWebDriver TheDriver { get; set; }
+        protected IWebDriver? TheDriver { get; set; }
 
         private bool _disposed = false;
 

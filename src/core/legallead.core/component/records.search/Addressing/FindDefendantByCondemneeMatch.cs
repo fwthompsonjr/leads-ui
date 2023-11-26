@@ -23,7 +23,7 @@ namespace legallead.records.search.Addressing
             string searchType = "Condemnee";
             // driver.FindElement(By.XPath("//th[contains(text(),'Principal')]"))
             CanFind = false;
-            IWebElement tdName = TryFindElement(driver, By.XPath(
+            IWebElement? tdName = TryFindElement(driver, By.XPath(
                 string.Format(CultureInfo.CurrentCulture,
                 IndexKeyNames.ThContainsText, searchType)));
             // this instance can find
@@ -51,8 +51,9 @@ namespace legallead.records.search.Addressing
                 MapElementAddress(linkData, rowLabel, table, trCol, r,
                     searchType.ToLower(System.Globalization.CultureInfo.CurrentCulture));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
         }
     }

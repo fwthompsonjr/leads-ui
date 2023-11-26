@@ -16,7 +16,7 @@ namespace legallead.records.search.Parsing
 
         public virtual string SearchFor => _searchKeyWord;
 
-        public string CaseData { get; set; }
+        public string CaseData { get; set; } = string.Empty;
 
         public virtual bool CanParse()
         {
@@ -58,7 +58,6 @@ namespace legallead.records.search.Parsing
             {
                 return response;
             }
-            //response.Defendant = CaseData.Substring(findItIndex).Trim();
             response.Plantiff =
                 CaseData[SearchFor.Length..].Trim();
             return response;

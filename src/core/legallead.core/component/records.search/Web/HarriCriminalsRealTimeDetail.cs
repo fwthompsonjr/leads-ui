@@ -32,13 +32,13 @@ namespace legallead.records.search.Web
             });
         }
 
-        private static void AppendDetail(List<HarrisCriminalDto> details, List<HtmlDocument> cdResults, DateTime runDate)
+        private static void AppendDetail(List<HarrisCriminalDto> details, List<HtmlDocument?> cdResults, DateTime runDate)
         {
-            if (details == null | cdResults == null)
+            if (details == null || cdResults == null)
             {
                 return;
             }
-            if (cdResults.Count < 3)
+            if (cdResults.Count < 3 || cdResults.Exists(x => x == null))
             {
                 return;
             }
@@ -48,19 +48,24 @@ namespace legallead.records.search.Web
             {
                 Index = details.Count + 1,
                 RunDate = runDate,
-                CauseSummary = cdResults[0].DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList(),
-                DefendantAddress = cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList(),
-                DefendantBio = cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[0]?.SelectNodes(tr)?.ToList(),
-                DefendantMetrics = cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[1]?.SelectNodes(tr)?.ToList(),
-                Court = cdResults[2]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList()
+                CauseSummary = GetNodes(cdResults[0]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList()),
+                DefendantAddress = GetNodes(cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList()),
+                DefendantBio = GetNodes(cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[0]?.SelectNodes(tr)?.ToList()),
+                DefendantMetrics = GetNodes(cdResults[1]?.DocumentNode?.FirstChild?.SelectNodes(tbl)[1]?.SelectNodes(tr)?.ToList()),
+                Court = GetNodes(cdResults[2]?.DocumentNode?.FirstChild?.SelectNodes(tr)?.ToList())
             };
-            HarrisCriminalDto dto = rows.CriminalDto();
+            HarrisCriminalDto? dto = rows.CriminalDto();
             if (dto == null)
             {
                 return;
             }
 
             details.Add(dto);
+        }
+
+        private static List<HtmlNode> GetNodes(List<HtmlNode>? nodes)
+        {
+            return nodes ?? new();
         }
 
         private static HtmlDocument? ToHtmlDocument(string table)

@@ -6,8 +6,17 @@ namespace legallead.records.search.Db
 {
     public static class DataPersistence
     {
-        internal static string _appFolder;
-        internal static string AppFolder => _appFolder ??= GetAppFolderName();
+        internal static string? _appFolder;
+
+        internal static string AppFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_appFolder)) return _appFolder;
+                _appFolder = GetAppFolderName();
+                return _appFolder;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the application directory.
@@ -16,10 +25,10 @@ namespace legallead.records.search.Db
         private static string GetAppFolderName()
         {
             string execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            return Path.GetDirectoryName(execName);
+            return Path.GetDirectoryName(execName) ?? string.Empty;
         }
 
-        private static string _dataFolder;
+        private static string? _dataFolder;
 
         /// <summary>
         /// Gets the data folder.
@@ -27,7 +36,15 @@ namespace legallead.records.search.Db
         /// <value>
         /// The data folder.
         /// </value>
-        public static string DataFolder => _dataFolder ??= GetDataFolderName();
+        public static string DataFolder
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(_dataFolder)) return _dataFolder;
+                _dataFolder = GetDataFolderName();
+                return _dataFolder;
+            }
+        }
 
         /// <summary>
         /// Gets the name of the application data directory.
@@ -47,19 +64,19 @@ namespace legallead.records.search.Db
             return dataFolder;
         }
 
-        public static T GetContent<T>(string fileName) where T : class
+        public static T GetContent<T>(string fileName) where T : class, new()
         {
             if (!FileExists(fileName))
             {
-                return default;
+                return new();
             }
             string targetFile = Path.Combine(DataFolder, fileName);
             using StreamReader reader = new(targetFile);
             string content = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<T>(content);
+            return JsonConvert.DeserializeObject<T>(content) ?? new();
         }
 
-        public static void Save(string fileName, object data)
+        public static void Save(string fileName, object? data)
         {
             if (string.IsNullOrEmpty(fileName))
             {

@@ -7,7 +7,7 @@
             List<BaseAction> actions = GetEnumerableOfType<BaseAction>("header", process).ToList();
             foreach (BaseAction? item in actions)
             {
-                if (actions.IndexOf(item) > 0)
+                if (actions.IndexOf(item) >= 0)
                 {
                     item.WebDriver = actions[0].WebDriver;
                 }
