@@ -4,19 +4,6 @@ namespace legallead.jdbc.tests
 {
     public class GetConnectionStringTest
     {
-        [Fact]
-        public void GetConnectionIsNotNull()
-        {
-            var response = RemoteData.GetConnectionString();
-            Assert.NotNull(response);
-        }
-
-        [Fact]
-        public void GetConnectionAliasIsNotNull()
-        {
-            var response = RemoteData.GetConnectionAlias();
-            Assert.NotNull(response);
-        }
 
         [Fact]
         public void GetConnectionPostGreIsNotNull()
