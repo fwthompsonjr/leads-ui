@@ -73,9 +73,6 @@ namespace legallead.json.db
         }
         public T? FirstOrDefault<T>(T entity, Func<T, bool> expression) where T : BaseEntity<T>, IDataEntity, new()
         {
-            if (entity is not BaseEntity<T> baseDto)
-                throw new TypeAccessException(typeAssignMessage);
-
             var key = typeof(T).Name.ToLower();
             if (!_dataFiles.ContainsKey(key))
                 throw new FileNotFoundException();
@@ -97,9 +94,6 @@ namespace legallead.json.db
         public IEnumerable<T>? Where<T>(T entity, Func<T, bool> expression)
             where T : BaseEntity<T>, IDataEntity, new()
         {
-            if (entity is not BaseEntity<T> baseDto)
-                throw new TypeAccessException(typeAssignMessage);
-
             var key = typeof(T).Name.ToLower();
             if (!_dataFiles.ContainsKey(key))
                 throw new FileNotFoundException();
