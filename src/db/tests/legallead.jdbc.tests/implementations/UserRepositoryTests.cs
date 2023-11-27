@@ -5,20 +5,22 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
-using System.Net.Http.Headers;
 
 namespace legallead.jdbc.tests.implementations
 {
-    public class ComponentRepositoryTests
+    public class UserRepositoryTests
     {
-        private static readonly Faker<Component> faker =
-            new Faker<Component>()
+        private static readonly Faker<User> faker =
+            new Faker<User>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Name, y => y.Company.CompanyName());
+            .RuleFor(x => x.UserName, y => y.Company.CompanyName())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.PasswordHash, y => y.Random.AlphaNumeric(60))
+            .RuleFor(x => x.PasswordSalt, y => y.Random.AlphaNumeric(30));
 
         private readonly DataContext dataContext;
 
-        public ComponentRepositoryTests()
+        public UserRepositoryTests()
         {
             dataContext = new DataContext(new Mock<IDapperCommand>().Object);
         }
@@ -26,14 +28,14 @@ namespace legallead.jdbc.tests.implementations
         [Fact]
         public void RepoCanConstruct()
         {
-            var repo = new ComponentRepository(dataContext);
+            var repo = new UserRepository(dataContext);
             Assert.NotNull(repo);
         }
 
         [Fact]
         public async Task RepoCanGetAll()
         {
-            var repo = new ComponentRepository(dataContext);
+            var repo = new UserRepository(dataContext);
             var response = await repo.GetAll();
             Assert.NotNull(response);
         }
@@ -44,8 +46,20 @@ namespace legallead.jdbc.tests.implementations
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var test = faker.Generate();
-                var repo = new ComponentRepository(dataContext);
+                var repo = new UserRepository(dataContext);
                 _ = await repo.GetById(test.Id);
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task RepoCanGetByEmail()
+        {
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var test = faker.Generate();
+                var repo = new UserRepository(dataContext);
+                _ = await repo.GetByEmail(test.Email);
             });
             Assert.Null(exception);
         }
@@ -56,8 +70,8 @@ namespace legallead.jdbc.tests.implementations
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var test = faker.Generate();
-                var repo = new ComponentRepository(dataContext);
-                _ = await repo.GetByName(test.Name);
+                var repo = new UserRepository(dataContext);
+                _ = await repo.GetByName(test.UserName);
             });
             Assert.Null(exception);
         }
@@ -68,7 +82,7 @@ namespace legallead.jdbc.tests.implementations
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var test = faker.Generate();
-                var repo = new ComponentRepository(GetDbMock().Object);
+                var repo = new UserRepository(GetDbMock().Object);
                 await repo.Create(test);
             });
             Assert.Null(exception);
@@ -80,7 +94,7 @@ namespace legallead.jdbc.tests.implementations
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var test = faker.Generate();
-                var repo = new ComponentRepository(GetDbMock().Object);
+                var repo = new UserRepository(GetDbMock().Object);
                 await repo.Update(test);
             });
             Assert.Null(exception);
@@ -92,7 +106,7 @@ namespace legallead.jdbc.tests.implementations
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var test = faker.Generate();
-                var repo = new ComponentRepository(GetDbMock().Object);
+                var repo = new UserRepository(GetDbMock().Object);
                 await repo.Delete(test.Id);
             });
             Assert.Null(exception);

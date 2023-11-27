@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using legallead.jdbc.interfaces;
 using Npgsql;
 using System.Data;
 
@@ -7,20 +8,28 @@ namespace legallead.jdbc.helpers
     public class DataContext
     {
         private readonly string _connectionString;
-        public DataContext()
+        private readonly IDapperCommand _dbexecutor;
+
+        public DataContext(IDapperCommand command)
         {
             _connectionString = RemoteData.GetPostGreString();
+            _dbexecutor = command;
         }
+
+        public virtual IDapperCommand GetCommand => _dbexecutor;
+
         public virtual IDbConnection CreateConnection()
         {
             return new NpgsqlConnection(_connectionString);
         }
+
         public async Task Init()
         {
             await InitTables();
             await InitApplications();
             await InitProfile();
         }
+
         private async Task InitTables()
         {
             // create tables if they don't exist
@@ -109,7 +118,6 @@ namespace legallead.jdbc.helpers
                     await connection.ExecuteAsync(command);
                 }
             }
-
         }
 
         private async Task InitApplications()
@@ -136,7 +144,6 @@ namespace legallead.jdbc.helpers
                 await connection.ExecuteAsync(stmt);
             }
         }
-
 
         private async Task InitProfile()
         {

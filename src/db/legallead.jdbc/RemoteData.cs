@@ -1,12 +1,9 @@
-﻿using System.Numerics;
-using System.Text;
-
-namespace legallead.jdbc
+﻿namespace legallead.jdbc
 {
     internal static class RemoteData
     {
         private const string PostGresCommand = "Host=lower-sponge-13511.5xj.cockroachlabs.cloud:26257;Username=<username>;Password=<password>;Database=defaultdb";
-        
+
         private static string[] GetPassCode()
         {
             const string saltLocal = "legal.lead.pgre.passcode";
@@ -14,6 +11,7 @@ namespace legallead.jdbc
             const string vector = "CMFdsdHMyvKbUvcynbzlQg==";
             return CryptoManager.Decrypt(conversion, saltLocal, vector).Split('|');
         }
+
         public static string GetPostGreString()
         {
             var secret = GetPassCode();

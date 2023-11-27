@@ -4,7 +4,6 @@ namespace legallead.jdbc.tests
 {
     public class GetConnectionStringTest
     {
-
         [Fact]
         public void GetConnectionPostGreIsNotNull()
         {

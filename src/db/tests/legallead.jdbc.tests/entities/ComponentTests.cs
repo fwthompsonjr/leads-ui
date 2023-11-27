@@ -1,10 +1,5 @@
 ﻿using Bogus;
 using legallead.jdbc.entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.tests.entities
 {
@@ -24,6 +19,7 @@ namespace legallead.jdbc.tests.entities
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void ComponentCanUpdateId()
         {
@@ -31,6 +27,7 @@ namespace legallead.jdbc.tests.entities
             items[0].Id = items[1].Id;
             Assert.Equal(items[1].Id, items[0].Id);
         }
+
         [Fact]
         public void ComponentCanUpdateName()
         {

@@ -1,9 +1,6 @@
 ﻿using legallead.jdbc.helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using legallead.jdbc.interfaces;
+using Moq;
 
 namespace legallead.jdbc.tests
 {
@@ -12,15 +9,16 @@ namespace legallead.jdbc.tests
         [Fact]
         public void DataContextCanConstruct()
         {
-            var db = new DataContext();
+            var db = new DataContext(new Mock<IDapperCommand>().Object);
             Assert.NotNull(db);
         }
 
         [Fact]
         public async Task DataContextCanInit()
         {
-            var exception = await Record.ExceptionAsync(async () => {
-                var db = new DataContext();
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var db = new DataContext(new Mock<IDapperCommand>().Object);
                 await db.Init();
             });
             Assert.Null(exception);
