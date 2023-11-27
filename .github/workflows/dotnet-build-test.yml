@@ -32,7 +32,7 @@ jobs:
     ## major.minor.build.revision
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}{2}', steps.versionid.outputs.vrsn_number, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Echo Release Version
       run: echo ${{ env.BUILD_VERSION }}
