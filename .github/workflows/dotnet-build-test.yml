@@ -16,23 +16,23 @@ jobs:
 
     steps:
     - name: Get current version number
-      id: version
-      run: echo "version=3.0" >> "$GITHUB_OUTPUT"
+      id: versionid
+      run: echo "vrsn_number=3.2" >> "$GITHUB_OUTPUT"
 
     - uses: actions/checkout@v4
     - name: Get current date
       id: date
-      run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+      run: echo "date=$(date +'%m%d')" >> "$GITHUB_OUTPUT"
     
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
     
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
-  
+    ## major.minor.build.revision
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}', steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Echo Release Version
       run: echo ${{ env.BUILD_VERSION }}
@@ -53,12 +53,7 @@ jobs:
       timeout-minutes: 5
       shell: pwsh
       run: |
-        & ./pipeline-test-solutions.ps1
-
-    - name: Summarize Test Results
-      shell: pwsh
-      run: |
-        & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
+        & ./pipeline-integration-test.ps1
 
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main'
