@@ -34,7 +34,7 @@ $startedAt = [datetime]::UtcNow
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $errorsFile = [System.IO.Path]::Combine( $currentDir, "build-error-file.txt" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
-$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories)
+$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object { $_.Name.IndexOf( 'integration' ) -lt 0 }
 $commands = @();
 
 if( $found.Count -eq $null ) {
