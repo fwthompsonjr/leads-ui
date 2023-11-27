@@ -17,8 +17,8 @@ jobs:
 
     steps:
     - name: Get current version number
-      id: version
-      run: echo "version=3.1" >> "$GITHUB_OUTPUT"
+      id: versionid
+      run: echo "vrsn_number=3.1" >> "$GITHUB_OUTPUT"
 
     - uses: actions/checkout@v4
     - name: Get current date
@@ -27,7 +27,7 @@ jobs:
   
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{2}{1}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{2}{1}', steps.versionid.outputs.vrsn_number, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
 
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
