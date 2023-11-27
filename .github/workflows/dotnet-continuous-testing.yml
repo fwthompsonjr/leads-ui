@@ -27,7 +27,7 @@ jobs:
   
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}.{2}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{2}.{1}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
 
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version

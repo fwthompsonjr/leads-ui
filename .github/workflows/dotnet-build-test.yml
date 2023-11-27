@@ -29,10 +29,10 @@ jobs:
     
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
-  
+    ## major.minor.build.revision
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}.{2}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{2}.{1}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Echo Release Version
       run: echo ${{ env.BUILD_VERSION }}
