@@ -1,12 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.jdbc.implementations
 {
@@ -24,7 +18,7 @@ namespace legallead.jdbc.implementations
         public async Task Create(User user)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"INSERT INTO {tableName} (Id, UserName, Email, PasswordHash, PasswordSalt) " + 
+            var sql = $"INSERT INTO {tableName} (Id, UserName, Email, PasswordHash, PasswordSalt) " +
                 "VALUES (@Id, @UserName, @Email, @PasswordHash, @PasswordSalt);";
             await _command.ExecuteAsync(connection, sql, user);
         }
@@ -67,7 +61,7 @@ namespace legallead.jdbc.implementations
         public async Task Update(User user)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"UPDATE {tableName} " + 
+            var sql = $"UPDATE {tableName} " +
                 "SET UserName = @UserName " +
                 " Email = @Email " +
                 " PasswordHash = @PasswordHash " +
