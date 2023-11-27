@@ -239,9 +239,11 @@ function getFailedTestList( $solution ) {
             $errors += $errstring;
         }
         $sorted = ($errors | Sort-Object);
-        $statstring = [string]::Join([Environment]::NewLine, $sorted);
-        $dvstats = "<div> <small>$statstring</small> </div>"
-        writeGitAction -content $dvstats
+        if( $sorted.Length -gt 0 ){
+            $statstring = [string]::Join([Environment]::NewLine, $sorted);
+            $dvstats = "<div> <small>$statstring</small> </div>   "
+            writeGitAction -content $dvstats
+        }
     } catch {
          Write-Warning "ERROR: $($_.Exception.Message)"
     }
