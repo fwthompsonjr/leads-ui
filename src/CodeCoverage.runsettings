@@ -28,21 +28,9 @@ Included items must then not match any entries in the exclude list to remain inc
 								<ModulePath>.*Shouldly.*</ModulePath>
 								<ModulePath>.*Moq.*</ModulePath>
 								<ModulePath>.*xunit*.*</ModulePath>
+								<ModulePath>.*\*.tests*</ModulePath>
+								<ModulePath>.*\*.Tests*</ModulePath>
 							</Exclude>
-						</ModulePaths>
-
-						<!-- NEW --> 
-
-						<ModulePaths>
-
-							<Include>
-								<ModulePath>.*\.dll$3</ModulePath>	
-							</Include>
-
-							<Exclude>
-
-							</Exclude>
-
 						</ModulePaths>
 
 						<!-- --> 

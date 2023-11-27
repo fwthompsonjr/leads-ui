@@ -1,0 +1,9 @@
+<FineCodeCoverage>
+	<Enabled>
+		True
+	</Enabled>
+	<!-- and more -->
+	<Exclude>
+	[*.tests.*]*
+  </Exclude>
+</FineCodeCoverage>

@@ -32,7 +32,7 @@ jobs:
   
     - name: Set Release Version
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}', steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{1}.{2}', steps.version.outputs.version, steps.date.outputs.date, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Echo Release Version
       run: echo ${{ env.BUILD_VERSION }}
@@ -53,7 +53,7 @@ jobs:
       timeout-minutes: 5
       shell: pwsh
       run: |
-        & ./pipeline-test-solutions.ps1
+        & ./pipeline-integration-test.ps1
 
     - name: Summarize Test Results
       shell: pwsh

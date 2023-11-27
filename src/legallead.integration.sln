@@ -1,0 +1,112 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6414FF76-621E-4208-930A-1968994421B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db", "core\legallead.core\component\harriscriminal.db\legallead.harriscriminal.db.csproj", "{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search", "core\legallead.core\component\records.search\legallead.records.search.csproj", "{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.resources", "core\legallead.core\component\resources\legallead.resources.csproj", "{E79D8838-04E2-4F51-8276-744A1AB547FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.json.db", "db\component\legallead.json.db.csproj", "{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.jdbc", "db\legallead.jdbc\legallead.jdbc.csproj", "{59E4E1C6-AFD6-461C-8528-170D9A63894D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{DA475DE6-75F5-4BDB-BD34-6A3D3EA795C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{29DC1BFF-7F9E-4686-98C5-2D642801BF5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.jdbc.tests", "db\tests\legallead.jdbc.tests\legallead.jdbc.tests.csproj", "{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.json.db.tests", "db\tests\legallead.json.db.tests\legallead.json.db.tests.csproj", "{B7789BCD-4BCD-41BC-8943-0D9129AA080F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{3337AB42-CA68-4152-A9B1-119AED0F073B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{56A97FE9-4958-44EB-BC1B-92DA0E1755ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.harriscriminal.db.tests", "core\legallead.core\tests\harriscriminal.db.tests\legallead.harriscriminal.db.tests.csproj", "{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "core\legallead.core\tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{12581296-986D-4A72-B66A-59BE4A088946}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{B658BCAC-DB86-4361-B9FD-7994D2ED55AD}"
+	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.resources.tests", "core\legallead.core\tests\legallead.resources.tests\legallead.resources.tests.csproj", "{17899607-8615-4565-8F87-866745045DF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E79D8838-04E2-4F51-8276-744A1AB547FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E79D8838-04E2-4F51-8276-744A1AB547FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E79D8838-04E2-4F51-8276-744A1AB547FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E79D8838-04E2-4F51-8276-744A1AB547FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59E4E1C6-AFD6-461C-8528-170D9A63894D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E4E1C6-AFD6-461C-8528-170D9A63894D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E4E1C6-AFD6-461C-8528-170D9A63894D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E4E1C6-AFD6-461C-8528-170D9A63894D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17899607-8615-4565-8F87-866745045DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17899607-8615-4565-8F87-866745045DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17899607-8615-4565-8F87-866745045DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17899607-8615-4565-8F87-866745045DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{48BF6E80-A859-4F49-9AEA-0D42E03C5E5A} = {29DC1BFF-7F9E-4686-98C5-2D642801BF5A}
+		{3C53FCF9-6C56-4E1D-8C6F-59EB6FD37715} = {29DC1BFF-7F9E-4686-98C5-2D642801BF5A}
+		{E79D8838-04E2-4F51-8276-744A1AB547FC} = {29DC1BFF-7F9E-4686-98C5-2D642801BF5A}
+		{4F3F9CD9-D7D0-4BE8-951F-7024E7FD0B0D} = {DA475DE6-75F5-4BDB-BD34-6A3D3EA795C1}
+		{59E4E1C6-AFD6-461C-8528-170D9A63894D} = {DA475DE6-75F5-4BDB-BD34-6A3D3EA795C1}
+		{DA475DE6-75F5-4BDB-BD34-6A3D3EA795C1} = {6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}
+		{29DC1BFF-7F9E-4686-98C5-2D642801BF5A} = {6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338} = {3337AB42-CA68-4152-A9B1-119AED0F073B}
+		{B7789BCD-4BCD-41BC-8943-0D9129AA080F} = {3337AB42-CA68-4152-A9B1-119AED0F073B}
+		{3337AB42-CA68-4152-A9B1-119AED0F073B} = {6414FF76-621E-4208-930A-1968994421B3}
+		{56A97FE9-4958-44EB-BC1B-92DA0E1755ED} = {6414FF76-621E-4208-930A-1968994421B3}
+		{0FFF0D3B-6B5E-49E9-84EA-34C62EBF7579} = {56A97FE9-4958-44EB-BC1B-92DA0E1755ED}
+		{12581296-986D-4A72-B66A-59BE4A088946} = {56A97FE9-4958-44EB-BC1B-92DA0E1755ED}
+		{17899607-8615-4565-8F87-866745045DF4} = {56A97FE9-4958-44EB-BC1B-92DA0E1755ED}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFCBB44C-A4CD-4F04-A5F2-DB8291697D28}
+	EndGlobalSection
+EndGlobal
