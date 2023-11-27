@@ -234,12 +234,16 @@ function getFailedTestList( $solution ) {
             $testName = $xmnode.Attributes.GetNamedItem('testName');
             if ( $outcome -eq $null ) { continue; }
             if ( $outcome.Value -eq "Passed") { continue; }
+            if ( $outcome.Value -eq "NotExecuted") { continue; }
             $errstring = " - $($outcome.Value) : $($testName.Value)   ";
             $errors += $errstring;
         }
         $sorted = ($errors | Sort-Object);
-        $statstring = [string]::Join([Environment]::NewLine, $sorted);
-        writeGitAction -content $statstring
+        if( $sorted.Length -gt 0 ){
+            $statstring = [string]::Join([Environment]::NewLine, $sorted);
+            $dvstats = "<div> <small>$statstring</small> </div>   "
+            writeGitAction -content $dvstats
+        }
     } catch {
          Write-Warning "ERROR: $($_.Exception.Message)"
     }

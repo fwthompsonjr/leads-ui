@@ -1,0 +1,24 @@
+﻿namespace legallead.jdbc
+{
+    internal static class RemoteData
+    {
+        private const string PostGresCommand = "Host=lower-sponge-13511.5xj.cockroachlabs.cloud:26257;Username=<username>;Password=<password>;Database=defaultdb";
+
+        private static string[] GetPassCode()
+        {
+            const string saltLocal = "legal.lead.pgre.passcode";
+            const string conversion = "fcxFbnRZ0YtjToqyBHnS4yu3qDdkwHFhk4+L8SllIo1UUDh4hqzEqdqJwEZTeRNP";
+            const string vector = "CMFdsdHMyvKbUvcynbzlQg==";
+            return CryptoManager.Decrypt(conversion, saltLocal, vector).Split('|');
+        }
+
+        public static string GetPostGreString()
+        {
+            var secret = GetPassCode();
+            var connection = PostGresCommand;
+            connection = connection.Replace("<username>", secret[0]);
+            connection = connection.Replace("<password>", secret[1]);
+            return connection;
+        }
+    }
+}

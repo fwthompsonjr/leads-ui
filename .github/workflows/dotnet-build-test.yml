@@ -15,10 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Get current version number
+      id: version
+      run: echo "version=3.0" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/checkout@v4
     - name: Get current date
       id: date
-      run: echo "date=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
+      run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
     
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
