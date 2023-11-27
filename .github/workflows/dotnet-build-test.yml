@@ -55,11 +55,6 @@ jobs:
       run: |
         & ./pipeline-integration-test.ps1
 
-    - name: Summarize Test Results
-      shell: pwsh
-      run: |
-        & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
-
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main'
       shell: pwsh
