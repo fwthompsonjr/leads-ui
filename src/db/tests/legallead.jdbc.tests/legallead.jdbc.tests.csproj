@@ -34,7 +34,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\legallead.jdbc\legallead.jdbc.csproj" />
+		<ProjectReference Include="..\..\component\legallead.jdbc\legallead.jdbc.csproj" />
 	</ItemGroup>
 
 </Project>
