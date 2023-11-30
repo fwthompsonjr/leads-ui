@@ -1,4 +1,6 @@
-﻿namespace legallead.jdbc
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.jdbc
 {
     internal static class RemoteData
     {
@@ -12,13 +14,28 @@
             return CryptoManager.Decrypt(conversion, saltLocal, vector).Split('|');
         }
 
-        public static string GetPostGreString()
+        public static string GetPostGreString(string environmentVaribleName = "LEGALLEAD_USE_LOCAL")
         {
+            if (UseLocalDb(environmentVaribleName)) { return LocalData.GetPostGreString(); }
             var secret = GetPassCode();
             var connection = PostGresCommand;
             connection = connection.Replace("<username>", secret[0]);
             connection = connection.Replace("<password>", secret[1]);
             return connection;
+        }
+        [ExcludeFromCodeCoverage(Justification = "The public methods that use this private method are fully covered.")]
+        private static bool UseLocalDb(string variableName)
+        {
+            try
+            {
+                var response = Environment.GetEnvironmentVariable(variableName, EnvironmentVariableTarget.Machine);
+                if (response != null && response.Equals("True", StringComparison.OrdinalIgnoreCase)) { return true; }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

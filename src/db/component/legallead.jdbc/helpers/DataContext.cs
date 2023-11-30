@@ -25,10 +25,13 @@ namespace legallead.jdbc.helpers
 
         public async Task Init()
         {
+            if (IsDbInitialized) return;
             await InitTables();
             await InitApplications();
             await InitProfile();
+            IsDbInitialized = true;
         }
+        private static bool IsDbInitialized = false;
 
         private async Task InitTables()
         {

@@ -15,7 +15,7 @@ namespace legallead.permissions.api.Controllers
         private static bool isReadMeBuilt = false;
 
         private static readonly object _instance = new();
-        private string? _readme;
+        private static string? _readme;
         private readonly DataProvider _db;
         public ApplicationController(DataProvider db)
         {
@@ -26,9 +26,12 @@ namespace legallead.permissions.api.Controllers
         [Route("read-me")]
         public string ReadMe()
         {
-            _readme ??= defaultReadme;
-            GenerateReadMe(ref _readme);
-            return _readme;
+            if(_readme == null)
+            {
+                _readme ??= defaultReadme;
+                GenerateReadMe(ref _readme);
+            }
+            return _readme ?? defaultReadme;
         }
 
         [HttpGet]
@@ -61,6 +64,11 @@ namespace legallead.permissions.api.Controllers
                 Password = model.Password,
             };
             var user = UserModel.ToUser(account);
+            var isDuplicate = await IsDuplicateAccount(user);
+            if (isDuplicate)
+            {
+                return "Potential duplicate account found.";
+            }
             var isAdded = await TryCreateAccount(user);
             return isAdded ? user.Id : response;
         }
@@ -105,6 +113,25 @@ namespace legallead.permissions.api.Controllers
                 Console.WriteLine(eventId);
                 Console.WriteLine(ex.ToString());
                 return false;
+            }
+        }
+
+        private async Task<bool> IsDuplicateAccount(User user)
+        {
+            try
+            {
+                var emailMatch = await _db.UserDb.GetByEmail(user.Email);
+                if (emailMatch != null) { return true; }
+                var nameMatch = await _db.UserDb.GetByName(user.UserName);
+                if (nameMatch != null ) { return true; }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                var eventId = new EventId((int)ErrorCodes.CheckForDuplicateAccount, ErrorCodes.CheckForDuplicateAccount.ToString());
+                Console.WriteLine(eventId);
+                Console.WriteLine(ex.ToString());
+                return true;
             }
         }
     }

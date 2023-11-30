@@ -4,7 +4,7 @@ using legallead.jdbc.interfaces;
 
 namespace legallead.jdbc.implementations
 {
-    internal class ComponentRepository : IComponentRepository
+    public class ComponentRepository : IComponentRepository
     {
         private const string tableName = "applications";
         private readonly DataContext _context;
@@ -14,6 +14,10 @@ namespace legallead.jdbc.implementations
         {
             _context = context;
             _command = context.GetCommand;
+            Task.Run(() =>
+            {
+                context.Init().ConfigureAwait(false);
+            });
         }
 
         public async Task<IEnumerable<Component>> GetAll()
@@ -26,36 +30,40 @@ namespace legallead.jdbc.implementations
         public async Task<Component?> GetById(string id)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"SELECT * FROM {tableName} WHERE Id = @id;";
-            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql, new { id });
+            var sql = $"SELECT * FROM {tableName} WHERE Id = '@Id';".Replace("@Id", id);
+            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql);
         }
 
         public async Task<Component?> GetByName(string name)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"SELECT * FROM {tableName} WHERE Name = @name;";
-            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql, new { name });
+            var sql = $"SELECT * FROM {tableName} WHERE Name = '@name';".Replace("@name", name);
+            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql);
         }
 
         public async Task Create(Component application)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"INSERT INTO {tableName} (Id, Name) VALUES (@Id, @Name);";
-            await _command.ExecuteAsync(connection, sql, application);
+            var sql = $"INSERT INTO {tableName} (Id, Name) VALUES ( '@Id', '@Name');"
+                .Replace("@Id", application.Id)
+                .Replace("@Name", application.Name);
+            await _command.ExecuteAsync(connection, sql);
         }
 
         public async Task Update(Component application)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"UPDATE {tableName} SET Name = @Name WHERE Id = @Id;";
-            await _command.ExecuteAsync(connection, sql, application);
+            var sql = $"UPDATE {tableName} SET Name = '@Name' WHERE Id = '@Id';"
+                .Replace("@Id", application.Id)
+                .Replace("@Name", application.Name);
+            await _command.ExecuteAsync(connection, sql);
         }
 
         public async Task Delete(string id)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"DELETE FROM {tableName} WHERE Id = @Id;";
-            await _command.ExecuteAsync(connection, sql, new { id });
+            var sql = $"DELETE FROM {tableName} WHERE Id = '@Id';".Replace("@Id", id); ;
+            await _command.ExecuteAsync(connection, sql);
         }
     }
 }

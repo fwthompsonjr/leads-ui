@@ -1,6 +1,6 @@
 ﻿namespace legallead.jdbc.entities
 {
-    internal class User
+    public class User
     {
         public string Id { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;

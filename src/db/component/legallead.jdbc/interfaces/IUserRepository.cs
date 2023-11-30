@@ -2,7 +2,7 @@
 
 namespace legallead.jdbc.interfaces
 {
-    internal interface IUserRepository
+    public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAll();
 

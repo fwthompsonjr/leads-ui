@@ -2,7 +2,7 @@
 
 namespace legallead.jdbc.interfaces
 {
-    internal interface IComponentRepository
+    public interface IComponentRepository
     {
         Task<IEnumerable<Component>> GetAll();
 
