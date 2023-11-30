@@ -21,4 +21,4 @@ RUN dotnet publish "legallead.permissions.api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "legallead.permissions.api.dll"]
+ENTRYPOINT ["dotnet", "legallead.permissions.api.dll", "--urls", "http://*:51803;https://*:44360;https://*:5001"]

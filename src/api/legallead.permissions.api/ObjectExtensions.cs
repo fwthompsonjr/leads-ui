@@ -31,7 +31,7 @@ namespace legallead.permissions.api
             try
             {
 
-                if (request == null || string.IsNullOrEmpty(headerName)) return default;
+                if (string.IsNullOrEmpty(headerName)) return default;
                 if (!request.Headers.TryGetValue(headerName, out var strings)) return default;
                 var source = strings.ToString();
                 if (string.IsNullOrEmpty(source)) return default;
