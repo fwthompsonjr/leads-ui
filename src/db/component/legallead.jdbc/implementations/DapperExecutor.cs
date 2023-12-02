@@ -17,6 +17,12 @@ namespace legallead.jdbc.implementations
             return response;
         }
 
+        public async Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, DynamicParameters arg)
+        {
+            var response = await conn.QuerySingleOrDefaultAsync<T>(sql, arg);
+            return response;
+        }
+
         public async Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, params object[] args)
         {
             var response = await conn.QuerySingleOrDefaultAsync<T>(sql);

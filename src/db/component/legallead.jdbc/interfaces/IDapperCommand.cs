@@ -7,7 +7,7 @@ namespace legallead.jdbc.interfaces
         Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, params object[] args);
 
         Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, params object[] args);
-
+        Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, Dapper.DynamicParameters arg);
         Task ExecuteAsync(IDbConnection conn, string sql, params object[] args);
     }
 }

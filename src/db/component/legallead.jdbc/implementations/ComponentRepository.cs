@@ -1,6 +1,8 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.jdbc.implementations
 {
@@ -9,7 +11,7 @@ namespace legallead.jdbc.implementations
         private const string tableName = "applications";
         private readonly DataContext _context;
         private readonly IDapperCommand _command;
-
+        private readonly Component component = new();
         public ComponentRepository(DataContext context)
         {
             _context = context;
@@ -23,47 +25,51 @@ namespace legallead.jdbc.implementations
         public async Task<IEnumerable<Component>> GetAll()
         {
             using var connection = _context.CreateConnection();
-            var sql = $"SELECT * FROM {tableName};";
+            var sql = component.SelectSQL();
             return await _command.QueryAsync<Component>(connection, sql);
         }
 
         public async Task<Component?> GetById(string id)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"SELECT * FROM {tableName} WHERE Id = '@Id';".Replace("@Id", id);
-            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql);
+            var parm = new Component {  Id = id };
+            var sql = component.SelectSQL(parm);
+            var parms = component.SelectParameters(parm);
+            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql, parms);
         }
 
         public async Task<Component?> GetByName(string name)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"SELECT * FROM {tableName} WHERE Name = '@name';".Replace("@name", name);
-            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql);
+            var parm = new Component { Name = name };
+            var sql = component.SelectSQL(parm);
+            var parms = component.SelectParameters(parm);
+            return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql, parms);
         }
 
         public async Task Create(Component application)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"INSERT INTO {tableName} (Id, Name) VALUES ( '@Id', '@Name');"
-                .Replace("@Id", application.Id)
-                .Replace("@Name", application.Name);
-            await _command.ExecuteAsync(connection, sql);
+            var sql = application.InsertSQL();
+            var parms = application.InsertParameters();
+            await _command.ExecuteAsync(connection, sql, parms);
         }
 
         public async Task Update(Component application)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"UPDATE {tableName} SET Name = '@Name' WHERE Id = '@Id';"
-                .Replace("@Id", application.Id)
-                .Replace("@Name", application.Name);
-            await _command.ExecuteAsync(connection, sql);
+            var sql = application.UpdateByIdSQL(application);
+            var parms = application.UpdateParameters();
+            await _command.ExecuteAsync(connection, sql, parms);
         }
 
         public async Task Delete(string id)
         {
             using var connection = _context.CreateConnection();
-            var sql = $"DELETE FROM {tableName} WHERE Id = '@Id';".Replace("@Id", id); ;
-            await _command.ExecuteAsync(connection, sql);
+            var parm = new Component { Id = id };
+            var sql = component.DeleteSQL();
+            var parms = parm.DeleteParameters();
+            await _command.ExecuteAsync(connection, sql, parms);
         }
     }
 }
