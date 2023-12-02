@@ -1,5 +1,8 @@
+using legallead.json.db.entity;
+using legallead.json.db.interfaces;
 using legallead.json.db.tests.sample;
 using legallead.json.tests;
+using Moq;
 using System.Reflection;
 
 namespace legallead.json.db.tests
@@ -104,6 +107,70 @@ namespace legallead.json.db.tests
             var items = Provider.Where(fruits[0], x => { return x.Name == fruits[0].Name; });
             Assert.NotNull(items);
             Assert.Equal(2, items.Count());
+        }
+
+        [Fact]
+        public void UsStateInitNoItems()
+        {
+            const UsState? usState = null;
+            var usResponse = new UsState();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsState>())).Returns(usResponse);
+
+            var exception = Record.Exception(() =>
+            {
+                UsState.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+        [Fact]
+        public void UsStateInitExistingItems()
+        {
+            var usState = new UsState();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsState>())).Throws(new Exception());
+
+            var exception = Record.Exception(() =>
+            {
+                UsState.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void UsStateCountyInitNoItems()
+        {
+            const UsStateCounty? usState = null;
+            var usResponse = new UsStateCounty();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Returns(usResponse);
+
+            var exception = Record.Exception(() =>
+            {
+                UsStateCounty.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+        [Fact]
+        public void UsStateCountyInitExistingItems()
+        {
+            var usState = new UsStateCounty();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Throws(new Exception());
+
+            var exception = Record.Exception(() =>
+            {
+                UsStateCounty.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
         }
 
         protected virtual void Dispose(bool disposing)
