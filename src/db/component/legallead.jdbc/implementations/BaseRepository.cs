@@ -41,7 +41,7 @@ namespace legallead.jdbc.implementations
         public async Task Update(T source)
         {
             using var connection = _context.CreateConnection();
-            var sql = source.UpdateByIdSQL(source);
+            var sql = source.UpdateByIdSQL();
             var parms = source.UpdateParameters();
             await _command.ExecuteAsync(connection, sql, parms);
         }

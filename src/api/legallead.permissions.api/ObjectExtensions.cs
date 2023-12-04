@@ -4,16 +4,44 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace legallead.permissions.api
 {
     public static class ObjectExtensions
     {
+        public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                var Key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+        }
+
         public static void RegisterDataServices(this IServiceCollection services)
         {
+            services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
+            services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped<DataContext>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
@@ -21,6 +49,7 @@ namespace legallead.permissions.api
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
             services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+            services.AddScoped<IUserTokenRepository, UserTokenRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped(d =>
             {
@@ -29,6 +58,7 @@ namespace legallead.permissions.api
                 var profileDb = d.GetRequiredService<IProfileMapRepository>();
                 var userPermissionDb = d.GetRequiredService<IUserPermissionRepository>();
                 var userProfileDb = d.GetRequiredService<IUserProfileRepository>();
+                var userTokenDb = d.GetRequiredService<IUserTokenRepository>();
                 var users = d.GetRequiredService<IUserRepository>();
                 return new DataProvider(
                     components,
@@ -36,8 +66,10 @@ namespace legallead.permissions.api
                     profileDb,
                     userPermissionDb,
                     userProfileDb,
+                    userTokenDb,
                     users);
             });
+            services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();
         }
 

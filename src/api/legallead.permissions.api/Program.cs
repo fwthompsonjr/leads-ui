@@ -1,4 +1,5 @@
 using legallead.permissions.api;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -10,25 +11,37 @@ var config =
         .AddJsonFile($"appsettings.{environmentName}.json", true)
         .AddEnvironmentVariables()
         .Build();
-builder.Services.RegisterDataServices();
-builder.Services.AddControllers();
-builder.Services.AddSingleton<IConfiguration>(config);
+var services = builder.Services;
+services.RegisterDataServices();
+services.RegisterAuthentication(config);
+services.AddControllers();
+services.AddSingleton<IConfiguration>(config);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "legallead.permissions.api", Version = "v1" });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "legallead.permissions.api v1"));
 }
-app.UseHttpsRedirection();
 
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

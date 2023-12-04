@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
-using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
 using Microsoft.Extensions.DependencyInjection;

@@ -108,6 +108,22 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\tKeyValue VARCHAR(256)"
                 + Environment.NewLine
+                + ");"
+                + Environment.NewLine
+                + "DROP TABLE IF EXISTS USERTOKENS;"
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS USERTOKENS ("
+                + Environment.NewLine
+                + "\tId CHAR(36) PRIMARY KEY,"
+                + Environment.NewLine
+                + "\tUserId CHAR(36) references USERS(Id),"
+                + Environment.NewLine
+                + "\tRefreshToken VARCHAR(256) NOT NULL default(''),"
+                + Environment.NewLine
+                + "\tIsActive BOOLEAN NOT NULL default( TRUE ),"
+                + Environment.NewLine
+                + "\tCreateDate timestamp with time zone NOT NULL default ( now() )"
+                + Environment.NewLine
                 + ");";
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)

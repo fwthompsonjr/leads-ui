@@ -10,6 +10,7 @@ namespace legallead.permissions.api
         private readonly IProfileMapRepository _profileDb;
         private readonly IUserPermissionRepository _userPermissionDb;
         private readonly IUserProfileRepository _userProfileDb;
+        private readonly IUserTokenRepository _userTokenDb;
         private readonly IUserRepository _userDb;
 
         internal DataProvider(
@@ -18,6 +19,7 @@ namespace legallead.permissions.api
             IProfileMapRepository profileDb,
             IUserPermissionRepository userPermissionDb,
             IUserProfileRepository userProfileDb,
+            IUserTokenRepository userTokenDb,
             IUserRepository user)
         {
             _componentDb = component;
@@ -25,6 +27,7 @@ namespace legallead.permissions.api
             _profileDb = profileDb;
             _userPermissionDb = userPermissionDb;
             _userProfileDb = userProfileDb;
+            _userTokenDb = userTokenDb;
             _userDb = user;
         }
 
@@ -33,9 +36,10 @@ namespace legallead.permissions.api
         internal IProfileMapRepository ProfileDb => _profileDb;
         internal IUserPermissionRepository UserPermissionDb => _userPermissionDb;
         internal IUserProfileRepository UserProfileDb => _userProfileDb;
+        internal IUserTokenRepository UserTokenDb => _userTokenDb;
         internal IUserRepository UserDb => _userDb;
 
-        public async Task<bool> InitializeProfile(User user)
+        public virtual async Task<bool> InitializeProfile(User user)
         {
             var profiles = await ProfileDb.GetAll();
             if (!profiles.Any()) { return true; }
@@ -52,7 +56,7 @@ namespace legallead.permissions.api
             additions.ForEach(async a => await UserProfileDb.Create(a));
             return true;
         }
-        public async Task<bool> InitializePermission(User user)
+        public virtual async Task<bool> InitializePermission(User user)
         {
             var permissions = await PermissionDb.GetAll();
             if (!permissions.Any()) { return true; }

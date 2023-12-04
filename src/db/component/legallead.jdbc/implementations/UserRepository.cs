@@ -1,19 +1,13 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using legallead.jdbc.models;
 
 namespace legallead.jdbc.implementations
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly DataContext _context;
-        private readonly IDapperCommand _command;
-
-        public UserRepository(DataContext context) : base(context)
-        {
-            _context = context;
-            _command = context.GetCommand;
-        }
+        public UserRepository(DataContext context) : base(context) { }
 
         public async Task<User?> GetByEmail(string email)
         {
@@ -31,6 +25,16 @@ namespace legallead.jdbc.implementations
             var sql = _sut.SelectSQL(parm).Replace(";", " LIMIT 1;");
             var parms = _sut.SelectParameters(parm);
             return await _command.QuerySingleOrDefaultAsync<User>(connection, sql, parms);
+        }
+        public async Task<KeyValuePair<bool, User?>> IsValidUserAsync(UserModel model)
+        {
+            var response = new KeyValuePair<bool, User?>(false, null);
+            var findEmail = await GetByEmail(model.Email);
+            var findName = await GetByName(model.UserName);
+            if (findEmail == null && findName == null) return response;
+            if (findName != null && UserModel.IsPasswordMatched(model.Password, findName)) return new KeyValuePair<bool, User?>(true, findName);
+            if (findEmail != null && UserModel.IsPasswordMatched(model.Password, findEmail)) return new KeyValuePair<bool, User?>(true, findEmail);
+            return response;
         }
     }
 }

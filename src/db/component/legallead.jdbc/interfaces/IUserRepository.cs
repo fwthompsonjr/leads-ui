@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc.entities;
+using legallead.jdbc.models;
 
 namespace legallead.jdbc.interfaces
 {
@@ -17,5 +18,6 @@ namespace legallead.jdbc.interfaces
         Task Update(User user);
 
         Task Delete(string id);
+        Task<KeyValuePair<bool, User?>> IsValidUserAsync(UserModel model);
     }
 }

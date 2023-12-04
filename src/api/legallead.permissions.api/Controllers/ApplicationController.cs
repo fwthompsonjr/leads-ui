@@ -40,10 +40,10 @@ namespace legallead.permissions.api.Controllers
         {
             var response = await _db.ComponentDb.GetAll();
             if (response == null) { return null; }
-            var apps = response.Select(s => 
+            var apps = response.Select(s =>
             new ApplicationModel
-            { 
-                Id = s.Id ?? string.Empty, 
+            {
+                Id = s.Id ?? string.Empty,
                 Name = s.Name ?? string.Empty
             });
             return apps;

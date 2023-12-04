@@ -30,11 +30,14 @@ namespace permissions.api.tests.Contollers
             {
                 HttpContext = httpContext,
             };
+            var refreshMock = new Mock<IRefreshTokenValidator>();
+            var jwtMock = new Mock<IJwtManagerRepository>();
             var compMk = new Mock<IComponentRepository>();
             var permissionMk = new Mock<IPermissionMapRepository>();
             var profileMk = new Mock<IProfileMapRepository>();
             var userPermissionMk = new Mock<IUserPermissionRepository>();
             var userProfileMk = new Mock<IUserProfileRepository>();
+            var userTokenMk = new Mock<IUserTokenRepository>();
             var userMk = new Mock<IUserRepository>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
@@ -43,13 +46,19 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => profileMk);
             collection.AddScoped(s => userPermissionMk);
             collection.AddScoped(s => userProfileMk);
+            collection.AddScoped(s => userTokenMk);
             collection.AddScoped(s => compMk);
+            collection.AddScoped(s => jwtMock);
+            collection.AddScoped(s => refreshMock);
             collection.AddScoped(s => userMk.Object);
             collection.AddScoped(s => permissionMk.Object);
             collection.AddScoped(s => profileMk.Object);
             collection.AddScoped(s => userPermissionMk.Object);
             collection.AddScoped(s => userProfileMk.Object);
+            collection.AddScoped(s => userTokenMk.Object);
             collection.AddScoped(s => compMk.Object);
+            collection.AddScoped(s => jwtMock.Object);
+            collection.AddScoped(s => refreshMock.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -57,13 +66,24 @@ namespace permissions.api.tests.Contollers
                 var c = p.GetRequiredService<IProfileMapRepository>();
                 var d = p.GetRequiredService<IUserPermissionRepository>();
                 var e = p.GetRequiredService<IUserProfileRepository>();
-                var f = p.GetRequiredService<IUserRepository>();
-                return new DataProvider(a, b, c, d, e, f);
+                var f = p.GetRequiredService<IUserTokenRepository>();
+                var g = p.GetRequiredService<IUserRepository>();
+                return new DataProvider(a, b, c, d, e, f, g);
             });
             collection.AddScoped(a =>
             {
                 var db = a.GetRequiredService<DataProvider>();
                 return new ApplicationController(db)
+                {
+                    ControllerContext = controllerContext
+                };
+            });
+            collection.AddScoped(a =>
+            {
+                var db = a.GetRequiredService<DataProvider>();
+                var jwt = a.GetRequiredService<IJwtManagerRepository>();
+                var refresh = a.GetRequiredService<IRefreshTokenValidator>();
+                return new AccountController(db, jwt, refresh)
                 {
                     ControllerContext = controllerContext
                 };

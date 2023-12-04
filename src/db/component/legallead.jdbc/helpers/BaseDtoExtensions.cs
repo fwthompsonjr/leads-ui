@@ -14,7 +14,9 @@ namespace legallead.jdbc.helpers
                 {
                     var objvalue = predicate[f];
                     if (objvalue == null) return false;
-                    var dfvalue = GetDefaultValue(objvalue.GetType());
+                    var objtype = objvalue.GetType();
+                    var dfvalue = GetDefaultValue(objtype);
+                    if (objtype == typeof(string) && objvalue is string strvalue && string.IsNullOrWhiteSpace(strvalue)) return false;
                     return !objvalue.Equals(dfvalue);
                 });
                 search.ForEach(f =>
@@ -52,7 +54,9 @@ namespace legallead.jdbc.helpers
                 {
                     var objvalue = predicate[f];
                     if (objvalue == null) return false;
-                    var dfvalue = GetDefaultValue(objvalue.GetType());
+                    var objtype = objvalue.GetType();
+                    var dfvalue = GetDefaultValue(objtype);
+                    if (objtype == typeof(string) && objvalue is string strvalue && string.IsNullOrWhiteSpace(strvalue)) return false;
                     return !objvalue.Equals(dfvalue);
                 });
 
@@ -130,8 +134,7 @@ namespace legallead.jdbc.helpers
 
         public static string DeleteSQL(this BaseDto obj, bool mySqlFormat = false)
         {
-            var builder = new StringBuilder($"DELETE [tbl] {Environment.NewLine}");
-            builder.AppendLine($" FROM [{obj.TableName}] [tbl] ");
+            var builder = new StringBuilder($"DELETE FROM [{obj.TableName}] {Environment.NewLine}");
             builder.AppendLine($" WHERE [Id] = @Id;");
             builder = FormatSQL(builder, mySqlFormat);
             return builder.ToString();

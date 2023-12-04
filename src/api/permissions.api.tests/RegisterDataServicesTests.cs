@@ -18,11 +18,18 @@ namespace permissions.api.tests
         }
 
         [Theory]
+        [InlineData(typeof(IJwtManagerRepository))]
         [InlineData(typeof(IDapperCommand))]
         [InlineData(typeof(DataContext))]
         [InlineData(typeof(IComponentRepository))]
+        [InlineData(typeof(IPermissionMapRepository))]
+        [InlineData(typeof(IProfileMapRepository))]
+        [InlineData(typeof(IUserPermissionRepository))]
+        [InlineData(typeof(IUserProfileRepository))]
+        [InlineData(typeof(IUserTokenRepository))]
         [InlineData(typeof(IUserRepository))]
         [InlineData(typeof(DataProvider))]
+        [InlineData(typeof(AccountController))]
         [InlineData(typeof(ApplicationController))]
         public void ProviderCanConstructInstance(Type type)
         {
