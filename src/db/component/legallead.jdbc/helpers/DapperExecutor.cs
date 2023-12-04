@@ -2,7 +2,7 @@
 using legallead.jdbc.interfaces;
 using System.Data;
 
-namespace legallead.jdbc.implementations
+namespace legallead.jdbc.helpers
 {
     public class DapperExecutor : IDapperCommand
     {

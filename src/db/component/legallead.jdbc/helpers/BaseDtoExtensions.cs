@@ -157,8 +157,8 @@ namespace legallead.jdbc.helpers
         {
             if (!isSQLServer)
             {
-                builder.Replace('[', '"');
-                builder.Replace(']', '"');
+                builder.Replace('['.ToString(), string.Empty);
+                builder.Replace(']'.ToString(), string.Empty);
             }
             return builder;
         }

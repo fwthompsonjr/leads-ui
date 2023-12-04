@@ -31,18 +31,34 @@ namespace permissions.api.tests.Contollers
                 HttpContext = httpContext,
             };
             var compMk = new Mock<IComponentRepository>();
+            var permissionMk = new Mock<IPermissionMapRepository>();
+            var profileMk = new Mock<IProfileMapRepository>();
+            var userPermissionMk = new Mock<IUserPermissionRepository>();
+            var userProfileMk = new Mock<IUserProfileRepository>();
             var userMk = new Mock<IUserRepository>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
             collection.AddScoped(s => userMk);
+            collection.AddScoped(s => permissionMk);
+            collection.AddScoped(s => profileMk);
+            collection.AddScoped(s => userPermissionMk);
+            collection.AddScoped(s => userProfileMk);
             collection.AddScoped(s => compMk);
             collection.AddScoped(s => userMk.Object);
+            collection.AddScoped(s => permissionMk.Object);
+            collection.AddScoped(s => profileMk.Object);
+            collection.AddScoped(s => userPermissionMk.Object);
+            collection.AddScoped(s => userProfileMk.Object);
             collection.AddScoped(s => compMk.Object);
-            collection.AddScoped(d =>
+            collection.AddScoped(p =>
             {
-                var a = d.GetRequiredService<IComponentRepository>();
-                var b = d.GetRequiredService<IUserRepository>();
-                return new DataProvider(a, b);
+                var a = p.GetRequiredService<IComponentRepository>();
+                var b = p.GetRequiredService<IPermissionMapRepository>();
+                var c = p.GetRequiredService<IProfileMapRepository>();
+                var d = p.GetRequiredService<IUserPermissionRepository>();
+                var e = p.GetRequiredService<IUserProfileRepository>();
+                var f = p.GetRequiredService<IUserRepository>();
+                return new DataProvider(a, b, c, d, e, f);
             });
             collection.AddScoped(a =>
             {

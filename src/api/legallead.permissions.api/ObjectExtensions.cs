@@ -4,6 +4,7 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,12 +17,26 @@ namespace legallead.permissions.api
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped<DataContext>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
+            services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
+            services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
+            services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
+                var permissionDb = d.GetRequiredService<IPermissionMapRepository>();
+                var profileDb = d.GetRequiredService<IProfileMapRepository>();
+                var userPermissionDb = d.GetRequiredService<IUserPermissionRepository>();
+                var userProfileDb = d.GetRequiredService<IUserProfileRepository>();
                 var users = d.GetRequiredService<IUserRepository>();
-                return new DataProvider(components, users);
+                return new DataProvider(
+                    components,
+                    permissionDb,
+                    profileDb,
+                    userPermissionDb,
+                    userProfileDb,
+                    users);
             });
             services.AddScoped<ApplicationController>();
         }

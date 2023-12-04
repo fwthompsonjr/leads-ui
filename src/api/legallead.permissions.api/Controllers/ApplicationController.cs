@@ -76,6 +76,11 @@ namespace legallead.permissions.api.Controllers
             }
             var isAdded = await TryCreateAccount(user);
             var aresponse = isAdded ? user.Id : response;
+            if (isAdded)
+            {
+                await _db.InitializeProfile(user);
+                await _db.InitializePermission(user);
+            }
             return aresponse ?? response;
         }
 

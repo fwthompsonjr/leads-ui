@@ -61,9 +61,19 @@ namespace permissions.api.tests
         private class MockDataProvider : DataProvider
         {
             private static Mock<IComponentRepository> ComponentMq { get; } = new();
+            private static Mock<IPermissionMapRepository> PermissionMk { get; } = new();
+            private static Mock<IProfileMapRepository> ProfileMk { get; } = new();
+            private static Mock<IUserPermissionRepository> UserPermissionMk { get; } = new();
+            private static Mock<IUserProfileRepository> UserProfileMk { get; } = new();
             private static Mock<IUserRepository> UserMq { get; } = new();
 
-            public MockDataProvider() : base(ComponentMq.Object, UserMq.Object)
+            public MockDataProvider() : base(
+                ComponentMq.Object,
+                PermissionMk.Object, 
+                ProfileMk.Object, 
+                UserPermissionMk.Object,
+                UserProfileMk.Object,
+                UserMq.Object)
             {
             }
 

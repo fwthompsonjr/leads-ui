@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using legallead.jdbc.implementations;
+using legallead.jdbc.helpers;
 using Moq;
 using Moq.Dapper;
 using System.Data.Common;
