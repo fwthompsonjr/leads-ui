@@ -6,6 +6,7 @@ namespace legallead.permissions.api
     {
         private readonly IComponentRepository _componentDb;
         private readonly IUserRepository _userDb;
+
         internal DataProvider(
             IComponentRepository component,
             IUserRepository user)
@@ -13,6 +14,7 @@ namespace legallead.permissions.api
             _componentDb = component;
             _userDb = user;
         }
+
         internal IComponentRepository ComponentDb => _componentDb;
         internal IUserRepository UserDb => _userDb;
     }

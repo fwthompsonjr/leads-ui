@@ -26,16 +26,19 @@ namespace legallead.json.db.entity
                 }
             });
         }
+
         private static string? _list;
+
         private static string GetList
         {
             get
             {
-                if(!string.IsNullOrEmpty(_list)) return _list;
+                if (!string.IsNullOrEmpty(_list)) return _list;
                 _list = GetJsonList();
                 return _list;
             }
         }
+
         private static string GetJsonList()
         {
             var sb = new StringBuilder();

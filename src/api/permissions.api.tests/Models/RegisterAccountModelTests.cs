@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.permissions.api;
+﻿using legallead.permissions.api;
 using legallead.permissions.api.Model;
 
 namespace permissions.api.tests.Models
@@ -21,6 +20,7 @@ namespace permissions.api.tests.Models
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void ModelCanGenerate()
         {

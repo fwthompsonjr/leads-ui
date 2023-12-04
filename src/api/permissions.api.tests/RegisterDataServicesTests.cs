@@ -3,17 +3,13 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests
 {
     public class RegisterDataServicesTests
     {
         private readonly IServiceProvider _serviceProvider;
+
         public RegisterDataServicesTests()
         {
             var collection = new ServiceCollection();

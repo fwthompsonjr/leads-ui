@@ -15,6 +15,7 @@ namespace legallead.jdbc.implementations
             _context = context;
             _command = context.GetCommand;
         }
+
         public async Task Create(User user)
         {
             using var connection = _context.CreateConnection();

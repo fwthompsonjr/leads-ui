@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.permissions.api;
+﻿using legallead.permissions.api;
 using legallead.permissions.api.Model;
 
 namespace permissions.api.tests.Models
@@ -20,6 +19,7 @@ namespace permissions.api.tests.Models
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void ModelCanGenerate()
         {
@@ -73,6 +73,7 @@ namespace permissions.api.tests.Models
             var errors = results.Select(x => x.ErrorMessage);
             Assert.Contains("Name is a required field.", errors);
         }
+
         [Fact]
         public void ModelIsInValidWithNullId()
         {

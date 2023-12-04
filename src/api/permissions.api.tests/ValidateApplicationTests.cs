@@ -1,23 +1,16 @@
-﻿using Bogus;
-using Bogus.DataSets;
-using legallead.jdbc.entities;
+﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
-using Moq;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests
 {
     public class ValidateApplicationTests
     {
         private readonly Faker faker = new();
+
         [Fact]
         public void RequestValidationHappyPath()
         {
@@ -69,10 +62,11 @@ namespace permissions.api.tests
         {
             private static Mock<IComponentRepository> ComponentMq { get; } = new();
             private static Mock<IUserRepository> UserMq { get; } = new();
+
             public MockDataProvider() : base(ComponentMq.Object, UserMq.Object)
             {
-                
             }
+
             public Mock<IComponentRepository> MqComponent => ComponentMq;
         }
     }

@@ -23,6 +23,7 @@ namespace legallead.jdbc
             connection = connection.Replace("<password>", secret[1]);
             return connection;
         }
+
         [ExcludeFromCodeCoverage(Justification = "The public methods that use this private method are fully covered.")]
         private static bool UseLocalDb(string variableName)
         {

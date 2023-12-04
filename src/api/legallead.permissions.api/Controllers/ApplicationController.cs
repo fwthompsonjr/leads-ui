@@ -2,7 +2,6 @@
 using legallead.jdbc.models;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 using System.Reflection;
 
 namespace legallead.permissions.api.Controllers
@@ -17,6 +16,7 @@ namespace legallead.permissions.api.Controllers
         private static readonly object _instance = new();
         private static string? _readme;
         private readonly DataProvider _db;
+
         public ApplicationController(DataProvider db)
         {
             _db = db;
@@ -26,7 +26,7 @@ namespace legallead.permissions.api.Controllers
         [Route("read-me")]
         public string ReadMe()
         {
-            if(_readme == null)
+            if (_readme == null)
             {
                 _readme ??= defaultReadme;
                 GenerateReadMe(ref _readme);
@@ -40,7 +40,12 @@ namespace legallead.permissions.api.Controllers
         {
             var response = await _db.ComponentDb.GetAll();
             if (response == null) { return null; }
-            var apps = response.Select(s => new ApplicationModel { Id = s.Id, Name = s.Name });
+            var apps = response.Select(s => 
+            new ApplicationModel
+            { 
+                Id = s.Id ?? string.Empty, 
+                Name = s.Name ?? string.Empty
+            });
             return apps;
         }
 
@@ -65,12 +70,13 @@ namespace legallead.permissions.api.Controllers
             };
             var user = UserModel.ToUser(account);
             var isDuplicate = await IsDuplicateAccount(user);
-            if (isDuplicate)
+            if (user == null || isDuplicate)
             {
                 return "Potential duplicate account found.";
             }
             var isAdded = await TryCreateAccount(user);
-            return isAdded ? user.Id : response;
+            var aresponse = isAdded ? user.Id : response;
+            return aresponse ?? response;
         }
 
         private static void GenerateReadMe(ref string readme)
@@ -96,7 +102,6 @@ namespace legallead.permissions.api.Controllers
                 {
                     readme = defaultReadme;
                 }
-
             }
         }
 
@@ -123,7 +128,7 @@ namespace legallead.permissions.api.Controllers
                 var emailMatch = await _db.UserDb.GetByEmail(user.Email);
                 if (emailMatch != null) { return true; }
                 var nameMatch = await _db.UserDb.GetByName(user.UserName);
-                if (nameMatch != null ) { return true; }
+                if (nameMatch != null) { return true; }
                 return false;
             }
             catch (Exception ex)

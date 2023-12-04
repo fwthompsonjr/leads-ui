@@ -1,7 +1,4 @@
-﻿using System.Xml.Linq;
-using System;
-
-namespace legallead.jdbc.entities
+﻿namespace legallead.jdbc.entities
 {
     [TargetTable(TableName = "users")]
     public class User : BaseDto
@@ -10,7 +7,6 @@ namespace legallead.jdbc.entities
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string PasswordSalt { get; set; } = string.Empty;
-
 
         public override object? this[string field]
         {

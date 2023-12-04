@@ -40,6 +40,7 @@
             connection = connection.Replace("<password>", secret[1]);
             return connection;
         }
+
 #endif
     }
 }

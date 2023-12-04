@@ -6,6 +6,7 @@
         public string UserId { get; set; } = string.Empty;
         public string PermissionMapId { get; set; } = string.Empty;
         public string KeyValue { get; set; } = string.Empty;
+
         public override object? this[string field]
         {
             get

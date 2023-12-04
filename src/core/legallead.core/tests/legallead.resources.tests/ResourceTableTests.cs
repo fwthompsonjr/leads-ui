@@ -2,7 +2,6 @@
 {
     public class ResourceTableTests
     {
-
         [Theory]
         [InlineData(ResourceType.Xml)]
         [InlineData(ResourceType.FindDefendant)]

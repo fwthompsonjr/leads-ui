@@ -1,4 +1,3 @@
-using legallead.jdbc.helpers;
 using legallead.permissions.api;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -47,7 +47,6 @@ namespace legallead.jdbc.tests.entities
             Assert.Equal(expected.Length, fields.Count);
         }
 
-
         [Theory]
         [InlineData("Id")]
         [InlineData("Name")]
@@ -75,6 +74,7 @@ namespace legallead.jdbc.tests.entities
             items[0].Name = items[1].Name;
             Assert.Equal(items[1].Name, items[0].Name);
         }
+
         [Theory]
         [InlineData(0, "abcdefg")]
         [InlineData(1, "abcdefg")]

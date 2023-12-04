@@ -1,8 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.jdbc.implementations
 {
@@ -12,6 +10,7 @@ namespace legallead.jdbc.implementations
         private readonly DataContext _context;
         private readonly IDapperCommand _command;
         private readonly Component component = new();
+
         public ComponentRepository(DataContext context)
         {
             _context = context;
@@ -32,7 +31,7 @@ namespace legallead.jdbc.implementations
         public async Task<Component?> GetById(string id)
         {
             using var connection = _context.CreateConnection();
-            var parm = new Component {  Id = id };
+            var parm = new Component { Id = id };
             var sql = component.SelectSQL(parm);
             var parms = component.SelectParameters(parm);
             return await _command.QuerySingleOrDefaultAsync<Component>(connection, sql, parms);

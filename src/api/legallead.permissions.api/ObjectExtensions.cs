@@ -30,7 +30,6 @@ namespace legallead.permissions.api
         {
             try
             {
-
                 if (string.IsNullOrEmpty(headerName)) return default;
                 if (!request.Headers.TryGetValue(headerName, out var strings)) return default;
                 var source = strings.ToString();
@@ -51,6 +50,7 @@ namespace legallead.permissions.api
             isValid = Validator.TryValidateObject(source, context, validationResults, true);
             return validationResults;
         }
+
         internal static KeyValuePair<bool, string> Validate(this HttpRequest request, DataProvider db, string response)
         {
             var pair = new KeyValuePair<bool, string>(true, "application is valid");
@@ -75,8 +75,7 @@ namespace legallead.permissions.api
             return pair;
         }
 
-
-        private async static Task<Component?> Find(this DataProvider db, ApplicationRequestModel request)
+        private static async Task<Component?> Find(this DataProvider db, ApplicationRequestModel request)
         {
             if (request.Id == null) { return null; }
             return await db.ComponentDb.GetById(request.Id.GetValueOrDefault().ToString("D"));

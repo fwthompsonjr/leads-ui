@@ -1,8 +1,6 @@
-﻿using Bogus;
-using legallead.permissions.api;
+﻿using legallead.permissions.api;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
-using Moq;
 using Newtonsoft.Json;
 
 namespace permissions.api.tests

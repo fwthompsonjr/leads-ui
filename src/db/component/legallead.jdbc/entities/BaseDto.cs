@@ -43,13 +43,14 @@ namespace legallead.jdbc.entities
                     {
                         var attributes = GetTableAttributes(type);
                         _fieldList = attributes.FieldList.Split(',').ToList();
-
                     }
                     return _fieldList;
                 }
             }
         }
+
         public abstract object? this[string field] { get; set; }
+
         public object? this[int fieldId]
         {
             get
@@ -97,6 +98,7 @@ namespace legallead.jdbc.entities
         }
 
         private static readonly Dictionary<Type, TableDescriptor> _TableNames = new();
+
         private sealed class TableDescriptor
         {
             public string TableName { get; set; } = string.Empty;

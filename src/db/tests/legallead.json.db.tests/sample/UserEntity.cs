@@ -7,6 +7,5 @@ namespace legallead.json.tests
     {
         public string UserId { get; set; } = string.Empty;
         public string Pwd { get; set; } = string.Empty;
-
     }
 }

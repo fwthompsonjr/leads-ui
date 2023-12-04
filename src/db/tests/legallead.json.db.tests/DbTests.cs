@@ -12,6 +12,7 @@ namespace legallead.json.db.tests
         private static readonly object locker = new();
         private bool disposedValue;
         private readonly DataProvider Provider;
+
         public DbTests()
         {
             Provider = GetDataProvider();
@@ -35,7 +36,6 @@ namespace legallead.json.db.tests
             Assert.Equal(user.Name, item.Name);
             Provider.Delete(user);
         }
-
 
         [Fact]
         public void Db_Can_Add_And_FindAll()
@@ -84,7 +84,6 @@ namespace legallead.json.db.tests
             Provider.Delete(fruit);
         }
 
-
         [Fact]
         public void Data_Can_Add_And_FindAll()
         {
@@ -125,6 +124,7 @@ namespace legallead.json.db.tests
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void UsStateInitExistingItems()
         {
@@ -157,6 +157,7 @@ namespace legallead.json.db.tests
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void UsStateCountyInitExistingItems()
         {
@@ -191,6 +192,7 @@ namespace legallead.json.db.tests
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
         private static DataProvider GetDataProvider()
         {
             return new DataProvider();

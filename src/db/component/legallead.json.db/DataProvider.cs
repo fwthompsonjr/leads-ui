@@ -7,7 +7,6 @@ namespace legallead.json.db
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1822:Mark members as static", Justification = "Exposing generic static methods as public to follow DI pattern")]
-
     public class DataProvider : IDataProvider
     {
         private const string dbFolder = "_db";
@@ -15,6 +14,7 @@ namespace legallead.json.db
         private static readonly object _instance = new();
 
         private static readonly Dictionary<string, string> _dataFiles = new();
+
         public DataProvider()
         {
             Initialize();
@@ -71,6 +71,7 @@ namespace legallead.json.db
 
             return BaseEntity<T>.Get(data, expression);
         }
+
         public T? FirstOrDefault<T>(T entity, Func<T, bool> expression) where T : BaseEntity<T>, IDataEntity, new()
         {
             var key = typeof(T).Name.ToLower();
@@ -101,7 +102,6 @@ namespace legallead.json.db
 
             return BaseEntity<T>.GetAll(data, expression);
         }
-
 
         private void Generate(string entityName, ref string? location)
         {
@@ -158,7 +158,6 @@ namespace legallead.json.db
             var execName = new Uri(assembly.Location).AbsolutePath;
             if (execName != null && File.Exists(execName))
             {
-
                 var name = $"{typeName}.json";
                 var contentRoot = Path.GetDirectoryName(execName) ?? "";
                 var dataRoot = Path.Combine(contentRoot, dbFolder);

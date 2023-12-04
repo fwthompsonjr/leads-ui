@@ -26,6 +26,7 @@ namespace legallead.json.db.entity
 
         private static string? _list;
         private static string GetList => _list ??= GetJsonList();
+
         private static string GetJsonList()
         {
             var sb = new StringBuilder(); sb.AppendLine("[");

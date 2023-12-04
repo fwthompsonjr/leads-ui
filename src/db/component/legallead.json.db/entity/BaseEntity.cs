@@ -5,15 +5,14 @@ namespace legallead.json.entities
 {
     public abstract class BaseEntity<T> where T : class, IDataEntity, new()
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", 
-            "S2743:Static fields should not be used in generic types", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
+            "S2743:Static fields should not be used in generic types",
             Justification = "Will Refactor. Quik way to make all calls to read/write thread safe.")]
         private static readonly object locker = new();
 
         public string? Id { get; set; }
         public string? Name { get; set; }
         public bool IsDeleted { get; set; }
-
 
         public void Add(T item, string location)
         {

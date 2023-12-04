@@ -9,7 +9,11 @@ namespace legallead.jdbc.helpers
         private readonly string _connectionString;
         private readonly IDapperCommand _dbexecutor;
         private readonly IDataInitializer _dbinit;
-        public DataContext(IDapperCommand command) : this(command, null) { }
+
+        public DataContext(IDapperCommand command) : this(command, null)
+        {
+        }
+
         internal DataContext(IDapperCommand command, IDataInitializer? dbint)
         {
             dbint ??= new DataInitializer();

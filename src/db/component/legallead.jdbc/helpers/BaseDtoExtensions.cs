@@ -1,15 +1,10 @@
 ﻿using legallead.jdbc.entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.helpers
 {
     internal static class BaseDtoExtensions
     {
-
         public static Dapper.DynamicParameters SelectParameters(this BaseDto obj, BaseDto? predicate = null)
         {
             var parms = new Dapper.DynamicParameters();
@@ -38,7 +33,6 @@ namespace legallead.jdbc.helpers
             fields.ForEach(f => parms.Add(f, obj[f]));
             return parms;
         }
-
 
         public static Dapper.DynamicParameters InsertParameters(this BaseDto obj)
         {
@@ -136,14 +130,12 @@ namespace legallead.jdbc.helpers
 
         public static string DeleteSQL(this BaseDto obj, bool mySqlFormat = false)
         {
-
             var builder = new StringBuilder($"DELETE [tbl] {Environment.NewLine}");
             builder.AppendLine($" FROM [{obj.TableName}] [tbl] ");
             builder.AppendLine($" WHERE [Id] = @Id;");
             builder = FormatSQL(builder, mySqlFormat);
             return builder.ToString();
         }
-
 
         public static Dapper.DynamicParameters DeleteParameters(this BaseDto obj)
         {
@@ -163,7 +155,6 @@ namespace legallead.jdbc.helpers
 
         private static StringBuilder FormatSQL(StringBuilder builder, bool isSQLServer)
         {
-
             if (!isSQLServer)
             {
                 builder.Replace('[', '"');

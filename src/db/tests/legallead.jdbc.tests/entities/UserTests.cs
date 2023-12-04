@@ -50,7 +50,6 @@ namespace legallead.jdbc.tests.entities
             Assert.Equal(expected.Length, fields.Count);
         }
 
-
         [Theory]
         [InlineData("Id")]
         [InlineData("UserName")]

@@ -21,6 +21,7 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public async Task ExecutorCanQueryAsync()
         {
@@ -39,6 +40,7 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public async Task ExecutorCanQuerySingleAsync()
         {

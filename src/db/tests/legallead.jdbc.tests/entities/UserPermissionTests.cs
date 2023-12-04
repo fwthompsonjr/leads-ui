@@ -22,7 +22,6 @@ namespace legallead.jdbc.tests.entities
             Assert.Null(exception);
         }
 
-
         [Fact]
         public void UserPermissionIsBaseDto()
         {
@@ -49,7 +48,6 @@ namespace legallead.jdbc.tests.entities
             Assert.NotEmpty(fields);
             Assert.Equal(expected.Length, fields.Count);
         }
-
 
         [Theory]
         [InlineData("Id")]
