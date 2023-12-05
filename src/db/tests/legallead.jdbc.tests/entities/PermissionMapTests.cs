@@ -22,6 +22,46 @@ namespace legallead.jdbc.tests.entities
         }
 
         [Fact]
+        public void PermissionMapIsBaseDto()
+        {
+            var sut = new PermissionMap();
+            Assert.NotNull(sut);
+            Assert.IsAssignableFrom<BaseDto>(sut);
+        }
+
+        [Fact]
+        public void PermissionMapHasTableNameDefined()
+        {
+            var expected = "permissionmap";
+            var sut = new PermissionMap();
+            Assert.Equal(expected, sut.TableName);
+        }
+
+        [Fact]
+        public void PermissionMapHasFieldListDefined()
+        {
+            var expected = new[] { "Id", "OrderId", "KeyName" };
+            var sut = new PermissionMap();
+            var fields = sut.FieldList;
+            Assert.NotNull(fields);
+            Assert.NotEmpty(fields);
+            Assert.Equal(expected.Length, fields.Count);
+        }
+
+        [Theory]
+        [InlineData("Id")]
+        [InlineData("OrderId")]
+        [InlineData("KeyName")]
+        public void PermissionMapHasExpectedFieldDefined(string name)
+        {
+            var sut = new PermissionMap();
+            var fields = sut.FieldList;
+            Assert.NotNull(fields);
+            Assert.NotEmpty(fields);
+            Assert.Contains(name, fields);
+        }
+
+        [Fact]
         public void PermissionMapCanUpdateId()
         {
             var items = faker.Generate(2);
@@ -43,6 +83,20 @@ namespace legallead.jdbc.tests.entities
             var items = faker.Generate(2);
             items[0].KeyName = items[1].KeyName;
             Assert.Equal(items[1].KeyName, items[0].KeyName);
+        }
+
+        [Theory]
+        [InlineData("Id", "abcdefg")]
+        [InlineData("OrderId", 200)]
+        [InlineData("KeyName", "15226")]
+        public void PermissionMapCanReadWriteByIndex(string fieldName, object expected)
+        {
+            var sut = new PermissionMap();
+            var flds = sut.FieldList;
+            var position = flds.IndexOf(fieldName);
+            sut[position] = expected;
+            var actual = sut[position];
+            Assert.Equal(expected, actual);
         }
     }
 }

@@ -1,5 +1,8 @@
+using legallead.json.db.entity;
+using legallead.json.db.interfaces;
 using legallead.json.db.tests.sample;
 using legallead.json.tests;
+using Moq;
 using System.Reflection;
 
 namespace legallead.json.db.tests
@@ -9,6 +12,7 @@ namespace legallead.json.db.tests
         private static readonly object locker = new();
         private bool disposedValue;
         private readonly DataProvider Provider;
+
         public DbTests()
         {
             Provider = GetDataProvider();
@@ -32,7 +36,6 @@ namespace legallead.json.db.tests
             Assert.Equal(user.Name, item.Name);
             Provider.Delete(user);
         }
-
 
         [Fact]
         public void Db_Can_Add_And_FindAll()
@@ -81,7 +84,6 @@ namespace legallead.json.db.tests
             Provider.Delete(fruit);
         }
 
-
         [Fact]
         public void Data_Can_Add_And_FindAll()
         {
@@ -106,6 +108,72 @@ namespace legallead.json.db.tests
             Assert.Equal(2, items.Count());
         }
 
+        [Fact]
+        public void UsStateInitNoItems()
+        {
+            const UsState? usState = null;
+            var usResponse = new UsState();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsState>())).Returns(usResponse);
+
+            var exception = Record.Exception(() =>
+            {
+                UsState.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void UsStateInitExistingItems()
+        {
+            var usState = new UsState();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsState>())).Throws(new Exception());
+
+            var exception = Record.Exception(() =>
+            {
+                UsState.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void UsStateCountyInitNoItems()
+        {
+            const UsStateCounty? usState = null;
+            var usResponse = new UsStateCounty();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Returns(usResponse);
+
+            var exception = Record.Exception(() =>
+            {
+                UsStateCounty.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void UsStateCountyInitExistingItems()
+        {
+            var usState = new UsStateCounty();
+            var mock = new Mock<IDataProvider>();
+            mock.Setup(m =>
+                m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
+            mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Throws(new Exception());
+
+            var exception = Record.Exception(() =>
+            {
+                UsStateCounty.Initialize(mock.Object);
+            });
+            Assert.Null(exception);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -124,6 +192,7 @@ namespace legallead.json.db.tests
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
         private static DataProvider GetDataProvider()
         {
             return new DataProvider();

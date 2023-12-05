@@ -5,7 +5,6 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
-using System.Net.Http.Headers;
 
 namespace legallead.jdbc.tests.implementations
 {

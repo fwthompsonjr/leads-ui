@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using legallead.jdbc.implementations;
+using legallead.jdbc.helpers;
 using Moq;
 using Moq.Dapper;
 using System.Data.Common;
@@ -21,6 +21,7 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public async Task ExecutorCanQueryAsync()
         {
@@ -39,6 +40,7 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public async Task ExecutorCanQuerySingleAsync()
         {

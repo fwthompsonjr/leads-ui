@@ -7,6 +7,7 @@
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+		<Configurations>Debug;Release;Local</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -34,7 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\legallead.jdbc\legallead.jdbc.csproj" />
+		<ProjectReference Include="..\..\component\legallead.jdbc\legallead.jdbc.csproj" />
 	</ItemGroup>
 
 </Project>
