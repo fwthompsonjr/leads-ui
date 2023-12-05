@@ -38,6 +38,8 @@ namespace permissions.api.tests
         [InlineData(typeof(IUserPermissionRepository))]
         [InlineData(typeof(IUserProfileRepository))]
         [InlineData(typeof(IUserTokenRepository))]
+        [InlineData(typeof(IUserProfileViewRepository))]
+        [InlineData(typeof(IUserPermissionViewRepository))]
         [InlineData(typeof(IUserRepository))]
         [InlineData(typeof(DataProvider))]
         [InlineData(typeof(AccountController))]

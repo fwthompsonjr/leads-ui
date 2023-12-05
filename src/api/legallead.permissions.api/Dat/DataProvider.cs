@@ -11,6 +11,8 @@ namespace legallead.permissions.api
         private readonly IUserPermissionRepository _userPermissionDb;
         private readonly IUserProfileRepository _userProfileDb;
         private readonly IUserTokenRepository _userTokenDb;
+        private readonly IUserPermissionViewRepository _userPermissionVw;
+        private readonly IUserProfileViewRepository _userProfileVw;
         private readonly IUserRepository _userDb;
 
         internal DataProvider(
@@ -20,6 +22,8 @@ namespace legallead.permissions.api
             IUserPermissionRepository userPermissionDb,
             IUserProfileRepository userProfileDb,
             IUserTokenRepository userTokenDb,
+            IUserPermissionViewRepository userPermissionVw,
+            IUserProfileViewRepository userProfileVw,
             IUserRepository user)
         {
             _componentDb = component;
@@ -28,6 +32,8 @@ namespace legallead.permissions.api
             _userPermissionDb = userPermissionDb;
             _userProfileDb = userProfileDb;
             _userTokenDb = userTokenDb;
+            _userPermissionVw = userPermissionVw;
+            _userProfileVw = userProfileVw;
             _userDb = user;
         }
 
@@ -37,6 +43,8 @@ namespace legallead.permissions.api
         internal IUserPermissionRepository UserPermissionDb => _userPermissionDb;
         internal IUserProfileRepository UserProfileDb => _userProfileDb;
         internal IUserTokenRepository UserTokenDb => _userTokenDb;
+        internal IUserPermissionViewRepository UserPermissionVw => _userPermissionVw;
+        internal IUserProfileViewRepository UserProfileVw => _userProfileVw;
         internal IUserRepository UserDb => _userDb;
 
         public virtual async Task<bool> InitializeProfile(User user)

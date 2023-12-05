@@ -4,7 +4,6 @@ namespace legallead.jdbc.interfaces
 {
     public interface IUserProfileRepository
     {
-
         Task<UserProfile?> GetById(string id);
 
         Task Create(UserProfile user);

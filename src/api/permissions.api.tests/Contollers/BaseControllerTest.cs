@@ -38,6 +38,8 @@ namespace permissions.api.tests.Contollers
             var userPermissionMk = new Mock<IUserPermissionRepository>();
             var userProfileMk = new Mock<IUserProfileRepository>();
             var userTokenMk = new Mock<IUserTokenRepository>();
+            var userPermissionVwMk = new Mock<IUserPermissionViewRepository>();
+            var userProfileVwMk = new Mock<IUserProfileViewRepository>();
             var userMk = new Mock<IUserRepository>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
@@ -50,6 +52,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => compMk);
             collection.AddScoped(s => jwtMock);
             collection.AddScoped(s => refreshMock);
+            collection.AddScoped(s => userPermissionVwMk);
+            collection.AddScoped(s => userProfileVwMk);
             collection.AddScoped(s => userMk.Object);
             collection.AddScoped(s => permissionMk.Object);
             collection.AddScoped(s => profileMk.Object);
@@ -59,6 +63,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => compMk.Object);
             collection.AddScoped(s => jwtMock.Object);
             collection.AddScoped(s => refreshMock.Object);
+            collection.AddScoped(s => userPermissionVwMk.Object);
+            collection.AddScoped(s => userProfileVwMk.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -67,8 +73,10 @@ namespace permissions.api.tests.Contollers
                 var d = p.GetRequiredService<IUserPermissionRepository>();
                 var e = p.GetRequiredService<IUserProfileRepository>();
                 var f = p.GetRequiredService<IUserTokenRepository>();
-                var g = p.GetRequiredService<IUserRepository>();
-                return new DataProvider(a, b, c, d, e, f, g);
+                var g = p.GetRequiredService<IUserPermissionViewRepository>();
+                var h = p.GetRequiredService<IUserProfileViewRepository>();
+                var i = p.GetRequiredService<IUserRepository>();
+                return new DataProvider(a, b, c, d, e, f, g, h, i);
             });
             collection.AddScoped(a =>
             {

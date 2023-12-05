@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using Npgsql;
 using System.Data;
+using System.Xml.Linq;
 
 namespace legallead.jdbc.helpers
 {
@@ -24,9 +26,11 @@ namespace legallead.jdbc.helpers
         {
             if (IsDbInitialized) return;
             await InitTables();
+            await InitViews();
             await InitApplications();
             await InitProfile();
             await InitPermissions();
+            await InitPermissionGroups();
             IsDbInitialized = true;
         }
 
@@ -124,7 +128,91 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\tCreateDate timestamp with time zone NOT NULL default ( now() )"
                 + Environment.NewLine
-                + ");";
+                + ");"
+                + Environment.NewLine
+                + "DROP TABLE IF EXISTS PERMISSIONGROUP;"
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS PERMISSIONGROUP ( "
+                + Environment.NewLine
+                + "\t Id CHAR(36) PRIMARY KEY, "
+                + Environment.NewLine
+                + "\t Name VARCHAR(50), "
+                + Environment.NewLine
+                + "\t GroupId INT, "
+                + Environment.NewLine
+                + "\t OrderId INT, "
+                + Environment.NewLine
+                + "\t PerRequest INT, "
+                + "\t PerMonth INT, "
+                + Environment.NewLine
+                + "\t PerYear INT, "
+                + Environment.NewLine
+                + "\t IsActive BOOLEAN NOT NULL default( TRUE ), "
+                + Environment.NewLine
+                + "\t IsVisible BOOLEAN NOT NULL default( TRUE ), "
+                + Environment.NewLine
+                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + Environment.NewLine
+                + " ); ";
+            var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var stmt in stmts)
+            {
+                if (!string.IsNullOrEmpty(stmt))
+                {
+                    var command = $"{stmt};";
+                    await connection.ExecuteAsync(command);
+                }
+            }
+        }
+
+        private async Task InitViews()
+        {
+            // create views if they don't exist
+            using var connection = CreateConnection();
+            var sql = "CREATE OR REPLACE VIEW VWUSERPROFILE "
+                + Environment.NewLine
+                + "AS "
+                + Environment.NewLine
+                + "\t SELECT u.id, "
+                + Environment.NewLine
+                + "\t u.userid,"
+                + Environment.NewLine
+                + "\t u.profilemapid, "
+                + Environment.NewLine
+                + "\t u.keyvalue, "
+                + Environment.NewLine
+                + "\t p.keyname, "
+                + Environment.NewLine
+                + "\t p.orderid "
+                + Environment.NewLine
+                + "\t FROM USERPROFILE u "
+                + Environment.NewLine
+                + "\t JOIN PROFILEMAP p "
+                + Environment.NewLine
+                + "\t ON u.profilemapid = p.id; "
+                + Environment.NewLine
+                + "CREATE OR REPLACE VIEW VWUSERPERMISSION "
+                + Environment.NewLine
+                + "AS "
+                + Environment.NewLine
+                + "\t SELECT u.id, "
+                + Environment.NewLine
+                + "\t u.userid,"
+                + Environment.NewLine
+                + "\t u.permissionmapid, "
+                + Environment.NewLine
+                + "\t u.keyvalue, "
+                + Environment.NewLine
+                + "\t p.keyname, "
+                + Environment.NewLine
+                + "\t p.orderid "
+                + Environment.NewLine
+                + "\t FROM userpermission u "
+                + Environment.NewLine
+                + "\t JOIN permissionmap p "
+                + Environment.NewLine
+                + "\t ON u.permissionmapid = p.id; "
+                + Environment.NewLine;
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)
             {
@@ -243,5 +331,32 @@ namespace legallead.jdbc.helpers
                 await connection.ExecuteAsync(stmt);
             }
         }
+
+        private async Task InitPermissionGroups()
+        {
+            using var connection = CreateConnection();
+            foreach (var grp in permissionGroups)
+            {
+                var selectCommand = grp.SelectSQL();
+                var finder = new PermissionGroup { GroupId = grp.GroupId, OrderId = grp.OrderId };
+                var parms = grp.SelectParameters(finder);
+                var existing = await connection.QuerySingleOrDefault(selectCommand, parms);
+                if (existing == null)
+                {
+                    var command = grp.InsertSQL();
+                    parms = grp.InsertParameters();
+                    await connection.ExecuteAsync(command, parms);
+                }
+            }
+        }
+        private static readonly List<PermissionGroup> permissionGroups = new ()
+        {
+            new() {  Name = "None", GroupId = 100, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },
+            new() {  Name = "Guest", GroupId = 110, OrderId = 20, PerRequest = 5, PerMonth = 15, PerYear = 50 },
+            new() {  Name = "Silver", GroupId = 120, OrderId = 30, PerRequest = 20, PerMonth = 200, PerYear = 1500 },
+            new() {  Name = "Gold", GroupId = 130, OrderId = 40, PerRequest = 100, PerMonth = 1500, PerYear = 10000 },
+            new() {  Name = "Platinum", GroupId = 140, OrderId = 50, PerRequest = 1000, PerMonth = 10000, PerYear = 100000 },
+            new() {  Name = "Admin", GroupId = 175, OrderId = 100, PerRequest = -1, PerMonth = -1, PerYear = -1, IsVisible = false },
+        };
     }
 }
