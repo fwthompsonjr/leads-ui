@@ -2,6 +2,7 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace permissions.api.tests
@@ -12,7 +13,17 @@ namespace permissions.api.tests
 
         public RegisterDataServicesTests()
         {
+            const string environmentName = "Development";
+            var config =
+                new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{environmentName}.json", true)
+                .AddEnvironmentVariables()
+                .Build();
             var collection = new ServiceCollection();
+            collection.AddSingleton<IConfiguration>(config);
+            collection.RegisterAuthentication(config);
             collection.RegisterDataServices();
             _serviceProvider = collection.BuildServiceProvider();
         }
