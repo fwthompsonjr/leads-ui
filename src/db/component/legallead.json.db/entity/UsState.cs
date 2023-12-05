@@ -9,9 +9,9 @@ namespace legallead.json.db.entity
         public string? ShortName { get; set; }
         public bool IsActive { get; set; }
 
-        public static void Initialize(IDataProvider? provider)
+        public static void Initialize(IJsonDataProvider? provider)
         {
-            provider ??= new DataProvider();
+            provider ??= new JsonDataProvider();
             var list = JsonConvert.DeserializeObject<List<UsState>>(GetList) ?? new();
             list.ForEach(a =>
             {

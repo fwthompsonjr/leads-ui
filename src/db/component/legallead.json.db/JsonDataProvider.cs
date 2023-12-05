@@ -7,7 +7,7 @@ namespace legallead.json.db
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance",
         "CA1822:Mark members as static", Justification = "Exposing generic static methods as public to follow DI pattern")]
-    public class DataProvider : IDataProvider
+    public class JsonDataProvider : IJsonDataProvider
     {
         private const string dbFolder = "_db";
         private const string typeAssignMessage = "improper assignment of typename argument.";
@@ -15,7 +15,7 @@ namespace legallead.json.db
 
         private static readonly Dictionary<string, string> _dataFiles = new();
 
-        public DataProvider()
+        public JsonDataProvider()
         {
             Initialize();
         }

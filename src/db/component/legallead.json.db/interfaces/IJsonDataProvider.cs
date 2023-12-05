@@ -3,7 +3,7 @@ using legallead.json.interfaces;
 
 namespace legallead.json.db.interfaces
 {
-    public interface IDataProvider
+    public interface IJsonDataProvider
     {
         T Delete<T>(T entity) where T : BaseEntity<T>, IDataEntity, new();
 

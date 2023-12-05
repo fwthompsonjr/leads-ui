@@ -11,7 +11,7 @@ namespace legallead.json.db.tests
     {
         private static readonly object locker = new();
         private bool disposedValue;
-        private readonly DataProvider Provider;
+        private readonly JsonDataProvider Provider;
 
         public DbTests()
         {
@@ -113,7 +113,7 @@ namespace legallead.json.db.tests
         {
             const UsState? usState = null;
             var usResponse = new UsState();
-            var mock = new Mock<IDataProvider>();
+            var mock = new Mock<IJsonDataProvider>();
             mock.Setup(m =>
                 m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
             mock.Setup(m => m.Insert(It.IsAny<UsState>())).Returns(usResponse);
@@ -129,7 +129,7 @@ namespace legallead.json.db.tests
         public void UsStateInitExistingItems()
         {
             var usState = new UsState();
-            var mock = new Mock<IDataProvider>();
+            var mock = new Mock<IJsonDataProvider>();
             mock.Setup(m =>
                 m.FirstOrDefault(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>())).Returns(usState);
             mock.Setup(m => m.Insert(It.IsAny<UsState>())).Throws(new Exception());
@@ -146,7 +146,7 @@ namespace legallead.json.db.tests
         {
             const UsStateCounty? usState = null;
             var usResponse = new UsStateCounty();
-            var mock = new Mock<IDataProvider>();
+            var mock = new Mock<IJsonDataProvider>();
             mock.Setup(m =>
                 m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
             mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Returns(usResponse);
@@ -162,7 +162,7 @@ namespace legallead.json.db.tests
         public void UsStateCountyInitExistingItems()
         {
             var usState = new UsStateCounty();
-            var mock = new Mock<IDataProvider>();
+            var mock = new Mock<IJsonDataProvider>();
             mock.Setup(m =>
                 m.FirstOrDefault(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>())).Returns(usState);
             mock.Setup(m => m.Insert(It.IsAny<UsStateCounty>())).Throws(new Exception());
@@ -193,9 +193,9 @@ namespace legallead.json.db.tests
             GC.SuppressFinalize(this);
         }
 
-        private static DataProvider GetDataProvider()
+        private static JsonDataProvider GetDataProvider()
         {
-            return new DataProvider();
+            return new JsonDataProvider();
         }
 
         private static void DropDb()

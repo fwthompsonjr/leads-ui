@@ -47,7 +47,8 @@ namespace legallead.jdbc.tests.implementations
             {
                 var test = faker.Generate();
                 var repo = new UserRepository(dataContext);
-                _ = await repo.GetById(test.Id);
+                var index = test.Id ?? Guid.Empty.ToString();
+                _ = await repo.GetById(index);
             });
             Assert.Null(exception);
         }
@@ -107,7 +108,8 @@ namespace legallead.jdbc.tests.implementations
             {
                 var test = faker.Generate();
                 var repo = new UserRepository(GetDbMock().Object);
-                await repo.Delete(test.Id);
+                var index = test.Id ?? Guid.Empty.ToString();
+                await repo.Delete(index);
             });
             Assert.Null(exception);
         }

@@ -31,7 +31,8 @@ namespace legallead.permissions.api
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenKey = Encoding.UTF8.GetBytes(_iconfiguration["JWT:Key"]);
+                var keyconfig = _iconfiguration["JWT:Key"] ?? string.Empty;
+                var tokenKey = Encoding.UTF8.GetBytes(keyconfig);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
@@ -108,7 +109,8 @@ namespace legallead.permissions.api
         }
         private TokenValidationParameters GetValidationParameters()
         {
-            var Key = Encoding.UTF8.GetBytes(_iconfiguration["JWT:Key"]);
+            var keyconfig = _iconfiguration["JWT:Key"] ?? string.Empty;
+            var Key = Encoding.UTF8.GetBytes(keyconfig);
             return new TokenValidationParameters
             {
                 ValidateIssuer = false,

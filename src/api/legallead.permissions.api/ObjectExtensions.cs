@@ -2,6 +2,8 @@
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
+using legallead.json.db;
+using legallead.json.db.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,7 +24,8 @@ namespace legallead.permissions.api
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                var Key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+                var keyconfig = configuration["JWT:Key"] ?? string.Empty;
+                var Key = Encoding.UTF8.GetBytes(keyconfig);
                 o.SaveToken = true;
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -40,6 +43,8 @@ namespace legallead.permissions.api
 
         public static void RegisterDataServices(this IServiceCollection services)
         {
+            services.AddSingleton<IJsonDataProvider, JsonDataProvider>();
+            services.AddSingleton<IJsonDataInitializer, JsonDataInitializer>();
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddScoped<IDapperCommand, DapperExecutor>();

@@ -11,9 +11,9 @@ namespace legallead.json.db.entity
         public string? ShortName { get; set; }
         public bool IsActive { get; set; }
 
-        public static void Initialize(IDataProvider? provider)
+        public static void Initialize(IJsonDataProvider? provider)
         {
-            provider ??= new DataProvider();
+            provider ??= new JsonDataProvider();
             var tmp = GetList;
             var list = JsonConvert.DeserializeObject<List<UsStateCounty>>(tmp) ?? new();
             list.ForEach(a =>

@@ -1,5 +1,7 @@
 ﻿using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using legallead.json.db;
+using legallead.json.db.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +31,8 @@ namespace permissions.api.tests
         }
 
         [Theory]
+        [InlineData(typeof(IJsonDataInitializer))]
+        [InlineData(typeof(IJsonDataProvider))]
         [InlineData(typeof(IJwtManagerRepository))]
         [InlineData(typeof(IDapperCommand))]
         [InlineData(typeof(DataContext))]
@@ -47,6 +51,17 @@ namespace permissions.api.tests
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() => _serviceProvider.GetService(type));
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task JsonDataCanInitialize()
+        {
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var initializer = _serviceProvider.GetRequiredService<IJsonDataInitializer>();
+                await initializer.InitTables();
+            });
             Assert.Null(exception);
         }
     }
