@@ -12,14 +12,14 @@ namespace legallead.permissions.api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SubscriptionsController : ControllerBase
+    public class ListsController : ControllerBase
     {
         private readonly DataProvider _db;
         private readonly IJsonDataProvider _jsondb;
         private readonly UsState stateRef = new();
         private readonly UsStateCounty countyRef = new();
         private readonly IMapper _mapper;
-        public SubscriptionsController(DataProvider db, IJsonDataProvider jsondb)
+        public ListsController(DataProvider db, IJsonDataProvider jsondb)
         {
             _db = db;
             _jsondb = jsondb;

@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.json.db.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
@@ -14,6 +15,23 @@ namespace permissions.api.tests.Contollers
     {
 
         private static IServiceProvider? _serviceProvider;
+
+        protected static readonly Faker<UserLoginModel> faker =
+            new Faker<UserLoginModel>()
+            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Password, y => y.Random.AlphaNumeric(22));
+
+        protected static readonly Faker<Tokens> tokenFaker =
+            new Faker<Tokens>()
+            .RuleFor(x => x.RefreshToken, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.AccessToken, y => y.Random.AlphaNumeric(22));
+
+        protected static readonly Faker<UserChangePasswordModel> changeFaker =
+            new Faker<UserChangePasswordModel>()
+            .RuleFor(x => x.UserName, y => y.Random.AlphaNumeric(22))
+            .RuleFor(x => x.OldPassword, y => y.Random.AlphaNumeric(30))
+            .RuleFor(x => x.NewPassword, y => y.Random.AlphaNumeric(30))
+            .FinishWith((a, b) => b.ConfirmPassword = b.NewPassword);
         protected static IServiceProvider GetProvider()
         {
             if (_serviceProvider != null) { return _serviceProvider; }
@@ -33,6 +51,7 @@ namespace permissions.api.tests.Contollers
             {
                 HttpContext = httpContext,
             };
+            var jsonMock = new Mock<IJsonDataProvider>();
             var refreshMock = new Mock<IRefreshTokenValidator>();
             var jwtMock = new Mock<IJwtManagerRepository>();
             var compMk = new Mock<IComponentRepository>();
@@ -56,6 +75,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => compMk);
             collection.AddScoped(s => jwtMock);
             collection.AddScoped(s => refreshMock);
+            collection.AddScoped(s => jsonMock);
             collection.AddScoped(s => userPermissionVwMk);
             collection.AddScoped(s => userProfileVwMk);
             collection.AddScoped(s => permissionGroupMk);
@@ -71,6 +91,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => userPermissionVwMk.Object);
             collection.AddScoped(s => userProfileVwMk.Object);
             collection.AddScoped(s => permissionGroupMk.Object);
+            collection.AddScoped(s => jsonMock.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -99,6 +120,15 @@ namespace permissions.api.tests.Contollers
                 var jwt = a.GetRequiredService<IJwtManagerRepository>();
                 var refresh = a.GetRequiredService<IRefreshTokenValidator>();
                 return new AccountController(db, jwt, refresh)
+                {
+                    ControllerContext = controllerContext
+                };
+            });
+            collection.AddScoped(a =>
+            {
+                var db = a.GetRequiredService<DataProvider>();
+                var jsondb = a.GetRequiredService<IJsonDataProvider>();
+                return new ListsController(db, jsondb)
                 {
                     ControllerContext = controllerContext
                 };

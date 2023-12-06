@@ -17,22 +17,6 @@ namespace permissions.api.tests.Contollers
     public class AccountControllerTests : BaseControllerTest
     {
         private const string unexpectedReply = "Unexpected Controller Response.";
-        private static readonly Faker<UserLoginModel> faker =
-            new Faker<UserLoginModel>()
-            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Password, y => y.Random.AlphaNumeric(22));
-
-        private static readonly Faker<Tokens> tokenFaker =
-            new Faker<Tokens>()
-            .RuleFor(x => x.RefreshToken, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.AccessToken, y => y.Random.AlphaNumeric(22));
-
-        private static readonly Faker<UserChangePasswordModel> changeFaker =
-            new Faker<UserChangePasswordModel>()
-            .RuleFor(x => x.UserName, y => y.Random.AlphaNumeric(22))
-            .RuleFor(x => x.OldPassword, y => y.Random.AlphaNumeric(30))
-            .RuleFor(x => x.NewPassword, y => y.Random.AlphaNumeric(30))
-            .FinishWith((a,b) => b.ConfirmPassword = b.NewPassword);
 
         [Fact]
         public void ControllerCanBeConstructed()
