@@ -7,9 +7,11 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
+COPY ["api/legallead.permissions.api/nuget.config", "api/legallead.permissions.api/"]
 COPY ["nuget.config", "."]
 COPY ["api/legallead.permissions.api/legallead.permissions.api.csproj", "api/legallead.permissions.api/"]
 COPY ["db/component/legallead.jdbc/legallead.jdbc.csproj", "db/component/legallead.jdbc/"]
+COPY ["db/component/legallead.json.db/legallead.json.db.csproj", "db/component/legallead.json.db/"]
 RUN dotnet restore "api/legallead.permissions.api/legallead.permissions.api.csproj"
 COPY . .
 WORKDIR "/src/api/legallead.permissions.api"
@@ -21,4 +23,4 @@ RUN dotnet publish "legallead.permissions.api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "legallead.permissions.api.dll", "--urls", "http://*:51803;https://*:44360;https://*:5001"]
+ENTRYPOINT ["dotnet", "legallead.permissions.api.dll"]

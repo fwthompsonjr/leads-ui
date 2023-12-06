@@ -17,7 +17,7 @@ namespace legallead.jdbc.implementations
             var list = await _command.QueryAsync<UserProfileView>(connection, sql, parms);
             if (list == null) return Array.Empty<UserProfileView>();
             var data = list.ToList();
-            data.Sort((a, b) => a.OrderId.CompareTo(b.OrderId));
+            data.Sort((a, b) => a.OrderId.GetValueOrDefault().CompareTo(b.OrderId.GetValueOrDefault()));
             return data;
         }
 

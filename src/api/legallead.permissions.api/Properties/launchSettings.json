@@ -21,16 +21,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "ASPNETCORE_HTTPS_PORT": "5212",
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "httpPort": 5050,
-      "useSSL": true,
-      "sslPort": 5212,
-      "publishAllPorts": false
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger"
     },
     "WSL": {
       "commandName": "WSL2",

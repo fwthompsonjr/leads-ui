@@ -7,7 +7,6 @@ using legallead.json.db.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -147,6 +146,30 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, response);
             }
             return pair;
+        }
+
+        internal async static Task<User?> GetUser(this HttpRequest request, DataProvider db)
+        {
+            var identity = request.HttpContext.User.Identity;
+            if (identity == null) return null;
+            var user = await db.UserDb.GetByEmail(identity.Name ?? string.Empty);
+            return user;
+        }
+        internal async static Task<string?> GetUserLevel(this HttpRequest request, DataProvider db)
+        {
+            const string fallback = "None";
+            var user = await request.GetUser(db);
+            if (user == null) return fallback;
+            var userlevel = (await db.UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>();
+            var level = userlevel.FirstOrDefault(x => x.KeyName == "Account.Permission.Level");
+            string levelName = level?.KeyValue ?? fallback;
+            return levelName;
+        }
+        internal async static Task<bool> IsAdminUser(this HttpRequest request, DataProvider db)
+        {
+            var level = await request.GetUserLevel(db);
+            if (level == null) return false;
+            return level.Equals("admin", StringComparison.OrdinalIgnoreCase);
         }
 
         private static async Task<Component?> Find(this DataProvider db, ApplicationRequestModel request)
