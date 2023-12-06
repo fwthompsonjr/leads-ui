@@ -1,5 +1,6 @@
 using legallead.permissions.api;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -43,5 +44,15 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+// Resolve the StartupTasks from the ServiceProvider
+var startupTasks = app.Services.GetServices<IStartupTask>();
 
+// Run the StartupTasks
+foreach (var startupTask in startupTasks)
+{
+    Task.Factory.StartNew(async () => await startupTask.Execute());
+}
 app.Run();
+
+[ExcludeFromCodeCoverage]
+static internal partial class Program { }

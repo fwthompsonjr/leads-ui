@@ -13,6 +13,7 @@ namespace legallead.permissions.api
         private readonly IUserTokenRepository _userTokenDb;
         private readonly IUserPermissionViewRepository _userPermissionVw;
         private readonly IUserProfileViewRepository _userProfileVw;
+        private readonly IPermissionGroupRepository _permissionGroupDb;
         private readonly IUserRepository _userDb;
 
         internal DataProvider(
@@ -23,7 +24,8 @@ namespace legallead.permissions.api
             IUserProfileRepository userProfileDb,
             IUserTokenRepository userTokenDb,
             IUserPermissionViewRepository userPermissionVw,
-            IUserProfileViewRepository userProfileVw,
+            IUserProfileViewRepository userProfileVw, 
+            IPermissionGroupRepository permissionGroupDb,
             IUserRepository user)
         {
             _componentDb = component;
@@ -34,6 +36,7 @@ namespace legallead.permissions.api
             _userTokenDb = userTokenDb;
             _userPermissionVw = userPermissionVw;
             _userProfileVw = userProfileVw;
+            _permissionGroupDb = permissionGroupDb;
             _userDb = user;
         }
 
@@ -45,6 +48,7 @@ namespace legallead.permissions.api
         internal IUserTokenRepository UserTokenDb => _userTokenDb;
         internal IUserPermissionViewRepository UserPermissionVw => _userPermissionVw;
         internal IUserProfileViewRepository UserProfileVw => _userProfileVw;
+        internal IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
         internal IUserRepository UserDb => _userDb;
 
         public virtual async Task<bool> InitializeProfile(User user)
@@ -82,5 +86,47 @@ namespace legallead.permissions.api
             return true;
         }
 
+        public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName)
+        {
+            try
+            {
+                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
+                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var group = groups.Find(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{groupName} not defined.");
+                var settings = new Dictionary<string, string>()
+                {
+                    { "Account.IsPrimary", "True" },
+                    { "Account.Permission.Level", group.Name ?? string.Empty },
+                    { "Setting.MaxRecords.Per.Year", group.PerYear.GetValueOrDefault().ToString() ?? string.Empty },
+                    { "Setting.MaxRecords.Per.Month", group.PerMonth.GetValueOrDefault().ToString()},
+                    { "Setting.MaxRecords.Per.Request", group.PerRequest.GetValueOrDefault().ToString() },
+                };
+                var changes = new List<UserPermission>();
+                foreach (var item in settings.Keys)
+                {
+                    var permission = permissions.Find(p => p.KeyName.Equals(item, StringComparison.OrdinalIgnoreCase));
+                    if (permission == null) return new KeyValuePair<bool, string>(false, $"Expected key: '{item}' not found in user settings");
+                    changes.Add(new UserPermission
+                    {
+                        Id = permission.Id,
+                        UserId = user.Id ?? Guid.Empty.ToString(),
+                        PermissionMapId = permission.PermissionMapId,
+                        KeyValue = settings[item]
+                    });
+                }
+                changes.ForEach(async c =>
+                {
+                    await UserPermissionDb.Update(c);
+                });
+                return new KeyValuePair<bool, string>(true, $"Group seetings for '{groupName} applied to user account.");
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
+            }
+        }
     }
 }

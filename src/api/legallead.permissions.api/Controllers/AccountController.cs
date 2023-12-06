@@ -67,10 +67,10 @@ namespace legallead.permissions.api.Controllers
             {
                 return BadRequest("Invalid access token.");
             }
-            var username = principal.Identity.Name;
-            var user = await _db.UserDb.GetByEmail(username ?? string.Empty);
+            var username = principal.Identity.Name ?? string.Empty;
+            var user = await _db.UserDb.GetByEmail(username);
 
-            if (string.IsNullOrEmpty(username) || user == null || string.IsNullOrEmpty(user.Id))
+            if (user == null || string.IsNullOrEmpty(user.Id))
             {
                 return BadRequest("User data is null or empty.");
             }

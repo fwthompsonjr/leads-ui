@@ -308,6 +308,8 @@ namespace legallead.jdbc.helpers
                 "Setting.Pricing.Per.Request",
                 "Setting.State.Subscriptions",
                 "Setting.State.County.Subscriptions",
+                "Setting.State.Subscriptions.Active",
+                "Setting.State.County.Subscriptions.Active",
             };
             var command = "INSERT INTO PERMISSIONMAP " + Environment.NewLine +
             "( Id, OrderId, KeyName ) " + Environment.NewLine +
@@ -334,19 +336,36 @@ namespace legallead.jdbc.helpers
 
         private async Task InitPermissionGroups()
         {
-            using var connection = CreateConnection();
-            foreach (var grp in permissionGroups)
+            try
             {
-                var selectCommand = grp.SelectSQL();
-                var finder = new PermissionGroup { GroupId = grp.GroupId, OrderId = grp.OrderId };
-                var parms = grp.SelectParameters(finder);
-                var existing = await connection.QuerySingleOrDefault(selectCommand, parms);
-                if (existing == null)
+
+                using var connection = CreateConnection();
+                foreach (var grp in permissionGroups)
                 {
-                    var command = grp.InsertSQL();
-                    parms = grp.InsertParameters();
-                    await connection.ExecuteAsync(command, parms);
+                    var finder = new PermissionGroup
+                    {
+                        GroupId = grp.GroupId,
+                        OrderId = grp.OrderId,
+                        IsActive = null,
+                        IsVisible = null,
+                        CreateDate = null
+                    };
+                    var selectCommand = grp.SelectSQL(finder);
+                    var parms = grp.SelectParameters(finder);
+                    var existing = await connection.QuerySingleOrDefaultAsync(selectCommand, parms);
+                    if (existing == null)
+                    {
+                        grp.Id = Guid.NewGuid().ToString("D");
+                        grp.CreateDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+                        var command = grp.InsertSQL();
+                        parms = grp.InsertParameters();
+                        await connection.ExecuteAsync(command, parms);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
         private static readonly List<PermissionGroup> permissionGroups = new ()
@@ -357,6 +376,14 @@ namespace legallead.jdbc.helpers
             new() {  Name = "Gold", GroupId = 130, OrderId = 40, PerRequest = 100, PerMonth = 1500, PerYear = 10000 },
             new() {  Name = "Platinum", GroupId = 140, OrderId = 50, PerRequest = 1000, PerMonth = 10000, PerYear = 100000 },
             new() {  Name = "Admin", GroupId = 175, OrderId = 100, PerRequest = -1, PerMonth = -1, PerYear = -1, IsVisible = false },
+            new() {  Name = "None.Pricing", GroupId = 1000, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },
+            new() {  Name = "Guest.Pricing", GroupId = 1010, OrderId = 20, PerRequest = 0, PerMonth = 0, PerYear = 0 },
+            new() {  Name = "Silver.Pricing", GroupId = 1020, OrderId = 30, PerRequest = 5, PerMonth = 12, PerYear = 100 },
+            new() {  Name = "Gold.Pricing", GroupId = 1030, OrderId = 40, PerRequest = 4, PerMonth = 20, PerYear = 225 },
+            new() {  Name = "Platinum.Pricing", GroupId = 1040, OrderId = 50, PerRequest = 3, PerMonth = 30, PerYear = 300 },
+            new() {  Name = "Admin.Pricing", GroupId = 1075, OrderId = 100, PerRequest = -1, PerMonth = -1, PerYear = -1, IsVisible = false },
+            new() {  Name = "State.Discount.Pricing", GroupId = 2100, OrderId = 10, PerRequest = 15, PerMonth = 2, PerYear = 24 },
+            new() {  Name = "County.Discount.Pricing", GroupId = 2200, OrderId = 20, PerRequest = 10, PerMonth = 1, PerYear = 12, },
         };
     }
 }

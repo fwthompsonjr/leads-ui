@@ -17,7 +17,11 @@ namespace legallead.json.db
 
         public JsonDataProvider()
         {
-            Initialize();
+            lock (_instance)
+            {
+                Initialize();
+            }
+            
         }
 
         public T Insert<T>(T entity) where T : class, IDataEntity, new()

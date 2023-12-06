@@ -1,9 +1,12 @@
-﻿using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.entities;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace permissions.api.tests.Contollers
 {
@@ -40,6 +43,7 @@ namespace permissions.api.tests.Contollers
             var userTokenMk = new Mock<IUserTokenRepository>();
             var userPermissionVwMk = new Mock<IUserPermissionViewRepository>();
             var userProfileVwMk = new Mock<IUserProfileViewRepository>();
+            var permissionGroupMk = new Mock<IPermissionGroupRepository>();
             var userMk = new Mock<IUserRepository>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
@@ -54,6 +58,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => refreshMock);
             collection.AddScoped(s => userPermissionVwMk);
             collection.AddScoped(s => userProfileVwMk);
+            collection.AddScoped(s => permissionGroupMk);
             collection.AddScoped(s => userMk.Object);
             collection.AddScoped(s => permissionMk.Object);
             collection.AddScoped(s => profileMk.Object);
@@ -65,6 +70,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => refreshMock.Object);
             collection.AddScoped(s => userPermissionVwMk.Object);
             collection.AddScoped(s => userProfileVwMk.Object);
+            collection.AddScoped(s => permissionGroupMk.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -75,8 +81,9 @@ namespace permissions.api.tests.Contollers
                 var f = p.GetRequiredService<IUserTokenRepository>();
                 var g = p.GetRequiredService<IUserPermissionViewRepository>();
                 var h = p.GetRequiredService<IUserProfileViewRepository>();
-                var i = p.GetRequiredService<IUserRepository>();
-                return new DataProvider(a, b, c, d, e, f, g, h, i);
+                var i = p.GetRequiredService<IPermissionGroupRepository>();
+                var j = p.GetRequiredService<IUserRepository>();
+                return new DataProvider(a, b, c, d, e, f, g, h, i, j);
             });
             collection.AddScoped(a =>
             {
@@ -99,6 +106,37 @@ namespace permissions.api.tests.Contollers
             _serviceProvider = collection.BuildServiceProvider();
             return _serviceProvider;
 
+        }
+
+        protected static AppHeader GetApplicationHeader()
+        {
+            var localFaker = new Faker();
+            const string headerName = "APP_IDENTITY";
+            var obj = new ApplicationRequestModel
+            {
+                Id = Guid.NewGuid(),
+                Name = localFaker.Name.FullName()
+            };
+            var app = new Component { Id = obj.Id.GetValueOrDefault().ToString("D"), Name = obj.Name };
+            var serialObj = JsonConvert.SerializeObject(obj);
+            var headers = new HeaderDictionary
+            {
+                { "Content-Type", "application/json" },
+                { headerName, serialObj }
+            };
+            return new AppHeader
+            {
+                App = app,
+                AppHeading = obj,
+                Headers = headers
+            };
+        }
+
+        protected sealed class AppHeader
+        {
+            public Component App { get; set; } = new();
+            public ApplicationRequestModel AppHeading { get; set; } = new();
+            public HeaderDictionary Headers { get; set; } = new();
         }
     }
 }
