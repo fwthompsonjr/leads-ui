@@ -24,7 +24,7 @@ namespace legallead.permissions.api
             IUserProfileRepository userProfileDb,
             IUserTokenRepository userTokenDb,
             IUserPermissionViewRepository userPermissionVw,
-            IUserProfileViewRepository userProfileVw, 
+            IUserProfileViewRepository userProfileVw,
             IPermissionGroupRepository permissionGroupDb,
             IUserRepository user)
         {
@@ -68,6 +68,7 @@ namespace legallead.permissions.api
             additions.ForEach(async a => await UserProfileDb.Create(a));
             return true;
         }
+
         public virtual async Task<bool> InitializePermission(User user)
         {
             var permissions = await PermissionDb.GetAll();

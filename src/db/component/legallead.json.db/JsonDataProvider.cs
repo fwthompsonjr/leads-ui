@@ -21,7 +21,6 @@ namespace legallead.json.db
             {
                 Initialize();
             }
-            
         }
 
         public T Insert<T>(T entity) where T : class, IDataEntity, new()

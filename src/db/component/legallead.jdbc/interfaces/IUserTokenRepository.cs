@@ -13,8 +13,11 @@ namespace legallead.jdbc.interfaces
         Task Update(UserRefreshToken user);
 
         Task Delete(string id);
+
         Task<UserRefreshToken> Add(UserRefreshToken token);
+
         Task<UserRefreshToken?> Find(string userId, string refreshToken);
+
         Task DeleteTokens(User user);
     }
 }

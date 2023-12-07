@@ -7,10 +7,12 @@ namespace legallead.permissions.api
     {
         private bool IsDataReady = false;
         private readonly IJsonDataProvider _dataProvider;
+
         public JsonInitStartupTask(IJsonDataProvider dataProvider)
         {
             _dataProvider = dataProvider;
         }
+
         public async Task Execute()
         {
             if (IsDataReady) { return; }

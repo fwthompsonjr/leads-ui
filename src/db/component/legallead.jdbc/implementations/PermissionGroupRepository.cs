@@ -6,6 +6,8 @@ namespace legallead.jdbc.implementations
 {
     public class PermissionGroupRepository : BaseRepository<PermissionGroup>, IPermissionGroupRepository
     {
-        public PermissionGroupRepository(DataContext context) : base(context) { }
+        public PermissionGroupRepository(DataContext context) : base(context)
+        {
+        }
     }
 }

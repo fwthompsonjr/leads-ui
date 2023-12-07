@@ -21,6 +21,7 @@ namespace legallead.permissions.api
             if (minutes == 0) minutes = defaultExpiryMinutes;
             _expiryMinutes = minutes;
         }
+
         public Tokens? GenerateToken(User user)
         {
             return GenerateJWTTokens(user);
@@ -55,7 +56,6 @@ namespace legallead.permissions.api
                 return null;
             }
         }
-
 
         public Tokens? GenerateRefreshToken(User user)
         {
@@ -107,6 +107,7 @@ namespace legallead.permissions.api
                 return false;
             }
         }
+
         private TokenValidationParameters GetValidationParameters()
         {
             var keyconfig = _iconfiguration["JWT:Key"] ?? string.Empty;

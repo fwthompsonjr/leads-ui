@@ -7,7 +7,9 @@ namespace legallead.jdbc.implementations
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(DataContext context) : base(context) { }
+        public UserRepository(DataContext context) : base(context)
+        {
+        }
 
         public async Task<User?> GetByEmail(string email)
         {
@@ -26,6 +28,7 @@ namespace legallead.jdbc.implementations
             var parms = _sut.SelectParameters(parm);
             return await _command.QuerySingleOrDefaultAsync<User>(connection, sql, parms);
         }
+
         public async Task<KeyValuePair<bool, User?>> IsValidUserAsync(UserModel model)
         {
             var response = new KeyValuePair<bool, User?>(false, null);

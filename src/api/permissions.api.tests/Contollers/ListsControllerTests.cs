@@ -6,7 +6,6 @@ using legallead.permissions.api.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Security.Principal;
 

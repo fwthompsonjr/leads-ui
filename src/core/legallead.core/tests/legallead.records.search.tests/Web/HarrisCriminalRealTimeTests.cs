@@ -1,7 +1,4 @@
-﻿using legallead.records.search.Web;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 
 namespace legallead.records.search.UnitTests.Web

@@ -7,8 +7,6 @@ using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -214,7 +212,6 @@ namespace permissions.api.tests.Contollers
             }
         }
 
-
         [Fact]
         public async Task RefreshRequiresNonNullClaimsPrincipal()
         {
@@ -340,6 +337,7 @@ namespace permissions.api.tests.Contollers
                 Assert.Fail(unexpectedReply);
             }
         }
+
         [Fact]
         public async Task RefreshRequiresNonEmptyUserId()
         {
@@ -562,7 +560,6 @@ namespace permissions.api.tests.Contollers
             }
         }
 
-
         [Fact]
         public void VerifyRequiresAppHeader()
         {
@@ -583,7 +580,6 @@ namespace permissions.api.tests.Contollers
                 Assert.Fail(unexpectedReply);
             }
         }
-
 
         [Fact]
         public void VerifyRequiresValidToken()
@@ -646,7 +642,6 @@ namespace permissions.api.tests.Contollers
                 Assert.Fail(unexpectedReply);
             }
         }
-
 
         [Fact]
         public async Task ChangePasswordRequiresAppHeader()

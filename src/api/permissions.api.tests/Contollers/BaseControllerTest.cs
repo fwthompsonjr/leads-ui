@@ -13,7 +13,6 @@ namespace permissions.api.tests.Contollers
 {
     public abstract class BaseControllerTest
     {
-
         private static IServiceProvider? _serviceProvider;
 
         protected static readonly Faker<UserLoginModel> faker =
@@ -32,6 +31,7 @@ namespace permissions.api.tests.Contollers
             .RuleFor(x => x.OldPassword, y => y.Random.AlphaNumeric(30))
             .RuleFor(x => x.NewPassword, y => y.Random.AlphaNumeric(30))
             .FinishWith((a, b) => b.ConfirmPassword = b.NewPassword);
+
         protected static IServiceProvider GetProvider()
         {
             if (_serviceProvider != null) { return _serviceProvider; }
@@ -46,7 +46,7 @@ namespace permissions.api.tests.Contollers
                 _.Request == request.Object
             );
 
-            //Controller needs a controller context 
+            //Controller needs a controller context
             var controllerContext = new ControllerContext()
             {
                 HttpContext = httpContext,
@@ -135,7 +135,6 @@ namespace permissions.api.tests.Contollers
             });
             _serviceProvider = collection.BuildServiceProvider();
             return _serviceProvider;
-
         }
 
         protected static AppHeader GetApplicationHeader()

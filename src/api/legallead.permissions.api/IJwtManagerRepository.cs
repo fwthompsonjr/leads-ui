@@ -7,8 +7,11 @@ namespace legallead.permissions.api
     public interface IJwtManagerRepository
     {
         Tokens? GenerateToken(User user);
+
         Tokens? GenerateRefreshToken(User user);
+
         ClaimsPrincipal? GetPrincipalFromExpiredToken(string token);
+
         bool ValidateToken(string token);
     }
 }

@@ -149,14 +149,15 @@ namespace legallead.permissions.api
             return pair;
         }
 
-        internal async static Task<User?> GetUser(this HttpRequest request, DataProvider db)
+        internal static async Task<User?> GetUser(this HttpRequest request, DataProvider db)
         {
             var identity = request.HttpContext.User.Identity;
             if (identity == null) return null;
             var user = await db.UserDb.GetByEmail(identity.Name ?? string.Empty);
             return user;
         }
-        internal async static Task<string?> GetUserLevel(this HttpRequest request, DataProvider db)
+
+        internal static async Task<string?> GetUserLevel(this HttpRequest request, DataProvider db)
         {
             const string fallback = "None";
             var user = await request.GetUser(db);
@@ -166,7 +167,8 @@ namespace legallead.permissions.api
             string levelName = level?.KeyValue ?? fallback;
             return levelName;
         }
-        internal async static Task<bool> IsAdminUser(this HttpRequest request, DataProvider db)
+
+        internal static async Task<bool> IsAdminUser(this HttpRequest request, DataProvider db)
         {
             var level = await request.GetUserLevel(db);
             if (level == null) return false;

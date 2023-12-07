@@ -3,7 +3,6 @@ using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using Npgsql;
 using System.Data;
-using System.Xml.Linq;
 
 namespace legallead.jdbc.helpers
 {
@@ -338,7 +337,6 @@ namespace legallead.jdbc.helpers
         {
             try
             {
-
                 using var connection = CreateConnection();
                 foreach (var grp in permissionGroups)
                 {
@@ -368,7 +366,8 @@ namespace legallead.jdbc.helpers
                 Console.WriteLine(ex);
             }
         }
-        private static readonly List<PermissionGroup> permissionGroups = new ()
+
+        private static readonly List<PermissionGroup> permissionGroups = new()
         {
             new() {  Name = "None", GroupId = 100, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },
             new() {  Name = "Guest", GroupId = 110, OrderId = 20, PerRequest = 5, PerMonth = 15, PerYear = 50 },

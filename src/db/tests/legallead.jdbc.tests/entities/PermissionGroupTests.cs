@@ -5,7 +5,6 @@ namespace legallead.jdbc.tests.entities
 {
     public class PermissionGroupTests
     {
-
         private readonly Faker<PermissionGroup> faker =
             new Faker<PermissionGroup>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))

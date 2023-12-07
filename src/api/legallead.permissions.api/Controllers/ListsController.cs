@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using legallead.jdbc.entities;
 using legallead.json.db.entity;
 using legallead.json.db.interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
@@ -19,6 +17,7 @@ namespace legallead.permissions.api.Controllers
         private readonly UsState stateRef = new();
         private readonly UsStateCounty countyRef = new();
         private readonly IMapper _mapper;
+
         public ListsController(DataProvider db, IJsonDataProvider jsondb)
         {
             _db = db;
@@ -49,7 +48,7 @@ namespace legallead.permissions.api.Controllers
             var user = await Request.GetUser(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
             var isAdmin = await Request.IsAdminUser(_db);
-            var permissions = (await _db.PermissionGroupDb.GetAll()).Where( p => isAdmin || p.IsVisible.GetValueOrDefault());
+            var permissions = (await _db.PermissionGroupDb.GetAll()).Where(p => isAdmin || p.IsVisible.GetValueOrDefault());
             var models = permissions.Select(s => _mapper.Map<PermissionGroupModel>(s)).ToList();
             models.FindAll(m => m.IsActive.GetValueOrDefault());
             models = models.FindAll(m => !m.Name.Contains('.'));
@@ -66,7 +65,7 @@ namespace legallead.permissions.api.Controllers
             var profiles = await _db.UserProfileVw.GetAll(user);
             var models = profiles.Select(s => _mapper.Map<UserProfileModel>(s)).ToList();
             models.ForEach(m => m.UserName = user.UserName);
-            models.Sort((a,b) => (a.KeyName ?? string.Empty).CompareTo(b.KeyName ?? string.Empty));
+            models.Sort((a, b) => (a.KeyName ?? string.Empty).CompareTo(b.KeyName ?? string.Empty));
             return Ok(models);
         }
 

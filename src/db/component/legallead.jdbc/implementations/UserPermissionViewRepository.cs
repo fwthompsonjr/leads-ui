@@ -6,7 +6,9 @@ namespace legallead.jdbc.implementations
 {
     public class UserPermissionViewRepository : BaseRepository<UserPermissionView>, IUserPermissionViewRepository
     {
-        public UserPermissionViewRepository(DataContext context) : base(context) { }
+        public UserPermissionViewRepository(DataContext context) : base(context)
+        {
+        }
 
         public async Task<IEnumerable<UserPermissionView>> GetAll(User user)
         {
@@ -17,7 +19,7 @@ namespace legallead.jdbc.implementations
             var list = await _command.QueryAsync<UserPermissionView>(connection, sql, parms);
             if (list == null) return Array.Empty<UserPermissionView>();
             var data = list.ToList();
-            data.Sort((a,b) => a.OrderId.CompareTo(b.OrderId));
+            data.Sort((a, b) => a.OrderId.CompareTo(b.OrderId));
             return data;
         }
 

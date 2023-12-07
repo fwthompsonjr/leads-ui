@@ -5,7 +5,6 @@ namespace legallead.jdbc.tests.entities
 {
     public class UserRefreshTokenTests
     {
-        
         private readonly Faker<UserRefreshToken> faker =
             new Faker<UserRefreshToken>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))

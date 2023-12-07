@@ -6,7 +6,9 @@ namespace legallead.jdbc.implementations
 {
     public class UserTokenRepository : BaseRepository<UserRefreshToken>, IUserTokenRepository
     {
-        public UserTokenRepository(DataContext context) : base(context) { }
+        public UserTokenRepository(DataContext context) : base(context)
+        {
+        }
 
         public async Task<IEnumerable<UserRefreshToken>> GetAll(User user)
         {
@@ -16,6 +18,7 @@ namespace legallead.jdbc.implementations
             var parms = _sut.SelectParameters(parm);
             return await _command.QueryAsync<UserRefreshToken>(connection, sql, parms);
         }
+
         public async Task<UserRefreshToken> Add(UserRefreshToken token)
         {
             token.Id = Guid.NewGuid().ToString("D");

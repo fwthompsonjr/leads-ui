@@ -11,8 +11,11 @@ namespace legallead.jdbc.interfaces
         Task Update(UserProfile user);
 
         Task Delete(string id);
+
         Task<IEnumerable<UserProfile>> GetAll();
+
         Task<IEnumerable<UserProfile>> GetAll(User user);
+
         Task<bool> DoesRecordExist(User user, string profileId);
     }
 }

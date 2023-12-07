@@ -22,6 +22,7 @@ namespace legallead.jdbc.models
                 PasswordSalt = vector
             };
         }
+
         public static bool IsPasswordMatched(string password, User model)
         {
             try

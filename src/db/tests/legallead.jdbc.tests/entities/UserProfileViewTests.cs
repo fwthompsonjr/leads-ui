@@ -5,7 +5,6 @@ namespace legallead.jdbc.tests.entities
 {
     public class UserProfileViewTests
     {
-
         private readonly Faker<UserProfileView> faker =
             new Faker<UserProfileView>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))

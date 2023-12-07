@@ -6,7 +6,9 @@ namespace legallead.jdbc.implementations
 {
     public class UserProfileViewRepository : BaseRepository<UserProfileView>, IUserProfileViewRepository
     {
-        public UserProfileViewRepository(DataContext context) : base(context) { }
+        public UserProfileViewRepository(DataContext context) : base(context)
+        {
+        }
 
         public async Task<IEnumerable<UserProfileView>> GetAll(User user)
         {

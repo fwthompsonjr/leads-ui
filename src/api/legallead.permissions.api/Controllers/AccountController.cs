@@ -113,7 +113,6 @@ namespace legallead.permissions.api.Controllers
             return Ok(isvalid);
         }
 
-
         [Authorize]
         [HttpPost]
         [Route("change-password")]

@@ -1,12 +1,9 @@
 ﻿using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using legallead.json.db;
-using legallead.json.db.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace permissions.api.tests
 {
@@ -32,7 +29,7 @@ namespace permissions.api.tests
                 collection.AddSingleton<IConfiguration>(config);
                 collection.RegisterAuthentication(config);
                 collection.RegisterDataServices();
-                _serviceProvider = collection.BuildServiceProvider(); 
+                _serviceProvider = collection.BuildServiceProvider();
             }
         }
 
@@ -58,7 +55,8 @@ namespace permissions.api.tests
         [InlineData(typeof(JdbcInitStartUpTask))]
         public void ProviderCanConstructInstance(Type type)
         {
-            var exception = Record.Exception(() => {
+            var exception = Record.Exception(() =>
+            {
                 Assert.NotNull(_serviceProvider);
                 _serviceProvider.GetService(type);
             });

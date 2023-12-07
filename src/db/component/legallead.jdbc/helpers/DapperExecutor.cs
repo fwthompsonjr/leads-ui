@@ -10,6 +10,7 @@ namespace legallead.jdbc.helpers
         {
             await conn.ExecuteAsync(sql);
         }
+
         public async Task ExecuteAsync(IDbConnection conn, string sql, DynamicParameters arg)
         {
             await conn.ExecuteAsync(sql, arg);
@@ -20,6 +21,7 @@ namespace legallead.jdbc.helpers
             var response = await conn.QueryAsync<T>(sql);
             return response;
         }
+
         public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, DynamicParameters arg)
         {
             var response = await conn.QueryAsync<T>(sql, arg);

@@ -21,6 +21,7 @@
             connection = connection.Replace("<password>", secret[1]);
             return connection;
         }
+
 #else
         private const string PostGresCommand = "Host=lower-sponge-13511.5xj.cockroachlabs.cloud:26257;Username=<username>;Password=<password>;Database=testdb";
 

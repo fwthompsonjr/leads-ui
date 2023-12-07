@@ -55,4 +55,5 @@ foreach (var startupTask in startupTasks)
 app.Run();
 
 [ExcludeFromCodeCoverage]
-static internal partial class Program { }
+internal static partial class Program
+{ }

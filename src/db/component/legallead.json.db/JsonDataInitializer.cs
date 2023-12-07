@@ -7,10 +7,12 @@ namespace legallead.json.db
     {
         private readonly IJsonDataProvider _provider;
         private bool IsDbInitialized = false;
+
         public JsonDataInitializer(IJsonDataProvider provider)
         {
             _provider = provider;
         }
+
         public async Task InitTables()
         {
             if (IsDbInitialized) return;
