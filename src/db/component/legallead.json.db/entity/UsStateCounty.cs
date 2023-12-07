@@ -25,6 +25,7 @@ namespace legallead.json.db.entity
                     provider.Insert(a);
                 }
             });
+            UsStateCountyList.Populate(list);
         }
 
         private static string? _list;

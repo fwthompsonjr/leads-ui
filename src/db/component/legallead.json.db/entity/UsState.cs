@@ -22,6 +22,7 @@ namespace legallead.json.db.entity
                     provider.Insert(a);
                 }
             });
+            UsStatesList.Populate(list);
         }
 
         private static string? _list;

@@ -104,30 +104,50 @@ namespace legallead.permissions.api
                     { "Setting.MaxRecords.Per.Year", group.PerYear.GetValueOrDefault().ToString() ?? string.Empty },
                     { "Setting.MaxRecords.Per.Month", group.PerMonth.GetValueOrDefault().ToString()},
                     { "Setting.MaxRecords.Per.Request", group.PerRequest.GetValueOrDefault().ToString() },
+                    { "Setting.Pricing.Name", group.Name ?? string.Empty }
                 };
-                var changes = new List<UserPermission>();
-                foreach (var item in settings.Keys)
+                var changes = ApplyChanges(user, settings, permissions);
+                if (!changes.Key) return changes;
+                var answer = new KeyValuePair<bool, string>(true, $"Group settings for '{groupName}' applied to user: {user.UserName}.");
+                var groupPrice = groups.Find(g => g.Name.Equals($"{groupName}.Pricing", StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (groupPrice == null) return answer;
+                settings = new Dictionary<string, string>()
                 {
-                    var permission = permissions.Find(p => p.KeyName.Equals(item, StringComparison.OrdinalIgnoreCase));
-                    if (permission == null) return new KeyValuePair<bool, string>(false, $"Expected key: '{item}' not found in user settings");
-                    changes.Add(new UserPermission
-                    {
-                        Id = permission.Id,
-                        UserId = user.Id ?? Guid.Empty.ToString(),
-                        PermissionMapId = permission.PermissionMapId,
-                        KeyValue = settings[item]
-                    });
-                }
-                changes.ForEach(async c =>
-                {
-                    await UserPermissionDb.Update(c);
-                });
-                return new KeyValuePair<bool, string>(true, $"Group seetings for '{groupName} applied to user account.");
+                    { "Setting.Pricing.Per.Year", groupPrice.PerYear.GetValueOrDefault().ToString() ?? string.Empty },
+                    { "Setting.Pricing.Per.Month", groupPrice.PerMonth.GetValueOrDefault().ToString()},
+                    { "Setting.Pricing.Per.Request", groupPrice.PerRequest.GetValueOrDefault().ToString() },
+                };
+                changes = ApplyChanges(user, settings, permissions);
+                if (!changes.Key) return changes;
+                return answer;
             }
             catch (Exception)
             {
                 return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
             }
+        }
+
+
+        private KeyValuePair<bool, string> ApplyChanges(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
+        {
+            var changes = new List<UserPermission>();
+            foreach (var item in settings.Keys)
+            {
+                var permission = permissions.Find(p => p.KeyName.Equals(item, StringComparison.OrdinalIgnoreCase));
+                if (permission == null) return new KeyValuePair<bool, string>(false, $"Expected key: '{item}' not found in user settings");
+                changes.Add(new UserPermission
+                {
+                    Id = permission.Id,
+                    UserId = user.Id ?? Guid.Empty.ToString(),
+                    PermissionMapId = permission.PermissionMapId,
+                    KeyValue = settings[item]
+                });
+            }
+            changes.ForEach(async c =>
+            {
+                await UserPermissionDb.Update(c);
+            });
+            return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
         }
     }
 }

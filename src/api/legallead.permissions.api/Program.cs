@@ -16,6 +16,7 @@ var services = builder.Services;
 services.RegisterDataServices();
 services.RegisterAuthentication(config);
 services.AddControllers();
+services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 services.AddSingleton<IConfiguration>(config);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
