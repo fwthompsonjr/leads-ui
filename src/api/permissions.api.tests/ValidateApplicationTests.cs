@@ -70,6 +70,7 @@ namespace permissions.api.tests
             private static Mock<IUserProfileViewRepository> UserProfileViewMk { get; } = new();
             private static Mock<IPermissionGroupRepository> ProfileGrpMk { get; } = new();
             private static Mock<IUserRepository> UserMq { get; } = new();
+            private static Mock<IUserPermissionHistoryRepository> PermissionHistoryMq { get; } = new();
 
             public MockDataProvider() : base(
                 ComponentMq.Object,
@@ -81,7 +82,8 @@ namespace permissions.api.tests
                 UserPermissionViewMk.Object,
                 UserProfileViewMk.Object,
                 ProfileGrpMk.Object,
-                UserMq.Object)
+                UserMq.Object,
+                PermissionHistoryMq.Object)
             {
             }
 

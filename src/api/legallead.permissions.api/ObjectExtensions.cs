@@ -71,6 +71,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
             services.AddScoped<IPermissionGroupRepository, PermissionGroupRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -83,6 +84,7 @@ namespace legallead.permissions.api
                 var userProfileVw = d.GetRequiredService<IUserProfileViewRepository>();
                 var permissionGroupDb = d.GetRequiredService<IPermissionGroupRepository>();
                 var users = d.GetRequiredService<IUserRepository>();
+                var permissionHistoryDb = d.GetRequiredService<IUserPermissionHistoryRepository>();
                 return new DataProvider(
                     components,
                     permissionDb,
@@ -93,7 +95,8 @@ namespace legallead.permissions.api
                     userPermissionVw,
                     userProfileVw,
                     permissionGroupDb,
-                    users);
+                    users,
+                    permissionHistoryDb);
             });
             services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();

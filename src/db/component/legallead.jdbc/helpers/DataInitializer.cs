@@ -26,6 +26,7 @@ namespace legallead.jdbc.helpers
             if (IsDbInitialized) return;
             await InitTables();
             await InitViews();
+            await InitStoredProcedures();
             await InitApplications();
             await InitProfile();
             await InitPermissions();
@@ -152,7 +153,31 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
                 + Environment.NewLine
-                + " ); ";
+                + " ); "
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS USERPERMISSIONHISTORY"
+                + Environment.NewLine
+                + "("
+                + Environment.NewLine
+                + "\t Id CHAR(36) PRIMARY KEY NOT NULL "
+                + Environment.NewLine
+                + "\t DEFAULT ( md5(random()::text || clock_timestamp()::text)::uuid::CHAR(36) ), "
+                + Environment.NewLine
+                + "\t UserPermissionId CHAR(36) references USERPERMISSION(Id), "
+                + Environment.NewLine
+                + "\t GroupId INT NULL, "
+                + Environment.NewLine
+                + "\t UserId CHAR(36) references USERS(Id) , "
+                + Environment.NewLine
+                + "\t PermissionMapId CHAR(36) references PERMISSIONMAP(Id) , "
+                + Environment.NewLine
+                + "\t KeyName VARCHAR(100) , "
+                + Environment.NewLine
+                + "\t KeyValue VARCHAR(256) , "
+                + Environment.NewLine
+                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + Environment.NewLine
+                + "); ";
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)
             {
@@ -366,6 +391,48 @@ namespace legallead.jdbc.helpers
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
+            }
+        }
+
+        private async Task InitStoredProcedures()
+        {
+            // create procs if they don't exist
+            var nl = Environment.NewLine;
+            using var connection = CreateConnection();
+            var sql = new List<string>() {
+                "create or replace procedure usp_append_permission_history( " + nl +
+                    "userindex char(36) " + nl +
+                    ") " + nl +
+                    "language plpgsql " + nl +
+                    "as $$ " + nl +
+                    "begin  " + nl +
+                    " " + nl +
+                    "-- append records  " + nl +
+                    "insert into USERPERMISSIONHISTORY " + nl +
+                    "( " + nl +
+                    "UserPermissionId, UserId, PermissionMapId, KeyName, KeyValue " + nl +
+                    ") " + nl +
+                    "SELECT " + nl +
+                    "v.Id, " + nl +
+                    "v.UserId,  " + nl +
+                    "v.PermissionMapId,  " + nl +
+                    "v.KeyName,  " + nl +
+                    "v.KeyValue " + nl +
+                    "FROM VWUSERPERMISSION v " + nl +
+                    "WHERE v.UserId = userindex; " + nl +
+                    " " + nl +
+                    "UPDATE USERPERMISSIONHISTORY h " + nl +
+                    "SET GroupId = CASE WHEN GroupId IS NULL THEN 0 ELSE GroupId - 1 END " + nl +
+                    "WHERE h.UserId = userindex; " + nl +
+                    "commit; " + nl +
+                    "end;$$ "
+            };
+            foreach (var stmt in sql)
+            {
+                if (!string.IsNullOrEmpty(stmt))
+                {
+                    await connection.ExecuteAsync(stmt);
+                }
             }
         }
 
