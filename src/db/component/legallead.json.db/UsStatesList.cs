@@ -17,6 +17,7 @@ namespace legallead.json.db
         public static bool Verify(string? state)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+            if (string.IsNullOrEmpty(state)) return false;
             if (!IsPopulated || list.Count == 0) return true;
             var item = list.Find(x => x.IsActive && (x.Name ?? "").Equals(state, oic) || (x.ShortName ?? "").Equals(state, oic));
             return item != null;
@@ -25,6 +26,7 @@ namespace legallead.json.db
         public static UsState? Find(string? state)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+            if (string.IsNullOrEmpty(state)) return null;
             if (!IsPopulated || list.Count == 0) return null;
             return list.Find(x => x.IsActive && (x.Name ?? "").Equals(state, oic) || (x.ShortName ?? "").Equals(state, oic));
         }

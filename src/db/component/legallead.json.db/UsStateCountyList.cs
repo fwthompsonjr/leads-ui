@@ -14,19 +14,33 @@ namespace legallead.json.db
             IsPopulated = true;
         }
 
-        public static bool Verify(string? state)
+        public static bool Verify(string? county)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+            if (string.IsNullOrEmpty(county)) return false;
             if (!IsPopulated || list.Count == 0) return true;
-            var item = list.Find(x => x.IsActive && (x.Name ?? "").Equals(state, oic) || (x.ShortName ?? "").Equals(state, oic));
+            var item = list.Find(x => x.IsActive && (x.Name ?? "").Equals(county, oic) || (x.ShortName ?? "").Equals(county, oic));
             return item != null;
         }
 
-        public static UsStateCounty? Find(string? state)
+        public static UsStateCounty? Find(string? county)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+
+            if (string.IsNullOrEmpty(county)) return null;
             if (!IsPopulated || list.Count == 0) return null;
-            return list.Find(x => x.IsActive && (x.Name ?? "").Equals(state, oic) || (x.ShortName ?? "").Equals(state, oic));
+            return list.Find(x => x.IsActive && (x.Name ?? "").Equals(county, oic) || (x.ShortName ?? "").Equals(county, oic));
+        }
+
+        public static List<UsStateCounty>? FindAll(string? county)
+        {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+
+            if (string.IsNullOrEmpty(county)) return null;
+            if (!IsPopulated || list.Count == 0) return null;
+            var found = list.FindAll(x => x.IsActive && (x.Name ?? "").Equals(county, oic) || (x.ShortName ?? "").Equals(county, oic));
+            if (found == null || !found.Any()) return null;
+            return found;
         }
     }
 }

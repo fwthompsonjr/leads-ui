@@ -7,6 +7,7 @@ using System.Reflection;
 
 namespace legallead.json.db.tests
 {
+    [Collection("Sequential")]
     public class DbTests : IDisposable
     {
         private static readonly object locker = new();
