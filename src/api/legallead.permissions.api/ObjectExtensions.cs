@@ -6,6 +6,7 @@ using legallead.json.db;
 using legallead.json.db.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -59,6 +60,7 @@ namespace legallead.permissions.api
                 var dbint = d.GetRequiredService<IDataInitializer>();
                 return new DataContext(command, dbint);
             });
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
@@ -96,6 +98,7 @@ namespace legallead.permissions.api
             services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();
             services.AddScoped<ListsController>();
+            services.AddScoped<PermissionsController>();
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();
             services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
         }

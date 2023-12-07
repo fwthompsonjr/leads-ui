@@ -309,6 +309,8 @@ namespace legallead.jdbc.helpers
                 "Setting.State.County.Subscriptions",
                 "Setting.State.Subscriptions.Active",
                 "Setting.State.County.Subscriptions.Active",
+                "User.State.Discount",
+                "User.State.County.Discount",
             };
             var command = "INSERT INTO PERMISSIONMAP " + Environment.NewLine +
             "( Id, OrderId, KeyName ) " + Environment.NewLine +

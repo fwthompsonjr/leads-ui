@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.json.db.entity;
 
 namespace legallead.permissions.api
 {
@@ -127,7 +128,214 @@ namespace legallead.permissions.api
             }
         }
 
+        public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode)
+        {
+            try
+            {
+                const string search = ".State.Subscriptions";
+                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
+                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode} not defined.");
+                var settings = new Dictionary<string, string>()
+                {
+                    { "Setting.State.Subscriptions", stateCode },
+                    { "Setting.State.Subscriptions.Active", "True" }
+                };
+                var changes = ApplySubscriptions(user, settings, permissions);
+                if (!changes.Key) return changes;
+                var discounts = ApplyDiscounts(user, permissions, groups, "State");
+                if (!discounts.Key) return discounts;
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{stateCode}' applied to user: {user.UserName}.");
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
+            }
+        }
 
+        public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode)
+        {
+            try
+            {
+                const string search = ".State.Subscriptions";
+                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
+                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode} not defined.");
+                var settings = new Dictionary<string, string>()
+                {
+                    { "Setting.State.Subscriptions", stateCode },
+                    { "Setting.State.Subscriptions.Active", "False" }
+                };
+                var changes = RemoveSubscriptions(user, settings, permissions);
+                if (!changes.Key) return changes;
+                if (IsDiscountRemovalNeeded(changes.Value))
+                {
+                    var removal = RemoveDiscounts(user, permissions, "State");
+                    if (!removal.Key) return removal;
+                }
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{stateCode}' applied to user: {user.UserName}.");
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
+            }
+        }
+
+        public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
+        {
+            try
+            {
+                const string search = ".County.";
+                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
+                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{countyCode.Name}, {countyCode.StateCode} not defined.");
+                var settings = new Dictionary<string, string>()
+                {
+                    { "Setting.State.County.Subscriptions", countyCode.Index.ToString() },
+                    { "Setting.State.County.Subscriptions.Active", "True" }
+                };
+                var changes = ApplySubscriptions(user, settings, permissions);
+                if (!changes.Key) return changes;
+                var discounts = ApplyDiscounts(user, permissions, groups, "County");
+                if (!discounts.Key) return discounts;
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}' applied to user: {user.UserName}.");
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
+            }
+        }
+
+        public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
+        {
+            try
+            {
+                const string search = ".County.";
+                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
+                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{countyCode.Name}, {countyCode.StateCode} not defined.");
+                var settings = new Dictionary<string, string>()
+                {
+                    { "Setting.State.County.Subscriptions", countyCode.Index.ToString() },
+                    { "Setting.State.County.Subscriptions.Active", "True" }
+                };
+                var changes = RemoveSubscriptions(user, settings, permissions);
+                if (!changes.Key) return changes;
+                if (IsDiscountRemovalNeeded(changes.Value))
+                {
+                    var removal = RemoveDiscounts(user, permissions, "County");
+                    if (!removal.Key) return removal;
+                }
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}' applied to user: {user.UserName}.");
+            }
+            catch (Exception)
+            {
+                return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
+            }
+        }
+
+        private KeyValuePair<bool, string> ApplySubscriptions(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
+        {
+            var changes = new List<UserPermission>();
+            foreach (var item in settings.Keys)
+            {
+                var permission = permissions.Find(p => p.KeyName.Equals(item, StringComparison.OrdinalIgnoreCase));
+                if (permission == null) return new KeyValuePair<bool, string>(false, $"Expected key: '{item}' not found in user settings");
+                var currentSetting = permission.KeyValue;
+                var desiredSetting = settings[item];
+                var isValue = !item.Contains("Active");
+                if (isValue && currentSetting.Contains(desiredSetting, StringComparison.OrdinalIgnoreCase)) continue;
+                if (isValue && !string.IsNullOrEmpty(currentSetting)) { desiredSetting = $"{currentSetting}, {desiredSetting}"; }
+                changes.Add(new UserPermission
+                {
+                    Id = permission.Id,
+                    UserId = user.Id ?? Guid.Empty.ToString(),
+                    PermissionMapId = permission.PermissionMapId,
+                    KeyValue = SortItems(desiredSetting)
+                });
+            }
+            changes.ForEach(async c =>
+            {
+                await UserPermissionDb.Update(c);
+            });
+            return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
+        }
+
+
+        private KeyValuePair<bool, string> RemoveSubscriptions(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
+        {
+            var changes = new List<UserPermission>();
+            string currentSubscriptions = "";
+            foreach (var item in settings.Keys)
+            {
+                var permission = permissions.Find(p => p.KeyName.Equals(item, StringComparison.OrdinalIgnoreCase));
+                if (permission == null) return new KeyValuePair<bool, string>(false, $"Expected key: '{item}' not found in user settings");
+                var currentSetting = permission.KeyValue;
+                var desiredSetting = settings[item];
+                var isValue = !item.Contains("Active");
+                if (isValue)
+                {
+                    currentSubscriptions = RemoveKey(currentSetting, desiredSetting);
+                    desiredSetting = currentSubscriptions;
+                }
+                else
+                {
+                    desiredSetting = string.IsNullOrEmpty(currentSubscriptions) ? "False" : "True";
+                }
+                changes.Add(new UserPermission
+                {
+                    Id = permission.Id,
+                    UserId = user.Id ?? Guid.Empty.ToString(),
+                    PermissionMapId = permission.PermissionMapId,
+                    KeyValue = SortItems(desiredSetting)
+                });
+            }
+            changes.ForEach(async c =>
+            {
+                await UserPermissionDb.Update(c);
+            });
+            return new KeyValuePair<bool, string>(true, $"Keys updated successfully | Current Subscriptions := {currentSubscriptions}");
+        }
+
+        private KeyValuePair<bool, string> ApplyDiscounts(User user, List<UserPermissionView> permissions, List<PermissionGroup> groups, string discountCode)
+        {
+            var discountNames = "State,County".Split(',').ToList();
+            if (!discountNames.Exists(x => x.Equals(discountCode, StringComparison.OrdinalIgnoreCase)))
+            {
+                return new KeyValuePair<bool, string>(false, $"Invalid discount type key: '{discountCode}'.");
+            }
+            var search = $"{discountCode}.Discount.Pricing";
+            var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
+            if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{search} not defined.");
+            var settingName = discountCode.Equals(discountNames[0], StringComparison.OrdinalIgnoreCase) ? "User.State.Discount" : "User.State.County.Discount";
+            var settings = new Dictionary<string, string>() {
+                { settingName, group.PerRequest.GetValueOrDefault().ToString() }
+            };
+            return ApplyChanges(user, settings, permissions);
+        }
+        private KeyValuePair<bool, string> RemoveDiscounts(User user, List<UserPermissionView> permissions, string discountCode)
+        {
+            var discountNames = "State,County".Split(',').ToList();
+            if (!discountNames.Exists(x => x.Equals(discountCode, StringComparison.OrdinalIgnoreCase)))
+            {
+                return new KeyValuePair<bool, string>(false, $"Invalid discount type key: '{discountCode}'.");
+            }
+            var settingName = discountCode.Equals(discountNames[0], StringComparison.OrdinalIgnoreCase) ? "User.State.Discount" : "User.State.County.Discount";
+            var settings = new Dictionary<string, string>() { { settingName, string.Empty } };
+            return ApplyChanges(user, settings, permissions);
+        }
         private KeyValuePair<bool, string> ApplyChanges(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
@@ -148,6 +356,39 @@ namespace legallead.permissions.api
                 await UserPermissionDb.Update(c);
             });
             return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
+        }
+
+        private static string SortItems(string source)
+        {
+            const char comma = ',';
+            if (string.IsNullOrEmpty(source) || !source.Contains(',')) return source;
+            var items = source.Split(comma).ToList();
+            items.Sort();
+            return string.Join(comma, items);
+        }
+
+        private static string RemoveKey(string current, string key)
+        {
+            const char comma = ',';
+            if (string.IsNullOrEmpty(current)) return current;
+            if (string.IsNullOrEmpty(key)) return current;
+            if (!current.Contains(comma)) return string.Empty;
+            var items = current.Split(comma).ToList();
+            items.Remove(key);
+            items.Sort();
+            return string.Join(comma, items);
+        }
+
+        private static bool IsDiscountRemovalNeeded(string? removalText)
+        {
+            const char pipe = '|';
+            const char eq = '=';
+            if (string.IsNullOrWhiteSpace(removalText)) return false;
+            if (!removalText.Contains(pipe) || !removalText.Contains(eq)) return false;
+            var command = removalText.Split(pipe)[^1];
+            if (!command.Contains(eq)) return false;
+            var setting = command.Split(eq)[^1].Trim();
+            return string.IsNullOrEmpty(setting);
         }
     }
 }

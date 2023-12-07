@@ -53,6 +53,7 @@ namespace permissions.api.tests
         [InlineData(typeof(ApplicationController))]
         [InlineData(typeof(JsonInitStartupTask))]
         [InlineData(typeof(JdbcInitStartUpTask))]
+        [InlineData(typeof(ISubscriptionInfrastructure))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
