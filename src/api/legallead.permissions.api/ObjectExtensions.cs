@@ -105,7 +105,12 @@ namespace legallead.permissions.api
             });
             services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();
-            services.AddScoped<ListsController>();
+            services.AddScoped(p =>
+            {
+                var data = p.GetRequiredService<DataProvider>();
+                var json = p.GetRequiredService<IJsonDataProvider>();
+                return new ListsController(data, json);
+            });
             services.AddScoped<PermissionsController>();
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();
             services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
