@@ -9,11 +9,13 @@ namespace legallead.jdbc.implementations
         protected readonly DataContext _context;
         protected readonly IDapperCommand _command;
         protected readonly T _sut = new();
+
         protected BaseRepository(DataContext context)
         {
             _context = context;
             _command = context.GetCommand;
         }
+
         public async Task<IEnumerable<T>> GetAll()
         {
             using var connection = _context.CreateConnection();

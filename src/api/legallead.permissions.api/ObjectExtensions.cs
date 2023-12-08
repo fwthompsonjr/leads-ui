@@ -2,8 +2,11 @@
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
+using legallead.json.db;
+using legallead.json.db.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -22,7 +25,8 @@ namespace legallead.permissions.api
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
             {
-                var Key = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+                var keyconfig = configuration["JWT:Key"] ?? string.Empty;
+                var Key = Encoding.UTF8.GetBytes(keyconfig);
                 o.SaveToken = true;
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -40,17 +44,34 @@ namespace legallead.permissions.api
 
         public static void RegisterDataServices(this IServiceCollection services)
         {
+            services.AddSingleton<IJsonDataProvider, JsonDataProvider>();
+            services.AddSingleton<IJsonDataInitializer>(p =>
+            {
+                var jsondb = p.GetRequiredService<IJsonDataProvider>();
+                return new JsonDataInitializer(jsondb);
+            });
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
+            services.AddSingleton<IDataInitializer, DataInitializer>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
-            services.AddScoped<DataContext>();
+            services.AddScoped(d =>
+            {
+                var command = d.GetRequiredService<IDapperCommand>();
+                var dbint = d.GetRequiredService<IDataInitializer>();
+                return new DataContext(command, dbint);
+            });
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
             services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IUserTokenRepository, UserTokenRepository>();
+            services.AddScoped<IUserPermissionViewRepository, UserPermissionViewRepository>();
+            services.AddScoped<IUserProfileViewRepository, UserProfileViewRepository>();
+            services.AddScoped<IPermissionGroupRepository, PermissionGroupRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -59,7 +80,11 @@ namespace legallead.permissions.api
                 var userPermissionDb = d.GetRequiredService<IUserPermissionRepository>();
                 var userProfileDb = d.GetRequiredService<IUserProfileRepository>();
                 var userTokenDb = d.GetRequiredService<IUserTokenRepository>();
+                var userPermissionVw = d.GetRequiredService<IUserPermissionViewRepository>();
+                var userProfileVw = d.GetRequiredService<IUserProfileViewRepository>();
+                var permissionGroupDb = d.GetRequiredService<IPermissionGroupRepository>();
                 var users = d.GetRequiredService<IUserRepository>();
+                var permissionHistoryDb = d.GetRequiredService<IUserPermissionHistoryRepository>();
                 return new DataProvider(
                     components,
                     permissionDb,
@@ -67,10 +92,28 @@ namespace legallead.permissions.api
                     userPermissionDb,
                     userProfileDb,
                     userTokenDb,
-                    users);
+                    userPermissionVw,
+                    userProfileVw,
+                    permissionGroupDb,
+                    users,
+                    permissionHistoryDb);
+            });
+            services.AddScoped<IDataProvider>(p =>
+            {
+                return p.GetRequiredService<DataProvider>();
+                
             });
             services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();
+            services.AddScoped(p =>
+            {
+                var data = p.GetRequiredService<DataProvider>();
+                var json = p.GetRequiredService<IJsonDataProvider>();
+                return new ListsController(data, json);
+            });
+            services.AddScoped<PermissionsController>();
+            services.AddSingleton<IStartupTask, JsonInitStartupTask>();
+            services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class
@@ -120,6 +163,32 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, response);
             }
             return pair;
+        }
+
+        internal static async Task<User?> GetUser(this HttpRequest request, DataProvider db)
+        {
+            var identity = request.HttpContext.User.Identity;
+            if (identity == null) return null;
+            var user = await db.UserDb.GetByEmail(identity.Name ?? string.Empty);
+            return user;
+        }
+
+        internal static async Task<string?> GetUserLevel(this HttpRequest request, DataProvider db)
+        {
+            const string fallback = "None";
+            var user = await request.GetUser(db);
+            if (user == null) return fallback;
+            var userlevel = (await db.UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>();
+            var level = userlevel.FirstOrDefault(x => x.KeyName == "Account.Permission.Level");
+            string levelName = level?.KeyValue ?? fallback;
+            return levelName;
+        }
+
+        internal static async Task<bool> IsAdminUser(this HttpRequest request, DataProvider db)
+        {
+            var level = await request.GetUserLevel(db);
+            if (level == null) return false;
+            return level.Equals("admin", StringComparison.OrdinalIgnoreCase);
         }
 
         private static async Task<Component?> Find(this DataProvider db, ApplicationRequestModel request)

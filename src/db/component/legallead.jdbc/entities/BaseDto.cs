@@ -69,8 +69,10 @@ namespace legallead.jdbc.entities
 
         protected static T? ChangeType<T>(object? source)
         {
-            if (source == null) return default;
-            return (T)(Convert.ChangeType(source, typeof(T)));
+            if (DBNull.Value == source || source == null) return default;
+            Type t = typeof(T);
+            t = Nullable.GetUnderlyingType(t) ?? t;
+            return (T)Convert.ChangeType(source, t);
         }
 
         private TableDescriptor GetTableAttributes(Type type)

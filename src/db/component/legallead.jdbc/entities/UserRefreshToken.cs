@@ -3,13 +3,13 @@
     [TargetTable(TableName = "usertokens")]
     public class UserRefreshToken : BaseDto
     {
-
         public string UserId { get; set; } = string.Empty;
 
         public string RefreshToken { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
         public DateTime? CreateDate { get; set; } = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+
         public override object? this[string field]
         {
             get

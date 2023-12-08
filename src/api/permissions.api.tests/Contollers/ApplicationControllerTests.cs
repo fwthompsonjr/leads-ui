@@ -13,7 +13,6 @@ namespace permissions.api.tests.Contollers
         {
             var sut = GetProvider().GetRequiredService<ApplicationController>();
             Assert.NotNull(sut);
-
         }
 
         [Fact]

@@ -1,0 +1,48 @@
+﻿using legallead.json.db.interfaces;
+using legallead.permissions.api;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace permissions.api.tests
+{
+    public class JsonDataInitializeTests
+    {
+        private static readonly object locker = new();
+        private static IServiceProvider? _serviceProvider = null;
+
+        public JsonDataInitializeTests()
+        {
+            lock (locker)
+            {
+                if (_serviceProvider != null) return;
+                const string environmentName = "Development";
+                var config =
+                    new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{environmentName}.json", true)
+                    .AddEnvironmentVariables()
+                    .Build();
+                var collection = new ServiceCollection();
+                collection.AddSingleton<IConfiguration>(config);
+                collection.RegisterAuthentication(config);
+                collection.RegisterDataServices();
+                _serviceProvider = collection.BuildServiceProvider();
+            }
+        }
+
+
+
+        [Fact]
+        public async Task JsonDataCanInitialize()
+        {
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                Assert.NotNull(_serviceProvider);
+                var initializer = _serviceProvider.GetRequiredService<IJsonDataInitializer>();
+                await initializer.InitTables();
+            });
+            Assert.Null(exception);
+        }
+    }
+}

@@ -1,5 +1,6 @@
 using legallead.permissions.api;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -15,6 +16,7 @@ var services = builder.Services;
 services.RegisterDataServices();
 services.RegisterAuthentication(config);
 services.AddControllers();
+services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 services.AddSingleton<IConfiguration>(config);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
@@ -43,5 +45,16 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+// Resolve the StartupTasks from the ServiceProvider
+var startupTasks = app.Services.GetServices<IStartupTask>();
 
+// Run the StartupTasks
+foreach (var startupTask in startupTasks)
+{
+    Task.Factory.StartNew(async () => await startupTask.Execute());
+}
 app.Run();
+
+[ExcludeFromCodeCoverage]
+internal static partial class Program
+{ }

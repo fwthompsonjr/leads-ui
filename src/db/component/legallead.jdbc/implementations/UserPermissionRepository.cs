@@ -6,7 +6,9 @@ namespace legallead.jdbc.implementations
 {
     public class UserPermissionRepository : BaseRepository<UserPermission>, IUserPermissionRepository
     {
-        public UserPermissionRepository(DataContext context) : base(context) { }
+        public UserPermissionRepository(DataContext context) : base(context)
+        {
+        }
 
         public async Task<IEnumerable<UserPermission>> GetAll(User user)
         {

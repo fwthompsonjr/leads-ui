@@ -18,6 +18,7 @@ namespace legallead.jdbc.interfaces
         Task Update(User user);
 
         Task Delete(string id);
+
         Task<KeyValuePair<bool, User?>> IsValidUserAsync(UserModel model);
     }
 }

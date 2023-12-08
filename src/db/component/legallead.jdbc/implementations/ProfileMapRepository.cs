@@ -6,6 +6,8 @@ namespace legallead.jdbc.implementations
 {
     public class ProfileMapRepository : BaseRepository<ProfileMap>, IProfileMapRepository
     {
-        public ProfileMapRepository(DataContext context) : base(context) { }
+        public ProfileMapRepository(DataContext context) : base(context)
+        {
+        }
     }
 }
