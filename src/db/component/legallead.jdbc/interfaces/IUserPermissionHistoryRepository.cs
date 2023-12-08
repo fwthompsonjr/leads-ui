@@ -11,6 +11,6 @@ namespace legallead.jdbc.interfaces
 
         Task<IEnumerable<UserPermissionHistory>> GetLatest(User user);
 
-        Task CreateSnapshot(User user);
+        Task CreateSnapshot(User user, PermissionChangeTypes permissionChange);
     }
 }

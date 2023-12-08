@@ -110,6 +110,11 @@ namespace permissions.api.tests.Contollers
                 var k = p.GetRequiredService<IUserPermissionHistoryRepository>();
                 return new DataProvider(a, b, c, d, e, f, g, h, i, j, k);
             });
+            collection.AddScoped<IDataProvider>(p =>
+            {
+                var a = p.GetRequiredService<DataProvider>();
+                return a;
+            });
             collection.AddScoped(a =>
             {
                 var db = a.GetRequiredService<DataProvider>();

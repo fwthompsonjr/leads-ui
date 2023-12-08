@@ -4,7 +4,7 @@ using legallead.json.db.entity;
 
 namespace legallead.permissions.api
 {
-    public class DataProvider
+    public class DataProvider : IDataProvider
     {
         private readonly IComponentRepository _componentDb;
         private readonly IPermissionMapRepository _permissionDb;
@@ -54,7 +54,7 @@ namespace legallead.permissions.api
         internal IUserProfileViewRepository UserProfileVw => _userProfileVw;
         internal IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
         internal IUserRepository UserDb => _userDb;
-        internal IUserPermissionHistoryRepository PermissionHistoryDb => _permissionHistoryDb;
+        public virtual IUserPermissionHistoryRepository PermissionHistoryDb => _permissionHistoryDb;
 
         public virtual async Task<bool> InitializeProfile(User user)
         {

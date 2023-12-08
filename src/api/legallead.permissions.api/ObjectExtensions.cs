@@ -98,6 +98,11 @@ namespace legallead.permissions.api
                     users,
                     permissionHistoryDb);
             });
+            services.AddScoped<IDataProvider>(p =>
+            {
+                return p.GetRequiredService<DataProvider>();
+                
+            });
             services.AddScoped<AccountController>();
             services.AddScoped<ApplicationController>();
             services.AddScoped<ListsController>();

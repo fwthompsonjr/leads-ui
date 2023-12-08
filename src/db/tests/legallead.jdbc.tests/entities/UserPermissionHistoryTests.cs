@@ -13,7 +13,8 @@ namespace legallead.jdbc.tests.entities
             .RuleFor(x => x.PermissionMapId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.KeyValue, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.KeyName, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.GroupId, y => y.Random.Int(5, 25055));
+            .RuleFor(x => x.GroupId, y => y.Random.Int(5, 25055))
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
         [Fact]
         public void UserPermissionHistoryCanBeCreated()
@@ -44,7 +45,7 @@ namespace legallead.jdbc.tests.entities
         [Fact]
         public void UserPermissionHistoryHasFieldListDefined()
         {
-            var expected = new[] { "Id", "UserPermissionId", "UserId", "PermissionMapId", "KeyValue", "KeyName", "GroupId" };
+            var expected = new[] { "Id", "UserPermissionId", "UserId", "PermissionMapId", "KeyValue", "KeyName", "GroupId", "CreateDate" };
             var sut = new UserPermissionHistory();
             var fields = sut.FieldList;
             Assert.NotNull(fields);
@@ -60,6 +61,7 @@ namespace legallead.jdbc.tests.entities
         [InlineData("KeyValue")]
         [InlineData("KeyName")]
         [InlineData("GroupId")]
+        [InlineData("CreateDate")]
         public void UserPermissionHistoryHasExpectedFieldDefined(string name)
         {
             var sut = new UserPermissionHistory();
@@ -123,6 +125,14 @@ namespace legallead.jdbc.tests.entities
             var items = faker.Generate(2);
             items[0].GroupId = items[1].GroupId;
             Assert.Equal(items[1].GroupId, items[0].GroupId);
+        }
+
+        [Fact]
+        public void UserPermissionHistoryCanUpdateCreateDate()
+        {
+            var items = faker.Generate(2);
+            items[0].CreateDate = items[1].CreateDate;
+            Assert.Equal(items[1].CreateDate, items[0].CreateDate);
         }
 
         [Theory]

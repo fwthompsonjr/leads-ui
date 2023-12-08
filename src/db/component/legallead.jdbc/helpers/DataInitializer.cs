@@ -31,6 +31,7 @@ namespace legallead.jdbc.helpers
             await InitProfile();
             await InitPermissions();
             await InitPermissionGroups();
+            await InitReasonCodes();
             IsDbInitialized = true;
         }
 
@@ -176,6 +177,16 @@ namespace legallead.jdbc.helpers
                 + "\t KeyValue VARCHAR(256) , "
                 + Environment.NewLine
                 + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + Environment.NewLine
+                + "); "
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS REASONCODES "
+                + Environment.NewLine
+                + "("
+                + Environment.NewLine
+                + "\t ReasonCode char(4) primary key,"
+                + Environment.NewLine
+                + "\t Reason varchar(125)"
                 + Environment.NewLine
                 + "); ";
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
@@ -401,11 +412,12 @@ namespace legallead.jdbc.helpers
             using var connection = CreateConnection();
             var sql = new List<string>() {
                 "create or replace procedure usp_append_permission_history( " + nl +
-                    "userindex char(36) " + nl +
+                    "userindex char(36), " + nl +
+                    "changecode char(4) " + nl +
                     ") " + nl +
                     "language plpgsql " + nl +
                     "as $$ " + nl +
-                    "begin  " + nl +
+                    "begin " + nl +
                     " " + nl +
                     "-- append records  " + nl +
                     "insert into USERPERMISSIONHISTORY " + nl +
@@ -415,7 +427,7 @@ namespace legallead.jdbc.helpers
                     "SELECT " + nl +
                     "v.Id, " + nl +
                     "v.UserId,  " + nl +
-                    "v.PermissionMapId,  " + nl +
+                    "v.PermissionMapId, " + nl +
                     "v.KeyName,  " + nl +
                     "v.KeyValue " + nl +
                     "FROM VWUSERPERMISSION v " + nl +
@@ -424,8 +436,51 @@ namespace legallead.jdbc.helpers
                     "UPDATE USERPERMISSIONHISTORY h " + nl +
                     "SET GroupId = CASE WHEN GroupId IS NULL THEN 0 ELSE GroupId - 1 END " + nl +
                     "WHERE h.UserId = userindex; " + nl +
+                    " " + nl +
+                    "-- add change history line record(s) for user " + nl +
+                    "INSERT INTO USERPERMISSIONCHANGE " + nl +
+                    "( " + nl +
+                    "UserId, GroupId, CreateDate " + nl +
+                    ")" + nl +
+                    "SELECT h.UserId, h.GroupId, h.CreateDate " + nl +
+                    "FROM " + nl +
+                    "( " + nl +
+                    "SELECT UserId, GroupId, Max( createdate ) createdate  " + nl +
+                    "FROM USERPERMISSIONHISTORY " + nl +
+                    "WHERE UserId = userindex " + nl +
+                    "GROUP BY UserId, GroupId " + nl +
+                    ") h " + nl +
+                    "LEFT JOIN USERPERMISSIONCHANGE c " + nl +
+                    "ON  \t  \t h.UserId = c.UserId " + nl +
+                    "AND  \t h.CreateDate = c.CreateDate " + nl +
+                    "WHERE \t c.Id is null; " + nl +
+                    " " + nl +
+                    "-- synchronize group indexes " + nl +
+                    "UPDATE  \t USERPERMISSIONCHANGE " + nl +
+                    "SET  \t GroupId = subquery.GroupId " + nl +
+                    "FROM ( " + nl +
+                    " \t  \t SELECT UserId, GroupId, Max( CreateDate ) CreateDate  " + nl +
+                    " \t  \t FROM USERPERMISSIONHISTORY " + nl +
+                    " \t  \t WHERE UserId = userindex " + nl +
+                    " \t  \t GROUP BY UserId, GroupId " + nl +
+                    " \t ) AS subquery " + nl +
+                    "WHERE 1 = 1 " + nl +
+                    "AND USERPERMISSIONCHANGE.UserId = subquery.UserId " + nl +
+                    "AND USERPERMISSIONCHANGE.CreateDate = subquery.CreateDate " + nl +
+                    "AND USERPERMISSIONCHANGE.GroupId != subquery.GroupId; " + nl +
+                    " " + nl +
+                    "-- set change reason code " + nl +
+                    "UPDATE  \t USERPERMISSIONCHANGE " + nl +
+                    "SET  \t ReasonCode = changecode " + nl +
+                    "WHERE  " + nl +
+                    "EXISTS (SELECT 1 FROM REASONCODES WHERE ReasonCode = changecode) " + nl +
+                    "AND  \t UserId = userindex " + nl +
+                    "AND  \t GroupId = 0 " + nl +
+                    "AND \t ReasonCode IS NULL; " + nl +
+                    " " + nl +
                     "commit; " + nl +
-                    "end;$$ "
+                    " " + nl +
+                    "end;$$"
             };
             foreach (var stmt in sql)
             {
@@ -436,6 +491,28 @@ namespace legallead.jdbc.helpers
             }
         }
 
+        private async Task InitReasonCodes()
+        {
+            var command = "INSERT INTO REASONCODES " + Environment.NewLine +
+            "( ReasonCode, Reason ) " + Environment.NewLine +
+            "SELECT b.Reason, b.Reason " + Environment.NewLine +
+            "FROM REASONCODES as a " + Environment.NewLine +
+            "RIGHT JOIN " + Environment.NewLine +
+            "( " + Environment.NewLine +
+            "SELECT  " + Environment.NewLine +
+            "\t'{0}' ReasonCode, " + Environment.NewLine +
+            "\t {1}  Reason " + Environment.NewLine +
+            ") as b " + Environment.NewLine +
+            "ON a.ReasonCode = b.ReasonCode " + Environment.NewLine +
+            "WHERE a.ReasonCode IS NULL;";
+
+            using var connection = CreateConnection();
+            foreach (var code in reasonCodes)
+            {
+                var stmt = string.Format(command, code.Code, code.Description);
+                await connection.ExecuteAsync(stmt);
+            }
+        }
         private static readonly List<PermissionGroup> permissionGroups = new()
         {
             new() {  Name = "None", GroupId = 100, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },
@@ -453,5 +530,31 @@ namespace legallead.jdbc.helpers
             new() {  Name = "State.Discount.Pricing", GroupId = 2100, OrderId = 10, PerRequest = 15, PerMonth = 2, PerYear = 24 },
             new() {  Name = "County.Discount.Pricing", GroupId = 2200, OrderId = 20, PerRequest = 10, PerMonth = 1, PerYear = 12, },
         };
+
+        private static readonly List<ReasonCodes> reasonCodes = new()
+        {
+			// user permission changes
+			new () { Code = "UC00" , Description = "User account created by system." },
+            new () { Code = "UC02" , Description = "User account registration completed." },
+            new () { Code = "UC10" , Description = "User Permission level changed."  },
+            new () { Code = "UC20" , Description = "User State Subscription changed."  },
+            new () { Code = "UC22" , Description = "User County Subscription changed."  },
+            new () { Code = "UC30" , Description = "User account temporarily locked, excessive login failures."  },
+            new () { Code = "UC32" , Description = "User account locked for non-payment."  },
+            new () { Code = "UC34" , Description = "User account locked by administrator."  },
+			// user profile changes
+			new () { Code = "UP00" , Description = "User account created by system." },
+            new () { Code = "UP02" , Description = "User account registration completed." },
+            new () { Code = "UP10" , Description = "User contact name changed by user." },
+            new () { Code = "UP20" , Description = "User phone changed by user." },
+            new () { Code = "UP30" , Description = "User email changed by user." },
+            new () { Code = "UP40" , Description = "User address changed by user." },
+        };
+
+        private sealed class ReasonCodes
+        {
+            public string Code { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
+        }
     }
 }

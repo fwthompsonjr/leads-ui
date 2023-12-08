@@ -10,12 +10,14 @@ namespace legallead.jdbc.implementations
         {
         }
 
-        public string SnapshotProcedureName => "CALL usp_append_permission_history('{0}');";
+        public string SnapshotProcedureName => "CALL usp_append_permission_history('{0}', '{1}');";
 
-        public async Task CreateSnapshot(User user)
+        public async Task CreateSnapshot(User user, PermissionChangeTypes permissionChange)
         {
+            var changeId = ((int)permissionChange).ToString("D2");
+            var changeCode = $"UC{changeId}";
             var userindex = user.Id ?? Guid.Empty.ToString();
-            var command = string.Format(SnapshotProcedureName, userindex);
+            var command = string.Format(SnapshotProcedureName, userindex, changeCode);
             using var connection = _context.CreateConnection();
             await _command.ExecuteAsync(connection, command);
         }

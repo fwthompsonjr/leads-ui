@@ -9,6 +9,7 @@
         public string KeyValue { get; set; } = string.Empty;
         public string KeyName { get; set; } = string.Empty;
         public int? GroupId { get; set; }
+        public DateTime? CreateDate { get; set; } = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
 
         public override object? this[string field]
         {
@@ -24,6 +25,7 @@
                 if (fieldName.Equals("KeyValue", Comparison)) return KeyValue;
                 if (fieldName.Equals("KeyName", Comparison)) return KeyName;
                 if (fieldName.Equals("GroupId", Comparison)) return GroupId;
+                if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
                 return null;
             }
             set
@@ -64,6 +66,11 @@
                 if (fieldName.Equals("GroupId", Comparison))
                 {
                     GroupId = ChangeType<int?>(value);
+                    return;
+                }
+                if (fieldName.Equals("CreateDate", Comparison))
+                {
+                    CreateDate = ChangeType<DateTime?>(value);
                 }
             }
         }
