@@ -4,6 +4,15 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Title>LegalLead Jdbc Database Repository</Title>
+		<Description>This is a micro-database storage provider managing business and account data.</Description>
+		<PackageReleaseNotes>
+			3.2.0 - 20231207 - Initial package creation
+		</PackageReleaseNotes>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageVersion>$(PackageVersion)</PackageVersion>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
 		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
 		<Configurations>Debug;Release;Local</Configurations>
 	</PropertyGroup>
@@ -21,7 +30,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Dapper" Version="2.1.24" />
-	  <PackageReference Include="Npgsql" Version="8.0.0" />
+		<PackageReference Include="Dapper" Version="2.1.24" />
+		<PackageReference Include="Npgsql" Version="8.0.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
 </Project>

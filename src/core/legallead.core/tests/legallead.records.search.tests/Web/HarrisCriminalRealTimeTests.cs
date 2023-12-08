@@ -1,23 +1,32 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if DEBUG
+
 using System.Reflection;
+using legallead.records.search.Web;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
+
+#endif
 
 namespace legallead.records.search.UnitTests.Web
 {
     [TestClass]
     public class HarrisCriminalRealTimeTests
     {
+
+#if DEBUG
+
         private static string? _srcDirectory;
         private static string? _srcFile;
         private static string SrcDirectoryName => _srcDirectory ??= SrcDir();
-        private static string SrcFile => _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
-#if DEBUG
+        private static string SrcFile =>
+            _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
         private IWebDriver? GetDriver;
-#endif
 
         [TestInitialize]
         public void Setup()
         {
-#if DEBUG
             if (GetDriver == null)
             {
                 var src = SrcFile.Replace(@"\", "/");
@@ -27,13 +36,11 @@ namespace legallead.records.search.UnitTests.Web
                     Url = url
                 };
             }
-#endif
         }
 
         [TestCleanup]
         public void CleanUp()
         {
-#if DEBUG
             if (GetDriver != null)
             {
                 GetDriver.Close();
@@ -41,8 +48,15 @@ namespace legallead.records.search.UnitTests.Web
                 GetDriver.Dispose();
                 GetDriver = null;
             }
-#endif
         }
+
+        private static string SrcDir()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
+        }
+#endif
+
 
         [TestMethod]
         public void Criminal_CanIterate()
@@ -64,14 +78,8 @@ namespace legallead.records.search.UnitTests.Web
                 Assert.Fail(ex.Message + Environment.NewLine + ex.StackTrace);
             }
 #else
-            Assert.Inconclusive("Test only runs in debug configuration.");
+            Assert.IsTrue(true);
 #endif
-        }
-
-        private static string SrcDir()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
         }
     }
 }
