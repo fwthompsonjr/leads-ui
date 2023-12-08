@@ -52,7 +52,6 @@ namespace permissions.api.tests
         [InlineData(typeof(AccountController))]
         [InlineData(typeof(PermissionsController))]
         [InlineData(typeof(ApplicationController))]
-        [InlineData(typeof(ListsController))]
         [InlineData(typeof(JsonInitStartupTask))]
         [InlineData(typeof(JdbcInitStartUpTask))]
         [InlineData(typeof(ISubscriptionInfrastructure))]
