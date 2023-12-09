@@ -92,7 +92,7 @@ namespace legallead.jdbc.entities
             var addition = new TableDescriptor
             {
                 Name = type.Name,
-                TableName = attributeName,
+                TableName = attributeName.ToUpper(),
                 FieldList = fieldList,
             };
             _TableNames.Add(type, addition);
