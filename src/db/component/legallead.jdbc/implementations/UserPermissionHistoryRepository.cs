@@ -10,7 +10,7 @@ namespace legallead.jdbc.implementations
         {
         }
 
-        public string SnapshotProcedureName => "CALL usp_append_permission_history('{0}', '{1}');";
+        public string SnapshotProcedureName => "CALL USP_APPEND_PERMISSION_HISTORY('{0}', '{1}');";
 
         public async Task CreateSnapshot(User user, PermissionChangeTypes permissionChange)
         {
