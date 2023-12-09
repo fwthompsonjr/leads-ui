@@ -34,7 +34,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "profilemap";
             var sut = new ProfileMap();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]

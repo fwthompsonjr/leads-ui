@@ -1,4 +1,7 @@
+using MySqlConnector;
 using Npgsql;
+using System.Data;
+using static legallead.jdbc.RemoteData;
 
 namespace legallead.jdbc.tests
 {
@@ -7,7 +10,7 @@ namespace legallead.jdbc.tests
         [Fact]
         public void GetConnectionPostGreIsNotNull()
         {
-            var response = RemoteData.GetPostGreString("ForceRemote");
+            var response = GetPostGreString("ForceRemote");
             Assert.NotNull(response);
         }
 
@@ -19,32 +22,31 @@ namespace legallead.jdbc.tests
         }
 
         [Fact]
-        public async Task CanOpenPgresConnection()
+        public void CanOpenRemoteConnection()
         {
-            var connectionString = RemoteData.GetPostGreString("ForceRemote");
-            await using var dataSource = NpgsqlDataSource.Create(connectionString);
-            Assert.NotNull(dataSource);
-            // fetch data
-            await using var cmmd = dataSource.CreateCommand("SELECT * FROM APPLICATIONS WHERE 1 = 2");
-            await using var reader = await cmmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            IDbConnection? conn = null;
+            try
             {
-                Console.WriteLine(reader.GetString(0));
+                var connectionString = GetPostGreString("ForceRemote");
+                using var dataSource = GetConnection(connectionString);
+                Assert.NotNull(dataSource);
+                conn = dataSource;
+                conn.Open();
+                // fetch data
+                using var cmmd = conn.CreateCommand();
+                cmmd.CommandText = "SELECT * FROM APPLICATIONS WHERE 1 = 2";
+                using var reader = cmmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Console.WriteLine(reader.GetString(0));
+                }
+                conn.Close();
             }
-        }
-
-        [Fact]
-        public async Task CanOpenEnvironmentPgresConnection()
-        {
-            var connectionString = RemoteData.GetPostGreString();
-            await using var dataSource = NpgsqlDataSource.Create(connectionString);
-            Assert.NotNull(dataSource);
-            // fetch data
-            await using var cmmd = dataSource.CreateCommand("SELECT * FROM APPLICATIONS WHERE 1 = 2");
-            await using var reader = await cmmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            finally
             {
-                Console.WriteLine(reader.GetString(0));
+                if (conn != null && conn.State == ConnectionState.Open)
+                    conn.Close();
+                conn?.Dispose();
             }
         }
 
@@ -60,6 +62,20 @@ namespace legallead.jdbc.tests
             while (await reader.ReadAsync())
             {
                 Console.WriteLine(reader.GetString(0));
+            }
+        }
+
+        private static IDbConnection GetConnection(string connectionString)
+        {
+            var connectionType = GetConnectionType();
+            switch (connectionType)
+            {
+                case DbConnectionType.MySQL:
+                    return new MySqlConnection(connectionString);
+                case DbConnectionType.PostGres:
+                    return new NpgsqlConnection(connectionString);
+                default:
+                    throw new InvalidOperationException();
             }
         }
     }

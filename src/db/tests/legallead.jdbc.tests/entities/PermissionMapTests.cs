@@ -34,7 +34,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "permissionmap";
             var sut = new PermissionMap();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]

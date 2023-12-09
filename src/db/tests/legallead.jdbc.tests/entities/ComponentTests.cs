@@ -33,7 +33,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "applications";
             var sut = new Component();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]
