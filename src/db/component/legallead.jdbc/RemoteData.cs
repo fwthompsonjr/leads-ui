@@ -17,11 +17,19 @@ namespace legallead.jdbc
         public static string GetPostGreString(string environmentVaribleName = "LEGALLEAD_USE_LOCAL")
         {
             if (UseLocalDb(environmentVaribleName)) { return LocalData.GetPostGreString(); }
+            if (UseAwsDb(environmentVaribleName)) { return AwsData.GetPostGreString(); }
             var secret = GetPassCode();
             var connection = PostGresCommand;
             connection = connection.Replace("<username>", secret[0]);
             connection = connection.Replace("<password>", secret[1]);
             return connection;
+        }
+
+        public static DbConnectionType GetConnectionType(string environmentVaribleName = "LEGALLEAD_USE_LOCAL")
+        {
+            if (UseLocalDb(environmentVaribleName)) { return DbConnectionType.PostGres; }
+            if (UseAwsDb(environmentVaribleName)) { return DbConnectionType.MySQL; }
+            return DbConnectionType.Other;
         }
 
         [ExcludeFromCodeCoverage(Justification = "The public methods that use this private method are fully covered.")]
@@ -37,6 +45,20 @@ namespace legallead.jdbc
             {
                 return false;
             }
+        }
+
+        private static bool UseAwsDb(string varibleName)
+        {
+            if(string.IsNullOrEmpty(varibleName)) return true;
+            return !varibleName.Equals("LEGALLEAD_USE_COACHROACH");
+        }
+
+        internal enum DbConnectionType
+        {
+            MySQL,
+            PostGres,
+            SQLServer,
+            Other
         }
     }
 }

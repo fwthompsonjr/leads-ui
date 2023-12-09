@@ -5,6 +5,7 @@ namespace legallead.permissions.api
     public class JdbcInitStartUpTask : IStartupTask
     {
         private readonly IDataInitializer _dataDb;
+        public int Index => 10;
 
         public JdbcInitStartUpTask(IDataInitializer dataDb)
         { _dataDb = dataDb; }

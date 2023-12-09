@@ -2,6 +2,7 @@
 {
     public interface IStartupTask
     {
+        int Index { get; }
         Task Execute();
     }
 }

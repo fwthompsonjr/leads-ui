@@ -7,6 +7,7 @@ namespace legallead.permissions.api
     {
         private bool IsDataReady = false;
         private readonly IJsonDataProvider _dataProvider;
+        public int Index => 5;
 
         public JsonInitStartupTask(IJsonDataProvider dataProvider)
         {

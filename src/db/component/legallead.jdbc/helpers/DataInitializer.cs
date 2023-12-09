@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using MySqlConnector;
 using Npgsql;
 using System.Data;
 
@@ -18,7 +19,16 @@ namespace legallead.jdbc.helpers
 
         public virtual IDbConnection CreateConnection()
         {
-            return new NpgsqlConnection(_connectionString);
+            var connectionType = RemoteData.GetConnectionType();
+            switch (connectionType)
+            {
+                case RemoteData.DbConnectionType.MySQL:
+                    return new MySqlConnection(_connectionString);
+                case RemoteData.DbConnectionType.PostGres:
+                    return new NpgsqlConnection(_connectionString);
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         public async Task Init()
@@ -26,7 +36,7 @@ namespace legallead.jdbc.helpers
             if (IsDbInitialized) return;
             await InitTables();
             await InitViews();
-            await InitStoredProcedures();
+            // await InitStoredProcedures();
             await InitApplications();
             await InitProfile();
             await InitPermissions();
@@ -127,11 +137,9 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\tIsActive BOOLEAN NOT NULL default( TRUE ),"
                 + Environment.NewLine
-                + "\tCreateDate timestamp with time zone NOT NULL default ( now() )"
+                + "\tCreateDate datetime NOT NULL default ( now() )"
                 + Environment.NewLine
                 + ");"
-                + Environment.NewLine
-                + "DROP TABLE IF EXISTS PERMISSIONGROUP;"
                 + Environment.NewLine
                 + "CREATE TABLE IF NOT EXISTS PERMISSIONGROUP ( "
                 + Environment.NewLine
@@ -152,7 +160,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t IsVisible BOOLEAN NOT NULL default( TRUE ), "
                 + Environment.NewLine
-                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + "\t CreateDate datetime NOT NULL default ( now() ) "
                 + Environment.NewLine
                 + " ); "
                 + Environment.NewLine
@@ -162,7 +170,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t Id CHAR(36) PRIMARY KEY NOT NULL "
                 + Environment.NewLine
-                + "\t DEFAULT ( md5(random()::text || clock_timestamp()::text)::uuid::CHAR(36) ), "
+                + "\t DEFAULT ( CAST( uuid() as CHAR(36) ) ), "
                 + Environment.NewLine
                 + "\t UserPermissionId CHAR(36) references USERPERMISSION(Id), "
                 + Environment.NewLine
@@ -176,7 +184,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t KeyValue VARCHAR(256) , "
                 + Environment.NewLine
-                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + "\t CreateDate datetime NOT NULL default ( now() ) "
                 + Environment.NewLine
                 + "); "
                 + Environment.NewLine
@@ -195,7 +203,7 @@ namespace legallead.jdbc.helpers
                 if (!string.IsNullOrEmpty(stmt))
                 {
                     var command = $"{stmt};";
-                    await connection.ExecuteAsync(command);
+                    await TryExecuteAsync(connection, command);
                 }
             }
         }
@@ -254,7 +262,7 @@ namespace legallead.jdbc.helpers
                 if (!string.IsNullOrEmpty(stmt))
                 {
                     var command = $"{stmt};";
-                    await connection.ExecuteAsync(command);
+                    await TryExecuteAsync(connection, command);
                 }
             }
         }
@@ -280,7 +288,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, application);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, command);
             }
         }
 
@@ -324,7 +332,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, keynames.IndexOf(key), key);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, stmt);
             }
         }
 
@@ -367,7 +375,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, keynames.IndexOf(key), key);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, stmt);
             }
         }
 
@@ -490,7 +498,15 @@ namespace legallead.jdbc.helpers
                 }
             }
         }
-
+        private async static Task TryExecuteAsync(IDbConnection connection, string command)
+        {
+            try {
+                await connection.ExecuteAsync(command);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
         private async Task InitReasonCodes()
         {
             var command = "INSERT INTO REASONCODES " + Environment.NewLine +

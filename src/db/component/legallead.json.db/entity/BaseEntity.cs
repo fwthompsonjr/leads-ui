@@ -119,7 +119,7 @@ namespace legallead.json.entities
             lock (locker)
             {
                 var content = File.ReadAllText(location);
-                return JsonConvert.DeserializeObject<List<T>>(content) ?? new();
+                return TryDeserialize<List<T>>(content);
             }
         }
 
@@ -134,6 +134,15 @@ namespace legallead.json.entities
             {
                 File.WriteAllText(location, content);
             }
+        }
+
+        public static K TryDeserialize<K>(string content) where K : new()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<K>(content) ?? new();
+            }
+            catch { return new(); }
         }
     }
 }
