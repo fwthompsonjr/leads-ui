@@ -17,6 +17,7 @@ function executeZip( $solution ) {
 }
 
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
+$di = [System.IO.DirectoryInfo]::new( $currentDir );
 $found = $di.GetFiles($searchPattern, [System.IO.SearchOption]::AllDirectories) | Where-Object { $_.Name.IndexOf( 'integration' ) -ge 0 }
 
 if( ( canEnumerate -obj $found ) -eq $false ) {
