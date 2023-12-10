@@ -18,6 +18,17 @@ namespace legallead.permissions.api.Controllers
         private static string IndexHtml => _index ??= GetIndex();
         private static string GetIndex()
         {
+            var operations = new List<string>()
+            {
+                "Account Management",
+                "Account Registration",
+                "Account Login",
+                "Account Password Reset",
+                "Common Lists",
+                "Manage User Permssions",
+                "Manage User Profile",
+            };
+            var listitems = "<ul>" + string.Join(Environment.NewLine, operations.Select(x => $"<li>{x}</li>")) + "</ul>";
             var content = new StringBuilder("<html>");
             content.AppendLine();
             content.AppendLine("<head>");
@@ -34,16 +45,20 @@ namespace legallead.permissions.api.Controllers
             content.AppendLine(" src=`https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.esm.js`></script>");
             content.AppendLine("</head>");
             content.AppendLine("<body>");
-            content.AppendLine(" <rux-container name=`tha-container`>");
+            content.AppendLine(" <rux-container name=`tha-container` style=`padding: 10px`>");
             content.AppendLine("   <div slot=`header`>");
             content.AppendLine("     legallead: permissions api");
             content.AppendLine("   </div>");
             content.AppendLine("   <div>");
-            content.AppendLine("     <h2>permissions api</h2>");
+            content.AppendLine("     <h2Permissions Api</h2>");
             content.AppendLine("     <blockquote>");
-            content.AppendLine("      The legallead.permissions.api is a component used to manage authentication and authorization of");
+            content.AppendLine("      The legallead.permissions.api is a component used to manage authentication and authorization of <br/>");
             content.AppendLine("      all key activities pertaining to users and applications in the leadlead applications suite.");
             content.AppendLine("     </blockquote>");
+            content.AppendLine("   </div>");
+            content.AppendLine("   <div>");
+            content.AppendLine("     <h2>Operations Overview: </h2>");
+            content.AppendLine(listitems);
             content.AppendLine("   </div>");
             content.AppendLine(" </rux-container>");
             content.AppendLine("</body>");

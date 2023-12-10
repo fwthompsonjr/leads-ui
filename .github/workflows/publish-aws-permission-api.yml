@@ -1,0 +1,43 @@
+name: "Deploy: Permissions.Api"
+env:
+  PRJ_NAME: "legallead.permission.api"
+  AWS_NAME: "legalleadpermissionapi"
+  AWS_ENV: "legalleadpermissionapi-dev"
+  AWS_REGION: "us-east-1"
+  
+on:
+  push:
+    paths:
+      - 'release/legallead.permissions.api.release.txt'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        
+	## Add Step to set the version based upon the source branch := main or other
+	  
+	## Change zip creation to use dotnet build -configuration = Zip
+    - name: Generate deployment package
+      if: false
+      run: zip -r deploy.zip . -x '*.git*'
+
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v21
+      if: false
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: ${{ env.AWS_NAME }}
+        environment_name: ${{ env.AWS_ENV }}
+        version_label: "ver-${{ steps.vars.outputs.sha_short }}"
+        region: ${{ env.AWS_REGION }}
+        deployment_package: deploy.zip
+        wait_for_deployment: false
