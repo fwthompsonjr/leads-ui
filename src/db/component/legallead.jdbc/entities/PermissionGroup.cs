@@ -1,6 +1,6 @@
 ﻿namespace legallead.jdbc.entities
 {
-    [TargetTable(TableName = "permissiongroup")]
+    [TargetTable(TableName = "PERMISSIONGROUP")]
     public class PermissionGroup : BaseDto
     {
         public string Name { get; set; } = string.Empty;
@@ -39,7 +39,7 @@
                 if (fieldName == null) return;
                 if (fieldName.Equals("Id", Comparison))
                 {
-                    Id = ChangeType<string>(value);
+                    Id = ChangeType<string>(value) ?? string.Empty;
                     return;
                 }
                 if (fieldName.Equals("Name", Comparison))

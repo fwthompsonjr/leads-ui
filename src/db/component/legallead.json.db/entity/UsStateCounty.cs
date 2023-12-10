@@ -1,30 +1,20 @@
-﻿using legallead.json.db.interfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text;
 
 namespace legallead.json.db.entity
 {
-    public class UsStateCounty : DataEntity<UsStateCounty>
+    public class UsStateCounty
     {
+        public string? Name { get; set; }
         public int Index { get; set; }
         public string? StateCode { get; set; }
         public string? ShortName { get; set; }
         public bool IsActive { get; set; }
 
-        public static void Initialize(IJsonDataProvider? provider)
+        public static void Initialize()
         {
-            provider ??= new JsonDataProvider();
             var tmp = GetList;
             var list = JsonConvert.DeserializeObject<List<UsStateCounty>>(tmp) ?? new();
-            list.ForEach(a =>
-            {
-                var existing = provider.FirstOrDefault(a, x => x.Name == a.Name);
-                if (existing == null)
-                {
-                    a.Id = string.Empty;
-                    provider.Insert(a);
-                }
-            });
             UsStateCountyList.Populate(list);
         }
 

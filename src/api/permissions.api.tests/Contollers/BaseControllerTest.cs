@@ -136,8 +136,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(a =>
             {
                 var db = a.GetRequiredService<DataProvider>();
-                var jsondb = a.GetRequiredService<IJsonDataProvider>();
-                return new ListsController(db, jsondb)
+                return new ListsController(db)
                 {
                     ControllerContext = controllerContext
                 };

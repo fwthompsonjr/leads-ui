@@ -39,7 +39,7 @@ namespace legallead.jdbc.tests.entities
         [Fact]
         public void PermissionGroupHasTableNameDefined()
         {
-            var expected = "permissiongroup";
+            var expected = "PERMISSIONGROUP";
             var sut = new PermissionGroup();
             Assert.Equal(expected, sut.TableName);
         }

@@ -37,7 +37,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "vwuserpermission";
             var sut = new UserPermissionView();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]

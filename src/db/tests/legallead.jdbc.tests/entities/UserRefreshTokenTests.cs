@@ -36,7 +36,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "usertokens";
             var sut = new UserRefreshToken();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]

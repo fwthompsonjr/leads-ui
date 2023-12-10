@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using MySqlConnector;
 using Npgsql;
 using System.Data;
+using System.Diagnostics;
 
 namespace legallead.jdbc.helpers
 {
@@ -18,7 +20,16 @@ namespace legallead.jdbc.helpers
 
         public virtual IDbConnection CreateConnection()
         {
-            return new NpgsqlConnection(_connectionString);
+            var connectionType = RemoteData.GetConnectionType();
+            switch (connectionType)
+            {
+                case RemoteData.DbConnectionType.MySQL:
+                    return new MySqlConnection(_connectionString);
+                case RemoteData.DbConnectionType.PostGres:
+                    return new NpgsqlConnection(_connectionString);
+                default:
+                    throw new InvalidOperationException();
+            }
         }
 
         public async Task Init()
@@ -127,11 +138,9 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\tIsActive BOOLEAN NOT NULL default( TRUE ),"
                 + Environment.NewLine
-                + "\tCreateDate timestamp with time zone NOT NULL default ( now() )"
+                + "\tCreateDate datetime NOT NULL default ( UTC_TIMESTAMP() )"
                 + Environment.NewLine
                 + ");"
-                + Environment.NewLine
-                + "DROP TABLE IF EXISTS PERMISSIONGROUP;"
                 + Environment.NewLine
                 + "CREATE TABLE IF NOT EXISTS PERMISSIONGROUP ( "
                 + Environment.NewLine
@@ -152,7 +161,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t IsVisible BOOLEAN NOT NULL default( TRUE ), "
                 + Environment.NewLine
-                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + "\t CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
                 + Environment.NewLine
                 + " ); "
                 + Environment.NewLine
@@ -162,7 +171,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t Id CHAR(36) PRIMARY KEY NOT NULL "
                 + Environment.NewLine
-                + "\t DEFAULT ( md5(random()::text || clock_timestamp()::text)::uuid::CHAR(36) ), "
+                + "\t DEFAULT ( CAST( uuid() as CHAR(36) ) ), "
                 + Environment.NewLine
                 + "\t UserPermissionId CHAR(36) references USERPERMISSION(Id), "
                 + Environment.NewLine
@@ -176,7 +185,7 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t KeyValue VARCHAR(256) , "
                 + Environment.NewLine
-                + "\t CreateDate timestamp with time zone NOT NULL default ( now() ) "
+                + "\t CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
                 + Environment.NewLine
                 + "); "
                 + Environment.NewLine
@@ -188,14 +197,32 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t Reason varchar(125)"
                 + Environment.NewLine
-                + "); ";
+                + "); "
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS USERPERMISSIONCHANGE "
+                + Environment.NewLine
+                + "( "
+                + Environment.NewLine
+                + "Id CHAR(36) PRIMARY KEY NOT NULL "
+                + Environment.NewLine
+                + "DEFAULT ( CAST( uuid() as CHAR(36) ) ), "
+                + Environment.NewLine
+                + "GroupId INT NULL, "
+                + Environment.NewLine
+                + "UserId CHAR(36) references USERS(Id) , "
+                + Environment.NewLine
+                + "ReasonCode char(4) references REASONCODES(ReasonCode), "
+                + Environment.NewLine
+                + "CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
+                + Environment.NewLine
+                + ");";
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)
             {
-                if (!string.IsNullOrEmpty(stmt))
+                if (!string.IsNullOrEmpty(stmt) && stmt.Trim().Length > 0)
                 {
                     var command = $"{stmt};";
-                    await connection.ExecuteAsync(command);
+                    await TryExecuteAsync(connection, command);
                 }
             }
         }
@@ -242,19 +269,19 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "\t p.orderid "
                 + Environment.NewLine
-                + "\t FROM userpermission u "
+                + "\t FROM USERPERMISSION u "
                 + Environment.NewLine
-                + "\t JOIN permissionmap p "
+                + "\t JOIN PERMISSIONMAP p "
                 + Environment.NewLine
                 + "\t ON u.permissionmapid = p.id; "
                 + Environment.NewLine;
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)
             {
-                if (!string.IsNullOrEmpty(stmt))
+                if (!string.IsNullOrEmpty(stmt) && stmt.Trim().Length > 0)
                 {
                     var command = $"{stmt};";
-                    await connection.ExecuteAsync(command);
+                    await TryExecuteAsync(connection, command);
                 }
             }
         }
@@ -280,7 +307,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, application);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, stmt);
             }
         }
 
@@ -324,7 +351,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, keynames.IndexOf(key), key);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, stmt);
             }
         }
 
@@ -367,7 +394,7 @@ namespace legallead.jdbc.helpers
             {
                 var indx = Guid.NewGuid().ToString("D").ToLower();
                 var stmt = string.Format(command, indx, keynames.IndexOf(key), key);
-                await connection.ExecuteAsync(stmt);
+                await TryExecuteAsync(connection, stmt);
             }
         }
 
@@ -411,86 +438,81 @@ namespace legallead.jdbc.helpers
             var nl = Environment.NewLine;
             using var connection = CreateConnection();
             var sql = new List<string>() {
-                "create or replace procedure usp_append_permission_history( " + nl +
-                    "userindex char(36), " + nl +
-                    "changecode char(4) " + nl +
-                    ") " + nl +
-                    "language plpgsql " + nl +
-                    "as $$ " + nl +
-                    "begin " + nl +
-                    " " + nl +
-                    "-- append records  " + nl +
-                    "insert into USERPERMISSIONHISTORY " + nl +
-                    "( " + nl +
-                    "UserPermissionId, UserId, PermissionMapId, KeyName, KeyValue " + nl +
-                    ") " + nl +
-                    "SELECT " + nl +
-                    "v.Id, " + nl +
-                    "v.UserId,  " + nl +
-                    "v.PermissionMapId, " + nl +
-                    "v.KeyName,  " + nl +
-                    "v.KeyValue " + nl +
-                    "FROM VWUSERPERMISSION v " + nl +
-                    "WHERE v.UserId = userindex; " + nl +
-                    " " + nl +
-                    "UPDATE USERPERMISSIONHISTORY h " + nl +
-                    "SET GroupId = CASE WHEN GroupId IS NULL THEN 0 ELSE GroupId - 1 END " + nl +
-                    "WHERE h.UserId = userindex; " + nl +
-                    " " + nl +
-                    "-- add change history line record(s) for user " + nl +
-                    "INSERT INTO USERPERMISSIONCHANGE " + nl +
-                    "( " + nl +
-                    "UserId, GroupId, CreateDate " + nl +
-                    ")" + nl +
-                    "SELECT h.UserId, h.GroupId, h.CreateDate " + nl +
-                    "FROM " + nl +
-                    "( " + nl +
-                    "SELECT UserId, GroupId, Max( createdate ) createdate  " + nl +
-                    "FROM USERPERMISSIONHISTORY " + nl +
-                    "WHERE UserId = userindex " + nl +
-                    "GROUP BY UserId, GroupId " + nl +
-                    ") h " + nl +
-                    "LEFT JOIN USERPERMISSIONCHANGE c " + nl +
-                    "ON  \t  \t h.UserId = c.UserId " + nl +
-                    "AND  \t h.CreateDate = c.CreateDate " + nl +
-                    "WHERE \t c.Id is null; " + nl +
-                    " " + nl +
-                    "-- synchronize group indexes " + nl +
-                    "UPDATE  \t USERPERMISSIONCHANGE " + nl +
-                    "SET  \t GroupId = subquery.GroupId " + nl +
-                    "FROM ( " + nl +
-                    " \t  \t SELECT UserId, GroupId, Max( CreateDate ) CreateDate  " + nl +
-                    " \t  \t FROM USERPERMISSIONHISTORY " + nl +
-                    " \t  \t WHERE UserId = userindex " + nl +
-                    " \t  \t GROUP BY UserId, GroupId " + nl +
-                    " \t ) AS subquery " + nl +
-                    "WHERE 1 = 1 " + nl +
-                    "AND USERPERMISSIONCHANGE.UserId = subquery.UserId " + nl +
-                    "AND USERPERMISSIONCHANGE.CreateDate = subquery.CreateDate " + nl +
-                    "AND USERPERMISSIONCHANGE.GroupId != subquery.GroupId; " + nl +
-                    " " + nl +
-                    "-- set change reason code " + nl +
-                    "UPDATE  \t USERPERMISSIONCHANGE " + nl +
-                    "SET  \t ReasonCode = changecode " + nl +
-                    "WHERE  " + nl +
-                    "EXISTS (SELECT 1 FROM REASONCODES WHERE ReasonCode = changecode) " + nl +
-                    "AND  \t UserId = userindex " + nl +
-                    "AND  \t GroupId = 0 " + nl +
-                    "AND \t ReasonCode IS NULL; " + nl +
-                    " " + nl +
-                    "commit; " + nl +
-                    " " + nl +
-                    "end;$$"
+                "DROP PROCEDURE IF EXISTS USP_APPEND_PERMISSION_HISTORY;",
+                "CREATE PROCEDURE USP_APPEND_PERMISSION_HISTORY (IN userindex char(36), IN changecode char(4)) " + nl +
+                "BEGIN " + nl +
+                " " + nl +
+                "-- update history for current user " + nl +
+                "UPDATE USERPERMISSIONHISTORY h   " + nl +
+                "SET GroupId = CASE WHEN GroupId IS NULL THEN 0 ELSE GroupId - 1 END   " + nl +
+                "WHERE h.UserId = userindex;  " + nl +
+                " " + nl +
+                "-- add change history line record(s) for user   " + nl +
+                "INSERT INTO USERPERMISSIONCHANGE   " + nl +
+                "(   " + nl +
+                "UserId, GroupId, CreateDate   " + nl +
+                ")  " + nl +
+                "SELECT h.UserId, h.GroupId, h.CreateDate   " + nl +
+                "FROM   " + nl +
+                "(   " + nl +
+                "SELECT UserId, GroupId, Max( createdate ) createdate    " + nl +
+                "FROM USERPERMISSIONHISTORY   " + nl +
+                "WHERE UserId = userindex   " + nl +
+                "GROUP BY UserId, GroupId   " + nl +
+                ") h   " + nl +
+                "LEFT JOIN USERPERMISSIONCHANGE c   " + nl +
+                "ON     h.UserId = c.UserId   " + nl +
+                "AND    h.CreateDate = c.CreateDate   " + nl +
+                "WHERE  c.Id is null;  " + nl +
+                " " + nl +
+                "-- synchronize group indexes   " + nl +
+                "UPDATE USERPERMISSIONCHANGE C " + nl +
+                "JOIN (   " + nl +
+                "    SELECT UserId, GroupId, Max( CreateDate ) CreateDate    " + nl +
+                "    FROM USERPERMISSIONHISTORY   " + nl +
+                "    WHERE UserId = userindex   " + nl +
+                "    GROUP BY UserId, GroupId   " + nl +
+                "  ) AS subquery  " + nl +
+                "  ON C.UserId = subquery.UserId " + nl +
+                "  AND C.CreateDate = subquery.CreateDate " + nl +
+                "SET   C.GroupId = subquery.GroupId " + nl +
+                "WHERE 1 = 1   " + nl +
+                "AND C.UserId = subquery.UserId   " + nl +
+                "AND C.CreateDate = subquery.CreateDate   " + nl +
+                "AND C.GroupId != subquery.GroupId; " + nl +
+                " " + nl +
+                "-- set change reason code " + nl +
+                "UPDATE USERPERMISSIONCHANGE   " + nl +
+                "SET  ReasonCode = changecode   " + nl +
+                "WHERE    " + nl +
+                "EXISTS (SELECT 1 FROM REASONCODES WHERE ReasonCode = changecode)   " + nl +
+                "AND UserId = userindex   " + nl +
+                "AND GroupId = 0   " + nl +
+                "AND ReasonCode IS NULL;  " + nl +
+                " " + nl +
+                "END; "
             };
             foreach (var stmt in sql)
             {
                 if (!string.IsNullOrEmpty(stmt))
                 {
-                    await connection.ExecuteAsync(stmt);
+                    await TryExecuteAsync(connection, stmt);
                 }
             }
         }
-
+        private async static Task TryExecuteAsync(IDbConnection connection, string command)
+        {
+            try {
+                if (string.IsNullOrEmpty(command) || command.Length < 5)
+                {
+                    Debugger.Break();
+                }
+                await connection.ExecuteAsync(command);
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
         private async Task InitReasonCodes()
         {
             var command = "INSERT INTO REASONCODES " + Environment.NewLine +

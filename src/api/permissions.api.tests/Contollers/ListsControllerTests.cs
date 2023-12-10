@@ -24,13 +24,7 @@ namespace permissions.api.tests.Contollers
         public void ControllerCanGetStateDetails()
         {
             var provider = GetProvider();
-            var jsonMq = provider.GetRequiredService<Mock<IJsonDataProvider>>();
             var sut = provider.GetRequiredService<ListsController>();
-
-            jsonMq.Setup(s =>
-                s.Where(It.IsAny<UsState>(), It.IsAny<Func<UsState, bool>>()))
-                .Returns(new List<UsState> { });
-
             var actual = sut.GetStateDetails();
             Assert.NotNull(actual);
             Assert.IsType<OkObjectResult>(actual);
@@ -40,13 +34,7 @@ namespace permissions.api.tests.Contollers
         public void ControllerCanGetCountyDetails()
         {
             var provider = GetProvider();
-            var jsonMq = provider.GetRequiredService<Mock<IJsonDataProvider>>();
             var sut = provider.GetRequiredService<ListsController>();
-
-            jsonMq.Setup(s =>
-                s.Where(It.IsAny<UsStateCounty>(), It.IsAny<Func<UsStateCounty, bool>>()))
-                .Returns(new List<UsStateCounty> { });
-
             var actual = sut.GetCountyDetails();
             Assert.NotNull(actual);
             Assert.IsType<OkObjectResult>(actual);

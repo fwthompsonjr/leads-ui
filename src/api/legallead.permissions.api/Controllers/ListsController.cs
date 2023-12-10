@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using legallead.json.db;
 using legallead.json.db.entity;
-using legallead.json.db.interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,45 +13,55 @@ namespace legallead.permissions.api.Controllers
     public class ListsController : ControllerBase
     {
         private readonly DataProvider _db;
-        private readonly IJsonDataProvider _jsondb;
-        private readonly UsState stateRef = new();
-        private readonly UsStateCounty countyRef = new();
         private readonly IMapper _mapper;
 
-        public ListsController(DataProvider db, IJsonDataProvider jsondb)
+        public ListsController(DataProvider db)
         {
             _db = db;
-            _jsondb = jsondb;
+            UsState.Initialize();
+            UsStateCounty.Initialize();
             _mapper = ModelMapper.Mapper;
         }
 
         [HttpGet]
         [Route("us-state-list")]
+        [AllowAnonymous]
         public IActionResult GetStateDetails()
         {
-            var states = _jsondb.Where(stateRef, x => x.IsActive);
+            var states = UsStatesList.All.Where(x => x.IsActive);
             return Ok(states);
         }
 
         [HttpGet]
         [Route("us-county-list")]
+        [AllowAnonymous]
         public IActionResult GetCountyDetails()
         {
-            var counties = _jsondb.Where(countyRef, x => x.IsActive);
+            var counties = UsStateCountyList.All.Where(x => x.IsActive);
             return Ok(counties);
         }
 
         [HttpGet]
         [Route("permission-groups")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPermissionGroups()
         {
+#if DEBUG
+            var isAdmin = await Request.IsAdminUser(_db);
+#else
             var user = await Request.GetUser(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
             var isAdmin = await Request.IsAdminUser(_db);
+#endif
+
             var permissions = (await _db.PermissionGroupDb.GetAll()).Where(p => isAdmin || p.IsVisible.GetValueOrDefault());
             var models = permissions.Select(s => _mapper.Map<PermissionGroupModel>(s)).ToList();
             models.FindAll(m => m.IsActive.GetValueOrDefault());
             models = models.FindAll(m => !m.Name.Contains('.'));
+            models.Sort((a, b) =>
+            {
+                return a.GroupId.GetValueOrDefault().CompareTo(b.GroupId.GetValueOrDefault());
+            });
             return Ok(models);
         }
 

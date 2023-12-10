@@ -15,9 +15,8 @@ namespace legallead.json.db.tests.attr
             {
                 lock (locker)
                 {
-                    var db = new JsonDataProvider();
-                    UsState.Initialize(db);
-                    UsStateCounty.Initialize(db);
+                    UsState.Initialize();
+                    UsStateCounty.Initialize();
                     isInitialized = true; 
                 }
             }

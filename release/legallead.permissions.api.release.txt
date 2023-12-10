@@ -1,0 +1,3 @@
+Release information - legallead.permissions.api
+12/09/2023 - 16:35 Manually pushed content to AWS Elastic Beanstock 
+12/09/2023 8:04:53 PM Manually pushed content to AWS Elastic Beanstock

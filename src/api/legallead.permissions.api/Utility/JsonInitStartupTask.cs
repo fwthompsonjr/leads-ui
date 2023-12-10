@@ -6,11 +6,10 @@ namespace legallead.permissions.api
     public class JsonInitStartupTask : IStartupTask
     {
         private bool IsDataReady = false;
-        private readonly IJsonDataProvider _dataProvider;
+        public int Index => 5;
 
-        public JsonInitStartupTask(IJsonDataProvider dataProvider)
+        public JsonInitStartupTask()
         {
-            _dataProvider = dataProvider;
         }
 
         public async Task Execute()
@@ -18,8 +17,8 @@ namespace legallead.permissions.api
             if (IsDataReady) { return; }
             await Task.Run(() =>
             {
-                UsStateCounty.Initialize(_dataProvider);
-                UsState.Initialize(_dataProvider);
+                UsStateCounty.Initialize();
+                UsState.Initialize();
             });
             IsDataReady = true;
         }

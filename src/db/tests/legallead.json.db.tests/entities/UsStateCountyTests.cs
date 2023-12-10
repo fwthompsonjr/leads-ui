@@ -7,7 +7,6 @@ namespace legallead.json.db.tests.entities
     {
         private readonly Faker<UsStateCounty> faker =
             new Faker<UsStateCounty>()
-            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Index, y => y.Random.Int(10000, 90000))
             .RuleFor(x => x.Name, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.StateCode, y => y.Random.Guid().ToString("D"))
@@ -22,14 +21,6 @@ namespace legallead.json.db.tests.entities
                 _ = new UsStateCounty();
             });
             Assert.Null(exception);
-        }
-
-        [Fact]
-        public void UsStateCountyCanUpdateId()
-        {
-            var items = faker.Generate(2);
-            items[0].Id = items[1].Id;
-            Assert.Equal(items[1].Id, items[0].Id);
         }
 
         [Fact]

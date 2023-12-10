@@ -1,4 +1,7 @@
+using MySqlConnector;
 using Npgsql;
+using System.Data;
+using static legallead.jdbc.RemoteData;
 
 namespace legallead.jdbc.tests
 {
@@ -7,7 +10,7 @@ namespace legallead.jdbc.tests
         [Fact]
         public void GetConnectionPostGreIsNotNull()
         {
-            var response = RemoteData.GetPostGreString("ForceRemote");
+            var response = GetPostGreString("ForceRemote");
             Assert.NotNull(response);
         }
 
@@ -16,36 +19,6 @@ namespace legallead.jdbc.tests
         {
             var response = LocalData.GetPostGreString();
             Assert.NotNull(response);
-        }
-
-        [Fact]
-        public async Task CanOpenPgresConnection()
-        {
-            var connectionString = RemoteData.GetPostGreString("ForceRemote");
-            await using var dataSource = NpgsqlDataSource.Create(connectionString);
-            Assert.NotNull(dataSource);
-            // fetch data
-            await using var cmmd = dataSource.CreateCommand("SELECT * FROM APPLICATIONS WHERE 1 = 2");
-            await using var reader = await cmmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                Console.WriteLine(reader.GetString(0));
-            }
-        }
-
-        [Fact]
-        public async Task CanOpenEnvironmentPgresConnection()
-        {
-            var connectionString = RemoteData.GetPostGreString();
-            await using var dataSource = NpgsqlDataSource.Create(connectionString);
-            Assert.NotNull(dataSource);
-            // fetch data
-            await using var cmmd = dataSource.CreateCommand("SELECT * FROM APPLICATIONS WHERE 1 = 2");
-            await using var reader = await cmmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                Console.WriteLine(reader.GetString(0));
-            }
         }
 
         [Fact]
@@ -62,5 +35,6 @@ namespace legallead.jdbc.tests
                 Console.WriteLine(reader.GetString(0));
             }
         }
+
     }
 }

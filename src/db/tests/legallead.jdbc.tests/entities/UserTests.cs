@@ -36,7 +36,7 @@ namespace legallead.jdbc.tests.entities
         {
             var expected = "users";
             var sut = new User();
-            Assert.Equal(expected, sut.TableName);
+            Assert.Equal(expected, sut.TableName, true);
         }
 
         [Fact]
