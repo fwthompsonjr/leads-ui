@@ -46,9 +46,4 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="powershell -ExecutionPolicy Unrestricted ..\..\..\zip-project.ps1 -sourceFolder $(ProjectDir)$(OutDir) -configuration $(ConfigurationName)" />
-	</Target>
-	
 </Project>
