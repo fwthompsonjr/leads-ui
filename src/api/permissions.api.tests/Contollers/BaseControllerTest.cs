@@ -64,6 +64,7 @@ namespace permissions.api.tests.Contollers
             var userProfileVwMk = new Mock<IUserProfileViewRepository>();
             var permissionGroupMk = new Mock<IPermissionGroupRepository>();
             var permissionHistoryDb = new Mock<IUserPermissionHistoryRepository>();
+            var profileHistoryDb = new Mock<IUserProfileHistoryRepository>();
             var userMk = new Mock<IUserRepository>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
@@ -95,6 +96,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => permissionGroupMk.Object);
             collection.AddScoped(s => permissionHistoryDb.Object);
             collection.AddScoped(s => jsonMock.Object);
+            collection.AddScoped(s => profileHistoryDb);
+            collection.AddScoped(s => profileHistoryDb.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -108,7 +111,8 @@ namespace permissions.api.tests.Contollers
                 var i = p.GetRequiredService<IPermissionGroupRepository>();
                 var j = p.GetRequiredService<IUserRepository>();
                 var k = p.GetRequiredService<IUserPermissionHistoryRepository>();
-                return new DataProvider(a, b, c, d, e, f, g, h, i, j, k);
+                var l = p.GetRequiredService<IUserProfileHistoryRepository>();
+                return new DataProvider(a, b, c, d, e, f, g, h, i, j, k, l);
             });
             collection.AddScoped<IDataProvider>(p =>
             {

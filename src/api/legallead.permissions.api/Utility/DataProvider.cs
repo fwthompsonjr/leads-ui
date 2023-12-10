@@ -17,6 +17,7 @@ namespace legallead.permissions.api
         private readonly IPermissionGroupRepository _permissionGroupDb;
         private readonly IUserRepository _userDb;
         private readonly IUserPermissionHistoryRepository _permissionHistoryDb;
+        private readonly IUserProfileHistoryRepository _profileHistoryDb;
 
         internal DataProvider(
             IComponentRepository component,
@@ -29,7 +30,8 @@ namespace legallead.permissions.api
             IUserProfileViewRepository userProfileVw,
             IPermissionGroupRepository permissionGroupDb,
             IUserRepository user,
-            IUserPermissionHistoryRepository permissionHistoryDb)
+            IUserPermissionHistoryRepository permissionHistoryDb,
+            IUserProfileHistoryRepository profileHistoryDb)
         {
             _componentDb = component;
             _permissionDb = permissionDb;
@@ -42,6 +44,7 @@ namespace legallead.permissions.api
             _permissionGroupDb = permissionGroupDb;
             _userDb = user;
             _permissionHistoryDb = permissionHistoryDb;
+            _profileHistoryDb = profileHistoryDb;
         }
 
         internal IComponentRepository ComponentDb => _componentDb;
@@ -55,6 +58,7 @@ namespace legallead.permissions.api
         internal IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
         internal IUserRepository UserDb => _userDb;
         public virtual IUserPermissionHistoryRepository PermissionHistoryDb => _permissionHistoryDb;
+        public virtual IUserProfileHistoryRepository ProfileHistoryDb => _profileHistoryDb;
 
         public virtual async Task<bool> InitializeProfile(User user)
         {
