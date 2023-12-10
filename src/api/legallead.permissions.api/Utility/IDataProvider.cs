@@ -7,6 +7,9 @@ namespace legallead.permissions.api
     public interface IDataProvider
     {
         IUserPermissionHistoryRepository PermissionHistoryDb { get; }
+        IUserProfileHistoryRepository ProfileHistoryDb { get; }
+        IUserProfileRepository UserProfileDb { get; }
+        IUserProfileViewRepository UserProfileVw { get; }
 
         Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode);
         Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode);

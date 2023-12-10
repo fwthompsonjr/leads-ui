@@ -1,4 +1,4 @@
-﻿namespace legallead.permissions.api.Enum
+﻿namespace legallead.permissions.api.Enumerations
 {
     public enum NameTypeNames
     {

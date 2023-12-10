@@ -1,4 +1,4 @@
-﻿using legallead.permissions.api.Enum;
+﻿using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http.Features;
 using System.ComponentModel.DataAnnotations;

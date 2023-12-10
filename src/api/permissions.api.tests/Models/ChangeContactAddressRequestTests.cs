@@ -1,4 +1,4 @@
-﻿using legallead.permissions.api.Enum;
+﻿using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
 using System.ComponentModel.DataAnnotations;
 
