@@ -37,10 +37,13 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       
     - name: Restore dependencies
+      working-directory: ${{ env.PRJ_NAME }}
       run: dotnet restore
 
     - name: Build
-      run: dotnet build ${{ env.PRJ_NAME }} --configuration Zip --no-restore
+      if: false
+      working-directory: ${{ env.PRJ_NAME }}
+      run: dotnet build  --configuration Zip --no-restore
 
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v21
