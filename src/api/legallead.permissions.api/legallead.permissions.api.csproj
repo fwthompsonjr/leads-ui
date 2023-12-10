@@ -41,5 +41,10 @@
   <ItemGroup>
     <Folder Include="_db\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="_html\home.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

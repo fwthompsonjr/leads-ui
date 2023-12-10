@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace legallead.permissions.api.Controllers
 {
-    [Route("api/connect")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ApplicationController : ControllerBase
     {
