@@ -37,7 +37,8 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       
     - name: Restore dependencies
-      run: dotnet restore ${{ env.PRJ_NAME }}
+      run: dotnet restore
+
     - name: Build
       run: dotnet build ${{ env.PRJ_NAME }} --configuration Zip --no-restore
 
