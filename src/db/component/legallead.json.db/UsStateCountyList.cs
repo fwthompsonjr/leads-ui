@@ -7,6 +7,8 @@ namespace legallead.json.db
         private static bool IsPopulated;
         private static readonly List<UsStateCounty> list = new();
 
+
+        public static List<UsStateCounty> All => list;
         public static void Populate(List<UsStateCounty> items)
         {
             if (IsPopulated) return;

@@ -10,7 +10,7 @@ namespace legallead.jdbc.entities
         public virtual List<string> InsertFieldList => FieldList;
         public virtual List<string> UpdateFieldList => FieldList;
 
-        public string? Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         public string TableName
         {
@@ -72,6 +72,12 @@ namespace legallead.jdbc.entities
             if (DBNull.Value == source || source == null) return default;
             Type t = typeof(T);
             t = Nullable.GetUnderlyingType(t) ?? t;
+            if (t == typeof(string))
+            {
+                var temp = Convert.ToString(source);
+                if (temp == null) return default;
+                return (T)Convert.ChangeType(temp, t);
+            }   
             return (T)Convert.ChangeType(source, t);
         }
 

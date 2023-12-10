@@ -32,6 +32,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{B658BCAC-DB86-4361-B9FD-7994D2ED55AD}"
 	ProjectSection(SolutionItems) = preProject
 		CodeCoverage.runsettings = CodeCoverage.runsettings
+		..\release\legallead.content.api.release.txt = ..\release\legallead.content.api.release.txt
+		..\release\legallead.permissions.api.release.txt = ..\release\legallead.permissions.api.release.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.resources.tests", "core\legallead.core\tests\legallead.resources.tests\legallead.resources.tests.csproj", "{17899607-8615-4565-8F87-866745045DF4}"

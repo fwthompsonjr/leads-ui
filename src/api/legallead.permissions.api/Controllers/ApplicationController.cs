@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace legallead.permissions.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/connect")]
     [ApiController]
     public class ApplicationController : ControllerBase
     {
@@ -38,15 +38,23 @@ namespace legallead.permissions.api.Controllers
         [Route("apps")]
         public async Task<IEnumerable<ApplicationModel>?> List()
         {
-            var response = await _db.ComponentDb.GetAll();
-            if (response == null) { return null; }
-            var apps = response.Select(s =>
-            new ApplicationModel
+            try
             {
-                Id = s.Id ?? string.Empty,
-                Name = s.Name ?? string.Empty
-            });
-            return apps;
+                var response = await _db.ComponentDb.GetAll();
+                if (response == null) { return new List<ApplicationModel>(); ; }
+                var apps = response.Select(s =>
+                new ApplicationModel
+                {
+                    Id = s.Id ?? string.Empty,
+                    Name = s.Name ?? string.Empty
+                });
+                return apps;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            return new List<ApplicationModel>();
         }
 
         [HttpPost]

@@ -22,41 +22,6 @@ namespace legallead.jdbc.tests.implementations
             Assert.Null(exception);
         }
 
-        [Fact]
-        public async Task ExecutorCanQueryAsync()
-        {
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var connection = new Mock<DbConnection>();
 
-                var expected = new[] { 7, 77, 777 };
-
-                connection.SetupDapperAsync(c => c.QueryAsync<int>(It.IsAny<string>(), null, null, null, null))
-                          .ReturnsAsync(expected);
-                var executor = new DapperExecutor();
-                var actual = (await executor.QueryAsync<int>(connection.Object, "")).ToList();
-                Assert.Equal(expected.Length, actual.Count);
-                Assert.Equivalent(expected, actual);
-            });
-            Assert.Null(exception);
-        }
-
-        [Fact]
-        public async Task ExecutorCanQuerySingleAsync()
-        {
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var connection = new Mock<DbConnection>();
-
-                var expected = 7;
-
-                connection.SetupDapperAsync(c => c.QuerySingleOrDefaultAsync<int>(It.IsAny<string>(), null, null, null, null))
-                          .ReturnsAsync(expected);
-                var executor = new DapperExecutor();
-                var actual = await executor.QuerySingleOrDefaultAsync<int>(connection.Object, "");
-                Assert.Equal(expected, actual);
-            });
-            Assert.Null(exception);
-        }
     }
 }

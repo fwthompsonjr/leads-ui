@@ -4,24 +4,16 @@ using System.Text;
 
 namespace legallead.json.db.entity
 {
-    public class UsState : DataEntity<UsState>
+    public class UsState
     {
+        public string? Id { get; set; }
+        public string? Name { get; set; }
         public string? ShortName { get; set; }
         public bool IsActive { get; set; }
 
-        public static void Initialize(IJsonDataProvider? provider)
+        public static void Initialize()
         {
-            provider ??= new JsonDataProvider();
             var list = JsonConvert.DeserializeObject<List<UsState>>(GetList) ?? new();
-            list.ForEach(a =>
-            {
-                var existing = provider.FirstOrDefault(a, x => x.Name == a.Name);
-                if (existing == null)
-                {
-                    a.Id = string.Empty;
-                    provider.Insert(a);
-                }
-            });
             UsStatesList.Populate(list);
         }
 

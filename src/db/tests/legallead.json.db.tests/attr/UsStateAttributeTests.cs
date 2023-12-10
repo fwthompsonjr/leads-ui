@@ -16,9 +16,7 @@ namespace legallead.json.db.tests.attr
             {
                 lock (locker)
                 {
-                    var db = new JsonDataProvider();
-                    UsState.Initialize(db);
-                    Thread.Sleep(100);
+                    UsState.Initialize();
                     isInitialized = true; 
                 }
             }

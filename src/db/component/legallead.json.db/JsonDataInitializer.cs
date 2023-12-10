@@ -5,12 +5,10 @@ namespace legallead.json.db
 {
     public class JsonDataInitializer : IJsonDataInitializer
     {
-        private readonly IJsonDataProvider _provider;
         private bool IsDbInitialized = false;
 
-        public JsonDataInitializer(IJsonDataProvider provider)
+        public JsonDataInitializer()
         {
-            _provider = provider;
         }
 
         public async Task InitTables()
@@ -18,8 +16,8 @@ namespace legallead.json.db
             if (IsDbInitialized) return;
             await Task.Run(() =>
             {
-                UsState.Initialize(_provider);
-                UsStateCounty.Initialize(_provider);
+                UsState.Initialize();
+                UsStateCounty.Initialize();
             });
             IsDbInitialized = true;
         }

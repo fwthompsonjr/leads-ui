@@ -47,8 +47,7 @@ namespace legallead.permissions.api
             services.AddSingleton<IJsonDataProvider, JsonDataProvider>();
             services.AddSingleton<IJsonDataInitializer>(p =>
             {
-                var jsondb = p.GetRequiredService<IJsonDataProvider>();
-                return new JsonDataInitializer(jsondb);
+                return new JsonDataInitializer();
             });
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
@@ -108,8 +107,7 @@ namespace legallead.permissions.api
             services.AddScoped(p =>
             {
                 var data = p.GetRequiredService<DataProvider>();
-                var json = p.GetRequiredService<IJsonDataProvider>();
-                return new ListsController(data, json);
+                return new ListsController(data);
             });
             services.AddScoped<PermissionsController>();
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();

@@ -39,7 +39,7 @@
                 if (fieldName == null) return;
                 if (fieldName.Equals("Id", Comparison))
                 {
-                    Id = ChangeType<string>(value);
+                    Id = ChangeType<string>(value) ?? string.Empty;
                     return;
                 }
                 if (fieldName.Equals("Name", Comparison))
