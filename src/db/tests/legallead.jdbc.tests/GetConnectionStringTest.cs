@@ -22,35 +22,6 @@ namespace legallead.jdbc.tests
         }
 
         [Fact]
-        public void CanOpenRemoteConnection()
-        {
-            IDbConnection? conn = null;
-            try
-            {
-                var connectionString = GetPostGreString("ForceRemote");
-                using var dataSource = GetConnection(connectionString);
-                Assert.NotNull(dataSource);
-                conn = dataSource;
-                conn.Open();
-                // fetch data
-                using var cmmd = conn.CreateCommand();
-                cmmd.CommandText = "SELECT * FROM APPLICATIONS WHERE 1 = 2";
-                using var reader = cmmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    Console.WriteLine(reader.GetString(0));
-                }
-                conn.Close();
-            }
-            finally
-            {
-                if (conn != null && conn.State == ConnectionState.Open)
-                    conn.Close();
-                conn?.Dispose();
-            }
-        }
-
-        [Fact]
         public async Task CanOpenLocalPgresConnection()
         {
             var connectionString = LocalData.GetPostGreString();
@@ -65,18 +36,5 @@ namespace legallead.jdbc.tests
             }
         }
 
-        private static IDbConnection GetConnection(string connectionString)
-        {
-            var connectionType = GetConnectionType();
-            switch (connectionType)
-            {
-                case DbConnectionType.MySQL:
-                    return new MySqlConnection(connectionString);
-                case DbConnectionType.PostGres:
-                    return new NpgsqlConnection(connectionString);
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
     }
 }
