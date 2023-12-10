@@ -1,6 +1,6 @@
 name: "Deploy: Permissions.Api"
 env:
-  PRJ_NAME: "src/api/legallead.permission.api/legallead.permission.api.csproj"
+  PRJ_NAME: "/src/api/legallead.permission.api/legallead.permission.api.csproj"
   AWS_NAME: "legalleadpermissionapi"
   AWS_ENV: "legalleadpermissionapi-dev"
   AWS_REGION: "us-east-1"
@@ -37,8 +37,7 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       
     - name: Restore dependencies
-      working-directory: ${{ env.PRJ_NAME }}
-      run: dotnet restore
+      run: dotnet restore ${{ env.PRJ_NAME }}
 
     - name: Build
       if: false
