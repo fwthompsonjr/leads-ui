@@ -39,10 +39,17 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ${{ env.PRJ_NAME }}
 
-    - name: Build
-      if: false
-      working-directory: ${{ env.PRJ_NAME }}
-      run: dotnet build  --configuration Zip --no-restore
+    - name: Restore Packages
+      timeout-minutes: 10
+      shell: pwsh
+      run: |
+        & ./pipeline-restore-packages.ps1
+
+    - name: Build solution
+      timeout-minutes: 5
+      shell: pwsh
+      run: |
+        & ./pipeline-zip-solution.ps1
 
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v21
