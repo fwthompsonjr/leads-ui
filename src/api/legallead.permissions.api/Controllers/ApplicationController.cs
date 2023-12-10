@@ -89,6 +89,7 @@ namespace legallead.permissions.api.Controllers
                 await _db.InitializeProfile(user);
                 await _db.InitializePermission(user);
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
+                await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
             }
             return aresponse ?? response;
         }

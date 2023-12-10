@@ -55,6 +55,7 @@ namespace permissions.api.tests
         [InlineData(typeof(JsonInitStartupTask))]
         [InlineData(typeof(JdbcInitStartUpTask))]
         [InlineData(typeof(ISubscriptionInfrastructure))]
+        [InlineData(typeof(IProfileInfrastructure))]
         [InlineData(typeof(IUserPermissionHistoryRepository))]
         public void ProviderCanConstructInstance(Type type)
         {

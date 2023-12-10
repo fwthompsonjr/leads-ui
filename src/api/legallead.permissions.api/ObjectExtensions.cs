@@ -60,6 +60,7 @@ namespace legallead.permissions.api
                 return new DataContext(command, dbint);
             });
             services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
+            services.AddScoped<IProfileInfrastructure, ProfileInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
