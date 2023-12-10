@@ -35,9 +35,6 @@ jobs:
       id: branchname
       shell: bash
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-      
-    - name: Restore dependencies
-      run: dotnet restore ${{ env.PRJ_NAME }}
 
     - name: Restore Packages
       timeout-minutes: 10
