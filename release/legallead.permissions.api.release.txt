@@ -2,4 +2,4 @@ Release information - legallead.permissions.api
 12/09/2023 - 16:35 Manually pushed content to AWS Elastic Beanstock 
 12/09/2023 8:04:53 PM Manually pushed content to AWS Elastic Beanstock
 12/10/2023 12:12:00 PM Testing pipeline exec without publish
-12/10/2023 12:15:00 PM Change To Pipeline YML file
+12/10/2023 12:17:00 PM Change To Pipeline YML file
