@@ -1,6 +1,6 @@
 name: "Deploy: Permissions.Api"
 env:
-  PRJ_NAME: "/src/api/legallead.permission.api/legallead.permission.api.csproj"
+  PRJ_NAME: "legallead.permissions.api.zip"
   AWS_NAME: "legalleadpermissionapi"
   AWS_ENV: "legalleadpermissionapi-dev"
   AWS_REGION: "us-east-1"
@@ -58,5 +58,5 @@ jobs:
         environment_name: ${{ env.AWS_ENV }}
         version_label: "ver-${{ steps.commitindex.outputs.sha_short }}"
         region: ${{ env.AWS_REGION }}
-        deployment_package: deploy.zip
+        deployment_package: ${{ env.PRJ_NAME }}
         wait_for_deployment: false
