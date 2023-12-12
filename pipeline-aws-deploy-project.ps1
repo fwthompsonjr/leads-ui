@@ -1,13 +1,8 @@
 param (
-    [string]$workingDir,
     [string]$searchPattern,
     [string]$versionLabel
 )
-if( $null -eq $workingDir ) {
-    $workingDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
-}
-
-if( $null -eq $searchPattern ) {
+if( [string]::IsNullOrWhiteSpace( $searchPattern ) -eq $true ) {
     $searchPattern = '*.api.csproj';
 }
 
@@ -22,6 +17,7 @@ function executeDeployment( $source ){
     }
 }
 
+$workingDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $di = [System.IO.DirectoryInfo]::new( $workingDir );
 $found = $di.GetFiles($searchPattern, [System.IO.SearchOption]::AllDirectories)
 
