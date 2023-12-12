@@ -79,13 +79,13 @@
 	<div class="global-header">
 		<rux-global-status-bar 
 			include-icon="true" 
-			app-state="Development" 
-			app-state-color="tag1" 
-			username="" 
 			app-domain="Legal Lead" 
 			app-name="UI" 
-			app-version="3.2 Beta" 
-			menu-icon="school">
+			app-state-color="tag1"  
+			menu-icon="school"
+			username="" 
+			app-state="{{app-environment}}" 
+			app-version="{{app-version}}">
 			<rux-tabs id="tab-set-id-1" small="true">
 				<rux-tab id="tab-id-1">Welcome</rux-tab>
 				<rux-tab id="tab-id-2" selected>Login</rux-tab>
@@ -101,7 +101,7 @@
 	<!-- Global Content -->
 	<rux-container name="main-container">
 		<div name="page-title" slot="header">
-			Login
+			<span name='page-title-text'>Login</span>
 		  </div>
 		  <div name="page-content">
 		<rux-tab-panels aria-labelledby="tab-set-id-1">

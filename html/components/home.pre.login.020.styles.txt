@@ -1,0 +1,54 @@
+<style>
+div.global-notification {
+margin-top: 5px;
+}
+div.global-header {
+display: flex; 
+justify-content: center;
+}
+rux-container[name="main-container"] {
+padding: 10px;
+}
+div.main-content {
+padding: 10px;
+}
+div.page-menu {
+display: flex; 
+width: 100%; 
+justify-content: left; 
+margin-bottom: 10px;
+}
+div[name="register-now"] {
+width: 50%;
+min-width: 300px;
+max-width: 500px;
+padding: 10px;
+border: 1px dotted var(--color-border-interactive-muted);
+}
+div[name="register-now"] p.not-yet { color: var(--color-text-secondary); }
+
+
+form {
+margin: 0 auto;
+max-width: 330px;
+display: block;
+}
+.group {
+margin-bottom: 2.25rem;
+}
+.field {
+display: flex;
+flex-flow: row wrap;
+align-items: flex-start;
+}
+.checkbox {
+margin: 0.5rem 0 1rem 0 !important;
+line-height: 1.2;
+}
+rux-input {
+width: 100%;
+}
+.sign-in-btn {
+margin-left: auto;
+}
+</style>

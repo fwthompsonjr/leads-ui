@@ -1,0 +1,148 @@
+let formNames = [ "", "" ];
+var cctformname = "contact-form";
+var frmContact = document.getElementById(cctformname);
+var contactData = new FormData(frmContact);
+var cartErrMsg = "div[name='frm-add-cart-error-message']";
+var contactJq = "#" + cctformname;
+var contacticons = {
+    spin: "i[name='message-send-spinner']",
+    normal: "i[name='message-send']"
+}
+
+jQuery.validator.setDefaults({
+    debug: true,
+    success: "valid"
+});
+jQuery.validator.addMethod("isEmail", function (value, element, params) {
+    if (!value) { return false; }
+    if (value == null) { return false; }
+    if (value.length == 0) { return false; }
+    const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return res.test(String(value).toLowerCase());
+}, 'Must be a valid email address.');
+jQuery.validator.addMethod("isPhone", function (value, element, params) {
+    if (!value) { return false; }
+    if (value == null) { return false; }
+    if (value.length == 0) { return false; }
+    const res = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    return res.test(String(value).toLowerCase());
+}, 'Must be a valid phone number.');
+$(contactJq).validate({
+    rules: {
+        "name": {
+            required: true
+        },
+        "surname": {
+            required: true
+        },
+        "email": {
+            required: true,
+            isEmail: true
+        },
+        "phone-number": {
+            required: true,
+            isPhone: true
+        },
+        "subject": {
+            required: true,
+            minlength: 1,
+            maxlength: 75
+        },
+        "message": {
+            required: true,
+            minlength: 1,
+            maxlength: 255
+        }
+    }
+});
+
+
+//convert FormData to Object
+var serializeFormToObjectB = function (form) {
+    var objForm = {};
+    var formData = new FormData(form);
+    for (var key of formData.keys()) {
+        objForm[key] = formData.get(key);
+    }
+    return JSON.stringify(objForm);
+};
+
+
+function submitContactUs(resend) {
+    const dsbl = "disabled";
+    $btn = $(contacticons.spin).closest('button');
+    $btn.attr(dsbl, dsbl);
+    $(contacticons.spin).show();
+    $(contacticons.normal).hide();
+    try {
+        var target = "/contactus/add";
+        var data = serializeFormToObjectB(frmContact);
+        if ($(contactJq).valid() == false) { return; }
+        else {
+            if (resend == null) {
+                submitContactUs(true);
+                return;
+            }            
+        }
+        $.ajax({
+            type: "POST",
+            url: target,
+            headers: { "x-contact-form": data },
+            success: function (data) {
+                resetContactUi();
+                $btn.removeAttr(dsbl);
+                var message = data && data.reason ? data.reason : "";
+                if (data.isValid == false) {
+                    displayMessage(message, "alert-danger");
+                    if (data.message != null) {
+                        displayErrorFields(data.message);
+                    }
+                } else {
+                    displayMessage(message);
+                    // clear the form
+                    var theForm = document.getElementById(cctformname);
+                    theForm.reset();
+                    theForm.querySelector('button').setAttribute('disabled', 'disabled');
+                }
+                console.debug(data);
+            },
+            error: function (errMsg) {
+                console.error(errMsg);
+            }
+        });
+    } finally
+    {
+        if ($(contacticons.spin).is(":hidden") == true) {
+            $btn.removeAttr(dsbl);
+        }
+    }
+}
+
+function displayErrorFields(messages) {
+    var selector = contactJq + " input[name='~0']";
+    if (messages == null) return;
+    if (!Array.isArray(messages)) return;
+    messages.forEach(function (m) {
+        let fieldName = "";
+        if (m == 'message') {
+            fieldName = selector
+                .replace("input", "textarea")
+                .replace("~0", m);
+        } else {
+            fieldName = selector.replace("~0", m);
+        }
+        
+        $(fieldName).css('border-color', "red");
+    });
+}
+
+function resetContactUi() {
+    var lines = contactJq + " input[name], " + contactJq + " textarea";
+    $(lines).removeAttr('style')
+    $(contacticons.spin).hide();
+    $(contacticons.normal).show();
+}
+
+$().ready(function () {
+    $(contactJq).validate();
+});

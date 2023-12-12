@@ -1,0 +1,18 @@
+<div class="global-header">
+<rux-global-status-bar 
+id="header-status-bar" 
+include-icon="true" 
+app-domain="Legal Lead" 
+app-name="UI" 
+menu-icon="school"
+username="" 
+app-state-color="{{app-tag-color}}"  
+app-state="{{app-environment}}" 
+app-version="{{app-version}}">
+<rux-tabs id="tab-set-id-1" small="true">
+<rux-tab id="tab-id-1" selected>Welcome</rux-tab>
+<rux-tab id="tab-id-2">Login</rux-tab>
+<rux-tab id="tab-id-3">Register</rux-tab>
+</rux-tabs>
+</rux-global-status-bar>			
+</div>

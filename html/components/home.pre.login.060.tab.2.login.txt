@@ -1,0 +1,15 @@
+<form id="frm-login">
+<div class="group">
+<div class="field">
+<rux-input id="frm-login-username" placeholder="username" label="User Name / Email:" type="text" />
+</div>
+</div>
+<div class="group">
+<div class="field">
+<rux-input id="frm-login-pw" label="Password" type="password"/>
+</div>
+</div>
+<div class="field">
+<rux-button id="sign-in-btn" class="sign-in-btn" type="button">Sign In</rux-button>
+</div>
+</form>

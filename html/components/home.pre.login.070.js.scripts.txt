@@ -1,0 +1,34 @@
+<script>
+function initializeStatusBar() {
+const headerid = "header-status-bar";
+const element = document.getElementById(headerid);
+if (undefined === element || null === element ) { return; }
+const keynames = "app-state-color,app-state,app-version".split(",");
+const defaultvalues = "tag1,Development,3.2 Beta".split(",");
+for (let i = 0; i < keynames.length; i++) {
+let attr = element.getAttribute(keynames[i]);
+if (undefined === attr || null === attr ) {
+let attnw = document.createAttribute(keynames[i]);
+attnw.value = defaultvalues[i];
+element.setAttributeNode(attnw);
+continue;
+}
+if (attr.indexOf("{") < 0 ) { continue; }
+element.setAttribute( keynames[i], defaultvalues[i] );
+}
+}
+
+function docReady(fn) {
+// see if DOM is already available
+if (document.readyState === "complete" || document.readyState === "interactive") {
+// call on next available tick
+setTimeout(fn, 10);
+} else {
+document.addEventListener("DOMContentLoaded", fn);
+}
+}
+
+docReady(function() {
+initializeStatusBar();
+});
+</script>

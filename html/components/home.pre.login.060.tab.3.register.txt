@@ -1,0 +1,25 @@
+<form id="frm-register">
+<div class="group">
+<div class="field">
+<rux-input id="frm-register-username" placeholder="username" label="User Name:" type="text" />
+</div>
+</div>
+<div class="group">
+<div class="field">
+<rux-input id="frm-register-email" placeholder="email@leagalleads.com" label="Email" type="email" />
+</div>
+</div>
+<div class="group">
+<div class="field">
+<rux-input id="frm-register-pw" label="Password" type="password"/>
+</div>
+</div>
+<div class="group">
+<div class="field">
+<rux-input id="frm-register-pw-confirm" label="Confirm Password" type="password"/>
+</div>
+</div>
+<div class="field">
+<rux-button id="sign-in-btn" class="sign-in-btn" type="button">Create Account</rux-button>
+</div>
+</form>
