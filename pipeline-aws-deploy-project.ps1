@@ -6,6 +6,15 @@ if( [string]::IsNullOrWhiteSpace( $searchPattern ) -eq $true ) {
     $searchPattern = '*.api.csproj';
 }
 
+function canEnumerate( $obj ) {
+    try {
+        $enumerated = $obj.GetEnumerator();
+        return $true;
+    } catch {
+        return $false;
+    }
+}
+
 function executeDeployment( $source ){
     $currentLocation = Get-Location
     try {
