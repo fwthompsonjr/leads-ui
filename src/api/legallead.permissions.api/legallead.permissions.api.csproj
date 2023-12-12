@@ -9,9 +9,6 @@
 		<PackageProjectUrl>https://localhost:44360</PackageProjectUrl>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
 		<DockerfileContext>..\..</DockerfileContext>
-		<PublishSingleFile>true</PublishSingleFile>
-		<SelfContained>true</SelfContained>
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,7 +20,7 @@
 	<ItemGroup>
 		<Folder Include="_db\" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
@@ -45,7 +42,7 @@
 			<_Parameter1>permissions.api.tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-	
+
 	<Target Name="ZipOutputPath" AfterTargets="Build" Condition="'$(Configuration)' == 'Zip'">
 		<ZipDirectory
             SourceDirectory="$(OutputPath)"

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+		rel="stylesheet"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css"
+	/>
+	<script
+		type="module"
+		src="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.esm.js"
+	></script>
+	
+	
+	<style>
+		div.global-notification {
+			margin-top: 5px;
+		}
+		div.global-header {
+			display: flex; 
+			justify-content: center;
+		}
+		rux-container[name="main-container"] {
+			padding: 10px;
+		}
+		div.main-content {
+			padding: 10px;
+		}
+		div.page-menu {
+			display: flex; 
+			width: 100%; 
+			justify-content: left; 
+			margin-bottom: 10px;
+		}
+		div[name='register-now'] {
+			width: 50%;
+			min-width: 300px;
+			max-width: 500px;
+			padding: 10px;
+			border: 1px dotted var(--color-border-interactive-muted);
+		}
+			div[name='register-now'] p.not-yet { color: var(--color-text-secondary); }
+	</style>
+  </head>
+  <body class="light-theme">
+    <!-- Global Header -->
+	<div class="global-header">
+		<rux-global-status-bar 
+			include-icon="true" 
+			app-state="Development" 
+			app-state-color="tag1" 
+			username="" 
+			app-domain="Legal Lead" 
+			app-name="UI" 
+			app-version="3.2 Beta" 
+			menu-icon="school">
+		</rux-global-status-bar>			
+	</div>
+	
+    <!-- Global Status -->
+	<div class="global-notification">
+		<rux-notification id="notification" status="caution" small="true">Something caution has happened!</rux-notification>
+	</div>
+	<!-- Global Content -->
+	<rux-container name="main-container">
+	
+		  <div name="page-title" slot="header">
+			Welcome
+		  </div>
+		  
+		<div class="page-menu">
+			<rux-pop-up placement="left">
+				<rux-button slot="trigger">Menu</rux-button>
+				<rux-menu>
+					<rux-menu-item href="#">Login</rux-menu-item>
+					<rux-menu-item href="#">Register</rux-menu-item>
+				</rux-menu>
+			</rux-pop-up>
+		</div>
+		  <div name="page-content">
+			<div>
+				<br/>
+				Legal Lead is an application used to locate public data from county courts.<br />
+				From this application you can retrieve: <br />
+				<ol>
+					<li>Case Details</li>
+					<li>Defendant Information</li>
+					<li>Court Information</li>
+				</ol>
+				
+				<div name="page-call-to-action">
+					<p><a href="#">Login</a>, if you already have an account.</p>
+				</div>
+				
+				
+				<div name="register-now">
+					<p class="not-yet">Not registered yet?</p>
+					<p>
+						<a href='#'>Register now!</a> <br/>
+						It is easy, done in 1 minute and gives you access to product demos and much more!
+					</p>
+				</div>
+				
+			</div>
+		  </div>
+		  
+	</rux-container>
+  </body>
+</html>
