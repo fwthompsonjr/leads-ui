@@ -15,14 +15,14 @@ function canEnumerate( $obj ) {
     }
 }
 function installTools() {
-    dotnet tool install -g aws.deploy.tools
+    dotnet tool install -g Amazon.ElasticBeanstalk.Tools
 }
 function executeDeployment( $source ){
     $currentLocation = Get-Location
     try {
         $projectDirectory = [System.IO.Path]::GetDirectoryName( $source );
         Set-Location $projectDirectory
-        dotnet-aws deploy-environment -c Release --version-label $versionLabel
+        dotnet eb deploy-environment -c Release --version-label $versionLabel
     } finally {
         Set-Location $currentLocation
     }
