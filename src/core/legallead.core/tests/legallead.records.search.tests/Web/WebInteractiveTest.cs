@@ -23,23 +23,6 @@ namespace legallead.records.search.Tests
         }
 
         [TestMethod]
-        [TestCategory("Web.Integration")]
-        public void ValidateChromePathTest()
-        {
-            if (!System.Diagnostics.Debugger.IsAttached)
-            {
-                Assert.Inconclusive("This method to be executed in debug mode only.");
-            }
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var rootDir = Directory.GetDirectoryRoot(baseDir);
-            DirectoryInfo di = new(rootDir);
-            var search = new DirectorySearch(di, "*chrome.exe", 2);
-            var found = search.FileList;
-            Assert.IsTrue(found.Any());
-            Console.WriteLine(found[0]);
-        }
-
-        [TestMethod]
         public async Task ValidatePathAsync()
         {
             var fileName = await Task.Run(() => WebUtilities.GetChromeBinary());

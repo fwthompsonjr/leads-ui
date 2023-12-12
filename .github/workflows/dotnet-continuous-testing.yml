@@ -7,6 +7,8 @@ on:
     branches:  
       - '**'        # matches every branch
       - '!main'   # excludes master
+    paths:
+      - 'src/**'
 env:
     FAILED_TEST_COUNT: "0"
 

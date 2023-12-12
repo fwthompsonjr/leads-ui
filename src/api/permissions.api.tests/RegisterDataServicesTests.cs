@@ -49,12 +49,13 @@ namespace permissions.api.tests
         [InlineData(typeof(IPermissionGroupRepository))]
         [InlineData(typeof(IUserRepository))]
         [InlineData(typeof(DataProvider))]
-        [InlineData(typeof(AccountController))]
+        [InlineData(typeof(SignonController))]
         [InlineData(typeof(PermissionsController))]
         [InlineData(typeof(ApplicationController))]
         [InlineData(typeof(JsonInitStartupTask))]
         [InlineData(typeof(JdbcInitStartUpTask))]
         [InlineData(typeof(ISubscriptionInfrastructure))]
+        [InlineData(typeof(IProfileInfrastructure))]
         [InlineData(typeof(IUserPermissionHistoryRepository))]
         public void ProviderCanConstructInstance(Type type)
         {
@@ -64,6 +65,12 @@ namespace permissions.api.tests
                 _serviceProvider.GetService(type);
             });
             Assert.Null(exception);
+        }
+        [Fact]
+        public void ProviderCanCreateMapper()
+        {
+            var mapper = ModelMapper.Mapper;
+            Assert.NotNull(mapper);
         }
     }
 }

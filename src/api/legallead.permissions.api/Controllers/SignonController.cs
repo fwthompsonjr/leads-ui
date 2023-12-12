@@ -8,13 +8,13 @@ namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class SignonController : ControllerBase
     {
         private readonly DataProvider _db;
         private readonly IJwtManagerRepository _jWTManager;
         private readonly IRefreshTokenValidator _tokenValidator;
 
-        public AccountController(DataProvider db, IJwtManagerRepository jWTManager, IRefreshTokenValidator tokenValidator)
+        public SignonController(DataProvider db, IJwtManagerRepository jWTManager, IRefreshTokenValidator tokenValidator)
         {
             _db = db;
             _jWTManager = jWTManager;

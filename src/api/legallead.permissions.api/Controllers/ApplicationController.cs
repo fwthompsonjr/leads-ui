@@ -3,6 +3,7 @@ using legallead.jdbc.models;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -41,7 +42,7 @@ namespace legallead.permissions.api.Controllers
             try
             {
                 var response = await _db.ComponentDb.GetAll();
-                if (response == null) { return new List<ApplicationModel>(); ; }
+                if (response == null || !response.Any()) { return ApplicationsFallback; }
                 var apps = response.Select(s =>
                 new ApplicationModel
                 {
@@ -54,7 +55,7 @@ namespace legallead.permissions.api.Controllers
             {
                 Console.WriteLine(ex);
             }
-            return new List<ApplicationModel>();
+            return ApplicationsFallback;
         }
 
         [HttpPost]
@@ -89,6 +90,7 @@ namespace legallead.permissions.api.Controllers
                 await _db.InitializeProfile(user);
                 await _db.InitializePermission(user);
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
+                await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
             }
             return aresponse ?? response;
         }
@@ -152,6 +154,15 @@ namespace legallead.permissions.api.Controllers
                 Console.WriteLine(ex.ToString());
                 return true;
             }
+        }
+
+        private static List<ApplicationModel> ApplicationsFallback
+            => applications ??= GetApplicationsFallback();
+
+        private static List<ApplicationModel>? applications;
+        private static List<ApplicationModel> GetApplicationsFallback()
+        {
+            return ApplicationModel.GetApplicationsFallback();
         }
     }
 }

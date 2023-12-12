@@ -1,9 +1,9 @@
 
 {
     "region" : "us-east-1",
-    "configuration" : "Debug",
+    "configuration" : "Release",
     "framework"     : "net6.0",
-    "self-contained" : false,
+    "self-contained" : true,
     "application"    : "legalleadpermissionsapi",
     "environment"    : "legalleadpermissionsapi-dev",
     "app-path"       : "/",

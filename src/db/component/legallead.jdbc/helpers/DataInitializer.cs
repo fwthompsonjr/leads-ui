@@ -215,6 +215,48 @@ namespace legallead.jdbc.helpers
                 + Environment.NewLine
                 + "CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
                 + Environment.NewLine
+                + ");"
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS USERPROFILEHISTORY"
+                + Environment.NewLine
+                + "("
+                + Environment.NewLine
+                + "\t Id CHAR(36) PRIMARY KEY NOT NULL "
+                + Environment.NewLine
+                + "\t DEFAULT ( CAST( uuid() as CHAR(36) ) ), "
+                + Environment.NewLine
+                + "\t UserProfileId CHAR(36) references USERPROFILE(Id), "
+                + Environment.NewLine
+                + "\t GroupId INT NULL, "
+                + Environment.NewLine
+                + "\t UserId CHAR(36) references USERS(Id) , "
+                + Environment.NewLine
+                + "\t ProfileMapId CHAR(36) references PROFILEMAP(Id) , "
+                + Environment.NewLine
+                + "\t KeyName VARCHAR(100) , "
+                + Environment.NewLine
+                + "\t KeyValue VARCHAR(256) , "
+                + Environment.NewLine
+                + "\t CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
+                + Environment.NewLine
+                + ");"
+                + Environment.NewLine
+                + "CREATE TABLE IF NOT EXISTS USERPROFILECHANGE "
+                + Environment.NewLine
+                + "( "
+                + Environment.NewLine
+                + "Id CHAR(36) PRIMARY KEY NOT NULL "
+                + Environment.NewLine
+                + "DEFAULT ( CAST( uuid() as CHAR(36) ) ), "
+                + Environment.NewLine
+                + "GroupId INT NULL, "
+                + Environment.NewLine
+                + "UserId CHAR(36) references USERS(Id) , "
+                + Environment.NewLine
+                + "ReasonCode char(4) references REASONCODES(ReasonCode), "
+                + Environment.NewLine
+                + "CreateDate datetime NOT NULL default ( UTC_TIMESTAMP() ) "
+                + Environment.NewLine
                 + ");";
             var stmts = sql.Split(';', StringSplitOptions.RemoveEmptyEntries);
             foreach (var stmt in stmts)
@@ -483,6 +525,59 @@ namespace legallead.jdbc.helpers
                 " " + nl +
                 "-- set change reason code " + nl +
                 "UPDATE USERPERMISSIONCHANGE   " + nl +
+                "SET  ReasonCode = changecode   " + nl +
+                "WHERE    " + nl +
+                "EXISTS (SELECT 1 FROM REASONCODES WHERE ReasonCode = changecode)   " + nl +
+                "AND UserId = userindex   " + nl +
+                "AND GroupId = 0   " + nl +
+                "AND ReasonCode IS NULL;  " + nl +
+                " " + nl +
+                "END; ",
+                "DROP PROCEDURE IF EXISTS USP_APPEND_PROFILE_HISTORY;",
+                "CREATE PROCEDURE USP_APPEND_PROFILE_HISTORY (IN userindex char(36), IN changecode char(4)) " + nl +
+                "BEGIN " + nl +
+                " " + nl +
+                "-- update history for current user " + nl +
+                "UPDATE USERPROFILEHISTORY h   " + nl +
+                "SET GroupId = CASE WHEN GroupId IS NULL THEN 0 ELSE GroupId - 1 END   " + nl +
+                "WHERE h.UserId = userindex;  " + nl +
+                " " + nl +
+                "-- add change history line record(s) for user   " + nl +
+                "INSERT INTO USERPROFILECHANGE   " + nl +
+                "(   " + nl +
+                "UserId, GroupId, CreateDate   " + nl +
+                ")  " + nl +
+                "SELECT h.UserId, h.GroupId, h.CreateDate   " + nl +
+                "FROM   " + nl +
+                "(   " + nl +
+                "SELECT UserId, GroupId, Max( createdate ) createdate    " + nl +
+                "FROM USERPROFILEHISTORY   " + nl +
+                "WHERE UserId = userindex   " + nl +
+                "GROUP BY UserId, GroupId   " + nl +
+                ") h   " + nl +
+                "LEFT JOIN USERPROFILECHANGE c   " + nl +
+                "ON     h.UserId = c.UserId   " + nl +
+                "AND    h.CreateDate = c.CreateDate   " + nl +
+                "WHERE  c.Id is null;  " + nl +
+                " " + nl +
+                "-- synchronize group indexes   " + nl +
+                "UPDATE USERPROFILECHANGE C " + nl +
+                "JOIN (   " + nl +
+                "    SELECT UserId, GroupId, Max( CreateDate ) CreateDate    " + nl +
+                "    FROM USERPROFILEHISTORY   " + nl +
+                "    WHERE UserId = userindex   " + nl +
+                "    GROUP BY UserId, GroupId   " + nl +
+                "  ) AS subquery  " + nl +
+                "  ON C.UserId = subquery.UserId " + nl +
+                "  AND C.CreateDate = subquery.CreateDate " + nl +
+                "SET   C.GroupId = subquery.GroupId " + nl +
+                "WHERE 1 = 1   " + nl +
+                "AND C.UserId = subquery.UserId   " + nl +
+                "AND C.CreateDate = subquery.CreateDate   " + nl +
+                "AND C.GroupId != subquery.GroupId; " + nl +
+                " " + nl +
+                "-- set change reason code " + nl +
+                "UPDATE USERPROFILECHANGE   " + nl +
                 "SET  ReasonCode = changecode   " + nl +
                 "WHERE    " + nl +
                 "EXISTS (SELECT 1 FROM REASONCODES WHERE ReasonCode = changecode)   " + nl +

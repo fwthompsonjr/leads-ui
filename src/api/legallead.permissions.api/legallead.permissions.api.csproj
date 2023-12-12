@@ -7,7 +7,7 @@
     <UserSecretsId>ca674681-102a-4e86-998b-b2f20045b17c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <PackageProjectUrl>https://localhost:44360</PackageProjectUrl>
-    <Configurations>Debug;Release;Local</Configurations>
+    <Configurations>Debug;Release;Local;Zip</Configurations>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
@@ -46,5 +46,4 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>

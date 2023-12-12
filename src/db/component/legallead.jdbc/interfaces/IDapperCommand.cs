@@ -7,21 +7,12 @@ namespace legallead.jdbc.interfaces
     public interface IDapperCommand
     {
 
+        Task ExecuteAsync(IDbConnection conn, string sql, DynamicParameters? arg = null);
 
-        Task ExecuteAsync(IDbConnection conn, string sql, params object[] args);
-
-        Task ExecuteAsync(IDbConnection conn, string sql, DynamicParameters arg);
-
-        Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, DynamicParameters arg)
+        Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, DynamicParameters? arg = null)
             where T : BaseDto, new();
 
-        Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, params object[] args)
-            where T : BaseDto, new();
-
-        Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, params object[] args)
-            where T : BaseDto, new();
-
-        Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, Dapper.DynamicParameters arg)
+        Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, DynamicParameters? arg = null)
             where T : BaseDto, new();
     }
 }

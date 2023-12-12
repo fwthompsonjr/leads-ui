@@ -6,7 +6,7 @@ namespace legallead.permissions.api.Utility
 {
     public class SubscriptionInfrastructure : ISubscriptionInfrastructure
     {
-        private readonly IDataProvider _db;
+        protected readonly IDataProvider _db;
         public SubscriptionInfrastructure(IDataProvider db)
         {
             _db = db;

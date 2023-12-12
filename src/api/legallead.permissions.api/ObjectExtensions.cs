@@ -59,7 +59,7 @@ namespace legallead.permissions.api
                 var dbint = d.GetRequiredService<IDataInitializer>();
                 return new DataContext(command, dbint);
             });
-            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();            
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
@@ -71,6 +71,7 @@ namespace legallead.permissions.api
             services.AddScoped<IPermissionGroupRepository, PermissionGroupRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
+            services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -84,6 +85,7 @@ namespace legallead.permissions.api
                 var permissionGroupDb = d.GetRequiredService<IPermissionGroupRepository>();
                 var users = d.GetRequiredService<IUserRepository>();
                 var permissionHistoryDb = d.GetRequiredService<IUserPermissionHistoryRepository>();
+                var profileHistoryDb = d.GetRequiredService<IUserProfileHistoryRepository>();
                 return new DataProvider(
                     components,
                     permissionDb,
@@ -95,14 +97,20 @@ namespace legallead.permissions.api
                     userProfileVw,
                     permissionGroupDb,
                     users,
-                    permissionHistoryDb);
+                    permissionHistoryDb,
+                    profileHistoryDb);
             });
             services.AddScoped<IDataProvider>(p =>
             {
                 return p.GetRequiredService<DataProvider>();
                 
             });
-            services.AddScoped<AccountController>();
+            services.AddScoped<IProfileInfrastructure>(p =>
+            {
+                var provider = p.GetRequiredService<IDataProvider>();
+                return new ProfileInfrastructure(provider);
+            });
+            services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();
             services.AddScoped(p =>
             {
@@ -154,6 +162,11 @@ namespace legallead.permissions.api
                 response = string.Join(';', apperrors.Select(m => m.ErrorMessage));
                 return new KeyValuePair<bool, string>(false, response);
             }
+            var emptyGuid = Guid.Empty.ToString("D");
+            if (emptyGuid.Equals(application.Id))
+            {
+                return SimpleNameValidation(application.Name);
+            }
             var matched = db.Find(application).GetAwaiter().GetResult();
             if (matched == null || !(matched.Name ?? "").Equals(application.Name))
             {
@@ -193,6 +206,15 @@ namespace legallead.permissions.api
         {
             if (request.Id == null) { return null; }
             return await db.ComponentDb.GetById(request.Id.GetValueOrDefault().ToString("D"));
+        }
+
+        private static KeyValuePair<bool, string> SimpleNameValidation(string name)
+        {
+            var names = ApplicationModel.GetApplicationsFallback();
+            var appNames = names.Select(x => x.Name).ToList();
+            var matched = appNames.Exists(x => x.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var message = matched ? "application is valid" : "Target application is not found or mismatched.";
+            return new KeyValuePair<bool, string>(matched, message);
         }
     }
 }
