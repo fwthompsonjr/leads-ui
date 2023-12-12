@@ -49,7 +49,7 @@ namespace permissions.api.tests
         [InlineData(typeof(IPermissionGroupRepository))]
         [InlineData(typeof(IUserRepository))]
         [InlineData(typeof(DataProvider))]
-        [InlineData(typeof(AccountController))]
+        [InlineData(typeof(SignonController))]
         [InlineData(typeof(PermissionsController))]
         [InlineData(typeof(ApplicationController))]
         [InlineData(typeof(JsonInitStartupTask))]

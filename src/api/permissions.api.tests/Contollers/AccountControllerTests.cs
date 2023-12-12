@@ -19,7 +19,7 @@ namespace permissions.api.tests.Contollers
         [Fact]
         public void ControllerCanBeConstructed()
         {
-            var sut = GetProvider().GetRequiredService<AccountController>();
+            var sut = GetProvider().GetRequiredService<SignonController>();
             Assert.NotNull(sut);
         }
 
@@ -27,7 +27,7 @@ namespace permissions.api.tests.Contollers
         public async Task AuthenicateRequiresAppHeader()
         {
             var provider = GetProvider();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var request = faker.Generate();
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             mockRq.SetupGet(x => x.Headers).Returns(new HeaderDictionary());
@@ -54,7 +54,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -83,7 +83,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -112,7 +112,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -142,7 +142,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             Tokens? tokens = null;
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
@@ -174,7 +174,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             Tokens? tokens = new() { RefreshToken = "123-456-789" };
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
@@ -199,7 +199,7 @@ namespace permissions.api.tests.Contollers
         public async Task RefreshRequiresAppHeader()
         {
             var provider = GetProvider();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var request = tokenFaker.Generate();
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             mockRq.SetupGet(x => x.Headers).Returns(new HeaderDictionary());
@@ -223,7 +223,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             ClaimsPrincipal? principal = null;
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
@@ -250,7 +250,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             claimMq.SetupGet(m => m.Identity).Returns((IIdentity?)null);
             ClaimsPrincipal? principal = claimMq.Object;
@@ -279,7 +279,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             identityMq.SetupGet(m => m.Name).Returns(string.Empty);
@@ -314,7 +314,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             identityMq.SetupGet(m => m.Name).Returns(new Faker().Person.Email);
@@ -349,7 +349,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             identityMq.SetupGet(m => m.Name).Returns(new Faker().Person.Email);
@@ -387,7 +387,7 @@ namespace permissions.api.tests.Contollers
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
             var validMq = provider.GetRequiredService<Mock<IRefreshTokenValidator>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             UserRefreshToken? findResponse = null;
@@ -428,7 +428,7 @@ namespace permissions.api.tests.Contollers
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
             var validMq = provider.GetRequiredService<Mock<IRefreshTokenValidator>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             var findResponse = new UserRefreshToken
@@ -474,7 +474,7 @@ namespace permissions.api.tests.Contollers
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
             var validMq = provider.GetRequiredService<Mock<IRefreshTokenValidator>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             var findResponse = new UserRefreshToken
@@ -522,7 +522,7 @@ namespace permissions.api.tests.Contollers
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
             var validMq = provider.GetRequiredService<Mock<IRefreshTokenValidator>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var claimMq = new Mock<ClaimsPrincipal>();
             var identityMq = new Mock<IIdentity>();
             var findResponse = new UserRefreshToken
@@ -564,7 +564,7 @@ namespace permissions.api.tests.Contollers
         public void VerifyRequiresAppHeader()
         {
             var provider = GetProvider();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var request = tokenFaker.Generate();
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             mockRq.SetupGet(x => x.Headers).Returns(new HeaderDictionary());
@@ -592,7 +592,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -623,7 +623,7 @@ namespace permissions.api.tests.Contollers
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -647,7 +647,7 @@ namespace permissions.api.tests.Contollers
         public async Task ChangePasswordRequiresAppHeader()
         {
             var provider = GetProvider();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
             var request = changeFaker.Generate();
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             mockRq.SetupGet(x => x.Headers).Returns(new HeaderDictionary());
@@ -674,7 +674,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -703,7 +703,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -732,7 +732,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -770,7 +770,7 @@ namespace permissions.api.tests.Contollers
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
-            var sut = provider.GetRequiredService<AccountController>();
+            var sut = provider.GetRequiredService<SignonController>();
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);

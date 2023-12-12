@@ -132,7 +132,7 @@ namespace permissions.api.tests.Contollers
                 var db = a.GetRequiredService<DataProvider>();
                 var jwt = a.GetRequiredService<IJwtManagerRepository>();
                 var refresh = a.GetRequiredService<IRefreshTokenValidator>();
-                return new AccountController(db, jwt, refresh)
+                return new SignonController(db, jwt, refresh)
                 {
                     ControllerContext = controllerContext
                 };

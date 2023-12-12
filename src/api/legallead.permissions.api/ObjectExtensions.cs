@@ -106,7 +106,7 @@ namespace legallead.permissions.api
                 return p.GetRequiredService<DataProvider>();
                 
             });
-            services.AddScoped<AccountController>();
+            services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();
             services.AddScoped(p =>
             {
@@ -158,6 +158,11 @@ namespace legallead.permissions.api
                 response = string.Join(';', apperrors.Select(m => m.ErrorMessage));
                 return new KeyValuePair<bool, string>(false, response);
             }
+            var emptyGuid = Guid.Empty.ToString("D");
+            if (emptyGuid.Equals(application.Id))
+            {
+                return SimpleNameValidation(application.Name);
+            }
             var matched = db.Find(application).GetAwaiter().GetResult();
             if (matched == null || !(matched.Name ?? "").Equals(application.Name))
             {
@@ -197,6 +202,15 @@ namespace legallead.permissions.api
         {
             if (request.Id == null) { return null; }
             return await db.ComponentDb.GetById(request.Id.GetValueOrDefault().ToString("D"));
+        }
+
+        private static KeyValuePair<bool, string> SimpleNameValidation(string name)
+        {
+            var names = ApplicationModel.GetApplicationsFallback();
+            var appNames = names.Select(x => x.Name).ToList();
+            var matched = appNames.Exists(x => x.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var message = matched ? "application is valid" : "Target application is not found or mismatched.";
+            return new KeyValuePair<bool, string>(matched, message);
         }
     }
 }
