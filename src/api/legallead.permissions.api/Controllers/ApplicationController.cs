@@ -98,26 +98,20 @@ namespace legallead.permissions.api.Controllers
         private static void GenerateReadMe(ref string readme)
         {
             if (isReadMeBuilt) return;
-            var assembly = Assembly.GetExecutingAssembly();
-            if (assembly == null || assembly.Location == null) return;
-            var execName = new Uri(assembly.Location).AbsolutePath;
-            if (execName != null && System.IO.File.Exists(execName))
+            var baseDir = System.AppContext.BaseDirectory;
+            var dataRoot = Path.Combine(baseDir, "_db");
+            var dataFile = Path.Combine(dataRoot, "readme.txt");
+            if (System.IO.File.Exists(dataFile))
             {
-                var contentRoot = Path.GetDirectoryName(execName) ?? "";
-                var dataRoot = Path.Combine(contentRoot, "_db");
-                var dataFile = Path.Combine(dataRoot, "readme.txt");
-                if (System.IO.File.Exists(dataFile))
+                lock (_instance)
                 {
-                    lock (_instance)
-                    {
-                        readme = System.IO.File.ReadAllText(dataFile);
-                        isReadMeBuilt = true;
-                    }
+                    readme = System.IO.File.ReadAllText(dataFile);
+                    isReadMeBuilt = true;
                 }
-                else
-                {
-                    readme = defaultReadme;
-                }
+            }
+            else
+            {
+                readme = defaultReadme;
             }
         }
 

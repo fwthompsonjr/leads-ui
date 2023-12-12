@@ -9,6 +9,9 @@
 		<PackageProjectUrl>https://localhost:44360</PackageProjectUrl>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
 		<DockerfileContext>..\..</DockerfileContext>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<ItemGroup>
