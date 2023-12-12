@@ -1,6 +1,8 @@
 name: "Deploy: Permissions.Api"
 env:
   PRJ_NAME: "legallead.permissions.api.zip"
+  PRJ_BUCKET: "s3://legal-lead-permissions-bucket/"
+  PRJ_BUCKET_NAME: "legal-lead-permissions-bucket"
   AWS_NAME: "legalleadpermissionsapi"
   AWS_ENV: "legalleadpermissionsapi-dev"
   AWS_REGION: "us-east-1"
@@ -48,14 +50,26 @@ jobs:
       run: |
         & ./pipeline-zip-solution.ps1
 
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v21
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: ${{ env.AWS_NAME }}
-        environment_name: ${{ env.AWS_ENV }}
-        version_label: "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
-        region: ${{ env.AWS_REGION }}
-        deployment_package: ${{ env.PRJ_NAME }}
-        wait_for_deployment: false
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Upload package to S3 bucket
+      run: aws s3 cp "${{ env.PRJ_NAME }}" "${{ env.PRJ_BUCKET }}"
+
+    - name: Create new ElasticBeanstalk Application Version
+      run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name "${{ env.AWS_NAME }}" \
+          --source-bundle S3Bucket="${{ env.PRJ_BUCKET_NAME }}",S3Key="${{ env.PRJ_NAME }}" \
+          --version-label "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}" \
+          --description "commit-sha-${{ github.sha }}"
+
+    - name: Deploy new ElasticBeanstalk Application Version
+      run: |
+          aws elasticbeanstalk update-environment \
+          --environment-name "${{ env.AWS_ENV }}" \
+          --version-label "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
