@@ -35,12 +35,6 @@ namespace legallead.permissions.api
                     .ForMember(a => a.KeyName, opt => opt.MapFrom(b => b.KeyName))
                     .ForMember(a => a.KeyValue, opt => opt.MapFrom(b => b.KeyValue));
 
-                c.CreateMap<UserProfileView, UserProfile>()
-                    .ForMember(a => a.Id, opt => opt.MapFrom(b => b.Id))
-                    .ForMember(a => a.UserId, opt => opt.MapFrom(b => b.UserId))
-                    .ForMember(a => a.ProfileMapId, opt => opt.MapFrom(b => b.ProfileMapId))
-                    .ForMember(a => a.KeyValue, opt => opt.MapFrom(b => b.KeyValue));
-
                 c.CreateMap<ChangeContactAddressRequest, UserProfileView[]>()
                     .ConvertUsing(ConvertTo);
 
@@ -51,6 +45,9 @@ namespace legallead.permissions.api
                     .ConvertUsing(ConvertTo);
 
                 c.CreateMap<ChangeContactPhoneRequest, UserProfileView>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView, UserProfile>()
                     .ConvertUsing(ConvertTo);
 
             });
@@ -107,6 +104,16 @@ namespace legallead.permissions.api
             {
                 KeyName = $"Phone {mappedId}",
                 KeyValue = source.Phone,
+            };
+        }
+        private static UserProfile ConvertTo(UserProfileView source, UserProfile dest)
+        {
+            return new UserProfile
+            {
+                Id = source.Id,
+                UserId = source.UserId ?? string.Empty,
+                ProfileMapId = source.ProfileMapId ?? string.Empty,
+                KeyValue = source.KeyValue ?? string.Empty,
             };
         }
 

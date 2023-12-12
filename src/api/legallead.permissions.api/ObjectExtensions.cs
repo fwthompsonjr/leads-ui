@@ -59,8 +59,7 @@ namespace legallead.permissions.api
                 var dbint = d.GetRequiredService<IDataInitializer>();
                 return new DataContext(command, dbint);
             });
-            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
-            services.AddScoped<IProfileInfrastructure, ProfileInfrastructure>();
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();            
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
@@ -105,6 +104,11 @@ namespace legallead.permissions.api
             {
                 return p.GetRequiredService<DataProvider>();
                 
+            });
+            services.AddScoped<IProfileInfrastructure>(p =>
+            {
+                var provider = p.GetRequiredService<IDataProvider>();
+                return new ProfileInfrastructure(provider);
             });
             services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();

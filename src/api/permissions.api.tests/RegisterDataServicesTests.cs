@@ -66,5 +66,11 @@ namespace permissions.api.tests
             });
             Assert.Null(exception);
         }
+        [Fact]
+        public void ProviderCanCreateMapper()
+        {
+            var mapper = ModelMapper.Mapper;
+            Assert.NotNull(mapper);
+        }
     }
 }
