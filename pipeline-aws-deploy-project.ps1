@@ -14,7 +14,9 @@ function canEnumerate( $obj ) {
         return $false;
     }
 }
-
+function installTools() {
+    dotnet tool install -g aws.deploy.tools
+}
 function executeDeployment( $source ){
     $currentLocation = Get-Location
     try {
@@ -29,7 +31,7 @@ function executeDeployment( $source ){
 $workingDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $di = [System.IO.DirectoryInfo]::new( $workingDir );
 $found = $di.GetFiles($searchPattern, [System.IO.SearchOption]::AllDirectories)
-
+installTools
 if( ( canEnumerate -obj $found ) -eq $false ) {
     $solutionFile = $found.FullName
     executeDeployment -solution $solutionFile
