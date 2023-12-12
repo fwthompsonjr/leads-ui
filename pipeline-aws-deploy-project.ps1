@@ -34,11 +34,11 @@ $found = $di.GetFiles($searchPattern, [System.IO.SearchOption]::AllDirectories)
 installTools
 if( ( canEnumerate -obj $found ) -eq $false ) {
     $solutionFile = $found.FullName
-    executeDeployment -solution $solutionFile
+    executeDeployment -source $solutionFile
 }
 else {
     $found.GetEnumerator() | ForEach-Object {
         $solutionFile = ([system.io.fileinfo]$_).FullName
-        executeDeployment -solution $solutionFile
+        executeDeployment -source $solutionFile
     }
 }
