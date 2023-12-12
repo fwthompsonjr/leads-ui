@@ -51,7 +51,7 @@ var startupTasks = app.Services.GetServices<IStartupTask>();
 // Run the StartupTasks
 foreach (var startupTask in startupTasks)
 {
-    Task.Factory.StartNew(async () => await startupTask.Execute());
+    Task.Factory.StartNew(async () => await startupTask.Execute()).ConfigureAwait(false);
 }
 app.Run();
 

@@ -34,7 +34,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{
 		CodeCoverage.runsettings = CodeCoverage.runsettings
 		..\release\legallead.content.api.release.txt = ..\release\legallead.content.api.release.txt
 		..\release\legallead.permissions.api.release.txt = ..\release\legallead.permissions.api.release.txt
-		..\zip-project.ps1 = ..\zip-project.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.resources.tests", "core\legallead.core\tests\legallead.resources.tests\legallead.resources.tests.csproj", "{17899607-8615-4565-8F87-866745045DF4}"
@@ -50,6 +49,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{77C1CB34-A5BB-4D4F-BA3D-13447F655D83}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "permissions.api.tests", "api\permissions.api.tests\permissions.api.tests.csproj", "{A0001DC1-1938-48A2-824B-325354A82F75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deploy", "_deploy", "{E2C63662-CFE2-41E7-964B-682FEFEE89CB}"
+	ProjectSection(SolutionItems) = preProject
+		..\pipeline-aws-deploy-project.ps1 = ..\pipeline-aws-deploy-project.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,8 +93,8 @@ Global
 		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Local|Any CPU.Build.0 = Local|Any CPU
 		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
-		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Zip|Any CPU.Build.0 = Zip|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D191E0-FAC1-4469-ACC4-AEDDA41EB338}.Zip|Any CPU.Build.0 = Debug|Any CPU
 		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7789BCD-4BCD-41BC-8943-0D9129AA080F}.Local|Any CPU.ActiveCfg = Local|Any CPU
@@ -113,8 +117,8 @@ Global
 		{12581296-986D-4A72-B66A-59BE4A088946}.Local|Any CPU.Build.0 = Local|Any CPU
 		{12581296-986D-4A72-B66A-59BE4A088946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12581296-986D-4A72-B66A-59BE4A088946}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12581296-986D-4A72-B66A-59BE4A088946}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
-		{12581296-986D-4A72-B66A-59BE4A088946}.Zip|Any CPU.Build.0 = Zip|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
+		{12581296-986D-4A72-B66A-59BE4A088946}.Zip|Any CPU.Build.0 = Debug|Any CPU
 		{17899607-8615-4565-8F87-866745045DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17899607-8615-4565-8F87-866745045DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17899607-8615-4565-8F87-866745045DF4}.Local|Any CPU.ActiveCfg = Local|Any CPU
@@ -129,8 +133,8 @@ Global
 		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Local|Any CPU.Build.0 = Local|Any CPU
 		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
-		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Zip|Any CPU.Build.0 = Zip|Any CPU
+		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
+		{119D29E7-3B3F-462F-BA1A-78DA2C58138D}.Zip|Any CPU.Build.0 = Debug|Any CPU
 		{5448616C-65DE-44DA-B620-7F4642EC610E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5448616C-65DE-44DA-B620-7F4642EC610E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5448616C-65DE-44DA-B620-7F4642EC610E}.Local|Any CPU.ActiveCfg = Local|Any CPU
@@ -153,8 +157,8 @@ Global
 		{A0001DC1-1938-48A2-824B-325354A82F75}.Local|Any CPU.Build.0 = Local|Any CPU
 		{A0001DC1-1938-48A2-824B-325354A82F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0001DC1-1938-48A2-824B-325354A82F75}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
-		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.Build.0 = Zip|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,8 +1,11 @@
 name: "Deploy: Permissions.Api"
 env:
-  PRJ_NAME: "/src/api/legallead.permission.api/legallead.permission.api.csproj"
-  AWS_NAME: "legalleadpermissionapi"
-  AWS_ENV: "legalleadpermissionapi-dev"
+  PRJ_PATTERN: "*.permissions.api.csproj"
+  PRJ_NAME: "legallead.permissions.api.zip"
+  PRJ_BUCKET: "s3://legal-lead-permissions-bucket/"
+  PRJ_BUCKET_NAME: "legal-lead-permissions-bucket"
+  AWS_NAME: "legalleadpermissionsapi"
+  AWS_ENV: "legalleadpermissionsapi-dev"
   AWS_REGION: "us-east-1"
   
 on:
@@ -42,21 +45,15 @@ jobs:
       run: |
         & ./pipeline-restore-packages.ps1
 
-    - name: Build solution
-      timeout-minutes: 5
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Deploy to AWS
+      timeout-minutes: 15
       shell: pwsh
       run: |
-        & ./pipeline-zip-solution.ps1
-
-    - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v21
-      if: false
-      with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: ${{ env.AWS_NAME }}
-        environment_name: ${{ env.AWS_ENV }}
-        version_label: "ver-${{ steps.commitindex.outputs.sha_short }}"
-        region: ${{ env.AWS_REGION }}
-        deployment_package: deploy.zip
-        wait_for_deployment: false
+        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
