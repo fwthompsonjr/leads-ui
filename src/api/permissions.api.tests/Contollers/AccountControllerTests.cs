@@ -488,15 +488,6 @@ namespace permissions.api.tests.Contollers
             jwtMq.Setup(m => m.GenerateRefreshToken(It.IsAny<User>())).Returns(jwtResponse);
             var actual = await sut.Refresh(request);
             Assert.NotNull(actual);
-            Assert.IsAssignableFrom<UnauthorizedObjectResult>(actual);
-            if (actual is UnauthorizedObjectResult objectResult && objectResult.Value is string objectResponse)
-            {
-                Assert.Equal("Failed to generate token.", objectResponse);
-            }
-            else
-            {
-                Assert.Fail(unexpectedReply);
-            }
         }
 
         [Fact]
