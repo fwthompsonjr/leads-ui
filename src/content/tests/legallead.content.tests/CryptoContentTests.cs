@@ -4,7 +4,7 @@ namespace legallead.content.tests
 {
     public class CryptoContentTests
     {
-        private readonly Faker faker = new Faker();
+        private readonly Faker faker = new();
         private static readonly string PassPhrase = "legal.lead.test.passcode";
 
         [Fact]

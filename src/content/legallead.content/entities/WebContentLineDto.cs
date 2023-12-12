@@ -58,7 +58,7 @@ namespace legallead.content.entities
                 }
                 if (fieldName.Equals("Content", Comparison))
                 {
-                    Content = ChangeType<string>(value) ?? string.Empty; ;
+                    Content = ChangeType<string>(value) ?? string.Empty;
                 }
             }
         }

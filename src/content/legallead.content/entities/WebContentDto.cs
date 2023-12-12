@@ -9,6 +9,7 @@ namespace legallead.content.entities
         public int? VersionId { get; set; }
         public string? ContentName { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsChild { get; set; } = false;
         public DateTime? CreateDate { get; set; } = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
         public override object? this[string field]
         {
@@ -22,6 +23,7 @@ namespace legallead.content.entities
                 if (fieldName.Equals("UniqueId", Comparison)) return UniqueId;
                 if (fieldName.Equals("ContentName", Comparison)) return ContentName;
                 if (fieldName.Equals("IsActive", Comparison)) return IsActive;
+                if (fieldName.Equals("IsChild", Comparison)) return IsChild;
                 if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
                 return null;
             }
@@ -53,6 +55,11 @@ namespace legallead.content.entities
                 if (fieldName.Equals("IsActive", Comparison))
                 {
                     IsActive = ChangeType<bool?>(value);
+                    return;
+                }
+                if (fieldName.Equals("IsChild", Comparison))
+                {
+                    IsChild = ChangeType<bool?>(value);
                     return;
                 }
                 if (fieldName.Equals("CreateDate", Comparison))
