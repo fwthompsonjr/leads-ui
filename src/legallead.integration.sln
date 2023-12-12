@@ -50,6 +50,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{77C1CB34-A5B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "permissions.api.tests", "api\permissions.api.tests\permissions.api.tests.csproj", "{A0001DC1-1938-48A2-824B-325354A82F75}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deploy", "_deploy", "{E2C63662-CFE2-41E7-964B-682FEFEE89CB}"
+	ProjectSection(SolutionItems) = preProject
+		..\pipeline-aws-deploy-project.ps1 = ..\pipeline-aws-deploy-project.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

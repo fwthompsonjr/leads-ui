@@ -1,5 +1,6 @@
 name: "Deploy: Permissions.Api"
 env:
+  PRJ_PATTERN: "*.permissions.api.csproj"
   PRJ_NAME: "legallead.permissions.api.zip"
   PRJ_BUCKET: "s3://legal-lead-permissions-bucket/"
   PRJ_BUCKET_NAME: "legal-lead-permissions-bucket"
@@ -38,17 +39,15 @@ jobs:
       shell: bash
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
+    - name: Install AWS CLI
+      shell: pwsh
+      run: dotnet tool install -g aws.deploy.tools
+
     - name: Restore Packages
       timeout-minutes: 10
       shell: pwsh
       run: |
         & ./pipeline-restore-packages.ps1
-
-    - name: Build solution
-      timeout-minutes: 5
-      shell: pwsh
-      run: |
-        & ./pipeline-zip-solution.ps1
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -57,19 +56,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: Upload package to S3 bucket
-      run: aws s3 cp "${{ env.PRJ_NAME }}" "${{ env.PRJ_BUCKET }}"
-
-    - name: Create new ElasticBeanstalk Application Version
+    - name: Deploy to AWS
+      timeout-minutes: 15
+      shell: pwsh
       run: |
-          aws elasticbeanstalk create-application-version \
-          --application-name "${{ env.AWS_NAME }}" \
-          --source-bundle S3Bucket="${{ env.PRJ_BUCKET_NAME }}",S3Key="${{ env.PRJ_NAME }}" \
-          --version-label "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}" \
-          --description "commit-sha-${{ github.sha }}"
-
-    - name: Deploy new ElasticBeanstalk Application Version
-      run: |
-          aws elasticbeanstalk update-environment \
-          --environment-name "${{ env.AWS_ENV }}" \
-          --version-label "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
+        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
