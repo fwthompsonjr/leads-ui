@@ -22,7 +22,7 @@ function executeDeployment( $source ){
     try {
         $projectDirectory = [System.IO.Path]::GetDirectoryName( $source );
         Set-Location $projectDirectory
-        dotnet eb deploy-environment -c Release --version-label $versionLabel
+        dotnet-aws deploy-environment -c Release --version-label $versionLabel
     } finally {
         Set-Location $currentLocation
     }
