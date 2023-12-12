@@ -5,3 +5,4 @@ Release information - legallead.permissions.api
 12/10/2023 12:36:00 PM pwsh zip script
 12/11/2023 08:31:00 PM testing modified build/zip script
 12/11/2023 08:36:00 PM testing aws triggered deploy step
+12/11/2023 08:49:00 PM testing aws triggered deploy step

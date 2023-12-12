@@ -1,8 +1,8 @@
 name: "Deploy: Permissions.Api"
 env:
   PRJ_NAME: "legallead.permissions.api.zip"
-  AWS_NAME: "legalleadpermissionapi"
-  AWS_ENV: "legalleadpermissionapi-dev"
+  AWS_NAME: "legalleadpermissionsapi"
+  AWS_ENV: "legalleadpermissionsapi-dev"
   AWS_REGION: "us-east-1"
   
 on:
