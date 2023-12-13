@@ -33,7 +33,7 @@ namespace legallead.content.implementations
             return await _command.QuerySingleOrDefaultAsync<T>(connection, sql, parms);
         }
 
-        public async Task Create(T source)
+        public virtual async Task Create(T source)
         {
             using var connection = _context.CreateConnection();
             var sql = source.InsertSQL();

@@ -6,13 +6,7 @@ namespace legallead.jdbc.implementations
 {
     public class ComponentRepository : BaseRepository<Component>, IComponentRepository
     {
-        public ComponentRepository(DataContext context) : base(context)
-        {
-            Task.Run(() =>
-            {
-                context.Init().ConfigureAwait(false);
-            });
-        }
+        public ComponentRepository(DataContext context) : base(context) { }
 
         public async Task<Component?> GetByName(string name)
         {

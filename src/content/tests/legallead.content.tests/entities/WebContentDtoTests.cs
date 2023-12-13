@@ -8,7 +8,7 @@ namespace legallead.content.tests.entities
         private readonly Faker<WebContentDto> faker =
             new Faker<WebContentDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.UniqueId, y => y.Random.Int(10, 20000))
+            .RuleFor(x => x.InternalId, y => y.Random.Int(10, 20000))
             .RuleFor(x => x.VersionId, y => y.Random.Int(1, 1000))
             .RuleFor(x => x.IsActive, y => y.Random.Bool())
             .RuleFor(x => x.IsChild, y => y.Random.Bool())
@@ -44,7 +44,7 @@ namespace legallead.content.tests.entities
         [Fact]
         public void WebContentDtoHasFieldListDefined()
         {
-            var expected = new[] { "Id", "UniqueId", "VersionId", "ContentName", "IsActive", "IsChild", "CreateDate" };
+            var expected = new[] { "Id", "InternalId", "VersionId", "ContentName", "IsActive", "IsChild", "CreateDate" };
             var sut = new WebContentDto();
             var fields = sut.FieldList;
             Assert.NotNull(fields);
@@ -54,7 +54,7 @@ namespace legallead.content.tests.entities
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("UniqueId")]
+        [InlineData("InternalId")]
         [InlineData("VersionId")]
         [InlineData("ContentName")]
         [InlineData("IsActive")]
@@ -78,11 +78,11 @@ namespace legallead.content.tests.entities
         }
 
         [Fact]
-        public void WebContentDtoCanUpdateUniqueId()
+        public void WebContentDtoCanUpdateInternalId()
         {
             var items = faker.Generate(2);
-            items[0].UniqueId = items[1].UniqueId;
-            Assert.Equal(items[1].UniqueId, items[0].UniqueId);
+            items[0].InternalId = items[1].InternalId;
+            Assert.Equal(items[1].InternalId, items[0].InternalId);
         }
 
         [Fact]

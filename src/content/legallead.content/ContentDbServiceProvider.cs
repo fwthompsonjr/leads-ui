@@ -12,8 +12,8 @@ namespace legallead.content
         {
             var builder = new ServiceCollection();
             builder.AddScoped<IContentDbCommand, ContentDbExecutor>();
+            builder.AddScoped<ContentDbContext>();
             _serviceProvider = builder.BuildServiceProvider();
-            // this class needs to use microsoft di package not the extensions package.
         }
 
         public IServiceProvider Provider => _serviceProvider;

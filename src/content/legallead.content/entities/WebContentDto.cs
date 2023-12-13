@@ -5,7 +5,7 @@ namespace legallead.content.entities
     [DbTable(TableName = "Content")]
     public class WebContentDto : CommonBaseDto
     {
-        public int? UniqueId { get; set; }
+        public int? InternalId { get; set; }
         public int? VersionId { get; set; }
         public string? ContentName { get; set; }
         public bool? IsActive { get; set; }
@@ -21,7 +21,7 @@ namespace legallead.content.entities
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("VersionId", Comparison)) return VersionId;
-                if (fieldName.Equals("UniqueId", Comparison)) return UniqueId;
+                if (fieldName.Equals("InternalId", Comparison)) return InternalId;
                 if (fieldName.Equals("ContentName", Comparison)) return ContentName;
                 if (fieldName.Equals("IsActive", Comparison)) return IsActive;
                 if (fieldName.Equals("IsChild", Comparison)) return IsChild;
@@ -38,9 +38,9 @@ namespace legallead.content.entities
                     Id = ChangeType<string>(value) ?? string.Empty;
                     return;
                 }
-                if (fieldName.Equals("UniqueId", Comparison))
+                if (fieldName.Equals("InternalId", Comparison))
                 {
-                    UniqueId = ChangeType<int?>(value);
+                    InternalId = ChangeType<int?>(value);
                     return;
                 }
                 if (fieldName.Equals("VersionId", Comparison))

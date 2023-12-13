@@ -6,7 +6,7 @@ namespace legallead.content.entities
     public class WebContentLineDto : CommonBaseDto
     {
         public string? ContentId { get; set; }
-        public int? VersionId { get; set; }
+        public int? InternalId { get; set; }
         public int? LineNbr { get; set; }
         public string? Content { get; set; }
 
@@ -19,7 +19,7 @@ namespace legallead.content.entities
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("ContentId", Comparison)) return ContentId;
-                if (fieldName.Equals("VersionId", Comparison)) return VersionId;
+                if (fieldName.Equals("InternalId", Comparison)) return InternalId;
                 if (fieldName.Equals("LineNbr", Comparison)) return LineNbr;
                 if (fieldName.Equals("Content", Comparison)) return Content;
                 return null;
@@ -39,9 +39,9 @@ namespace legallead.content.entities
                     ContentId = ChangeType<string>(value) ?? string.Empty;
                     return;
                 }
-                if (fieldName.Equals("VersionId", Comparison))
+                if (fieldName.Equals("InternalId", Comparison))
                 {
-                    VersionId = ChangeType<int?>(value);
+                    InternalId = ChangeType<int?>(value);
                     return;
                 }
                 if (fieldName.Equals("LineNbr", Comparison))

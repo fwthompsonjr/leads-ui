@@ -10,7 +10,7 @@ namespace legallead.content.tests.entities
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ContentId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.LineNbr, y => y.Random.Int(10, 20000))
-            .RuleFor(x => x.VersionId, y => y.Random.Int(1, 1000))
+            .RuleFor(x => x.InternalId, y => y.Random.Int(1, 1000))
             .RuleFor(x => x.Content, y => y.Hacker.Phrase());
 
         [Fact]
@@ -42,7 +42,7 @@ namespace legallead.content.tests.entities
         [Fact]
         public void WebContentLineDtoHasFieldListDefined()
         {
-            var expected = new[] { "Id", "ContentId", "VersionId", "LineNbr", "Content" };
+            var expected = new[] { "Id", "ContentId", "InternalId", "LineNbr", "Content" };
             var sut = new WebContentLineDto();
             var fields = sut.FieldList;
             Assert.NotNull(fields);
@@ -53,7 +53,7 @@ namespace legallead.content.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("ContentId")]
-        [InlineData("VersionId")]
+        [InlineData("InternalId")]
         [InlineData("LineNbr")]
         [InlineData("Content")]
         public void WebContentLineDtoHasExpectedFieldDefined(string name)
@@ -82,11 +82,11 @@ namespace legallead.content.tests.entities
         }
 
         [Fact]
-        public void WebContentLineDtoCanUpdateVersionId()
+        public void WebContentLineDtoCanUpdateInternalId()
         {
             var items = faker.Generate(2);
-            items[0].VersionId = items[1].VersionId;
-            Assert.Equal(items[1].VersionId, items[0].VersionId);
+            items[0].InternalId = items[1].InternalId;
+            Assert.Equal(items[1].InternalId, items[0].InternalId);
         }
 
         [Fact]
