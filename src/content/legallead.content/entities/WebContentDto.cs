@@ -11,6 +11,7 @@ namespace legallead.content.entities
         public bool? IsActive { get; set; }
         public bool? IsChild { get; set; } = false;
         public DateTime? CreateDate { get; set; } = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
+
         public override object? this[string field]
         {
             get

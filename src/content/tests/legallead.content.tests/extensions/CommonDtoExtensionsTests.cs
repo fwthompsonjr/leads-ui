@@ -1,13 +1,7 @@
 ﻿using Bogus;
-using Bogus.DataSets;
 using legallead.content.attr;
 using legallead.content.entities;
 using legallead.content.extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests.extensions
 {
@@ -34,6 +28,7 @@ namespace legallead.content.tests.extensions
             Assert.NotNull(actual.ParameterNames);
             Assert.Contains("Name", actual.ParameterNames);
         }
+
         [Fact]
         public void DtoCanGetUpdateParameters()
         {
@@ -119,7 +114,7 @@ namespace legallead.content.tests.extensions
             Assert.Contains("Id", actual);
         }
 
-        [DbTable(TableName ="MYTEST")]
+        [DbTable(TableName = "MYTEST")]
         private sealed class MyTestDto : CommonBaseDto
         {
             public string? Name { get; set; }

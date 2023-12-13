@@ -1,17 +1,10 @@
 ﻿using legallead.content.attr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace legallead.content.entities
 {
     [DbTable(TableName = "ContentLine")]
     public class WebContentLineDto : CommonBaseDto
     {
-
         public string? ContentId { get; set; }
         public int? VersionId { get; set; }
         public int? LineNbr { get; set; }

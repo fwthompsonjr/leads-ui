@@ -1,14 +1,8 @@
 ﻿using Bogus;
 using legallead.content.entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests.entities
 {
-
     public class WebContentLineDtoTests
     {
         private readonly Faker<WebContentLineDto> faker =
@@ -126,6 +120,7 @@ namespace legallead.content.tests.entities
             var expected = sut[fieldName];
             Assert.Equal(expected, actual);
         }
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
