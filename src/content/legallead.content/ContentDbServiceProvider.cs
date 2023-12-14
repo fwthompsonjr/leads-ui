@@ -1,4 +1,5 @@
 ﻿using legallead.content.helpers;
+using legallead.content.implementations;
 using legallead.content.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,6 +14,8 @@ namespace legallead.content
             var builder = new ServiceCollection();
             builder.AddScoped<IContentDbCommand, ContentDbExecutor>();
             builder.AddScoped<ContentDbContext>();
+            builder.AddScoped<IWebContentLineRepository, WebContentLineRepository>();
+            builder.AddScoped<IWebContentRepository, WebContentRepository>();
             _serviceProvider = builder.BuildServiceProvider();
         }
 

@@ -49,7 +49,7 @@ namespace legallead.content.implementations
         public async Task Insert(CreateContentRequest dto)
         {
             _ = dto.GetValidationResult(out var isValid);
-            if (!isValid || string.IsNullOrWhiteSpace(dto.Name))
+            if (string.IsNullOrWhiteSpace(dto.Name) || !isValid)
                 throw new ArgumentOutOfRangeException(nameof(dto));
 
             var statement = $"CALL USP_INSERT_CONTENT( '{dto.Name}' );";

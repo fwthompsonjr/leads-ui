@@ -1,21 +1,11 @@
 ﻿using Bogus;
-using Bogus.DataSets;
-using Castle.Components.DictionaryAdapter.Xml;
 using Dapper;
-using legallead.content.entities;
-using legallead.content.extensions;
 using legallead.content.helpers;
-using legallead.content.implementations;
 using legallead.content.interfaces;
 using legallead.content.tests.testobj;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests.implementations
 {

@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Castle.Core.Internal;
 using legallead.content.entities;
+using legallead.content.extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace legallead.content.tests.entities
@@ -29,6 +30,21 @@ namespace legallead.content.tests.entities
             var attribute = sut.GetType().GetProperty("Name")?.GetAttribute<StringLengthAttribute>();
             var maxlength = attribute?.MaximumLength ?? 0;
             Assert.Equal(expected, maxlength);
+        }
+
+        [Theory]
+        [InlineData(5)]
+        [InlineData(50)]
+        [InlineData(500)]
+        [InlineData(1000)]
+        public void CreateContentRequestCanVaildateMaxLengthAttribute(int length)
+        {
+            bool expected = length <= 500;
+            var text = new Faker().Random.AlphaNumeric(length);
+            var sut = faker.Generate();
+            sut.Name = text;
+            _ = sut.GetValidationResult(out var isvalid);
+            Assert.Equal(expected, isvalid);
         }
 
         [Fact]
