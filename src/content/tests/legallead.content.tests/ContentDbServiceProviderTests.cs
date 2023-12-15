@@ -25,6 +25,8 @@ namespace legallead.content.tests
         [InlineData(typeof(IContentDbCommand))]
         [InlineData(typeof(IWebContentRepository))]
         [InlineData(typeof(IWebContentLineRepository))]
+        [InlineData(typeof(IWebPageRepository))]
+        [InlineData(typeof(IPageBuilder))]
         public void ProviderCanGetInstance(Type type)
         {
             var provider = new ContentDbServiceProvider().Provider;

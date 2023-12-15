@@ -16,6 +16,8 @@ namespace legallead.content
             builder.AddScoped<ContentDbContext>();
             builder.AddScoped<IWebContentLineRepository, WebContentLineRepository>();
             builder.AddScoped<IWebContentRepository, WebContentRepository>();
+            builder.AddScoped<IWebPageRepository, WebPageRepository>();
+            builder.AddScoped<IPageBuilder, PageBuilder>();
             _serviceProvider = builder.BuildServiceProvider();
         }
 
