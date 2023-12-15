@@ -71,12 +71,12 @@ namespace legallead.content.implementations
                 var key = s.Key;
                 if (string.IsNullOrWhiteSpace(key)) return false;
                 if (!key.StartsWith("{{")) return false;
-                if (!key.EndsWith("{{")) return false;
+                if (!key.EndsWith("}}")) return false;
                 return true;
             });
         }
 
-        private static List<string> pageNames = new(){
+        private static readonly List<string> pageNames = new(){
             "HOME.PRE.LOGIN"
         };
     }

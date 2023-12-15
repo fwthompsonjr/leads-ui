@@ -49,6 +49,8 @@ namespace legallead.content.tests
                 });
                 collection.AddSingleton<IWebContentLineRepository, WebContentLineRepository>();
                 collection.AddSingleton<IWebContentRepository, WebContentRepository>();
+                collection.AddSingleton<IWebPageRepository, WebPageRepository>();
+                collection.AddSingleton<IPageBuilder, PageBuilder>();
                 var provider = collection.BuildServiceProvider();
                 var dto = provider.GetRequiredService<TempDto>();
                 var contentContextMk = provider.GetRequiredService<Mock<ContentDbContext>>();
