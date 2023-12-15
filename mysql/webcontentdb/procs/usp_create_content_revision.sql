@@ -15,6 +15,19 @@ BEGIN
     WHERE Id = contentReferenceId
     AND VersionId = @currentVersionIndex;
 	
+    -- set / ensure is-child flag for child pages
+    
+	UPDATE CONTENT 
+	  SET IsChild = true
+	  WHERE ContentName in 
+	  ( 
+	  'HOME.PRE.LOGIN.060.TAB.1.WELCOME',
+	  'HOME.PRE.LOGIN.060.TAB.2.LOGIN',
+	  'HOME.PRE.LOGIN.060.TAB.3.REGISTER'
+	  )
+	  AND IsChild = false
+	  AND Id != '25';
+  
 	SET @newIndex = (SELECT Id FROM CONTENT WHERE InternalId = @internalIndex AND VersionId = @newVersionIndex);
     
     
