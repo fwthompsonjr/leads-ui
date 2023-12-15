@@ -5,12 +5,7 @@ using legallead.content.interfaces;
 using legallead.content.tests.testobj;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests
 {
@@ -49,6 +44,8 @@ namespace legallead.content.tests
                 });
                 collection.AddSingleton<IWebContentLineRepository, WebContentLineRepository>();
                 collection.AddSingleton<IWebContentRepository, WebContentRepository>();
+                collection.AddSingleton<IWebPageRepository, WebPageRepository>();
+                collection.AddSingleton<IPageBuilder, PageBuilder>();
                 var provider = collection.BuildServiceProvider();
                 var dto = provider.GetRequiredService<TempDto>();
                 var contentContextMk = provider.GetRequiredService<Mock<ContentDbContext>>();

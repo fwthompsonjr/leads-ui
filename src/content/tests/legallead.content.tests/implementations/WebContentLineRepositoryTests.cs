@@ -4,12 +4,7 @@ using legallead.content.entities;
 using legallead.content.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests.implementations
 {

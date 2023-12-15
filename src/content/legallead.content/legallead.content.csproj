@@ -4,6 +4,15 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<Title>LegalLead Content Repository</Title>
+		<Description>This is a database wrapper exposing HTML content to authenticated users</Description>
+		<PackageReleaseNotes>
+			3.2.0 - 20231215 - Initial package creation
+		</PackageReleaseNotes>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageVersion>$(PackageVersion)</PackageVersion>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

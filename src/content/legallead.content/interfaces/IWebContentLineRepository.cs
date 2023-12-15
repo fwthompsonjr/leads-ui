@@ -4,7 +4,6 @@ namespace legallead.content.interfaces
 {
     public interface IWebContentLineRepository
     {
-
         Task Create(WebContentLineDto dto);
 
         Task Delete(string id);
