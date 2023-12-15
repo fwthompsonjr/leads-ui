@@ -1,11 +1,6 @@
 ﻿using legallead.content.helpers;
 using legallead.content.interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.content.tests.helpers
 {
