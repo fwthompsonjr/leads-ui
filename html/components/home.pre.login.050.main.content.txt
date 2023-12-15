@@ -1,0 +1,19 @@
+<rux-container name="main-container">
+<div name="page-title" slot="header">
+<span name='page-title-text'>Home</span>
+</div>
+<div name="page-content">
+<rux-tab-panels aria-labelledby="tab-set-id-1">
+<rux-tab-panel aria-labelledby="tab-id-1">
+<!-- HOME.PRE.LOGIN.060.TAB.1.WELCOME -->
+</rux-tab-panel>
+<rux-tab-panel aria-labelledby="tab-id-2">
+<!-- HOME.PRE.LOGIN.060.TAB.2.LOGIN -->
+</rux-tab-panel>
+<rux-tab-panel aria-labelledby="tab-id-3">
+<!-- HOME.PRE.LOGIN.060.TAB.3.REGISTER -->
+</rux-tab-panel>
+</rux-tab-panels>
+</div>
+</rux-container>
+  

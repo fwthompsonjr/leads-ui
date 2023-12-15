@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>legallead.ui: home</title>
+<!-- HOME.PRE.LOGIN.010.LINKS -->
+<!-- HOME.PRE.LOGIN.020.STYLES -->
+</head>
+<body class="light-theme">
+<!-- HOME.PRE.LOGIN.030.HEADER -->
+<!-- HOME.PRE.LOGIN.040.NOTIFICATIONS -->
+<!-- HOME.PRE.LOGIN.050.MAIN.CONTENT -->
+<!-- HOME.PRE.LOGIN.070.JS.SCRIPTS -->
+</body>
+</html>

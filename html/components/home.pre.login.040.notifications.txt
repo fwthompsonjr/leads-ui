@@ -1,0 +1,5 @@
+<div class="global-notification">
+<rux-notification id="notification" status="caution" small="true">
+<div id="notification-content"></div>
+</rux-notification>
+</div>

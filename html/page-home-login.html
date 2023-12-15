@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+		rel="stylesheet"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css"
+	/>
+	<script
+		type="module"
+		src="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.esm.js"
+	></script>
+	
+	
+	<style>
+		div.global-notification {
+			margin-top: 5px;
+		}
+		div.global-header {
+			display: flex; 
+			justify-content: center;
+		}
+		rux-container[name="main-container"] {
+			padding: 10px;
+		}
+		div.main-content {
+			padding: 10px;
+		}
+		div.page-menu {
+			display: flex; 
+			width: 100%; 
+			justify-content: left; 
+			margin-bottom: 10px;
+		}
+		div[name='register-now'] {
+			width: 50%;
+			min-width: 300px;
+			max-width: 500px;
+			padding: 10px;
+			border: 1px dotted var(--color-border-interactive-muted);
+		}
+			div[name='register-now'] p.not-yet { color: var(--color-text-secondary); }
+			
+			
+		form {
+			margin: 0 auto;
+			max-width: 330px;
+			display: block;
+		}
+		.group {
+			margin-bottom: 2.25rem;
+		}
+		.field {
+			display: flex;
+			flex-flow: row wrap;
+			align-items: flex-start;
+		}
+		.checkbox {
+			margin: 0.5rem 0 1rem 0 !important;
+			line-height: 1.2;
+		}
+		rux-input {
+			width: 100%;
+		}
+		.sign-in-btn {
+			margin-left: auto;
+		}
+	</style>
+  </head>
+  <body class="light-theme">
+    <!-- Global Header -->
+	<div class="global-header">
+		<rux-global-status-bar 
+			include-icon="true" 
+			app-domain="Legal Lead" 
+			app-name="UI" 
+			app-state-color="tag1"  
+			menu-icon="school"
+			username="" 
+			app-state="{{app-environment}}" 
+			app-version="{{app-version}}">
+			<rux-tabs id="tab-set-id-1" small="true">
+				<rux-tab id="tab-id-1">Welcome</rux-tab>
+				<rux-tab id="tab-id-2" selected>Login</rux-tab>
+				<rux-tab id="tab-id-3">Register</rux-tab>
+			</rux-tabs>
+		</rux-global-status-bar>			
+	</div>
+	
+    <!-- Global Status -->
+	<div class="global-notification">
+		<rux-notification id="notification" status="caution" small="true">Something caution has happened!</rux-notification>
+	</div>
+	<!-- Global Content -->
+	<rux-container name="main-container">
+		<div name="page-title" slot="header">
+			<span name='page-title-text'>Login</span>
+		  </div>
+		  <div name="page-content">
+		<rux-tab-panels aria-labelledby="tab-set-id-1">
+		<rux-tab-panel aria-labelledby="tab-id-1">
+			<div style="padding: 1vw; border: rgba(255,255,255, .15) dashed 1px; font-family: monospace;">
+				<pre>&lt;<span>!-- Tab 1 HTML content --</span>&gt;</pre>
+			</div>
+		</rux-tab-panel>
+		<rux-tab-panel aria-labelledby="tab-id-2">
+			<form id="rux-form">
+				<div class="group">
+					<div class="field">
+						<rux-input id="username" placeholder="username" label="User Name / Email:" type="text" />
+					</div>
+				</div>
+				<div class="group">
+					<div class="field">
+						<rux-input id="pw" label="Password" type="password"/>
+					</div>
+				</div>
+				<div class="field">
+					<rux-button id="sign-in-btn" class="sign-in-btn" type="button">Sign In</rux-button>
+				</div>
+			</form>
+		</rux-tab-panel>
+		<rux-tab-panel aria-labelledby="tab-id-3">
+			<div style="padding: 1vw; border: rgba(255,255,255, .15) dashed 1px; font-family: monospace;">
+				<pre>&lt;<span>!-- Tab 3 HTML content --</span>&gt;</pre>
+			</div>
+		</rux-tab-panel>
+	</rux-tab-panels>
+		  
+			
+		  </div>
+		  
+	</rux-container>
+  </body>
+</html>
