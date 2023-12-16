@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.css" />
 <script type="module" src="https://unpkg.com/@astrouxds/astro-web-components/dist/astro-web-components/astro-web-components.esm.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js" integrity="sha512-TiQST7x/0aMjgVTcep29gi+q5Lk5gVTUPE9XgN0g96rwtjEjLpod4mlBRKWHeBcvGBAEvJBmfDqh2hfMMmg+5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 div.global-notification {
 margin-top: 5px;
@@ -184,7 +186,10 @@ It is easy, done in 1 minute and gives you access to product demos and much more
 </rux-container>
 </div>
 <script>
+/*
+	add validation methods for the forms.
 
+*/
 function removePreLoadAnimation() {
 
 let preloadframe = document.getElementById("loading-div");
@@ -225,7 +230,7 @@ document.addEventListener("DOMContentLoaded", fn);
 
 docReady(function() {
 initializeStatusBar();
-setTimeout(removePreLoadAnimation, 1500);
+setTimeout(removePreLoadAnimation, 1100);
 /*
 */
 });

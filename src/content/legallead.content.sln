@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.content", "legallead.content\legallead.content.csproj", "{B91FC4E4-AD26-4B2A-BF9C-7D944EF812A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.content.tests", "tests\legallead.content.tests\legallead.content.tests.csproj", "{CF9B1EF0-64FA-455D-8462-A970065BFAA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.content.tests", "tests\legallead.content.tests\legallead.content.tests.csproj", "{CF9B1EF0-64FA-455D-8462-A970065BFAA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.desktop", "..\presentation\legallead.desktop\legallead.desktop.csproj", "{6D96CC44-7769-4B87-9E14-4893A7CC7F29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CF9B1EF0-64FA-455D-8462-A970065BFAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF9B1EF0-64FA-455D-8462-A970065BFAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF9B1EF0-64FA-455D-8462-A970065BFAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D96CC44-7769-4B87-9E14-4893A7CC7F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D96CC44-7769-4B87-9E14-4893A7CC7F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D96CC44-7769-4B87-9E14-4893A7CC7F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D96CC44-7769-4B87-9E14-4893A7CC7F29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
