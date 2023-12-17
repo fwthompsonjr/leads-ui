@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+	  <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+  </PropertyGroup>
+
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>$(AssemblyName).tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.80" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\legallead.desktop.core\legallead.desktop.core.csproj" />
+	</ItemGroup>
+</Project>
