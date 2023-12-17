@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	  <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+	  <ApplicationIcon>legallead-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 
@@ -13,6 +14,11 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>$(AssemblyName).tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Content Include="legallead-icon.ico" />
 	</ItemGroup>
 
 

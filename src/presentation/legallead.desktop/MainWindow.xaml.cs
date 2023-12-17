@@ -16,10 +16,7 @@ namespace legallead.desktop
         public MainWindow()
         {
             InitializeComponent();
-            var contentProvider = ContentProvider.LocalContentProvider;
-            var initialHtml = contentProvider.GetContent("home");
-            if (initialHtml == null) return;
-            wb1.NavigateToString(initialHtml.Content);
+            ContentHandler.LoadLocal("introduction", content1);
         }
     }
 }
