@@ -13,7 +13,7 @@
     <!-- common styles -->
     <link rel="stylesheet" name="base" href="css/base.css" />
 </head>
-<body class="text-center" style="">
+<body class="text-center" style="overflow: hidden">
 
     <div name="header" 
     style="
@@ -43,9 +43,24 @@
                     Quality leads don't grow on trees, they come from legal lead.
                 </p>
 
-                <div id="loading-div" style="height: 120px; width: 120px; margin: 15px"></div>
+                <div class="text-left" id="loading-div" style="
+                    height: 30px; 
+                    width: 200px; 
+                    margin: 15px;
+                    margin-bottom: 100px;
+                    border: 2px solid #9c9c63">
+                    
+                    <div class="text-left" id="loading-div-progress" style="
+                        height: 100%; 
+                        width: 15%; 
+                        margin: 2px;
+                        background: #cdcdb1">
+                    
+                    </div>
+                    
+                </div>
 
-                <p class="lead text-secondary">
+                <p style="color: rgb(108, 117, 125)">
                     Please wait, application content is loading.
                 </p>
             </div>
@@ -57,10 +72,10 @@
         position:absolute; text-align: left; left: 0; bottom:0; 
         width:100%; height:60px; padding-top: 10px;
         border-top: #444 solid 1px; margin-top: 10px;
-        padding-left: 5px;">
-        <span>legallead-ui</span> 
-        <span>&copy; 2023</span>
+        padding-left: 5px;
+        background: #333">
+            <span>legallead-ui</span> 
+            <span>&copy; 2023</span>
     </div>
 </body>
-</html>
 </html>
