@@ -7,10 +7,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="_html\introduction.html" />
-  </ItemGroup>
-
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -20,6 +16,6 @@
 
 
 	<ItemGroup>
-	  <Resource  Include="_html\introduction.html" />
+	  <ProjectReference Include="..\legallead.desktop.core\legallead.desktop.core.csproj" />
 	</ItemGroup>
 </Project>

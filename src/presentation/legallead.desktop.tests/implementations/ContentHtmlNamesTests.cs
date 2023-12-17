@@ -43,5 +43,38 @@ namespace legallead.desktop.tests.implementations
             var actual = sut.IsValid(test);
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData("", false)]
+        [InlineData("missing", false)]
+        [InlineData("base", true)]
+        [InlineData("Base", true)]
+        [InlineData("introduction", true)]
+        [InlineData("Introduction", true)]
+        public void ContentHtmlNamesCanGetContent(string test, bool expected)
+        {
+            var sut = new ContentHtmlNames();
+            var actual = sut.GetContent(test);
+            if (expected)
+                Assert.NotNull(actual);
+            else
+                Assert.Null(actual);
+        }
+
+        [Theory]
+        [InlineData("", false)]
+        [InlineData("missing", false)]
+        [InlineData("base", true)]
+        [InlineData("Base", true)]
+        [InlineData("introduction", true)]
+        [InlineData("Introduction", true)]
+        public void ContentHtmlNamesCanGetContentStream(string test, bool expected)
+        {
+            var sut = new ContentHtmlNames();
+            using var reader = new StreamReader(sut.GetContentStream(test));
+            var content = reader.ReadToEnd();
+            var actual = !string.IsNullOrEmpty(content);
+            Assert.Equal(expected, actual);
+        }
     }
 }

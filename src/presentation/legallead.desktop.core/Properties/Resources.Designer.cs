@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace legallead.desktop.tests.Properties {
+namespace legallead.desktop.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace legallead.desktop.tests.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("legallead.desktop.tests.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("legallead.desktop.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,52 @@ namespace legallead.desktop.tests.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*
+        /// * Globals
+        /// */
+        ///
+        ////* Links */
+        ///a,
+        ///a:focus,
+        ///a:hover {
+        ///  color: #fff;
+        ///}
+        ///
+        ////* Custom default button */
+        ///.btn-secondary,
+        ///.btn-secondary:hover,
+        ///.btn-secondary:focus {
+        ///  color: #333;
+        ///  text-shadow: none; /* Prevent inheritance from `body` */
+        ///  background-color: #fff;
+        ///  border: .05rem solid #fff;
+        ///}
+        ///
+        ///
+        ////*
+        /// * Base structure
+        /// */
+        ///
+        ///html,
+        ///body {
+        ///  height: 100%;
+        ///  background-color: #333;
+        ///}
+        ///
+        ///body {
+        ///  display: -ms-flexbox;
+        ///  display: -webkit-box;
+        ///  display: flex;
+        ///  -ms-flex-pack: center;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string base_css {
+            get {
+                return ResourceManager.GetString("base-css", resourceCulture);
             }
         }
         

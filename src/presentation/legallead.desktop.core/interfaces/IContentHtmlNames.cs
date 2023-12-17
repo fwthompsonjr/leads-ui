@@ -7,6 +7,8 @@ namespace legallead.desktop.interfaces
         List<ContentHtml> ContentNames { get; }
         List<string> Names { get; }
 
+        ContentHtml? GetContent(string name);
+        Stream GetContentStream(string name);
         bool IsValid(string name);
     }
 }
