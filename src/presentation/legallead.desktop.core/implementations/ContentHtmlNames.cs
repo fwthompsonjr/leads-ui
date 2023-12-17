@@ -68,16 +68,34 @@ namespace legallead.desktop.implementations
                 string scripttag = GetBaseCssScript();
                 resourceText = resourceText.Replace(CssBaseLink, scripttag);
             }
+            if (resourceText.Contains(CssBootStrapLink))
+            {
+                string scripttag = GetBootstrapCssScript();
+                resourceText = resourceText.Replace(CssBootStrapLink, scripttag);
+            }
             item.Content = resourceText;
         }
 
         private static string GetBaseCssScript()
         {
             var basecsstext = Properties.Resources.base_css;
-            var builder = new StringBuilder("<script name=\"base-css\"");
+            var builder = new StringBuilder("<style name=\"base-css\">");
             builder.AppendLine();
             builder.AppendLine(basecsstext);
             builder.AppendLine();
+            builder.AppendLine("</style>");
+            var scripttag = builder.ToString();
+            return scripttag;
+        }
+
+        private static string GetBootstrapCssScript()
+        {
+            var basecsstext = Properties.Resources.bootstrapmin_css;
+            var builder = new StringBuilder("<style name=\"base-css\">");
+            builder.AppendLine();
+            builder.AppendLine(basecsstext);
+            builder.AppendLine();
+            builder.AppendLine("</style>");
             var scripttag = builder.ToString();
             return scripttag;
         }
@@ -89,5 +107,6 @@ namespace legallead.desktop.implementations
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
+        private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
     }
 }

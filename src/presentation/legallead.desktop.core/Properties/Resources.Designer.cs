@@ -107,6 +107,19 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @charset &quot;UTF-8&quot;;/*!
+        /// * Bootstrap  v5.3.2 (https://getbootstrap.com/)
+        /// * Copyright 2011-2023 The Bootstrap Authors
+        /// * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+        /// */:root,[data-bs-theme=light]{--bs-blue:#0d6efd;--bs-indigo:#6610f2;--bs-purple:#6f42c1;--bs-pink:#d63384;--bs-red:#dc3545;--bs-orange:#fd7e14;--bs-yellow:#ffc107;--bs-green:#198754;--bs-teal:#20c997;--bs-cyan:#0dcaf0;--bs-black:#000;--bs-white:#fff;--bs-gray:#6c757d;--bs-gray-dark:#343a40;--bs-gray-100:#f8f9fa;--b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string bootstrapmin_css {
+            get {
+                return ResourceManager.GetString("bootstrapmin-css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///&lt;head&gt;
         ///    &lt;meta charset=&quot;utf-8&quot;&gt;
@@ -117,7 +130,8 @@ namespace legallead.desktop.Properties {
         ///    &lt;!-- googleapis : fonts --&gt;
         ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
         ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/boo [rest of string was truncated]&quot;;.
+        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
+        ///    &lt;!-- jquery --&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string introduction_html {
             get {

@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	  <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
   </PropertyGroup>
 
 
@@ -12,6 +13,11 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>$(AssemblyName).tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.80" />
 	</ItemGroup>
 
 

@@ -40,6 +40,7 @@ body {
   color: #fff;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  font-family: Roboto;
 }
 
 .cover-container {
@@ -108,6 +109,14 @@ body {
 .mastfoot {
   color: rgba(255, 255, 255, .5);
 }
+
+div[name="header"] {
+    height: 50px; 
+    border-bottom: #444 solid 1px;
+    margin-top: 5px;
+}
+
+
 div[name="loader"] {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -116,10 +125,4 @@ div[name="loader"] {
   border-radius: 50%;
   width: 120px;
   height: 120px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
