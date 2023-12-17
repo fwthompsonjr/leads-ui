@@ -126,12 +126,33 @@ namespace legallead.desktop.Properties {
         ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
         ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
         ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///    &lt;title&gt;legallead.ui: home&lt;/title&gt;
+        ///    &lt;!-- googleapis : fonts --&gt;
+        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///    &lt;!-- bootstrap --&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
+        ///    &lt;!-- jquery --&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string home_html {
+            get {
+                return ResourceManager.GetString("home-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
         ///    &lt;title&gt;legallead.ui: introduction&lt;/title&gt;
         ///    &lt;!-- googleapis : fonts --&gt;
         ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
         ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot;&gt;
-        ///    &lt;!-- jquery --&gt; [rest of string was truncated]&quot;;.
+        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
+        ///    &lt;!-- jquery - [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string introduction_html {
             get {

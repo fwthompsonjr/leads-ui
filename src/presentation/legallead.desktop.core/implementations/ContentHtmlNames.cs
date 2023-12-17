@@ -103,7 +103,8 @@ namespace legallead.desktop.implementations
         private static readonly List<ContentHtml> _contents = new()
         {
             new() { Index = 10, Name = "base-css"},
-            new() { Index = 100, Name = "introduction-html"}
+            new() { Index = 100, Name = "introduction-html"},
+            new() { Index = 110, Name = "home-html"}
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
