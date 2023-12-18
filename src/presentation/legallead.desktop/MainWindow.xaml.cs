@@ -1,9 +1,4 @@
-﻿using CefSharp.Wpf;
-using CefSharp;
-using legallead.desktop.implementations;
-using legallead.desktop.utilities;
-using System.Text;
-using System;
+﻿using legallead.desktop.utilities;
 using System.Windows;
 
 namespace legallead.desktop
@@ -16,7 +11,7 @@ namespace legallead.desktop
         public MainWindow()
         {
             InitializeComponent();
-            ContentHandler.LoadLocal("introduction", content1);
+            ContentHandler.LoadLocal("home", content1);
         }
     }
 }
