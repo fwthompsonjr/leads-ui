@@ -8,10 +8,15 @@ namespace legallead.desktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BrowserHelper? Helper { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-            ContentHandler.LoadLocal("home", content1);
+            var window = (Window)this;
+            var dispatcher = Dispatcher;
+            Helper = new BrowserHelper(window);
+            Helper.Load("introduction", dispatcher, content1);
         }
     }
 }

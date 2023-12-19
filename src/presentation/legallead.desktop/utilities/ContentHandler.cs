@@ -1,34 +1,36 @@
-﻿using legallead.desktop.entities;
-using System.Text;
+﻿using CefSharp.Wpf;
+using legallead.desktop.entities;
+using legallead.desktop.js;
+using legallead.desktop.models;
 using System;
+using System.Text;
 using System.Windows.Controls;
-using CefSharp.Wpf;
-using CefSharp;
+using System.Windows.Threading;
 
 namespace legallead.desktop.utilities
 {
     internal static class ContentHandler
     {
-        public static void LoadLocal(string name, WebBrowser browser)
-        {
-            var content = GetLocalContent(name);
-            if (content == null) return;
-            browser.NavigateToString(content.Content);
-        }
-
-        public static void LoadLocal(string name, ContentControl browserContainer)
+        public static ContentRegistrationResponse? LoadLocal(string name, Dispatcher dispatcher, ContentControl browserContainer)
         {
             var content = GetLocalContent(name);
             if (content == null)
             {
                 browserContainer.Content = "Error: Page load failure for page: {name}";
-                return;
+                return null;
             }
-            var browser = new ChromiumWebBrowser()
+            var response = dispatcher.Invoke(() =>
             {
-                Address = GetAddressBase64(content)
-            };
-            browserContainer.Content = browser;
+                var browser = new ChromiumWebBrowser()
+                {
+                    Address = GetAddressBase64(content)
+                };
+                var jsHandler = GetJsHandler(name);
+                browser.JavascriptObjectRepository.Register("jsHandler", jsHandler);
+                browserContainer.Content = browser;
+                return new ContentRegistrationResponse { Browser = browser, Handler = jsHandler };
+            });
+            return response;
         }
 
         private static ContentHtml? GetLocalContent(string name)
@@ -42,6 +44,12 @@ namespace legallead.desktop.utilities
             const string bs64address = "data:text/html;base64,{0}";
             var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(content.Content));
             return string.Format(bs64address, base64EncodedHtml);
+        }
+
+        private static JsHandler GetJsHandler(string name)
+        {
+            if (name.Equals("introduction")) return new IntroductionJsHandler();
+            return new JsHandler();
         }
     }
 }

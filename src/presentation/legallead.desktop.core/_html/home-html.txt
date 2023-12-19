@@ -1,4 +1,5 @@
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,9 +21,11 @@
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 		<style name="subcontent-css">
+
 			div.subcontent {
 				width: 50%; 
-				max-width: 800px;
+				min-width: 400px;
+				max-width: 1200px;
                 margin-bottom: 20px;
 				display: none;
 			}
@@ -30,8 +33,23 @@
 			div.subcontent.active {
 				display: block;
 			}
+
+			div[name="subcontent-home-bullet-list"] {
+				width: 50%; 
+				margin-left: 35%;
+				text-align: left;
+				justify-content: left;
+			}
+			
+
+			div[name="main-content"] {
+				width: 70%; 
+				min-width: 800px;
+				max-width: 1200px;
+			}
 		</style>
 	</head>
+
 	<body class="text-center">
 
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
@@ -53,17 +71,21 @@
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent">
+			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent active">
                 <br/>
-                Legal Lead is an application used to locate public data from county courts.<br />
-                From this application you can retrieve: <br />
-
-                <ol>
-                    <li>Case Details</li>
-                    <li>Defendant Information</li>
-                    <li>Court Information</li>
-                </ol>
-
+                <p>
+					Legal Lead is an application used to locate public data from county courts.
+				</p>
+				<p>
+					From this application you can retrieve: <br />
+				</p>
+				<div name="subcontent-home-bullet-list" class="text-left">
+					<ol>
+						<li>Case Details</li>
+						<li>Defendant Information</li>
+						<li>Court Information</li>
+					</ol>
+				</div>
                 <div name="page-call-to-action">
 					<p>
 						<a href="javascript:setDisplay('login')">Login</a>, if you already have an account.
@@ -122,7 +144,7 @@
 		if (names.indexOf( name ) < 0 ) { return; }
 		const divnames = [ "dv-subcontent-home", "dv-subcontent-login", "dv-subcontent-register" ];
 		
-		for(let i = 0; i < thelinks.length; i++) {
+		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);
 			if ( divnames[i].indexOf(name) >= 0 ) {
 				d.classList.add(actv);
@@ -135,4 +157,6 @@
 	</script>
 
   </body>
+
+
 </html>

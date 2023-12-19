@@ -10,6 +10,10 @@
 		<SelfContained>true</SelfContained>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="AppSettings.json" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
@@ -19,12 +23,20 @@
 
 
 	<ItemGroup>
+		<Content Include="AppSettings.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="legallead-icon.ico" />
 	</ItemGroup>
 
 
 	<ItemGroup>
 		<PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.80" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.55" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 	</ItemGroup>
 
 

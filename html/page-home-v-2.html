@@ -168,7 +168,8 @@ div[name="loader"] {
 		<style name="subcontent-css">
 			div.subcontent {
 				width: 50%; 
-				max-width: 800px;
+				min-width: 800px;
+				max-width: 1200px;
                 margin-bottom: 20px;
 				display: none;
 			}
@@ -176,8 +177,23 @@ div[name="loader"] {
 			div.subcontent.active {
 				display: block;
 			}
+
+			div[name="subcontent-home-bullet-list"] {
+				width: 50%; 
+				margin-left: 35%;
+				text-align: left;
+				justify-content: left;
+			}
+			
+
+			div[name="main-content"] {
+				width: 70%; 
+				min-width: 800px;
+				max-width: 1200px;
+			}
 		</style>
 	</head>
+
 	<body class="text-center">
 
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
@@ -188,26 +204,30 @@ div[name="loader"] {
 				<span>Legal Lead UI</span>
 			</h3>
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-				<a class="nav-link active" href="javascript:setDisplay('home')">Home</a>
-				<a class="nav-link" href="javascript:setDisplay('login')">Login</a>
-				<a class="nav-link" href="javascript:setDisplay('register')">Register</a>
+				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
+				<a name="subcontent-login" class="nav-link" href="javascript:setDisplay('login')">Login</a>
+				<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>
 			</nav>
 		</div>
       </header>
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div name="subcontent-home" class="subcontent active">
+			<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active">
                 <br>
-                Legal Lead is an application used to locate public data from county courts.<br>
-                From this application you can retrieve: <br>
-
-                <ol>
-                    <li>Case Details</li>
-                    <li>Defendant Information</li>
-                    <li>Court Information</li>
-                </ol>
-
+                <p>
+					Legal Lead is an application used to locate public data from county courts.
+				</p>
+				<p>
+					From this application you can retrieve: <br>
+				</p>
+				<div name="subcontent-home-bullet-list" class="text-left">
+					<ol>
+						<li>Case Details</li>
+						<li>Defendant Information</li>
+						<li>Court Information</li>
+					</ol>
+				</div>
                 <div name="page-call-to-action">
 					<p>
 						<a href="javascript:setDisplay('login')">Login</a>, if you already have an account.
@@ -224,11 +244,11 @@ div[name="loader"] {
                 </div>
             </div>
 			
-			<div name="subcontent-login" class="subcontent">
+			<div id="dv-subcontent-login" name="subcontent-login" class="subcontent">
 				<p>Login form</p>
             </div>
 			
-			<div name="subcontent-register" class="subcontent">
+			<div id="dv-subcontent-register" name="subcontent-register" class="subcontent">
 				<p>Registration form</p>			
             </div>
 		</div>
@@ -242,33 +262,43 @@ div[name="loader"] {
     </div>
 
 	<script>
+	const actv = "active";
+	const names = [ "home", "login", "register" ];
+
 	function setDisplay( name ) {
-			const actv = "active";
-			const names = [ "home", "login", "register" ];
 			if (names.indexOf( name ) < 0 ) { return; }
+			setActiveDiv(name);
 			const themenu = document.getElementById("masthead-nav-menu");
 			let thelinks = themenu.getElementsByTagName("a");
-			const dvs = document.getElementById("dv-main-content").getElementsByTagName("div");
-			
+
 			for(let i = 0; i < thelinks.length; i++) {
 				let a = thelinks[i];
-				let d = dvs[i];
 				const aname = a.getAttribute("name");
 				if ( aname.indexOf(name) >= 0 ) {
 					a.classList.add(actv);
 				} else {
 					a.classList.remove(actv);
 				}
-				const dvname = d.getAttribute("name");
-				if ( dvname.indexOf(name) >= 0 ) {
-					d.classList.add(actv);
-				} else {
-					d.classList.remove(actv);
-				}
 			}			
 		}
+
+	function setActiveDiv( name ) {
+		if (names.indexOf( name ) < 0 ) { return; }
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-login", "dv-subcontent-register" ];
+		
+		for(let i = 0; i < divnames.length; i++) {
+			const d = document.getElementById(divnames[i]);
+			if ( divnames[i].indexOf(name) >= 0 ) {
+				d.classList.add(actv);
+			} else {
+				d.classList.remove(actv);
+			}
+		}
+	}
 		
 	</script>
 
   
+
+
 </body></html>
