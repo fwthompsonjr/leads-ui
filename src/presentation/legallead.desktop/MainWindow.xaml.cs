@@ -1,9 +1,4 @@
-﻿using CefSharp.Wpf;
-using CefSharp;
-using legallead.desktop.implementations;
-using legallead.desktop.utilities;
-using System.Text;
-using System;
+﻿using legallead.desktop.utilities;
 using System.Windows;
 
 namespace legallead.desktop
@@ -13,13 +8,15 @@ namespace legallead.desktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private BrowserHelper? Helper { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-            var contentProvider = ContentProvider.LocalContentProvider;
-            var initialHtml = contentProvider.GetContent("home");
-            if (initialHtml == null) return;
-            wb1.NavigateToString(initialHtml.Content);
+            var window = (Window)this;
+            var dispatcher = Dispatcher;
+            Helper = new BrowserHelper(window);
+            Helper.Load("introduction", dispatcher, content1);
         }
     }
 }

@@ -1,10 +1,5 @@
 ﻿using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.utilities
 {
@@ -12,7 +7,15 @@ namespace legallead.desktop.utilities
     {
         private static IContentHtmlNames _localContentProvider;
 
-        public static IContentHtmlNames LocalContentProvider =
-            _localContentProvider ??= new ContentHtmlNames();
+        public static readonly IContentHtmlNames LocalContentProvider =
+            _localContentProvider ??= GetContentHtmlNames();
+
+        private static IContentHtmlNames GetContentHtmlNames()
+        {
+            var provider = DesktopCoreServiceProvider.Provider;
+            var obj = provider.GetService(typeof(IContentHtmlNames));
+            if (obj is not IContentHtmlNames icontenthtml) return new ContentHtmlNames();
+            return icontenthtml;
+        }
     }
 }

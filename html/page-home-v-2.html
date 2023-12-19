@@ -1,30 +1,174 @@
-<html>
-
-	<head>
+<html><head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>legallead.ui: introduction</title>
 		<!-- googleapis : fonts -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
 		<!-- bootstrap -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
 		<!-- jquery -->
-		<script 
-			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
-			integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
-			crossorigin="anonymous" 
-			referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<!-- common styles -->	
-		<link rel="stylesheet" name="base" href="css/base.css" />
-		<style name="subcontent-css">
+		<style name="base-css">
+/*
+ * Globals
+ */
 
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #333;
+}
+
+body {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  font-family: Roboto;
+}
+
+.cover-container {
+  max-width: 42em;
+}
+
+
+/*
+ * Header
+ */
+.masthead {
+  margin-bottom: 2rem;
+}
+
+.masthead-brand {
+  margin-bottom: 0;
+}
+
+#header-navigation .nav-link {
+  padding: .25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .5);
+  background-color: transparent;
+  border-bottom: .25rem solid transparent;
+}
+
+#header-navigation .nav-link:hover,
+#header-navigation .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+#header-navigation .nav-link + .nav-link {
+  margin-left: 1rem;
+}
+
+#header-navigation .nav-link .active {
+  color: #fff;
+  border-bottom: #fff 1px solid;
+  cursor: pointer;
+}
+
+
+.nav-link {
+    display: inline;
+    margin-left: 10px;
+    padding: 2px;
+    font-weight: bold;
+    text-decoration: none;
+    background: 0 0;
+    border: 0;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
+}
+
+
+@media (min-width: 48em) {
+  .masthead-brand {
+    float: left;
+  }
+  .nav-masthead {
+    float: right;
+  }
+}
+
+
+/*
+ * Cover
+ */
+.cover {
+  padding: 0 1.5rem;
+}
+.cover .btn-lg {
+  padding: .75rem 1.25rem;
+  font-weight: 700;
+}
+
+
+/*
+ * Footer
+ */
+.mastfoot {
+  color: rgba(255, 255, 255, .5);
+}
+
+div[name="header"] {
+    height: 50px; 
+    border-bottom: #444 solid 1px;
+    margin-top: 5px;
+}
+
+
+div[name="loader"] {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 16px solid #cdcdb1; /* Light grey */
+  border-top: 16px solid #9c9c63; /* Brown-ish */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+</style>
+
+		<style name="subcontent-css">
 			div.subcontent {
 				width: 50%; 
-				min-width: 400px;
+				min-width: 800px;
 				max-width: 1200px;
                 margin-bottom: 20px;
 				display: none;
@@ -53,9 +197,7 @@
 	<body class="text-center">
 
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header 
-		class="masthead mb-auto" 
-		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+      <header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 		<div class="inner">
 			<h3 class="masthead-brand">
 				<i class="bi bi-bank2"></i>
@@ -71,13 +213,13 @@
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent active">
-                <br/>
+			<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active">
+                <br>
                 <p>
 					Legal Lead is an application used to locate public data from county courts.
 				</p>
 				<p>
-					From this application you can retrieve: <br />
+					From this application you can retrieve: <br>
 				</p>
 				<div name="subcontent-home-bullet-list" class="text-left">
 					<ol>
@@ -96,17 +238,17 @@
                 <div name="register-now">
 					<p class="not-yet">Not registered yet?</p>
 					<p>
-						<a href="javascript:setDisplay('register')">Register now!</a> <br/>
+						<a href="javascript:setDisplay('register')">Register now!</a> <br>
 						It is easy, done in 1 minute and gives you access to product demos and much more!
 					</p>
                 </div>
             </div>
 			
-			<div id="dv-subcontent-login" name="subcontent-login"  class="subcontent">
+			<div id="dv-subcontent-login" name="subcontent-login" class="subcontent">
 				<p>Login form</p>
             </div>
 			
-			<div id="dv-subcontent-register" name="subcontent-register"  class="subcontent">
+			<div id="dv-subcontent-register" name="subcontent-register" class="subcontent">
 				<p>Registration form</p>			
             </div>
 		</div>
@@ -156,7 +298,7 @@
 		
 	</script>
 
-  </body>
+  
 
 
-</html>
+</body></html>
