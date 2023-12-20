@@ -27,31 +27,39 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> AuthenticateAsync(UserLoginModel usersdata)
         {
             var response = "An error occurred authenticating account.";
-            var applicationCheck = Request.Validate(_db, response);
-            if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
-            var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
-            var validUser = await _db.UserDb.IsValidUserAsync(model);
-            var user = validUser.Value;
-            if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
+
+            try
             {
-                return Unauthorized("Invalid username or password...");
+                var applicationCheck = Request.Validate(_db, response);
+                if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
+                var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
+                var validUser = await _db.UserDb.IsValidUserAsync(model);
+                var user = validUser.Value;
+                if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
+                {
+                    return Unauthorized("Invalid username or password...");
+                }
+
+                var token = _jWTManager.GenerateToken(user);
+
+                if (token == null)
+                {
+                    return Unauthorized("Invalid Attempt..");
+                }
+
+                var obj = new UserRefreshToken
+                {
+                    RefreshToken = token.RefreshToken,
+                    UserId = user.Id
+                };
+
+                await _db.UserTokenDb.Add(obj);
+                return Ok(token);
             }
-
-            var token = _jWTManager.GenerateToken(user);
-
-            if (token == null)
+            catch (Exception ex)
             {
-                return Unauthorized("Invalid Attempt..");
+                return StatusCode(500, ex.Message);
             }
-
-            var obj = new UserRefreshToken
-            {
-                RefreshToken = token.RefreshToken,
-                UserId = user.Id
-            };
-
-            await _db.UserTokenDb.Add(obj);
-            return Ok(token);
         }
 
         [AllowAnonymous]
