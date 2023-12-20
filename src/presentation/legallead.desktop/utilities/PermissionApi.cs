@@ -40,16 +40,15 @@ namespace legallead.desktop.utilities
             };
         }
 
-        public async Task<ApiResponse> Post(string name, string payload, UserBo user)
+        public async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
             var pageName = PostAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
             if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
             if (!user.IsInitialized) { return new ApiResponse { Message = "Invalid user state. Please initialize user context." }; }
             var address = string.Format(PostAddresses[pageName], _baseUri);
-            var obj = JsonConvert.DeserializeObject<object?>(payload) ?? new();
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("APP_IDENTITY", user.GetAppServiceHeader());
-            var result = await client.PostAsJsonAsync(address, obj);
+            var result = await client.PostAsJsonAsync(address, payload);
             if (result == null)
             {
                 return new ApiResponse

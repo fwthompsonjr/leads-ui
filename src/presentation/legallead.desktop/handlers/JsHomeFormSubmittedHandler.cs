@@ -53,7 +53,7 @@ namespace legallead.desktop.handlers
                 case "form-login":
                     var data = TryDeserialize<LoginForm>(json);
                     if (data == null) return failed;
-                    var obj = JsonConvert.SerializeObject(new { data.UserName, data.Password }) ?? string.Empty;
+                    var obj = new { data.UserName, data.Password };
                     var loginResponse = await api.Post("login", obj, user) ?? failed;
                     return loginResponse;
 
