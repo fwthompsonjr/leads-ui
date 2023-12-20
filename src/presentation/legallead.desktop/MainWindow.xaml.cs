@@ -1,6 +1,5 @@
 ﻿using legallead.desktop.utilities;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace legallead.desktop
 {

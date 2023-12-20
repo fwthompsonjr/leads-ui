@@ -1,6 +1,5 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.handlers;
-using legallead.desktop.js;
 using legallead.desktop.models;
 using System;
 using System.Windows;
