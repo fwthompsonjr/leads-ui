@@ -97,12 +97,27 @@ function initializeForms() {
 	initializeFormButtons();
 }
 
+function handleApiResponse( indx, response ) {
+	if( isNaN(indx) || indx < 0 || indx > formNames.length || response.length == 0) { return ""; }
+	
+}
+
 function formButtonClicked( formIndex ) {
-	var indx = parseInt(formIndex);
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) return "";
+	let issubmitted = false;
+	let apiresponse = "";
+	let icons = [];
+	let frm;
+	let indx = parseInt(formIndex);
+	try {
+	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return ""; }
 	var formName = formNames[indx];
 	var formSelector = "#" + formName;
-	var frm = $(formSelector);
+	icons.push("#" + formName + "-icon");
+	icons.push("#" + formName + "-icon-spin");
+
+	frm = $(formSelector);
+	frm.find("button").attr("disabled", "disabled");
+
 	frm.validate();
 	var isvalid = frm.valid();
 	if (!isvalid) return;
@@ -110,10 +125,27 @@ function formButtonClicked( formIndex ) {
 	let handler = window.jsHandler;
 	if( undefined === handler || null === handler || !(handler) ) { return; }
 
+	$( icons[0] ).addClass( "hide" );
+	$( icons[1] ).removeClass( "hide" );
 
+	issubmitted = true;
 	let json = serializeFormToObject(indx);
-	handler.submit(formName, json);
+	apiresponse = handler.submit(formName, json);
+	} 
+	finally {
+		if( icons.length == 2) {
+			$( icons[0] ).addClass( "hide" );
+			$( icons[1] ).removeClass( "hide" );
+		}
+		if (!issubmitted && frm !== undefined) { 
+			frm.find("button").removeAttr("disabled");
+		}
+		if ( apiresponse.length > 0) {
+			handleApiResponse( indx, apiresponse );
+		}
+	}
 }
+
 //convert FormData to Object
 var serializeFormToObject = function (formIndex) {
 	var indx = parseInt(formIndex);

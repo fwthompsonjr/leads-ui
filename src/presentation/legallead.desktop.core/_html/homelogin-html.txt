@@ -16,7 +16,14 @@
                     Provide password.
                 </div>
             </div>
-            <button id="form-login-submit" type="button" class="btn btn-primary">Sign In</button>
+            <button id="form-login-submit" type="button" class="btn btn-primary">
+                <i id="form-login-icon" class="fa-solid fa-right-to-bracket"></i>
+                <i id="form-login-icon-spin" class="fa-solid fa-circle-notch fa-spin hide"></i>
+                Sign In</button>
+                    
+            <div name='form-login-error-message' class='form-group hide'>
+                <!-- Error messages -->
+            </div>
         </form>
     </div>
 </div>

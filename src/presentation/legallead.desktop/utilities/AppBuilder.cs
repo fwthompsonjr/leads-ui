@@ -1,4 +1,5 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -43,9 +44,12 @@ namespace legallead.desktop.utilities
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
             services.AddTransient(s => new PermissionApi(PermissionApiBase ?? string.Empty));
             services.AddTransient(typeof(MainWindow));
+            if (provider == null) return;
+            services.AddTransient(s => provider.GetRequiredService<IContentParser>());
         }
     }
 }

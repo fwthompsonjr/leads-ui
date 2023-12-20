@@ -1,8 +1,10 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.handlers;
+using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -38,7 +40,13 @@ namespace legallead.desktop.utilities
         private static ContentHtml? GetLocalContent(string name)
         {
             var contentProvider = ContentProvider.LocalContentProvider;
-            return contentProvider.GetContent(name);
+            var raw = contentProvider.GetContent(name);
+            if (raw == null) return null;
+            var provider = AppBuilder.ServiceProvider;
+            var beutifier = provider?.GetRequiredService<IContentParser>();
+            if (beutifier == null) return raw;
+            raw.Content = beutifier.BeautfyHTML(raw.Content);
+            return raw;
         }
 
         private static string GetAddressBase64(ContentHtml content)

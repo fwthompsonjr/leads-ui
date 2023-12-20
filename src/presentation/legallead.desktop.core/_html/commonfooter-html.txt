@@ -1,0 +1,7 @@
+
+
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p>(c) 2023 - Legal Lead UI</p>
+        </div>
+      </footer>

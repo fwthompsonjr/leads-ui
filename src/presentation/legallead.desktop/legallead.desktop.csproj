@@ -8,6 +8,7 @@
 		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
 		<ApplicationIcon>legallead-icon.ico</ApplicationIcon>
 		<SelfContained>true</SelfContained>
+		<EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,7 +33,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.80" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.55" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />

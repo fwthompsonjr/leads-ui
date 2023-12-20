@@ -109,6 +109,46 @@ namespace legallead.desktop.implementations
             return builder.ToString();
         }
 
+        private static string GetWelcomeInclude()
+        {
+            var text = Properties.Resources.homewelcome_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
+        private static string GetCommonCefInclude()
+        {
+            var text = Properties.Resources.commoncefhandler_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
+        private static string GetCommonFooterInclude()
+        {
+            var text = Properties.Resources.commonfooter_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
+        private static string GetCommonHeaderInclude()
+        {
+            var text = Properties.Resources.commonheadings_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
         private static string GetBootstrapCssScript()
         {
             var basecsstext = Properties.Resources.homelogin_html;
@@ -145,7 +185,11 @@ namespace legallead.desktop.implementations
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
+        private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
+        private const string HtmCommonFooter = "<!-- block: common-footer -->";
+        private const string HtmCommonHeading = "<!-- block: common-headings -->";
         private const string HtmLoginInclude = "<p>Login form</p>";
+        private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
 
@@ -154,7 +198,11 @@ namespace legallead.desktop.implementations
             { CssBootStrapLink, GetBootstrapCssScript() },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
-            { JsHomeValidation, GetHomeValidationScript() }
+            { JsHomeValidation, GetHomeValidationScript() },
+            { JsCommonCefHandler, GetCommonCefInclude() },
+            { HtmCommonFooter, GetCommonFooterInclude() },
+            { HtmCommonHeading, GetCommonHeaderInclude() },
+            { HtmWelcomeInclude, GetWelcomeInclude() }
         };
     }
 }
