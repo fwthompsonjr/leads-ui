@@ -1,5 +1,6 @@
 ﻿using legallead.desktop.utilities;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace legallead.desktop
 {
@@ -13,10 +14,24 @@ namespace legallead.desktop
         public MainWindow()
         {
             InitializeComponent();
+            var helper = GetHelper();
+            helper.Load("blank", Dispatcher, content1);
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             var window = (Window)this;
             var dispatcher = Dispatcher;
+            var initialPage = AppBuilder.InitialViewName ?? "introduction";
             Helper = new BrowserHelper(window);
-            Helper.Load("introduction", dispatcher, content1);
+            Helper.Load(initialPage, dispatcher, content1);
+        }
+
+        private BrowserHelper GetHelper()
+        {
+            var window = (Window)this;
+            return new BrowserHelper(window);
         }
     }
 }

@@ -127,6 +127,12 @@
   <data name="home-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\home-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="homelogin_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\homelogin-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="homeregister_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\homeregister-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="introduction-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\introduction-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

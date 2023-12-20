@@ -121,18 +121,17 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
-        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///    &lt;title&gt;legallead.ui: home&lt;/title&gt;
-        ///    &lt;!-- googleapis : fonts --&gt;
-        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
-        ///    &lt;!-- jquery --&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- bootstrap --&gt;
+        ///		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js&quot;&gt;&lt;/script [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string home_html {
             get {
@@ -141,18 +140,58 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body&quot;&gt;
+        ///        &lt;h5 class=&quot;card-title&quot;&gt;Login&lt;/h5&gt;
+        ///        &lt;form&gt;
+        ///            &lt;div class=&quot;mb-3&quot;&gt;
+        ///                &lt;label for=&quot;username&quot; class=&quot;form-label&quot;&gt;User Name / Email:&lt;/label&gt;
+        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;username&quot; aria-describedby=&quot;emailHelp&quot;&gt;
+        ///                &lt;div id=&quot;emailHelp&quot; class=&quot;text-secondary&quot;&gt;
+        ///                    &lt;small&gt;Provide user-name or email address.&lt;/small&gt;
+        ///                &lt;/div&gt;
+        ///            &lt;/div&gt;
+        ///          [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homelogin_html {
+            get {
+                return ResourceManager.GetString("homelogin_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body&quot;&gt;
+        ///        &lt;h5 class=&quot;card-title&quot;&gt;Register&lt;/h5&gt;
+        ///        &lt;form&gt;
+        ///            &lt;div class=&quot;mb-3&quot;&gt;
+        ///                &lt;label for=&quot;register-username&quot; class=&quot;form-label&quot;&gt;User Name:&lt;/label&gt;
+        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;register-username&quot; aria-describedby=&quot;register-username-help&quot;&gt;
+        ///                &lt;div id=&quot;register-username-help&quot; class=&quot;text-secondary&quot;&gt;
+        ///                    &lt;small&gt;Provide user name.&lt;/small&gt;
+        ///                &lt;/div&gt;
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homeregister_html {
+            get {
+                return ResourceManager.GetString("homeregister_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
-        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///    &lt;title&gt;legallead.ui: introduction&lt;/title&gt;
-        ///    &lt;!-- googleapis : fonts --&gt;
-        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
-        ///    &lt;!-- jquery - [rest of string was truncated]&quot;;.
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: introduction&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string introduction_html {
             get {

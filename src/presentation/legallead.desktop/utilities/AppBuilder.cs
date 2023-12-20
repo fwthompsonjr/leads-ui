@@ -2,11 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.utilities
 {
@@ -17,6 +13,7 @@ namespace legallead.desktop.utilities
         public static IConfiguration? Configuration { get; private set; }
 
         public static string? PermissionApiBase { get; private set; }
+        public static string? InitialViewName { get; private set; }
 
         public static void Build()
         {
@@ -31,6 +28,10 @@ namespace legallead.desktop.utilities
             if (string.IsNullOrEmpty(PermissionApiBase))
             {
                 PermissionApiBase = Configuration["Permissions_API"] ?? string.Empty;
+            }
+            if (string.IsNullOrEmpty(InitialViewName))
+            {
+                InitialViewName = Configuration["Initial_View"] ?? "introduction";
             }
             if (ServiceProvider == null)
             {

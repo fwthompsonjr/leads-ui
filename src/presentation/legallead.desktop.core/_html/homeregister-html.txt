@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Register</h5>
+        <form name="form-register">
+            <div class="mb-3">
+                <label for="register-username" class="form-label">User Name:</label>
+                <input type="text" class="form-control" id="register-username" aria-describedby="register-username-help">
+                <div id="register-username-help" class="text-secondary">
+                    <small>Provide user name.</small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="register-email" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="register-email" aria-describedby="register-email-help">
+                <div id="register-email-help" class="text-secondary">
+                    <small>Provide an email address.</small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="register-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="register-password" aria-describedby="register-password-help">
+                <div id="register-password-help" class="text-secondary">
+                    <small>Provide a strong password.</small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="register-password-confirmation" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="register-password-confirmation" aria-describedby="register-password-confirmation-help">
+                <div id="register-password-confirmation-help" class="text-secondary">
+                    <small>Confirm password.</small>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary">Create Account</button>
+        </form>
+    </div>
+</div>

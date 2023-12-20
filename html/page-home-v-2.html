@@ -3,7 +3,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
 		<meta name="author" content="">
-		<title>legallead.ui: introduction</title>
+		<title>legallead.ui: home</title>
 		<!-- googleapis : fonts -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
 		<!-- bootstrap -->
@@ -56,7 +56,6 @@ body {
   color: #fff;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-  font-family: Roboto;
 }
 
 .cover-container {
@@ -75,7 +74,7 @@ body {
   margin-bottom: 0;
 }
 
-#header-navigation .nav-link {
+.nav-masthead .nav-link {
   padding: .25rem 0;
   font-weight: 700;
   color: rgba(255, 255, 255, .5);
@@ -83,33 +82,19 @@ body {
   border-bottom: .25rem solid transparent;
 }
 
-#header-navigation .nav-link:hover,
-#header-navigation .nav-link:focus {
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
   border-bottom-color: rgba(255, 255, 255, .25);
 }
 
-#header-navigation .nav-link + .nav-link {
+.nav-masthead .nav-link + .nav-link {
   margin-left: 1rem;
 }
 
-#header-navigation .nav-link .active {
+.nav-masthead .active {
   color: #fff;
-  border-bottom: #fff 1px solid;
-  cursor: pointer;
+  border-bottom-color: #fff;
 }
-
-
-.nav-link {
-    display: inline;
-    margin-left: 10px;
-    padding: 2px;
-    font-weight: bold;
-    text-decoration: none;
-    background: 0 0;
-    border: 0;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
-}
-
 
 @media (min-width: 48em) {
   .masthead-brand {
@@ -140,6 +125,33 @@ body {
   color: rgba(255, 255, 255, .5);
 }
 
+
+
+/*
+ * Card
+ */
+ .card {
+    background-color: transparent;
+    border-color: #444;
+    color: #fff;
+ }
+ .card .card-body .card-title {
+    border-bottom: #444 solid 1px;
+    padding-bottom: 5px;
+ }
+
+/*
+* Forms
+*/
+.form-control {
+    background-color: transparent;
+    border-color: #555;
+    color: ghostwhite;
+}
+
+/*
+ * Header
+ */
 div[name="header"] {
     height: 50px; 
     border-bottom: #444 solid 1px;
@@ -147,6 +159,10 @@ div[name="header"] {
 }
 
 
+
+/*
+ * Loader
+ */
 div[name="loader"] {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -166,9 +182,10 @@ div[name="loader"] {
 </style>
 
 		<style name="subcontent-css">
+
 			div.subcontent {
 				width: 50%; 
-				min-width: 800px;
+				min-width: 400px;
 				max-width: 1200px;
                 margin-bottom: 20px;
 				display: none;
@@ -191,6 +208,15 @@ div[name="loader"] {
 				min-width: 800px;
 				max-width: 1200px;
 			}
+
+			div[name="subcontent-login"] {
+				text-align: left;
+				justify-content: left;
+				margin-bottom: 20px;
+				margin-left: 20px;
+				min-width: 300px;
+			}
+
 		</style>
 	</head>
 
@@ -204,8 +230,8 @@ div[name="loader"] {
 				<span>Legal Lead UI</span>
 			</h3>
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
-				<a name="subcontent-login" class="nav-link" href="javascript:setDisplay('login')">Login</a>
+				<a name="subcontent-home" class="nav-link" href="javascript:setDisplay('home')">Home</a>
+				<a name="subcontent-login" class="nav-link active" href="javascript:setDisplay('login')">Login</a>
 				<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>
 			</nav>
 		</div>
@@ -213,7 +239,7 @@ div[name="loader"] {
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active">
+			<div id="dv-subcontent-home" name="subcontent-home" class="subcontent">
                 <br>
                 <p>
 					Legal Lead is an application used to locate public data from county courts.
@@ -244,8 +270,29 @@ div[name="loader"] {
                 </div>
             </div>
 			
-			<div id="dv-subcontent-login" name="subcontent-login" class="subcontent">
-				<p>Login form</p>
+			<div id="dv-subcontent-login" name="subcontent-login" class="subcontent active">
+				
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Login</h5>
+        <form>
+            <div class="mb-3">
+                <label for="username" class="form-label">User Name / Email:</label>
+                <input type="text" class="form-control" id="username" aria-describedby="emailHelp">
+                <div id="emailHelp" class="text-secondary">
+                    <small>Provide user-name or email address.</small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="login-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="login-password">
+            </div>
+            <button type="button" class="btn btn-primary">Sign In</button>
+        </form>
+    </div>
+</div>
+
+
             </div>
 			
 			<div id="dv-subcontent-register" name="subcontent-register" class="subcontent">

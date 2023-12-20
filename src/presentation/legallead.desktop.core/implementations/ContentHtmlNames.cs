@@ -2,6 +2,7 @@
 using legallead.desktop.interfaces;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.Linq;
 
 namespace legallead.desktop.implementations
 {
@@ -63,16 +64,14 @@ namespace legallead.desktop.implementations
             var manager = Properties.Resources.ResourceManager;
             var resourceText = manager.GetString(item.Name);
             if (string.IsNullOrEmpty(resourceText)) return;
-            if (resourceText.Contains(CssBaseLink))
+            var keys = Replacements.Keys;
+            foreach (var key in from key in keys
+                                where resourceText.Contains(key)
+                                select key)
             {
-                string scripttag = GetBaseCssScript();
-                resourceText = resourceText.Replace(CssBaseLink, scripttag);
+                resourceText = resourceText.Replace(key, Replacements[key]);
             }
-            if (resourceText.Contains(CssBootStrapLink))
-            {
-                string scripttag = GetBootstrapCssScript();
-                resourceText = resourceText.Replace(CssBootStrapLink, scripttag);
-            }
+
             item.Content = resourceText;
         }
 
@@ -88,9 +87,29 @@ namespace legallead.desktop.implementations
             return scripttag;
         }
 
+        private static string GetLoginInclude()
+        {
+            var text = Properties.Resources.homelogin_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
+        private static string GetRegistrationInclude()
+        {
+            var text = Properties.Resources.homeregister_html;
+            var builder = new StringBuilder();
+            builder.AppendLine();
+            builder.AppendLine(text);
+            builder.AppendLine();
+            return builder.ToString();
+        }
+
         private static string GetBootstrapCssScript()
         {
-            var basecsstext = Properties.Resources.bootstrapmin_css;
+            var basecsstext = Properties.Resources.homelogin_html;
             var builder = new StringBuilder("<style name=\"base-css\">");
             builder.AppendLine();
             builder.AppendLine(basecsstext);
@@ -102,12 +121,23 @@ namespace legallead.desktop.implementations
 
         private static readonly List<ContentHtml> _contents = new()
         {
+            new() { Index = 0, Name = "blank-html"},
             new() { Index = 10, Name = "base-css"},
             new() { Index = 100, Name = "introduction-html"},
-            new() { Index = 110, Name = "home-html"}
+            new() { Index = 110, Name = "home-html"},
+            new() { Index = 110, Name = "homelogin-html"}
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
+        private const string HtmLoginInclude = "<p>Login form</p>";
+        private const string HtmRegistrationInclude = "<p>Registration form</p>";
+
+        private static readonly Dictionary<string, string> Replacements = new() {
+            { CssBaseLink, GetBaseCssScript() },
+            { CssBootStrapLink, GetBootstrapCssScript() },
+            { HtmLoginInclude, GetLoginInclude() },
+            { HtmRegistrationInclude, GetRegistrationInclude() }
+        };
     }
 }
