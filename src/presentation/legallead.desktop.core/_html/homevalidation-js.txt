@@ -113,7 +113,8 @@ function initializeForms() {
 
 function handleApiResponse( indx, response ) {
 	if( isNaN(indx) || indx < 0 || indx > formNames.length || response.length == 0) { return ""; }
-	
+	// var obj = 
+	alert( response );
 }
 
 function formButtonClicked( formIndex ) {
