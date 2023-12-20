@@ -23,7 +23,7 @@ namespace legallead.desktop.utilities
 
         public void Load(string name, Dispatcher dispatcher, ContentControl browserContainer)
         {
-            _window.Title = name;
+            _window.Title = name.ToTitleCase();
             var response = ContentHandler.LoadLocal(name, dispatcher, browserContainer);
             Browser = response?.Browser;
             GetDispatcher = dispatcher;
@@ -50,6 +50,7 @@ namespace legallead.desktop.utilities
         private static JsCompletedHandler? GetInitializationHandler(string name)
         {
             if (name.Equals("introduction")) return new InitializationCompletedHandler();
+            if (name.Equals("home")) return new JsHomeFormSubmittedHandler();
             return default;
         }
     }

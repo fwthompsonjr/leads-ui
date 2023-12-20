@@ -1,8 +1,10 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.handlers;
 using legallead.desktop.js;
 using legallead.desktop.models;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -48,8 +50,16 @@ namespace legallead.desktop.utilities
 
         private static JsHandler GetJsHandler(string name)
         {
+            if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler();
             if (name.Equals("introduction")) return new IntroductionJsHandler();
+            if (name.Equals("home")) return new HomeJsHandler();
             return new JsHandler();
         }
+
+        private static readonly List<string> KnownHandlers = new()
+        {
+            "introduction",
+            "home"
+        };
     }
 }

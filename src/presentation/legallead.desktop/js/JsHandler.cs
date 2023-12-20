@@ -17,6 +17,11 @@ namespace legallead.desktop.js
         {
         }
 
+        public virtual string Submit(string formName, string json)
+        {
+            return string.Empty;
+        }
+
         public virtual Action<object?>? OnInitCompleted { get; set; }
 
         protected static void Init()
@@ -33,7 +38,7 @@ namespace legallead.desktop.js
             user.Applications = applications;
         }
 
-        private static T? TryDeserialize<T>(string json)
+        protected static T? TryDeserialize<T>(string json)
         {
             try
             {

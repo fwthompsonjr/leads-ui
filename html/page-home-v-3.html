@@ -156,6 +156,17 @@ body {
     color: ghostwhite;
 }
 
+.form-control.error {
+    border-color: red;
+}
+label.error {
+    color: red;
+    font-size: small;
+}
+div.help-text {
+    font-size: small;
+}
+
 /*
  * Header
  */
@@ -164,7 +175,6 @@ div[name="header"] {
     border-bottom: #444 solid 1px;
     margin-top: 5px;
 }
-
 
 
 /*
@@ -285,16 +295,16 @@ div[name="loader"] {
         <form id="form-login" name="form-login" novalidate="novalidate">
             <div class="mb-3">
                 <label for="username" class="form-label">User Name / Email:</label>
-                <input type="text" class="form-control error" id="username" name="username" aria-describedby="username-help"><label id="username-error" class="error" for="username">This field is required.</label>
-                <div id="username-help" class="text-secondary">
-                    <small>Provide user-name or email address.</small>
+                <input type="text" class="form-control valid" id="username" name="username" aria-describedby="username-help" aria-invalid="false"><label id="username-error" class="error valid" for="username"></label>
+                <div id="username-help" class="text-secondary help-text">
+                    Provide user-name or email address.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="login-password" class="form-label">Password</label>
-                <input type="password" class="form-control error" name="login-password" id="login-password"><label id="login-password-error" class="error" for="login-password">This field is required.</label>
-                <div id="login-password-help" class="text-secondary" aria-describedby="login-password-help">
-                    <small>Provide password.</small>
+                <input type="password" class="form-control valid" name="login-password" id="login-password" aria-invalid="false"><label id="login-password-error" class="error valid" for="login-password"></label>
+                <div id="login-password-help" class="text-secondary help-text" aria-describedby="login-password-help">
+                    Provide password.
                 </div>
             </div>
             <button id="form-login-submit" type="button" class="btn btn-primary">Sign In</button>
@@ -314,29 +324,29 @@ div[name="loader"] {
             <div class="mb-3">
                 <label for="register-username" class="form-label">User Name:</label>
                 <input type="text" class="form-control" id="register-username" name="username" maxlength="255" minlength="8" aria-describedby="register-username-help">
-                <div id="register-username-help" class="text-secondary">
-                    <small>Provide user name.</small>
+                <div id="register-username-help" class="text-secondary help-text">
+                    Provide user name.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="register-email" class="form-label">Email:</label>
                 <input type="email" class="form-control" id="register-email" name="register-email" maxlength="255" minlength="8" aria-describedby="register-email-help">
-                <div id="register-email-help" class="text-secondary">
-                    <small>Provide an email address.</small>
+                <div id="register-email-help" class="text-secondary help-text">
+                    Provide an email address.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="register-password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="register-password" name="register-password" maxlength="255" minlength="8" aria-describedby="register-password-help">
-                <div id="register-password-help" class="text-secondary">
-                    <small>Provide a strong password.</small>
+                <div id="register-password-help" class="text-secondary help-text">
+                    Provide a strong password.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="register-password-confirmation" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" id="register-password-confirmation" name="register-password-confirmation" maxlength="255" minlength="8" aria-describedby="register-password-confirmation-help">
-                <div id="register-password-confirmation-help" class="text-secondary">
-                    <small>Confirm password.</small>
+                <div id="register-password-confirmation-help" class="text-secondary help-text">
+                    Confirm password.
                 </div>
             </div>
             <button id="form-register-submit" type="button" class="btn btn-primary">Create Account</button>
@@ -504,6 +514,10 @@ function formButtonClicked( formIndex ) {
 	
 	let handler = window.jsHandler;
 	if( undefined === handler || null === handler || !(handler) ) { return; }
+
+
+	let json = serializeFormToObject(indx);
+	handler.submit(formName, json);
 }
 //convert FormData to Object
 var serializeFormToObject = function (formIndex) {

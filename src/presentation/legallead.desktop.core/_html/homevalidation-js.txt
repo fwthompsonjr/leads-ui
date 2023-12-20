@@ -109,6 +109,10 @@ function formButtonClicked( formIndex ) {
 	
 	let handler = window.jsHandler;
 	if( undefined === handler || null === handler || !(handler) ) { return; }
+
+
+	let json = serializeFormToObject(indx);
+	handler.submit(formName, json);
 }
 //convert FormData to Object
 var serializeFormToObject = function (formIndex) {

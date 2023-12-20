@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <WebBrowser x:Name="wb1" Visibility="Hidden" />
         <ContentControl x:Name="content1" />
     </Grid>
 </Window>
