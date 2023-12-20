@@ -59,7 +59,7 @@ namespace legallead.permissions.api
                 var dbint = d.GetRequiredService<IDataInitializer>();
                 return new DataContext(command, dbint);
             });
-            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();            
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
@@ -103,7 +103,6 @@ namespace legallead.permissions.api
             services.AddScoped<IDataProvider>(p =>
             {
                 return p.GetRequiredService<DataProvider>();
-                
             });
             services.AddScoped<IProfileInfrastructure>(p =>
             {
@@ -145,6 +144,12 @@ namespace legallead.permissions.api
             var validationResults = new List<ValidationResult>();
             isValid = Validator.TryValidateObject(source, context, validationResults, true);
             return validationResults;
+        }
+
+        public static string IfNull(this string? s, string fallback)
+        {
+            if (s == null) return fallback;
+            return s;
         }
 
         internal static KeyValuePair<bool, string> Validate(this HttpRequest request, DataProvider db, string response)
