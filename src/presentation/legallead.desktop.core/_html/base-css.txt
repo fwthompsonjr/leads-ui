@@ -139,6 +139,17 @@ body {
     color: ghostwhite;
 }
 
+.form-control.error {
+    border-color: red;
+}
+label.error {
+    color: red;
+    font-size: small;
+}
+div.help-text {
+    font-size: small;
+}
+
 /*
  * Header
  */
@@ -147,7 +158,6 @@ div[name="header"] {
     border-bottom: #444 solid 1px;
     margin-top: 5px;
 }
-
 
 
 /*

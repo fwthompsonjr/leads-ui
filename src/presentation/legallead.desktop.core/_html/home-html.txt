@@ -18,6 +18,7 @@
 			integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
 			crossorigin="anonymous" 
 			referrerpolicy="no-referrer"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 		<style name="subcontent-css">
@@ -164,7 +165,7 @@
 	}
 		
 	</script>
-
+	<!-- script: home-form-validation -->
   </body>
 
 

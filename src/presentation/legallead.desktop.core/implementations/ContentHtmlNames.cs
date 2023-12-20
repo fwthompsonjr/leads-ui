@@ -2,7 +2,6 @@
 using legallead.desktop.interfaces;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using System.Linq;
 
 namespace legallead.desktop.implementations
 {
@@ -122,6 +121,18 @@ namespace legallead.desktop.implementations
             return scripttag;
         }
 
+        private static string GetHomeValidationScript()
+        {
+            var basecsstext = Properties.Resources.homevalidation_js;
+            var builder = new StringBuilder("<script name=\"home-form-validation\">");
+            builder.AppendLine();
+            builder.AppendLine(basecsstext);
+            builder.AppendLine();
+            builder.AppendLine("</script>");
+            var scripttag = builder.ToString();
+            return scripttag;
+        }
+
         private static readonly List<ContentHtml> _contents = new()
         {
             new() { Index = -1, Name = "test"},
@@ -136,12 +147,14 @@ namespace legallead.desktop.implementations
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
         private const string HtmLoginInclude = "<p>Login form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
+        private const string JsHomeValidation = "<!-- script: home-form-validation -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
             { CssBootStrapLink, GetBootstrapCssScript() },
             { HtmLoginInclude, GetLoginInclude() },
-            { HtmRegistrationInclude, GetRegistrationInclude() }
+            { HtmRegistrationInclude, GetRegistrationInclude() },
+            { JsHomeValidation, GetHomeValidationScript() }
         };
     }
 }

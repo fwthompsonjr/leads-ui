@@ -143,15 +143,12 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
         ///    &lt;div class=&quot;card-body&quot;&gt;
         ///        &lt;h5 class=&quot;card-title&quot;&gt;Login&lt;/h5&gt;
-        ///        &lt;form&gt;
+        ///        &lt;form id=&quot;form-login&quot; name=&quot;form-login&quot;&gt;
         ///            &lt;div class=&quot;mb-3&quot;&gt;
         ///                &lt;label for=&quot;username&quot; class=&quot;form-label&quot;&gt;User Name / Email:&lt;/label&gt;
-        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;username&quot; aria-describedby=&quot;emailHelp&quot;&gt;
-        ///                &lt;div id=&quot;emailHelp&quot; class=&quot;text-secondary&quot;&gt;
-        ///                    &lt;small&gt;Provide user-name or email address.&lt;/small&gt;
-        ///                &lt;/div&gt;
-        ///            &lt;/div&gt;
-        ///          [rest of string was truncated]&quot;;.
+        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;username&quot; name=&quot;username&quot; aria-describedby=&quot;username-help&quot;&gt;
+        ///                &lt;div id=&quot;username-help&quot; class=&quot;text-secondary&quot;&gt;
+        ///                    &lt;small&gt;Provide user-name or email address.&lt;/sma [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string homelogin_html {
             get {
@@ -163,18 +160,42 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
         ///    &lt;div class=&quot;card-body&quot;&gt;
         ///        &lt;h5 class=&quot;card-title&quot;&gt;Register&lt;/h5&gt;
-        ///        &lt;form&gt;
+        ///        &lt;form id=&quot;form-register&quot; name=&quot;form-register&quot;&gt;
         ///            &lt;div class=&quot;mb-3&quot;&gt;
         ///                &lt;label for=&quot;register-username&quot; class=&quot;form-label&quot;&gt;User Name:&lt;/label&gt;
-        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;register-username&quot; aria-describedby=&quot;register-username-help&quot;&gt;
-        ///                &lt;div id=&quot;register-username-help&quot; class=&quot;text-secondary&quot;&gt;
-        ///                    &lt;small&gt;Provide user name.&lt;/small&gt;
-        ///                &lt;/div&gt;
-        ///        [rest of string was truncated]&quot;;.
+        ///                &lt;input  type=&quot;text&quot; class=&quot;form-control&quot; 
+        ///                        id=&quot;register-username&quot; name=&quot;username&quot; 
+        ///                        maxlength=&quot;255&quot; minlength=&quot;8&quot;
+        ///                        aria-describedby=&quot;register-username-help [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string homeregister_html {
             get {
                 return ResourceManager.GetString("homeregister_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to let formNames = [ &quot;form-login&quot;, &quot;form-register&quot; ];
+        ///let buttonNames = [ &quot;form-login-submit&quot;, &quot;form-register-submit&quot; ];
+        ///var contacticons = {
+        ///    spin: &quot;i[name=&apos;message-send-spinner&apos;]&quot;,
+        ///    normal: &quot;i[name=&apos;message-send&apos;]&quot;
+        ///}
+        ///
+        ///
+        ///function initializeValidator() {
+        ///	jQuery.validator.setDefaults({
+        ///		debug: true,
+        ///		success: &quot;valid&quot;
+        ///	});
+        ///	jQuery.validator.addMethod(&quot;isEmail&quot;, function (value, element, params) {
+        ///		if (!value) { return false; }
+        ///		if (value == null) { return false; }
+        ///		if (value.length ==  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homevalidation_js {
+            get {
+                return ResourceManager.GetString("homevalidation_js", resourceCulture);
             }
         }
         
