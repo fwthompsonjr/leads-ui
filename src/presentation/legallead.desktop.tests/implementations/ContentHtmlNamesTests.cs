@@ -32,6 +32,8 @@ namespace legallead.desktop.tests.implementations
         [InlineData("missing", false)]
         [InlineData("introduction", true)]
         [InlineData("Introduction", true)]
+        [InlineData("home", true)]
+        [InlineData("Home", true)]
         public void ContentHtmlNamesIsValid(string test, bool expected)
         {
             var sut = new ContentHtmlNames();
@@ -48,6 +50,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("Introduction", true)]
         [InlineData("home", true)]
         [InlineData("Home", true)]
+        [InlineData("test", false)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
             var sut = new ContentHtmlNames();
@@ -67,6 +70,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("Introduction", true)]
         [InlineData("home", true)]
         [InlineData("Home", true)]
+        [InlineData("test", false)]
         public void ContentHtmlNamesCanGetContentStream(string test, bool expected)
         {
             var sut = new ContentHtmlNames();

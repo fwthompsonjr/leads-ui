@@ -19,9 +19,11 @@ namespace legallead.desktop.implementations
 
         public ContentHtml? GetContent(string name)
         {
+            const char minus = '-';
             if (!IsValid(name)) return null;
-            var item = ContentNames.Find(x =>
-                x.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            var item = ContentNames
+                    .Where(w => w.Name.Contains(minus))
+                    .FirstOrDefault(x => x.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
             if (item == null) return null;
             if (string.IsNullOrEmpty(item.Content))
             {
@@ -52,7 +54,8 @@ namespace legallead.desktop.implementations
 
         private static List<string> GetNames()
         {
-            var names = _contents.Select(x => x.Name.Split('-')[0].ToLower()).ToList();
+            const char minus = '-';
+            var names = _contents.Select(x => x.Name.Split(minus)[0].ToLower()).ToList();
             return names;
         }
 
@@ -121,6 +124,7 @@ namespace legallead.desktop.implementations
 
         private static readonly List<ContentHtml> _contents = new()
         {
+            new() { Index = -1, Name = "test"},
             new() { Index = 0, Name = "blank-html"},
             new() { Index = 10, Name = "base-css"},
             new() { Index = 100, Name = "introduction-html"},
