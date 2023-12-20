@@ -1,7 +1,10 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -21,11 +24,11 @@ namespace legallead.desktop.handlers
                 var response = new ApiResponse { StatusCode = 402, Message = "Invalid form name provided." };
                 return JsonConvert.SerializeObject(response);
             }
-            var objectData = ConvertTo(formName, json);
+            var objectData = ConvertTo(formName, json).Result;
             return JsonConvert.SerializeObject(objectData);
         }
 
-        private static ApiResponse ConvertTo(string formName, string json)
+        private static async Task<ApiResponse> ConvertTo(string formName, string json)
         {
             const string failureMessage = "Unable to parse form submission data.";
             var failed = new ApiResponse { StatusCode = 402, Message = failureMessage };
@@ -35,15 +38,27 @@ namespace legallead.desktop.handlers
             {
                 return failed;
             }
+
+            var provider = AppBuilder.ServiceProvider;
+            if (provider == null) return failed;
+
+            var api = provider.GetRequiredService<PermissionApi>();
+            if (api == null) return failed;
+
+            var user = provider.GetRequiredService<UserBo>();
+            if (user == null) return failed;
+
             switch (matchedName)
             {
                 case "form-login":
                     var data = TryDeserialize<LoginForm>(json);
                     if (data == null) return failed;
-                    return succeeded;
+                    var obj = JsonConvert.SerializeObject(new { data.UserName, data.Password }) ?? string.Empty;
+                    var loginResponse = await api.Post("login", obj, user) ?? failed;
+                    return loginResponse;
 
                 default:
-                    return new ApiResponse { StatusCode = 200, Message = "Form processed as expected!" };
+                    return succeeded;
             }
         }
 

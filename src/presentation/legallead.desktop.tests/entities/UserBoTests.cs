@@ -58,5 +58,17 @@ namespace legallead.desktop.tests.entities
                 Assert.Equal(expected, i.IsInitialized);
             });
         }
+
+        [Fact]
+        public void UserBoCanGetAppServiceHeader()
+        {
+            var items = faker.Generate(10);
+            items.ForEach(i =>
+            {
+                var expected = i.Applications == null || i.Applications.Length == 0;
+                var header = i.GetAppServiceHeader();
+                Assert.Equal(expected, string.IsNullOrEmpty(header));
+            });
+        }
     }
 }

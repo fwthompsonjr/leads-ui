@@ -22,5 +22,18 @@ namespace legallead.desktop.tests.utilities
             var actual = input.ToTitleCase();
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("   ", "   ")]
+        [InlineData("fruit-and-vegetables", "fruit-and-vegetables")]
+        [InlineData("fruit/and/vegetables", "fruit/and/vegetables")]
+        [InlineData("fruit/and/vegetables/", "fruit/and/vegetables")]
+        [InlineData("fruit/and/vegetables////", "fruit/and/vegetables")]
+        public void TrimEndTests(string input, string expected)
+        {
+            var actual = input.TrimSlash();
+            Assert.Equal(expected, actual);
+        }
     }
 }
