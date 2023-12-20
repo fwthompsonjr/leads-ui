@@ -17,11 +17,11 @@
                 </div>
             </div>
             <button id="form-login-submit" type="button" class="btn btn-primary">
-                <i id="form-login-icon" class="fa-solid fa-right-to-bracket"></i>
-                <i id="form-login-icon-spin" class="fa-solid fa-circle-notch fa-spin hide"></i>
+                <i id="form-login-icon" class="bi bi-box-arrow-in-right" ></i>
+                <i id="form-login-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
                 Sign In</button>
                     
-            <div name='form-login-error-message' class='form-group hide'>
+            <div id="form-login-error-message" class="form-group d-none">
                 <!-- Error messages -->
             </div>
         </form>
