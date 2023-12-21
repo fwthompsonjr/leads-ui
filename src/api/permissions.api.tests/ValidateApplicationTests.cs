@@ -15,10 +15,11 @@ namespace permissions.api.tests
         public void RequestValidationHappyPath()
         {
             const string headerName = "APP_IDENTITY";
+            var applist = ApplicationModel.GetApplicationsFallback();
             var obj = new ApplicationRequestModel
             {
                 Id = Guid.NewGuid(),
-                Name = faker.Name.FullName()
+                Name = faker.PickRandom(applist).Name
             };
             var app = new Component { Id = obj.Id.GetValueOrDefault().ToString("D"), Name = obj.Name };
             var serialObj = JsonConvert.SerializeObject(obj);

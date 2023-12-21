@@ -3,7 +3,7 @@
     "region" : "us-east-2",
     "configuration" : "Debug",
     "framework"     : "net6.0",
-    "self-contained" : false,
+    "self-contained" : true,
     "application"    : "legalleadpermissionsapi",
     "environment"    : "legalleadpermissionsapi-dev",
     "app-path"       : "/",
