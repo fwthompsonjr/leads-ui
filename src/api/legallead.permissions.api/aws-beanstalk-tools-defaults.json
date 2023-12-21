@@ -1,14 +1,15 @@
 
 {
-    "region" : "us-east-1",
-    "configuration" : "Release",
+    "region" : "us-east-2",
+    "configuration" : "Debug",
     "framework"     : "net6.0",
-    "self-contained" : true,
+    "self-contained" : false,
     "application"    : "legalleadpermissionsapi",
     "environment"    : "legalleadpermissionsapi-dev",
     "app-path"       : "/",
     "iis-website"    : "Default Web Site",
-    "enable-xray"    : false,
+    "enable-xray"    : true,
     "enhanced-health-type" : "enhanced",
-    "additional-options"   : ""
+    "additional-options"   : "",
+    "proxy-server"         : "nginx"
 }

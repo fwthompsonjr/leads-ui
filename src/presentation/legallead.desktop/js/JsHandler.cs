@@ -1,4 +1,5 @@
-﻿using legallead.desktop.entities;
+﻿using CefSharp.Wpf;
+using legallead.desktop.entities;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -8,8 +9,11 @@ namespace legallead.desktop.js
 {
     internal class JsHandler
     {
-        public JsHandler()
+        protected readonly ChromiumWebBrowser? web;
+
+        public JsHandler(ChromiumWebBrowser? browser)
         {
+            web = browser;
             AppBuilder.Build();
         }
 
@@ -17,9 +21,8 @@ namespace legallead.desktop.js
         {
         }
 
-        public virtual string Submit(string formName, string json)
+        public virtual void Submit(string formName, string json)
         {
-            return string.Empty;
         }
 
         public virtual Action<object?>? OnInitCompleted { get; set; }

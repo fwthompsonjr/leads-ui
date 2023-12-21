@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CefSharp.Wpf;
+using System;
 using System.Diagnostics;
 using System.Threading;
 
@@ -6,7 +7,7 @@ namespace legallead.desktop.js
 {
     internal class IntroductionJsHandler : JsHandler
     {
-        public IntroductionJsHandler() : base()
+        public IntroductionJsHandler(ChromiumWebBrowser? browser) : base(browser)
         {
         }
 

@@ -1,4 +1,5 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.handlers;
 using legallead.desktop.interfaces;
@@ -29,7 +30,7 @@ namespace legallead.desktop.utilities
                 {
                     Address = GetAddressBase64(content)
                 };
-                var jsHandler = GetJsHandler(name);
+                var jsHandler = GetJsHandler(name, browser);
                 browser.JavascriptObjectRepository.Register("jsHandler", jsHandler);
                 browserContainer.Content = browser;
                 return new ContentRegistrationResponse { Browser = browser, Handler = jsHandler };
@@ -56,12 +57,12 @@ namespace legallead.desktop.utilities
             return string.Format(bs64address, base64EncodedHtml);
         }
 
-        private static JsHandler GetJsHandler(string name)
+        private static JsHandler GetJsHandler(string name, ChromiumWebBrowser? browser)
         {
-            if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler();
-            if (name.Equals("introduction")) return new IntroductionJsHandler();
-            if (name.Equals("home")) return new HomeJsHandler();
-            return new JsHandler();
+            if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler(browser);
+            if (name.Equals("introduction")) return new IntroductionJsHandler(browser);
+            if (name.Equals("home")) return new HomeJsHandler(browser);
+            return new JsHandler(browser);
         }
 
         private static readonly List<string> KnownHandlers = new()

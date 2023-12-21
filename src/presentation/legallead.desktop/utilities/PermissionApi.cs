@@ -20,24 +20,35 @@ namespace legallead.desktop.utilities
 
         public async Task<ApiResponse> Get(string name)
         {
-            var pageName = GetAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
-            var address = string.Format(GetAddresses[pageName], _baseUri);
-            using var client = new HttpClient();
-            var result = await client.GetStringAsync(address);
-            if (result == null)
+            try
+            {
+                var pageName = GetAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+                if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
+                var address = string.Format(GetAddresses[pageName], _baseUri);
+                using var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+                var result = await client.GetStringAsync(address);
+                if (result == null)
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "Unable to communicate with remote server"
+                    };
+                }
+                return new ApiResponse
+                {
+                    StatusCode = 200,
+                    Message = result
+                };
+            }
+            catch (Exception ex)
             {
                 return new ApiResponse
                 {
                     StatusCode = 500,
-                    Message = "Unable to communicate with remote server"
+                    Message = ex.Message
                 };
             }
-            return new ApiResponse
-            {
-                StatusCode = 200,
-                Message = result
-            };
         }
 
         public async Task<ApiResponse> Post(string name, object payload, UserBo user)

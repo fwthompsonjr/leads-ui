@@ -12,6 +12,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="DawnCache\**" />
+	  <Compile Remove="GPUCache\**" />
+	  <EmbeddedResource Remove="DawnCache\**" />
+	  <EmbeddedResource Remove="GPUCache\**" />
+	  <None Remove="DawnCache\**" />
+	  <None Remove="GPUCache\**" />
+	  <Page Remove="DawnCache\**" />
+	  <Page Remove="GPUCache\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="AppSettings.json" />
 	</ItemGroup>
 

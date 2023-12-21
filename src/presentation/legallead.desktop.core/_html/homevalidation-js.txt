@@ -1,3 +1,4 @@
+
 let formNames = [ "form-login", "form-register" ];
 let buttonNames = [ "form-login-submit", "form-register-submit" ];
 var contacticons = {
@@ -117,49 +118,74 @@ function handleApiResponse( indx, response ) {
 	alert( response );
 }
 
+function setIconState( indx, isSpinning ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const pound = "#";
+	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
+	
+	let icons = [];
+	var formName = formNames[indx];
+	var bttn = pound + buttonNames[indx];
+	icons.push(pound + formName + "-icon");
+	icons.push(pound + formName + "-icon-spin");
+	let a = isSpinning ? 0 : 1;
+	let b = isSpinning ? 1 : 0;
+	$( icons[a] ).addClass( hddn );
+	$( icons[b] ).removeClass( hddn );
+	if( isSpinning ) {
+		$( bttn ).attr(dsb, dsb);
+	} else {
+		$( bttn ).removeAttr(dsb);
+	}
+}
+
+
+function setStatusMessage( indx, message, isActive ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const emptymessage = "<!-- Error messages -->"
+	const pound = "#";
+	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
+	var formName = formNames[indx];
+	var dverr = pound + formName + "-error-message"
+	if( isActive ) {
+		$( dverr ).removeClass(hddn);
+		$( dverr ).html(message);
+	} else {
+		$( dverr ).addClass(hddn);
+		$( dverr ).html(emptymessage);
+	}
+}
+
 function formButtonClicked( formIndex ) {
 	const dsb = "disabled";
 	const hddn = "d-none";
-	let issubmitted = false;
-	let apiresponse = "";
-	let icons = [];
-	let frm;
+	
 	let indx = parseInt(formIndex);
 	try {
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return ""; }
-	var formName = formNames[indx];
-	var formSelector = "#" + formName;
-	icons.push("#" + formName + "-icon");
-	icons.push("#" + formName + "-icon-spin");
+		if ( isNaN(indx) || indx < 0 || indx > formNames.length ) { return ""; }
+		setIconState( indx, true );
+		setStatusMessage( indx, "", false );
+		var formName = formNames[indx];
+		var formSelector = "#" + formName;
 
-	frm = $(formSelector);
-	frm.find("button").attr(dsb, dsb);
-
-	frm.validate();
-	var isvalid = frm.valid();
-	if (!isvalid) return;
+		let frm = $(formSelector);
+		frm.validate();
+		var isvalid = frm.valid();
+		if (!isvalid) return;
 	
-	let handler = window.jsHandler;
-	if( undefined === handler || null === handler || !(handler) ) { return; }
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { return; }
+	
+		let json = serializeFormToObject(indx);
+		handler.submit(formName, json);
 
-	$( icons[0] ).addClass( hddn );
-	$( icons[1] ).removeClass( hddn );
-
-	issubmitted = true;
-	let json = serializeFormToObject(indx);
-	apiresponse = handler.submit(formName, json);
-	} 
+	} catch (err) {
+		setStatusMessage( indx, err, true );
+	}
 	finally {
-		if( icons.length == 2) {
-			$( icons[1] ).addClass( hddn );
-			$( icons[0] ).removeClass( hddn );
-		}
-		if (!issubmitted && frm !== undefined) { 
-			frm.find("button").removeAttr(dsb);
-		}
-		if ( apiresponse.length > 0) {
-			handleApiResponse( indx, apiresponse );
-		}
+		setIconState( indx, false );
 	}
 }
 

@@ -2,7 +2,7 @@
 		<script type="text/javascript">
 			try {
 				CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-			} catch {}
+			} catch {}		
 		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -319,10 +319,11 @@ div[name="loader"] {
 										<i id="form-login-icon" class="bi bi-box-arrow-in-right"></i>
 										<i id="form-login-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
 										Sign In</button>
-									<div id="form-login-error-message" class="form-group d-none">
-										
-										<!-- Error messages -->
-									</div>
+									<div id="form-login-error-message" class="form-group"><div class="border border-danger-subtle m-2 p-2 fs-5cd">
+	<span name="status-code" class="text-danger"> 000 Status </span> <br>
+	<span name="status-message" class="text-secondary"> Invalid user state. Please initialize user context. </span> <br>
+</div>
+</div>
 								</form>
 							</div>
 						</div>
@@ -411,6 +412,7 @@ div[name="loader"] {
 	
 		</script>
 		<script name="home-form-validation">
+
 let formNames = [ "form-login", "form-register" ];
 let buttonNames = [ "form-login-submit", "form-register-submit" ];
 var contacticons = {
@@ -573,7 +575,6 @@ function setStatusMessage( indx, message, isActive ) {
 function formButtonClicked( formIndex ) {
 	const dsb = "disabled";
 	const hddn = "d-none";
-	let issubmitted = false;
 	let apiresponse = "";
 	let icons = [];
 	let frm;
@@ -593,17 +594,15 @@ function formButtonClicked( formIndex ) {
 	
 	let handler = window.jsHandler;
 	if( undefined === handler || null === handler || !(handler) ) { return; }
-
-	$( icons[0] ).addClass( hddn );
-	$( icons[1] ).removeClass( hddn );
-
-	issubmitted = true;
+	
 	let json = serializeFormToObject(indx);
 	apiresponse = handler.submit(formName, json);
-	} 
+	setStatusMessage( indx, apiresponse, true );
+	} catch (err) {
+		setStatusMessage( indx, err, true );
+	}
 	finally {
 		setIconState( indx, false );
-		if (!hasSubmissionError) { setStatusMessage( indx, "", false ); }
 	}
 }
 

@@ -47,10 +47,10 @@ namespace legallead.desktop.utilities
             };
         }
 
-        private static JsCompletedHandler? GetInitializationHandler(string name)
+        private static JsCompletedHandler? GetInitializationHandler(string name, ChromiumWebBrowser? web = null)
         {
-            if (name.Equals("introduction")) return new InitializationCompletedHandler();
-            if (name.Equals("home")) return new JsHomeFormSubmittedHandler();
+            if (name.Equals("introduction")) return new InitializationCompletedHandler(web);
+            if (name.Equals("home")) return new JsHomeFormSubmittedHandler(web);
             return default;
         }
     }

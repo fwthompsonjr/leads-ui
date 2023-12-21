@@ -1,15 +1,21 @@
-﻿using legallead.desktop.handlers;
+﻿using CefSharp.Wpf;
+using legallead.desktop.entities;
+using legallead.desktop.handlers;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.desktop.js
 {
     internal class HomeJsHandler : JsHandler
     {
-        public override string Submit(string formName, string json)
+        public override void Submit(string formName, string json)
         {
-            var response = _handler.Submit(formName, json);
-            return response ?? string.Empty;
+            var handler = new JsHomeFormSubmittedHandler(web);
+            handler.Submit(formName, json);
         }
 
-        private static readonly JsCompletedHandler _handler = new JsHomeFormSubmittedHandler();
+        public HomeJsHandler(ChromiumWebBrowser? browser) : base(browser)
+        {
+        }
     }
 }
