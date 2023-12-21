@@ -15,21 +15,12 @@ namespace legallead.jdbc.helpers
 
         public DataInitializer()
         {
-            _connectionString = RemoteData.GetPostGreString();
+            _connectionString = AwsData.GetPostGreString();
         }
 
         public virtual IDbConnection CreateConnection()
         {
-            var connectionType = RemoteData.GetConnectionType();
-            switch (connectionType)
-            {
-                case RemoteData.DbConnectionType.MySQL:
-                    return new MySqlConnection(_connectionString);
-                case RemoteData.DbConnectionType.PostGres:
-                    return new NpgsqlConnection(_connectionString);
-                default:
-                    throw new InvalidOperationException();
-            }
+            return new MySqlConnection(_connectionString);
         }
 
         public async Task Init()
@@ -595,19 +586,23 @@ namespace legallead.jdbc.helpers
                 }
             }
         }
-        private async static Task TryExecuteAsync(IDbConnection connection, string command)
+
+        private static async Task TryExecuteAsync(IDbConnection connection, string command)
         {
-            try {
+            try
+            {
                 if (string.IsNullOrEmpty(command) || command.Length < 5)
                 {
                     Debugger.Break();
                 }
                 await connection.ExecuteAsync(command);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
         }
+
         private async Task InitReasonCodes()
         {
             var command = "INSERT INTO REASONCODES " + Environment.NewLine +
@@ -630,6 +625,7 @@ namespace legallead.jdbc.helpers
                 await connection.ExecuteAsync(stmt);
             }
         }
+
         private static readonly List<PermissionGroup> permissionGroups = new()
         {
             new() {  Name = "None", GroupId = 100, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },

@@ -29,7 +29,7 @@ namespace legallead.permissions.api.Controllers
         {
             if (_readme == null)
             {
-                _readme ??= defaultReadme;
+                SetApplicationReadMe(defaultReadme);
                 GenerateReadMe(ref _readme);
             }
             return _readme ?? defaultReadme;
@@ -60,17 +60,17 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<string> Register([FromBody] RegisterAccountModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";
             var merrors = model.Validate(out bool isModelValid);
             if (!isModelValid)
             {
                 response = string.Join(';', merrors.Select(m => m.ErrorMessage));
-                return response;
+                return BadRequest(response);
             }
             var applicationCheck = Request.Validate(_db, response);
-            if (!applicationCheck.Key) { return applicationCheck.Value; }
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var account = new UserModel
             {
                 UserName = model.UserName,
@@ -81,21 +81,29 @@ namespace legallead.permissions.api.Controllers
             var isDuplicate = await IsDuplicateAccount(user);
             if (user == null || isDuplicate)
             {
-                return "Potential duplicate account found.";
+                return Conflict("Potential duplicate account found.");
             }
-            var isAdded = await TryCreateAccount(user);
-            var aresponse = isAdded ? user.Id : response;
-            if (isAdded)
+            try
             {
-                await _db.InitializeProfile(user);
-                await _db.InitializePermission(user);
-                await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
-                await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
+                var isAdded = await TryCreateAccount(user);
+                var aresponse = isAdded ? user.Id : response;
+                if (isAdded)
+                {
+                    await _db.InitializeProfile(user);
+                    await _db.InitializePermission(user);
+                    await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
+                    await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
+                }
+                if (aresponse != null) return Ok(aresponse);
+                return UnprocessableEntity(response);
             }
-            return aresponse ?? response;
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        private static void GenerateReadMe(ref string readme)
+        private static void GenerateReadMe(ref string? readme)
         {
             if (isReadMeBuilt) return;
             var baseDir = System.AppContext.BaseDirectory;
@@ -154,9 +162,18 @@ namespace legallead.permissions.api.Controllers
             => applications ??= GetApplicationsFallback();
 
         private static List<ApplicationModel>? applications;
+
         private static List<ApplicationModel> GetApplicationsFallback()
         {
             return ApplicationModel.GetApplicationsFallback();
+        }
+
+        private static void SetApplicationReadMe(string fallback)
+        {
+            lock (_instance)
+            {
+                _readme = _readme.IfNull(fallback);
+            }
         }
     }
 }

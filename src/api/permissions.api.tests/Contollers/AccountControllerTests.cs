@@ -196,6 +196,28 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
+        public async Task AuthenicateCatchesExceptions()
+        {
+            var provider = GetProvider();
+            var request = faker.Generate();
+            var appHeader = GetApplicationHeader();
+            var userResponse = new KeyValuePair<bool, User?>(true, new User { Id = "abcd" });
+            var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
+            var userDbMq = provider.GetRequiredService<Mock<IUserRepository>>();
+            var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
+            var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
+            var sut = provider.GetRequiredService<SignonController>();
+
+            mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
+            compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
+            userDbMq.Setup(m => m.IsValidUserAsync(It.IsAny<UserModel>())).ReturnsAsync(userResponse);
+            jwtMq.Setup(m => m.GenerateToken(It.IsAny<User>())).Throws(new ApplicationException());
+
+            var actual = await sut.AuthenticateAsync(request);
+            Assert.NotNull(actual);
+        }
+
+        [Fact]
         public async Task RefreshRequiresAppHeader()
         {
             var provider = GetProvider();

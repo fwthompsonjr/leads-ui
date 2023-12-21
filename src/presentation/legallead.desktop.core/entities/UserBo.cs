@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace legallead.desktop.entities
 {
@@ -12,5 +8,13 @@ namespace legallead.desktop.entities
         public string UserName { get; set; } = string.Empty;
         public ApiContext[]? Applications { get; set; }
         public bool IsInitialized => Applications != null;
+
+        public string GetAppServiceHeader()
+        {
+            var count = Applications?.Length ?? 0;
+            if (count <= 0 || Applications == null) return string.Empty;
+            var item = Applications[0];
+            return JsonConvert.SerializeObject(item);
+        }
     }
 }

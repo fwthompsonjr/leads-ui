@@ -1,23 +1,13 @@
 <html>
 
 	<head>
+		<!-- script: common-cef-handler -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
 		<meta name="author" content="">
-		<title>legallead.ui: introduction</title>
-		<!-- googleapis : fonts -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
-		<!-- bootstrap -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
-		<!-- jquery -->
-		<script 
-			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
-			integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
-			crossorigin="anonymous" 
-			referrerpolicy="no-referrer"></script>
+		<title>legallead.ui: home</title>
+		<!-- block: common-headings -->
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 		<style name="subcontent-css">
@@ -47,6 +37,15 @@
 				min-width: 800px;
 				max-width: 1200px;
 			}
+
+			div[name="subcontent-login"],
+			div[name="subcontent-register"] {
+				text-align: left;
+				justify-content: left;
+				margin-bottom: 20px;
+				margin-left: 20px;
+			}
+
 		</style>
 	</head>
 
@@ -72,34 +71,7 @@
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
 			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent active">
-                <br/>
-                <p>
-					Legal Lead is an application used to locate public data from county courts.
-				</p>
-				<p>
-					From this application you can retrieve: <br />
-				</p>
-				<div name="subcontent-home-bullet-list" class="text-left">
-					<ol>
-						<li>Case Details</li>
-						<li>Defendant Information</li>
-						<li>Court Information</li>
-					</ol>
-				</div>
-                <div name="page-call-to-action">
-					<p>
-						<a href="javascript:setDisplay('login')">Login</a>, if you already have an account.
-					</p>
-				</div>
-
-                
-                <div name="register-now">
-					<p class="not-yet">Not registered yet?</p>
-					<p>
-						<a href="javascript:setDisplay('register')">Register now!</a> <br/>
-						It is easy, done in 1 minute and gives you access to product demos and much more!
-					</p>
-                </div>
+				<p>Welcome form</p>
             </div>
 			
 			<div id="dv-subcontent-login" name="subcontent-login"  class="subcontent">
@@ -112,11 +84,8 @@
 		</div>
       </main>
 
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p>(c) 2023 - Legal Lead UI</p>
-        </div>
-      </footer>
+      <!-- block: common-footer -->
+
     </div>
 
 	<script>
@@ -155,7 +124,7 @@
 	}
 		
 	</script>
-
+	<!-- script: home-form-validation -->
   </body>
 
 

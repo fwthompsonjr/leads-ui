@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.desktop", "legall
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.desktop.tests", "legallead.desktop.tests\legallead.desktop.tests.csproj", "{770873D7-C9DE-4F83-AD88-583F72F3EC43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.desktop.core", "legallead.desktop.core\legallead.desktop.core.csproj", "{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.desktop.core", "legallead.desktop.core\legallead.desktop.core.csproj", "{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{0AB23E5A-9D9B-4C35-9A2B-2C6198C2C412}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "a-core", "a-core", "{0AB23E5A-9D9B-4C35-9A2B-2C6198C2C412}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FFE95784-CEBD-4BA2-AF1B-88D1B8FA7E8C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-tests", "c-tests", "{FFE95784-CEBD-4BA2-AF1B-88D1B8FA7E8C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ui", "ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "b-ui", "b-ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,12 +6,12 @@ env:
   PRJ_BUCKET_NAME: "legal-lead-permissions-bucket"
   AWS_NAME: "legalleadpermissionsapi"
   AWS_ENV: "legalleadpermissionsapi-dev"
-  AWS_REGION: "us-east-1"
+  AWS_REGION: "us-east-2"
   
 on:
   push:
     paths:
-      - 'release/legallead.permissions.api.release.txt'
+      - 'disabled/legallead.permissions.api.release.txt'
 
 jobs:
   build:

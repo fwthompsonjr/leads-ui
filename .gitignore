@@ -397,3 +397,9 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 *.trx
+
+# DawnCache
+**/DawnCache/*
+
+# GPUCache
+**/GPUCache/*

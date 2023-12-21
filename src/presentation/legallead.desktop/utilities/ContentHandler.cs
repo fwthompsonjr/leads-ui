@@ -1,8 +1,13 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.handlers;
+using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.models;
+using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -25,7 +30,7 @@ namespace legallead.desktop.utilities
                 {
                     Address = GetAddressBase64(content)
                 };
-                var jsHandler = GetJsHandler(name);
+                var jsHandler = GetJsHandler(name, browser);
                 browser.JavascriptObjectRepository.Register("jsHandler", jsHandler);
                 browserContainer.Content = browser;
                 return new ContentRegistrationResponse { Browser = browser, Handler = jsHandler };
@@ -36,7 +41,13 @@ namespace legallead.desktop.utilities
         private static ContentHtml? GetLocalContent(string name)
         {
             var contentProvider = ContentProvider.LocalContentProvider;
-            return contentProvider.GetContent(name);
+            var raw = contentProvider.GetContent(name);
+            if (raw == null) return null;
+            var provider = AppBuilder.ServiceProvider;
+            var beutifier = provider?.GetRequiredService<IContentParser>();
+            if (beutifier == null) return raw;
+            raw.Content = beutifier.BeautfyHTML(raw.Content);
+            return raw;
         }
 
         private static string GetAddressBase64(ContentHtml content)
@@ -46,10 +57,18 @@ namespace legallead.desktop.utilities
             return string.Format(bs64address, base64EncodedHtml);
         }
 
-        private static JsHandler GetJsHandler(string name)
+        private static JsHandler GetJsHandler(string name, ChromiumWebBrowser? browser)
         {
-            if (name.Equals("introduction")) return new IntroductionJsHandler();
-            return new JsHandler();
+            if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler(browser);
+            if (name.Equals("introduction")) return new IntroductionJsHandler(browser);
+            if (name.Equals("home")) return new HomeJsHandler(browser);
+            return new JsHandler(browser);
         }
+
+        private static readonly List<string> KnownHandlers = new()
+        {
+            "introduction",
+            "home"
+        };
     }
 }

@@ -59,7 +59,7 @@ namespace legallead.permissions.api
                 var dbint = d.GetRequiredService<IDataInitializer>();
                 return new DataContext(command, dbint);
             });
-            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();            
+            services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
             services.AddScoped<IPermissionMapRepository, PermissionMapRepository>();
             services.AddScoped<IProfileMapRepository, ProfileMapRepository>();
@@ -103,7 +103,6 @@ namespace legallead.permissions.api
             services.AddScoped<IDataProvider>(p =>
             {
                 return p.GetRequiredService<DataProvider>();
-                
             });
             services.AddScoped<IProfileInfrastructure>(p =>
             {
@@ -147,10 +146,14 @@ namespace legallead.permissions.api
             return validationResults;
         }
 
+        public static string IfNull(this string? s, string fallback)
+        {
+            if (s == null) return fallback;
+            return s;
+        }
+
         internal static KeyValuePair<bool, string> Validate(this HttpRequest request, DataProvider db, string response)
         {
-            var pair = new KeyValuePair<bool, string>(true, "application is valid");
-
             var application = request.GetObjectFromHeader<ApplicationRequestModel>("APP_IDENTITY");
             if (application == null)
             {
@@ -162,18 +165,7 @@ namespace legallead.permissions.api
                 response = string.Join(';', apperrors.Select(m => m.ErrorMessage));
                 return new KeyValuePair<bool, string>(false, response);
             }
-            var emptyGuid = Guid.Empty.ToString("D");
-            if (emptyGuid.Equals(application.Id))
-            {
-                return SimpleNameValidation(application.Name);
-            }
-            var matched = db.Find(application).GetAwaiter().GetResult();
-            if (matched == null || !(matched.Name ?? "").Equals(application.Name))
-            {
-                response = "Target application is not found or mismatched.";
-                return new KeyValuePair<bool, string>(false, response);
-            }
-            return pair;
+            return SimpleNameValidation(application.Name);
         }
 
         internal static async Task<User?> GetUser(this HttpRequest request, DataProvider db)
@@ -200,12 +192,6 @@ namespace legallead.permissions.api
             var level = await request.GetUserLevel(db);
             if (level == null) return false;
             return level.Equals("admin", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static async Task<Component?> Find(this DataProvider db, ApplicationRequestModel request)
-        {
-            if (request.Id == null) { return null; }
-            return await db.ComponentDb.GetById(request.Id.GetValueOrDefault().ToString("D"));
         }
 
         private static KeyValuePair<bool, string> SimpleNameValidation(string name)

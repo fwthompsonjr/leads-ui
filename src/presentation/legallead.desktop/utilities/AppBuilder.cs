@@ -1,12 +1,9 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.utilities
 {
@@ -17,6 +14,7 @@ namespace legallead.desktop.utilities
         public static IConfiguration? Configuration { get; private set; }
 
         public static string? PermissionApiBase { get; private set; }
+        public static string? InitialViewName { get; private set; }
 
         public static void Build()
         {
@@ -32,6 +30,10 @@ namespace legallead.desktop.utilities
             {
                 PermissionApiBase = Configuration["Permissions_API"] ?? string.Empty;
             }
+            if (string.IsNullOrEmpty(InitialViewName))
+            {
+                InitialViewName = Configuration["Initial_View"] ?? "introduction";
+            }
             if (ServiceProvider == null)
             {
                 var serviceCollection = new ServiceCollection();
@@ -42,9 +44,12 @@ namespace legallead.desktop.utilities
 
         private static void ConfigureServices(IServiceCollection services)
         {
+            var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
             services.AddTransient(s => new PermissionApi(PermissionApiBase ?? string.Empty));
             services.AddTransient(typeof(MainWindow));
+            if (provider == null) return;
+            services.AddTransient(s => provider.GetRequiredService<IContentParser>());
         }
     }
 }

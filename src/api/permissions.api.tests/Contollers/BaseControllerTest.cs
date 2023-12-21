@@ -152,11 +152,12 @@ namespace permissions.api.tests.Contollers
         protected static AppHeader GetApplicationHeader()
         {
             var localFaker = new Faker();
+            var applist = ApplicationModel.GetApplicationsFallback();
             const string headerName = "APP_IDENTITY";
             var obj = new ApplicationRequestModel
             {
                 Id = Guid.NewGuid(),
-                Name = localFaker.Name.FullName()
+                Name = localFaker.PickRandom(applist).Name
             };
             var app = new Component { Id = obj.Id.GetValueOrDefault().ToString("D"), Name = obj.Name };
             var serialObj = JsonConvert.SerializeObject(obj);

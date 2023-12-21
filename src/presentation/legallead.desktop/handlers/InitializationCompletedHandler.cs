@@ -1,4 +1,5 @@
-﻿using legallead.desktop.entities;
+﻿using CefSharp.Wpf;
+using legallead.desktop.entities;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -9,7 +10,7 @@ namespace legallead.desktop.handlers
 {
     internal class InitializationCompletedHandler : JsCompletedHandler
     {
-        public InitializationCompletedHandler() : base()
+        public InitializationCompletedHandler(ChromiumWebBrowser? browser) : base(browser)
         {
         }
 
@@ -21,6 +22,11 @@ namespace legallead.desktop.handlers
             if (user == null || !user.IsInitialized) return;
             const string target = "home";
             ContentHandler.LoadLocal(target, dispatcher, control);
+            dispatcher.Invoke(() => { window.Title = target.ToTitleCase(); });
+        }
+
+        public override void Submit(string formName, string json)
+        {
         }
     }
 }

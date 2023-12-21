@@ -2,6 +2,7 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace permissions.api.tests.Contollers
@@ -54,8 +55,17 @@ namespace permissions.api.tests.Contollers
             var sut = provider.GetRequiredService<ApplicationController>();
             request.Email = string.Empty;
             var actual = await sut.Register(request);
-            Assert.False(string.IsNullOrEmpty(actual));
-            Assert.False(Guid.TryParse(actual, out var _));
+            Assert.NotNull(actual);
+            if (actual is not BadRequestObjectResult oresult)
+            {
+                Assert.Fail($"Invalid controller response. Expected BadRequestObjectResult, Actual {actual.GetType().Name}");
+                return;
+            }
+
+            Assert.NotNull(oresult.Value);
+            var message = Convert.ToString(oresult.Value) ?? string.Empty;
+            Assert.False(string.IsNullOrWhiteSpace(message));
+            Assert.False(Guid.TryParse(message, out var _));
         }
 
         [Fact]
@@ -71,8 +81,15 @@ namespace permissions.api.tests.Contollers
             var sut = provider.GetRequiredService<ApplicationController>();
             request.Password = string.Empty;
             var actual = await sut.Register(request);
-            Assert.False(string.IsNullOrEmpty(actual));
-            Assert.False(Guid.TryParse(actual, out var _));
+            Assert.NotNull(actual);
+            if (actual is not BadRequestObjectResult oresult)
+            {
+                Assert.Fail($"Invalid controller response. Expected BadRequestObjectResult, Actual {actual.GetType().Name}");
+                return;
+            }
+
+            Assert.NotNull(oresult.Value);
+            Assert.False(string.IsNullOrEmpty(oresult.Value.ToString()));
         }
 
         [Fact]
@@ -88,8 +105,17 @@ namespace permissions.api.tests.Contollers
             var sut = provider.GetRequiredService<ApplicationController>();
             request.UserName = string.Empty;
             var actual = await sut.Register(request);
-            Assert.False(string.IsNullOrEmpty(actual));
-            Assert.False(Guid.TryParse(actual, out var _));
+            Assert.NotNull(actual);
+            if (actual is not BadRequestObjectResult oresult)
+            {
+                Assert.Fail($"Invalid controller response. Expected BadRequestObjectResult, Actual {actual.GetType().Name}");
+                return;
+            }
+
+            Assert.NotNull(oresult.Value);
+            var message = Convert.ToString(oresult.Value) ?? string.Empty;
+            Assert.False(string.IsNullOrWhiteSpace(message));
+            Assert.False(Guid.TryParse(message, out var _));
         }
     }
 }

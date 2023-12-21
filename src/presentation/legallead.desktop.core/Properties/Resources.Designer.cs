@@ -120,19 +120,62 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///		&lt;/script&gt;.
+        /// </summary>
+        internal static string commoncefhandler_html {
+            get {
+                return ResourceManager.GetString("commoncefhandler_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///
+        ///      &lt;footer class=&quot;mastfoot mt-auto&quot;&gt;
+        ///        &lt;div class=&quot;inner&quot;&gt;
+        ///          &lt;p&gt;(c) 2023 - Legal Lead UI&lt;/p&gt;
+        ///        &lt;/div&gt;
+        ///      &lt;/footer&gt;.
+        /// </summary>
+        internal static string commonfooter_html {
+            get {
+                return ResourceManager.GetString("commonfooter_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- bootstrap --&gt;
+        ///		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css&quot;&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css&quot; integrity=&quot;sha384-4LISF5TTJ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string commonheadings_html {
+            get {
+                return ResourceManager.GetString("commonheadings_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
-        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///    &lt;title&gt;legallead.ui: home&lt;/title&gt;
-        ///    &lt;!-- googleapis : fonts --&gt;
-        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
-        ///    &lt;!-- jquery --&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- boots [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string home_html {
             get {
@@ -141,18 +184,107 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body&quot;&gt;
+        ///        &lt;h5 class=&quot;card-title&quot;&gt;Login&lt;/h5&gt;
+        ///        &lt;form id=&quot;form-login&quot; name=&quot;form-login&quot;&gt;
+        ///            &lt;div class=&quot;mb-3&quot;&gt;
+        ///                &lt;label for=&quot;username&quot; class=&quot;form-label&quot;&gt;User Name / Email:&lt;/label&gt;
+        ///                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; id=&quot;username&quot; name=&quot;username&quot; aria-describedby=&quot;username-help&quot;&gt;
+        ///                &lt;div id=&quot;username-help&quot; class=&quot;text-secondary help-text&quot;&gt;
+        ///                    Provide user-name or email address.
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homelogin_html {
+            get {
+                return ResourceManager.GetString("homelogin_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card&quot;&gt;
+        ///    &lt;div class=&quot;card-body&quot;&gt;
+        ///        &lt;h5 class=&quot;card-title&quot;&gt;Register&lt;/h5&gt;
+        ///        &lt;form id=&quot;form-register&quot; name=&quot;form-register&quot;&gt;
+        ///            &lt;div class=&quot;mb-3&quot;&gt;
+        ///                &lt;label for=&quot;register-username&quot; class=&quot;form-label&quot;&gt;User Name:&lt;/label&gt;
+        ///                &lt;input  type=&quot;text&quot; class=&quot;form-control&quot; 
+        ///                        id=&quot;register-username&quot; name=&quot;username&quot; 
+        ///                        maxlength=&quot;255&quot; minlength=&quot;8&quot;
+        ///                        aria-describedby=&quot;register-username-help [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homeregister_html {
+            get {
+                return ResourceManager.GetString("homeregister_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to let formNames = [ &quot;form-login&quot;, &quot;form-register&quot; ];
+        ///let buttonNames = [ &quot;form-login-submit&quot;, &quot;form-register-submit&quot; ];
+        ///var contacticons = {
+        ///    spin: &quot;i[name=&apos;message-send-spinner&apos;]&quot;,
+        ///    normal: &quot;i[name=&apos;message-send&apos;]&quot;
+        ///}
+        ///
+        ///
+        ///function initializeValidator() {
+        ///	jQuery.validator.setDefaults({
+        ///		debug: true,
+        ///		success: &quot;valid&quot;
+        ///	});
+        ///	jQuery.validator.addMethod(&quot;isEmail&quot;, function (value, element, params) {
+        ///		if (!value) { return false; }
+        ///		if (value == null) { return false; }
+        ///		if (value.length ==  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homevalidation_js {
+            get {
+                return ResourceManager.GetString("homevalidation_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///
+        ///                &lt;br/&gt;
+        ///                &lt;p&gt;
+        ///					Legal Lead is an application used to locate public data from county courts.
+        ///				&lt;/p&gt;
+        ///				&lt;p&gt;
+        ///					From this application you can retrieve: &lt;br /&gt;
+        ///				&lt;/p&gt;
+        ///				&lt;div name=&quot;subcontent-home-bullet-list&quot; class=&quot;text-left&quot;&gt;
+        ///					&lt;ol&gt;
+        ///						&lt;li&gt;Case Details&lt;/li&gt;
+        ///						&lt;li&gt;Defendant Information&lt;/li&gt;
+        ///						&lt;li&gt;Court Information&lt;/li&gt;
+        ///					&lt;/ol&gt;
+        ///				&lt;/div&gt;
+        ///                &lt;div name=&quot;page-call-to-action&quot;&gt;
+        ///					&lt;p&gt;
+        ///						&lt;a href=&quot;javascript:setDisplay(&apos;lo [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string homewelcome_html {
+            get {
+                return ResourceManager.GetString("homewelcome_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
-        ///&lt;head&gt;
-        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
-        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///    &lt;title&gt;legallead.ui: introduction&lt;/title&gt;
-        ///    &lt;!-- googleapis : fonts --&gt;
-        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///    &lt;!-- bootstrap --&gt;
-        ///    &lt;link rel=&quot;stylesheet&quot; href=&quot;bootstrap.min.css&quot; /&gt;
-        ///    &lt;!-- jquery - [rest of string was truncated]&quot;;.
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: introduction&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string introduction_html {
             get {
