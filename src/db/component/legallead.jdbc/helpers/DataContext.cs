@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.interfaces;
 using MySqlConnector;
-using Npgsql;
 using System.Data;
 
 namespace legallead.jdbc.helpers
@@ -19,7 +18,7 @@ namespace legallead.jdbc.helpers
         {
             dbint ??= new DataInitializer();
             _dbinit = dbint;
-            _connectionString = RemoteData.GetPostGreString();
+            _connectionString = AwsData.GetPostGreString();
             _dbexecutor = command;
         }
 
@@ -27,16 +26,7 @@ namespace legallead.jdbc.helpers
 
         public virtual IDbConnection CreateConnection()
         {
-            var connectionType = RemoteData.GetConnectionType();
-            switch (connectionType)
-            {
-                case RemoteData.DbConnectionType.MySQL:
-                    return new MySqlConnection(_connectionString);
-                case RemoteData.DbConnectionType.PostGres:
-                    return new NpgsqlConnection(_connectionString);
-                default:
-                    throw new InvalidOperationException();
-            }
+            return new MySqlConnection(_connectionString);
         }
 
         public async Task Init()

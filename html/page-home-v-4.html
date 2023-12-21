@@ -1,7 +1,8 @@
 <html><head>
 		<script type="text/javascript">
-			CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-		
+			try {
+				CefSharp.BindObjectAsync("jsHandler", "jsHandler");
+			} catch {}
 		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -257,15 +258,15 @@ div[name="loader"] {
 						<span>Legal Lead UI</span>
 					</h3>
 					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-						<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
-						<a name="subcontent-login" class="nav-link" href="javascript:setDisplay('login')">Login</a>
+						<a name="subcontent-home" class="nav-link" href="javascript:setDisplay('home')">Home</a>
+						<a name="subcontent-login" class="nav-link active" href="javascript:setDisplay('login')">Login</a>
 						<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>
 					</nav>
 				</div>
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active">
+					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent">
 						<br>
 						<p>
 							Legal Lead is an application used to locate public data from county courts.
@@ -295,30 +296,30 @@ div[name="loader"] {
 							</p>
 						</div>
 					</div>
-					<div id="dv-subcontent-login" name="subcontent-login" class="subcontent">
+					<div id="dv-subcontent-login" name="subcontent-login" class="subcontent active">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title">Login</h5>
 								<form id="form-login" name="form-login" novalidate="novalidate">
 									<div class="mb-3">
 										<label for="username" class="form-label">User Name / Email:</label>
-										<input type="text" class="form-control" id="username" name="username" aria-describedby="username-help">
+										<input type="text" class="form-control valid" id="username" name="username" aria-describedby="username-help" aria-invalid="false"><label id="username-error" class="error valid" for="username"></label>
 										<div id="username-help" class="text-secondary help-text">
 											Provide user-name or email address.
 										</div>
 									</div>
 									<div class="mb-3">
 										<label for="login-password" class="form-label">Password</label>
-										<input type="password" class="form-control" name="login-password" id="login-password">
+										<input type="password" class="form-control valid" name="login-password" id="login-password" aria-invalid="false"><label id="login-password-error" class="error valid" for="login-password"></label>
 										<div id="login-password-help" class="text-secondary help-text" aria-describedby="login-password-help">
 											Provide password.
 										</div>
 									</div>
 									<button id="form-login-submit" type="button" class="btn btn-primary">
 										<i id="form-login-icon" class="bi bi-box-arrow-in-right"></i>
-										<i id="form-login-icon-spin" class="bi bi-arrow-clockwise fa-spin"></i>
+										<i id="form-login-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
 										Sign In</button>
-									<div name="form-login-error-message" class="form-group hide">
+									<div id="form-login-error-message" class="form-group d-none">
 										
 										<!-- Error messages -->
 									</div>
@@ -417,19 +418,32 @@ var contacticons = {
     normal: "i[name='message-send']"
 }
 
-
+function isValidEmail( email ) {
+	const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return res.test(email.toLowerCase());
+}
 function initializeValidator() {
 	jQuery.validator.setDefaults({
 		debug: true,
 		success: "valid"
 	});
+
+	jQuery.validator.addMethod("isEmailOrUser", function (value, element, params) {
+		if (!value) { return false; }
+		if (value == null) { return false; }
+		if (value.length == 0) { return false; }
+		if (isValidEmail(String(value))) { return true; }
+		if (value.indexOf("@") >= 0) { return false; }
+		return true;
+	}, 'Must be a valid user name.');
+
 	jQuery.validator.addMethod("isEmail", function (value, element, params) {
 		if (!value) { return false; }
 		if (value == null) { return false; }
 		if (value.length == 0) { return false; }
-		const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		return res.test(String(value).toLowerCase());
+		return isValidEmail(String(value));
 	}, 'Must be a valid email address.');
+
 	jQuery.validator.addMethod("isPassword", function (value, element, params) {
 		if (!value) { return false; }
 		if (value == null) { return false; }
@@ -451,7 +465,8 @@ function initializeFormValidation()
 						"username": {
 							required: true,
 							minlength: 8,
-							maxlength: 255
+							maxlength: 255,
+							isEmailOrUser: true
 						},
 						"login-password": {
 							required: true,
@@ -500,8 +515,6 @@ function initializeFormButtons() {
 		let bttn = document.getElementById(buttonNames[i]);
 		if (undefined === bttn || null === bttn ) { continue; }
 		bttn.addEventListener("click", () => formButtonClicked(i) );
-		let iconsName = "#" + buttonNames[i] + "-icon-spin";
-		$( iconsName ).hide();
 	}
 }
 
@@ -513,25 +526,67 @@ function initializeForms() {
 
 function handleApiResponse( indx, response ) {
 	if( isNaN(indx) || indx < 0 || indx > formNames.length || response.length == 0) { return ""; }
+	// var obj = 
+	alert( response );
+}
+
+function setIconState( indx, isSpinning ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const pound = "#";
+	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
 	
+	let icons = [];
+	var formName = formNames[indx];
+	var bttn = pound + buttonNames[indx];
+	icons.push(pound + formName + "-icon");
+	icons.push(pound + formName + "-icon-spin");
+	let a = isSpinning ? 0 : 1;
+	let b = isSpinning ? 1 : 0;
+	$( icons[a] ).addClass( hddn );
+	$( icons[b] ).removeClass( hddn );
+	if( isSpinning ) {
+		$( bttn ).attr(dsb, dsb);
+	} else {
+		$( bttn ).removeAttr(dsb);
+	}
+}
+
+
+function setStatusMessage( indx, message, isActive ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const emptymessage = "<!-- Error messages -->"
+	const pound = "#";
+	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
+	var formName = formNames[indx];
+	var dverr = pound + formName + "-error-message"
+	if( isActive ) {
+		$( dverr ).removeClass(hddn);
+		$( dverr ).html(message);
+	} else {
+		$( dverr ).addClass(hddn);
+		$( dverr ).html(emptymessage);
+	}
 }
 
 function formButtonClicked( formIndex ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
 	let issubmitted = false;
 	let apiresponse = "";
 	let icons = [];
 	let frm;
 	let indx = parseInt(formIndex);
+	let hasSubmissionError = false;
 	try {
 	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return ""; }
+	setIconState( indx, true );
+	setStatusMessage( indx, "", false );
 	var formName = formNames[indx];
 	var formSelector = "#" + formName;
-	icons.push("#" + formName + "-icon");
-	icons.push("#" + formName + "-icon-spin");
 
 	frm = $(formSelector);
-	frm.find("button").attr("disabled", "disabled");
-
 	frm.validate();
 	var isvalid = frm.valid();
 	if (!isvalid) return;
@@ -539,24 +594,16 @@ function formButtonClicked( formIndex ) {
 	let handler = window.jsHandler;
 	if( undefined === handler || null === handler || !(handler) ) { return; }
 
-	$( icons[0] ).addClass( "hide" );
-	$( icons[1] ).removeClass( "hide" );
+	$( icons[0] ).addClass( hddn );
+	$( icons[1] ).removeClass( hddn );
 
 	issubmitted = true;
 	let json = serializeFormToObject(indx);
 	apiresponse = handler.submit(formName, json);
 	} 
 	finally {
-		if( icons.length == 2) {
-			$( icons[0] ).addClass( "hide" );
-			$( icons[1] ).removeClass( "hide" );
-		}
-		if (!issubmitted && frm !== undefined) { 
-			frm.find("button").removeAttr("disabled");
-		}
-		if ( apiresponse.length > 0) {
-			handleApiResponse( indx, apiresponse );
-		}
+		setIconState( indx, false );
+		if (!hasSubmissionError) { setStatusMessage( indx, "", false ); }
 	}
 }
 

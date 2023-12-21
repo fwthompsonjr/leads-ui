@@ -11,3 +11,4 @@ Release information - legallead.permissions.api
 12/12/2023 04:14:00 AM test using aws cli with pwsh to deploy
 12/20/2023 05:52:00 AM correction to registration end point
 12/20/2023 11:46:00 AM added try/catch to authenication method
+12/20/2023 11:46:00 AM added try/catch to authenication method
