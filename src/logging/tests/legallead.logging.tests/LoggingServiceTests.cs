@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using legallead.logging.entities;
+using legallead.logging.implementations;
 using legallead.logging.interfaces;
 
 namespace legallead.logging.tests
@@ -20,7 +21,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception();
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteError(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogError(ex); });
             Assert.Null(exception);
         }
 
@@ -29,7 +30,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteCritical(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogCritical(ex); });
             Assert.Null(exception);
         }
 
@@ -38,7 +39,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteWarning(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogWarning(ex); });
             Assert.Null(exception);
         }
 
@@ -47,7 +48,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteInformation(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogInformation(ex); });
             Assert.Null(exception);
         }
 
@@ -56,7 +57,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteDebug(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogDebug(ex); });
             Assert.Null(exception);
         }
 
@@ -65,7 +66,7 @@ namespace legallead.logging.tests
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
-            var exception = await Record.ExceptionAsync(async () => { _ = await service.WriteVerbose(ex); });
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogVerbose(ex); });
             Assert.Null(exception);
         }
 
@@ -77,7 +78,7 @@ namespace legallead.logging.tests
             var ex = faker.System.Exception().Message;
             var exception = await Record.ExceptionAsync(async () =>
             {
-                var dto = await service.WriteVerbose(ex);
+                var dto = await service.LogVerbose(ex);
                 await repo.Insert(dto);
             });
             Assert.Null(exception);
@@ -91,7 +92,7 @@ namespace legallead.logging.tests
             var ex = faker.System.Exception().Message;
             var exception = await Record.ExceptionAsync(async () =>
             {
-                var dto = await service.WriteVerbose(ex);
+                var dto = await service.LogVerbose(ex);
                 var query = new LogQueryModel
                 {
                     Id = 1,

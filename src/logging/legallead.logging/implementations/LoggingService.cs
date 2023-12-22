@@ -6,18 +6,24 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace legallead.logging
+namespace legallead.logging.implementations
 {
-    internal class LoggingService
+    internal class LoggingService : ILoggingService
     {
         private readonly Guid _id;
         private readonly ILogContentRepository _contentRepository;
+        private readonly ILogConfiguration _config;
 
-        public LoggingService(Guid? requestId = null, ILogContentRepository? contentRepository = null)
+        public LoggingService(
+            Guid? requestId = null,
+            ILogContentRepository? contentRepository = null,
+            ILogConfiguration? config = null)
         {
             _id = requestId.GetValueOrDefault(Guid.NewGuid());
             contentRepository ??= InternalDbServiceProvider.GetService<ILogContentRepository>();
+            config ??= InternalDbServiceProvider.GetService<ILogConfiguration>();
             _contentRepository = contentRepository;
+            _config = config;
         }
 
         private enum SeverityCodes
@@ -30,65 +36,75 @@ namespace legallead.logging
             Error = 5000
         }
 
-        public async Task<LogInsertModel> WriteVerbose(
+        public async Task<LogInsertModel> LogVerbose(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Verbose, _id, callerLineNumber, callerMethodName, message);
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
         }
 
-        public async Task<LogInsertModel> WriteDebug(
+        public async Task<LogInsertModel> LogDebug(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Debug, _id, callerLineNumber, callerMethodName, message);
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
         }
 
-        public async Task<LogInsertModel> WriteInformation(
+        public async Task<LogInsertModel> LogInformation(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Information, _id, callerLineNumber, callerMethodName, message);
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
         }
 
-        public async Task<LogInsertModel> WriteWarning(
+        public async Task<LogInsertModel> LogWarning(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Warning, _id, callerLineNumber, callerMethodName, message);
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
         }
 
-        public async Task<LogInsertModel> WriteCritical(
+        public async Task<LogInsertModel> LogCritical(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Critical, _id, callerLineNumber, callerMethodName, message);
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
         }
 
-        public async Task<LogInsertModel> WriteError(
+        public async Task<LogInsertModel> LogError(
             Exception exception,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Error, _id, callerLineNumber, callerMethodName, exception.Message);
             model.Detail = exception.ToString();
-            await _contentRepository.Insert(model);
+            await Write(model);
             return model;
+        }
+
+        private async Task Write(LogInsertModel model)
+        {
+            var serialized = JsonConvert.SerializeObject(model, Formatting.Indented);
+            Console.WriteLine(serialized);
+            int currentLevel = (int)_config.LogLevel;
+            int index = model.StatusId.GetValueOrDefault();
+            if (currentLevel < index) return;
+            await _contentRepository.Insert(model);
         }
 
         internal static string GetInsertParameters(LogInsertModel dto)

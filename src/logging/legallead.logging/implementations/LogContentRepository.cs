@@ -10,23 +10,24 @@ namespace legallead.logging.implementations
         {
         }
 
-        public async Task InsertChild(LogContentDetailDto dto)
+        public virtual async Task InsertChild(LogContentDetailDto dto)
         {
             await Create(dto);
         }
 
         public async Task Insert(LogInsertModel dto)
         {
+            const int mxlength = 450;
             var parmlist = LoggingService.GetInsertParameters(dto);
             var statement = $"CALL USP_INSERT_LOG_CONTENT( {parmlist} );";
             using var connection = GetContext.CreateConnection();
             var insertId = await GetCommand.QuerySingleOrDefaultAsync<InsertIndexDto>(connection, statement);
             if (string.IsNullOrEmpty(dto.Detail) || insertId == null) return;
             var logContentId = insertId.Id;
-            var lines = dto.Detail.SplitByLength(500);
+            var lines = dto.Detail.SplitByLength(mxlength);
             lines.Keys.ToList().ForEach(async line =>
             {
-                var text = lines[line].Truncate(500);
+                var text = lines[line].Truncate(mxlength);
                 var detail = new LogContentDetailDto
                 {
                     LogContentId = logContentId,

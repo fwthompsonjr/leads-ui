@@ -21,8 +21,11 @@ namespace legallead.logging.tests
         }
 
         [Theory]
-        [InlineData(typeof(ILoggingDbContext))]
+        [InlineData(typeof(ILogConfiguration))]
         [InlineData(typeof(ILoggingDbCommand))]
+        [InlineData(typeof(ILoggingDbContext))]
+        [InlineData(typeof(ILogContentRepository))]
+        [InlineData(typeof(ILoggingService))]
         public void ProviderCanGetInstance(Type type)
         {
             var provider = new LoggingDbServiceProvider().Provider;
