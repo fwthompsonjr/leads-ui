@@ -30,10 +30,9 @@ namespace permissions.api.tests
             };
             var mock = GetMock();
             mock.SetupGet(x => x.Headers).Returns(headers);
-            var db = new MockDataProvider();
-            db.MqComponent.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(app);
+            MockDataProvider.MqComponent.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(app);
             var request = mock.Object;
-            var result = request.Validate(db, faker.Hacker.Phrase());
+            var result = request.Validate(faker.Hacker.Phrase());
             Assert.True(result.Key);
             Assert.Equal("application is valid", result.Value);
         }
@@ -43,9 +42,8 @@ namespace permissions.api.tests
         {
             string response = faker.Hacker.Phrase();
             var mock = GetMock();
-            var db = new MockDataProvider();
             var request = mock.Object;
-            var result = request.Validate(db, response);
+            var result = request.Validate(response);
             Assert.False(result.Key);
             Assert.Equal(response, result.Value);
         }
@@ -90,7 +88,7 @@ namespace permissions.api.tests
             {
             }
 
-            public Mock<IComponentRepository> MqComponent => ComponentMq;
+            public static Mock<IComponentRepository> MqComponent => ComponentMq;
         }
     }
 }

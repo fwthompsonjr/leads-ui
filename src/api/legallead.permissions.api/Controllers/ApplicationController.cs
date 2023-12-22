@@ -69,7 +69,7 @@ namespace legallead.permissions.api.Controllers
                 response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var account = new UserModel
             {

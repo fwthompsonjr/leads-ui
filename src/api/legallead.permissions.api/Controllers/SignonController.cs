@@ -30,7 +30,7 @@ namespace legallead.permissions.api.Controllers
 
             try
             {
-                var applicationCheck = Request.Validate(_db, response);
+                var applicationCheck = Request.Validate(response);
                 if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
                 var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
                 var validUser = await _db.UserDb.IsValidUserAsync(model);
@@ -68,7 +68,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> Refresh(Tokens token)
         {
             var response = "An error occurred refreshing authentication token.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var principal = _jWTManager.GetPrincipalFromExpiredToken(token.AccessToken);
             if (principal == null || principal.Identity == null || string.IsNullOrEmpty(principal.Identity.Name))
@@ -111,7 +111,7 @@ namespace legallead.permissions.api.Controllers
         public IActionResult Verify(Tokens token)
         {
             var response = "An error occurred verifying authentication token.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var isvalid = _jWTManager.ValidateToken(token.AccessToken);
             if (!isvalid)
@@ -127,7 +127,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> ChangePasswordAsync(UserChangePasswordModel usersdata)
         {
             var response = "An error occurred authenticating account.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var model = new UserModel { Password = usersdata.OldPassword, Email = usersdata.UserName, UserName = usersdata.UserName };
             var validUser = await _db.UserDb.IsValidUserAsync(model);

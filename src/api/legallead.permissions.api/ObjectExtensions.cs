@@ -152,7 +152,7 @@ namespace legallead.permissions.api
             return s;
         }
 
-        internal static KeyValuePair<bool, string> Validate(this HttpRequest request, DataProvider db, string response)
+        internal static KeyValuePair<bool, string> Validate(this HttpRequest request, string response)
         {
             var application = request.GetObjectFromHeader<ApplicationRequestModel>("APP_IDENTITY");
             if (application == null)

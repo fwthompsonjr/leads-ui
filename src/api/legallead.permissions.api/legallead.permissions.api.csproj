@@ -25,11 +25,12 @@
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
 		<PackageReference Include="legallead.json.db" Version="3.2.*" />
+		<PackageReference Include="legallead.logging" Version="3.2.*" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.0.3" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
 	</ItemGroup>
 
@@ -40,8 +41,6 @@
 	</ItemGroup>
 
 	<Target Name="ZipOutputPath" AfterTargets="Build" Condition="'$(Configuration)' == 'Zip'">
-		<ZipDirectory
-            SourceDirectory="$(OutputPath)"
-            DestinationFile="$(MSBuildProjectDirectory)\$(ProjectName).zip" />
+		<ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\$(ProjectName).zip" />
 	</Target>
 </Project>
