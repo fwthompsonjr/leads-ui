@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.logging", "legallead.logging\legallead.logging.csproj", "{054E9670-34C2-4BF3-B982-4B7248B90ED1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.logging.tests", "tests\legallead.logging.tests\legallead.logging.tests.csproj", "{F718E051-B37E-499B-A249-4832A3FA1B77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{054E9670-34C2-4BF3-B982-4B7248B90ED1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{054E9670-34C2-4BF3-B982-4B7248B90ED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{054E9670-34C2-4BF3-B982-4B7248B90ED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{054E9670-34C2-4BF3-B982-4B7248B90ED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F718E051-B37E-499B-A249-4832A3FA1B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F718E051-B37E-499B-A249-4832A3FA1B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F718E051-B37E-499B-A249-4832A3FA1B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F718E051-B37E-499B-A249-4832A3FA1B77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E15677A-4706-470A-A550-C35D97A06F1E}
+	EndGlobalSection
+EndGlobal
