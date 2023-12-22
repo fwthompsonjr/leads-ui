@@ -11,7 +11,7 @@ namespace legallead.logging.tests
         public void LogConfigurationHasALoggingLevel()
         {
             var exception = Record.Exception(() => { _ = logConfiguration.LogLevel; });
-            Assert.NotNull(exception);
+            Assert.Null(exception);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace legallead.logging.tests
                 var item = faker.PickRandom<LogConfigurationLevel>();
                 logConfiguration.SetLoggingLevel(item);
             });
-            Assert.NotNull(exception);
+            Assert.Null(exception);
         }
     }
 }

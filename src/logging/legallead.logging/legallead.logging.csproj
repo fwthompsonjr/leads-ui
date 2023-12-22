@@ -13,6 +13,7 @@
 		<PackageVersion>$(PackageVersion)</PackageVersion>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -40,5 +41,12 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>legallead.desktop.core</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 </Project>

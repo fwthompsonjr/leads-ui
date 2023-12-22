@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using legallead.logging.helpers;
-using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.logging.tests.testobj;
 using Microsoft.Extensions.DependencyInjection;

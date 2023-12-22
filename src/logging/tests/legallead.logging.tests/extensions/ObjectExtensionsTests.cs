@@ -1,11 +1,6 @@
 ﻿using Bogus;
 using legallead.logging.extensions;
 using legallead.logging.tests.testobj;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.logging.tests.extensions
 {

@@ -1,7 +1,6 @@
 ﻿using legallead.logging.extensions;
 using legallead.logging.interfaces;
 using Newtonsoft.Json;
-using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;

@@ -39,6 +39,20 @@ namespace legallead.logging.tests.implementations
             .RuleFor(x => x.LineId, y => y.Random.Int(1, 1000))
             .RuleFor(x => x.Line, y => y.Company.CompanyName());
 
+        private readonly Faker<VwLogDto> viewFaker =
+            new Faker<VwLogDto>()
+            .RuleFor(x => x.Id, y => y.IndexFaker + seed)
+            .RuleFor(x => x.RequestId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.StatusId, y => y.Random.Int(10, 2000))
+            .RuleFor(x => x.LineNumber, y => y.Random.Int(1, 1000))
+            .RuleFor(x => x.NameSpace, y => y.Company.CompanyName())
+            .RuleFor(x => x.ClassName, y => y.Company.CompanyName())
+            .RuleFor(x => x.MethodName, y => y.Company.CompanyName())
+            .RuleFor(x => x.Message, y => y.Company.CompanyName())
+            .RuleFor(x => x.LineId, y => y.Random.Int(10, 2000))
+            .RuleFor(x => x.Line, y => y.Company.CompanyName())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent(300));
+
         [Fact]
         public async Task LogCanInsertChild()
         {
@@ -53,7 +67,7 @@ namespace legallead.logging.tests.implementations
             context.Setup(m => m.CreateConnection()).Returns(conn.Object);
 
             var exception = await Record.ExceptionAsync(async () => { await sut.InsertChild(query); });
-            Assert.NotNull(exception);
+            Assert.Null(exception);
         }
 
         [Fact]
@@ -76,7 +90,30 @@ namespace legallead.logging.tests.implementations
                 It.IsAny<DynamicParameters>())).ReturnsAsync(index);
 
             var exception = await Record.ExceptionAsync(async () => { await sut.Insert(query); });
-            Assert.NotNull(exception);
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task LogCanQueryHappyPath()
+        {
+            var query = new LogQueryModel();
+            var index = viewFaker.Generate(4);
+
+            var context = new Mock<ILoggingDbContext>();
+            var db = new Mock<ILoggingDbCommand>();
+            var conn = new Mock<IDbConnection>();
+            var sut = new TestInsertRepo(context.Object, db.Object);
+
+            context.SetupGet(m => m.GetCommand).Returns(db.Object);
+            context.Setup(m => m.CreateConnection()).Returns(conn.Object);
+
+            db.Setup(m => m.QueryAsync<VwLogDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).ReturnsAsync(index);
+
+            var exception = await Record.ExceptionAsync(async () => { await sut.Query(query); });
+            Assert.Null(exception);
         }
 
         private sealed class TestInsertRepo : LogContentRepository
