@@ -9,16 +9,20 @@
 		<PackageProjectUrl>https://localhost:44360</PackageProjectUrl>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
 		<DockerfileContext>..\..</DockerfileContext>
+		<PublishSingleFile>true</PublishSingleFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="..\..\README.txt" Link="_db\README.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
+	  <Compile Remove="_db\**" />
+	  <Content Remove="_db\**" />
+	  <EmbeddedResource Remove="_db\**" />
+	  <None Remove="_db\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="_db\" />
+		<Content Include="README.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,6 +42,21 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>permissions.api.tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<Target Name="ZipOutputPath" AfterTargets="Build" Condition="'$(Configuration)' == 'Zip'">

@@ -106,21 +106,8 @@ namespace legallead.permissions.api.Controllers
         private static void GenerateReadMe(ref string? readme)
         {
             if (isReadMeBuilt) return;
-            var baseDir = System.AppContext.BaseDirectory;
-            var dataRoot = Path.Combine(baseDir, "_db");
-            var dataFile = Path.Combine(dataRoot, "readme.txt");
-            if (System.IO.File.Exists(dataFile))
-            {
-                lock (_instance)
-                {
-                    readme = System.IO.File.ReadAllText(dataFile);
-                    isReadMeBuilt = true;
-                }
-            }
-            else
-            {
-                readme = defaultReadme;
-            }
+            readme = Properties.Resources.README;
+            isReadMeBuilt = true;
         }
 
         private async Task<bool> TryCreateAccount(User user)
