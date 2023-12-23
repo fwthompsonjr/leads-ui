@@ -11,6 +11,7 @@
 		</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageVersion>$(PackageVersion)</PackageVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<FileVersion>1.0.0.0</FileVersion>
 		<ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>

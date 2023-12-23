@@ -1,5 +1,4 @@
-﻿using legallead.json.db.interfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Text;
 
 namespace legallead.json.db.entity
