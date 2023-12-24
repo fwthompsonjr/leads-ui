@@ -19,7 +19,7 @@ RUN dotnet build "./legallead.permissions.api.csproj" -c $BUILD_CONFIGURATION -o
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./legallead.permissions.api.csproj" -r linux-x64 -p:PublishSingleFile=true -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
+RUN dotnet publish "./legallead.permissions.api.csproj" -r linux-x64 -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
 
 FROM base AS final
 WORKDIR /app

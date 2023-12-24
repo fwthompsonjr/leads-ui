@@ -2,6 +2,7 @@
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
 using System.Runtime.Caching;
@@ -35,6 +36,7 @@ namespace legallead.desktop.utilities
                 return new ApiResponse { StatusCode = 503, Message = "Base api address is missing or not defined." };
             }
             var pageName = GetAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+            pageName ??= PostAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
             if (pageName == null)
             {
                 return new ApiResponse { StatusCode = 404, Message = "Invalid page address." };
@@ -53,6 +55,12 @@ namespace legallead.desktop.utilities
             {
                 return new KeyValuePair<bool, ApiResponse>(false, nointernet);
             }
+            var isGetPage = GetAddresses.Keys.Any(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+            if (!isGetPage)
+            {
+                var notfound = new ApiResponse { StatusCode = 404, Message = "Invalid page address." };
+                return new KeyValuePair<bool, ApiResponse>(false, notfound);
+            }
             var addressCheck = CheckAddress(name);
             if (addressCheck.StatusCode != 200) return new KeyValuePair<bool, ApiResponse>(false, addressCheck);
             return new KeyValuePair<bool, ApiResponse>(true, addressCheck);
@@ -60,6 +68,12 @@ namespace legallead.desktop.utilities
 
         public KeyValuePair<bool, ApiResponse> CanPost(string name, object payload, UserBo user)
         {
+            var isPostPage = PostAddresses.Keys.Any(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+            if (!isPostPage)
+            {
+                var notfound = new ApiResponse { StatusCode = 404, Message = "Invalid page address." };
+                return new KeyValuePair<bool, ApiResponse>(false, notfound);
+            }
             var canget = CanGet(name);
             if (!canget.Key) return new KeyValuePair<bool, ApiResponse>(false, canget.Value);
             if (!user.IsInitialized)
@@ -101,30 +115,28 @@ namespace legallead.desktop.utilities
 
         public virtual async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
-            var canpost = CanPost(name, payload, user);
-            if (!canpost.Key) return canpost.Value;
-
-            var pageName = PostAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
-            if (!user.IsInitialized) { return new ApiResponse { Message = "Invalid user state. Please initialize user context." }; }
-            var address = string.Format(PostAddresses[pageName], _baseUri);
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("APP_IDENTITY", user.GetAppServiceHeader());
-            var result = await client.PostAsJsonAsync(address, payload);
-            if (result == null)
+            try
+            {
+                var response = await Task.Run(() =>
+                {
+                    var verify = CanPost(name, payload, user);
+                    if (!verify.Key) return verify.Value;
+                    return new ApiResponse
+                    {
+                        StatusCode = 200,
+                        Message = "API call is to be executed from derived class."
+                    };
+                });
+                return response;
+            }
+            catch (Exception ex)
             {
                 return new ApiResponse
                 {
                     StatusCode = 500,
-                    Message = "Unable to communicate with remote server"
+                    Message = ex.Message
                 };
             }
-            var content = await result.Content.ReadAsStringAsync();
-            return new ApiResponse
-            {
-                StatusCode = (int)result.StatusCode,
-                Message = content
-            };
         }
 
         protected virtual bool GetConnectionStatus(string name, string address)
@@ -144,25 +156,34 @@ namespace legallead.desktop.utilities
             { "application-register", "{0}/api/Application/register" }
         };
 
-        protected static bool CanConnectedToPage(string address)
+        protected static bool CanConnectToPage(string address, IPingAddress? ping = null)
         {
-            bool result = false;
-            Ping p = new();
+            ping ??= new PingAddress();
             try
             {
-                PingReply reply = p.Send(address, 3000);
-                if (reply.Status == IPStatus.Success)
-                    return true;
+                var reply = ping.CheckStatus(address);
+                if (reply != IPStatus.Success)
+                    return false;
+                return true;
             }
             catch
             {
-                return result;
+                return false;
             }
-            return result;
         }
 
         protected const string PageKeyName = "page-{0}-status";
 
         private static readonly ApiResponse nointernet = new() { StatusCode = 503, Message = "Application is unable to connect to internet." };
+
+        private sealed class PingAddress : IPingAddress
+        {
+            public IPStatus CheckStatus(string address)
+            {
+                Ping p = new();
+                var reply = p.Send(address, 1000);
+                return reply.Status;
+            }
+        }
     }
 }

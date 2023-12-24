@@ -47,5 +47,15 @@
 		"description": [
 			"Application resource you have requested is not found or unavailable."
 		]
+	}, 
+	{
+		"id": "409",
+		"code": "Conflict",
+		"description": [
+			"Application is unable to process request. ",
+			"There is a data conflict between your request and the current application state. ",
+			"Potential reason(s) for conflict include: duplicate account, foreign key violation, and/or business rule violations.",
+			"Please contact system administrator for additional details or information regarding this error."
+		]
 	}
 ]

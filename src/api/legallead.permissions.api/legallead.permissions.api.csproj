@@ -9,7 +9,6 @@
 		<PackageProjectUrl>https://localhost:44360</PackageProjectUrl>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
 		<DockerfileContext>..\..</DockerfileContext>
-		<PublishSingleFile>true</PublishSingleFile>
 	</PropertyGroup>
 
 	<ItemGroup>

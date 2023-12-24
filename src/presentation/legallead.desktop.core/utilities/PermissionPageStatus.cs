@@ -48,7 +48,7 @@ namespace legallead.desktop.utilities
             if (!memoryCache.Contains(keyName))
             {
                 var expiration = DateTimeOffset.UtcNow.AddMinutes(15);
-                memoryCache.Add(keyName, CanConnectedToPage(url), expiration);
+                memoryCache.Add(keyName, CanConnectToPage(url), expiration);
             }
 
             return Convert.ToBoolean(memoryCache.Get(keyName));
