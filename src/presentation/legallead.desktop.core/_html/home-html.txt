@@ -8,6 +8,7 @@
 		<meta name="author" content="">
 		<title>legallead.ui: home</title>
 		<!-- block: common-headings -->
+		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css" />
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 		<style name="subcontent-css">

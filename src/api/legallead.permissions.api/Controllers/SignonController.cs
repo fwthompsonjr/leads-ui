@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.models;
+using legallead.logging.interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,18 @@ namespace legallead.permissions.api.Controllers
         private readonly DataProvider _db;
         private readonly IJwtManagerRepository _jWTManager;
         private readonly IRefreshTokenValidator _tokenValidator;
+        private readonly ILoggingInfrastructure _logSvc;
 
-        public SignonController(DataProvider db, IJwtManagerRepository jWTManager, IRefreshTokenValidator tokenValidator)
+        public SignonController(
+            DataProvider db,
+            IJwtManagerRepository jWTManager,
+            IRefreshTokenValidator tokenValidator,
+            ILoggingInfrastructure logService)
         {
             _db = db;
             _jWTManager = jWTManager;
             _tokenValidator = tokenValidator;
+            _logSvc = logService;
         }
 
         [AllowAnonymous]
@@ -27,37 +34,57 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> AuthenticateAsync(UserLoginModel usersdata)
         {
             var response = "An error occurred authenticating account.";
-
+            await _logSvc.LogInformation("Begin : Authenication process");
             try
             {
-                var applicationCheck = Request.Validate(_db, response);
-                if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
+                await _logSvc.LogInformation("Begin : Validate Application Header.");
+                var applicationCheck = Request.Validate(response);
+                await _logSvc.LogInformation("End : Validate Application Header.");
+                if (!applicationCheck.Key)
+                {
+                    await _logSvc.LogWarning("Failed : Validate Application Header. Returning 401 - Unauthorized");
+                    return Unauthorized(applicationCheck.Value);
+                }
+                await _logSvc.LogInformation("Begin : Map Request to User Model.");
                 var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
+                await _logSvc.LogInformation("End : Map Request to User Model.");
+
+                await _logSvc.LogInformation("Begin : Validate User Credential.");
                 var validUser = await _db.UserDb.IsValidUserAsync(model);
+                await _logSvc.LogInformation("End : Validate User Credential.");
                 var user = validUser.Value;
                 if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
                 {
+                    await _logSvc.LogWarning("Failed : Validate User Credential. Returning 401 - Unauthorized");
                     return Unauthorized("Invalid username or password...");
                 }
 
+                await _logSvc.LogInformation("Begin : Generate Access Token.");
                 var token = _jWTManager.GenerateToken(user);
+                await _logSvc.LogInformation("End : Generate Access Token.");
 
                 if (token == null)
                 {
+                    await _logSvc.LogWarning("Failed : Generate Access Token. Returning 401 - Unauthorized");
                     return Unauthorized("Invalid Attempt..");
                 }
 
+                await _logSvc.LogInformation("Begin : Map Token to dto.");
                 var obj = new UserRefreshToken
                 {
                     RefreshToken = token.RefreshToken,
                     UserId = user.Id
                 };
+                await _logSvc.LogInformation("End : Map Token to dto.");
 
+                await _logSvc.LogInformation("Begin : Save Refresh Token.");
                 await _db.UserTokenDb.Add(obj);
+                await _logSvc.LogInformation("End : Save Refresh Token.");
                 return Ok(token);
             }
             catch (Exception ex)
             {
+                await _logSvc.LogError(ex);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -68,7 +95,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> Refresh(Tokens token)
         {
             var response = "An error occurred refreshing authentication token.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var principal = _jWTManager.GetPrincipalFromExpiredToken(token.AccessToken);
             if (principal == null || principal.Identity == null || string.IsNullOrEmpty(principal.Identity.Name))
@@ -111,7 +138,7 @@ namespace legallead.permissions.api.Controllers
         public IActionResult Verify(Tokens token)
         {
             var response = "An error occurred verifying authentication token.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var isvalid = _jWTManager.ValidateToken(token.AccessToken);
             if (!isvalid)
@@ -127,7 +154,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> ChangePasswordAsync(UserChangePasswordModel usersdata)
         {
             var response = "An error occurred authenticating account.";
-            var applicationCheck = Request.Validate(_db, response);
+            var applicationCheck = Request.Validate(response);
             if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
             var model = new UserModel { Password = usersdata.OldPassword, Email = usersdata.UserName, UserName = usersdata.UserName };
             var validUser = await _db.UserDb.IsValidUserAsync(model);

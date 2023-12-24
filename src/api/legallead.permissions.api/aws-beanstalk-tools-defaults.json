@@ -9,7 +9,14 @@
     "app-path"       : "/",
     "iis-website"    : "Default Web Site",
     "enable-xray"    : true,
-    "enhanced-health-type" : "enhanced",
-    "additional-options"   : "",
-    "proxy-server"         : "nginx"
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-094500038aa2f7e8b,sg-01332d0a93da8c798\";\"aws:ec2:vpc,Subnets\"=\"subnet-0f56e1f6cb6385734\"",
+    "proxy-server"         : "none",
+    "solution-stack"       : "64bit Windows Server Core 2019 v2.13.1 running IIS 10.0",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "legalleadpermissionsapi-dev",
+    "instance-type"        : "t3a.medium",
+    "key-pair"             : "kvp-lead-app",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role"
 }

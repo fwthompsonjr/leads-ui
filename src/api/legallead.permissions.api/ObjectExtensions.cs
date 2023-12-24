@@ -4,6 +4,8 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.json.db;
 using legallead.json.db.interfaces;
+using legallead.logging;
+using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
@@ -119,6 +121,25 @@ namespace legallead.permissions.api
             services.AddScoped<PermissionsController>();
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();
             services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
+            services.AddSingleton<LoggingDbServiceProvider>();
+
+            // logging
+            services.AddScoped(p =>
+            {
+                var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
+                return logprovider.GetRequiredService<ILogConfiguration>();
+            });
+            // logging
+            services.AddScoped(p =>
+            {
+                var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
+                return logprovider.GetRequiredService<ILoggingService>();
+            });
+            services.AddScoped<ILoggingInfrastructure>(p =>
+            {
+                var lg = p.GetRequiredService<ILoggingService>();
+                return new LoggingInfrastructure(lg);
+            });
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class
@@ -152,7 +173,7 @@ namespace legallead.permissions.api
             return s;
         }
 
-        internal static KeyValuePair<bool, string> Validate(this HttpRequest request, DataProvider db, string response)
+        internal static KeyValuePair<bool, string> Validate(this HttpRequest request, string response)
         {
             var application = request.GetObjectFromHeader<ApplicationRequestModel>("APP_IDENTITY");
             if (application == null)

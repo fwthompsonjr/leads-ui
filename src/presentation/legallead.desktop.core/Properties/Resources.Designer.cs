@@ -61,44 +61,44 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /*
-        /// * Globals
-        /// */
-        ///
-        ////* Links */
-        ///a,
-        ///a:focus,
-        ///a:hover {
-        ///  color: #fff;
+        ///   Looks up a localized string similar to 
+        ////*
+        ///* Forms
+        ///*/
+        ///.form-control {
+        ///    background-color: transparent;
+        ///    border-color: #555;
+        ///    color: ghostwhite;
         ///}
         ///
-        ////* Custom default button */
-        ///.btn-secondary,
-        ///.btn-secondary:hover,
-        ///.btn-secondary:focus {
-        ///  color: #333;
-        ///  text-shadow: none; /* Prevent inheritance from `body` */
-        ///  background-color: #fff;
-        ///  border: .05rem solid #fff;
+        ///.form-control.error {
+        ///    border-color: red;
+        ///}
+        ///label.error {
+        ///    color: red;
+        ///    font-size: small;
+        ///}
+        ///div.help-text {
+        ///    font-size: small;
+        ///}
+        ///
+        ////*
+        /// * Header
+        /// */
+        ///div[name=&quot;header&quot;] {
+        ///    height: 50px; 
+        ///    border-bottom: #444 solid 1px;
+        ///    margin-top: 5px;
         ///}
         ///
         ///
         ////*
-        /// * Base structure
+        /// * Loader
         /// */
-        ///
-        ///html,
-        ///body {
-        ///  height: 100%;
-        ///  background-color: #333;
-        ///}
-        ///
-        ///body {
-        ///  display: -ms-flexbox;
-        ///  display: -webkit-box;
-        ///  display: flex;
-        ///  -ms-flex-pack: center;
-        ///  [rest of string was truncated]&quot;;.
+        ///div[name=&quot;loader&quot;] {
+        ///  margin-top: 20px;
+        ///  margin-bottom: 20px;
+        ///  border: 16px soli [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string base_css {
             get {
@@ -162,20 +162,47 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [
+        ///	{
+        ///		&quot;id&quot;: &quot;500&quot;,
+        ///		&quot;isDefault&quot; : true,
+        ///		&quot;code&quot;: &quot;Unexpected Error&quot;,
+        ///		&quot;description&quot;: [
+        ///			&quot;Application encoutered an unexpected error. &quot;,
+        ///			&quot;Please contact system administrator for additional details or information regarding this error.&quot;
+        ///		]
+        ///	}, 
+        ///	{
+        ///		&quot;id&quot;: &quot;503&quot;,
+        ///		&quot;code&quot;: &quot;Internet Unavailable&quot;,
+        ///		&quot;description&quot;: [
+        ///			&quot;Application is unable to connect to internet. &quot;,
+        ///			&quot;Please check your internet settings, router, and/or firewall settings &quot;,
+        ///			&quot;to resolve this issue.&quot;
+        ///		]
+        ///	}, 
+        ///	{        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string errorstatus_json {
+            get {
+                return ResourceManager.GetString("errorstatus_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///
         ///	&lt;head&gt;
-        ///		&lt;script type=&quot;text/javascript&quot;&gt;
-        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
-        ///		&lt;/script&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
         ///		&lt;meta charset=&quot;utf-8&quot;&gt;
         ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
         ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
         ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
         ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
-        ///		&lt;!-- googleapis : fonts --&gt;
-        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
-        ///		&lt;!-- boots [rest of string was truncated]&quot;;.
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;cover-css&quot; href=&quot;https://getbootstrap.com/docs/4.0/examples/cover/cover.css&quot; /&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base. [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string home_html {
             get {
@@ -220,23 +247,20 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to let formNames = [ &quot;form-login&quot;, &quot;form-register&quot; ];
+        ///   Looks up a localized string similar to 
+        ///let formNames = [ &quot;form-login&quot;, &quot;form-register&quot; ];
         ///let buttonNames = [ &quot;form-login-submit&quot;, &quot;form-register-submit&quot; ];
         ///var contacticons = {
         ///    spin: &quot;i[name=&apos;message-send-spinner&apos;]&quot;,
         ///    normal: &quot;i[name=&apos;message-send&apos;]&quot;
         ///}
         ///
-        ///
+        ///function isValidEmail( email ) {
+        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        ///	return res.test(email.toLowerCase());
+        ///}
         ///function initializeValidator() {
-        ///	jQuery.validator.setDefaults({
-        ///		debug: true,
-        ///		success: &quot;valid&quot;
-        ///	});
-        ///	jQuery.validator.addMethod(&quot;isEmail&quot;, function (value, element, params) {
-        ///		if (!value) { return false; }
-        ///		if (value == null) { return false; }
-        ///		if (value.length ==  [rest of string was truncated]&quot;;.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string homevalidation_js {
             get {

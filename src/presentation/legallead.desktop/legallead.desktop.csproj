@@ -54,4 +54,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\legallead.desktop.core\legallead.desktop.core.csproj" />
 	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="interfaces\" />
+	</ItemGroup>
 </Project>

@@ -57,6 +57,8 @@ namespace permissions.api.tests
         [InlineData(typeof(ISubscriptionInfrastructure))]
         [InlineData(typeof(IProfileInfrastructure))]
         [InlineData(typeof(IUserPermissionHistoryRepository))]
+        [InlineData(typeof(ListsController))]
+        [InlineData(typeof(ILoggingInfrastructure))] //
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
@@ -66,6 +68,7 @@ namespace permissions.api.tests
             });
             Assert.Null(exception);
         }
+
         [Fact]
         public void ProviderCanCreateMapper()
         {

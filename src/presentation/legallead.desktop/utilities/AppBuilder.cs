@@ -46,10 +46,11 @@ namespace legallead.desktop.utilities
         {
             var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
-            services.AddTransient(s => new PermissionApi(PermissionApiBase ?? string.Empty));
+            services.AddTransient<IPermissionApi>(s => new PermissionPageClient(PermissionApiBase ?? string.Empty));
             services.AddTransient(typeof(MainWindow));
             if (provider == null) return;
             services.AddTransient(s => provider.GetRequiredService<IContentParser>());
+            services.AddSingleton(s => provider.GetRequiredService<IInternetStatus>());
         }
     }
 }

@@ -14,6 +14,7 @@ namespace legallead.desktop.utilities
             var builder = new ServiceCollection();
             builder.AddSingleton<IContentHtmlNames, ContentHtmlNames>();
             builder.AddScoped<IContentParser, ContentParser>();
+            builder.AddSingleton<IInternetStatus, InternetStatus>();
             return builder.BuildServiceProvider();
         }
     }

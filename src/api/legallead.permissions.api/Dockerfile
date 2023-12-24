@@ -2,23 +2,24 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+ENV ASPNETCORE_URLS=https://+:443
 EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["api/legallead.permissions.api/nuget.config", "api/legallead.permissions.api/"]
 COPY ["nuget.config", "."]
 COPY ["api/legallead.permissions.api/legallead.permissions.api.csproj", "api/legallead.permissions.api/"]
-COPY ["db/component/legallead.jdbc/legallead.jdbc.csproj", "db/component/legallead.jdbc/"]
-COPY ["db/component/legallead.json.db/legallead.json.db.csproj", "db/component/legallead.json.db/"]
-RUN dotnet restore "api/legallead.permissions.api/legallead.permissions.api.csproj"
+RUN dotnet restore "./api/legallead.permissions.api/./legallead.permissions.api.csproj"
 COPY . .
 WORKDIR "/src/api/legallead.permissions.api"
-RUN dotnet build "legallead.permissions.api.csproj" -c Release -o /app/build
+RUN dotnet build "./legallead.permissions.api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "legallead.permissions.api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./legallead.permissions.api.csproj" -r linux-x64 -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=true
 
 FROM base AS final
 WORKDIR /app

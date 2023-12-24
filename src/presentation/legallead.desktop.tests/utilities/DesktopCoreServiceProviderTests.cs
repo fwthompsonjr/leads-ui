@@ -18,6 +18,7 @@ namespace legallead.desktop.tests.utilities
         [Theory]
         [InlineData(typeof(IContentParser))]
         [InlineData(typeof(IContentHtmlNames))]
+        [InlineData(typeof(IInternetStatus))]
         public void CanGetRegisteredType(Type type)
         {
             // DesktopCoreServiceProvider.

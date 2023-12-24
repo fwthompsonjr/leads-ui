@@ -20,6 +20,7 @@
 			integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
 			crossorigin="anonymous" 
 			referrerpolicy="no-referrer"></script>
+		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css" />
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 	</head>
