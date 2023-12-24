@@ -95,7 +95,7 @@ namespace legallead.desktop.tests.utilities
         }
 
         [Theory]
-        [InlineData("this-is-not-a-valid-address", null, false)]
+        [InlineData("google.com", null, true)]
         [InlineData("address-mock-valid", true, true)]
         [InlineData("address-mock-false", false, false)]
         public void ServiceCanCheckValidUri(string uri, bool? connectExpression, bool expected)
