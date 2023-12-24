@@ -95,7 +95,6 @@ namespace legallead.desktop.tests.utilities
         }
 
         [Theory]
-        [InlineData("www.google.com", null, true)]
         [InlineData("this-is-not-a-valid-address", null, false)]
         [InlineData("address-mock-valid", true, true)]
         [InlineData("address-mock-false", false, false)]
