@@ -13,7 +13,8 @@ namespace legallead.desktop.utilities
             if (!memoryCache.Contains(IsConnectedKeyName))
             {
                 var expiration = DateTimeOffset.UtcNow.AddMinutes(5);
-                memoryCache.Add(IsConnectedKeyName, IsConnectedToInternet(), expiration);
+                var keyvalue = IsConnectedToInternet();
+                memoryCache.Add(IsConnectedKeyName, keyvalue, expiration);
             }
 
             return ConvertResponse(memoryCache.Get(IsConnectedKeyName));
@@ -27,7 +28,7 @@ namespace legallead.desktop.utilities
 
         private static bool IsConnectedToInternet()
         {
-            string host = "https://www.google.com";
+            string host = "google.com";
             bool result = false;
             Ping p = new();
             try

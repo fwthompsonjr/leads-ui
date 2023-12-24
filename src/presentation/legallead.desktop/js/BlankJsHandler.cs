@@ -2,28 +2,31 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace legallead.desktop.js
 {
-    internal class IntroductionJsHandler : JsHandler
+    internal class BlankJsHandler : JsHandler
     {
-        public IntroductionJsHandler(ChromiumWebBrowser? browser) : base(browser)
+        public BlankJsHandler(ChromiumWebBrowser? browser) : base(browser)
         {
         }
 
         public override void OnPageLoaded()
         {
-            Console.WriteLine("initialize remote data process is requested");
-            var minimun = TimeSpan.FromSeconds(1.2);
+            Console.WriteLine("application base page is loading.");
+            var minimun = TimeSpan.FromMilliseconds(500);
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            Init();
             while (stopWatch.Elapsed < minimun)
             {
                 Thread.Sleep(100);
             }
             stopWatch.Stop();
-            OnInitCompleted?.Invoke(null);
+            _ = Task.Run(() =>
+            {
+                OnInitCompleted?.Invoke(null);
+            }).Wait(100);
         }
     }
 }

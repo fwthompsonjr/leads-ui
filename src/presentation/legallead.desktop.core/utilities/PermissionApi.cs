@@ -1,4 +1,5 @@
-﻿using legallead.desktop.entities;
+﻿using AngleSharp.Dom;
+using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -45,7 +46,7 @@ namespace legallead.desktop.utilities
             {
                 return new ApiResponse { StatusCode = 503, Message = "Page is not available." };
             }
-            return new ApiResponse { StatusCode = 200, Message = pageName };
+            return new ApiResponse { StatusCode = 200, Message = GetUrl(pageName) };
         }
 
         public KeyValuePair<bool, ApiResponse> CanGet(string name)
@@ -139,6 +140,13 @@ namespace legallead.desktop.utilities
             }
         }
 
+        protected string GetUrl(string address)
+        {
+            var isGet = GetAddresses.ContainsKey(address);
+            var pageFragment = isGet ? GetAddresses[address] : PostAddresses[address];
+            return string.Format(pageFragment, _baseUri);
+        }
+
         protected virtual bool GetConnectionStatus(string name, string address)
         {
             return true;
@@ -180,9 +188,9 @@ namespace legallead.desktop.utilities
         {
             public IPStatus CheckStatus(string address)
             {
-                Ping p = new();
-                var reply = p.Send(address, 1000);
-                return reply.Status;
+                if (!Uri.IsWellFormedUriString(address, UriKind.RelativeOrAbsolute))
+                    return IPStatus.BadDestination;
+                return IPStatus.Success;
             }
         }
     }

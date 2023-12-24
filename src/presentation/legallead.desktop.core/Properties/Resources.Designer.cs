@@ -107,6 +107,27 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		&lt;!-- bootstrap --&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string blank_html {
+            get {
+                return ResourceManager.GetString("blank-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @charset &quot;UTF-8&quot;;/*!
         /// * Bootstrap  v5.3.2 (https://getbootstrap.com/)
         /// * Copyright 2011-2023 The Bootstrap Authors
@@ -168,7 +189,7 @@ namespace legallead.desktop.Properties {
         ///		&quot;isDefault&quot; : true,
         ///		&quot;code&quot;: &quot;Unexpected Error&quot;,
         ///		&quot;description&quot;: [
-        ///			&quot;Application encoutered an unexpected error. &quot;,
+        ///			&quot;Application encountered an unexpected error. &quot;,
         ///			&quot;Please contact system administrator for additional details or information regarding this error.&quot;
         ///		]
         ///	}, 
@@ -181,7 +202,7 @@ namespace legallead.desktop.Properties {
         ///			&quot;to resolve this issue.&quot;
         ///		]
         ///	}, 
-        ///	{        /// [rest of string was truncated]&quot;;.
+        ///	{ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string errorstatus_json {
             get {

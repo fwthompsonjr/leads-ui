@@ -50,13 +50,17 @@ namespace legallead.desktop.tests.implementations
         [InlineData("Introduction", true)]
         [InlineData("home", true)]
         [InlineData("Home", true)]
-        [InlineData("test", false)]
+        [InlineData("Blank", true)]
+        [InlineData("blank", true)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
             var sut = new ContentHtmlNames();
             var actual = sut.GetContent(test);
             if (expected)
+            {
                 Assert.NotNull(actual);
+                Assert.False(string.IsNullOrWhiteSpace(actual.Content));
+            }
             else
                 Assert.Null(actual);
         }
