@@ -18,7 +18,7 @@ namespace legallead.desktop.js
             AppBuilder.Build();
         }
 
-        public virtual void Initialize()
+        public virtual void OnPageLoaded()
         {
         }
 

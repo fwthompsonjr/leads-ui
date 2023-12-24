@@ -38,7 +38,7 @@ namespace legallead.desktop.utilities
             return response;
         }
 
-        private static ContentHtml? GetLocalContent(string name)
+        internal static ContentHtml? GetLocalContent(string name)
         {
             var contentProvider = ContentProvider.LocalContentProvider;
             var raw = contentProvider.GetContent(name);
@@ -50,7 +50,7 @@ namespace legallead.desktop.utilities
             return raw;
         }
 
-        private static string GetAddressBase64(ContentHtml content)
+        internal static string GetAddressBase64(ContentHtml content)
         {
             const string bs64address = "data:text/html;base64,{0}";
             var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(content.Content));
@@ -60,6 +60,7 @@ namespace legallead.desktop.utilities
         private static JsHandler GetJsHandler(string name, ChromiumWebBrowser? browser)
         {
             if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler(browser);
+            if (name.Equals("blank")) return new BlankJsHandler(browser);
             if (name.Equals("introduction")) return new IntroductionJsHandler(browser);
             if (name.Equals("home")) return new HomeJsHandler(browser);
             return new JsHandler(browser);
@@ -67,6 +68,7 @@ namespace legallead.desktop.utilities
 
         private static readonly List<string> KnownHandlers = new()
         {
+            "blank",
             "introduction",
             "home"
         };

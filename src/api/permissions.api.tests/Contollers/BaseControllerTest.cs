@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
-using legallead.json.db.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Model;
@@ -51,7 +50,6 @@ namespace permissions.api.tests.Contollers
             {
                 HttpContext = httpContext,
             };
-            var jsonMock = new Mock<IJsonDataProvider>();
             var refreshMock = new Mock<IRefreshTokenValidator>();
             var jwtMock = new Mock<IJwtManagerRepository>();
             var compMk = new Mock<IComponentRepository>();
@@ -77,7 +75,6 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => compMk);
             collection.AddScoped(s => jwtMock);
             collection.AddScoped(s => refreshMock);
-            collection.AddScoped(s => jsonMock);
             collection.AddScoped(s => userPermissionVwMk);
             collection.AddScoped(s => userProfileVwMk);
             collection.AddScoped(s => permissionGroupMk);
@@ -95,7 +92,6 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => userProfileVwMk.Object);
             collection.AddScoped(s => permissionGroupMk.Object);
             collection.AddScoped(s => permissionHistoryDb.Object);
-            collection.AddScoped(s => jsonMock.Object);
             collection.AddScoped(s => profileHistoryDb);
             collection.AddScoped(s => profileHistoryDb.Object);
             collection.AddScoped(p =>

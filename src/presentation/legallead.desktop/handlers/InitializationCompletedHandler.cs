@@ -22,7 +22,7 @@ namespace legallead.desktop.handlers
             if (user == null || !user.IsInitialized) return;
             const string target = "home";
             ContentHandler.LoadLocal(target, dispatcher, control);
-            dispatcher.Invoke(() => { window.Title = target.ToTitleCase(); });
+            dispatcher.Invoke(() => { window.Title = BrowserHelper.GetPageTitle(target); });
         }
 
         public override void Submit(string formName, string json)

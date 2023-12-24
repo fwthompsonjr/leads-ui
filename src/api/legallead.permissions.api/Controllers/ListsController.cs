@@ -37,7 +37,7 @@ namespace legallead.permissions.api.Controllers
         [AllowAnonymous]
         public IActionResult GetCountyDetails()
         {
-            var counties = UsStateCountyList.All.Where(x => x.IsActive);
+            var counties = new List<UsStateCounty>();
             return Ok(counties);
         }
 

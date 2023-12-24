@@ -1,5 +1,6 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using System.Net;
 using System.Runtime.Caching;
 
 namespace legallead.desktop.utilities
@@ -43,7 +44,7 @@ namespace legallead.desktop.utilities
         {
             var keyName = string.Format(PageKeyName, name);
             var memoryCache = MemoryCache.Default;
-            var url = string.Format(address, _baseUri);
+            var url = GetUrl(address);
 
             if (!memoryCache.Contains(keyName))
             {

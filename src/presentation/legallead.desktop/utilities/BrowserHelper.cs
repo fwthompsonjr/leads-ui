@@ -1,5 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.handlers;
+using legallead.desktop.js;
 using legallead.desktop.models;
 using System;
 using System.Windows;
@@ -19,15 +20,22 @@ namespace legallead.desktop.utilities
 
         public ChromiumWebBrowser? Browser { get; private set; }
 
+        public JsHandler? Handler { get; private set; }
         protected Dispatcher? GetDispatcher { get; set; }
 
         public void Load(string name, Dispatcher dispatcher, ContentControl browserContainer)
         {
-            _window.Title = name.ToTitleCase();
+            dispatcher.Invoke(DispatcherPriority.Normal, () =>
+            {
+                _window.Title = GetPageTitle(name);
+            });
+
+            Handler = default;
             var response = ContentHandler.LoadLocal(name, dispatcher, browserContainer);
             Browser = response?.Browser;
             GetDispatcher = dispatcher;
             SetInitializationCompletedHandler(name, browserContainer, response);
+            if (response?.Handler != null) Handler = response.Handler;
         }
 
         private void SetInitializationCompletedHandler(string name, ContentControl browserContainer, ContentRegistrationResponse? response)
@@ -49,9 +57,17 @@ namespace legallead.desktop.utilities
 
         private static JsCompletedHandler? GetInitializationHandler(string name, ChromiumWebBrowser? web = null)
         {
+            if (name.Equals("blank")) return new BlankCompletedHandler(web);
             if (name.Equals("introduction")) return new InitializationCompletedHandler(web);
             if (name.Equals("home")) return new JsHomeFormSubmittedHandler(web);
             return default;
+        }
+
+        public static string GetPageTitle(string name)
+        {
+            if (name.Equals("blank", StringComparison.OrdinalIgnoreCase))
+                return "Legal Lead";
+            return name.ToTitleCase();
         }
     }
 }

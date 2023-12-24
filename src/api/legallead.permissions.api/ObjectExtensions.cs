@@ -2,8 +2,6 @@
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
-using legallead.json.db;
-using legallead.json.db.interfaces;
 using legallead.logging;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
@@ -46,11 +44,6 @@ namespace legallead.permissions.api
 
         public static void RegisterDataServices(this IServiceCollection services)
         {
-            services.AddSingleton<IJsonDataProvider, JsonDataProvider>();
-            services.AddSingleton<IJsonDataInitializer>(p =>
-            {
-                return new JsonDataInitializer();
-            });
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();
