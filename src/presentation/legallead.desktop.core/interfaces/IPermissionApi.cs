@@ -11,5 +11,7 @@ namespace legallead.desktop.interfaces
         KeyValuePair<bool, ApiResponse> CanGet(string name);
 
         KeyValuePair<bool, ApiResponse> CanPost(string name, object payload, UserBo user);
+        Task<ApiResponse> Get(string name);
+        Task<ApiResponse> Post(string name, object payload, UserBo user);
     }
 }

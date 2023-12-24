@@ -1,5 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -32,7 +33,7 @@ namespace legallead.desktop.js
             var provider = AppBuilder.ServiceProvider;
             if (provider == null) return;
 
-            var api = provider.GetRequiredService<PermissionApi>();
+            var api = provider.GetRequiredService<IPermissionApi>();
             var user = provider.GetRequiredService<UserBo>();
             if (api == null || user == null || user.IsInitialized) return;
             var list = api.Get("list").Result;
