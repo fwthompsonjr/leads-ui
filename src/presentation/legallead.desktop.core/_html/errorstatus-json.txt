@@ -40,5 +40,12 @@
 			"Application resource you have requested requires an authorization. ",
 			"Please check your credentials and/or settings from the user profile page."
 		]
+	}, 
+	{
+		"id": "404",
+		"code": "Page Not Found",
+		"description": [
+			"Application resource you have requested is not found or unavailable."
+		]
 	}
 ]
