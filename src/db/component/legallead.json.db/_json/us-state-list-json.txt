@@ -1,0 +1,338 @@
+[
+  {
+    "Id": null,
+    "Name": "Alaska",
+    "ShortName": "AK",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Alabama",
+    "ShortName": "AL",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Arkansas",
+    "ShortName": "AR",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "American Samoa",
+    "ShortName": "AS",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Arizona",
+    "ShortName": "AZ",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "California",
+    "ShortName": "CA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Colorado",
+    "ShortName": "CO",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Connecticut",
+    "ShortName": "CT",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "District of Columbia",
+    "ShortName": "DC",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Delaware",
+    "ShortName": "DE",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Florida",
+    "ShortName": "FL",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Georgia",
+    "ShortName": "GA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Guam",
+    "ShortName": "GU",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Hawaii",
+    "ShortName": "HI",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Iowa",
+    "ShortName": "IA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Idaho",
+    "ShortName": "ID",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Illinois",
+    "ShortName": "IL",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Indiana",
+    "ShortName": "IN",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Kansas",
+    "ShortName": "KS",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Kentucky",
+    "ShortName": "KY",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Louisiana",
+    "ShortName": "LA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Massachusetts",
+    "ShortName": "MA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Maryland",
+    "ShortName": "MD",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Maine",
+    "ShortName": "ME",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Michigan",
+    "ShortName": "MI",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Minnesota",
+    "ShortName": "MN",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Missouri",
+    "ShortName": "MO",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Northern Mariana Islands",
+    "ShortName": "MP",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Mississippi",
+    "ShortName": "MS",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Montana",
+    "ShortName": "MT",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "North Carolina",
+    "ShortName": "NC",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "North Dakota",
+    "ShortName": "ND",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Nebraska",
+    "ShortName": "NE",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "New Hampshire",
+    "ShortName": "NH",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "New Jersey",
+    "ShortName": "NJ",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "New Mexico",
+    "ShortName": "NM",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Nevada",
+    "ShortName": "NV",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "New York",
+    "ShortName": "NY",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Ohio",
+    "ShortName": "OH",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Oklahoma",
+    "ShortName": "OK",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Oregon",
+    "ShortName": "OR",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Pennsylvania",
+    "ShortName": "PA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Puerto Rico",
+    "ShortName": "PR",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Rhode Island",
+    "ShortName": "RI",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "South Carolina",
+    "ShortName": "SC",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "South Dakota",
+    "ShortName": "SD",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Tennessee",
+    "ShortName": "TN",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Texas",
+    "ShortName": "TX",
+    "IsActive": true
+  },
+  {
+    "Id": null,
+    "Name": "Utah",
+    "ShortName": "UT",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Virginia",
+    "ShortName": "VA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Virgin Islands",
+    "ShortName": "VI",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Vermont",
+    "ShortName": "VT",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Washington",
+    "ShortName": "WA",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Wisconsin",
+    "ShortName": "WI",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "West Virginia",
+    "ShortName": "WV",
+    "IsActive": false
+  },
+  {
+    "Id": null,
+    "Name": "Wyoming",
+    "ShortName": "WY",
+    "IsActive": false
+  }
+]

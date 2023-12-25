@@ -1,5 +1,6 @@
 ﻿using legallead.json.db.attr;
 using legallead.json.db.entity;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace legallead.json.db.tests.attr
@@ -9,6 +10,7 @@ namespace legallead.json.db.tests.attr
     {
         private static bool isInitialized = false;
         private static readonly object locker = new();
+
         public UsCountyAttributeTests()
         {
             if (!isInitialized)
@@ -17,7 +19,7 @@ namespace legallead.json.db.tests.attr
                 {
                     UsState.Initialize();
                     UsStateCounty.Initialize();
-                    isInitialized = true; 
+                    isInitialized = true;
                 }
             }
         }
@@ -37,7 +39,6 @@ namespace legallead.json.db.tests.attr
             _ = Check(test, out var actual);
             Assert.Equal(expected, actual);
         }
-
 
         [Theory]
         [InlineData("collin", "Tx", true)]
@@ -85,6 +86,22 @@ namespace legallead.json.db.tests.attr
             Assert.Equal(expected, actual);
         }
 
+        [Fact]
+        public void UsCountyCanListAll()
+        {
+            var list = UsStateCountyList.All;
+            var actual = list != null && list.Any();
+            Assert.True(actual);
+        }
+
+        [Fact]
+        public void UsStateCanListAll()
+        {
+            var list = UsStatesList.All;
+            var actual = list != null && list.Any();
+            Assert.True(actual);
+        }
+
         private static List<ValidationResult> Check<T>(T source, out bool isValid) where T : class
         {
             var context = new ValidationContext(source, serviceProvider: null, items: null);
@@ -92,7 +109,6 @@ namespace legallead.json.db.tests.attr
             isValid = Validator.TryValidateObject(source, context, validationResults, true);
             return validationResults;
         }
-
 
         private sealed class NameTest
         {
