@@ -4,9 +4,16 @@ namespace legallead.desktop.entities
 {
     internal class ErrorStatusMessage
     {
+        [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
-        public bool IsDefault { get; set; }
+
+        [JsonProperty("isDefault")]
+        public bool? IsDefault { get; set; }
+
+        [JsonProperty("code")]
         public string Code { get; set; } = string.Empty;
+
+        [JsonProperty("description")]
         public string[] Message { get; set; } = Array.Empty<string>();
 
         public string Description
