@@ -38,6 +38,8 @@ namespace legallead.permissions.api.Controllers
         public IActionResult GetCountyDetails()
         {
             var counties = new List<UsStateCounty>();
+            var source = UsStateCountyList.All.Where(x => x.IsActive);
+            counties.AddRange(source);
             return Ok(counties);
         }
 

@@ -53,6 +53,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deploy", "_deploy", "{E2C63662-CFE2-41E7-964B-682FEFEE89CB}"
 	ProjectSection(SolutionItems) = preProject
 		..\pipeline-aws-deploy-project.ps1 = ..\pipeline-aws-deploy-project.ps1
+		..\pipeline-build-solutions.ps1 = ..\pipeline-build-solutions.ps1
 	EndProjectSection
 EndProject
 Global
