@@ -1,4 +1,4 @@
-<script name="css/error.css">
+<style name="css/error.css">
 
 #errorbox {
     position: relative;
@@ -44,7 +44,7 @@
 }
 
 .errorbox h1 {
-    font-family: nunito,sans-serif;
+    font-family: Roboto,sans-serif;
     font-size: 65px;
     font-weight: 700;
     margin-top: 0;
@@ -54,7 +54,7 @@
 }
 
 .errorbox h2 {
-    font-family: nunito,sans-serif;
+    font-family: Roboto,sans-serif;
     font-size: 21px;
     font-weight: 400;
     margin: 0;
@@ -63,13 +63,13 @@
 }
 
 .errorbox p {
-    font-family: nunito,sans-serif;
+    font-family: Roboto,sans-serif;
     color: #999fa5;
     font-weight: 400
 }
 
 .errorbox a {
-    font-family: nunito,sans-serif;
+    font-family: Roboto,sans-serif;
     display: inline-block;
     font-weight: 700;
     border-radius: 40px;
@@ -90,8 +90,18 @@
     }
 }
 
+#errorbox-error-text,
 #errorbox-error-text-description {
-	margin-top: 20px;
+    min-width: 300px;
+    width: 80%;
 }
 
-</script>
+#errorbox-error-text-description {
+    margin-top: 20px;
+    min-width: 300px;
+    width: 80%;
+}
+
+.icon-size { font-size: 140px; }
+
+</style>

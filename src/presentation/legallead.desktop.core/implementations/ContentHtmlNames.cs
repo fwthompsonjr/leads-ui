@@ -190,7 +190,7 @@ namespace legallead.desktop.implementations
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
-        private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\" />";
+        private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";

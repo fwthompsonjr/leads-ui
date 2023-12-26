@@ -45,23 +45,11 @@ namespace legallead.desktop.entities
             if (_messages != null) return _messages;
             var messages = new List<ErrorStatusMessage>();
             var source = Properties.Resources.errorstatus_json;
-            var content = TryGet<List<ErrorStatusMessage>>(source);
+            var content = ObjectExtensions.TryGet<List<ErrorStatusMessage>>(source);
             messages.AddRange(content);
             if (!messages.Any()) { messages.Add(defaultStatusMessage); }
             _messages = messages;
             return _messages;
-        }
-
-        private static T TryGet<T>(string source) where T : new()
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(source) ?? new();
-            }
-            catch
-            {
-                return new T();
-            }
         }
     }
 }

@@ -8,7 +8,36 @@
         xmlns:local="clr-namespace:legallead.desktop"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ContentControl x:Name="content1" />
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="mnuHome" Header="_Home" Click="MnuHome_Click" />
+                <Separator />
+                <MenuItem x:Name="mnuExit" Header="_Exit" />
+            </MenuItem>
+            <MenuItem Header="_Error" Visibility="Hidden">
+                <MenuItem x:Name="mnu500" Header="_Unexpected Error" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu503" Header="_Internet Unavailable" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu424" Header="_Remote Connection Refused" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu400" Header="_Bad Request" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu401" Header="Un_authorized" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu404" Header="_Page Not Found" Click="MnuError_Click" />
+                <MenuItem x:Name="mnu409" Header="_Conflict" Click="MnuError_Click" />
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <TabControl x:Name="mdiContainer">
+                <TabItem x:Name="tabHome" IsSelected="True" Tag="Home" Visibility="Collapsed">
+                    <ContentControl x:Name="content1" />
+                </TabItem>
+                <TabItem x:Name="tabError" IsSelected="False" Tag="Error" Visibility="Collapsed">
+                    <ContentControl x:Name="contentError" />
+                </TabItem>
+                <TabItem x:Name="tabExit" IsSelected="False" Tag="Exit" Visibility="Collapsed">
+                    <ContentControl x:Name="contentExit" />
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
 </Window>

@@ -183,6 +183,40 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;IsVisible&quot;: false,
+        ///    &quot;Items&quot;: [
+        ///      {
+        ///        &quot;Name&quot;: &quot;Home&quot;,
+        ///        &quot;IsDisplayed&quot;: true,
+        ///        &quot;IsSelected&quot;: true
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;Error&quot;,
+        ///        &quot;IsDisplayed&quot;: true,
+        ///        &quot;IsSelected&quot;: false
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;MyAccount&quot;,
+        ///        &quot;IsDisplayed&quot;: false,
+        ///        &quot;IsSelected&quot;: false
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;Separator&quot;,
+        ///        &quot;IsDisplayed&quot;: true,
+        ///        &quot;IsSelected&quot;: false
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;Exit&quot;,
+        ///        &quot;Is [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string contextmenu {
+            get {
+                return ResourceManager.GetString("contextmenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///		&lt;!-- script: common-cef-handler --&gt;
         ///		&lt;meta charset=&quot;utf-8&quot;&gt;
@@ -202,7 +236,8 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
+        ///   Looks up a localized string similar to &lt;script name=&quot;css/error.css&quot;&gt;
+        ///
         ///#errorbox {
         ///    position: relative;
         ///    height: 40vh
@@ -228,9 +263,7 @@ namespace legallead.desktop.Properties {
         ///    position: absolute;
         ///    left: 0;
         ///    top: 0;
-        ///    display: inline-block;
-        ///    width: 140px;
-        ///    [rest of string was truncated]&quot;;.
+        ///    display: inline [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string errorbox_css {
             get {
@@ -277,9 +310,14 @@ namespace legallead.desktop.Properties {
         ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
         ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
         ///		&lt;!-- block: common-headings --&gt;
-        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;cover-css&quot; href=&quot;https://getbootstrap.com/docs/4.0/examples/cover/cover.css&quot; /&gt;
         ///		&lt;!-- common styles --&gt;	
-        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base. [rest of string was truncated]&quot;;.
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///			div.subcontent {
+        ///				width: 50%; 
+        ///				min-width: 400px;
+        ///				ma [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string home_html {
             get {

@@ -1,7 +1,10 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using legallead.desktop.models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -51,6 +54,8 @@ namespace legallead.desktop.utilities
             if (provider == null) return;
             services.AddTransient(s => provider.GetRequiredService<IContentParser>());
             services.AddSingleton(s => provider.GetRequiredService<IInternetStatus>());
+            services.AddSingleton(s => provider.GetRequiredService<MenuConfiguration>());
+            services.AddSingleton(s => provider.GetRequiredService<IErrorContentProvider>());
         }
     }
 }

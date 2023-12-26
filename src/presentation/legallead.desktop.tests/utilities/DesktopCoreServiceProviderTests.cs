@@ -1,4 +1,5 @@
-﻿using legallead.desktop.interfaces;
+﻿using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 
 namespace legallead.desktop.tests.utilities
@@ -19,6 +20,8 @@ namespace legallead.desktop.tests.utilities
         [InlineData(typeof(IContentParser))]
         [InlineData(typeof(IContentHtmlNames))]
         [InlineData(typeof(IInternetStatus))]
+        [InlineData(typeof(MenuConfiguration))]
+        [InlineData(typeof(IErrorContentProvider))]
         public void CanGetRegisteredType(Type type)
         {
             // DesktopCoreServiceProvider.
