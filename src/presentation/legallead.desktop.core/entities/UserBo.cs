@@ -7,7 +7,7 @@ namespace legallead.desktop.entities
         public bool IsAuthenicated { get; set; }
         public string UserName { get; set; } = string.Empty;
         public ApiContext[]? Applications { get; set; }
-        public bool IsInitialized => Applications != null;
+        public bool IsInitialized => Applications != null && Applications.Length > 0;
 
         public string GetAppServiceHeader()
         {

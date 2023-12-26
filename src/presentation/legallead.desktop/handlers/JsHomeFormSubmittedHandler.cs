@@ -1,6 +1,8 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.interfaces;
+using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -26,7 +28,7 @@ namespace legallead.desktop.handlers
 
         public override void Submit(string formName, string json)
         {
-            var handler = new LoginHandler(Web, formName, json);
+            var handler = new LoginFormHandler(Web, formName, json);
             if (!handler.IsValid)
             {
                 return;
@@ -70,7 +72,7 @@ namespace legallead.desktop.handlers
             const string failureMessage = "Unable to parse form submission data.";
             var failed = new ApiResponse { StatusCode = 402, Message = failureMessage };
             var succeeded = new ApiResponse { StatusCode = 200, Message = "Form processed as expected!" };
-            var matchedName = formNames.Find(x => x.Equals(formName, StringComparison.OrdinalIgnoreCase));
+            var matchedName = HomeFormNames.Find(x => x.Equals(formName, StringComparison.OrdinalIgnoreCase));
             if (string.IsNullOrWhiteSpace(matchedName))
             {
                 return failed;
@@ -79,7 +81,7 @@ namespace legallead.desktop.handlers
             var provider = AppBuilder.ServiceProvider;
             if (provider == null) return failed;
 
-            var api = provider.GetRequiredService<PermissionApi>();
+            var api = provider.GetRequiredService<IPermissionApi>();
             if (api == null) return failed;
 
             var user = provider.GetRequiredService<UserBo>();
@@ -88,7 +90,7 @@ namespace legallead.desktop.handlers
             switch (matchedName)
             {
                 case "form-login":
-                    var data = TryDeserialize<LoginForm>(json);
+                    var data = TryDeserialize<LoginFormModel>(json);
                     if (data == null) return failed;
                     var obj = new { data.UserName, data.Password };
                     var loginResponse = await api.Post("login", obj, user) ?? failed;
@@ -99,70 +101,6 @@ namespace legallead.desktop.handlers
             }
         }
 
-        private static readonly List<string> formNames = new() { "form-login", "form-register" };
-
-        private sealed class LoginForm
-        {
-            [JsonProperty("username")]
-            public string UserName { get; set; } = string.Empty;
-
-            [JsonProperty("login-password")]
-            public string Password { get; set; } = string.Empty;
-        }
-
-        private sealed class LoginHandler
-        {
-            private readonly ChromiumWebBrowser? _web;
-            public int FormIndex { get; private set; }
-            public string Payload { get; private set; }
-            public bool IsValid => FormIndex >= 0;
-            private readonly bool? HasWebBrowser;
-
-            public LoginHandler(ChromiumWebBrowser? browser, string formName, string json)
-            {
-                FormIndex = formNames.FindIndex(x => x.Equals(formName, StringComparison.OrdinalIgnoreCase));
-                Payload = json;
-                _web = browser;
-
-                HasWebBrowser = IsValid && _web != null && _web.CanExecuteJavascriptInMainFrame;
-            }
-
-            public void Start()
-            {
-                if (!HasWebBrowser.GetValueOrDefault()) return;
-
-                scriptNames.ForEach(s =>
-                {
-                    if (scriptNames.IndexOf(s) == 0)
-                    {
-                        // setup animation so user knows process is running
-                        _web.ExecuteScriptAsync(s, FormIndex, true);
-                    }
-                    if (scriptNames.IndexOf(s) == 1)
-                    {
-                        // clear any previous submission messages
-                        _web.ExecuteScriptAsync(s, FormIndex, "", false);
-                    }
-                });
-            }
-
-            internal void SetMessage(string htm)
-            {
-                if (!HasWebBrowser.GetValueOrDefault()) return;
-                _web.ExecuteScriptAsync(scriptNames[1], FormIndex, htm, true);
-            }
-
-            public void End()
-            {
-                if (!HasWebBrowser.GetValueOrDefault()) return;
-                _web.ExecuteScriptAsync(scriptNames[0], FormIndex, false);
-            }
-
-            private static readonly List<string> scriptNames = new()
-            {
-                "setIconState",
-                "setStatusMessage"
-            };
-        }
+        internal static readonly List<string> HomeFormNames = new() { "form-login", "form-register" };
     }
 }

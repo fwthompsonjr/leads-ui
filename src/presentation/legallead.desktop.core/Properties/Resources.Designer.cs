@@ -184,23 +184,57 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
-        ///		&lt;script type=&quot;text/javascript&quot;&gt;
-        ///			try {
-        ///				CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
-        ///			} catch {}		
-        ///		&lt;/script&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
         ///		&lt;meta charset=&quot;utf-8&quot;&gt;
         ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
         ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
         ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
         ///		&lt;title&gt;legallead.ui: error&lt;/title&gt;
-        ///		
-        ///		&lt;!-- googleapis : fonts --&gt;
-        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;amp;display=swap&quot; r [rest of string was truncated]&quot;;.
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;cover-css&quot; href=&quot;https://getbootstrap.com/docs/4.0/examples/cover/cover.css&quot; /&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string error_html {
             get {
                 return ResourceManager.GetString("error_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///#errorbox {
+        ///    position: relative;
+        ///    height: 40vh
+        ///}
+        ///
+        ///#errorbox .errorbox {
+        ///    position: absolute;
+        ///    left: 50%;
+        ///    top: 50%;
+        ///    -webkit-transform: translate(-50%,-50%);
+        ///    -ms-transform: translate(-50%,-50%);
+        ///    transform: translate(-50%,-50%)
+        ///}
+        ///
+        ///.errorbox {
+        ///    max-width: 560px;
+        ///    width: 100%;
+        ///    padding-left: 160px;
+        ///    line-height: 1.1
+        ///}
+        ///
+        ///.errorbox .errorbox-callout {
+        ///    position: absolute;
+        ///    left: 0;
+        ///    top: 0;
+        ///    display: inline-block;
+        ///    width: 140px;
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string errorbox_css {
+            get {
+                return ResourceManager.GetString("errorbox_css", resourceCulture);
             }
         }
         

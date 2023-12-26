@@ -37,5 +37,24 @@ namespace legallead.desktop.tests.entities
             var item = list.Find(x => x.StatusCode == statusCode);
             Assert.NotNull(item);
         }
+
+        [Theory]
+        [InlineData(7)]
+        public void ErrorContentExpectedLength(int expected)
+        {
+            var list = ErrorContentHtml.ErrorContentList();
+            Assert.NotNull(list);
+            Assert.NotEmpty(list);
+            Assert.Equal(expected, list.Count);
+        }
+
+        [Fact]
+        public void ErrorContentHasOneDefaultItem()
+        {
+            var list = ErrorContentHtml.ErrorContentList()
+                .Where(w => w.IsDefault);
+            Assert.NotNull(list);
+            Assert.Single(list);
+        }
     }
 }
