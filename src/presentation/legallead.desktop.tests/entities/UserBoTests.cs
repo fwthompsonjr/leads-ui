@@ -54,7 +54,7 @@ namespace legallead.desktop.tests.entities
             var items = faker.Generate(10);
             items.ForEach(i =>
             {
-                var expected = i.Applications != null;
+                var expected = i.Applications != null && i.Applications.Length > 0;
                 Assert.Equal(expected, i.IsInitialized);
             });
         }
