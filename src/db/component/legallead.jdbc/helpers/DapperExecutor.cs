@@ -2,7 +2,6 @@
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using System.Data;
-using System.Data.Common;
 
 namespace legallead.jdbc.helpers
 {

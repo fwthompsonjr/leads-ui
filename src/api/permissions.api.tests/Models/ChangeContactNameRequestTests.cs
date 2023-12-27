@@ -6,7 +6,7 @@ namespace permissions.api.tests.Models
 {
     public class ChangeContactNameRequestTests
     {
-        private readonly static Faker<ChangeContactNameRequest> faker =
+        private static readonly Faker<ChangeContactNameRequest> faker =
             new Faker<ChangeContactNameRequest>()
                 .RuleFor(x => x.NameType, y => y.PickRandom<NameTypeNames>().ToString())
                 .RuleFor(x => x.Name, y => y.Person.FullName);
@@ -36,7 +36,6 @@ namespace permissions.api.tests.Models
             _ = Check(test, out var actual);
             Assert.Equal(expected, actual);
         }
-
 
         [Theory]
         [InlineData(40, true)]

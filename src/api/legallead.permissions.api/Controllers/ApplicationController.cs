@@ -2,8 +2,6 @@
 using legallead.jdbc.models;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection;
-using System.Xml.Linq;
 
 namespace legallead.permissions.api.Controllers
 {

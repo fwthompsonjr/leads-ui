@@ -16,6 +16,7 @@ namespace legallead.permissions.api.Controllers
 
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
+
         private static string GetIndex()
         {
             var operations = new List<string>()
@@ -67,6 +68,4 @@ namespace legallead.permissions.api.Controllers
             return content.ToString();
         }
     }
-
-
 }

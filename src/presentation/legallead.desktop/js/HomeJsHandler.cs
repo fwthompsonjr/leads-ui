@@ -1,8 +1,5 @@
 ﻿using CefSharp.Wpf;
-using legallead.desktop.entities;
 using legallead.desktop.handlers;
-using legallead.desktop.utilities;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.desktop.js
 {

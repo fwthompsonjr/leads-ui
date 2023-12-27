@@ -21,7 +21,5 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(exception);
         }
-
-
     }
 }

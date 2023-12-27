@@ -1,6 +1,5 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using System.Net;
 using System.Runtime.Caching;
 
 namespace legallead.desktop.utilities

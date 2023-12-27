@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace legallead.desktop.entities
+﻿namespace legallead.desktop.entities
 {
     internal class MenuConfiguration
     {

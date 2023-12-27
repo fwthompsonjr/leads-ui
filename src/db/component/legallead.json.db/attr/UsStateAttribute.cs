@@ -5,6 +5,7 @@ namespace legallead.json.db.attr
     public class UsStateAttribute : ValidationAttribute
     {
         public string? Name { get; set; }
+
         public override bool IsValid(object? value)
         {
             if (value == null) return false;

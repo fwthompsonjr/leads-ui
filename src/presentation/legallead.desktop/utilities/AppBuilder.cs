@@ -1,10 +1,7 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using legallead.desktop.models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.IO;
 

@@ -5,6 +5,7 @@ namespace legallead.jdbc.interfaces
     public interface IUserProfileHistoryRepository
     {
         string SnapshotProcedureName { get; }
+
         Task<IEnumerable<UserProfileHistory>> GetAll();
 
         Task<IEnumerable<UserProfileHistory>> GetAll(User user);

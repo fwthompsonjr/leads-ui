@@ -2,10 +2,8 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.js;
-using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace legallead.json.db.attr
 {
@@ -18,6 +13,7 @@ namespace legallead.json.db.attr
         private string StateName { get; set; }
 
 #pragma warning disable CS8603 // Possible null reference return.
+
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             string? countyName = GetString(value);
@@ -37,6 +33,7 @@ namespace legallead.json.db.attr
                 return new ValidationResult($"County - {countyName} - is not located in {stateName}.");
             }
         }
+
 #pragma warning restore CS8603 // Possible null reference return.
 
         private static string? GetString(object? value)

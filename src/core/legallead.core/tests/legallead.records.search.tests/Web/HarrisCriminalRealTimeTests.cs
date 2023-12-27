@@ -1,5 +1,5 @@
-﻿
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 #if DEBUG
 
 using System.Reflection;
@@ -14,14 +14,15 @@ namespace legallead.records.search.UnitTests.Web
     [TestClass]
     public class HarrisCriminalRealTimeTests
     {
-
 #if DEBUG
 
         private static string? _srcDirectory;
         private static string? _srcFile;
         private static string SrcDirectoryName => _srcDirectory ??= SrcDir();
+
         private static string SrcFile =>
             _srcFile ??= Path.Combine(SrcDirectoryName, "_html\\sample-harris-criminal-search-result.html");
+
         private IWebDriver? GetDriver;
 
         [TestInitialize]
@@ -55,8 +56,8 @@ namespace legallead.records.search.UnitTests.Web
             var assembly = Assembly.GetExecutingAssembly();
             return Path.GetDirectoryName(assembly.Location) ?? string.Empty;
         }
-#endif
 
+#endif
 
         [TestMethod]
         public void Criminal_CanIterate()

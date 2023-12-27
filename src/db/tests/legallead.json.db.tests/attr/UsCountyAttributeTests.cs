@@ -1,6 +1,5 @@
 ﻿using legallead.json.db.attr;
 using legallead.json.db.entity;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace legallead.json.db.tests.attr

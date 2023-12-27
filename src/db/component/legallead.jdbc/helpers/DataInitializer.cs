@@ -2,7 +2,6 @@
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using MySqlConnector;
-using Npgsql;
 using System.Data;
 using System.Diagnostics;
 

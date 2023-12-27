@@ -7,6 +7,7 @@ namespace legallead.permissions.api.Utility
     public class ProfileInfrastructure : SubscriptionInfrastructure, IProfileInfrastructure
     {
         private readonly IMapper mapper;
+
         public ProfileInfrastructure(IDataProvider db) : base(db)
         {
             mapper = ModelMapper.Mapper;

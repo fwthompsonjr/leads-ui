@@ -2,7 +2,7 @@
 {
     public enum AddressTypeNames
     {
-        Mailing = 1, 
+        Mailing = 1,
         Billing = 2
     }
 }

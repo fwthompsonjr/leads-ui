@@ -2,7 +2,6 @@
 using legallead.records.search.Dto;
 using legallead.records.search.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
 using Shouldly;
 
 namespace legallead.records.search.Tests
@@ -44,7 +43,6 @@ namespace legallead.records.search.Tests
             folder.ShouldNotBeNullOrEmpty();
             Directory.Exists(folder).ShouldBeTrue();
         }
-
 
         [TestMethod]
         public void CanParseMinMax()

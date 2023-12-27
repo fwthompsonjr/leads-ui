@@ -13,6 +13,7 @@ namespace legallead.Profiles.api.Controllers
     public class ProfilesController : ControllerBase
     {
         private readonly IProfileInfrastructure _db;
+
         public ProfilesController(IProfileInfrastructure db)
         {
             _db = db;

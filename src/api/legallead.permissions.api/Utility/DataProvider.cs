@@ -281,7 +281,6 @@ namespace legallead.permissions.api
             return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
         }
 
-
         private KeyValuePair<bool, string> RemoveSubscriptions(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
@@ -333,6 +332,7 @@ namespace legallead.permissions.api
             };
             return ApplyChanges(user, settings, permissions);
         }
+
         private KeyValuePair<bool, string> RemoveDiscounts(User user, List<UserPermissionView> permissions, string discountCode)
         {
             var discountNames = "State,County".Split(',').ToList();
@@ -344,6 +344,7 @@ namespace legallead.permissions.api
             var settings = new Dictionary<string, string>() { { settingName, string.Empty } };
             return ApplyChanges(user, settings, permissions);
         }
+
         private KeyValuePair<bool, string> ApplyChanges(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
