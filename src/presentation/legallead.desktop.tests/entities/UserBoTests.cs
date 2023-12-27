@@ -12,7 +12,6 @@ namespace legallead.desktop.tests.entities
 
         private readonly Faker<UserBo> faker =
             new Faker<UserBo>()
-            .RuleFor(x => x.IsAuthenicated, y => y.Random.Bool())
             .RuleFor(x => x.Applications, y =>
             {
                 var isnull = y.Random.Bool();

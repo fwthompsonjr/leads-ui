@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Moq;
@@ -9,6 +10,20 @@ namespace legallead.desktop.tests.utilities
     public class PermissionApiTests
     {
         private readonly Faker faker = new();
+
+        private static readonly Faker<ApiContext> contextfaker =
+            new Faker<ApiContext>()
+            .RuleFor(x => x.Id, y => y.Random.Int(1, 500).ToString())
+            .RuleFor(x => x.Name, y => y.Company.CompanyName());
+
+        private readonly Faker<UserBo> userfaker =
+            new Faker<UserBo>()
+            .RuleFor(x => x.Applications, y =>
+            {
+                var count = y.Random.Int(1, 6);
+                return contextfaker.Generate(count).ToArray();
+            })
+            .RuleFor(x => x.UserName, y => y.Company.CompanyName());
 
         [Fact]
         public void ServiceCanBeCreated()
@@ -95,11 +110,51 @@ namespace legallead.desktop.tests.utilities
         }
 
         [Theory]
+        [InlineData("list", 200)]
+        [InlineData("read-me", 200)]
+        [InlineData("non-existing", 404)]
+        public async Task ServiceShouldGetEndpoint(string pageName, int expectedCode)
+        {
+            var mock = new ActiveInternetStatus();
+            var api = new PermissionApi(
+                faker.Internet.DomainName(), mock);
+            var response = await api.Get(pageName);
+            Assert.Equal(expectedCode, response.StatusCode);
+            Assert.False(string.IsNullOrWhiteSpace(response.Message));
+        }
+
+        [Theory]
+        [InlineData("login", 200)]
+        [InlineData("refresh", 200)]
+        [InlineData("password", 200)]
+        [InlineData("change-password", 200)]
+        [InlineData("non-existing", 404)]
+        public async Task ServiceShouldGetPostEndpoint(string pageName, int expectedCode)
+        {
+            var mock = new ActiveInternetStatus();
+            var api = new PermissionApi(
+                faker.Internet.DomainName(), mock);
+            var response = await api.Post(pageName, new(), userfaker.Generate());
+            Assert.Equal(expectedCode, response.StatusCode);
+            Assert.False(string.IsNullOrWhiteSpace(response.Message));
+        }
+
+        [Theory]
         [InlineData("google.com", null, true)]
         [InlineData("address-mock-valid", true, true)]
         [InlineData("address-mock-false", false, false)]
+        [InlineData("exception", false, false)]
         public void ServiceCanCheckValidUri(string uri, bool? connectExpression, bool expected)
         {
+            if (uri.Equals(""))
+            {
+                var exception = Record.Exception(() =>
+                {
+                    _ = ActivePageAddress.CanConnect(uri, connectExpression);
+                });
+                Assert.NotNull(exception);
+                return;
+            }
             var actual = ActivePageAddress.CanConnect(uri, connectExpression);
             Assert.Equal(expected, actual);
         }
@@ -149,6 +204,10 @@ namespace legallead.desktop.tests.utilities
             {
                 lock (locker)
                 {
+                    if (address.Equals("exception"))
+                    {
+                        return CanConnectToPage(address, new ExceptionPinger());
+                    }
                     if (expected == null)
                     {
                         return CanConnectToPage(address);
@@ -177,6 +236,16 @@ namespace legallead.desktop.tests.utilities
                         .Cast<IPStatus>()
                         .Where(s => s != IPStatus.Success);
                     return faker.PickRandom(items);
+                }
+            }
+
+            private sealed class ExceptionPinger : IPingAddress
+            {
+                private static readonly Faker faker = new();
+
+                public IPStatus CheckStatus(string address)
+                {
+                    throw new Exception();
                 }
             }
         }

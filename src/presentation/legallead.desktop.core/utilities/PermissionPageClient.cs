@@ -1,5 +1,7 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.extensions;
 using legallead.desktop.interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 
 namespace legallead.desktop.utilities
@@ -23,7 +25,9 @@ namespace legallead.desktop.utilities
             var address = GetAddress(name);
             if (address.StatusCode != 200) return address;
             var url = address.Message;
+            var user = GetUserOrDefault();
             using var client = GetHttpClient();
+            client.AppendAuthorization(user);
             var result = await client.GetStringAsync(url);
             if (result == null)
             {
@@ -50,6 +54,7 @@ namespace legallead.desktop.utilities
             if (address.StatusCode != 200) return address;
             var url = address.Message;
             using var client = GetHttpClient();
+            client.AppendAuthorization(user);
             client.DefaultRequestHeaders.Add("APP_IDENTITY", user.GetAppServiceHeader());
             var result = await client.PostAsJsonAsync(url, payload);
             if (result == null)
@@ -71,6 +76,19 @@ namespace legallead.desktop.utilities
         protected virtual HttpClient GetHttpClient()
         {
             return new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+        }
+
+        private static UserBo GetUserOrDefault()
+        {
+            try
+            {
+                var user = DesktopCoreServiceProvider.Provider.GetService<UserBo>();
+                return user ?? new();
+            }
+            catch (Exception)
+            {
+                return new();
+            }
         }
     }
 }
