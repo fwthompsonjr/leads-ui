@@ -241,8 +241,6 @@ namespace legallead.desktop.tests.utilities
 
             private sealed class ExceptionPinger : IPingAddress
             {
-                private static readonly Faker faker = new();
-
                 public IPStatus CheckStatus(string address)
                 {
                     throw new Exception();

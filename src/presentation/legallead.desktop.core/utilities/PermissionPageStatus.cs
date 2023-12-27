@@ -17,8 +17,8 @@ namespace legallead.desktop.utilities
         protected ApiResponse PostAddress(string name, UserBo user)
         {
             var pageName = PostAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
-            if (!user.IsInitialized) { return new ApiResponse { Message = "Invalid user state. Please initialize user context." }; }
+            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { StatusCode = 404, Message = "Invalid page address." }; }
+            if (!user.IsInitialized) { return new ApiResponse { StatusCode = 400, Message = "Invalid user state. Please initialize user context." }; }
             var address = string.Format(PostAddresses[pageName], _baseUri);
             return new ApiResponse
             {
@@ -30,7 +30,7 @@ namespace legallead.desktop.utilities
         protected ApiResponse GetAddress(string name)
         {
             var pageName = GetAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
-            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { Message = "Invalid page address." }; }
+            if (string.IsNullOrEmpty(pageName)) { return new ApiResponse { StatusCode = 404, Message = "Invalid page address." }; }
             var address = string.Format(GetAddresses[pageName], _baseUri);
             return new ApiResponse
             {

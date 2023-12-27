@@ -1,6 +1,5 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using legallead.desktop.utilities;
 
 namespace legallead.desktop.extensions
 {
@@ -18,7 +17,7 @@ namespace legallead.desktop.extensions
             if (api == null) return;
             if (user.Token == null || string.IsNullOrEmpty(user.Token.AccessToken) || !user.IsAuthenicated) return;
             var expiration = DateTime.UtcNow.Subtract(user.Token.Expires.GetValueOrDefault());
-            if (expiration.TotalSeconds < 45) return;
+            if (expiration.TotalSeconds < -45) return;
             var token = user.Token;
             var payload = new { refreshToken = token.RefreshToken, accessToken = token.AccessToken };
             var response = await api.Post("refresh", payload, user);
