@@ -1,7 +1,5 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
+﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
-using legallead.desktop.handlers;
 using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.models;

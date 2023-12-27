@@ -39,7 +39,6 @@ namespace legallead.json.db.tests.attr
             public string? Name { get; set; } = string.Empty;
         }
 
-
         private static List<ValidationResult> Check<T>(T source, out bool isValid) where T : class
         {
             var context = new ValidationContext(source, serviceProvider: null, items: null);
@@ -47,6 +46,5 @@ namespace legallead.json.db.tests.attr
             isValid = Validator.TryValidateObject(source, context, validationResults, true);
             return validationResults;
         }
-
     }
 }

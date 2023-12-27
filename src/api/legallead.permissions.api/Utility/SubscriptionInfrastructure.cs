@@ -7,10 +7,12 @@ namespace legallead.permissions.api.Utility
     public class SubscriptionInfrastructure : ISubscriptionInfrastructure
     {
         protected readonly IDataProvider _db;
+
         public SubscriptionInfrastructure(IDataProvider db)
         {
             _db = db;
         }
+
         public async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
         {
             var response = await _db.AddCountySubscriptions(user, countyCode);
@@ -39,7 +41,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<User?> GetUser(HttpRequest request)
         {
-            if(_db is not DataProvider db)
+            if (_db is not DataProvider db)
                 throw new ArgumentOutOfRangeException(nameof(request));
             return await request.GetUser(db);
         }

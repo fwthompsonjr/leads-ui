@@ -4,9 +4,16 @@ namespace legallead.desktop.entities
 {
     internal class ErrorStatusMessage
     {
+        [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
-        public bool IsDefault { get; set; }
+
+        [JsonProperty("isDefault")]
+        public bool? IsDefault { get; set; }
+
+        [JsonProperty("code")]
         public string Code { get; set; } = string.Empty;
+
+        [JsonProperty("description")]
         public string[] Message { get; set; } = Array.Empty<string>();
 
         public string Description
@@ -38,23 +45,11 @@ namespace legallead.desktop.entities
             if (_messages != null) return _messages;
             var messages = new List<ErrorStatusMessage>();
             var source = Properties.Resources.errorstatus_json;
-            var content = TryGet<List<ErrorStatusMessage>>(source);
+            var content = ObjectExtensions.TryGet<List<ErrorStatusMessage>>(source);
             messages.AddRange(content);
             if (!messages.Any()) { messages.Add(defaultStatusMessage); }
             _messages = messages;
             return _messages;
-        }
-
-        private static T TryGet<T>(string source) where T : new()
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(source) ?? new();
-            }
-            catch
-            {
-                return new T();
-            }
         }
     }
 }

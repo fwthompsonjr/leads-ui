@@ -49,7 +49,6 @@ namespace legallead.permissions.api
 
                 c.CreateMap<UserProfileView, UserProfile>()
                     .ConvertUsing(ConvertTo);
-
             });
         }
 
@@ -60,14 +59,14 @@ namespace legallead.permissions.api
             var mappedId = hasName ? (int)index : 1;
             var prefix = AddressPrefixes[mappedId];
             var list = new List<UserProfileView>();
-            if(string.IsNullOrEmpty(source.Address)) return list.ToArray();
+            if (string.IsNullOrEmpty(source.Address)) return list.ToArray();
             var pieces = source.Address.Split(pipe, StringSplitOptions.RemoveEmptyEntries);
             for (var i = 0; i < pieces.Length; i++)
             {
                 var item = new UserProfileView
                 {
                     KeyName = $"{prefix} Address Line {i + 1}",
-                    KeyValue = pieces[i].Trim(),   
+                    KeyValue = pieces[i].Trim(),
                 };
                 list.Add(item);
             }
@@ -106,6 +105,7 @@ namespace legallead.permissions.api
                 KeyValue = source.Phone,
             };
         }
+
         private static UserProfile ConvertTo(UserProfileView source, UserProfile dest)
         {
             return new UserProfile
@@ -122,6 +122,7 @@ namespace legallead.permissions.api
             { 1, "Address 1 -" },
             { 2, "Address 2 -" }
         };
+
         private static readonly Dictionary<int, string> NamePrefixes = new()
         {
             { 1, "First Name" },

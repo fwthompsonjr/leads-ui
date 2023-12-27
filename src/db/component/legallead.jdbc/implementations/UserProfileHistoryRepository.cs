@@ -32,7 +32,6 @@ namespace legallead.jdbc.implementations
                 });
                 Debugger.Break();
             });
-            
         }
 
         public async Task<IEnumerable<UserProfileHistory>> GetAll(User user)

@@ -1,4 +1,5 @@
-﻿using legallead.desktop.implementations;
+﻿using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +14,15 @@ namespace legallead.desktop.utilities
         {
             var builder = new ServiceCollection();
             builder.AddSingleton<IContentHtmlNames, ContentHtmlNames>();
+            builder.AddSingleton<IErrorContentProvider, ErrorContentProvider>();
             builder.AddScoped<IContentParser, ContentParser>();
             builder.AddSingleton<IInternetStatus, InternetStatus>();
+            var menucontent = Properties.Resources.contextmenu;
+            if (string.IsNullOrEmpty(menucontent)) return builder.BuildServiceProvider();
+            builder.AddSingleton(s =>
+            {
+                return ObjectExtensions.TryGet<MenuConfiguration>(menucontent);
+            });
             return builder.BuildServiceProvider();
         }
     }

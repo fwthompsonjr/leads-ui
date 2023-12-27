@@ -3,7 +3,6 @@ using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
 using System.Globalization;
 using System.Text;
 
@@ -38,6 +37,7 @@ namespace legallead.records.search.Tests
             keys[^1].Value = endingDate.ToString("MM/dd/yyyy", CultureInfo.CurrentCulture);
             Assert.IsNotNull(settings);
         }
+
         private const string DataFileFoundMessage = "DataFile:= {0}";
 
         [TestMethod]

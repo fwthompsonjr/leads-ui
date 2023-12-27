@@ -10,6 +10,7 @@ namespace legallead.permissions.api.Controllers
     public class PermissionsController : ControllerBase
     {
         private readonly ISubscriptionInfrastructure _db;
+
         public PermissionsController(ISubscriptionInfrastructure db)
         {
             _db = db;
@@ -71,7 +72,6 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-
         [HttpPost]
         [Route("remove-state-subscription")]
         public async Task<IActionResult> RemoveStateSubscriptions(StateSubscriptionRequest request)
@@ -96,7 +96,6 @@ namespace legallead.permissions.api.Controllers
 
             return Conflict(response);
         }
-
 
         [HttpPost]
         [Route("remove-county-subscription")]

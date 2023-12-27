@@ -6,7 +6,6 @@ namespace legallead.jdbc.interfaces
 {
     public interface IDapperCommand
     {
-
         Task ExecuteAsync(IDbConnection conn, string sql, DynamicParameters? arg = null);
 
         Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, DynamicParameters? arg = null)

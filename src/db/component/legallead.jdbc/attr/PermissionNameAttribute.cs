@@ -13,7 +13,9 @@ namespace legallead.jdbc.attr
             "Platinum",
             "Admin"
         };
+
         public string Name { get; set; } = string.Empty;
+
         public override bool IsValid(object? value)
         {
             if (value == null) return false;

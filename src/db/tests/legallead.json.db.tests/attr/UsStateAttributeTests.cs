@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace legallead.json.db.tests.attr
 {
-
     [Collection("Sequential")]
     public class UsStateAttributeTests
     {
         private static bool isInitialized = false;
         private static readonly object locker = new();
+
         public UsStateAttributeTests()
         {
             if (!isInitialized)
@@ -17,7 +17,7 @@ namespace legallead.json.db.tests.attr
                 lock (locker)
                 {
                     UsState.Initialize();
-                    isInitialized = true; 
+                    isInitialized = true;
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace legallead.json.db.tests.attr
                 {
                     var test = new NameTest { Name = item.Key };
                     _ = Check(test, out var actual);
-                    Assert.Equal(item.Value, actual); 
+                    Assert.Equal(item.Value, actual);
                 }
             }
         }
@@ -52,7 +52,6 @@ namespace legallead.json.db.tests.attr
             public string? Name { get; set; } = string.Empty;
         }
 
-
         private static List<ValidationResult> Check<T>(T source, out bool isValid) where T : class
         {
             var context = new ValidationContext(source, serviceProvider: null, items: null);
@@ -60,6 +59,5 @@ namespace legallead.json.db.tests.attr
             isValid = Validator.TryValidateObject(source, context, validationResults, true);
             return validationResults;
         }
-
     }
 }

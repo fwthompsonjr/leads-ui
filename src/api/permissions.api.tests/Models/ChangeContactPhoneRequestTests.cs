@@ -1,13 +1,12 @@
 ﻿using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
-using Microsoft.AspNetCore.Http.Features;
 using System.ComponentModel.DataAnnotations;
 
 namespace permissions.api.tests.Models
 {
     public class ChangeContactPhoneRequestTests
     {
-        private readonly static string[] fakerNumbers = new string[]
+        private static readonly string[] fakerNumbers = new string[]
         {
             "(799) 846-8465",
             "(355) 976-9927",
@@ -30,7 +29,8 @@ namespace permissions.api.tests.Models
             "229-591-5606",
             "469-496-2948",
         };
-        private readonly static Faker<ChangeContactPhoneRequest> faker =
+
+        private static readonly Faker<ChangeContactPhoneRequest> faker =
             new Faker<ChangeContactPhoneRequest>()
                 .RuleFor(x => x.PhoneType, y => y.PickRandom<PhoneTypeNames>().ToString())
                 .RuleFor(x => x.Phone, y => y.PickRandom(fakerNumbers));
@@ -40,7 +40,8 @@ namespace permissions.api.tests.Models
         {
             var items = faker.Generate(fakerNumbers.Length);
             var results = new List<bool>();
-            items.ForEach(x => {
+            items.ForEach(x =>
+            {
                 _ = Check(x, out var isvalid);
                 results.Add(isvalid);
             });
@@ -64,7 +65,6 @@ namespace permissions.api.tests.Models
             _ = Check(test, out var actual);
             Assert.Equal(expected, actual);
         }
-
 
         [Theory]
         [InlineData(5, false)]

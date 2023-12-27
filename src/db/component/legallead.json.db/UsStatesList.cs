@@ -8,6 +8,7 @@ namespace legallead.json.db
         private static readonly List<UsState> list = new();
 
         public static List<UsState> All => list;
+
         public static void Populate(List<UsState> items)
         {
             if (IsPopulated) return;

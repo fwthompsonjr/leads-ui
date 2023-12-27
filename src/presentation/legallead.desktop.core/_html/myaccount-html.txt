@@ -1,0 +1,131 @@
+<html>
+
+	<head>
+		<!-- script: common-cef-handler -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: home</title>
+		<!-- block: common-headings -->
+		<!-- common styles -->	
+		<link rel="stylesheet" name="base" href="css/base.css" />
+		<style name="subcontent-css">
+
+			div.subcontent {
+				width: 50%; 
+				min-width: 400px;
+				max-width: 1200px;
+                margin-bottom: 20px;
+				display: none;
+			}
+			
+			div.subcontent.active {
+				display: block;
+			}
+
+			div[name="subcontent-home-bullet-list"] {
+				width: 50%; 
+				margin-left: 35%;
+				text-align: left;
+				justify-content: left;
+			}
+			
+
+			div[name="main-content"] {
+				width: 70%; 
+				min-width: 800px;
+				max-width: 1200px;
+			}
+
+			div[name="subcontent-profile"],
+			div[name="subcontent-permissions"] {
+				text-align: left;
+				justify-content: left;
+				margin-bottom: 20px;
+				margin-left: 20px;
+			}
+
+		</style>
+	</head>
+
+	<body class="text-center">
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header 
+		class="masthead mb-auto" 
+		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+		<div class="inner">
+			<h3 class="masthead-brand">
+				<i class="bi bi-bank2"></i>
+				<span>Legal Lead UI</span>
+			</h3>
+			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
+				<a name="subcontent-profile" class="nav-link" href="javascript:setDisplay('profile')">Profile</a>
+				<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
+			</nav>
+		</div>
+      </header>
+
+      <main role="main" class="inner cover">
+		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
+			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent active">
+				<p>My Account</p>
+            </div>
+			
+			<div id="dv-subcontent-profile" name="subcontent-profile"  class="subcontent">
+				<p>My Profile</p>
+            </div>
+			
+			<div id="dv-subcontent-permissions" name="subcontent-permissions"  class="subcontent">
+				<p>My Permissions</p>			
+            </div>
+		</div>
+      </main>
+
+      <!-- block: common-footer -->
+
+    </div>
+
+	<script>
+	const actv = "active";
+	const names = [ "home", "profile", "permissions" ];
+
+	function setDisplay( name ) {
+			if (names.indexOf( name ) < 0 ) { return; }
+			setActiveDiv(name);
+			const themenu = document.getElementById("masthead-nav-menu");
+			let thelinks = themenu.getElementsByTagName("a");
+
+			for(let i = 0; i < thelinks.length; i++) {
+				let a = thelinks[i];
+				const aname = a.getAttribute("name");
+				if ( aname.indexOf(name) >= 0 ) {
+					a.classList.add(actv);
+				} else {
+					a.classList.remove(actv);
+				}
+			}			
+		}
+
+	function setActiveDiv( name ) {
+		if (names.indexOf( name ) < 0 ) { return; }
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions" ];
+		
+		for(let i = 0; i < divnames.length; i++) {
+			const d = document.getElementById(divnames[i]);
+			if ( divnames[i].indexOf(name) >= 0 ) {
+				d.classList.add(actv);
+			} else {
+				d.classList.remove(actv);
+			}
+		}
+	}
+		
+	</script>
+	<!-- script: home-form-validation -->
+  </body>
+
+
+</html>

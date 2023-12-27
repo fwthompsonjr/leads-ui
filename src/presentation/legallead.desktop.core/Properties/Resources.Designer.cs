@@ -141,10 +141,11 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///   Looks up a localized string similar to 	&lt;script type=&quot;text/javascript&quot;&gt;
+        ///		try {
         ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
-        ///		&lt;/script&gt;.
+        ///		} catch {}		
+        ///	&lt;/script&gt;.
         /// </summary>
         internal static string commoncefhandler_html {
             get {
@@ -179,6 +180,89 @@ namespace legallead.desktop.Properties {
         internal static string commonheadings_html {
             get {
                 return ResourceManager.GetString("commonheadings_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;IsVisible&quot;: false,
+        ///    &quot;Items&quot;: [
+        ///      {
+        ///        &quot;Name&quot;: &quot;Home&quot;,
+        ///        &quot;IsDisplayed&quot;: true,
+        ///        &quot;IsSelected&quot;: true
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;Error&quot;,
+        ///        &quot;IsDisplayed&quot;: true,
+        ///        &quot;IsSelected&quot;: false
+        ///      },
+        ///      {
+        ///        &quot;Name&quot;: &quot;MyAccount&quot;,
+        ///        &quot;IsDisplayed&quot;: false,
+        ///        &quot;IsSelected&quot;: false
+        ///      }
+        ///    ]
+        ///  }.
+        /// </summary>
+        internal static string contextmenu {
+            get {
+                return ResourceManager.GetString("contextmenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: error&lt;/title&gt;
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;cover-css&quot; href=&quot;https://getbootstrap.com/docs/4.0/examples/cover/cover.css&quot; /&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string error_html {
+            get {
+                return ResourceManager.GetString("error_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;css/error.css&quot;&gt;
+        ///
+        ///#errorbox {
+        ///    position: relative;
+        ///    height: 40vh
+        ///}
+        ///
+        ///#errorbox .errorbox {
+        ///    position: absolute;
+        ///    left: 50%;
+        ///    top: 50%;
+        ///    -webkit-transform: translate(-50%,-50%);
+        ///    -ms-transform: translate(-50%,-50%);
+        ///    transform: translate(-50%,-50%)
+        ///}
+        ///
+        ///.errorbox {
+        ///    max-width: 560px;
+        ///    width: 100%;
+        ///    padding-left: 160px;
+        ///    line-height: 1.1
+        ///}
+        ///
+        ///.errorbox .errorbox-callout {
+        ///    position: absolute;
+        ///    left: 0;
+        ///    top: 0;
+        ///    display: inline- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string errorbox_css {
+            get {
+                return ResourceManager.GetString("errorbox_css", resourceCulture);
             }
         }
         
@@ -221,9 +305,14 @@ namespace legallead.desktop.Properties {
         ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
         ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
         ///		&lt;!-- block: common-headings --&gt;
-        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;cover-css&quot; href=&quot;https://getbootstrap.com/docs/4.0/examples/cover/cover.css&quot; /&gt;
         ///		&lt;!-- common styles --&gt;	
-        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base. [rest of string was truncated]&quot;;.
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///			div.subcontent {
+        ///				width: 50%; 
+        ///				min-width: 400px;
+        ///				ma [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string home_html {
             get {
@@ -334,6 +423,32 @@ namespace legallead.desktop.Properties {
         internal static string introduction_html {
             get {
                 return ResourceManager.GetString("introduction-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///			div.subcontent {
+        ///				width: 50%; 
+        ///				min-width: 400px;
+        ///				ma [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_html {
+            get {
+                return ResourceManager.GetString("myaccount-html", resourceCulture);
             }
         }
     }

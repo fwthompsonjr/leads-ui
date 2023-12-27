@@ -12,11 +12,17 @@ namespace legallead.permissions.api
         IUserProfileViewRepository UserProfileVw { get; }
 
         Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode);
+
         Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode);
+
         Task<bool> InitializePermission(User user);
+
         Task<bool> InitializeProfile(User user);
+
         Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode);
+
         Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode);
+
         Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName);
     }
 }

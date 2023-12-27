@@ -1,6 +1,6 @@
-﻿using System.Net.NetworkInformation;
+﻿using legallead.desktop.interfaces;
+using System.Net.NetworkInformation;
 using System.Runtime.Caching;
-using legallead.desktop.interfaces;
 
 namespace legallead.desktop.utilities
 {

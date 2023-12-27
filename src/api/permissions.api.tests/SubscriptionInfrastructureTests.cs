@@ -3,7 +3,6 @@ using legallead.jdbc.interfaces;
 using legallead.json.db.entity;
 using legallead.permissions.api;
 using legallead.permissions.api.Utility;
-using Microsoft.Extensions.DependencyInjection;
 using permissions.api.tests.Contollers;
 
 namespace permissions.api.tests
@@ -93,6 +92,7 @@ namespace permissions.api.tests
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Never);
         }
+
         [Fact]
         public async Task RemoveCountySubscriptionsHappyPath()
         {

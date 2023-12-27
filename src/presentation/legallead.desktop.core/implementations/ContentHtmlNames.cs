@@ -58,22 +58,26 @@ namespace legallead.desktop.implementations
             return names;
         }
 
+        internal static string CommonReplacement(string? source)
+        {
+            if (string.IsNullOrEmpty(source)) return string.Empty;
+            var keys = Replacements.Keys;
+            foreach (var key in from key in keys
+                                where source.Contains(key)
+                                select key)
+            {
+                source = source.Replace(key, Replacements[key]);
+            }
+            return source;
+        }
+
         [ExcludeFromCodeCoverage]
         private static void MapResourceContent(ContentHtml? item)
         {
             if (item == null) return;
             if (!string.IsNullOrEmpty(item.Content)) return;
             var manager = Properties.Resources.ResourceManager;
-            var resourceText = manager.GetString(item.Name);
-            if (string.IsNullOrEmpty(resourceText)) return;
-            var keys = Replacements.Keys;
-            foreach (var key in from key in keys
-                                where resourceText.Contains(key)
-                                select key)
-            {
-                resourceText = resourceText.Replace(key, Replacements[key]);
-            }
-
+            var resourceText = CommonReplacement(manager.GetString(item.Name));
             item.Content = resourceText;
         }
 
@@ -180,11 +184,14 @@ namespace legallead.desktop.implementations
             new() { Index = 10, Name = "base-css"},
             new() { Index = 100, Name = "introduction-html"},
             new() { Index = 110, Name = "home-html"},
-            new() { Index = 110, Name = "homelogin-html"}
+            new() { Index = 110, Name = "homelogin-html"},
+            new() { Index = 200, Name = "errorbox-css"},
+            new() { Index = 200, Name = "myaccount-html"},
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
+        private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
@@ -196,6 +203,7 @@ namespace legallead.desktop.implementations
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
             { CssBootStrapLink, GetBootstrapCssScript() },
+            { CssErrorBox, Properties.Resources.errorbox_css },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
             { JsHomeValidation, GetHomeValidationScript() },

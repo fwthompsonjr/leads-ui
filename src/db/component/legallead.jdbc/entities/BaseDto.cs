@@ -77,7 +77,7 @@ namespace legallead.jdbc.entities
                 var temp = Convert.ToString(source);
                 if (temp == null) return default;
                 return (T)Convert.ChangeType(temp, t);
-            }   
+            }
             return (T)Convert.ChangeType(source, t);
         }
 

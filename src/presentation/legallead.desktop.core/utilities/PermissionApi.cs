@@ -1,12 +1,7 @@
-﻿using AngleSharp.Dom;
-using legallead.desktop.entities;
+﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Net;
-using System.Net.Http.Json;
 using System.Net.NetworkInformation;
-using System.Runtime.Caching;
 
 namespace legallead.desktop.utilities
 {
@@ -69,49 +64,43 @@ namespace legallead.desktop.utilities
 
         public KeyValuePair<bool, ApiResponse> CanPost(string name, object payload, UserBo user)
         {
-            var isPostPage = PostAddresses.Keys.Any(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
-            if (!isPostPage)
+            var postPage = PostAddresses.Keys.FirstOrDefault(x => x.EndsWith(name, StringComparison.OrdinalIgnoreCase));
+            if (postPage == null)
             {
                 var notfound = new ApiResponse { StatusCode = 404, Message = "Invalid page address." };
                 return new KeyValuePair<bool, ApiResponse>(false, notfound);
             }
-            var canget = CanGet(name);
-            if (!canget.Key) return new KeyValuePair<bool, ApiResponse>(false, canget.Value);
             if (!user.IsInitialized)
             {
-                // do somthing to invalidate or fix
-                var current = canget.Value;
-                current.StatusCode = 500;
-                current.Message = "User account is not initialized. Please check application settings";
+                var current = new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "User account is not initialized. Please check application settings"
+                };
                 return new KeyValuePair<bool, ApiResponse>(false, current);
             }
-            return new KeyValuePair<bool, ApiResponse>(true, canget.Value);
+            var address = GetUrl(postPage);
+            var accepted = new ApiResponse
+            {
+                StatusCode = 200,
+                Message = address
+            };
+            return new KeyValuePair<bool, ApiResponse>(true, accepted);
         }
 
         public virtual async Task<ApiResponse> Get(string name)
         {
-            try
+            var response = await Task.Run(() =>
             {
-                var response = await Task.Run(() =>
-                {
-                    var verify = CanGet(name);
-                    if (!verify.Key) return verify.Value;
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "API call is to be executed from derived class."
-                    };
-                });
-                return response;
-            }
-            catch (Exception ex)
-            {
+                var verify = CanGet(name);
+                if (!verify.Key) return verify.Value;
                 return new ApiResponse
                 {
-                    StatusCode = 500,
-                    Message = ex.Message
+                    StatusCode = 200,
+                    Message = "API call is to be executed from derived class."
                 };
-            }
+            });
+            return response;
         }
 
         public virtual async Task<ApiResponse> Post(string name, object payload, UserBo user)

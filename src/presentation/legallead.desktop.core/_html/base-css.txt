@@ -47,3 +47,24 @@ div[name="loader"] {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
+
+/*
+ * Card
+ */
+ .card {
+    background-color: transparent;
+    border-color: #444;
+    color: #fff;
+ }
+ .card .card-body .card-title {
+    border-bottom: #444 solid 1px;
+    padding-bottom: 5px;
+ }
+@media screen and (max-width: 500px) {
+  .card {
+    width: 300px;
+    margin-left: 40px;
+ }
+}
