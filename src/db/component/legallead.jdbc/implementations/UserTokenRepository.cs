@@ -29,14 +29,8 @@ namespace legallead.jdbc.implementations
         public async Task<UserRefreshToken?> Find(string userId, string refreshToken)
         {
             using var connection = _context.CreateConnection();
-            var parm = new UserRefreshToken
-            {
-                UserId = userId,
-                RefreshToken = refreshToken
-            };
-            var sql = _sut.SelectSQL(parm);
-            var parms = _sut.SelectParameters(parm);
-            return await _command.QuerySingleOrDefaultAsync<UserRefreshToken>(connection, sql, parms);
+            var sproc = $"CALL USP_GET_REFRESH_TOKEN '{userId}', '{refreshToken}';";
+            return await _command.QuerySingleOrDefaultAsync<UserRefreshToken>(connection, sproc);
         }
 
         public async Task DeleteTokens(User user)

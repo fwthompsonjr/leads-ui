@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.models;
-using legallead.logging.interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -109,7 +108,8 @@ namespace legallead.permissions.api.Controllers
             {
                 return BadRequest("User data is null or empty.");
             }
-            var savedRefreshToken = _tokenValidator.Verify(await _db.UserTokenDb.Find(user.Id, token.RefreshToken));
+            var found = await _db.UserTokenDb.Find(user.Id, token.RefreshToken);
+            var savedRefreshToken = _tokenValidator.Verify(found);
             if (savedRefreshToken == null || !savedRefreshToken.IsActive)
             {
                 return Unauthorized("Refresh token is missing or invalid.");
