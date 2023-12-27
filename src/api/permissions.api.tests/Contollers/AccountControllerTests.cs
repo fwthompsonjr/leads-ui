@@ -175,7 +175,7 @@ namespace permissions.api.tests.Contollers
             var compDbMq = provider.GetRequiredService<Mock<IComponentRepository>>();
             var jwtMq = provider.GetRequiredService<Mock<IJwtManagerRepository>>();
             var sut = provider.GetRequiredService<SignonController>();
-            Tokens? tokens = new() { RefreshToken = "123-456-789" };
+            Tokens? tokens = new() { RefreshToken = "123-456-789", Expires = DateTime.UtcNow.AddMinutes(1) };
 
             mockRq.SetupGet(x => x.Headers).Returns(appHeader.Headers);
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
@@ -188,6 +188,7 @@ namespace permissions.api.tests.Contollers
             if (actual is OkObjectResult objectResult && objectResult.Value is Tokens objectResponse)
             {
                 Assert.Equal(tokens.RefreshToken, objectResponse.RefreshToken);
+                Assert.True(tokens.Expires.HasValue);
             }
             else
             {

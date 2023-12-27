@@ -38,18 +38,19 @@ namespace legallead.permissions.api
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                   {
-                      new Claim(ClaimTypes.Name, user.Email),
-                      new Claim(ClaimTypes.NameIdentifier, user.Id ?? ""),
-                      new Claim(ClaimTypes.WindowsAccountName, user.UserName),
-                      new Claim(ClaimTypes.Email, user.Email)
+                      new(ClaimTypes.Name, user.Email),
+                      new(ClaimTypes.NameIdentifier, user.Id ?? ""),
+                      new(ClaimTypes.WindowsAccountName, user.UserName),
+                      new(ClaimTypes.Email, user.Email)
                   }),
                     Expires = DateTime.UtcNow.AddMinutes(_expiryMinutes.GetValueOrDefault(defaultExpiryMinutes)),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
                 };
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
+                var expiration = tokenDescriptor.Expires;
                 var refreshToken = GenerateRefreshToken();
-                return new Tokens { AccessToken = tokenHandler.WriteToken(token), RefreshToken = refreshToken };
+                return new Tokens { AccessToken = tokenHandler.WriteToken(token), RefreshToken = refreshToken, Expires = expiration };
             }
             catch
             {
