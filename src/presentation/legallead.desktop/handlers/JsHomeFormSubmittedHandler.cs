@@ -39,6 +39,8 @@ namespace legallead.desktop.handlers
                 var objectData = ConvertTo(formName, json).Result;
                 var htm = ConvertHTML(objectData);
                 handler.SetMessage(htm);
+                if (objectData.StatusCode != 200) return;
+                NavigateTo("MyAccount", objectData);
             }
             catch (Exception ex)
             {
@@ -50,6 +52,17 @@ namespace legallead.desktop.handlers
             {
                 handler.End();
             }
+        }
+
+        private static void NavigateTo(string destination, ApiResponse objectData)
+        {
+            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            var dispatcher = Application.Current.Dispatcher;
+            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            if (mainWindow is not MainWindow main) return;
+            if (user == null) return;
+            user.Token = ObjectExtensions.TryGet<AccessTokenBo>(objectData.Message);
+            main.NavigateTo(destination);
         }
 
         private static string ConvertHTML(ApiResponse response)

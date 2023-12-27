@@ -33,11 +33,12 @@ namespace legallead.desktop.tests.entities
         }
 
         [Fact]
-        public void UserBoCanUpdateIsAuthenicated()
+        public void UserBoCanGetIsAuthenicated()
         {
-            var items = faker.Generate(2);
-            items[0].IsAuthenicated = items[1].IsAuthenicated;
-            Assert.Equal(items[1].IsAuthenicated, items[0].IsAuthenicated);
+            var item = faker.Generate();
+            var actual = item.IsAuthenicated;
+            var expected = item.Token != null;
+            Assert.Equal(expected, actual);
         }
 
         [Fact]

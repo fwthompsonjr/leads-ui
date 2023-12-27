@@ -185,7 +185,8 @@ namespace legallead.desktop.implementations
             new() { Index = 100, Name = "introduction-html"},
             new() { Index = 110, Name = "home-html"},
             new() { Index = 110, Name = "homelogin-html"},
-            new() { Index = 200, Name = "errorbox-css"}
+            new() { Index = 200, Name = "errorbox-css"},
+            new() { Index = 200, Name = "myaccount-html"},
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";

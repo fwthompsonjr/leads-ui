@@ -7,6 +7,7 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,14 +21,12 @@ namespace legallead.desktop
     public partial class MainWindow : Window
     {
         private bool isBlankLoaded = false;
-        private readonly MenuConfiguration? menuConfiguration;
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeBrowserContent();
             InitializeErrorContent();
-            menuConfiguration = AppBuilder.ServiceProvider?.GetRequiredService<MenuConfiguration>();
             ContentRendered += MainWindow_ContentRendered;
             mnuExit.Click += MnuExit_Click;
         }
@@ -50,6 +49,21 @@ namespace legallead.desktop
         private void InitializeErrorContent()
         {
             SetErrorContent(404);
+        }
+
+        private void InitializeMyAccountContent()
+        {
+            var blankContent = ContentHandler.GetLocalContent("myaccount");
+            if (blankContent != null)
+            {
+                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
+                var browser = new ChromiumWebBrowser()
+                {
+                    Address = blankHtml
+                };
+                browser.JavascriptObjectRepository.Register("jsHandler", new JsHandler(browser));
+                contentMyAccount.Content = browser;
+            }
         }
 
         private void MainWindow_ContentRendered(object? sender, System.EventArgs e)
@@ -77,6 +91,11 @@ namespace legallead.desktop
             Environment.Exit(0);
         }
 
+        private void MnuAccount_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not MenuItem _) return;
+        }
+
         private void MnuHome_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not MenuItem _) return;
@@ -101,7 +120,9 @@ namespace legallead.desktop
         private void SetErrorContent(int errorCode)
         {
             var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
-            var errorContent = errorService?.GetContent(errorCode);
+            if (errorService == null) return;
+            var errorContent = errorService.GetContent(errorCode);
+            errorContent ??= errorService.GetContent(500);
             if (errorContent != null)
             {
                 var blankHtml = ContentHandler.GetAddressBase64(errorContent);
@@ -113,5 +134,62 @@ namespace legallead.desktop
                 contentError.Content = browser;
             }
         }
+
+        internal void NavigateTo(string destination, int errorCode = 0)
+        {
+            var landing = Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
+            if (landing == null) return;
+            switch (landing)
+            {
+                case "home":
+                    Dispatcher.Invoke(() =>
+                    {
+                        InitializeBrowserContent();
+                        tabHome.IsSelected = true;
+                    });
+                    break;
+
+                case "error":
+                    Dispatcher.Invoke(() =>
+                    {
+                        SetErrorContent(errorCode);
+                        tabError.IsSelected = true;
+                    });
+                    break;
+
+                case "myaccount":
+                    var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+                    if (user == null || !user.IsAuthenicated)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            mnuMyAccount.Visibility = Visibility.Hidden;
+                            SetErrorContent(401);
+                            tabError.IsSelected = true;
+                        });
+                        return;
+                    }
+                    Dispatcher.Invoke(() =>
+                    {
+                        InitializeMyAccountContent();
+                        mnuMyAccount.Visibility = Visibility.Visible;
+                        tabMyAccount.IsSelected = true;
+                    });
+
+                    break;
+
+                case "exit":
+                    Environment.Exit(0);
+                    break;
+            }
+        }
+
+        private static readonly List<string> Landings = new()
+        {
+            "home",
+            "myaccount",
+            "error",
+            "exit"
+        };
     }
 }

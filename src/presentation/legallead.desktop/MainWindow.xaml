@@ -24,12 +24,20 @@
                 <MenuItem x:Name="mnu404" Header="_Page Not Found" Click="MnuError_Click" />
                 <MenuItem x:Name="mnu409" Header="_Conflict" Click="MnuError_Click" />
             </MenuItem>
+            <MenuItem x:Name="mnuMyAccount" Header="My _Account" Visibility="Hidden">
+                <MenuItem x:Name="mnuMyAccountHome" Header="_Account" Click="MnuAccount_Click" />
+                <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuAccount_Click" />
+                <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuAccount_Click" />
+            </MenuItem>
         </Menu>
 
         <Grid>
             <TabControl x:Name="mdiContainer">
                 <TabItem x:Name="tabHome" IsSelected="True" Tag="Home" Visibility="Collapsed">
                     <ContentControl x:Name="content1" />
+                </TabItem>
+                <TabItem x:Name="tabMyAccount" IsSelected="False" Tag="MyAccount" Visibility="Collapsed">
+                    <ContentControl x:Name="contentMyAccount" />
                 </TabItem>
                 <TabItem x:Name="tabError" IsSelected="False" Tag="Error" Visibility="Collapsed">
                     <ContentControl x:Name="contentError" />
