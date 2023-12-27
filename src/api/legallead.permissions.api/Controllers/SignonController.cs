@@ -93,51 +93,43 @@ namespace legallead.permissions.api.Controllers
         [Route("refresh-token")]
         public async Task<IActionResult> Refresh(Tokens token)
         {
-            try
+            var response = "An error occurred refreshing authentication token.";
+            var applicationCheck = Request.Validate(response);
+            if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
+            var principal = _jWTManager.GetPrincipalFromExpiredToken(token.AccessToken);
+            if (principal == null || principal.Identity == null || string.IsNullOrEmpty(principal.Identity.Name))
             {
-                var response = "An error occurred refreshing authentication token.";
-                var applicationCheck = Request.Validate(response);
-                if (!applicationCheck.Key) { return Unauthorized(applicationCheck.Value); }
-                var principal = _jWTManager.GetPrincipalFromExpiredToken(token.AccessToken);
-                if (principal == null || principal.Identity == null || string.IsNullOrEmpty(principal.Identity.Name))
-                {
-                    return BadRequest("Invalid access token.");
-                }
-                var username = principal.Identity.Name ?? string.Empty;
-                var user = await _db.UserDb.GetByEmail(username);
-
-                if (user == null || string.IsNullOrEmpty(user.Id))
-                {
-                    return BadRequest("User data is null or empty.");
-                }
-                var found = await _db.UserTokenDb.Find(user.Id, token.RefreshToken);
-                var savedRefreshToken = _tokenValidator.Verify(found);
-                if (savedRefreshToken == null || !savedRefreshToken.IsActive)
-                {
-                    return Unauthorized("Refresh token is missing or invalid.");
-                }
-
-                var newJwtToken = _jWTManager.GenerateRefreshToken(user);
-                if (newJwtToken == null)
-                {
-                    return Unauthorized("Failed to generate token.");
-                }
-
-                var obj = new UserRefreshToken
-                {
-                    RefreshToken = newJwtToken.RefreshToken,
-                    UserId = user.Id
-                };
-
-                await _db.UserTokenDb.DeleteTokens(user);
-                await _db.UserTokenDb.Add(obj);
-                return Ok(newJwtToken);
+                return BadRequest("Invalid access token.");
             }
-            catch (Exception ex)
+            var username = principal.Identity.Name ?? string.Empty;
+            var user = await _db.UserDb.GetByEmail(username);
+
+            if (user == null || string.IsNullOrEmpty(user.Id))
             {
-                await _logSvc.LogError(ex);
-                return StatusCode(500, ex.Message);
+                return BadRequest("User data is null or empty.");
             }
+            var found = await _db.UserTokenDb.Find(user.Id, token.RefreshToken);
+            var savedRefreshToken = _tokenValidator.Verify(found);
+            if (savedRefreshToken == null || !savedRefreshToken.IsActive)
+            {
+                return Unauthorized("Refresh token is missing or invalid.");
+            }
+
+            var newJwtToken = _jWTManager.GenerateRefreshToken(user);
+            if (newJwtToken == null)
+            {
+                return Unauthorized("Failed to generate token.");
+            }
+
+            var obj = new UserRefreshToken
+            {
+                RefreshToken = newJwtToken.RefreshToken,
+                UserId = user.Id
+            };
+
+            await _db.UserTokenDb.DeleteTokens(user);
+            await _db.UserTokenDb.Add(obj);
+            return Ok(newJwtToken);
         }
 
         [AllowAnonymous]
