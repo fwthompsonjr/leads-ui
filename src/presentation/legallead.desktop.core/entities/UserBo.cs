@@ -4,7 +4,7 @@ namespace legallead.desktop.entities
 {
     internal class UserBo
     {
-        public bool IsAuthenicated => Token != null;
+        public bool IsAuthenicated => Token != null && Token.Expires.HasValue;
         public string UserName { get; set; } = string.Empty;
         public ApiContext[]? Applications { get; set; }
         public bool IsInitialized => Applications != null && Applications.Length > 0;

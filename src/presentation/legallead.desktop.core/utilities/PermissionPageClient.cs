@@ -1,6 +1,8 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
-using System.Net.Http.Json;
+using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
@@ -23,9 +25,11 @@ namespace legallead.desktop.utilities
             var address = GetAddress(name);
             if (address.StatusCode != 200) return address;
             var url = address.Message;
+            var user = GetUserOrDefault();
             using var client = GetHttpClient();
-            var result = await client.GetStringAsync(url);
-            if (result == null)
+            client.AppendAuthorization(user);
+            var result = await client.GetStringAsync(client.Client, url);
+            if (string.IsNullOrEmpty(result))
             {
                 return new ApiResponse
                 {
@@ -50,9 +54,10 @@ namespace legallead.desktop.utilities
             if (address.StatusCode != 200) return address;
             var url = address.Message;
             using var client = GetHttpClient();
-            client.DefaultRequestHeaders.Add("APP_IDENTITY", user.GetAppServiceHeader());
-            var result = await client.PostAsJsonAsync(url, payload);
-            if (result == null)
+            client.AppendAuthorization(user);
+            client.AppendHeader("APP_IDENTITY", user.GetAppServiceHeader());
+            var result = await client.PostAsJsonAsync(client.Client, url, payload);
+            if (!result.IsSuccessStatusCode)
             {
                 return new ApiResponse
                 {
@@ -68,9 +73,25 @@ namespace legallead.desktop.utilities
             };
         }
 
-        protected virtual HttpClient GetHttpClient()
+        protected virtual IHttpClientWrapper GetHttpClient()
         {
-            return new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+            var wrapper = new HttpClientWrapper(client);
+            return wrapper;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public call.")]
+        private static UserBo GetUserOrDefault()
+        {
+            try
+            {
+                var user = DesktopCoreServiceProvider.Provider.GetService<UserBo>();
+                return user ?? new();
+            }
+            catch (Exception)
+            {
+                return new();
+            }
         }
     }
 }

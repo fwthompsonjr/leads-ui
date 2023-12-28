@@ -1,6 +1,7 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.NetworkInformation;
 
 namespace legallead.desktop.utilities
@@ -105,28 +106,17 @@ namespace legallead.desktop.utilities
 
         public virtual async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
-            try
+            var response = await Task.Run(() =>
             {
-                var response = await Task.Run(() =>
-                {
-                    var verify = CanPost(name, payload, user);
-                    if (!verify.Key) return verify.Value;
-                    return new ApiResponse
-                    {
-                        StatusCode = 200,
-                        Message = "API call is to be executed from derived class."
-                    };
-                });
-                return response;
-            }
-            catch (Exception ex)
-            {
+                var verify = CanPost(name, payload, user);
+                if (!verify.Key) return verify.Value;
                 return new ApiResponse
                 {
-                    StatusCode = 500,
-                    Message = ex.Message
+                    StatusCode = 200,
+                    Message = "API call is to be executed from derived class."
                 };
-            }
+            });
+            return response;
         }
 
         protected string GetUrl(string address)
@@ -150,6 +140,8 @@ namespace legallead.desktop.utilities
         protected static readonly Dictionary<string, string> PostAddresses = new()
         {
             { "signon-login", "{0}/api/signon/login" },
+            { "signon-refresh", "{0}/api/signon/refresh-token" },
+            { "signon-change-password", "{0}/api/signon/change-password" },
             { "application-register", "{0}/api/Application/register" }
         };
 
@@ -173,6 +165,7 @@ namespace legallead.desktop.utilities
 
         private static readonly ApiResponse nointernet = new() { StatusCode = 503, Message = "Application is unable to connect to internet." };
 
+        [ExcludeFromCodeCoverage(Justification = "This method is private and tested through public members.")]
         private sealed class PingAddress : IPingAddress
         {
             public IPStatus CheckStatus(string address)
