@@ -1,4 +1,5 @@
 ﻿using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.NetworkInformation;
 using System.Runtime.Caching;
 
@@ -20,12 +21,14 @@ namespace legallead.desktop.utilities
             return ConvertResponse(memoryCache.Get(IsConnectedKeyName));
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method tested through public call.")]
         private static bool ConvertResponse(object? response)
         {
             if (response == null) return false;
             return Convert.ToBoolean(response);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method tested through public call.")]
         private static bool IsConnectedToInternet()
         {
             string host = "google.com";

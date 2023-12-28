@@ -5,6 +5,7 @@ namespace legallead.desktop.entities
 {
     internal class ErrorContentHtml : ContentHtml
     {
+        private static readonly object locker = new();
         public int StatusCode { get; set; }
         public bool IsDefault { get; set; }
         public ErrorStatusMessage StatusMessage { get; set; } = DefaultMessage;
@@ -12,22 +13,25 @@ namespace legallead.desktop.entities
         public static List<ErrorContentHtml> ErrorContentList()
         {
             if (_list != null) return _list;
-            _list = new List<ErrorContentHtml>();
-            var messages = ErrorStatusMessage.GetMessages();
-            messages.ForEach(m =>
+            lock (locker)
             {
-                var item = new ErrorContentHtml
+                _list = new List<ErrorContentHtml>();
+                var messages = ErrorStatusMessage.GetMessages();
+                messages.ForEach(m =>
                 {
-                    IsDefault = m.IsDefault.GetValueOrDefault(),
-                    StatusCode = Convert.ToInt32(m.Id),
-                    StatusMessage = m,
-                    Index = (messages.IndexOf(m) * 10) + 5000,
-                    Name = "Error",
-                    Content = MapContent(m)
-                };
-                _list.Add(item);
-            });
-            return _list;
+                    var item = new ErrorContentHtml
+                    {
+                        IsDefault = m.IsDefault.GetValueOrDefault(),
+                        StatusCode = Convert.ToInt32(m.Id),
+                        StatusMessage = m,
+                        Index = (messages.IndexOf(m) * 10) + 5000,
+                        Name = "Error",
+                        Content = MapContent(m)
+                    };
+                    _list.Add(item);
+                });
+                return _list;
+            }
         }
 
         private static string? _errorContent;

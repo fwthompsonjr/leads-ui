@@ -77,7 +77,7 @@ namespace legallead.desktop.tests.extensions
             client.AppendAuthorization(user);
             var headers = client.DefaultRequestHeaders;
             var added = headers.Any(a => a.Key == "Authorization");
-            Assert.False(added);
+            Assert.True(added);
         }
 
         [Fact]

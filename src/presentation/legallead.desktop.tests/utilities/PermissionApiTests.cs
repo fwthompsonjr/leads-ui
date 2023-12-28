@@ -2,7 +2,6 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
-using Moq;
 using System.Net.NetworkInformation;
 
 namespace legallead.desktop.tests.utilities

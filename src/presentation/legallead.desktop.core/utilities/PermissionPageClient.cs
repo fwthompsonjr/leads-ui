@@ -1,8 +1,8 @@
 ﻿using legallead.desktop.entities;
-using legallead.desktop.extensions;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
@@ -28,8 +28,8 @@ namespace legallead.desktop.utilities
             var user = GetUserOrDefault();
             using var client = GetHttpClient();
             client.AppendAuthorization(user);
-            var result = await client.GetStringAsync(url);
-            if (result == null)
+            var result = await client.GetStringAsync(client.Client, url);
+            if (string.IsNullOrEmpty(result))
             {
                 return new ApiResponse
                 {
@@ -55,9 +55,9 @@ namespace legallead.desktop.utilities
             var url = address.Message;
             using var client = GetHttpClient();
             client.AppendAuthorization(user);
-            client.DefaultRequestHeaders.Add("APP_IDENTITY", user.GetAppServiceHeader());
-            var result = await client.PostAsJsonAsync(url, payload);
-            if (result == null)
+            client.AppendHeader("APP_IDENTITY", user.GetAppServiceHeader());
+            var result = await client.PostAsJsonAsync(client.Client, url, payload);
+            if (!result.IsSuccessStatusCode)
             {
                 return new ApiResponse
                 {
@@ -73,11 +73,14 @@ namespace legallead.desktop.utilities
             };
         }
 
-        protected virtual HttpClient GetHttpClient()
+        protected virtual IHttpClientWrapper GetHttpClient()
         {
-            return new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+            var wrapper = new HttpClientWrapper(client);
+            return wrapper;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public call.")]
         private static UserBo GetUserOrDefault()
         {
             try
