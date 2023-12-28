@@ -1,0 +1,9 @@
+
+					<div id="dv-subcontent-permissions" name="subcontent-permissions" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title text-start">Account Permissions</h5>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-sm btn-primary">Save</button>
+						</div>
+					</div>

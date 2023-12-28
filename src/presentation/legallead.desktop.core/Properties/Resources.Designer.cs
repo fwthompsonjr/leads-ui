@@ -427,6 +427,45 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///div.subcontent {
+        ///	width: 50%; 
+        ///	min-width: 400px;
+        ///	max-width: 1200px;
+        ///    margin-bottom: 20px;
+        ///	display: none;
+        ///}
+        ///			
+        ///div.subcontent.active {
+        ///	display: block;
+        ///}
+        ///
+        ///div[name=&quot;subcontent-home-bullet-list&quot;] {
+        ///	width: 50%; 
+        ///	margin-left: 35%;
+        ///	text-align: left;
+        ///	justify-content: left;
+        ///}
+        ///			
+        ///
+        ///div[name=&quot;main-content&quot;] {
+        ///	width: 70%; 
+        ///	min-width: 800px;
+        ///	max-width: 1200px;
+        ///}		
+        ///
+        ///div[name=&quot;subcontent-home&quot;],
+        ///div[name=&quot;subcontent-profile&quot;],
+        ///div[name=&quot;subconten [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_css {
+            get {
+                return ResourceManager.GetString("myaccount_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///
         ///	&lt;head&gt;
@@ -449,6 +488,83 @@ namespace legallead.desktop.Properties {
         internal static string myaccount_html {
             get {
                 return ResourceManager.GetString("myaccount-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script&gt;
+        ///	const actv = &quot;active&quot;;
+        ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot; ];
+        ///
+        ///	function setDisplay( name ) {
+        ///			if (names.indexOf( name ) &lt; 0 ) { return; }
+        ///			setActiveDiv(name);
+        ///			const themenu = document.getElementById(&quot;masthead-nav-menu&quot;);
+        ///			let thelinks = themenu.getElementsByTagName(&quot;a&quot;);
+        ///
+        ///			for(let i = 0; i &lt; thelinks.length; i++) {
+        ///				let a = thelinks[i];
+        ///				const aname = a.getAttribute(&quot;name&quot;);
+        ///				if ( aname.indexOf(name) &gt;= 0 ) {
+        ///					a.classList.add(actv);
+        ///				} else  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_script_js {
+            get {
+                return ResourceManager.GetString("myaccount_script_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-home&quot; name=&quot;subcontent-home&quot; class=&quot;subcontent active card&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title&quot;&gt;Account Details&lt;/h5&gt;	
+        ///							&lt;div class=&quot;row&quot;&gt;
+        ///								&lt;div class=&quot;col-4 text-info text-start&quot;&gt;User Name:&lt;/div&gt;
+        ///								&lt;div class=&quot;col-1 text-info&quot;&gt;&lt;/div&gt;
+        ///								&lt;div id=&quot;account-user-name&quot; class=&quot;col-7 text-secondary text-start&quot;&gt;user-name&lt;/div&gt;
+        ///							&lt;/div&gt;
+        ///							&lt;div class=&quot;row&quot;&gt;
+        ///								&lt;div class=&quot;col-4 text-info text-start&quot;&gt;Email:&lt;/div&gt;
+        ///			 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccounthome_html {
+            get {
+                return ResourceManager.GetString("myaccounthome-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-permissions&quot; name=&quot;subcontent-permissions&quot; class=&quot;subcontent card&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title text-start&quot;&gt;Account Permissions&lt;/h5&gt;
+        ///						&lt;/div&gt;
+        ///						&lt;div class=&quot;card-footer&quot;&gt;
+        ///							&lt;button class=&quot;btn btn-sm btn-primary&quot;&gt;Save&lt;/button&gt;
+        ///						&lt;/div&gt;
+        ///					&lt;/div&gt;.
+        /// </summary>
+        internal static string myaccountpermissions_html {
+            get {
+                return ResourceManager.GetString("myaccountpermissions-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;dv-subcontent-profile&quot; name=&quot;subcontent-profile&quot; class=&quot;subcontent card&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title text-start&quot;&gt;Account Profile&lt;/h5&gt;	
+        ///							&lt;div class=&quot;row&quot;&gt;
+        ///								&lt;form id=&quot;frm-user-profile&quot; name=&quot;frm-user-profile&quot;&gt;
+        ///									&lt;div id=&quot;dv-subcontent-profile-row-01&quot; class=&quot;mb-3 text-start&quot;&gt;
+        ///										&lt;label for=&quot;cbo-profile-group&quot; class=&quot;form-label&quot;&gt;Section&lt;/label&gt;
+        ///										&lt;select id=&quot;cbo-profile-group&quot; class=&quot;form-control&quot; onchange=&quot;profileComboBoxChanged [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccountprofile_html {
+            get {
+                return ResourceManager.GetString("myaccountprofile-html", resourceCulture);
             }
         }
     }

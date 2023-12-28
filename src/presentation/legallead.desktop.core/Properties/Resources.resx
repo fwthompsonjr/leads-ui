@@ -167,6 +167,21 @@
     <value>..\_html\introduction-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="myaccount-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_html\myaccount-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_html\myaccount-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="myaccounthome-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\myaccount-home-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="myaccountpermissions-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\myaccount-permissions-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="myaccountprofile-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\myaccount-profile-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="myaccount_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\myaccount-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="myaccount_script_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\myaccount-script-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
