@@ -14,3 +14,4 @@ Release information - legallead.permissions.api
 12/20/2023 11:46:00 AM added try/catch to authenication method
 12/27/2023 02:10:00 AM testing automated deployment
 12/27/2023 02:34:00 AM testing automated deployment
+12/28/2023 03:26:00 AM testing newman validation of api action

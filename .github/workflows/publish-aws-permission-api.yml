@@ -57,3 +57,10 @@ jobs:
       shell: pwsh
       run: |
         & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
+
+    - name: Deployment Validation
+      uses: matt-ball/newman-action@master
+      with:
+        collection: postman_collection.json
+        environment: postman_environment.json
+  
