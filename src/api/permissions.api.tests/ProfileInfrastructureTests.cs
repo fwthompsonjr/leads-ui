@@ -125,7 +125,7 @@ namespace permissions.api.tests
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
             var user = provider.GetRequiredService<User>();
-            var change = GetResponse("Email");
+            var change = GetResponse("Phone");
             var changerequest = JsonConvert.DeserializeObject<ChangeContactPhoneRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 
@@ -139,7 +139,7 @@ namespace permissions.api.tests
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
             var user = provider.GetRequiredService<User>();
-            var change = GetResponse("Email");
+            var change = GetResponse("Name");
             var changerequest = JsonConvert.DeserializeObject<ChangeContactNameRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 

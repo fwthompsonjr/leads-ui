@@ -1426,6 +1426,350 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "EditContactDetail_Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact Address details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AddressType\": \"Mailing\",\r\n        \"Address\": \"{{$randomStreetAddress}} {{$randomCity}}, {{$randomCountry}} {{$randomInt}}\"\r\n    },    \r\n    {\r\n        \"AddressType\": \"Billing\",\r\n        \"Address\": \"{{$randomStreetAddress}} {{$randomCity}}, {{$randomCountry}} {{$randomInt}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_ADDRESS_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_ADDRESS_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact Email details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"EmailType\": \"Personal\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    },    \r\n    {\r\n        \"EmailType\": \"Business\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    },    \r\n    {\r\n        \"EmailType\": \"Other\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_EMAIL_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_EMAIL_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Phone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact Phone details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"PhoneType\": \"Personal\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    },\r\n    {\r\n        \"PhoneType\": \"Business\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    },    \r\n    {\r\n        \"PhoneType\": \"Other\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_PHONE_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_PHONE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact Name details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"NameType\": \"First\",\r\n        \"Name\": \"{{$randomFirstName}}\"\r\n    },\r\n    {\r\n        \"NameType\": \"Last\",\r\n        \"Name\": \"{{$randomLastName}}\"\r\n    },    \r\n    {\r\n        \"NameType\": \"Company\",\r\n        \"Name\": \"{{$randomCompanyName}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_NAME_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_NAME_URL}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

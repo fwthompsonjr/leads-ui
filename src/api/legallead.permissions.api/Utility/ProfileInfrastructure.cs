@@ -74,7 +74,9 @@ namespace legallead.permissions.api.Utility
             var updates = new List<UserProfile>();
             requests.ForEach(r =>
             {
-                var found = current.First(c => (c.KeyName ?? "").Equals(r.KeyName));
+                r.KeyName ??= string.Empty;
+                var found = current.FirstOrDefault(c => (c.KeyName ?? "").Equals(r.KeyName));
+                found ??= current.FirstOrDefault(c => (c.KeyName ?? "").StartsWith(r.KeyName));
                 if (found != null)
                 {
                     found.KeyValue = r.KeyValue;

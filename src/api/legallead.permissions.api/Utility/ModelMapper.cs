@@ -158,11 +158,15 @@ namespace legallead.permissions.api
 
         private static UserProfileView ConvertTo(ChangeContactNameRequest source, UserProfileView dest)
         {
-            var hasName = Enum.TryParse<NameTypeNames>(source.NameType, out var index);
+            const char space = ' ';
+            var named = source.NameType ?? string.Empty;
+            if (named.Contains(space)) named = named.Split(space)[0];
+            var hasName = Enum.TryParse<NameTypeNames>(named, out var index);
             var mappedId = hasName ? (int)index : 1;
+            var mappedName = NamePrefixes[mappedId];
             return new UserProfileView
             {
-                KeyName = NamePrefixes[mappedId],
+                KeyName = $"{mappedName} Name",
                 KeyValue = source.Name,
             };
         }
@@ -311,9 +315,9 @@ namespace legallead.permissions.api
 
         private static readonly Dictionary<int, string> NamePrefixes = new()
         {
-            { 1, "First Name" },
-            { 2, "Last Name" },
-            { 3, "Company Name" }
+            { 0, "First" },
+            { 1, "Last" },
+            { 2, "Company" }
         };
     }
 }
