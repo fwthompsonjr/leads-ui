@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
+using Npgsql.Replication.PgOutput;
 
 namespace legallead.permissions.api.Utility
 {
@@ -13,6 +14,27 @@ namespace legallead.permissions.api.Utility
             mapper = ModelMapper.Mapper;
         }
 
+        public async Task<GetContactResponse[]> GetContactDetail(User? user, string responseType)
+        {
+            var fallback = new GetContactResponse[] {
+                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                };
+            if (user == null) { return fallback; }
+            try
+            {
+                var current = await _db.UserProfileVw.GetAll(user);
+                var response = mapper.Map<GetContactResponse[]>(current).ToList();
+                if (string.IsNullOrEmpty(responseType)) { return response.ToArray(); }
+                return response.FindAll(x => x.ResponseType == responseType).ToArray();
+            }
+            catch (Exception ex)
+            {
+                fallback[0].Message = ex.Message;
+                return fallback;
+            }
+        }
+
+        //public async
         public async Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);

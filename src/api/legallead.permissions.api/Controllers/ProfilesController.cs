@@ -20,6 +20,27 @@ namespace legallead.Profiles.api.Controllers
         }
 
         [HttpPost]
+        [Route("get-contact-detail")]
+        public async Task<IActionResult> GetContactAddress(GetContactRequest request)
+        {
+            var fallback = new GetContactResponse[] {
+                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                };
+            var user = await _db.GetUser(Request);
+            if (user == null)
+            {
+                fallback[0].Message = "Invalid user account.";
+                return Unauthorized(fallback);
+            }
+            var response = await _db.GetContactDetail(user, request.RequestType ?? string.Empty);
+            var failure = response?.ToList().Find(a => !a.IsOK);
+            if (failure == null)
+                return Ok(response);
+            fallback[0].Message = failure.Message;
+            return Conflict(fallback);
+        }
+
+        [HttpPost]
         [Route("edit-contact-address")]
         public async Task<IActionResult> ChangeContactAddress(ChangeContactAddressRequest[] request)
         {
