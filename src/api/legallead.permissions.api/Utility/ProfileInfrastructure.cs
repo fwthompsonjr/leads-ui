@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
-using Npgsql.Replication.PgOutput;
 
 namespace legallead.permissions.api.Utility
 {
