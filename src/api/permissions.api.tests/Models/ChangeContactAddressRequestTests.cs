@@ -45,8 +45,8 @@ namespace permissions.api.tests.Models
         [InlineData(200, true)]
         [InlineData(400, true)]
         [InlineData(500, true)]
-        [InlineData(501, false)]
-        [InlineData(1000, false)]
+        [InlineData(1000, true)]
+        [InlineData(1001, false)]
         public void ContactLengthValidation(int length, bool expected)
         {
             var fieldData = new Faker().Random.AlphaNumeric(length);

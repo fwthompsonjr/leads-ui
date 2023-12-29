@@ -34,7 +34,6 @@ namespace legallead.permissions.api.Utility
             }
         }
 
-        //public async
         public async Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);

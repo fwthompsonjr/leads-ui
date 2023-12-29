@@ -65,7 +65,63 @@ namespace legallead.permissions.api
 
                 c.CreateMap<UserProfileView[], GetContactResponse[]>()
                     .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactAddressRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactEmailRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactPhoneRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactNameRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
             });
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactAddressRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, Array.Empty<UserProfileView>());
+                list.AddRange(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactEmailRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactPhoneRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactNameRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
         }
 
         private static UserProfileView[] ConvertTo(ChangeContactAddressRequest source, UserProfileView[] dest)
@@ -135,12 +191,11 @@ namespace legallead.permissions.api
 
         private static GetContactResponse[] ConvertTo(UserProfileView[] source, GetContactResponse[] dest)
         {
-            var template = new GetContactResponse();
             var response = new List<GetContactResponse>();
-            var addresses = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactAddressRequest>()), template);
-            var emails = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactEmailRequest>()), template);
-            var phones = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactPhoneRequest>()), template);
-            var names = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactNameRequest>()), template);
+            var addresses = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactAddressRequest>()), new GetContactResponse());
+            var emails = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactEmailRequest>()), new GetContactResponse());
+            var phones = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactPhoneRequest>()), new GetContactResponse());
+            var names = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactNameRequest>()), new GetContactResponse());
             response.Add(names);
             response.Add(addresses);
             response.Add(emails);
@@ -214,50 +269,38 @@ namespace legallead.permissions.api
 
         private static GetContactResponse ConvertTo(ChangeContactNameRequest[] source, GetContactResponse dest)
         {
-            var response = new GetContactResponse
-            {
-                IsOK = true,
-                ResponseType = "Name",
-                Data = JsonConvert.SerializeObject(source),
-                Message = "Mapping completed"
-            };
-            return response;
+            dest.IsOK = true;
+            dest.ResponseType = "Name";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
         }
 
         private static GetContactResponse ConvertTo(ChangeContactAddressRequest[] source, GetContactResponse dest)
         {
-            var response = new GetContactResponse
-            {
-                IsOK = true,
-                ResponseType = "Address",
-                Data = JsonConvert.SerializeObject(source),
-                Message = "Mapping completed"
-            };
-            return response;
+            dest.IsOK = true;
+            dest.ResponseType = "Address";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
         }
 
         private static GetContactResponse ConvertTo(ChangeContactEmailRequest[] source, GetContactResponse dest)
         {
-            var response = new GetContactResponse
-            {
-                IsOK = true,
-                ResponseType = "Email",
-                Data = JsonConvert.SerializeObject(source),
-                Message = "Mapping completed"
-            };
-            return response;
+            dest.IsOK = true;
+            dest.ResponseType = "Email";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
         }
 
         private static GetContactResponse ConvertTo(ChangeContactPhoneRequest[] source, GetContactResponse dest)
         {
-            var response = new GetContactResponse
-            {
-                IsOK = true,
-                ResponseType = "Phone",
-                Data = JsonConvert.SerializeObject(source),
-                Message = "Mapping completed"
-            };
-            return response;
+            dest.IsOK = true;
+            dest.ResponseType = "Phone";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
         }
 
         private static readonly Dictionary<int, string> AddressPrefixes = new()
