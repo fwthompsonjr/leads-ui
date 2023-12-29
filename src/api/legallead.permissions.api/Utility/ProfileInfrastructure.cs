@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
+using System.Linq;
 
 namespace legallead.permissions.api.Utility
 {
@@ -22,7 +23,7 @@ namespace legallead.permissions.api.Utility
             try
             {
                 var current = await _db.UserProfileVw.GetAll(user);
-                var response = mapper.Map<GetContactResponse[]>(current).ToList();
+                var response = mapper.Map<GetContactResponse[]>(current.ToArray()).ToList();
                 if (string.IsNullOrEmpty(responseType)) { return response.ToArray(); }
                 return response.FindAll(x => x.ResponseType == responseType).ToArray();
             }

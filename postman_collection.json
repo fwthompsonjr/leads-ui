@@ -1014,7 +1014,420 @@
 		},
 		{
 			"name": "profile",
-			"item": []
+			"item": [
+				{
+					"name": "ContactDetail",
+					"item": [
+						{
+							"name": "GetContactDetail_All",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 4 members\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(4);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Name\", function () {\r",
+											"    const key = \"Name\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Address\", function () {\r",
+											"    const key = \"Address\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Email\", function () {\r",
+											"    const key = \"Email\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Phone\", function () {\r",
+											"    const key = \"Phone\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Address",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Address\", function () {\r",
+											"    const key = \"Address\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Address\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Email\", function () {\r",
+											"    const key = \"Email\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Email\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Name\", function () {\r",
+											"    const key = \"Name\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Phone",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Phone\", function () {\r",
+											"    const key = \"Phone\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Phone\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	],
 	"event": [
@@ -1107,7 +1520,6 @@
 					"            var rtoken = jstring[\"refreshToken\"];",
 					"            pm.environment.set(\"access_token\", atoken);",
 					"            pm.environment.set(\"refresh_token\", rtoken);",
-					"            console.log(atoken);",
 					"            });",
 					"    } catch (error) {",
 					"        console.debug(error);",
@@ -1208,6 +1620,31 @@
 		{
 			"key": "APP_REGISTER_URL",
 			"value": "api/application/register"
+		},
+		{
+			"key": "PROFILES_CONTACT_DETAIL_URL",
+			"value": "api/profiles/get-contact-detail",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_ADDRESS_URL",
+			"value": "api/profiles/edit-contact-address",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_EMAIL_URL",
+			"value": "api/profiles/edit-contact-email",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_NAME_URL",
+			"value": "api/profiles/edit-contact-name",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_PHONE_URL",
+			"value": "api/profiles/edit-contact-phone",
+			"type": "string"
 		}
 	]
 }
