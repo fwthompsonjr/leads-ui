@@ -103,7 +103,7 @@ namespace legallead.Profiles.api.Controllers
             }
             response.User = user;
             var validation = BulkValidate(request, out var isValid);
-            if (!isValid && validation != null)
+            if (!isValid && validation != null && validation.Any())
             {
                 var messages = validation.Select(x => x.ErrorMessage).ToList();
                 response.Result = BadRequest(messages);
@@ -118,7 +118,7 @@ namespace legallead.Profiles.api.Controllers
             foreach (var item in collection)
             {
                 var resp = item.Validate(out var _);
-                if (resp != null) { results.AddRange(resp); }
+                if (resp != null && resp.Any()) { results.AddRange(resp); }
             }
             isvalid = results.Any();
             return results;
