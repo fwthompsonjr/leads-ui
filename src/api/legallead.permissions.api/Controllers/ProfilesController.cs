@@ -21,7 +21,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("get-contact-detail")]
-        public async Task<IActionResult> GetContactAddress(GetContactRequest request)
+        public async Task<IActionResult> GetContactDetail(GetContactRequest request)
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }

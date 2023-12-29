@@ -1,0 +1,19 @@
+name: "Verify: Permissions.Api"
+  
+on:
+  schedule:
+    - cron: "*/45 * * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Deployment Validation
+      uses: matt-ball/newman-action@master
+      with:
+        collection: postman_collection.json
+        environment: postman_environment.json
+  
