@@ -20,12 +20,12 @@ namespace legallead.desktop.implementations
                 new { node = "", find = "//*[@id=\"tbx-profile-company\"]", replace = GetProfileItem(profile, "Name", "Company")},
                 new { node = "textarea", find = "//*[@id=\"tbx-profile-mailing-address\"]", replace = GetProfileItem(profile, "Address", "Mailing")},
                 new { node = "textarea", find = "//*[@id=\"tbx-profile-billing-address\"]", replace = GetProfileItem(profile, "Address", "Billing")},
-                new { node = "", find = "//*[@id=\"tbx-profile-phone-01\"]", replace = GetProfileItem(profile, "Email", "Personal")},
-                new { node = "", find = "//*[@id=\"tbx-profile-phone-02\"]", replace = GetProfileItem(profile, "Email", "Business")},
-                new { node = "", find = "//*[@id=\"tbx-profile-phone-03\"]", replace = GetProfileItem(profile, "Email", "Other")},
-                new { node = "", find = "//*[@id=\"tbx-profile-email-01\"]", replace = GetProfileItem(profile, "Phone", "Personal")},
-                new { node = "", find = "//*[@id=\"tbx-profile-email-02\"]", replace = GetProfileItem(profile, "Phone", "Business")},
-                new { node = "", find = "//*[@id=\"tbx-profile-email-03\"]", replace = GetProfileItem(profile, "Phone", "Other")},
+                new { node = "", find = "//*[@id=\"tbx-profile-email-01\"]", replace = GetProfileItem(profile, "Email", "Personal")},
+                new { node = "", find = "//*[@id=\"tbx-profile-email-02\"]", replace = GetProfileItem(profile, "Email", "Business")},
+                new { node = "", find = "//*[@id=\"tbx-profile-email-03\"]", replace = GetProfileItem(profile, "Email", "Other")},
+                new { node = "", find = "//*[@id=\"tbx-profile-phone-01\"]", replace = GetProfileItem(profile, "Phone", "Personal")},
+                new { node = "", find = "//*[@id=\"tbx-profile-phone-02\"]", replace = GetProfileItem(profile, "Phone", "Business")},
+                new { node = "", find = "//*[@id=\"tbx-profile-phone-03\"]", replace = GetProfileItem(profile, "Phone", "Other")},
             };
             foreach (var item in replacements)
             {
@@ -61,16 +61,16 @@ namespace legallead.desktop.implementations
         {
             const string landing = "get-contact-detail";
 
-            var payload = new { ResponseType = string.Empty };
+            var payload = new { RequestType = string.Empty };
             var response = await api.Post(landing, payload, user);
             if (response.StatusCode != 200) return null;
             var data = ObjectExtensions.TryGet<List<ContactProfileResponse>>(response.Message);
             if (data == null || !data.Any()) return null;
             var list = new List<ContactProfileItem>();
-            var address = data.ToList().Find(a => a.ResponseType.Equals("Address"))?.Message;
-            var names = data.ToList().Find(a => a.ResponseType.Equals("Name"))?.Message;
-            var emails = data.ToList().Find(a => a.ResponseType.Equals("Email"))?.Message;
-            var phones = data.ToList().Find(a => a.ResponseType.Equals("Phone"))?.Message;
+            var address = data.ToList().Find(a => a.ResponseType.Equals("Address"))?.Data;
+            var names = data.ToList().Find(a => a.ResponseType.Equals("Name"))?.Data;
+            var emails = data.ToList().Find(a => a.ResponseType.Equals("Email"))?.Data;
+            var phones = data.ToList().Find(a => a.ResponseType.Equals("Phone"))?.Data;
             if (!string.IsNullOrEmpty(address))
             {
                 var t1 = ObjectExtensions.TryGet<List<ContactAddress>>(address);
