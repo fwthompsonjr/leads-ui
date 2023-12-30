@@ -109,6 +109,25 @@ namespace legallead.desktop
             SetErrorContent(menuId);
         }
 
+        private static async Task<string> MapProfileResponse(string response)
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var user = provider?.GetService<UserBo>();
+            var api = provider?.GetService<IPermissionApi>();
+            var service = provider?.GetService<IUserProfileMapper>();
+            if (api == null || user == null || service == null) return response;
+            try
+            {
+                var resp = await service.Map(api, user, response);
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return response;
+            }
+        }
+
         private BrowserHelper GetHelper()
         {
             var window = (Window)this;
@@ -170,6 +189,11 @@ namespace legallead.desktop
                     Dispatcher.Invoke(() =>
                     {
                         InitializeMyAccountContent();
+                        Task.Run(async () =>
+                        {
+                            Thread.Sleep(1000);
+                            await MapMyAccountDetails();
+                        });
                         mnuMyAccount.Visibility = Visibility.Visible;
                         tabMyAccount.IsSelected = true;
                     });
@@ -180,6 +204,28 @@ namespace legallead.desktop
                     Environment.Exit(0);
                     break;
             }
+        }
+
+        private async Task MapMyAccountDetails()
+        {
+            var content = Dispatcher.Invoke(() =>
+            {
+                var container = contentMyAccount.Content;
+                if (container is not ChromiumWebBrowser web) return string.Empty;
+                var html = web.Address;
+                if (string.IsNullOrEmpty(html)) return string.Empty;
+                return ContentHandler.DecodeFromBase64(html);
+            });
+            if (string.IsNullOrEmpty(content)) return;
+            var revised = await MapProfileResponse(content);
+            if (string.IsNullOrEmpty(revised)) return;
+            var conversion = ContentHandler.GetAddressBase64(new ContentHtml { Content = revised });
+            Dispatcher.Invoke(() =>
+            {
+                var container = contentMyAccount.Content;
+                if (container is not ChromiumWebBrowser web) return;
+                web.Address = conversion;
+            });
         }
 
         private static readonly List<string> Landings = new()

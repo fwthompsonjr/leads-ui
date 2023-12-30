@@ -22,6 +22,7 @@ namespace legallead.desktop.tests.utilities
         [InlineData(typeof(IInternetStatus))]
         [InlineData(typeof(MenuConfiguration))]
         [InlineData(typeof(IErrorContentProvider))]
+        [InlineData(typeof(IUserProfileMapper))]
         public void CanGetRegisteredType(Type type)
         {
             // DesktopCoreServiceProvider.

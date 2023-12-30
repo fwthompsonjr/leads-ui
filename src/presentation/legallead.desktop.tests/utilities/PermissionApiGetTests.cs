@@ -54,6 +54,11 @@ namespace legallead.desktop.tests.utilities
         [InlineData("register", true)]
         [InlineData("refresh", true)]
         [InlineData("change-password", true)]
+        [InlineData("get-contact-detail", true)]
+        [InlineData("edit-contact-address", true)]
+        [InlineData("edit-contact-email", true)]
+        [InlineData("edit-contact-name", true)]
+        [InlineData("edit-contact-phone", true)]
         public void ServiceCanGetPostPageUrl(string landing, bool expected)
         {
             var mock = new ActiveInternetStatus();
@@ -69,6 +74,12 @@ namespace legallead.desktop.tests.utilities
         [InlineData("misspelled", false)]
         [InlineData("login", false)]
         [InlineData("register", false)]
+        [InlineData("change-password", false)]
+        [InlineData("get-contact-detail", false)]
+        [InlineData("edit-contact-address", false)]
+        [InlineData("edit-contact-email", false)]
+        [InlineData("edit-contact-name", false)]
+        [InlineData("edit-contact-phone", false)]
         public void ServiceCanNotGetPostPageWithNonInitializedUser(string landing, bool expected)
         {
             var mock = new ActiveInternetStatus();

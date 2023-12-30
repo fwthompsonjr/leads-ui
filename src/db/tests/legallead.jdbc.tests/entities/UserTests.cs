@@ -11,7 +11,8 @@ namespace legallead.jdbc.tests.entities
             .RuleFor(x => x.UserName, y => y.Company.CompanyName())
             .RuleFor(x => x.Email, y => y.Person.Email)
             .RuleFor(x => x.PasswordHash, y => y.Random.AlphaNumeric(60))
-            .RuleFor(x => x.PasswordSalt, y => y.Random.AlphaNumeric(30));
+            .RuleFor(x => x.PasswordSalt, y => y.Random.AlphaNumeric(30))
+            .RuleFor(x => x.CreateDate, y => y.Date.Past(1));
 
         [Fact]
         public void UserCanBeCreated()
@@ -42,7 +43,7 @@ namespace legallead.jdbc.tests.entities
         [Fact]
         public void UserHasFieldListDefined()
         {
-            var expected = new[] { "Id", "UserName", "Email", "PasswordHash", "PasswordSalt" };
+            var expected = new[] { "Id", "UserName", "Email", "PasswordHash", "PasswordSalt", "CreateDate" };
             var sut = new User();
             var fields = sut.FieldList;
             Assert.NotNull(fields);
@@ -56,6 +57,7 @@ namespace legallead.jdbc.tests.entities
         [InlineData("Email")]
         [InlineData("PasswordHash")]
         [InlineData("PasswordSalt")]
+        [InlineData("CreateDate")]
         public void UserHasExpectedFieldDefined(string name)
         {
             var sut = new User();
@@ -105,12 +107,28 @@ namespace legallead.jdbc.tests.entities
             Assert.Equal(items[1].PasswordSalt, items[0].PasswordSalt);
         }
 
+        [Fact]
+        public void UserCanUpdateCreateDate()
+        {
+            var items = faker.Generate(2);
+            items[0].CreateDate = items[1].CreateDate;
+            Assert.Equal(items[1].CreateDate, items[0].CreateDate);
+        }
+
+        [Fact]
+        public void UserCanUpdateCreateDateByIndex()
+        {
+            var items = faker.Generate(2);
+            items[0][4] = items[1][4];
+            Assert.Equal(items[1].CreateDate, items[0].CreateDate);
+        }
+
         [Theory]
         [InlineData(0, "abcdefg")]
         [InlineData(1, "abcdefg")]
         [InlineData(2, "abcdefg")]
         [InlineData(3, "abcdefg")]
-        [InlineData(4, "abcdefg")]
+        [InlineData(5, "abcdefg")]
         public void UserCanReadWriteByIndex(int position, object expected)
         {
             var sut = new User();

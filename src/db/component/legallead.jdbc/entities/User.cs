@@ -7,6 +7,7 @@
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string PasswordSalt { get; set; } = string.Empty;
+        public DateTime? CreateDate { get; set; }
 
         public override object? this[string field]
         {
@@ -20,6 +21,7 @@
                 if (fieldName.Equals("Email", Comparison)) return Email;
                 if (fieldName.Equals("PasswordHash", Comparison)) return PasswordHash;
                 if (fieldName.Equals("PasswordSalt", Comparison)) return PasswordSalt;
+                if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
                 return null;
             }
             set
@@ -50,6 +52,10 @@
                 if (fieldName.Equals("PasswordSalt", Comparison))
                 {
                     PasswordSalt = ChangeType<string>(value) ?? string.Empty;
+                }
+                if (fieldName.Equals("CreateDate", Comparison))
+                {
+                    CreateDate = ChangeType<DateTime?>(value);
                 }
             }
         }
