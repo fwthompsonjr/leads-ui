@@ -54,10 +54,19 @@ namespace legallead.desktop.handlers
             _web.ExecuteScriptAsync(scriptNames[0], FormIndex, false);
         }
 
+        internal void LoginCompleted(string formName)
+        {
+            const string loginForm = "form-login";
+            if (!formName.Equals(loginForm, StringComparison.OrdinalIgnoreCase)) return;
+            if (!HasWebBrowser.GetValueOrDefault()) return;
+            _web.ExecuteScriptAsync(scriptNames[2]);
+        }
+
         private static readonly List<string> scriptNames = new()
             {
                 "setIconState",
-                "setStatusMessage"
+                "setStatusMessage",
+                "loginCompletedAction"
             };
     }
 }

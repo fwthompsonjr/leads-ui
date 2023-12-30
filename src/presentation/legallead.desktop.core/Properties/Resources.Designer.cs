@@ -493,6 +493,28 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
+        ///
+        ///let profileNames = [ &quot;frm-profile-address&quot;, &quot;frm-profile-personal&quot;, &quot;frm-profile-phone&quot;, &quot;frm-profile-email&quot; ];
+        ///let profileButtonName = &quot;frm-profile-submit-button&quot;;
+        ///var profileicons = {
+        ///    spin: &quot;#form-profile-icon-spin&quot;,
+        ///    normal: &quot;#form-profile-icon&quot;
+        ///}
+        ///
+        ///
+        ///
+        ///function isValidProfileEmail( email ) {
+        ///	if( undefined === email || null === email || email.length === 0) { return true; }
+        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_profile_validation_js {
+            get {
+                return ResourceManager.GetString("myaccount_profile_validation_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script&gt;
         ///	const actv = &quot;active&quot;;
         ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot; ];
         ///
@@ -523,11 +545,11 @@ namespace legallead.desktop.Properties {
         ///							&lt;div class=&quot;row&quot;&gt;
         ///								&lt;div class=&quot;col-4 text-info text-start&quot;&gt;User Name:&lt;/div&gt;
         ///								&lt;div class=&quot;col-1 text-info&quot;&gt;&lt;/div&gt;
-        ///								&lt;div id=&quot;account-user-name&quot; class=&quot;col-7 text-secondary text-start&quot;&gt;user-name&lt;/div&gt;
+        ///								&lt;div id=&quot;account-user-name&quot; class=&quot;col-7 text-secondary text-start&quot;&gt; - &lt;/div&gt;
         ///							&lt;/div&gt;
         ///							&lt;div class=&quot;row&quot;&gt;
         ///								&lt;div class=&quot;col-4 text-info text-start&quot;&gt;Email:&lt;/div&gt;
-        ///			 [rest of string was truncated]&quot;;.
+        ///								&lt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccounthome_html {
             get {
@@ -559,8 +581,8 @@ namespace legallead.desktop.Properties {
         ///							&lt;div class=&quot;row&quot;&gt;
         ///								&lt;form id=&quot;frm-user-profile&quot; name=&quot;frm-user-profile&quot;&gt;
         ///									&lt;div id=&quot;dv-subcontent-profile-row-01&quot; class=&quot;mb-3 text-start&quot;&gt;
-        ///										&lt;label for=&quot;cbo-profile-group&quot; class=&quot;form-label&quot;&gt;Section&lt;/label&gt;
-        ///										&lt;select id=&quot;cbo-profile-group&quot; class=&quot;form-control&quot; onchange=&quot;profileComboBoxChanged [rest of string was truncated]&quot;;.
+        ///										&lt;label for=&quot;cbo-profile-group&quot; class=&quot;form-label text-secondary&quot;&gt;Section&lt;/label&gt;
+        ///										&lt;select id=&quot;cbo-profile-group&quot; class=&quot;form-control&quot; onchange=&quot;profile [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountprofile_html {
             get {

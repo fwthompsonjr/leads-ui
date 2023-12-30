@@ -38,6 +38,7 @@ namespace legallead.desktop.handlers
                 var htm = ConvertHTML(objectData);
                 handler.SetMessage(htm);
                 if (objectData.StatusCode != 200) return;
+                handler.LoginCompleted(formName);
                 NavigateTo("MyAccount", objectData);
             }
             catch (Exception ex)

@@ -5,6 +5,8 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace legallead.desktop.js
 {
@@ -24,6 +26,11 @@ namespace legallead.desktop.js
 
         public virtual void Submit(string formName, string json)
         {
+            if (ProfileForms.Exists(f => f.Equals(formName, StringComparison.OrdinalIgnoreCase)))
+            {
+                var handler = new JsProfileChange(web);
+                handler.Submit(formName, json);
+            }
         }
 
         public virtual Action<object?>? OnInitCompleted { get; set; }
@@ -53,5 +60,13 @@ namespace legallead.desktop.js
                 return default;
             }
         }
+
+        protected static readonly List<string> ProfileForms = new()
+        {
+            "frm-profile-personal",
+            "frm-profile-address",
+            "frm-profile-phone",
+            "frm-profile-email"
+        };
     }
 }

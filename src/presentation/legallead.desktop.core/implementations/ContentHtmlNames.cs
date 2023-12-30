@@ -206,6 +206,7 @@ namespace legallead.desktop.implementations
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
+        private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
         private const string CssMyAccountInclude = "<!-- style: my-account-custom-css -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
@@ -221,6 +222,7 @@ namespace legallead.desktop.implementations
             { JsHomeValidation, GetHomeValidationScript() },
             { JsCommonCefHandler, GetCommonCefInclude() },
             { JsMyAccountNavigation, Properties.Resources.myaccount_script_js },
+            { JsMyAccountProfile, Properties.Resources.myaccount_profile_validation_js },
             { HtmCommonFooter, GetCommonFooterInclude() },
             { HtmCommonHeading, GetCommonHeaderInclude() },
             { HtmWelcomeInclude, GetWelcomeInclude() }

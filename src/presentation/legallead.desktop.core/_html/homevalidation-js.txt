@@ -158,6 +158,19 @@ function setStatusMessage( indx, message, isActive ) {
 	}
 }
 
+function loginCompletedAction() {
+	const indx = 0;
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const emptymessage = "<!-- Error messages -->"
+	const pound = "#";
+	var formName = formNames[indx];
+	var dverr = pound + formName + "-error-message"
+	$( dverr ).addClass(hddn);
+	$( dverr ).html(emptymessage);
+	$( "#username, #login-password" ).val("");	
+}
+
 function formButtonClicked( formIndex ) {
 	const dsb = "disabled";
 	const hddn = "d-none";

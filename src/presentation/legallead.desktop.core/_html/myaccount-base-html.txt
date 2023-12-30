@@ -85,6 +85,7 @@
 
 	<!-- script: my-account-navigation -->
 	<!-- script: my-account-form-validation -->
+	<!-- script: my-account-profile-valid -->
   </body>
 
 
