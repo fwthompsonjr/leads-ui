@@ -142,7 +142,12 @@ namespace legallead.desktop.utilities
             { "signon-login", "{0}/api/signon/login" },
             { "signon-refresh", "{0}/api/signon/refresh-token" },
             { "signon-change-password", "{0}/api/signon/change-password" },
-            { "application-register", "{0}/api/Application/register" }
+            { "application-register", "{0}/api/Application/register" },
+            { "profile-get-contact-detail", "{0}/api/profiles/get-contact-detail" },
+            { "profile-edit-contact-address", "{0}/api/profiles/edit-contact-address" },
+            { "profile-edit-contact-email", "{0}/api/profiles/edit-contact-email" },
+            { "profile-edit-contact-name", "{0}/api/profiles/edit-contact-name" },
+            { "profile-edit-contact-phone", "{0}/api/profiles/edit-contact-phone" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)

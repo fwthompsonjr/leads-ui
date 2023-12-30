@@ -17,6 +17,7 @@ namespace legallead.desktop.utilities
             builder.AddSingleton<IErrorContentProvider, ErrorContentProvider>();
             builder.AddScoped<IContentParser, ContentParser>();
             builder.AddSingleton<IInternetStatus, InternetStatus>();
+            builder.AddSingleton<IUserProfileMapper, UserProfileMapper>();
             var menucontent = Properties.Resources.contextmenu;
             if (string.IsNullOrEmpty(menucontent)) return builder.BuildServiceProvider();
             builder.AddSingleton(s =>

@@ -48,6 +48,14 @@ namespace legallead.desktop.utilities
             return raw;
         }
 
+        internal static string DecodeFromBase64(string content)
+        {
+            const string bs64address = "data:text/html;base64,";
+            if (!content.StartsWith(bs64address)) return content;
+            content = content.Replace(bs64address, string.Empty);
+            return Encoding.UTF8.GetString(Convert.FromBase64String(content));
+        }
+
         internal static string GetAddressBase64(ContentHtml content)
         {
             const string bs64address = "data:text/html;base64,{0}";
