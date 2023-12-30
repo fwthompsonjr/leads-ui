@@ -20,3 +20,4 @@ Release information - legallead.permissions.api
 12/29/2023 03:15:00 PM manually deploying permissions api
 12/29/2023 03:47:00 PM correction to edit contact address api method
 12/29/2023 04:34:00 PM correction to edit contact name api method
+12/29/2023 10:29:00 PM add method to get user identity

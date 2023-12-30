@@ -36,7 +36,7 @@ namespace legallead.Profiles.api.Controllers
             {
                 userName = user.UserName,
                 email = user.Email,
-                created = DateTime.UtcNow.ToShortDateString(),
+                created = user.CreateDate.GetValueOrDefault(DateTime.UtcNow).ToShortDateString(),
             };
             return Ok(useritem);
         }
