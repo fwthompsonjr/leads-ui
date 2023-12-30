@@ -1,8 +1,13 @@
 name: "Verify: Permissions.Api"
-  
 on:
-  schedule:
-    - cron: "*/45 * * * *"
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Who to greet"
+        default: "World"  
+#on:
+#  schedule:
+#    - cron: "*/45 * * * *"
 
 jobs:
   build:
