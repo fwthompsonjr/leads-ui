@@ -11,7 +11,7 @@ env:
 on:
   push:
     paths:
-      - 'release/legallead.permissions.api.release.txt'
+      - 'disabled/legallead.permissions.api.release.txt'
 
 jobs:
   build:

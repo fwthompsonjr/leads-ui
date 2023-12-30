@@ -12,5 +12,6 @@ namespace legallead.permissions.api
         Task<KeyValuePair<bool, string>> ChangeContactName(User? user, ChangeContactNameRequest[] request);
 
         Task<KeyValuePair<bool, string>> ChangeContactPhone(User? user, ChangeContactPhoneRequest[] request);
+        Task<GetContactResponse[]> GetContactDetail(User? user, string responseType);
     }
 }

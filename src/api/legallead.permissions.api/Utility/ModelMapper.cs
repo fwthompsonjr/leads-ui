@@ -2,6 +2,7 @@
 using legallead.jdbc.entities;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
+using Newtonsoft.Json;
 
 namespace legallead.permissions.api
 {
@@ -49,7 +50,78 @@ namespace legallead.permissions.api
 
                 c.CreateMap<UserProfileView, UserProfile>()
                     .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView[], ChangeContactAddressRequest[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView[], ChangeContactEmailRequest[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView[], ChangeContactPhoneRequest[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView[], ChangeContactNameRequest[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<UserProfileView[], GetContactResponse[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactAddressRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactEmailRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactPhoneRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeContactNameRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
             });
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactAddressRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, Array.Empty<UserProfileView>());
+                list.AddRange(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactEmailRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactPhoneRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
+        }
+
+        private static UserProfileView[] ConvertTo(ChangeContactNameRequest[] source, UserProfileView[] dest)
+        {
+            var list = new List<UserProfileView>();
+            foreach (var item in source)
+            {
+                var addition = ConvertTo(item, new UserProfileView());
+                list.Add(addition);
+            }
+            return list.ToArray();
         }
 
         private static UserProfileView[] ConvertTo(ChangeContactAddressRequest source, UserProfileView[] dest)
@@ -86,11 +158,15 @@ namespace legallead.permissions.api
 
         private static UserProfileView ConvertTo(ChangeContactNameRequest source, UserProfileView dest)
         {
-            var hasName = Enum.TryParse<NameTypeNames>(source.NameType, out var index);
+            const char space = ' ';
+            var named = source.NameType ?? string.Empty;
+            if (named.Contains(space)) named = named.Split(space)[0];
+            var hasName = Enum.TryParse<NameTypeNames>(named, out var index);
             var mappedId = hasName ? (int)index : 1;
+            var mappedName = NamePrefixes[mappedId];
             return new UserProfileView
             {
-                KeyName = NamePrefixes[mappedId],
+                KeyName = $"{mappedName} Name",
                 KeyValue = source.Name,
             };
         }
@@ -117,6 +193,120 @@ namespace legallead.permissions.api
             };
         }
 
+        private static GetContactResponse[] ConvertTo(UserProfileView[] source, GetContactResponse[] dest)
+        {
+            var response = new List<GetContactResponse>();
+            var addresses = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactAddressRequest>()), new GetContactResponse());
+            var emails = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactEmailRequest>()), new GetContactResponse());
+            var phones = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactPhoneRequest>()), new GetContactResponse());
+            var names = ConvertTo(ConvertTo(source, Array.Empty<ChangeContactNameRequest>()), new GetContactResponse());
+            response.Add(names);
+            response.Add(addresses);
+            response.Add(emails);
+            response.Add(phones);
+            return response.ToArray();
+        }
+
+        private static ChangeContactAddressRequest[] ConvertTo(UserProfileView[] source, ChangeContactAddressRequest[] dest)
+        {
+            const string mailingKey = "Address 1";
+            const string billingKey = "Address 2";
+            const string joiner = " ";
+            var response = new List<ChangeContactAddressRequest>();
+            var mailing = source.Where(w => (w.KeyName ?? string.Empty).StartsWith(mailingKey)).Select(x => x.KeyValue);
+            var billing = source.Where(w => (w.KeyName ?? string.Empty).StartsWith(billingKey)).Select(x => x.KeyValue);
+            response.Add(new ChangeContactAddressRequest { Address = string.Join(joiner, mailing), AddressType = "Mailing" });
+            response.Add(new ChangeContactAddressRequest { Address = string.Join(joiner, billing), AddressType = "Billing" });
+            return response.ToArray();
+        }
+
+        private static ChangeContactEmailRequest[] ConvertTo(UserProfileView[] source, ChangeContactEmailRequest[] dest)
+        {
+            const string selector = "Email";
+            const string emaila = $"{selector} 1";
+            const string emailb = $"{selector} 2";
+            const string emailc = $"{selector} 3";
+            var list = source.Where(w => (w.KeyName ?? string.Empty).StartsWith(selector)).ToList();
+            var response = new List<ChangeContactEmailRequest>();
+            var first = list.Find(w => (w.KeyName ?? string.Empty).Equals(emaila)) ?? new();
+            var second = list.Find(w => (w.KeyName ?? string.Empty).Equals(emailb)) ?? new();
+            var third = list.Find(w => (w.KeyName ?? string.Empty).Equals(emailc)) ?? new();
+            response.Add(new ChangeContactEmailRequest { Email = first.KeyValue, EmailType = "Personal" });
+            response.Add(new ChangeContactEmailRequest { Email = second.KeyValue, EmailType = "Business" });
+            response.Add(new ChangeContactEmailRequest { Email = third.KeyValue, EmailType = "Other" });
+            return response.ToArray();
+        }
+
+        private static ChangeContactPhoneRequest[] ConvertTo(UserProfileView[] source, ChangeContactPhoneRequest[] dest)
+        {
+            const string selector = "Phone";
+            const string phonea = $"{selector} 1";
+            const string phoneb = $"{selector} 2";
+            const string phonec = $"{selector} 3";
+            var list = source.Where(w => (w.KeyName ?? string.Empty).StartsWith(selector)).ToList();
+            var response = new List<ChangeContactPhoneRequest>();
+            var first = list.Find(w => (w.KeyName ?? string.Empty).Equals(phonea)) ?? new();
+            var second = list.Find(w => (w.KeyName ?? string.Empty).Equals(phoneb)) ?? new();
+            var third = list.Find(w => (w.KeyName ?? string.Empty).Equals(phonec)) ?? new();
+            response.Add(new ChangeContactPhoneRequest { Phone = first.KeyValue, PhoneType = "Personal" });
+            response.Add(new ChangeContactPhoneRequest { Phone = second.KeyValue, PhoneType = "Business" });
+            response.Add(new ChangeContactPhoneRequest { Phone = third.KeyValue, PhoneType = "Other" });
+            return response.ToArray();
+        }
+
+        private static ChangeContactNameRequest[] ConvertTo(UserProfileView[] source, ChangeContactNameRequest[] dest)
+        {
+            const string selector = "Name";
+            const string namea = $"First {selector}";
+            const string nameb = $"Last {selector}";
+            const string namec = $"Company {selector}";
+            var list = source.Where(w => (w.KeyName ?? string.Empty).EndsWith(selector)).ToList();
+            var response = new List<ChangeContactNameRequest>();
+            var first = list.Find(w => (w.KeyName ?? string.Empty).Equals(namea)) ?? new();
+            var second = list.Find(w => (w.KeyName ?? string.Empty).Equals(nameb)) ?? new();
+            var third = list.Find(w => (w.KeyName ?? string.Empty).Equals(namec)) ?? new();
+            response.Add(new ChangeContactNameRequest { Name = first.KeyValue, NameType = "First" });
+            response.Add(new ChangeContactNameRequest { Name = second.KeyValue, NameType = "Last" });
+            response.Add(new ChangeContactNameRequest { Name = third.KeyValue, NameType = "Company" });
+            return response.ToArray();
+        }
+
+        private static GetContactResponse ConvertTo(ChangeContactNameRequest[] source, GetContactResponse dest)
+        {
+            dest.IsOK = true;
+            dest.ResponseType = "Name";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
+        }
+
+        private static GetContactResponse ConvertTo(ChangeContactAddressRequest[] source, GetContactResponse dest)
+        {
+            dest.IsOK = true;
+            dest.ResponseType = "Address";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
+        }
+
+        private static GetContactResponse ConvertTo(ChangeContactEmailRequest[] source, GetContactResponse dest)
+        {
+            dest.IsOK = true;
+            dest.ResponseType = "Email";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
+        }
+
+        private static GetContactResponse ConvertTo(ChangeContactPhoneRequest[] source, GetContactResponse dest)
+        {
+            dest.IsOK = true;
+            dest.ResponseType = "Phone";
+            dest.Data = JsonConvert.SerializeObject(source);
+            dest.Message = "Mapping completed";
+            return dest;
+        }
+
         private static readonly Dictionary<int, string> AddressPrefixes = new()
         {
             { 1, "Address 1 -" },
@@ -125,9 +315,9 @@ namespace legallead.permissions.api
 
         private static readonly Dictionary<int, string> NamePrefixes = new()
         {
-            { 1, "First Name" },
-            { 2, "Last Name" },
-            { 3, "Company Name" }
+            { 0, "First" },
+            { 1, "Last" },
+            { 2, "Company" }
         };
     }
 }

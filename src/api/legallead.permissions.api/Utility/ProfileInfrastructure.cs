@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
+using System.Linq;
 
 namespace legallead.permissions.api.Utility
 {
@@ -11,6 +12,26 @@ namespace legallead.permissions.api.Utility
         public ProfileInfrastructure(IDataProvider db) : base(db)
         {
             mapper = ModelMapper.Mapper;
+        }
+
+        public async Task<GetContactResponse[]> GetContactDetail(User? user, string responseType)
+        {
+            var fallback = new GetContactResponse[] {
+                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                };
+            if (user == null) { return fallback; }
+            try
+            {
+                var current = await _db.UserProfileVw.GetAll(user);
+                var response = mapper.Map<GetContactResponse[]>(current.ToArray()).ToList();
+                if (string.IsNullOrEmpty(responseType)) { return response.ToArray(); }
+                return response.FindAll(x => x.ResponseType == responseType).ToArray();
+            }
+            catch (Exception ex)
+            {
+                fallback[0].Message = ex.Message;
+                return fallback;
+            }
         }
 
         public async Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request)
@@ -53,7 +74,9 @@ namespace legallead.permissions.api.Utility
             var updates = new List<UserProfile>();
             requests.ForEach(r =>
             {
-                var found = current.First(c => (c.KeyName ?? "").Equals(r.KeyName));
+                r.KeyName ??= string.Empty;
+                var found = current.FirstOrDefault(c => (c.KeyName ?? "").Equals(r.KeyName));
+                found ??= current.FirstOrDefault(c => (c.KeyName ?? "").StartsWith(r.KeyName));
                 if (found != null)
                 {
                     found.KeyValue = r.KeyValue;

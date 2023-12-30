@@ -54,6 +54,10 @@ namespace legallead.desktop.tests.implementations
         [InlineData("blank", true)]
         [InlineData("myaccount", true)]
         [InlineData("MyAccount", true)]
+        [InlineData("myaccounthome", true)]
+        [InlineData("MyAccountHome", true)]
+        [InlineData("myaccountpermissions", true)]
+        [InlineData("MyAccountPermissions", true)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
             var sut = new ContentHtmlNames();

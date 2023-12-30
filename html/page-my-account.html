@@ -59,6 +59,24 @@ div[name="header"] {
     margin-top: 5px;
 }
 
+/*
+ * Card
+ */
+ .card {
+    background-color: transparent;
+    border-color: #444;
+    color: #fff;
+ }
+ .card .card-body .card-title {
+    border-bottom: #444 solid 1px;
+    padding-bottom: 5px;
+ }
+@media screen and (max-width: 500px) {
+  .card {
+    width: 300px;
+    margin-left: 40px;
+ }
+}
 
 /*
  * Loader
@@ -95,11 +113,15 @@ div[name="loader"] {
 				display: block;
 			}			
 
-			div[name="main-content"] {
-				width: 70%; 
-				min-width: 800px;
-				max-width: 1200px;
+			div[name="subcontent-home"],
+			div[name="subcontent-profile"],
+			div[name="subcontent-permissions"] {
+				text-align: left;
+				justify-content: left;
+				margin-bottom: 20px;
+				margin-left: 20px;
 			}
+			
 			.icon-size { font-size: 140px; }
 		</style>
 	</head>
@@ -112,29 +134,134 @@ div[name="loader"] {
 						<span>Legal Lead UI</span>
 					</h3>
 				</div>
+				<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+					<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
+					<a name="subcontent-profile" class="nav-link" href="javascript:setDisplay('profile')">Profile</a>
+					<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
+				</nav>
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div class="subcontent active">
-						<div class="row">
-							<h2>Welcome to Legal Lead</h2>
-						</div>
-						<div class="row">
-							<div class="col-4 text-info text-start">User Name:</div>
-							<div class="col-1 text-info"></div>
-							<div id="account-user-name" class="col-7 text-secondary text-start">user-name</div>
-						</div>
-						<div class="row">
-							<div class="col-4 text-info text-start">Email:</div>
-							<div class="col-1 text-info"></div>
-							<div id="account-user-email" class="col-7 text-secondary text-start">email</div>
-						</div>
-						<div class="row">
-							<div class="col-4 text-info text-start">Account Date:</div>
-							<div class="col-1 text-info"></div>
-							<div id="account-create-date" class="col-7 text-secondary text-start">12/26/2023</div>
+					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active card">
+						<div class="card-body">
+							<h5 class="card-title">Account Details</h5>	
+							<div class="row">
+								<div class="col-4 text-info text-start">User Name:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-name" class="col-7 text-secondary text-start">user-name</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Email:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-email" class="col-7 text-secondary text-start">email</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Date:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-create-date" class="col-7 text-secondary text-start">12/26/2023</div>
+							</div>
 						</div>
 					</div>
+				
+				
+			
+					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title text-start">Account Profile</h5>	
+							<div class="row">
+									<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
+										<label for="cbo-profile-group" class="form-label">Section</label>
+										<select id="cbo-profile-group" class="form-control" onchange="profileComboBoxChanged()">
+											<option value="">Select view</option>
+											<option selected value="personal">Personal Details</option>
+											<option value="address">Addresses</option>
+											<option value="phone">Phone Numbers</option>
+											<option value="email">Email Addresses</option>
+										</select>
+									</div>
+										<div id="dv-subcontent-profile-row-02" name="dv-subcontent-profile-personal" class="mb-3 text-start">
+											<hr />
+											<form id="frm-profile-personal" name="frm-profile-personal">
+											<div class="row">
+												<label for="tbx-profile-first-name" class="form-label">First Name</label>
+												<input id="tbx-profile-first-name" class="form-control" />
+											</div>
+											<div class="row">
+												<label for="tbx-profile-last-name" class="form-label">Last Name</label>
+												<input id="tbx-profile-last-name" class="form-control" />
+											</div>
+											<div class="row">
+												<label for="tbx-profile-company" class="form-label">Company</label>
+												<input id="tbx-profile-company" class="form-control" />
+											</div>
+											</form>
+										</div>
+									<div id="dv-subcontent-profile-row-03" name="dv-subcontent-profile-address" class="mb-3 text-start">
+										<hr />
+										<form id="frm-profile-address" name="frm-profile-address">
+										<div class="row m-1">
+											<label for="tbx-profile-mailing-address" class="form-label">Mailing Address</label>
+											<textarea rows="4" id="tbx-profile-mailing-address" class="form-control"></textarea>
+										</div>
+										<div class="row m-1">
+											<label for="tbx-profile-billing-address" class="form-label">Billing Address</label>
+											<textarea rows="4" id="tbx-profile-billing-address" class="form-control"></textarea>
+										</div>
+										</form>
+									</div>
+									<div id="dv-subcontent-profile-row-04" name="dv-subcontent-profile-phone" class="mb-3 text-start">
+										<hr />
+										<form id="frm-profile-phone" name="frm-profile-phone">
+										<div class="row">
+											<label for="tbx-profile-phone-01" class="form-label">Contact</label>
+											<input id="tbx-profile-phone-01" class="form-control" />
+										</div>
+										<div class="row">
+											<label for="tbx-profile-phone-02" class="form-label">Office</label>
+											<input id="tbx-profile-phone-02" class="form-control" />
+										</div>
+										<div class="row">
+											<label for="tbx-profile-phone-03" class="form-label">Fax / Other</label>
+											<input id="tbx-profile-phone-03" class="form-control" />
+										</div>
+										</form>
+									</div>
+									<div id="dv-subcontent-profile-row-05" name="dv-subcontent-profile-email" class="mb-3 text-start">
+										<hr />
+										<form id="frm-profile-email" name="frm-profile-email">
+										<div class="row">
+											<label for="tbx-profile-email-01" class="form-label">Primary</label>
+											<input id="tbx-profile-email-01" class="form-control" />
+										</div>
+										<div class="row">
+											<label for="tbx-profile-email-02" class="form-label">Business</label>
+											<input id="tbx-profile-email-02" class="form-control" />
+										</div>
+										<div class="row">
+											<label for="tbx-profile-email-03" class="form-label">Alternate</label>
+											<input id="tbx-profile-email-03" class="form-control" />
+										</div>
+										</form>
+									</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">Save</button>
+						</div>
+					</div>
+				
+				
+			
+					<div id="dv-subcontent-permissions" name="subcontent-permissions" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title text-start">Account Permissions</h5>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-sm btn-primary">Save</button>
+						</div>
+					</div>
+					
+					
 				</div>
 			</main>
 			<footer class="mastfoot mt-auto">
@@ -145,7 +272,7 @@ div[name="loader"] {
 		</div>
 		<script>
 	const actv = "active";
-	const names = [ "home", "login", "register" ];
+	const names = [ "home", "profile", "permissions" ];
 
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
@@ -166,10 +293,11 @@ div[name="loader"] {
 
 	function setActiveDiv( name ) {
 		if (names.indexOf( name ) < 0 ) { return; }
-		const divnames = [ "dv-subcontent-error", "dv-subcontent-login", "dv-subcontent-register" ];
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions" ];
 		
 		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);
+			if(null === d || undefined === d) { continue; }
 			if ( divnames[i].indexOf(name) >= 0 ) {
 				d.classList.add(actv);
 			} else {
@@ -177,7 +305,91 @@ div[name="loader"] {
 			}
 		}
 	}
-		
 	
+	function profileComboBoxChanged() {
+		const hidden = "d-none";
+		const cboxid = "#cbo-profile-group";
+		const find = "~0";
+		const dvprefix = "div[name='dv-subcontent-profile-~0']";
+		const dvparent = "#dv-subcontent-profile";
+		const divnames = [ 
+			dvprefix.replace(find, "personal"), 
+			dvprefix.replace(find, "address"), 
+			dvprefix.replace(find, "phone"), 
+			dvprefix.replace(find, "email")  ];
+		for(var i = 0; i < divnames.length; i++) {
+			var dv = divnames[i];
+			$( dv ).addClass(hidden);
+		}
+		var current = $(cboxid).val();
+		if (null === current || current.length === 0) {
+			$( dvparent ).find("div.card-footer").hide();
+			return;
+		}
+		var target = dvprefix.replace(find, current);
+		$( target ).removeClass(hidden);
+		$( dvparent ).find("div.card-footer").show();
+		
+	}
+	
+	
+	function profileSubmitButtonClicked() {
+		const cboxid = "#cbo-profile-group";
+		const find = "~0";
+		const frmprefix = "frm-profile-~0";
+		const suffixes = [ "personal", "address", "phone", "email" ];
+		
+		
+		var current = $(cboxid).val();
+		if (null === current || current.length === 0 || suffixes.indexOf(current) < 0) {
+			return;
+		}
+		
+		let target = frmprefix.replace(find, current);
+		if (document.getElementById(target) == null) { return; }
+		let payload = "";
+		
+		switch(current) {
+			case "personal" :
+			
+				const personal = [
+					{ NameType: "First", Name: $("#tbx-profile-first-name").val() },	
+					{ NameType: "Last", Name: $("#tbx-profile-last-name").val() },
+					{ NameType: "Company", Name: $("#tbx-profile-company").val() }
+				];
+				payload = JSON.stringify( personal );
+				break;
+			case "address" :
+			
+				const address = [
+					{ AddressType: "Mailing", Address: $("#tbx-profile-mailing-address").val() },	
+					{ AddressType: "Billing", Address: $("#tbx-profile-billing-address").val() }
+				];
+				payload = JSON.stringify( address );
+				break;
+			case "phone" :
+			
+				const phone = [
+					{ PhoneType: "Personal", Phone: $("#tbx-profile-phone-01").val() },	
+					{ PhoneType: "Business", Phone: $("#tbx-profile-phone-02").val() },	
+					{ PhoneType: "Other", Phone: $("#tbx-profile-phone-03").val() },	
+				];
+				payload = JSON.stringify( phone );
+				break;
+			case "email" :
+			
+				const email = [
+					{ EmailType: "Personal", Email: $("#tbx-profile-email-01").val() },	
+					{ EmailType: "Business", Email: $("#tbx-profile-email-02").val() },	
+					{ EmailType: "Other", Email: $("#tbx-profile-email-03").val() },	
+				];
+				payload = JSON.stringify( email );
+				break;
+		}
+		if ( null === payload || payload.length == 0 ) { return; }
+		console.log( payload );
+	}
+	
+	profileComboBoxChanged()
 		</script>
 </body></html>

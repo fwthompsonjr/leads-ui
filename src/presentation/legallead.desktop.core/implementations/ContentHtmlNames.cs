@@ -186,28 +186,41 @@ namespace legallead.desktop.implementations
             new() { Index = 110, Name = "home-html"},
             new() { Index = 110, Name = "homelogin-html"},
             new() { Index = 200, Name = "errorbox-css"},
-            new() { Index = 200, Name = "myaccount-html"},
+            new() { Index = 300, Name = "myaccount-html"},
+            new() { Index = 310, Name = "myaccounthome-html"},
+            new() { Index = 315, Name = "myaccountpermissions-html"},
+            new() { Index = 320, Name = "myaccountprofile-html"},
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
         private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
+        private const string HtmAccountHomeInclude = "<p>My Account</p>";
+        private const string HtmAccountProfileInclude = "<p>My Profile</p>";
+        private const string HtmAccountPermissionsInclude = "<p>My Permissions</p>";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
         private const string HtmLoginInclude = "<p>Login form</p>";
         private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
+        private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
+        private const string CssMyAccountInclude = "<!-- style: my-account-custom-css -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
             { CssBootStrapLink, GetBootstrapCssScript() },
             { CssErrorBox, Properties.Resources.errorbox_css },
+            { CssMyAccountInclude, Properties.Resources.myaccount_css },
+            { HtmAccountHomeInclude, Properties.Resources.myaccounthome_html },
+            { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
+            { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
             { JsHomeValidation, GetHomeValidationScript() },
             { JsCommonCefHandler, GetCommonCefInclude() },
+            { JsMyAccountNavigation, Properties.Resources.myaccount_script_js },
             { HtmCommonFooter, GetCommonFooterInclude() },
             { HtmCommonHeading, GetCommonHeaderInclude() },
             { HtmWelcomeInclude, GetWelcomeInclude() }

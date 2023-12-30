@@ -20,6 +20,27 @@ namespace legallead.Profiles.api.Controllers
         }
 
         [HttpPost]
+        [Route("get-contact-detail")]
+        public async Task<IActionResult> GetContactDetail(GetContactRequest request)
+        {
+            var fallback = new GetContactResponse[] {
+                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                };
+            var user = await _db.GetUser(Request);
+            if (user == null)
+            {
+                fallback[0].Message = "Invalid user account.";
+                return Unauthorized(fallback);
+            }
+            var response = await _db.GetContactDetail(user, request.RequestType ?? string.Empty);
+            var failure = response?.ToList().Find(a => !a.IsOK);
+            if (failure == null)
+                return Ok(response);
+            fallback[0].Message = failure.Message;
+            return Conflict(fallback);
+        }
+
+        [HttpPost]
         [Route("edit-contact-address")]
         public async Task<IActionResult> ChangeContactAddress(ChangeContactAddressRequest[] request)
         {
@@ -82,7 +103,7 @@ namespace legallead.Profiles.api.Controllers
             }
             response.User = user;
             var validation = BulkValidate(request, out var isValid);
-            if (!isValid && validation != null)
+            if (!isValid && validation != null && validation.Any())
             {
                 var messages = validation.Select(x => x.ErrorMessage).ToList();
                 response.Result = BadRequest(messages);
@@ -97,7 +118,7 @@ namespace legallead.Profiles.api.Controllers
             foreach (var item in collection)
             {
                 var resp = item.Validate(out var _);
-                if (resp != null) { results.AddRange(resp); }
+                if (resp != null && resp.Any()) { results.AddRange(resp); }
             }
             isvalid = results.Any();
             return results;

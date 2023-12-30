@@ -1,0 +1,21 @@
+
+					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active card">
+						<div class="card-body">
+							<h5 class="card-title">Account Details</h5>	
+							<div class="row">
+								<div class="col-4 text-info text-start">User Name:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-name" class="col-7 text-secondary text-start">user-name</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Email:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-email" class="col-7 text-secondary text-start">email</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Date:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-create-date" class="col-7 text-secondary text-start">12/26/2023</div>
+							</div>
+						</div>
+					</div>
