@@ -27,10 +27,33 @@
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
 				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
 				<a name="subcontent-profile" class="nav-link" href="javascript:setDisplay('profile')">Profile</a>
-				<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
-				<a name="subcontent-icon" class="nav-link" href="javascript:setDisplay('home')">
-					<i class="bi bi-person-fill-check"></i>
-				</a>
+				<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>				
+				<div 
+							id="account-subcontent-icon" 
+							name="subcontent-icon" 
+							class="nav-link dropdown">
+								<button 
+									class="btn btn-secondary dropdown-toggle" 
+									type="button" data-bs-toggle="dropdown" aria-expanded="false">
+									<i class="bi bi-person-fill-check "></i>
+							  </button>
+							  <ul class="dropdown-menu">
+								<li>
+									<a id="account-dropdown-item-user-name" class="dropdown-item" href="#">
+										<i class="bi bi-person m-1"></i>
+										<span id="account-text-item-user-name"> - </span>
+									</a>
+								</li>
+								<li>
+									<a id="account-dropdown-item-user-level" class="dropdown-item" href="#">
+										<i class="bi bi-collection m-1"></i>
+										<span id="account-text-item-user-level"> - </span>
+									</a>
+								</li>
+								<li><hr class="dropdown-divider"></li>
+								<li><a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a></li>
+							  </ul>
+						</div>
 			</nav>
 		</div>
       </header>
