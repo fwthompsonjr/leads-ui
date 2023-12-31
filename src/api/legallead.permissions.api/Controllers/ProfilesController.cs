@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -32,11 +33,15 @@ namespace legallead.Profiles.api.Controllers
                 fallback[0].Message = "Invalid user account.";
                 return Unauthorized(fallback);
             }
+            var roleName = await _db.GetContactRole(user);
+            var roleDescription = RoleDescriptions.GetDescription(roleName);
             var useritem = new
             {
                 userName = user.UserName,
                 email = user.Email,
-                created = DateTime.UtcNow.ToShortDateString(),
+                created = user.CreateDate.GetValueOrDefault(DateTime.UtcNow).ToShortDateString(),
+                role = roleName,
+                roleDescription
             };
             return Ok(useritem);
         }

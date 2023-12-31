@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using System.Xml.XPath;
 
 namespace legallead.desktop.implementations
 {
@@ -10,6 +11,7 @@ namespace legallead.desktop.implementations
         {
             var profile = await GetProfile(api, user);
             if (profile == null) return source;
+            var identity = await GetIdentity(api, user);
 
             var document = GetDocument(source);
             if (document == null) return source;
@@ -26,9 +28,15 @@ namespace legallead.desktop.implementations
                 new { node = "", find = "//*[@id=\"tbx-profile-phone-01\"]", replace = GetProfileItem(profile, "Phone", "Personal")},
                 new { node = "", find = "//*[@id=\"tbx-profile-phone-02\"]", replace = GetProfileItem(profile, "Phone", "Business")},
                 new { node = "", find = "//*[@id=\"tbx-profile-phone-03\"]", replace = GetProfileItem(profile, "Phone", "Other")},
+                new { node = "div", find = "//*[@id=\"account-user-name\"]", replace = identity.UserName},
+                new { node = "div", find = "//*[@id=\"account-user-email\"]", replace = identity.Email},
+                new { node = "div", find = "//*[@id=\"account-create-date\"]", replace = identity.Created},
+                new { node = "div", find = "//*[@id=\"account-role\"]", replace = identity.Role},
+                new { node = "div", find = "//*[@id=\"account-description\"]", replace = identity.RoleDescription},
             };
             foreach (var item in replacements)
             {
+                if (!IsValidXPath(item.find)) continue;
                 var element = document.DocumentNode.SelectSingleNode(item.find);
                 if (element == null) continue;
                 if (string.IsNullOrEmpty(item.node))
@@ -43,6 +51,20 @@ namespace legallead.desktop.implementations
             return document.DocumentNode.OuterHtml;
         }
 
+        private static bool IsValidXPath(string xpath)
+        {
+            if (string.IsNullOrEmpty(xpath)) return false;
+            try
+            {
+                XPathExpression.Compile(xpath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static HtmlDocument? GetDocument(string source)
         {
             try
@@ -54,6 +76,24 @@ namespace legallead.desktop.implementations
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        private static async Task<ContactIdentity> GetIdentity(IPermissionApi api, UserBo user)
+        {
+            const string landing = "get-contact-identity";
+            try
+            {
+                var payload = new object();
+                var response = await api.Post(landing, payload, user);
+                if (response.StatusCode != 200) return new();
+                var data = ObjectExtensions.TryGet<ContactIdentity>(response.Message);
+                if (data == null) return new();
+                return data;
+            }
+            catch
+            {
+                return new();
             }
         }
 

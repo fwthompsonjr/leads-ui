@@ -52,9 +52,9 @@ namespace legallead.permissions.api
         internal IProfileMapRepository ProfileDb => _profileDb;
         internal IUserPermissionRepository UserPermissionDb => _userPermissionDb;
         internal IUserTokenRepository UserTokenDb => _userTokenDb;
-        internal IUserPermissionViewRepository UserPermissionVw => _userPermissionVw;
         internal IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
         internal IUserRepository UserDb => _userDb;
+        public virtual IUserPermissionViewRepository UserPermissionVw => _userPermissionVw;
         public virtual IUserProfileRepository UserProfileDb => _userProfileDb;
         public virtual IUserProfileViewRepository UserProfileVw => _userProfileVw;
         public virtual IUserPermissionHistoryRepository PermissionHistoryDb => _permissionHistoryDb;

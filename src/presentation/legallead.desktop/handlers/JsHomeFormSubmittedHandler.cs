@@ -6,7 +6,6 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +37,7 @@ namespace legallead.desktop.handlers
                 var htm = ConvertHTML(objectData);
                 handler.SetMessage(htm);
                 if (objectData.StatusCode != 200) return;
+                handler.LoginCompleted(formName);
                 NavigateTo("MyAccount", objectData);
             }
             catch (Exception ex)
@@ -61,21 +61,6 @@ namespace legallead.desktop.handlers
             if (user == null) return;
             user.Token = ObjectExtensions.TryGet<AccessTokenBo>(objectData.Message);
             main.NavigateTo(destination);
-        }
-
-        private static string ConvertHTML(ApiResponse response)
-        {
-            const int statusOk = 200;
-            var code = response.StatusCode;
-            var statusClass = code == statusOk ? "text-success" : "text-danger";
-            var borderCode = code == statusOk ? "border-secordary" : "border-danger";
-            var builder = new StringBuilder($"<div class='border {borderCode} m-2 p-2 fs-5cd'>");
-            var message = string.IsNullOrWhiteSpace(response.Message) ? "No data provided" : response.Message;
-            builder.AppendLine();
-            builder.AppendLine($"\t<span name='status-code' class='{statusClass}'> {code:D3} Status </span> <br/>");
-            builder.AppendLine($"\t<span name='status-message' class='text-secondary'> {message} </span> <br/>");
-            builder.AppendLine("</div>");
-            return builder.ToString();
         }
 
         private static async Task<ApiResponse> ConvertTo(string formName, string json)

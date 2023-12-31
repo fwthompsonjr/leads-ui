@@ -1,0 +1,20 @@
+﻿<hr />
+<h5>Guest</h5>
+<div>
+    <p class="lead">
+        You have a Guest Account. 
+        As a Guest you have the following search restrictions.
+    </p>
+    <ol>
+        <li>Searches: A limit of 5 records can returned from any a search.</li>
+        <li>Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.</li>
+        <li>Annual Limit: A maximum of 50 records can be retrieved in a calendar year.</li>
+    </ol>
+    <p>
+        Data restriction: 
+        Any search result will be masked to remove address and/or case information.
+    </p>
+    <p class="text-sm">
+        The guest account is intended to allow users to test the system prior to purchase.
+    </p>
+</div>

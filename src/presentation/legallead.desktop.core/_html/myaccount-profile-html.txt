@@ -1,10 +1,19 @@
-<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+
+					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+						<div id="dv-subcontent-profile-row-00" class="row d-none w-75">
+							<div id="dv-subcontent-profile-success" class="alert alert-success d-flex align-items-center" role="alert">
+								<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+								<div>
+								Your account information has been updated successfully
+								</div>
+							</div>
+						</div>
 						<div class="card-body">
-							<h5 class="card-title text-start">Account Profile</h5>	
+							<h5 class="card-title text-start">Account Profile</h5>
 							<div class="row">
 								<form id="frm-user-profile" name="frm-user-profile">
 									<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
-										<label for="cbo-profile-group" class="form-label">Section</label>
+										<label for="cbo-profile-group" class="form-label text-secondary">Section</label>
 										<select id="cbo-profile-group" class="form-control" onchange="profileComboBoxChanged()">
 											<option value="">Select view</option>
 											<option selected value="personal">Personal Details</option>
@@ -16,63 +25,69 @@
 									<div id="dv-subcontent-profile-row-02" name="dv-subcontent-profile-personal" class="mb-3 text-start">
 										<hr />
 										<div class="row">
-											<label for="tbx-profile-first-name" class="form-label">First Name</label>
-											<input id="tbx-profile-first-name" class="form-control" />
+											<label for="tbx-profile-first-name" class="form-label text-secondary">First Name</label>
+											<input id="tbx-profile-first-name" name="first-name" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-last-name" class="form-label">Last Name</label>
-											<input id="tbx-profile-last-name" class="form-control" />
+											<label for="tbx-profile-last-name" class="form-label text-secondary">Last Name</label>
+											<input id="tbx-profile-last-name" name="last-name" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-company" class="form-label">Company</label>
-											<input id="tbx-profile-company" class="form-control" />
+											<label for="tbx-profile-company" class="form-label text-secondary">Company</label>
+											<input id="tbx-profile-company" name="company-name" class="form-control w-75 m-2" />
 										</div>
 									</div>
 									<div id="dv-subcontent-profile-row-03" name="dv-subcontent-profile-address" class="mb-3 text-start">
 										<hr />
 										<div class="row m-1">
-											<label for="tbx-profile-mailing-address" class="form-label">Mailing Address</label>
-											<textarea rows="4" id="tbx-profile-mailing-address" class="form-control"></textarea>
+											<label for="tbx-profile-mailing-address" class="form-label text-secondary">Mailing Address</label>
+											<textarea rows="4" id="tbx-profile-mailing-address" name="mailing-address" class="form-control"></textarea>
 										</div>
 										<div class="row m-1">
-											<label for="tbx-profile-billing-address" class="form-label">Billing Address</label>
-											<textarea rows="4" id="tbx-profile-billing-address" class="form-control"></textarea>
+											<label for="tbx-profile-billing-address" class="form-label text-secondary">Billing Address</label>
+											<textarea rows="4" id="tbx-profile-billing-address" name="billing-address" class="form-control"></textarea>
 										</div>
 									</div>
 									<div id="dv-subcontent-profile-row-04" name="dv-subcontent-profile-phone" class="mb-3 text-start">
 										<hr />
 										<div class="row">
-											<label for="tbx-profile-phone-01" class="form-label">Contact</label>
-											<input id="tbx-profile-phone-01" class="form-control" />
+											<label for="tbx-profile-phone-01" class="form-label text-secondary">Contact</label>
+											<input id="tbx-profile-phone-01" name="phone-number" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-phone-02" class="form-label">Office</label>
-											<input id="tbx-profile-phone-02" class="form-control" />
+											<label for="tbx-profile-phone-02" class="form-label text-secondary">Office</label>
+											<input id="tbx-profile-phone-02" name="phone-number" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-phone-03" class="form-label">Fax / Other</label>
-											<input id="tbx-profile-phone-03" class="form-control" />
+											<label for="tbx-profile-phone-03" class="form-label text-secondary">Fax / Other</label>
+											<input id="tbx-profile-phone-03" name="phone-number" class="form-control w-75 m-2" />
 										</div>
 									</div>
 									<div id="dv-subcontent-profile-row-05" name="dv-subcontent-profile-email" class="mb-3 text-start">
 										<hr />
 										<div class="row">
-											<label for="tbx-profile-email-01" class="form-label">Primary</label>
-											<input id="tbx-profile-email-01" class="form-control" />
+											<label for="tbx-profile-email-01" class="form-label text-secondary">Primary</label>
+											<input type="email" id="tbx-profile-email-01" name="email-address" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-email-02" class="form-label">Business</label>
-											<input id="tbx-profile-email-02" class="form-control" />
+											<label for="tbx-profile-email-02" class="form-label text-secondary">Business</label>
+											<input type="email" id="tbx-profile-email-02" name="email-address" class="form-control w-75 m-2" />
 										</div>
 										<div class="row">
-											<label for="tbx-profile-email-03" class="form-label">Alternate</label>
-											<input id="tbx-profile-email-03" class="form-control" />
+											<label for="tbx-profile-email-03" class="form-label text-secondary">Alternate</label>
+											<input type="email" id="tbx-profile-email-03" name="email-address" class="form-control w-75 m-2" />
 										</div>
 									</div>
 								</form>
 							</div>
 						</div>
 						<div class="card-footer">
-							<button class="btn btn-sm btn-primary">Save</button>
+							<div id="frm-profile-error-message" class="d-none">
+								<!-- Error messages -->
+							</div>
+							<button id="frm-profile-submit-button" class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">
+								<i id="form-profile-icon" class="bi bi-pencil-square" ></i>
+								<i id="form-profile-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
+							</button>
 						</div>
 					</div>

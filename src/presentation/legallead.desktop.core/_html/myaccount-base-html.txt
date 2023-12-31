@@ -10,44 +10,7 @@
 		<!-- block: common-headings -->
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
-		<style name="subcontent-css">
-
-			div.subcontent {
-				width: 50%; 
-				min-width: 400px;
-				max-width: 1200px;
-                margin-bottom: 20px;
-				display: none;
-			}
-			
-			div.subcontent.active {
-				display: block;
-			}
-
-			div[name="subcontent-home-bullet-list"] {
-				width: 50%; 
-				margin-left: 35%;
-				text-align: left;
-				justify-content: left;
-			}
-			
-
-			div[name="main-content"] {
-				width: 70%; 
-				min-width: 800px;
-				max-width: 1200px;
-			}		
-
-			div[name="subcontent-home"],
-			div[name="subcontent-profile"],
-			div[name="subcontent-permissions"] {
-				text-align: left;
-				justify-content: left;
-				margin-bottom: 20px;
-				margin-left: 20px;
-			}
-
-		</style>
+		<!-- style: my-account-subcontent-css -->
 	</head>
 
 	<body class="text-center">
@@ -65,6 +28,9 @@
 				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
 				<a name="subcontent-profile" class="nav-link" href="javascript:setDisplay('profile')">Profile</a>
 				<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
+				<a name="subcontent-icon" class="nav-link" href="javascript:setDisplay('home')">
+					<i class="bi bi-person-fill-check"></i>
+				</a>
 			</nav>
 		</div>
       </header>
@@ -85,6 +51,7 @@
 
 	<!-- script: my-account-navigation -->
 	<!-- script: my-account-form-validation -->
+	<!-- script: my-account-profile-valid -->
   </body>
 
 

@@ -1,0 +1,35 @@
+﻿<hr />
+<h5>Platinum</h5>
+<div>
+    <p class="lead">
+        You have a Platinum Account. 
+    </p>
+    <ol>
+        <li>
+            Searches: 
+            The first 1000 records returned from a search are billed at 3 cents per lead.
+            Additional records in the search are billed at 5 cents per lead.
+        </li>
+        <li>
+            Monthly Limit: 
+            Your account is limited to receive 10,000 leads in a calendar month.</li>
+        <li>
+            Annual Limit: 
+            Your account is limited to receive 100,000 leads in a calendar year.</li>
+    </ol>
+    <p>
+        Billing Types: 
+    </p>
+    <ul>
+        <li>Monthly - $30 per month</li>
+        <li>Annual - $300 per year.</li>
+    </ul>
+    <p>
+        Discounts: <br>
+        On top pf your current pricing, you are eligible to purchase State and/or County level subscriptions
+    </p>
+    <ul>
+        <li>State Discount - 15% discount applied to eligible records</li>
+        <li>County Discount - 10% discount applied to eligible records</li>
+    </ul>
+</div>

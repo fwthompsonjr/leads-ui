@@ -143,6 +143,7 @@ namespace legallead.desktop.utilities
             { "signon-refresh", "{0}/api/signon/refresh-token" },
             { "signon-change-password", "{0}/api/signon/change-password" },
             { "application-register", "{0}/api/Application/register" },
+            { "profile-get-contact-identity", "{0}/api/profiles/get-contact-identity" },
             { "profile-get-contact-detail", "{0}/api/profiles/get-contact-detail" },
             { "profile-edit-contact-address", "{0}/api/profiles/edit-contact-address" },
             { "profile-edit-contact-email", "{0}/api/profiles/edit-contact-email" },
