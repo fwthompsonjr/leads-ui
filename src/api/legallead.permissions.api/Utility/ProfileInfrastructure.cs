@@ -2,6 +2,7 @@
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
 using System.Linq;
+using System.Text;
 
 namespace legallead.permissions.api.Utility
 {
@@ -12,6 +13,18 @@ namespace legallead.permissions.api.Utility
         public ProfileInfrastructure(IDataProvider db) : base(db)
         {
             mapper = ModelMapper.Mapper;
+        }
+
+        public async Task<string> GetContactRole(User? user)
+        {
+            const string fallbackName = "Guest";
+            const string permissionName = "Account.Permission.Level";
+            if (user == null) { return fallbackName; }
+            await _db.InitializePermission(user);
+            var profiles = (await _db.UserPermissionVw.GetAll(user)).ToList();
+            var roleItem = profiles.Find(x => x.KeyName.Equals(permissionName));
+            var roleName = roleItem?.KeyValue ?? fallbackName;
+            return string.IsNullOrWhiteSpace(roleName) ? fallbackName : roleName;
         }
 
         public async Task<GetContactResponse[]> GetContactDetail(User? user, string responseType)

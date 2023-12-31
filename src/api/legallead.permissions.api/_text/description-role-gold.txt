@@ -1,0 +1,36 @@
+﻿<hr />
+<h5>Gold</h5>
+<div>
+    <p class="lead">
+        You have a Gold Account. 
+        As a Guest you have the following search restrictions.
+    </p>
+    <ol>
+        <li>
+            Searches: 
+            The first 20 records returned from a search are billed at 4 cents per lead.
+            Additional records in the search are billed at 5 cents per lead.
+        </li>
+        <li>
+            Monthly Limit: 
+            Your account is limited to receive 1500 leads in a calendar month.</li>
+        <li>
+            Annual Limit: 
+            Your account is limited to receive 10000 leads in a calendar year.</li>
+    </ol>
+    <p>
+        Billing Types: 
+    </p>
+    <ul>
+        <li>Monthly - $20 per month</li>
+        <li>Annual - $225 per year.</li>
+    </ul>
+    <p>
+        Discounts: <br>
+        On top pf your current pricing, you are eligible to purchase State and/or County level subscriptions
+    </p>
+    <ul>
+        <li>State Discount - 15% discount applied to eligible records</li>
+        <li>County Discount - 10% discount applied to eligible records</li>
+    </ul>
+</div>

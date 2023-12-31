@@ -61,6 +61,121 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///&lt;div&gt;
+        ///    &lt;p class=&quot;lead&quot;&gt;
+        ///        You have a Guest Account. 
+        ///        As a Guest you have the following search restrictions.
+        ///    &lt;/p&gt;
+        ///    &lt;ol&gt;
+        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt;
+        ///    &lt;p&gt;
+        ///        Data restriction: 
+        ///        Any search res [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string description_role_admin {
+            get {
+                return ResourceManager.GetString("description-role-admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///&lt;div&gt;
+        ///    &lt;p class=&quot;lead&quot;&gt;
+        ///        You have a Guest Account. 
+        ///        As a Guest you have the following search restrictions.
+        ///    &lt;/p&gt;
+        ///    &lt;ol&gt;
+        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt;
+        ///    &lt;p&gt;
+        ///        Data restriction: 
+        ///        Any search res [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string description_role_gold {
+            get {
+                return ResourceManager.GetString("description-role-gold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///&lt;div&gt;
+        ///    &lt;p class=&quot;lead&quot;&gt;
+        ///        You have a Guest Account. 
+        ///        As a Guest you have the following search restrictions.
+        ///    &lt;/p&gt;
+        ///    &lt;ol&gt;
+        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt;
+        ///    &lt;p&gt;
+        ///        Data restriction: 
+        ///        Any search res [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string description_role_guest {
+            get {
+                return ResourceManager.GetString("description-role-guest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///&lt;div&gt;
+        ///    &lt;p class=&quot;lead&quot;&gt;
+        ///        You have a Guest Account. 
+        ///        As a Guest you have the following search restrictions.
+        ///    &lt;/p&gt;
+        ///    &lt;ol&gt;
+        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt;
+        ///    &lt;p&gt;
+        ///        Data restriction: 
+        ///        Any search res [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string description_role_platinum {
+            get {
+                return ResourceManager.GetString("description-role-platinum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///&lt;div&gt;
+        ///    &lt;p class=&quot;lead&quot;&gt;
+        ///        You have a Guest Account. 
+        ///        As a Guest you have the following search restrictions.
+        ///    &lt;/p&gt;
+        ///    &lt;ol&gt;
+        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt;
+        ///    &lt;p&gt;
+        ///        Data restriction: 
+        ///        Any search res [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string description_role_silver {
+            get {
+                return ResourceManager.GetString("description-role-silver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to # leads-ui
         ///The ultimate lead sourcing application
         ///
