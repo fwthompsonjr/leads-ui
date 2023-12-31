@@ -1,8 +1,9 @@
 <html><head>
 		<script type="text/javascript">
-			try {
-				CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-			} catch {}		
+		try {
+			CefSharp.BindObjectAsync("jsHandler", "jsHandler");
+		} catch {}		
+	
 		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -12,6 +13,9 @@
 		
 		<!-- googleapis : fonts -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+		
+		<!-- popper -->
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
 		
 		<!-- bootstrap -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
@@ -26,139 +30,11 @@
 		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
 		
 		<!-- common styles -->
+		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css">
+		
+		<!-- common styles -->
 		<style name="base-css">
-/*
- * Globals
- */
 
-/* Links */
-a,
-a:focus,
-a:hover {
-  color: #fff;
-}
-
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none; /* Prevent inheritance from `body` */
-  background-color: #fff;
-  border: .05rem solid #fff;
-}
-
-
-/*
- * Base structure
- */
-
-html,
-body {
-  height: 100%;
-  background-color: #333;
-}
-
-body {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: flex;
-  -ms-flex-pack: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  color: #fff;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-  overflow-x: hidden;
-}
-
-.cover-container {
-  max-width: 42em;
-}
-
-
-/*
- * Header
- */
-.masthead {
-  margin-bottom: 2rem;
-}
-
-.masthead-brand {
-  margin-bottom: 0;
-}
-
-.nav-masthead .nav-link {
-  padding: .25rem 0;
-  font-weight: 700;
-  color: rgba(255, 255, 255, .5);
-  background-color: transparent;
-  border-bottom: .25rem solid transparent;
-}
-
-.nav-masthead .nav-link:hover,
-.nav-masthead .nav-link:focus {
-  border-bottom-color: rgba(255, 255, 255, .25);
-}
-
-.nav-masthead .nav-link + .nav-link {
-  margin-left: 1rem;
-}
-
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-@media (min-width: 48em) {
-  .masthead-brand {
-    float: left;
-  }
-  .nav-masthead {
-    float: right;
-  }
-}
-
-
-/*
- * Cover
- */
-.cover {
-  padding: 0 1.5rem;
-}
-.cover .btn-lg {
-  padding: .75rem 1.25rem;
-  font-weight: 700;
-}
-
-
-/*
- * Footer
- */
-.mastfoot {
-  color: rgba(255, 255, 255, .5);
-}
-
-
-
-/*
- * Card
- */
- .card {
-    background-color: transparent;
-    border-color: #444;
-    color: #fff;
- }
- .card .card-body .card-title {
-    border-bottom: #444 solid 1px;
-    padding-bottom: 5px;
- }
-@media screen and (max-width: 500px) {
-  .card {
-    width: 300px;
-    margin-left: 40px;
- }
-}
 /*
 * Forms
 */
@@ -209,6 +85,27 @@ div[name="loader"] {
 }
 
 
+
+/*
+ * Card
+ */
+ .card {
+    background-color: transparent;
+    border-color: #444;
+    color: #fff;
+ }
+ .card .card-body .card-title {
+    border-bottom: #444 solid 1px;
+    padding-bottom: 5px;
+ }
+@media screen and (max-width: 500px) {
+  .card {
+    width: 300px;
+    margin-left: 40px;
+ }
+}
+
+
 		</style>
 		<style name="subcontent-css">
 
@@ -236,17 +133,23 @@ div[name="loader"] {
 				width: 70%; 
 				min-width: 800px;
 				max-width: 1200px;
+			}		
+
+			div[name="main-content"] div.card {
+				height: 95%;
+				min-height: 560px;
 			}
 
-			div[name="subcontent-login"],
-			div[name="subcontent-register"] {
+			div[name="subcontent-home"],
+			div[name="subcontent-profile"],
+			div[name="subcontent-permissions"] {
 				text-align: left;
 				justify-content: left;
 				margin-bottom: 20px;
 				margin-left: 20px;
 			}
 
-		
+
 		</style>
 	</head>
 	<body class="text-center">
@@ -259,111 +162,187 @@ div[name="loader"] {
 					</h3>
 					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
 						<a name="subcontent-home" class="nav-link" href="javascript:setDisplay('home')">Home</a>
-						<a name="subcontent-login" class="nav-link active" href="javascript:setDisplay('login')">Login</a>
-						<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>
+						<a name="subcontent-profile" class="nav-link active" href="javascript:setDisplay('profile')">Profile</a>
+						<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
+						<div id="account-subcontent-icon" name="subcontent-icon" class="nav-link dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-person-fill-check "></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li>
+									<a id="account-dropdown-item-user-name" class="dropdown-item" href="#">
+										<i class="bi bi-person m-1"></i>
+										<span id="account-text-item-user-name">test.account</span>
+									</a>
+								</li>
+								<li>
+									<a id="account-dropdown-item-user-level" class="dropdown-item" href="#">
+										<i class="bi bi-collection m-1"></i>
+										<span id="account-text-item-user-level">Guest</span>
+									</a>
+								</li>
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a>
+								</li>
+							</ul>
+						</div>
 					</nav>
 				</div>
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent">
-						<br>
-						<p>
-							Legal Lead is an application used to locate public data from county courts.
-						</p>
-						<p>
-							From this application you can retrieve:
-							<br>
-						</p>
-						<div name="subcontent-home-bullet-list" class="text-left">
-							<ol>
-								<li>Case Details</li>
-								<li>Defendant Information</li>
-								<li>Court Information</li>
-							</ol>
-						</div>
-						<div name="page-call-to-action">
-							<p>
-								<a href="javascript:setDisplay('login')">Login</a>, if you already have an account.
-							</p>
-						</div>
-						<div name="register-now">
-							<p class="not-yet">Not registered yet?</p>
-							<p>
-								<a href="javascript:setDisplay('register')">Register now!</a>
-								<br>
-								It is easy, done in 1 minute and gives you access to product demos and much more!
-							</p>
+					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title">Account Details</h5>
+							<div class="row">
+								<div class="col-4 text-info text-start">User Name:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-name" class="col-7 text-secondary text-start">test.account</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Email:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-user-email" class="col-7 text-secondary text-start">user@example.com</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Date:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-create-date" class="col-7 text-secondary text-start">12/30/2023</div>
+							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Type:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-role" class="col-7 text-secondary text-start">Guest</div>
+							</div>
+							<div id="account-description" class="row"><hr>
+<h5>Guest</h5>
+<div>
+    <p class="lead">
+        You have a Guest Account. 
+        As a Guest you have the following search restrictions.
+    </p>
+    <ol>
+        <li>Searches: A limit of 5 records can returned from any a search.</li>
+        <li>Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.</li>
+        <li>Annual Limit: A maximum of 50 records can be retrieved in a calendar year.</li>
+    </ol>
+    <p>
+        Data restriction: 
+        Any search result will be masked to remove address and/or case information.
+    </p>
+    <p class="text-sm">
+        The guest account is intended to allow users to test the system prior to purchase.
+    </p>
+</div></div>
 						</div>
 					</div>
-					<div id="dv-subcontent-login" name="subcontent-login" class="subcontent active">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Login</h5>
-								<form id="form-login" name="form-login" novalidate="novalidate">
-									<div class="mb-3">
-										<label for="username" class="form-label">User Name / Email:</label>
-										<input type="text" class="form-control valid" id="username" name="username" aria-describedby="username-help" aria-invalid="false"><label id="username-error" class="error valid" for="username"></label>
-										<div id="username-help" class="text-secondary help-text">
-											Provide user-name or email address.
-										</div>
-									</div>
-									<div class="mb-3">
-										<label for="login-password" class="form-label">Password</label>
-										<input type="password" class="form-control valid" name="login-password" id="login-password" aria-invalid="false"><label id="login-password-error" class="error valid" for="login-password"></label>
-										<div id="login-password-help" class="text-secondary help-text" aria-describedby="login-password-help">
-											Provide password.
-										</div>
-									</div>
-									<button id="form-login-submit" type="button" class="btn btn-primary">
-										<i id="form-login-icon" class="bi bi-box-arrow-in-right"></i>
-										<i id="form-login-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
-										Sign In</button>
-									<div id="form-login-error-message" class="form-group"><div class="border border-danger-subtle m-2 p-2 fs-5cd">
-	<span name="status-code" class="text-danger"> 000 Status </span> <br>
-	<span name="status-message" class="text-secondary"> Invalid user state. Please initialize user context. </span> <br>
-</div>
-</div>
-								</form>
+					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card active">
+						<div id="dv-subcontent-profile-row-00" class="row d-none w-75">
+							<div id="dv-subcontent-profile-success" class="alert alert-success d-flex align-items-center" role="alert">
+								<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:">
+									<use xlink:href="#check-circle-fill"></use>
+								</svg>
+								<div>
+									Your account information has been updated successfully
+								</div>
 							</div>
 						</div>
-					</div>
-					<div id="dv-subcontent-register" name="subcontent-register" class="subcontent">
-						<div class="card">
-							<div class="card-body">
-								<h5 class="card-title">Register</h5>
-								<form id="form-register" name="form-register" novalidate="novalidate">
-									<div class="mb-3">
-										<label for="register-username" class="form-label">User Name:</label>
-										<input type="text" class="form-control" id="register-username" name="username" maxlength="255" minlength="8" aria-describedby="register-username-help">
-										<div id="register-username-help" class="text-secondary help-text">
-											Provide user name.
+						<div class="card-body">
+							<h5 class="card-title text-start">Account Profile</h5>
+							<div class="row">
+								<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
+									<label for="cbo-profile-group" class="form-label text-secondary">Section</label>
+									<select id="cbo-profile-group" class="form-control" onchange="profileComboBoxChanged()">
+										<option value="">Select view</option>
+										<option selected="" value="personal">Personal Details</option>
+										<option value="address">Addresses</option>
+										<option value="phone">Phone Numbers</option>
+										<option value="email">Email Addresses</option>
+									</select>
+								</div>
+								<div id="dv-subcontent-profile-row-02" name="dv-subcontent-profile-personal" class="mb-3 text-start">
+									<hr>
+									<form id="frm-user-profile" name="frm-user-profile">
+										<div class="row">
+											<label for="tbx-profile-first-name" class="form-label text-secondary">First Name</label>
+											<input id="tbx-profile-first-name" name="first-name" class="form-control w-75 m-2" value="Vella">
 										</div>
-									</div>
-									<div class="mb-3">
-										<label for="register-email" class="form-label">Email:</label>
-										<input type="email" class="form-control" id="register-email" name="register-email" maxlength="255" minlength="8" aria-describedby="register-email-help">
-										<div id="register-email-help" class="text-secondary help-text">
-											Provide an email address.
+										<div class="row">
+											<label for="tbx-profile-last-name" class="form-label text-secondary">Last Name</label>
+											<input id="tbx-profile-last-name" name="last-name" class="form-control w-75 m-2" value="Lindgren">
 										</div>
-									</div>
-									<div class="mb-3">
-										<label for="register-password" class="form-label">Password</label>
-										<input type="password" class="form-control" id="register-password" name="register-password" maxlength="255" minlength="8" aria-describedby="register-password-help">
-										<div id="register-password-help" class="text-secondary help-text">
-											Provide a strong password.
+										<div class="row">
+											<label for="tbx-profile-company" class="form-label text-secondary">Company</label>
+											<input id="tbx-profile-company" name="company-name" class="form-control w-75 m-2" value="Lakin - Bartell">
 										</div>
-									</div>
-									<div class="mb-3">
-										<label for="register-password-confirmation" class="form-label">Confirm Password</label>
-										<input type="password" class="form-control" id="register-password-confirmation" name="register-password-confirmation" maxlength="255" minlength="8" aria-describedby="register-password-confirmation-help">
-										<div id="register-password-confirmation-help" class="text-secondary help-text">
-											Confirm password.
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-03" name="dv-subcontent-profile-address" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-address" name="frm-user-address">
+										<div class="row m-1">
+											<label for="tbx-profile-mailing-address" class="form-label text-secondary">Mailing Address</label>
+											<textarea rows="4" id="tbx-profile-mailing-address" name="mailing-address" class="form-control">2318 Giuseppe Mission Jonchester, South Africa 85</textarea>
 										</div>
-									</div>
-									<button id="form-register-submit" type="button" class="btn btn-primary">Create Account</button>
-								</form>
+										<div class="row m-1">
+											<label for="tbx-profile-billing-address" class="form-label text-secondary">Billing Address</label>
+											<textarea rows="4" id="tbx-profile-billing-address" name="billing-address" class="form-control">8801 Marvin Rue Langworthmouth, Gabon 249</textarea>
+										</div>
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-04" name="dv-subcontent-profile-phone" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-phone" name="frm-user-phone">
+										<div class="row">
+											<label for="tbx-profile-phone-01" class="form-label text-secondary">Contact</label>
+											<input id="tbx-profile-phone-01" name="phone-number" class="form-control w-75 m-2" value="705-574-7933">
+										</div>
+										<div class="row">
+											<label for="tbx-profile-phone-02" class="form-label text-secondary">Office</label>
+											<input id="tbx-profile-phone-02" name="phone-number" class="form-control w-75 m-2" value="385-308-1676">
+										</div>
+										<div class="row">
+											<label for="tbx-profile-phone-03" class="form-label text-secondary">Fax / Other</label>
+											<input id="tbx-profile-phone-03" name="phone-number" class="form-control w-75 m-2" value="202-542-0383">
+										</div>
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-05" name="dv-subcontent-profile-email" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-email" name="frm-user-email">
+										<div class="row">
+											<label for="tbx-profile-email-01" class="form-label text-secondary">Primary</label>
+											<input type="email" id="tbx-profile-email-01" name="email-address" class="form-control w-75 m-2" value="Chet.VonRueden65@gmail.com">
+										</div>
+										<div class="row">
+											<label for="tbx-profile-email-02" class="form-label text-secondary">Business</label>
+											<input type="email" id="tbx-profile-email-02" name="email-address" class="form-control w-75 m-2" value="Velva4@gmail.com">
+										</div>
+										<div class="row">
+											<label for="tbx-profile-email-03" class="form-label text-secondary">Alternate</label>
+											<input type="email" id="tbx-profile-email-03" name="email-address" class="form-control w-75 m-2" value="Rhoda.Bosco@hotmail.com">
+										</div>
+									</form>
+								</div>
 							</div>
+						</div>
+						<div class="card-footer">
+							<div id="frm-profile-error-message" class="d-none"><!-- Error messages --></div>
+							<button id="frm-profile-submit-button" class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">
+								<i id="form-profile-icon" class="bi bi-pencil-square"></i>
+								<i id="form-profile-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
+							</button>
+						</div>
+					</div>
+					<div id="dv-subcontent-permissions" name="subcontent-permissions" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title text-start">Account Permissions</h5>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-sm btn-primary">Save</button>
 						</div>
 					</div>
 				</div>
@@ -376,7 +355,7 @@ div[name="loader"] {
 		</div>
 		<script>
 	const actv = "active";
-	const names = [ "home", "login", "register" ];
+	const names = [ "home", "profile", "permissions" ];
 
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
@@ -397,10 +376,11 @@ div[name="loader"] {
 
 	function setActiveDiv( name ) {
 		if (names.indexOf( name ) < 0 ) { return; }
-		const divnames = [ "dv-subcontent-home", "dv-subcontent-login", "dv-subcontent-register" ];
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions" ];
 		
 		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);
+			if(null === d || undefined === d) { continue; }
 			if ( divnames[i].indexOf(name) >= 0 ) {
 				d.classList.add(actv);
 			} else {
@@ -408,141 +388,93 @@ div[name="loader"] {
 			}
 		}
 	}
+	
+	function profileComboBoxChanged() {
+		const hidden = "d-none";
+		const cboxid = "#cbo-profile-group";
+		const find = "~0";
+		const dvprefix = "div[name='dv-subcontent-profile-~0']";
+		const dvparent = "#dv-subcontent-profile";
+		const divnames = [ 
+			dvprefix.replace(find, "personal"), 
+			dvprefix.replace(find, "address"), 
+			dvprefix.replace(find, "phone"), 
+			dvprefix.replace(find, "email")  ];
+		for(var i = 0; i < divnames.length; i++) {
+			var dv = divnames[i];
+			$( dv ).addClass(hidden);
+		}
+		var current = $(cboxid).val();
+		if (null === current || current.length === 0) {
+			$( dvparent ).find("div.card-footer").hide();
+			return;
+		}
+		var target = dvprefix.replace(find, current);
+		$( target ).removeClass(hidden);
+		$( dvparent ).find("div.card-footer").show();
 		
+	}
+		
+	profileComboBoxChanged()
 	
 		</script>
-		<script name="home-form-validation">
-
-let formNames = [ "form-login", "form-register" ];
-let buttonNames = [ "form-login-submit", "form-register-submit" ];
-var contacticons = {
-    spin: "i[name='message-send-spinner']",
-    normal: "i[name='message-send']"
+		
+		<!-- script: my-account-form-validation -->
+		<script>
+let profileAlertTimer = null;
+let profileNames = [ "frm-profile-address", "frm-profile-personal", "frm-profile-phone", "frm-profile-email" ];
+let profileButtonName = "frm-profile-submit-button";
+let profileStatusDiv = "frm-profile-error-message";
+var profileicons = {
+    spin: "#form-profile-icon-spin",
+    normal: "#form-profile-icon"
 }
 
-function isValidEmail( email ) {
-	const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return res.test(email.toLowerCase());
-}
-function initializeValidator() {
-	jQuery.validator.setDefaults({
-		debug: true,
-		success: "valid"
-	});
+function setSuccessAlert( isActive ) {
+	const hddn = "d-none";
+	const parentDv = "#dv-subcontent-profile-row-00";
+	const alertDv = "#dv-subcontent-profile-success";
 
-	jQuery.validator.addMethod("isEmailOrUser", function (value, element, params) {
-		if (!value) { return false; }
-		if (value == null) { return false; }
-		if (value.length == 0) { return false; }
-		if (isValidEmail(String(value))) { return true; }
-		if (value.indexOf("@") >= 0) { return false; }
-		return true;
-	}, 'Must be a valid user name.');
+	if ( null != profileAlertTimer ) { 
+		clearTimeout(profileAlertTimer);
+		profileAlertTimer = null;
+	}
 
-	jQuery.validator.addMethod("isEmail", function (value, element, params) {
-		if (!value) { return false; }
-		if (value == null) { return false; }
-		if (value.length == 0) { return false; }
-		return isValidEmail(String(value));
-	}, 'Must be a valid email address.');
+	$( parentDv ).addClass(hddn);
+	if (!isActive) { return; }
 
-	jQuery.validator.addMethod("isPassword", function (value, element, params) {
-		if (!value) { return false; }
-		if (value == null) { return false; }
-		if (value.length == 0) { return false; }
-		const res = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,255}$/im;
-		return res.test(String(value));
-	}, 'Password must meet minimum requirement.');
+	$( alertDv ).hide();
+	$( parentDv ).removeClass(hddn);
+	$( alertDv ).fadeIn( 600 );
+	profileAlertTimer = setTimeout(() => { setSuccessAlert(false); }, 15000);
 }
 
-function initializeFormValidation()
-{
-	for(var i = 0; i < formNames.length; i++) {
-		var frm = document.getElementById(formNames[1]);
-		var formJq = "#" + formNames[i];
-		switch (i) {
-			case 0:
-				$(formJq).validate({
-					rules: {
-						"username": {
-							required: true,
-							minlength: 8,
-							maxlength: 255,
-							isEmailOrUser: true
-						},
-						"login-password": {
-							required: true,
-							minlength: 8,
-							maxlength: 255,
-							isPassword: true
-						}
-					}
-				});
-				break;
-			case 1:
-				$(formJq).validate({
-					rules: {
-						"username": {
-							required: true,
-							minlength: 8,
-							maxlength: 255
-						},
-						"register-email": {
-							required: true,
-							minlength: 8,
-							maxlength: 255,
-							isPassword: true
-						},
-						"register-password": {
-							required: true,
-							minlength: 8,
-							maxlength: 255,
-							isPassword: true
-						},
-						"register-password-confirmation": {
-							minlength: 8,
-							maxlength: 255,
-							equalTo: "#register-password"
-						}
-					}
-				});
-				break;
-			
-		}
+function setProfileStatusMessage( message, isActive ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const emptymessage = "<!-- Error messages -->"
+	const pound = "#";
+	var dverr = pound + profileStatusDiv
+	if( isActive ) {
+		$( dverr ).removeClass(hddn);
+		$( dverr ).html(message);
+	} else {
+		$( dverr ).addClass(hddn);
+		$( dverr ).html(emptymessage);
 	}
 }
 
-function initializeFormButtons() {
-	for( let i = 0; i < buttonNames.length; i++ ) {
-		let bttn = document.getElementById(buttonNames[i]);
-		if (undefined === bttn || null === bttn ) { continue; }
-		bttn.addEventListener("click", () => formButtonClicked(i) );
-	}
-}
 
-function initializeForms() {
-	initializeValidator();
-	initializeFormValidation();
-	initializeFormButtons();
-}
-
-function handleApiResponse( indx, response ) {
-	if( isNaN(indx) || indx < 0 || indx > formNames.length || response.length == 0) { return ""; }
-	// var obj = 
-	alert( response );
-}
-
-function setIconState( indx, isSpinning ) {
+function setProfileIconState( isSpinning ) {
 	const dsb = "disabled";
 	const hddn = "d-none";
 	const pound = "#";
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
 	
 	let icons = [];
-	var formName = formNames[indx];
-	var bttn = pound + buttonNames[indx];
-	icons.push(pound + formName + "-icon");
-	icons.push(pound + formName + "-icon-spin");
+	var bttn = pound + profileButtonName;
+
+	icons.push(profileicons.normal);
+	icons.push(profileicons.spin);
 	let a = isSpinning ? 0 : 1;
 	let b = isSpinning ? 1 : 0;
 	$( icons[a] ).addClass( hddn );
@@ -554,87 +486,238 @@ function setIconState( indx, isSpinning ) {
 	}
 }
 
+function profileActionCompleted() {
+	setProfileIconState( false );
+	setProfileStatusMessage( '', false );
+	setSuccessAlert( true );
+}
 
-function setStatusMessage( indx, message, isActive ) {
-	const dsb = "disabled";
-	const hddn = "d-none";
-	const emptymessage = "<!-- Error messages -->"
-	const pound = "#";
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return }
-	var formName = formNames[indx];
-	var dverr = pound + formName + "-error-message"
-	if( isActive ) {
-		$( dverr ).removeClass(hddn);
-		$( dverr ).html(message);
-	} else {
-		$( dverr ).addClass(hddn);
-		$( dverr ).html(emptymessage);
+function isValidProfileEmail( email ) {
+	if( undefined === email || null === email || email.length === 0) { return true; }
+	const res = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return res.test(email.toLowerCase());
+}
+
+
+function isValidProfilePhone( phonenumber ) {
+	if( undefined === phonenumber || null === phonenumber || phonenumber.length === 0) { return true; }
+	var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+	var phoneexp = /^[\s()+-]*([0-9][\s()+-]*){6,20}$/;
+	var expressions = [ phoneno, phoneexp ];
+	for( var t = 0; t < expressions.length; t++ ) {
+		var rg = expressions[t];
+		var isOk = rg.test(phonenumber);
+		if(isOk) return true;
+	}
+	return false;
+}
+
+function isValidProfileAddress( address ) {
+	if ( undefined === address || null === address || address.length === 0) { return true; }
+	address = address.trim();
+	if ( address.length < 9 ) return false;
+	const space = ' ';
+	const comma = ',';
+	if ( address.indexOf(space) < 0 ) return false;
+	if ( address.indexOf(comma) < 0 ) return false;
+	let parts = address.split(space);
+	let zip = parts[parts.length - 1];
+	if(!isZip(zip)) return false;
+	return true;
+}
+
+
+function isZip( zip ) {
+	if ( undefined === zip || null === zip || zip.length === 0) { return false; }
+	var zp = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+	return zp.test(zip);
+
+}
+
+function initializeProfileValidator() {
+	/* 
+	 * NOTE: There are multiple forms on this page 
+	 * initialization of the jquery validators needs to be consolidated
+	 * to include both profile and permissions forms
+	 */
+	jQuery.validator.setDefaults({
+		debug: true,
+		success: "valid"
+	});
+
+	jQuery.validator.addMethod("isValidProfileEmail", function (value, element, params) {
+		if (!value) { return true; }
+		if (value == null) { return true; }
+		if (value.length == 0) { return true; }
+		return isValidProfileEmail(String(value));
+	}, 'Must be a valid email address.');
+
+	jQuery.validator.addMethod("isValidProfilePhone", function (value, element, params) {
+		if (!value) { return true; }
+		if (value == null) { return true; }
+		if (value.length == 0) { return true; }
+		return isValidProfilePhone(String(value));
+	}, 'Must be a valid phone number.');
+
+	jQuery.validator.addMethod("isValidProfileAddress", function (value, element, params) {
+		if (!value) { return true; }
+		if (value == null) { return true; }
+		if (value.length == 0) { return true; }
+		return isValidProfileAddress(String(value));
+	}, 'Must be a valid address.');
+}
+
+function initializeProfileFormValidation()
+{
+	for(var i = 0; i < profileNames.length; i++) {
+		var frm = document.getElementById(profileNames[i]);
+		var formJq = "#" + profileNames[i];
+		switch (i) {
+			case 0: // address
+				$(formJq).validate({
+					rules: {
+						"billing-address": {
+							maxlength: 750,
+							isValidProfileAddress: true
+						},
+						"mailing-address": {
+							maxlength: 750,
+							isValidProfileAddress: true
+						}
+					}
+				});
+				break;
+			case 1: // personal
+				$(formJq).validate({
+					rules: {
+						"first-name": {
+							required: false,
+							minlength: 1,
+							maxlength: 75
+						},
+						"last-name": {
+							required: false,
+							minlength: 1,
+							maxlength: 125
+						},
+						"company-name": {
+							required: true,
+							minlength: 2,
+							maxlength: 150
+						}
+					}
+				});
+				break;
+			case 2: // phone
+				$(formJq).validate({
+					rules: {
+						"phone-number": {
+							required: false,
+							minlength: 7,
+							maxlength: 30,
+							isValidProfilePhone: true
+						}
+					}
+				});
+				break;
+			case 3: // email
+				$(formJq).validate({
+					rules: {
+						"email-address": {
+							required: false,
+							minlength: 4,
+							maxlength: 255,
+							isValidProfileEmail: true
+						}
+					}
+				});
+				break;
+			
+		}
 	}
 }
 
-function formButtonClicked( formIndex ) {
-	const dsb = "disabled";
-	const hddn = "d-none";
-	let apiresponse = "";
-	let icons = [];
-	let frm;
-	let indx = parseInt(formIndex);
-	let hasSubmissionError = false;
-	try {
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) { return ""; }
-	setIconState( indx, true );
-	setStatusMessage( indx, "", false );
-	var formName = formNames[indx];
-	var formSelector = "#" + formName;
-
-	frm = $(formSelector);
-	frm.validate();
-	var isvalid = frm.valid();
-	if (!isvalid) return;
 	
-	let handler = window.jsHandler;
-	if( undefined === handler || null === handler || !(handler) ) { return; }
+	function profileSubmitButtonClicked() {
+		const cboxid = "#cbo-profile-group";
+		const find = "~0";
+		const frmprefix = "frm-profile-~0";
+		const suffixes = [ "personal", "address", "phone", "email" ];
+		
+		setSuccessAlert( false );
+		setProfileIconState( false );
+		setProfileStatusMessage( '', false );
+		var current = $(cboxid).val();
+		if (null === current || current.length === 0 || suffixes.indexOf(current) < 0) {
+			return;
+		}
+		
+		let target = frmprefix.replace(find, current);
+		if (document.getElementById(target) == null) { return; }
+		let jqobj = "#" + target;
+		if( $( jqobj ).valid() == false ) { 
+			setProfileStatusMessage( 'Please review submission, you have one or more invalid values.', true );
+			return; 
+		}
+		let payload = "";
+		
+		switch(current) {
+			case "personal" :
+			
+				const personal = [
+					{ NameType: "First", Name: $("#tbx-profile-first-name").val() },	
+					{ NameType: "Last", Name: $("#tbx-profile-last-name").val() },
+					{ NameType: "Company", Name: $("#tbx-profile-company").val() }
+				];
+				payload = JSON.stringify( personal );
+				break;
+			case "address" :
+			
+				const address = [
+					{ AddressType: "Mailing", Address: $("#tbx-profile-mailing-address").val() },	
+					{ AddressType: "Billing", Address: $("#tbx-profile-billing-address").val() }
+				];
+				payload = JSON.stringify( address );
+				break;
+			case "phone" :
+			
+				const phone = [
+					{ PhoneType: "Personal", Phone: $("#tbx-profile-phone-01").val() },	
+					{ PhoneType: "Business", Phone: $("#tbx-profile-phone-02").val() },	
+					{ PhoneType: "Other", Phone: $("#tbx-profile-phone-03").val() },	
+				];
+				payload = JSON.stringify( phone );
+				break;
+			case "email" :
+			
+				const email = [
+					{ EmailType: "Personal", Email: $("#tbx-profile-email-01").val() },	
+					{ EmailType: "Business", Email: $("#tbx-profile-email-02").val() },	
+					{ EmailType: "Other", Email: $("#tbx-profile-email-03").val() },	
+				];
+				payload = JSON.stringify( email );
+				break;
+		}
+		if ( null === payload || payload.length == 0 ) { 
+			setProfileStatusMessage( 'Error: Unable to capture form submission values', true );
+			return; 
+		}
 	
-	let json = serializeFormToObject(indx);
-	apiresponse = handler.submit(formName, json);
-	setStatusMessage( indx, apiresponse, true );
-	} catch (err) {
-		setStatusMessage( indx, err, true );
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { 
+			setProfileStatusMessage( 'Error: Unable to bind form submission handler', true );
+			return; 
+		}
+		try {
+			handler.submit(target, payload);
+		}
+		catch (err) {
+			setProfileStatusMessage( err, true );
+		}
 	}
-	finally {
-		setIconState( indx, false );
-	}
-}
 
-//convert FormData to Object
-var serializeFormToObject = function (formIndex) {
-	var indx = parseInt(formIndex);
-	if( isNaN(indx) || indx < 0 || indx > formNames.length ) return "";
-	var formName = formNames[indx];
-	var form = document.getElementById(formName);
-    var objForm = {};
-    var formData = new FormData(form);
-    for (var key of formData.keys()) {
-        objForm[key] = formData.get(key);
-    }
-    return JSON.stringify(objForm);
-};
-
-
-function docReady(fn) {
-	// see if DOM is already available
-	if (document.readyState === "complete" || document.readyState === "interactive") {
-		// call on next available tick
-		setTimeout(fn, 10);
-	} else {
-		document.addEventListener("DOMContentLoaded", fn);
-	}
-}
-
-docReady(function() {
-	initializeForms();
-});
-
+initializeProfileValidator();
+initializeProfileFormValidation();
 
 		</script>
 	

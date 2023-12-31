@@ -1,4 +1,5 @@
-﻿<hr />
+﻿
+<hr class="m-2 w-75" />
 <h5>Admin</h5>
 <div>
     <p class="lead">
@@ -10,14 +11,14 @@
         <li>Monthly Limit: There are no monthly limits applied to your account.</li>
         <li>Annual Limit: There are no annual limits.</li>
     </ol>
-    <p>
+    <p class="text-primary">
         Pricing: 
     </p>
     <ul>
         <li>The cost per lead is free.</li>
         <li>Admin account can access all states and counties in the system.</li>
     </ul>
-    <p class="text-sm">
+    <h6 class="text-secondary">
         The Admin account is for super-users and key product personnel.
-    </p>
+    </h6>
 </div>

@@ -1,9 +1,10 @@
-﻿<hr />
+﻿
+<hr class="m-2 w-75" />
 <h5>Gold</h5>
 <div>
     <p class="lead">
         You have a Gold Account. 
-        As a Guest you have the following search restrictions.
+        With a Gold you have the following search restrictions.
     </p>
     <ol>
         <li>
@@ -18,15 +19,17 @@
             Annual Limit: 
             Your account is limited to receive 10000 leads in a calendar year.</li>
     </ol>
-    <p>
+    <p class="text-primary">
         Billing Types: 
     </p>
     <ul>
         <li>Monthly - $20 per month</li>
         <li>Annual - $225 per year.</li>
     </ul>
+    <p class="text-primary">
+        Discounts:
+    </p>
     <p>
-        Discounts: <br>
         On top pf your current pricing, you are eligible to purchase State and/or County level subscriptions
     </p>
     <ul>

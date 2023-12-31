@@ -32,7 +32,6 @@ function setProfileStatusMessage( message, isActive ) {
 	const hddn = "d-none";
 	const emptymessage = "<!-- Error messages -->"
 	const pound = "#";
-	var formName = profileNames[indx];
 	var dverr = pound + profileStatusDiv
 	if( isActive ) {
 		$( dverr ).removeClass(hddn);
@@ -50,7 +49,6 @@ function setProfileIconState( isSpinning ) {
 	const pound = "#";
 	
 	let icons = [];
-	var formName = formNames[indx];
 	var bttn = pound + profileButtonName;
 
 	icons.push(profileicons.normal);
@@ -224,7 +222,9 @@ function initializeProfileFormValidation()
 		const frmprefix = "frm-profile-~0";
 		const suffixes = [ "personal", "address", "phone", "email" ];
 		
-		
+		setSuccessAlert( false );
+		setProfileIconState( false );
+		setProfileStatusMessage( '', false );
 		var current = $(cboxid).val();
 		if (null === current || current.length === 0 || suffixes.indexOf(current) < 0) {
 			return;
@@ -233,7 +233,10 @@ function initializeProfileFormValidation()
 		let target = frmprefix.replace(find, current);
 		if (document.getElementById(target) == null) { return; }
 		let jqobj = "#" + target;
-		if( $( jqobj ).valid() == false ) { return; }
+		if( $( jqobj ).valid() == false ) { 
+			setProfileStatusMessage( 'Please review submission, you have one or more invalid values.', true );
+			return; 
+		}
 		let payload = "";
 		
 		switch(current) {
@@ -273,8 +276,22 @@ function initializeProfileFormValidation()
 				payload = JSON.stringify( email );
 				break;
 		}
-		if ( null === payload || payload.length == 0 ) { return; }
-		console.log( payload );
+		if ( null === payload || payload.length == 0 ) { 
+			setProfileStatusMessage( 'Error: Unable to capture form submission values', true );
+			return; 
+		}
+	
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { 
+			setProfileStatusMessage( 'Error: Unable to bind form submission handler', true );
+			return; 
+		}
+		try {
+			handler.submit(target, payload);
+		}
+		catch (err) {
+			setProfileStatusMessage( err, true );
+		}
 	}
 
 initializeProfileValidator();

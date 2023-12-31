@@ -33,6 +33,8 @@ namespace legallead.desktop.implementations
                 new { node = "div", find = "//*[@id=\"account-create-date\"]", replace = identity.Created},
                 new { node = "div", find = "//*[@id=\"account-role\"]", replace = identity.Role},
                 new { node = "div", find = "//*[@id=\"account-description\"]", replace = identity.RoleDescription},
+                new { node = "span", find = "//*[@id=\"account-text-item-user-name\"]", replace = identity.UserName},
+                new { node = "span", find = "//*[@id=\"account-text-item-user-level\"]", replace = identity.Role},
             };
             foreach (var item in replacements)
             {

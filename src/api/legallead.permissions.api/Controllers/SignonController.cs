@@ -164,6 +164,7 @@ namespace legallead.permissions.api.Controllers
                 return Unauthorized("Invalid username or password...");
             }
             User update = MapFromChangePassword(usersdata, model, user);
+            update.CreateDate = user.CreateDate.GetValueOrDefault(DateTime.UtcNow);
             await _db.UserDb.Update(update);
             return Ok(usersdata.UserName);
         }

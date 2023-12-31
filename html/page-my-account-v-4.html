@@ -136,8 +136,8 @@ div[name="loader"] {
 			}		
 
 			div[name="main-content"] div.card {
-				height: 70%;
-				min-height: 400px;
+				height: 95%;
+				min-height: 560px;
 			}
 
 			div[name="subcontent-home"],
@@ -161,49 +161,40 @@ div[name="loader"] {
 						<span>Legal Lead UI</span>
 					</h3>
 					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-						<a name="subcontent-home" class="nav-link" href="javascript:setDisplay('home')">Home</a>
-						<a name="subcontent-profile" class="nav-link active" href="javascript:setDisplay('profile')">Profile</a>
+						<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
+						<a name="subcontent-profile" class="nav-link" href="javascript:setDisplay('profile')">Profile</a>
 						<a name="subcontent-permissions" class="nav-link" href="javascript:setDisplay('permissions')">Permissions</a>
-						<div 
-							id="account-subcontent-icon" 
-							name="subcontent-icon" 
-							class="nav-link dropdown">
-								<button 
-									class="btn btn-secondary dropdown-toggle" 
-									type="button" data-bs-toggle="dropdown" aria-expanded="false">
-									<i class="bi bi-person-fill-check "></i>
-							  </button>
-							  <ul class="dropdown-menu">
+						<div id="account-subcontent-icon" name="subcontent-icon" class="nav-link dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-person-fill-check "></i>
+							</button>
+							<ul class="dropdown-menu">
 								<li>
 									<a id="account-dropdown-item-user-name" class="dropdown-item" href="#">
 										<i class="bi bi-person m-1"></i>
-										<span id="account-text-item-user-name"> - </span>
+										<span id="account-text-item-user-name">test.account</span>
 									</a>
 								</li>
 								<li>
 									<a id="account-dropdown-item-user-level" class="dropdown-item" href="#">
 										<i class="bi bi-collection m-1"></i>
-										<span id="account-text-item-user-level"> - </span>
+										<span id="account-text-item-user-level">Guest</span>
 									</a>
 								</li>
-								<li><hr class="dropdown-divider"></li>
-								<li><a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a></li>
-							  </ul>
+								<li>
+									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a>
+								</li>
+							</ul>
 						</div>
 					</nav>
 				</div>
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div id="dv-subcontent-profile-row-00" class="row d-none w-75">
-						<div id="dv-subcontent-profile-success" class="alert alert-success d-flex align-items-center" role="alert">
-							<i class="bi bi-check-circle-fill m-1"></i>
-							<div>
-								Your account information has been updated successfully
-							</div>
-						</div>
-					</div>
-					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent card">
+					<div id="dv-subcontent-home" name="subcontent-home" class="subcontent active card">
 						<div class="card-body">
 							<h5 class="card-title">Account Details</h5>
 							<div class="row">
@@ -221,26 +212,60 @@ div[name="loader"] {
 								<div class="col-1 text-info"></div>
 								<div id="account-create-date" class="col-7 text-secondary text-start">12/30/2023</div>
 							</div>
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Type:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-role" class="col-7 text-secondary text-start">Guest</div>
+							</div>
+							<div id="account-description" class="row"><hr>
+<h5>Guest</h5>
+<div>
+    <p class="lead">
+        You have a Guest Account. 
+        As a Guest you have the following search restrictions.
+    </p>
+    <ol>
+        <li>Searches: A limit of 5 records can returned from any a search.</li>
+        <li>Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.</li>
+        <li>Annual Limit: A maximum of 50 records can be retrieved in a calendar year.</li>
+    </ol>
+    <p>
+        Data restriction: 
+        Any search result will be masked to remove address and/or case information.
+    </p>
+    <p class="text-sm">
+        The guest account is intended to allow users to test the system prior to purchase.
+    </p>
+</div></div>
 						</div>
 					</div>
-					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card active">
-						
+					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+						<div id="dv-subcontent-profile-row-00" class="row d-none w-75">
+							<div id="dv-subcontent-profile-success" class="alert alert-success d-flex align-items-center" role="alert">
+								<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:">
+									<use xlink:href="#check-circle-fill"></use>
+								</svg>
+								<div>
+									Your account information has been updated successfully
+								</div>
+							</div>
+						</div>
 						<div class="card-body">
 							<h5 class="card-title text-start">Account Profile</h5>
 							<div class="row">
-								<form id="frm-user-profile" name="frm-user-profile">
-									<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
-										<label for="cbo-profile-group" class="form-label text-secondary">Section</label>
-										<select id="cbo-profile-group" class="form-control" onchange="profileComboBoxChanged()">
-											<option value="">Select view</option>
-											<option selected="" value="personal">Personal Details</option>
-											<option value="address">Addresses</option>
-											<option value="phone">Phone Numbers</option>
-											<option value="email">Email Addresses</option>
-										</select>
-									</div>
-									<div id="dv-subcontent-profile-row-02" name="dv-subcontent-profile-personal" class="mb-3 text-start">
-										<hr>
+								<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
+									<label for="cbo-profile-group" class="form-label text-secondary">Section</label>
+									<select id="cbo-profile-group" class="form-control" onchange="profileComboBoxChanged()">
+										<option value="">Select view</option>
+										<option selected="" value="personal">Personal Details</option>
+										<option value="address">Addresses</option>
+										<option value="phone">Phone Numbers</option>
+										<option value="email">Email Addresses</option>
+									</select>
+								</div>
+								<div id="dv-subcontent-profile-row-02" name="dv-subcontent-profile-personal" class="mb-3 text-start">
+									<hr>
+									<form id="frm-user-profile" name="frm-user-profile">
 										<div class="row">
 											<label for="tbx-profile-first-name" class="form-label text-secondary">First Name</label>
 											<input id="tbx-profile-first-name" name="first-name" class="form-control w-75 m-2" value="Vella">
@@ -253,9 +278,11 @@ div[name="loader"] {
 											<label for="tbx-profile-company" class="form-label text-secondary">Company</label>
 											<input id="tbx-profile-company" name="company-name" class="form-control w-75 m-2" value="Lakin - Bartell">
 										</div>
-									</div>
-									<div id="dv-subcontent-profile-row-03" name="dv-subcontent-profile-address" class="mb-3 text-start d-none">
-										<hr>
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-03" name="dv-subcontent-profile-address" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-address" name="frm-user-address">
 										<div class="row m-1">
 											<label for="tbx-profile-mailing-address" class="form-label text-secondary">Mailing Address</label>
 											<textarea rows="4" id="tbx-profile-mailing-address" name="mailing-address" class="form-control">2318 Giuseppe Mission Jonchester, South Africa 85</textarea>
@@ -264,9 +291,11 @@ div[name="loader"] {
 											<label for="tbx-profile-billing-address" class="form-label text-secondary">Billing Address</label>
 											<textarea rows="4" id="tbx-profile-billing-address" name="billing-address" class="form-control">8801 Marvin Rue Langworthmouth, Gabon 249</textarea>
 										</div>
-									</div>
-									<div id="dv-subcontent-profile-row-04" name="dv-subcontent-profile-phone" class="mb-3 text-start d-none">
-										<hr>
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-04" name="dv-subcontent-profile-phone" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-phone" name="frm-user-phone">
 										<div class="row">
 											<label for="tbx-profile-phone-01" class="form-label text-secondary">Contact</label>
 											<input id="tbx-profile-phone-01" name="phone-number" class="form-control w-75 m-2" value="705-574-7933">
@@ -279,9 +308,11 @@ div[name="loader"] {
 											<label for="tbx-profile-phone-03" class="form-label text-secondary">Fax / Other</label>
 											<input id="tbx-profile-phone-03" name="phone-number" class="form-control w-75 m-2" value="202-542-0383">
 										</div>
-									</div>
-									<div id="dv-subcontent-profile-row-05" name="dv-subcontent-profile-email" class="mb-3 text-start d-none">
-										<hr>
+									</form>
+								</div>
+								<div id="dv-subcontent-profile-row-05" name="dv-subcontent-profile-email" class="mb-3 text-start d-none">
+									<hr>
+									<form id="frm-user-email" name="frm-user-email">
 										<div class="row">
 											<label for="tbx-profile-email-01" class="form-label text-secondary">Primary</label>
 											<input type="email" id="tbx-profile-email-01" name="email-address" class="form-control w-75 m-2" value="Chet.VonRueden65@gmail.com">
@@ -294,8 +325,8 @@ div[name="loader"] {
 											<label for="tbx-profile-email-03" class="form-label text-secondary">Alternate</label>
 											<input type="email" id="tbx-profile-email-03" name="email-address" class="form-control w-75 m-2" value="Rhoda.Bosco@hotmail.com">
 										</div>
-									</div>
-								</form>
+									</form>
+								</div>
 							</div>
 						</div>
 						<div class="card-footer">
@@ -426,7 +457,6 @@ function setProfileStatusMessage( message, isActive ) {
 	const hddn = "d-none";
 	const emptymessage = "<!-- Error messages -->"
 	const pound = "#";
-	var formName = profileNames[indx];
 	var dverr = pound + profileStatusDiv
 	if( isActive ) {
 		$( dverr ).removeClass(hddn);
@@ -444,7 +474,6 @@ function setProfileIconState( isSpinning ) {
 	const pound = "#";
 	
 	let icons = [];
-	var formName = formNames[indx];
 	var bttn = pound + profileButtonName;
 
 	icons.push(profileicons.normal);
@@ -618,7 +647,11 @@ function initializeProfileFormValidation()
 		const frmprefix = "frm-profile-~0";
 		const suffixes = [ "personal", "address", "phone", "email" ];
 		
+		debugger;
 		
+		setSuccessAlert( false );
+		setProfileIconState( false );
+		setProfileStatusMessage( '', false );
 		var current = $(cboxid).val();
 		if (null === current || current.length === 0 || suffixes.indexOf(current) < 0) {
 			return;
@@ -627,7 +660,10 @@ function initializeProfileFormValidation()
 		let target = frmprefix.replace(find, current);
 		if (document.getElementById(target) == null) { return; }
 		let jqobj = "#" + target;
-		if( $( jqobj ).valid() == false ) { return; }
+		if( $( jqobj ).valid() == false ) { 
+			setProfileStatusMessage( 'Please review submission, you have one or more invalid values.', true );
+			return; 
+		}
 		let payload = "";
 		
 		switch(current) {
@@ -667,8 +703,22 @@ function initializeProfileFormValidation()
 				payload = JSON.stringify( email );
 				break;
 		}
-		if ( null === payload || payload.length == 0 ) { return; }
-		console.log( payload );
+		if ( null === payload || payload.length == 0 ) { 
+			setProfileStatusMessage( 'Error: Unable to capture form submission values', true );
+			return; 
+		}
+	
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { 
+			setProfileStatusMessage( 'Error: Unable to bind form submission handler', true );
+			return; 
+		}
+		try {
+			handler.submit(target, payload);
+		}
+		catch (err) {
+			setProfileStatusMessage( err, true );
+		}
 	}
 
 initializeProfileValidator();
