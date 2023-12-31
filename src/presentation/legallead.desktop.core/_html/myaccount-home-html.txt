@@ -17,5 +17,14 @@
 								<div class="col-1 text-info"></div>
 								<div id="account-create-date" class="col-7 text-secondary text-start"> - </div>
 							</div>
+							
+							<div class="row">
+								<div class="col-4 text-info text-start">Account Type:</div>
+								<div class="col-1 text-info"></div>
+								<div id="account-role" class="col-7 text-secondary text-start"> - </div>
+							</div>
+
+							<div id="account-description" class="row">
+							</div>
 						</div>
 					</div>

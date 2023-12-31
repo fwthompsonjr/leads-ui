@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace legallead.desktop.js
 {
