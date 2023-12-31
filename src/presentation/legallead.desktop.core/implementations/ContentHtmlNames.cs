@@ -195,6 +195,8 @@ namespace legallead.desktop.implementations
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
         private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
+        private const string CssMyAccountInclude = "<!-- style: my-account-custom-css -->";
+        private const string CssMyAccountSubContent = "<!-- style: my-account-subcontent-css -->";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
         private const string HtmAccountHomeInclude = "<p>My Account</p>";
         private const string HtmAccountProfileInclude = "<p>My Profile</p>";
@@ -207,13 +209,13 @@ namespace legallead.desktop.implementations
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
-        private const string CssMyAccountInclude = "<!-- style: my-account-custom-css -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
             { CssBootStrapLink, GetBootstrapCssScript() },
             { CssErrorBox, Properties.Resources.errorbox_css },
             { CssMyAccountInclude, Properties.Resources.myaccount_css },
+            { CssMyAccountSubContent, Properties.Resources.subcontent_css },
             { HtmAccountHomeInclude, Properties.Resources.myaccounthome_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
             { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },

@@ -589,5 +589,42 @@ namespace legallead.desktop.Properties {
                 return ResourceManager.GetString("myaccountprofile-html", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///			div.subcontent {
+        ///				width: 50%; 
+        ///				min-width: 400px;
+        ///				max-width: 1200px;
+        ///                margin-bottom: 20px;
+        ///				display: none;
+        ///			}
+        ///			
+        ///			div.subcontent.active {
+        ///				display: block;
+        ///			}
+        ///
+        ///			div[name=&quot;subcontent-home-bullet-list&quot;] {
+        ///				width: 50%; 
+        ///				margin-left: 35%;
+        ///				text-align: left;
+        ///				justify-content: left;
+        ///			}
+        ///			
+        ///
+        ///			div[name=&quot;main-content&quot;] {
+        ///				width: 70%; 
+        ///				min-width: 800px;
+        ///				max-width: 1200px;
+        ///			}		
+        ///
+        ///			div[nam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string subcontent_css {
+            get {
+                return ResourceManager.GetString("subcontent_css", resourceCulture);
+            }
+        }
     }
 }

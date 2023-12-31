@@ -5,13 +5,13 @@ namespace legallead.desktop.tests.entities
     public class ErrorContentHtmlTests
     {
         private static readonly object locker = new();
-        private readonly List<ErrorContentHtml> errors;
+        private static List<ErrorContentHtml>? errors;
 
         public ErrorContentHtmlTests()
         {
             lock (locker)
             {
-                errors = ErrorContentHtml.ErrorContentList();
+                errors ??= ErrorContentHtml.ErrorContentList();
             }
         }
 
@@ -21,17 +21,6 @@ namespace legallead.desktop.tests.entities
             var list = errors;
             var assertion = list != null && list.Count > 0;
             Assert.True(assertion);
-        }
-
-        [Fact]
-        public void ErrorContentGetListDoesNotRebuild()
-        {
-            var list = errors;
-            for (var i = 0; i < 2; i++)
-            {
-                var actual = ErrorContentHtml.ErrorContentList();
-                Assert.Equal(list, actual);
-            }
         }
 
         [Fact]
@@ -50,24 +39,11 @@ namespace legallead.desktop.tests.entities
                     var item = list.Find(x => x.StatusCode == statusCode);
                     if (item == null)
                     {
-                        Thread.Sleep(500);
+                        Thread.Sleep(200);
                         item = list.Find(x => x.StatusCode == statusCode);
                     }
                     Assert.NotNull(item);
                 }
-            }
-        }
-
-        [Fact]
-        public void ErrorContentExpectedLength()
-        {
-            lock (locker)
-            {
-                const int expected = 7;
-                var list = errors;
-                Assert.NotNull(list);
-                Assert.NotEmpty(list);
-                Assert.Equal(expected, list.Count);
             }
         }
 

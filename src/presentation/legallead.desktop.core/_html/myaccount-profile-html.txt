@@ -1,6 +1,15 @@
-<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+
+					<div id="dv-subcontent-profile" name="subcontent-profile" class="subcontent card">
+						<div id="dv-subcontent-profile-row-00" class="row d-none w-75">
+							<div id="dv-subcontent-profile-success" class="alert alert-success d-flex align-items-center" role="alert">
+								<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+								<div>
+								Your account information has been updated successfully
+								</div>
+							</div>
+						</div>
 						<div class="card-body">
-							<h5 class="card-title text-start">Account Profile</h5>	
+							<h5 class="card-title text-start">Account Profile</h5>
 							<div class="row">
 								<form id="frm-user-profile" name="frm-user-profile">
 									<div id="dv-subcontent-profile-row-01" class="mb-3 text-start">
@@ -73,6 +82,9 @@
 							</div>
 						</div>
 						<div class="card-footer">
+							<div id="frm-profile-error-message" class="d-none">
+								<!-- Error messages -->
+							</div>
 							<button id="frm-profile-submit-button" class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">
 								<i id="form-profile-icon" class="bi bi-pencil-square" ></i>
 								<i id="form-profile-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save

@@ -1,13 +1,76 @@
 <script>
-
+let profileAlertTimer = null;
 let profileNames = [ "frm-profile-address", "frm-profile-personal", "frm-profile-phone", "frm-profile-email" ];
 let profileButtonName = "frm-profile-submit-button";
+let profileStatusDiv = "frm-profile-error-message";
 var profileicons = {
     spin: "#form-profile-icon-spin",
     normal: "#form-profile-icon"
 }
 
+function setSuccessAlert( isActive ) {
+	const hddn = "d-none";
+	const parentDv = "#dv-subcontent-profile-row-00";
+	const alertDv = "#dv-subcontent-profile-success";
 
+	if ( null != profileAlertTimer ) { 
+		clearTimeout(profileAlertTimer);
+		profileAlertTimer = null;
+	}
+
+	$( parentDv ).addClass(hddn);
+	if (!isActive) { return; }
+
+	$( alertDv ).hide();
+	$( parentDv ).removeClass(hddn);
+	$( alertDv ).fadeIn( 600 );
+	profileAlertTimer = setTimeout(() => { setSuccessAlert(false); }, 15000);
+}
+
+function setProfileStatusMessage( message, isActive ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const emptymessage = "<!-- Error messages -->"
+	const pound = "#";
+	var formName = profileNames[indx];
+	var dverr = pound + profileStatusDiv
+	if( isActive ) {
+		$( dverr ).removeClass(hddn);
+		$( dverr ).html(message);
+	} else {
+		$( dverr ).addClass(hddn);
+		$( dverr ).html(emptymessage);
+	}
+}
+
+
+function setProfileIconState( isSpinning ) {
+	const dsb = "disabled";
+	const hddn = "d-none";
+	const pound = "#";
+	
+	let icons = [];
+	var formName = formNames[indx];
+	var bttn = pound + profileButtonName;
+
+	icons.push(profileicons.normal);
+	icons.push(profileicons.spin);
+	let a = isSpinning ? 0 : 1;
+	let b = isSpinning ? 1 : 0;
+	$( icons[a] ).addClass( hddn );
+	$( icons[b] ).removeClass( hddn );
+	if( isSpinning ) {
+		$( bttn ).attr(dsb, dsb);
+	} else {
+		$( bttn ).removeAttr(dsb);
+	}
+}
+
+function profileActionCompleted() {
+	setProfileIconState( false );
+	setProfileStatusMessage( '', false );
+	setSuccessAlert( true );
+}
 
 function isValidProfileEmail( email ) {
 	if( undefined === email || null === email || email.length === 0) { return true; }
@@ -52,6 +115,11 @@ function isZip( zip ) {
 }
 
 function initializeProfileValidator() {
+	/* 
+	 * NOTE: There are multiple forms on this page 
+	 * initialization of the jquery validators needs to be consolidated
+	 * to include both profile and permissions forms
+	 */
 	jQuery.validator.setDefaults({
 		debug: true,
 		success: "valid"
@@ -82,8 +150,8 @@ function initializeProfileValidator() {
 function initializeProfileFormValidation()
 {
 	for(var i = 0; i < profileNames.length; i++) {
-		var frm = document.getElementById(formNames[1]);
-		var formJq = "#" + formNames[i];
+		var frm = document.getElementById(profileNames[i]);
+		var formJq = "#" + profileNames[i];
 		switch (i) {
 			case 0: // address
 				$(formJq).validate({
