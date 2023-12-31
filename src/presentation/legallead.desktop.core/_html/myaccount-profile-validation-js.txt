@@ -32,7 +32,6 @@ function setProfileStatusMessage( message, isActive ) {
 	const hddn = "d-none";
 	const emptymessage = "<!-- Error messages -->"
 	const pound = "#";
-	var formName = profileNames[indx];
 	var dverr = pound + profileStatusDiv
 	if( isActive ) {
 		$( dverr ).removeClass(hddn);
@@ -50,7 +49,6 @@ function setProfileIconState( isSpinning ) {
 	const pound = "#";
 	
 	let icons = [];
-	var formName = formNames[indx];
 	var bttn = pound + profileButtonName;
 
 	icons.push(profileicons.normal);
