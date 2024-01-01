@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {
@@ -27,7 +26,7 @@ namespace legallead.permissions.api.Utility
             return string.IsNullOrWhiteSpace(roleName) ? fallbackName : roleName;
         }
 
-        public async Task<GetContactResponse[]> GetContactDetail(User? user, string responseType)
+        public async Task<GetContactResponse[]?> GetContactDetail(User? user, string responseType)
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
@@ -50,33 +49,29 @@ namespace legallead.permissions.api.Utility
         public async Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);
-            if (!updated.Key || user == null) return new KeyValuePair<bool, string>(false, "Error occurred updating user profile.");
-            await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.UserAddressDetailChanged);
-            return new KeyValuePair<bool, string>(true, "Contact Address details updated successfully.");
+            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserAddressDetailChanged);
+            return response;
         }
 
         public async Task<KeyValuePair<bool, string>> ChangeContactEmail(User? user, ChangeContactEmailRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);
-            if (!updated.Key || user == null) return new KeyValuePair<bool, string>(false, "Error occurred updating user profile.");
-            await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
-            return new KeyValuePair<bool, string>(true, "Contact Email details updated successfully.");
+            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
+            return response;
         }
 
         public async Task<KeyValuePair<bool, string>> ChangeContactName(User? user, ChangeContactNameRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);
-            if (!updated.Key || user == null) return new KeyValuePair<bool, string>(false, "Error occurred updating user profile.");
-            await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
-            return new KeyValuePair<bool, string>(true, "Contact Name details updated successfully.");
+            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserContactNameChanged);
+            return response;
         }
 
         public async Task<KeyValuePair<bool, string>> ChangeContactPhone(User? user, ChangeContactPhoneRequest[] request)
         {
             var updated = await ChangeContact(_db, mapper, user, request);
-            if (!updated.Key || user == null) return new KeyValuePair<bool, string>(false, "Error occurred updating user profile.");
-            await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
-            return new KeyValuePair<bool, string>(true, "Contact Phone details updated successfully.");
+            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserPhoneNumberChanged);
+            return response;
         }
 
         private static async Task<KeyValuePair<bool, string>> ChangeContact(IDataProvider db, IMapper mapper, User? user, object request)
@@ -87,20 +82,41 @@ namespace legallead.permissions.api.Utility
             var updates = new List<UserProfile>();
             requests.ForEach(r =>
             {
-                r.KeyName ??= string.Empty;
-                var found = current.FirstOrDefault(c => (c.KeyName ?? "").Equals(r.KeyName));
-                found ??= current.FirstOrDefault(c => (c.KeyName ?? "").StartsWith(r.KeyName));
-                if (found != null)
-                {
-                    found.KeyValue = r.KeyValue;
-                    updates.Add(mapper.Map<UserProfile>(found));
-                }
+                ChangeContactInternal(mapper, r, current, updates);
             });
             var updated = ApplyProfileChanges(db, updates);
             if (!updated) return new KeyValuePair<bool, string>(false, "Error occurred updating user profile.");
             return new KeyValuePair<bool, string>(true, "update completed.");
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public members.")]
+        private static void ChangeContactInternal(IMapper mapper, UserProfileView r, IEnumerable<UserProfileView> current, List<UserProfile> updates)
+        {
+            r.KeyName ??= string.Empty;
+            var found = current.FirstOrDefault(c => (c.KeyName ?? "").Equals(r.KeyName));
+            found ??= current.FirstOrDefault(c => (c.KeyName ?? "").StartsWith(r.KeyName));
+            if (found != null)
+            {
+                found.KeyValue = r.KeyValue;
+                updates.Add(mapper.Map<UserProfile>(found));
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public members.")]
+        private static async Task<KeyValuePair<bool, string>> CreateSnapshotInternal(
+            IDataProvider db,
+            KeyValuePair<bool, string> updated,
+            User? user,
+            jdbc.ProfileChangeTypes changeType)
+        {
+            const string errorMessage = "Error occurred updating user profile.";
+            const string message = "Contact details updated successfully.";
+            if (!updated.Key || user == null) return new KeyValuePair<bool, string>(false, errorMessage);
+            await db.ProfileHistoryDb.CreateSnapshot(user, changeType);
+            return new KeyValuePair<bool, string>(true, message);
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public members.")]
         private static bool ApplyProfileChanges(IDataProvider db, List<UserProfile> source)
         {
             try

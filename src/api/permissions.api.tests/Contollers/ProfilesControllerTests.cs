@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
+using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,8 @@ namespace permissions.api.tests.Contollers
 {
     public class ProfilesControllerTests
     {
+        private static string[] RoleNames = "Admin,Platinum,Gold,Silver,Guest".Split(',');
+
         private static readonly Faker<User> userFaker =
             new Faker<User>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
@@ -37,6 +40,95 @@ namespace permissions.api.tests.Contollers
                 _ = provider.GetRequiredService<ProfilesController>();
             });
             Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task ControllerCanGetContactIdentity()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            var user = provider.GetRequiredService<User>();
+            var roleName = new Faker().PickRandom(RoleNames);
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdentity();
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task ControllerGetContactIdentityWithNullUser()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            User? user = default;
+            var roleName = new Faker().PickRandom(RoleNames);
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdentity();
+            Assert.NotNull(response);
+            Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task ControllerCanGetContactDetail()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            var user = provider.GetRequiredService<User>();
+            var contactResponse = GetResponse();
+            var request = new GetContactRequest();
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetail(request);
+            Assert.NotNull(response);
+            Assert.IsAssignableFrom<OkObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task ControllerGetContactDetailWithoutUserIsUnauthorized()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            User? user = default;
+            var contactResponse = GetResponse();
+            var request = new GetContactRequest();
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetail(request);
+            Assert.NotNull(response);
+            Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task ControllerGetContactDetailWithoutDetailIsConflict()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            var user = provider.GetRequiredService<User>();
+            GetContactResponse[]? contactResponse = default;
+            var request = new GetContactRequest();
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetail(request);
+            Assert.NotNull(response);
+            Assert.IsAssignableFrom<ConflictObjectResult>(response);
+        }
+
+        private static GetContactResponse[] GetResponse()
+        {
+            var profile = GetProfile();
+            var mapper = ModelMapper.Mapper;
+            return mapper.Map<GetContactResponse[]>(profile);
         }
 
         private static UserProfileView[] GetProfile()
@@ -85,17 +177,14 @@ namespace permissions.api.tests.Contollers
             collection.AddSingleton(m => new Mock<IUserProfileRepository>());
             collection.AddSingleton(m => new Mock<IUserProfileViewRepository>());
             collection.AddSingleton(m => new Mock<IUserProfileHistoryRepository>());
+            collection.AddSingleton(m => new Mock<IProfileInfrastructure>());
             collection.AddSingleton(m => m.GetRequiredService<Mock<IDataProvider>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileRepository>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileViewRepository>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileHistoryRepository>>().Object);
             collection.AddSingleton(m => GetProfile());
             collection.AddSingleton(m => userFaker.Generate());
-            collection.AddSingleton<IProfileInfrastructure>(m =>
-            {
-                var db = m.GetRequiredService<IDataProvider>();
-                return new ProfileInfrastructure(db);
-            });
+            collection.AddSingleton(m => m.GetRequiredService<Mock<IProfileInfrastructure>>().Object);
             collection.AddSingleton(m =>
             {
                 var db = m.GetRequiredService<IProfileInfrastructure>();

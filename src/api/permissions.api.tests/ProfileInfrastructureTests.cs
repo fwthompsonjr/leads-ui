@@ -27,6 +27,15 @@ namespace permissions.api.tests
             .RuleFor(x => x.KeyValue, y => y.Random.AlphaNumeric(50))
             .RuleFor(x => x.KeyName, y => y.Random.AlphaNumeric(25));
 
+        private static readonly Faker<UserPermissionView> permissionFaker =
+            new Faker<UserPermissionView>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.PermissionMapId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.KeyValue, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.KeyName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.OrderId, y => y.Random.Int(5, 25055));
+
         [Fact]
         public void ProfileCanBeCreated()
         {
@@ -44,6 +53,65 @@ namespace permissions.api.tests
             var item = response[0];
             Assert.Equal("Error", item.ResponseType);
             Assert.Equal("Unable to retrieve user detail", item.Message);
+        }
+
+        [Fact]
+        public async Task ProfileGetContactRoleNoUser()
+        {
+            User? user = null;
+            var service = GetInfrastructure();
+            var response = await service.GetContactRole(user);
+            Assert.NotNull(response);
+            Assert.Equal("Guest", response);
+        }
+
+        [Theory]
+        [InlineData("Guest")]
+        [InlineData("Admin")]
+        [InlineData("Platinum")]
+        [InlineData("Gold")]
+        [InlineData("Silver")]
+        public async Task ProfileGetContactRole(string roleName)
+        {
+            var provider = GetTestArtifacts();
+            var service = provider.GetRequiredService<IProfileInfrastructure>();
+            var db = provider.GetRequiredService<Mock<IUserPermissionViewRepository>>();
+            var user = provider.GetRequiredService<User>();
+            var permissions = GetPermissions(roleName);
+            db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
+            var response = await service.GetContactRole(user);
+            Assert.NotNull(response);
+            Assert.Equal(roleName, response);
+        }
+
+        [Fact]
+        public async Task ProfileGetContactWithRoleMissingReturnsDefault()
+        {
+            const string permissionName = "Account.Permission.Level";
+            var provider = GetTestArtifacts();
+            var service = provider.GetRequiredService<IProfileInfrastructure>();
+            var db = provider.GetRequiredService<Mock<IUserPermissionViewRepository>>();
+            var user = provider.GetRequiredService<User>();
+            var permissions = GetPermissions("").ToList();
+            permissions.RemoveAll(a => a.KeyName.Equals(permissionName));
+            db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
+            var response = await service.GetContactRole(user);
+            Assert.NotNull(response);
+            Assert.Equal("Guest", response);
+        }
+
+        [Fact]
+        public async Task ProfileGetContactWithRoleEmptyReturnsDefault()
+        {
+            var provider = GetTestArtifacts();
+            var service = provider.GetRequiredService<IProfileInfrastructure>();
+            var db = provider.GetRequiredService<Mock<IUserPermissionViewRepository>>();
+            var user = provider.GetRequiredService<User>();
+            var permissions = GetPermissions("").ToList();
+            db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
+            var response = await service.GetContactRole(user);
+            Assert.NotNull(response);
+            Assert.Equal("Guest", response);
         }
 
         [Fact]
@@ -156,6 +224,30 @@ namespace permissions.api.tests
             return change ?? new();
         }
 
+        private static UserPermissionView[] GetPermissions(string levelName)
+        {
+            var fieldNames = new[]
+            {
+                "Account.Permission.Level",
+                "Account.IsPrimary",
+                "Account.Linked.Accounts",
+                "Setting.State.County.Subscriptions",
+                "Setting.State.County.Subscriptions.Active",
+                "Setting.State.Subscriptions",
+                "Setting.State.Subscriptions.Active",
+                "User.State.County.Discount",
+                "User.State.Discount"
+            };
+            var list = permissionFaker.Generate(fieldNames.Length);
+            list.ForEach(a =>
+            {
+                var indx = list.IndexOf(a);
+                a.KeyName = fieldNames[indx];
+                if (indx == 0) { a.KeyValue = levelName; }
+            });
+            return list.ToArray();
+        }
+
         private static UserProfileView[] GetProfile()
         {
             var fieldNames = new[]
@@ -196,10 +288,12 @@ namespace permissions.api.tests
             collection.AddSingleton(m => new Mock<IUserProfileRepository>());
             collection.AddSingleton(m => new Mock<IUserProfileViewRepository>());
             collection.AddSingleton(m => new Mock<IUserProfileHistoryRepository>());
+            collection.AddSingleton(m => new Mock<IUserPermissionViewRepository>());
             collection.AddSingleton(m => m.GetRequiredService<Mock<IDataProvider>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileRepository>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileViewRepository>>().Object);
             collection.AddSingleton(m => m.GetRequiredService<Mock<IUserProfileHistoryRepository>>().Object);
+            collection.AddSingleton(m => m.GetRequiredService<Mock<IUserPermissionViewRepository>>().Object);
             collection.AddSingleton(m => GetProfile());
             collection.AddSingleton(m => userFaker.Generate());
             collection.AddSingleton<IProfileInfrastructure>(m =>
@@ -213,11 +307,13 @@ namespace permissions.api.tests
             var profileHistoryDb = provider.GetRequiredService<IUserProfileHistoryRepository>();
             var userProfileDb = provider.GetRequiredService<IUserProfileRepository>();
             var userProfileVwMock = provider.GetRequiredService<Mock<IUserProfileViewRepository>>();
+            var userPermissionVwMock = provider.GetRequiredService<Mock<IUserPermissionViewRepository>>();
             var profile = provider.GetRequiredService<UserProfileView[]>();
             userProfileVwMock.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(profile);
             dataProvider.SetupGet(m => m.UserProfileVw).Returns(userProfileVw);
             dataProvider.SetupGet(m => m.ProfileHistoryDb).Returns(profileHistoryDb);
             dataProvider.SetupGet(m => m.UserProfileDb).Returns(userProfileDb);
+            dataProvider.SetupGet(m => m.UserPermissionVw).Returns(userPermissionVwMock.Object);
             return provider;
         }
     }

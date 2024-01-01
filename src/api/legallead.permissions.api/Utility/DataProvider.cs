@@ -47,18 +47,18 @@ namespace legallead.permissions.api
             _profileHistoryDb = profileHistoryDb;
         }
 
-        internal IComponentRepository ComponentDb => _componentDb;
-        internal IPermissionMapRepository PermissionDb => _permissionDb;
-        internal IProfileMapRepository ProfileDb => _profileDb;
-        internal IUserPermissionRepository UserPermissionDb => _userPermissionDb;
-        internal IUserTokenRepository UserTokenDb => _userTokenDb;
-        internal IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
-        internal IUserRepository UserDb => _userDb;
+        public virtual IComponentRepository ComponentDb => _componentDb;
+        public virtual IPermissionMapRepository PermissionDb => _permissionDb;
+        public virtual IProfileMapRepository ProfileDb => _profileDb;
+        public virtual IUserPermissionRepository UserPermissionDb => _userPermissionDb;
+        public virtual IUserTokenRepository UserTokenDb => _userTokenDb;
+        public virtual IPermissionGroupRepository PermissionGroupDb => _permissionGroupDb;
         public virtual IUserPermissionViewRepository UserPermissionVw => _userPermissionVw;
         public virtual IUserProfileRepository UserProfileDb => _userProfileDb;
         public virtual IUserProfileViewRepository UserProfileVw => _userProfileVw;
         public virtual IUserPermissionHistoryRepository PermissionHistoryDb => _permissionHistoryDb;
         public virtual IUserProfileHistoryRepository ProfileHistoryDb => _profileHistoryDb;
+        public virtual IUserRepository UserDb => _userDb;
 
         public virtual async Task<bool> InitializeProfile(User user)
         {

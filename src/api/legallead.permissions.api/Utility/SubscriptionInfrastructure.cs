@@ -41,16 +41,12 @@ namespace legallead.permissions.api.Utility
 
         public async Task<User?> GetUser(HttpRequest request)
         {
-            if (_db is not DataProvider db)
-                throw new ArgumentOutOfRangeException(nameof(request));
-            return await request.GetUser(db);
+            return await request.GetUser(_db);
         }
 
         public async Task<bool> IsAdminUser(HttpRequest request)
         {
-            if (_db is not DataProvider db)
-                throw new ArgumentOutOfRangeException(nameof(request));
-            return await request.IsAdminUser(db);
+            return await request.IsAdminUser(_db);
         }
 
         public async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
