@@ -316,7 +316,11 @@ namespace legallead.permissions.api
 
         private static List<KeyValuePair<bool, UsState>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsState>> dest)
         {
-            foreach (var request in source.Choices)
+            dest ??= new();
+            var choices = source.Choices.Where(s =>
+                string.IsNullOrEmpty(s.CountyName) &&
+                !string.IsNullOrEmpty(s.StateName));
+            foreach (var request in choices)
             {
                 var item = request.ToState();
                 if (item == null || !item.IsActive) continue;
@@ -327,7 +331,11 @@ namespace legallead.permissions.api
 
         private static List<KeyValuePair<bool, UsStateCounty>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsStateCounty>> dest)
         {
-            foreach (var request in source.Choices)
+            dest ??= new();
+            var choices = source.Choices.Where(s =>
+                !string.IsNullOrEmpty(s.CountyName) &&
+                !string.IsNullOrEmpty(s.StateName));
+            foreach (var request in choices)
             {
                 var item = request.ToCounty();
                 if (item == null || !item.IsActive) continue;

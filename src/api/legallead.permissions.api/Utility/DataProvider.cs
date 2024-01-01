@@ -140,13 +140,13 @@ namespace legallead.permissions.api
         {
             try
             {
-                const string search = ".State.Subscriptions";
+                const string search = "State.Discount.Pricing";
                 var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
                 var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
                 if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
                 if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
-                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode} not defined.");
+                if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode}' not defined.");
                 var settings = new Dictionary<string, string>()
                 {
                     { "Setting.State.Subscriptions", stateCode },
@@ -187,7 +187,7 @@ namespace legallead.permissions.api
                     var removal = RemoveDiscounts(user, permissions, "State");
                     if (!removal.Key) return removal;
                 }
-                return new KeyValuePair<bool, string>(true, $"Group settings for '{stateCode}' applied to user: {user.UserName}.");
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{stateCode}' removed from user: {user.UserName}.");
             }
             catch (Exception)
             {
@@ -199,7 +199,7 @@ namespace legallead.permissions.api
         {
             try
             {
-                const string search = ".County.";
+                const string search = "County.Discount.Pricing";
                 var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
                 var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
                 if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
@@ -215,7 +215,7 @@ namespace legallead.permissions.api
                 if (!changes.Key) return changes;
                 var discounts = ApplyDiscounts(user, permissions, groups, "County");
                 if (!discounts.Key) return discounts;
-                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}' applied to user: {user.UserName}.");
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}, {countyCode.StateCode}' applied to user: {user.UserName}.");
             }
             catch (Exception)
             {
@@ -227,7 +227,7 @@ namespace legallead.permissions.api
         {
             try
             {
-                const string search = ".County.";
+                const string search = "County.Discount.Pricing";
                 var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
                 var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
                 if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
@@ -246,7 +246,7 @@ namespace legallead.permissions.api
                     var removal = RemoveDiscounts(user, permissions, "County");
                     if (!removal.Key) return removal;
                 }
-                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}' applied to user: {user.UserName}.");
+                return new KeyValuePair<bool, string>(true, $"Group settings for '{countyCode.Name}, {countyCode.StateCode}' removed from user: {user.UserName}.");
             }
             catch (Exception)
             {

@@ -1,4 +1,5 @@
-﻿using legallead.json.db.entity;
+﻿using legallead.jdbc.entities;
+using legallead.json.db.entity;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,17 +32,17 @@ namespace legallead.permissions.api.Controllers
             if (user == null) { return Unauthorized("Invalid user account."); }
             var statelist = ModelMapper.Mapper.Map<List<KeyValuePair<bool, UsState>>>(request);
 
-            List<IActionResult> list = ProcessStateDiscounts(statelist);
+            List<IActionResult> list = ProcessStateDiscounts(user, statelist);
             var failed = list.Find(a => a is not OkObjectResult);
             if (failed != null) return failed;
 
             var countylist = ModelMapper.Mapper.Map<List<KeyValuePair<bool, UsStateCounty>>>(request);
-            list = ProcessCountyDiscounts(countylist);
-            var success = list.Find(a => a is OkObjectResult);
+            list.AddRange(ProcessCountyDiscounts(user, countylist));
+            var success = list.FindAll(a => a is OkObjectResult);
             failed = list.Find(a => a is not OkObjectResult);
 
             if (failed != null) return failed;
-            if (success != null) { return success; }
+            if (success != null && success.Any()) { return Consolidate(success); }
             return Conflict("Unexpected error during account processing");
         }
 
@@ -70,16 +71,8 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        protected virtual async Task<IActionResult> AddCountySubscriptions(CountySubscriptionRequest request)
+        protected virtual async Task<IActionResult> AddCountySubscriptions(User user, CountySubscriptionRequest request)
         {
-            var user = await _db.GetUser(Request);
-            if (user == null) { return Unauthorized("Invalid user account."); }
-            var validation = request.Validate(out var isValid);
-            if (!isValid && validation != null)
-            {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(messages);
-            }
             var stateId = _db.FindState(request.State);
             if (stateId == null)
             {
@@ -99,16 +92,8 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        protected virtual async Task<IActionResult> AddStateSubscriptions(StateSubscriptionRequest request)
+        protected virtual async Task<IActionResult> AddStateSubscriptions(User user, StateSubscriptionRequest request)
         {
-            var user = await _db.GetUser(Request);
-            if (user == null) { return Unauthorized("Invalid user account."); }
-            var validation = request.Validate(out var isValid);
-            if (!isValid && validation != null)
-            {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(messages);
-            }
             var stateId = _db.FindState(request.Name);
             if (stateId == null || string.IsNullOrEmpty(stateId.ShortName))
             {
@@ -122,16 +107,8 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        protected virtual async Task<IActionResult> RemoveStateSubscriptions(StateSubscriptionRequest request)
+        protected virtual async Task<IActionResult> RemoveStateSubscriptions(User user, StateSubscriptionRequest request)
         {
-            var user = await _db.GetUser(Request);
-            if (user == null) { return Unauthorized("Invalid user account."); }
-            var validation = request.Validate(out var isValid);
-            if (!isValid && validation != null)
-            {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(messages);
-            }
             var stateId = _db.FindState(request.Name);
             if (stateId == null || string.IsNullOrEmpty(stateId.ShortName))
             {
@@ -145,16 +122,8 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        protected virtual async Task<IActionResult> RemoveCountySubscriptions(CountySubscriptionRequest request)
+        protected virtual async Task<IActionResult> RemoveCountySubscriptions(User user, CountySubscriptionRequest request)
         {
-            var user = await _db.GetUser(Request);
-            if (user == null) { return Unauthorized("Invalid user account."); }
-            var validation = request.Validate(out var isValid);
-            if (!isValid && validation != null)
-            {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(messages);
-            }
             var stateId = _db.FindState(request.State);
             if (stateId == null)
             {
@@ -174,49 +143,72 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        private List<IActionResult> ProcessStateDiscounts(List<KeyValuePair<bool, UsState>> statelist)
+        private List<IActionResult> ProcessStateDiscounts(User user, List<KeyValuePair<bool, UsState>> statelist)
         {
             List<IActionResult> list = new();
-            statelist.ForEach(async st =>
+            statelist.ForEach(st =>
             {
-                IActionResult? stateResult;
-                var stateRequest = new StateSubscriptionRequest { Name = st.Value.Name };
-                if (st.Key)
+                var failed = list.Find(a => a is not OkObjectResult);
+                if (failed == null)
                 {
-                    stateResult = await AddStateSubscriptions(stateRequest);
+                    IActionResult? stateResult;
+                    var stateRequest = new StateSubscriptionRequest { Name = st.Value.Name };
+                    if (st.Key)
+                    {
+                        stateResult = AddStateSubscriptions(user, stateRequest).Result;
+                    }
+                    else
+                    {
+                        stateResult = RemoveStateSubscriptions(user, stateRequest).Result;
+                    }
+                    if (stateResult != null) { list.Add(stateResult); }
                 }
-                else
-                {
-                    stateResult = await RemoveStateSubscriptions(stateRequest);
-                }
-                if (stateResult != null) { list.Add(stateResult); }
             });
             return list;
         }
 
-        private List<IActionResult> ProcessCountyDiscounts(List<KeyValuePair<bool, UsStateCounty>> countylist)
+        private List<IActionResult> ProcessCountyDiscounts(User user, List<KeyValuePair<bool, UsStateCounty>> countylist)
         {
             List<IActionResult> list = new();
-            countylist.ForEach(async c =>
+            countylist.ForEach(c =>
             {
-                IActionResult? countyResult;
-                var county = c.Value;
-                var countyRequest = new CountySubscriptionRequest
+                var failed = list.Find(a => a is not OkObjectResult);
+                if (failed == null)
                 {
-                    County = county.Name,
-                    State = county.StateCode
-                };
-                if (c.Key)
-                {
-                    countyResult = await AddCountySubscriptions(countyRequest);
+                    IActionResult? countyResult;
+                    var county = c.Value;
+                    var countyRequest = new CountySubscriptionRequest
+                    {
+                        County = county.Name,
+                        State = county.StateCode
+                    };
+                    if (c.Key)
+                    {
+                        countyResult = AddCountySubscriptions(user, countyRequest).Result;
+                    }
+                    else
+                    {
+                        countyResult = RemoveCountySubscriptions(user, countyRequest).Result;
+                    }
+                    if (countyResult != null) { list.Add(countyResult); }
                 }
-                else
-                {
-                    countyResult = await RemoveCountySubscriptions(countyRequest);
-                }
-                if (countyResult != null) { list.Add(countyResult); }
             });
             return list;
+        }
+
+        private static OkObjectResult Consolidate(List<IActionResult> results)
+        {
+            var messages = new List<string>();
+            foreach (var result in results)
+            {
+                if (result is OkObjectResult result1)
+                {
+                    var msg = Convert.ToString(result1.Value);
+                    if (!string.IsNullOrEmpty(msg))
+                        messages.Add(msg);
+                }
+            }
+            return new(messages);
         }
     }
 }
