@@ -1,9 +1,12 @@
-﻿using legallead.permissions.api.Model;
+﻿using legallead.json.db.entity;
+using legallead.permissions.api.Model;
 
 namespace permissions.api.tests.Models
 {
     public class ChangeDiscountRequestTests
     {
+        private static readonly object locker = new();
+
         private readonly Faker<ChangeDiscountRequest> choiceFaker =
             new Faker<ChangeDiscountRequest>()
             .RuleFor(x => x.Choices, y => faker.Generate(y.Random.Int(1, 5)));
@@ -13,6 +16,15 @@ namespace permissions.api.tests.Models
             .RuleFor(x => x.IsSelected, y => y.Random.Bool())
             .RuleFor(x => x.StateName, y => y.Company.CompanyName())
             .RuleFor(x => x.CountyName, y => y.Company.CompanyName());
+
+        public ChangeDiscountRequestTests()
+        {
+            lock (locker)
+            {
+                UsState.Initialize();
+                UsStateCounty.Initialize();
+            }
+        }
 
         [Fact]
         public void RequestCanBeCreated()
@@ -64,6 +76,36 @@ namespace permissions.api.tests.Models
             var items = choiceFaker.Generate(2);
             items[0].Choices = items[1].Choices;
             Assert.Equal(items[1].Choices, items[0].Choices);
+        }
+
+        [Theory]
+        [InlineData("TX", true)]
+        [InlineData("texas", true)]
+        [InlineData("not-a-state-name", false)]
+        [InlineData("CA", true)]
+        [InlineData("", false)]
+        public void DiscountChoiceCanConvertToState(string stateName, bool expected)
+        {
+            var item = faker.Generate();
+            item.StateName = stateName;
+            var converted = item.ToState();
+            if (expected) Assert.NotNull(converted);
+            else Assert.Null(converted);
+        }
+
+        [Theory]
+        [InlineData("TX", "Collin", true)]
+        [InlineData("texas", "Denton", true)]
+        [InlineData("TX", "not-a-name", false)]
+        [InlineData("CA", "Collin", false)]
+        public void DiscountChoiceCanConvertToCounty(string stateName, string county, bool expected)
+        {
+            var item = faker.Generate();
+            item.StateName = stateName;
+            item.CountyName = county;
+            var converted = item.ToCounty();
+            if (expected) Assert.NotNull(converted);
+            else Assert.Null(converted);
         }
     }
 }

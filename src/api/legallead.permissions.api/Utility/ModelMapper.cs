@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
+using legallead.json.db.entity;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
 using Newtonsoft.Json;
@@ -76,6 +77,12 @@ namespace legallead.permissions.api
                     .ConvertUsing(ConvertTo);
 
                 c.CreateMap<ChangeContactNameRequest[], UserProfileView[]>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeDiscountRequest, List<KeyValuePair<bool, UsState>>>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<ChangeDiscountRequest, List<KeyValuePair<bool, UsStateCounty>>>()
                     .ConvertUsing(ConvertTo);
             });
         }
@@ -304,6 +311,28 @@ namespace legallead.permissions.api
             dest.ResponseType = "Phone";
             dest.Data = JsonConvert.SerializeObject(source);
             dest.Message = "Mapping completed";
+            return dest;
+        }
+
+        private static List<KeyValuePair<bool, UsState>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsState>> dest)
+        {
+            foreach (var request in source.Choices)
+            {
+                var item = request.ToState();
+                if (item == null || !item.IsActive) continue;
+                dest.Add(new KeyValuePair<bool, UsState>(request.IsSelected, item));
+            }
+            return dest;
+        }
+
+        private static List<KeyValuePair<bool, UsStateCounty>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsStateCounty>> dest)
+        {
+            foreach (var request in source.Choices)
+            {
+                var item = request.ToCounty();
+                if (item == null || !item.IsActive) continue;
+                dest.Add(new KeyValuePair<bool, UsStateCounty>(request.IsSelected, item));
+            }
             return dest;
         }
 

@@ -4,6 +4,7 @@ namespace legallead.json.db.entity
 {
     public class UsStateCounty
     {
+        private static readonly object locker = new();
         public string? Name { get; set; }
         public int Index { get; set; }
         public string? StateCode { get; set; }
@@ -12,11 +13,17 @@ namespace legallead.json.db.entity
 
         public static void Initialize()
         {
-            var tmp = GetList;
-            var list = JsonConvert.DeserializeObject<List<UsStateCounty>>(tmp) ?? new();
-            UsStateCountyList.Populate(list);
+            lock (locker)
+            {
+                if (IsInitialized) return;
+                var tmp = GetList;
+                var list = JsonConvert.DeserializeObject<List<UsStateCounty>>(tmp) ?? new();
+                UsStateCountyList.Populate(list);
+                IsInitialized = true;
+            }
         }
 
+        private static bool IsInitialized;
         private static string? _list;
 
         private static string GetList

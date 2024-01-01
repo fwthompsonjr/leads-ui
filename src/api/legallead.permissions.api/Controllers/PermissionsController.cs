@@ -1,4 +1,5 @@
-﻿using legallead.permissions.api.Model;
+﻿using legallead.json.db.entity;
+using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,16 +10,67 @@ namespace legallead.permissions.api.Controllers
     [Authorize]
     public class PermissionsController : ControllerBase
     {
+        private static readonly object locker = new();
         private readonly ISubscriptionInfrastructure _db;
 
         public PermissionsController(ISubscriptionInfrastructure db)
         {
             _db = db;
+            lock (locker)
+            {
+                UsState.Initialize();
+                UsStateCounty.Initialize();
+            }
         }
 
         [HttpPost]
-        [Route("add-county-subscription")]
-        public async Task<IActionResult> AddCountySubscriptions(CountySubscriptionRequest request)
+        [Route("set-discount")]
+        public async Task<IActionResult> SetDiscount(ChangeDiscountRequest request)
+        {
+            var user = await _db.GetUser(Request);
+            if (user == null) { return Unauthorized("Invalid user account."); }
+            var statelist = ModelMapper.Mapper.Map<List<KeyValuePair<bool, UsState>>>(request);
+
+            List<IActionResult> list = ProcessStateDiscounts(statelist);
+            var failed = list.Find(a => a is not OkObjectResult);
+            if (failed != null) return failed;
+
+            var countylist = ModelMapper.Mapper.Map<List<KeyValuePair<bool, UsStateCounty>>>(request);
+            list = ProcessCountyDiscounts(countylist);
+            var success = list.Find(a => a is OkObjectResult);
+            failed = list.Find(a => a is not OkObjectResult);
+
+            if (failed != null) return failed;
+            if (success != null) { return success; }
+            return Conflict("Unexpected error during account processing");
+        }
+
+        [HttpPost]
+        [Route("set-permission")]
+        public async Task<IActionResult> SetPermissionLevel(UserLevelRequest permissionLevel)
+        {
+            var user = await _db.GetUser(Request);
+            if (user == null) { return Unauthorized("Invalid user account."); }
+            var validation = permissionLevel.Validate(out var isValid);
+            if (!isValid && validation != null)
+            {
+                var messages = validation.Select(x => x.ErrorMessage).ToList();
+                return BadRequest(messages);
+            }
+            var isAdmin = await _db.IsAdminUser(Request);
+            if (!isAdmin && permissionLevel.Level.Equals("admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return Unauthorized(permissionLevel);
+            }
+            var response = await _db.SetPermissionGroup(user, permissionLevel.Level);
+
+            if (response.Key)
+                return Ok(response);
+
+            return Conflict(response);
+        }
+
+        protected virtual async Task<IActionResult> AddCountySubscriptions(CountySubscriptionRequest request)
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
@@ -47,9 +99,7 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        [HttpPost]
-        [Route("add-state-subscription")]
-        public async Task<IActionResult> AddStateSubscriptions(StateSubscriptionRequest request)
+        protected virtual async Task<IActionResult> AddStateSubscriptions(StateSubscriptionRequest request)
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
@@ -72,9 +122,7 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        [HttpPost]
-        [Route("remove-state-subscription")]
-        public async Task<IActionResult> RemoveStateSubscriptions(StateSubscriptionRequest request)
+        protected virtual async Task<IActionResult> RemoveStateSubscriptions(StateSubscriptionRequest request)
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
@@ -97,9 +145,7 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        [HttpPost]
-        [Route("remove-county-subscription")]
-        public async Task<IActionResult> RemoveCountySubscriptions(CountySubscriptionRequest request)
+        protected virtual async Task<IActionResult> RemoveCountySubscriptions(CountySubscriptionRequest request)
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
@@ -128,29 +174,49 @@ namespace legallead.permissions.api.Controllers
             return Conflict(response);
         }
 
-        [HttpPost]
-        [Route("set-permission")]
-        public async Task<IActionResult> SetPermissionLevel(UserLevelRequest permissionLevel)
+        private List<IActionResult> ProcessStateDiscounts(List<KeyValuePair<bool, UsState>> statelist)
         {
-            var user = await _db.GetUser(Request);
-            if (user == null) { return Unauthorized("Invalid user account."); }
-            var validation = permissionLevel.Validate(out var isValid);
-            if (!isValid && validation != null)
+            List<IActionResult> list = new();
+            statelist.ForEach(async st =>
             {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                return BadRequest(messages);
-            }
-            var isAdmin = await _db.IsAdminUser(Request);
-            if (!isAdmin && permissionLevel.Level.Equals("admin", StringComparison.OrdinalIgnoreCase))
+                IActionResult? stateResult;
+                var stateRequest = new StateSubscriptionRequest { Name = st.Value.Name };
+                if (st.Key)
+                {
+                    stateResult = await AddStateSubscriptions(stateRequest);
+                }
+                else
+                {
+                    stateResult = await RemoveStateSubscriptions(stateRequest);
+                }
+                if (stateResult != null) { list.Add(stateResult); }
+            });
+            return list;
+        }
+
+        private List<IActionResult> ProcessCountyDiscounts(List<KeyValuePair<bool, UsStateCounty>> countylist)
+        {
+            List<IActionResult> list = new();
+            countylist.ForEach(async c =>
             {
-                return Unauthorized(permissionLevel);
-            }
-            var response = await _db.SetPermissionGroup(user, permissionLevel.Level);
-
-            if (response.Key)
-                return Ok(response);
-
-            return Conflict(response);
+                IActionResult? countyResult;
+                var county = c.Value;
+                var countyRequest = new CountySubscriptionRequest
+                {
+                    County = county.Name,
+                    State = county.StateCode
+                };
+                if (c.Key)
+                {
+                    countyResult = await AddCountySubscriptions(countyRequest);
+                }
+                else
+                {
+                    countyResult = await RemoveCountySubscriptions(countyRequest);
+                }
+                if (countyResult != null) { list.Add(countyResult); }
+            });
+            return list;
         }
     }
 }
