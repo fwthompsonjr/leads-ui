@@ -3,7 +3,10 @@ using legallead.desktop.interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows.Documents;
 
 namespace legallead.desktop.utilities
 {
@@ -28,7 +31,7 @@ namespace legallead.desktop.utilities
             }
             if (string.IsNullOrEmpty(PermissionApiBase))
             {
-                PermissionApiBase = Configuration["Permissions_API"] ?? string.Empty;
+                PermissionApiBase = GetPermissionApi(Configuration);
             }
             if (string.IsNullOrEmpty(InitialViewName))
             {
@@ -40,6 +43,23 @@ namespace legallead.desktop.utilities
                 ConfigureServices(serviceCollection);
                 ServiceProvider = serviceCollection.BuildServiceProvider();
             }
+        }
+
+        private static string GetPermissionApi(IConfiguration configuration)
+        {
+            var keys = new[] {
+              "Permissions_API",
+              "api.permissions:destination",
+              "api.permissions:remote",
+              "api.permissions:local" }.ToList();
+            var keyvalues = new List<string> { };
+            foreach (var item in keys)
+            {
+                var value = configuration[item] ?? string.Empty;
+                keyvalues.Add(value);
+            }
+            if (string.IsNullOrEmpty(keyvalues[1])) return keyvalues[0];
+            return keyvalues[1] == "local" ? keyvalues[3] : keyvalues[2];
         }
 
         private static void ConfigureServices(IServiceCollection services)
