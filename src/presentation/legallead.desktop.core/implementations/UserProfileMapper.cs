@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.XPath;
 
 namespace legallead.desktop.implementations
@@ -51,34 +52,6 @@ namespace legallead.desktop.implementations
                 }
             }
             return document.DocumentNode.OuterHtml;
-        }
-
-        private static bool IsValidXPath(string xpath)
-        {
-            if (string.IsNullOrEmpty(xpath)) return false;
-            try
-            {
-                XPathExpression.Compile(xpath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static HtmlDocument? GetDocument(string source)
-        {
-            try
-            {
-                var document = new HtmlDocument();
-                document.LoadHtml(source);
-                return document;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         private static async Task<ContactIdentity> GetIdentity(IPermissionApi api, UserBo user)
@@ -136,6 +109,7 @@ namespace legallead.desktop.implementations
             return list;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member to be tested from public method")]
         private static string GetProfileItem(List<ContactProfileItem> profile, string category, string code)
         {
             const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
@@ -143,6 +117,36 @@ namespace legallead.desktop.implementations
                 x.Code.Equals(code, comparison));
             if (item == null) return string.Empty;
             return item.Data.Trim();
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member to be tested from public method")]
+        private static bool IsValidXPath(string xpath)
+        {
+            if (string.IsNullOrEmpty(xpath)) return false;
+            try
+            {
+                XPathExpression.Compile(xpath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member to be tested from public method")]
+        private static HtmlDocument? GetDocument(string source)
+        {
+            try
+            {
+                var document = new HtmlDocument();
+                document.LoadHtml(source);
+                return document;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
