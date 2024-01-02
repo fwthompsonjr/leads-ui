@@ -1,4 +1,7 @@
 using legallead.permissions.api;
+using legallead.permissions.api.Health;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 
@@ -25,6 +28,9 @@ services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "legallead.permissions.api", Version = "v1" });
 });
 
+services.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(services));
+services.RegisterHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,7 +46,20 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+var statuscodes = new Dictionary<HealthStatus, int>()
+{
+    [HealthStatus.Healthy] = StatusCodes.Status200OK,
+    [HealthStatus.Degraded] = StatusCodes.Status200OK,
+    [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+};
+var health = new HealthCheckOptions { ResultStatusCodes = statuscodes };
+var details = new HealthCheckOptions
+{
+    ResultStatusCodes = statuscodes,
+    ResponseWriter = WriteHealthResponse.WriteResponse
+};
+app.MapHealthChecks("/health", health);
+app.MapHealthChecks("/health-details", details);
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
