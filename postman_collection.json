@@ -714,6 +714,132 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.text();\r",
+									"    pm.expect(expected).to.equal(actual);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HealthDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    pm.expect(expected).to.equal(actual[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has results.\",() =>{\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"];\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Contollers result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Contollers;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Data result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Data;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has DBConnection result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].DBConnection;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Infrastructure result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Infrastructure;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Repository result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Repository;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health-details",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health-details"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
