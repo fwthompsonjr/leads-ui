@@ -60,7 +60,7 @@ jobs:
         timeout_minutes: 10
         max_attempts: 3
         shell: pwsh
-        run: |
+        command: |
           & ./pipeline-test-solutions.ps1
 
     - name: Summarize Test Results
