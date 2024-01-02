@@ -293,7 +293,41 @@ function initializeProfileFormValidation()
 			setProfileStatusMessage( err, true );
 		}
 	}
+	
+
+	function permissionsComboBoxChanged() {
+		const tilde = "~0";
+		const permissionsCombo = "#cbo-permissions-group";
+		const permissionsAreaName = "#dv-subcontent-permissions-row-~0";
+		const permissionsAreas = [ 
+			permissionsAreaName.replace(tilde, "02"), 
+			permissionsAreaName.replace(tilde, "03")
+		];
+		
+		permissionsAreas.forEach(p => { $( p ).hide(); });
+		let item = $( permissionsCombo ).val();
+		let itemName = permissionsAreaName.replace(tilde, item);
+		$( itemName ).fadeIn( 600 );
+		subscriptionLevelChanged();
+		
+	}
+
+	
+	function subscriptionLevelChanged() {
+		const paragraphName = "#subscription-description-~0"
+		var dvDescription = "#dv-permissions-subscription-description";
+		var selection = $("input[name='subscription-group']:checked").val();
+		if ( undefined === selection || null === selection || selection.length == 0 ) {
+			selection = "Guest";
+		}
+		$( dvDescription ).find("p").hide();
+		$( dvDescription ).find("p").removeClass("d-none");
+		const paragraph = paragraphName.replace( "~0", selection.toLowerCase() );
+		$( paragraph ).fadeIn( 200 );
+	}
 
 initializeProfileValidator();
 initializeProfileFormValidation();
+permissionsComboBoxChanged();
+
 </script>

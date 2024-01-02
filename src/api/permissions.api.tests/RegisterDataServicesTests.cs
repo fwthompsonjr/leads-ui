@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using legallead.logging.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using Microsoft.Extensions.Configuration;
@@ -35,9 +36,9 @@ namespace permissions.api.tests
 
         [Theory]
         [InlineData(typeof(IDataInitializer))]
-        [InlineData(typeof(IJwtManagerRepository))]
         [InlineData(typeof(IDapperCommand))]
         [InlineData(typeof(DataContext))]
+        [InlineData(typeof(IJwtManagerRepository))]
         [InlineData(typeof(IComponentRepository))]
         [InlineData(typeof(IPermissionMapRepository))]
         [InlineData(typeof(IProfileMapRepository))]
@@ -47,18 +48,20 @@ namespace permissions.api.tests
         [InlineData(typeof(IUserProfileViewRepository))]
         [InlineData(typeof(IUserPermissionViewRepository))]
         [InlineData(typeof(IPermissionGroupRepository))]
+        [InlineData(typeof(IUserPermissionHistoryRepository))]
         [InlineData(typeof(IUserRepository))]
         [InlineData(typeof(DataProvider))]
-        [InlineData(typeof(SignonController))]
-        [InlineData(typeof(PermissionsController))]
-        [InlineData(typeof(ApplicationController))]
         [InlineData(typeof(JsonInitStartupTask))]
         [InlineData(typeof(JdbcInitStartUpTask))]
         [InlineData(typeof(ISubscriptionInfrastructure))]
         [InlineData(typeof(IProfileInfrastructure))]
-        [InlineData(typeof(IUserPermissionHistoryRepository))]
+        [InlineData(typeof(ILogConfiguration))]
+        [InlineData(typeof(ILoggingInfrastructure))]
+        [InlineData(typeof(PermissionsController))]
+        [InlineData(typeof(ApplicationController))]
+        [InlineData(typeof(SignonController))]
         [InlineData(typeof(ListsController))]
-        [InlineData(typeof(ILoggingInfrastructure))] //
+        [InlineData(typeof(HomeController))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>

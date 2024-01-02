@@ -4,6 +4,7 @@ namespace legallead.json.db.entity
 {
     public class UsState
     {
+        private static readonly object locker = new();
         public string? Id { get; set; }
         public string? Name { get; set; }
         public string? ShortName { get; set; }
@@ -11,10 +12,16 @@ namespace legallead.json.db.entity
 
         public static void Initialize()
         {
-            var list = JsonConvert.DeserializeObject<List<UsState>>(GetList) ?? new();
-            UsStatesList.Populate(list);
+            lock (locker)
+            {
+                if (IsInitialized) return;
+                var list = JsonConvert.DeserializeObject<List<UsState>>(GetList) ?? new();
+                UsStatesList.Populate(list);
+                IsInitialized = true;
+            }
         }
 
+        private static bool IsInitialized;
         private static string? _list;
         private static string GetList => _list ??= GetJsonList();
 

@@ -35,4 +35,13 @@ div[name="subcontent-permissions"] {
 	margin-left: 20px;
 }
 
+			
+div[name="subcontent-permissions"] .form-check-input, 
+div[name="subcontent-permissions"] .list-group,
+div[name="subcontent-permissions"] .list-group-item {
+	background-color: transparent;
+	border-color: #555;
+	color: ghostwhite;
+
+}
 </style>

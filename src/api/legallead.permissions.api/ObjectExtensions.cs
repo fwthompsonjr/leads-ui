@@ -5,8 +5,10 @@ using legallead.jdbc.interfaces;
 using legallead.logging;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Health;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
+using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -115,7 +117,8 @@ namespace legallead.permissions.api
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();
             services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
             services.AddSingleton<LoggingDbServiceProvider>();
-
+            services.AddScoped<HomeController>();
+            services.AddScoped<ProfilesController>();
             // logging
             services.AddScoped(p =>
             {
@@ -133,6 +136,16 @@ namespace legallead.permissions.api
                 var lg = p.GetRequiredService<ILoggingService>();
                 return new LoggingInfrastructure(lg);
             });
+        }
+
+        public static void RegisterHealthChecks(this IServiceCollection services)
+        {
+            services.AddHealthChecks()
+                .AddCheck<ControllerHealthCheck>("Contollers")
+                .AddCheck<DataHealthCheck>("Data")
+                .AddCheck<DbConnectionHealthCheck>("DBConnection")
+                .AddCheck<InfrastructureHealthCheck>("Infrastructure")
+                .AddCheck<RepositoryHealthCheck>("Repository");
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class
@@ -182,7 +195,7 @@ namespace legallead.permissions.api
             return SimpleNameValidation(application.Name);
         }
 
-        internal static async Task<User?> GetUser(this HttpRequest request, DataProvider db)
+        internal static async Task<User?> GetUser(this HttpRequest request, IDataProvider db)
         {
             var identity = request.HttpContext.User.Identity;
             if (identity == null) return null;
@@ -190,7 +203,7 @@ namespace legallead.permissions.api
             return user;
         }
 
-        internal static async Task<string?> GetUserLevel(this HttpRequest request, DataProvider db)
+        internal static async Task<string?> GetUserLevel(this HttpRequest request, IDataProvider db)
         {
             const string fallback = "None";
             var user = await request.GetUser(db);
@@ -201,7 +214,7 @@ namespace legallead.permissions.api
             return levelName;
         }
 
-        internal static async Task<bool> IsAdminUser(this HttpRequest request, DataProvider db)
+        internal static async Task<bool> IsAdminUser(this HttpRequest request, IDataProvider db)
         {
             var level = await request.GetUserLevel(db);
             if (level == null) return false;

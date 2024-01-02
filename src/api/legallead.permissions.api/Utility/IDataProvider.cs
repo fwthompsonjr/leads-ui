@@ -11,6 +11,13 @@ namespace legallead.permissions.api
         IUserProfileRepository UserProfileDb { get; }
         IUserProfileViewRepository UserProfileVw { get; }
         IUserPermissionViewRepository UserPermissionVw { get; }
+        IUserRepository UserDb { get; }
+        IComponentRepository ComponentDb { get; }
+        IPermissionMapRepository PermissionDb { get; }
+        IProfileMapRepository ProfileDb { get; }
+        IUserTokenRepository UserTokenDb { get; }
+        IPermissionGroupRepository PermissionGroupDb { get; }
+        IUserPermissionRepository UserPermissionDb { get; }
 
         Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode);
 

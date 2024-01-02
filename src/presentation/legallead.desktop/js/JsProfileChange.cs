@@ -38,7 +38,8 @@ namespace legallead.desktop.js
             try
             {
                 Start();
-                var response = permissionApi?.Post(AddressMap[name], JsonConvert.DeserializeObject(json) ?? new(), user).Result;
+                var js = MapPayload(formName, json);
+                var response = permissionApi?.Post(AddressMap[name], js, user).Result;
                 var htm = JsCompletedHandler.ConvertHTML(response);
                 SetMessage(htm);
                 if (response == null || response.StatusCode != 200) return;
@@ -112,12 +113,28 @@ namespace legallead.desktop.js
             web.ExecuteScriptAsync(scriptNames[0], false);
         }
 
+        private static object MapPayload(string formName, object payload)
+        {
+            var js = Convert.ToString(payload);
+            var typeMap = PayloadMap[formName];
+            var mapped = JsonConvert.DeserializeObject(js, typeMap);
+            return mapped ?? new();
+        }
+
         private static readonly Dictionary<string, string> AddressMap = new()
         {
             { "frm-profile-personal", "profile-edit-contact-name" },
             { "frm-profile-address", "profile-edit-contact-address" },
             { "frm-profile-phone", "profile-edit-contact-phone" },
             { "frm-profile-email", "profile-edit-contact-email" }
+        };
+
+        private static readonly Dictionary<string, Type> PayloadMap = new()
+        {
+            { "frm-profile-personal", typeof(ContactName[]) },
+            { "frm-profile-address", typeof(ContactAddress[]) },
+            { "frm-profile-phone", typeof(ContactPhone[]) },
+            { "frm-profile-email", typeof(ContactEmail[]) }
         };
 
         private static readonly List<string> scriptNames = new()

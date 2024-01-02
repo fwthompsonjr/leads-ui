@@ -50,8 +50,9 @@ namespace legallead.Profiles.api.Controllers
         [Route("get-contact-detail")]
         public async Task<IActionResult> GetContactDetail(GetContactRequest request)
         {
+            const string noDetailMessage = "Unable to retrieve user detail";
             var fallback = new GetContactResponse[] {
-                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                new() { ResponseType = "Error", Message = noDetailMessage }
                 };
             var user = await _db.GetUser(Request);
             if (user == null)
@@ -61,9 +62,9 @@ namespace legallead.Profiles.api.Controllers
             }
             var response = await _db.GetContactDetail(user, request.RequestType ?? string.Empty);
             var failure = response?.ToList().Find(a => !a.IsOK);
-            if (failure == null)
+            if (response != null && failure == null)
                 return Ok(response);
-            fallback[0].Message = failure.Message;
+            fallback[0].Message = failure?.Message ?? noDetailMessage;
             return Conflict(fallback);
         }
 

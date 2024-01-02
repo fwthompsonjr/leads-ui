@@ -57,15 +57,15 @@ namespace legallead.desktop.utilities
             client.AppendAuthorization(user);
             client.AppendHeader("APP_IDENTITY", user.GetAppServiceHeader());
             var result = await client.PostAsJsonAsync(client.Client, url, payload);
+            var content = await result.Content.ReadAsStringAsync();
             if (!result.IsSuccessStatusCode)
             {
                 return new ApiResponse
                 {
-                    StatusCode = 500,
-                    Message = "Unable to communicate with remote server"
+                    StatusCode = (int)result.StatusCode,
+                    Message = content
                 };
             }
-            var content = await result.Content.ReadAsStringAsync();
             return new ApiResponse
             {
                 StatusCode = (int)result.StatusCode,

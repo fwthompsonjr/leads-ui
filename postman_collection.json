@@ -585,6 +585,100 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SetDiscount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let expected = [\r",
+									"    \"Group settings for 'TX' applied to user: test.account.\",\r",
+									"    \"Group settings for 'Collin, TX' applied to user: test.account.\",\r",
+									"    \"Group settings for 'Tarrant, TX' removed from user: test.account.\"\r",
+									"]\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"State discount is applied\", () =>{\r",
+									"    let search = expected[0];\r",
+									"    let js = pm.response.json();\r",
+									"    let found = js.find(x => x.indexOf(search) >= 0);\r",
+									"    pm.expect(found != null).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"County discount (Collin) is applied\", () =>{\r",
+									"    let search = expected[1];\r",
+									"    let js = pm.response.json();\r",
+									"    let found = js.find(x => x.indexOf(search) >= 0);\r",
+									"    pm.expect(found != null).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"County discount (Tarrant) is removed\", () =>{\r",
+									"    let search = expected[2];\r",
+									"    let js = pm.response.json();\r",
+									"    let found = js.find(x => x.indexOf(search) >= 0);\r",
+									"    pm.expect(found != null).to.be.true;\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Choices\": [\r\n        { \"StateName\": \"TX\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Tarrant\", \"IsSelected\": false }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/Permissions/set-discount",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Permissions",
+								"set-discount"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -616,6 +710,132 @@
 							],
 							"path": [
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.text();\r",
+									"    pm.expect(expected).to.equal(actual);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HealthDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    pm.expect(expected).to.equal(actual[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has results.\",() =>{\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"];\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Contollers result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Contollers;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Data result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Data;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has DBConnection result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].DBConnection;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Infrastructure result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Infrastructure;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Repository result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Repository;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health-details",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health-details"
 							]
 						}
 					},
@@ -1018,6 +1238,71 @@
 				{
 					"name": "ContactDetail",
 					"item": [
+						{
+							"name": "GetContactIdentity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_IDENTITY_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_IDENTITY_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
 						{
 							"name": "GetContactDetail_All",
 							"event": [
@@ -1988,6 +2273,11 @@
 		{
 			"key": "PROFILES_EDIT_CONTACT_PHONE_URL",
 			"value": "api/profiles/edit-contact-phone",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_CONTACT_IDENTITY_URL",
+			"value": "api/profiles/get-contact-identity",
 			"type": "string"
 		}
 	]
