@@ -1,5 +1,8 @@
-﻿namespace legallead.jdbc
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.jdbc
 {
+    [ExcludeFromCodeCoverage(Justification = "This is test code. To be deleted.")]
     internal static class LocalData
     {
 #if LOCAL
