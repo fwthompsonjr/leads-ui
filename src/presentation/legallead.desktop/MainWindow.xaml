@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:legallead.desktop"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -16,9 +16,9 @@
                 <MenuItem x:Name="mnuExit" Header="_Exit" />
             </MenuItem>
             <MenuItem x:Name="mnuMyAccount" Header="My _Account" Visibility="Hidden">
-                <MenuItem x:Name="mnuMyAccountHome" Header="_Account" Click="MnuAccount_Click" />
-                <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuAccount_Click" />
-                <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuAccount_Click" />
+                <MenuItem x:Name="mnuMyAccountHome" Header="_Account" Click="MnuAccount_Click" Tag="myaccount-home" />
+                <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuAccount_Click" Tag="myaccount-profile" />
+                <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuAccount_Click" Tag="myaccount-permissions" />
                 <Separator />
                 <MenuItem x:Name="mnuMyAccountLogout" Header="_Logout" Click="MnuAccount_Click" />
             </MenuItem>

@@ -1,4 +1,5 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.js;
@@ -31,7 +32,9 @@ namespace legallead.desktop
 
         private void InitializeBrowserContent()
         {
-            var blankContent = ContentHandler.GetLocalContent("blank");
+            string[] names = new[] { "home", "blank" };
+            var target = isBlankLoaded ? names[0] : names[1];
+            var blankContent = ContentHandler.GetLocalContent(target);
             if (blankContent != null)
             {
                 var blankHtml = ContentHandler.GetAddressBase64(blankContent);
@@ -39,7 +42,8 @@ namespace legallead.desktop
                 {
                     Address = blankHtml
                 };
-                browser.JavascriptObjectRepository.Register("jsHandler", new JsHandler(browser));
+                var handler = target == names[1] ? new JsHandler(browser) : new HomeJsHandler(browser);
+                browser.JavascriptObjectRepository.Register("jsHandler", handler);
                 content1.Content = browser;
             }
         }
@@ -91,7 +95,10 @@ namespace legallead.desktop
 
         private void MnuAccount_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not MenuItem _) return;
+            if (sender is not MenuItem mnu) return;
+            if (mnu.Tag is not string mnuCommand) return;
+            if (string.IsNullOrEmpty(mnuCommand)) return;
+            NavigateChild(mnuCommand);
         }
 
         private void MnuHome_Click(object sender, RoutedEventArgs e)
@@ -152,10 +159,38 @@ namespace legallead.desktop
             }
         }
 
-        internal void NavigateTo(string destination, int errorCode = 0)
+        internal void NavigateChild(string destination)
+        {
+            var sublanding = SubLandings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
+            if (sublanding == null) return;
+            var directions = sublanding.Split('-');
+            var parentName = directions[0];
+            var parentView = NavigateTo(parentName);
+            if (string.IsNullOrEmpty(parentView)) return;
+
+            var targetWindow = GetBrowserTarget(parentView);
+            if (targetWindow is not ChromiumWebBrowser _) return;
+            Dispatcher.Invoke(() =>
+            {
+                int waitInterval = 500;
+                var targetWindow = GetBrowserTarget(parentView);
+                if (targetWindow is not ChromiumWebBrowser web) return;
+                Thread.Sleep(waitInterval);
+                var retries = 0;
+                while (retries < 5)
+                {
+                    if (SetBrowserDisplay(web, directions[1])) break;
+                    var delay = CalculateExponentialDelay(waitInterval, retries);
+                    Thread.Sleep(delay);
+                    retries++;
+                }
+            });
+        }
+
+        internal string? NavigateTo(string destination, int errorCode = 0)
         {
             var landing = Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
-            if (landing == null) return;
+            if (landing == null) return null;
             switch (landing)
             {
                 case "home":
@@ -184,7 +219,7 @@ namespace legallead.desktop
                             SetErrorContent(401);
                             tabError.IsSelected = true;
                         });
-                        return;
+                        return null;
                     }
                     Dispatcher.Invoke(() =>
                     {
@@ -204,6 +239,15 @@ namespace legallead.desktop
                     Environment.Exit(0);
                     break;
             }
+            return landing;
+        }
+
+        private object? GetBrowserTarget(string name)
+        {
+            return Dispatcher.Invoke(() =>
+            {
+                return name.Equals("home") ? content1.Content : contentMyAccount.Content;
+            });
         }
 
         private async Task MapMyAccountDetails()
@@ -228,12 +272,41 @@ namespace legallead.desktop
             });
         }
 
+        private static bool SetBrowserDisplay(ChromiumWebBrowser web, string display)
+        {
+            try
+            {
+                web.ExecuteScriptAsync("setDisplay", display);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static int CalculateExponentialDelay(int initialWait, int retries)
+        {
+            var additional = Convert.ToInt32(Math.Pow(retries, 2));
+            return additional * initialWait;
+        }
+
         private static readonly List<string> Landings = new()
         {
             "home",
             "myaccount",
             "error",
             "exit"
+        };
+
+        private static readonly List<string> SubLandings = new()
+        {
+            "home-home",
+            "home-login",
+            "home-register",
+            "myaccount-home",
+            "myaccount-profile",
+            "myaccount-permissions"
         };
     }
 }

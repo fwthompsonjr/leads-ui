@@ -101,6 +101,7 @@
 			for(let i = 0; i < thelinks.length; i++) {
 				let a = thelinks[i];
 				const aname = a.getAttribute("name");
+				if( undefined === aname || null === aname ) { continue; }
 				if ( aname.indexOf(name) >= 0 ) {
 					a.classList.add(actv);
 				} else {
@@ -115,6 +116,7 @@
 		
 		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);
+			if( undefined === d || null === d ) { continue; }
 			if ( divnames[i].indexOf(name) >= 0 ) {
 				d.classList.add(actv);
 			} else {
@@ -123,6 +125,8 @@
 		}
 	}
 		
+	/* js-include-common-reload */
+
 	</script>
 	<!-- script: home-form-validation -->
   </body>

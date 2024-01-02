@@ -1,7 +1,10 @@
 
 
       <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p>(c) 2023 - Legal Lead UI</p>
-        </div>
+			<div id="footer-copy" class="float-end">
+				<span id="footer-copy-span">{0}</span>
+			</div>
+			<div id="footer-reload" class="float-start">
+				<a id="footer-reload-link" href="javascript:reloadContent()" class="text-secondary text-decoration-none">Reload</a>
+			</div>
       </footer>

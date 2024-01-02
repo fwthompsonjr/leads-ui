@@ -33,6 +33,8 @@
 			}
 		}
 	}
+		
+	/* js-include-common-reload */
 	
 	function profileComboBoxChanged() {
 		const hidden = "d-none";
