@@ -31,6 +31,11 @@ jobs:
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
 
+    - uses: ChristopheLav/windows-sdk-install@v1
+      with:
+        version-sdk: 22621
+        features: 'OptionId.UWPCPP,OptionId.DesktopCPParm64'
+
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
       if: github.event_name != 'pull_request'
@@ -38,16 +43,6 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
       if: github.event_name != 'pull_request'
-
-    - name: Setup Dotnet SDK
-      timeout-minutes: 10
-      if: github.event_name != 'pull_request'
-      shell: bash
-      run: |
-        curl -SL -o dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/master/dotnet-sdk-latest-linux-arm64.tar.gz
-        sudo mkdir -p /usr/share/dotnet
-        sudo tar -zxf dotnet.tar.gz -C /usr/share/dotnet
-        sudo ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
   
     - name: Restore Packages
       if: github.event_name != 'pull_request'
