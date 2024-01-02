@@ -38,6 +38,16 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
       if: github.event_name != 'pull_request'
+
+    - name: Setup Dotnet SDK
+      timeout-minutes: 10
+      if: github.event_name != 'pull_request'
+      shell: bash
+      run: |
+        curl -SL -o dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/master/dotnet-sdk-latest-linux-arm64.tar.gz
+        sudo mkdir -p /usr/share/dotnet
+        sudo tar -zxf dotnet.tar.gz -C /usr/share/dotnet
+        sudo ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
   
     - name: Restore Packages
       if: github.event_name != 'pull_request'

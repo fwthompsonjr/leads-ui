@@ -29,7 +29,16 @@ jobs:
     
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
-    ## major.minor.build.revision
+
+    - name: Setup Dotnet SDK
+      timeout-minutes: 10
+      shell: bash
+      run: |
+        curl -SL -o dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/master/dotnet-sdk-latest-linux-arm64.tar.gz
+        sudo mkdir -p /usr/share/dotnet
+        sudo tar -zxf dotnet.tar.gz -C /usr/share/dotnet
+        sudo ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+
     - name: Set Release Version
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
