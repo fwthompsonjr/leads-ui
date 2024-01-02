@@ -31,11 +31,6 @@ jobs:
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
 
-    - name: Add Windows SDK
-      run: |
-          wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-
-
     - uses: browser-actions/setup-chrome@v1
     - run: chrome --version
       if: github.event_name != 'pull_request'

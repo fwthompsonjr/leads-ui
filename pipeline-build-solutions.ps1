@@ -28,13 +28,27 @@ function generateBuildCommand( $solution ) {
         "obj" = $command
         }
 }
-$startedAt = [datetime]::UtcNow
 
+function isSolutionNotExcluded( $name ) {
+    
+    $exclusions = @('integration', 'presentation');
+    foreach($item in $exclusions){
+        if($name.IndexOf( $item ) -ge 0 ) { return $false; }
+    }
+    return  $true;
+}
+
+
+$startedAt = [datetime]::UtcNow
 ## find all files matching *.sln 
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $errorsFile = [System.IO.Path]::Combine( $currentDir, "build-error-file.txt" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
-$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object { $_.Name.IndexOf( 'integration' ) -lt 0 }
+$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object {  
+        $nme = $_.Name
+        $isNotExcluded = ( isSolutionNotExcluded -name $nme ) 
+        return $isNotExcluded;
+}
 $commands = @();
 
 if( $found.Count -eq $null ) {
