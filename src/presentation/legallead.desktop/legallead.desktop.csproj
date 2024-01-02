@@ -5,7 +5,6 @@
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
-		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
 		<ApplicationIcon>legallead-icon.ico</ApplicationIcon>
 		<SelfContained>true</SelfContained>
 		<EnableWindowsTargeting>true</EnableWindowsTargeting>
