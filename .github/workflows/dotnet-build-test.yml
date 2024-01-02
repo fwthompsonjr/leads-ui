@@ -30,11 +30,6 @@ jobs:
     - uses: browser-actions/setup-firefox@v1
     - run: firefox --version
 
-    - uses: ChristopheLav/windows-sdk-install@v1
-      with:
-        version-sdk: 22621
-        features: 'OptionId.UWPCPP,OptionId.DesktopCPParm64'
-
     - name: Set Release Version
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
