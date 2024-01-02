@@ -2,7 +2,6 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Model;
-using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

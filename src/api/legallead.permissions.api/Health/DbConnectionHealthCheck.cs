@@ -1,6 +1,4 @@
 ﻿using legallead.jdbc.helpers;
-using legallead.permissions.api.Controllers;
-using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
