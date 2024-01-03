@@ -154,6 +154,30 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script&gt;
+        ///	
+        ///	let clientScriptActivated = false;
+        ///
+        ///	function commonClientScript() {
+        ///		try {
+        ///			/* user injected block */
+        ///		} catch(err) {
+        ///			console.debug(err);
+        ///		}
+        ///	}
+        ///	if (clientScriptActivated) {
+        ///		setTimeout( () =&gt; { commonClientScript(); }, 250);
+        ///	}
+        ///	
+        ///&lt;/script&gt;.
+        /// </summary>
+        internal static string commonclientinjection_js {
+            get {
+                return ResourceManager.GetString("commonclientinjection_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///
         ///      &lt;footer class=&quot;mastfoot mt-auto&quot;&gt;

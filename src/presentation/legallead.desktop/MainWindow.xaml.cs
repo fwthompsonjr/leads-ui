@@ -7,6 +7,7 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -169,22 +170,19 @@ namespace legallead.desktop
             if (string.IsNullOrEmpty(parentView)) return;
 
             var targetWindow = GetBrowserTarget(parentView);
-            if (targetWindow is not ChromiumWebBrowser _) return;
-            Dispatcher.Invoke(() =>
+            if (targetWindow is not ChromiumWebBrowser web) return;
+            var script = $"setDisplay( '{directions[1]}' );";
+            var replacements = new Dictionary<string, string>()
             {
-                int waitInterval = 500;
-                var targetWindow = GetBrowserTarget(parentView);
-                if (targetWindow is not ChromiumWebBrowser web) return;
-                Thread.Sleep(waitInterval);
-                var retries = 0;
-                while (retries < 5)
-                {
-                    if (SetBrowserDisplay(web, directions[1])) break;
-                    var delay = CalculateExponentialDelay(waitInterval, retries);
-                    Thread.Sleep(delay);
-                    retries++;
-                }
-            });
+                { "let clientScriptActivated = false;", "let clientScriptActivated = true;" },
+                { "/* user injected block */", script }
+            };
+            var html = new StringBuilder(web.GetHTML(Dispatcher));
+            foreach (var replace in replacements)
+            {
+                html.Replace(replace.Key, replace.Value);
+            }
+            web.SetHTML(Dispatcher, html.ToString());
         }
 
         internal string? NavigateTo(string destination, int errorCode = 0)
@@ -256,39 +254,17 @@ namespace legallead.desktop
             {
                 var container = contentMyAccount.Content;
                 if (container is not ChromiumWebBrowser web) return string.Empty;
-                var html = web.Address;
-                if (string.IsNullOrEmpty(html)) return string.Empty;
-                return ContentHandler.DecodeFromBase64(html);
+                return web.GetHTML(Dispatcher);
             });
             if (string.IsNullOrEmpty(content)) return;
             var revised = await MapProfileResponse(content);
             if (string.IsNullOrEmpty(revised)) return;
-            var conversion = ContentHandler.GetAddressBase64(new ContentHtml { Content = revised });
             Dispatcher.Invoke(() =>
             {
                 var container = contentMyAccount.Content;
                 if (container is not ChromiumWebBrowser web) return;
-                web.Address = conversion;
+                web.SetHTML(Dispatcher, revised);
             });
-        }
-
-        private static bool SetBrowserDisplay(ChromiumWebBrowser web, string display)
-        {
-            try
-            {
-                web.ExecuteScriptAsync("setDisplay", display);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static int CalculateExponentialDelay(int initialWait, int retries)
-        {
-            var additional = Convert.ToInt32(Math.Pow(retries, 2));
-            return additional * initialWait;
         }
 
         private static readonly List<string> Landings = new()

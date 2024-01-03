@@ -287,10 +287,14 @@ function initializeProfileFormValidation()
 			return; 
 		}
 		try {
+			setProfileIconState( true );
+			setProfileStatusMessage( "<span class='text-warning'>Submitting form values ...</span>", true );
 			handler.submit(target, payload);
 		}
 		catch (err) {
 			setProfileStatusMessage( err, true );
+		} finally {
+			setProfileIconState( false );
 		}
 	}
 	

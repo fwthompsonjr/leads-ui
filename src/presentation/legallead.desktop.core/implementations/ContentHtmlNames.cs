@@ -231,6 +231,7 @@ namespace legallead.desktop.implementations
         private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
         private const string JsCommonReload = "/* js-include-common-reload */";
+        private const string JsCommonClientInclude = "<!-- script: common-client-include -->";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
@@ -254,6 +255,7 @@ namespace legallead.desktop.implementations
             { HtmCommonHeading, GetCommonHeaderInclude() },
             { HtmWelcomeInclude, GetWelcomeInclude() },
             { JsCommonReload, Properties.Resources.commonreload_js },
+            { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
         };
     }
 }
