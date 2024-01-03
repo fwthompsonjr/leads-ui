@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.helpers;
 using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.utilities;
@@ -148,44 +149,6 @@ namespace legallead.desktop
             SetErrorContent(menuId);
         }
 
-        private static async Task<string> MapProfileResponse(string response)
-        {
-            var provider = AppBuilder.ServiceProvider;
-            var user = provider?.GetService<UserBo>();
-            var api = provider?.GetService<IPermissionApi>();
-            var service = provider?.GetService<IUserProfileMapper>();
-            if (api == null || user == null || service == null) return response;
-            try
-            {
-                var resp = await service.Map(api, user, response);
-                return resp;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return response;
-            }
-        }
-
-        private static async Task<string> MapPermissionsResponse(string response)
-        {
-            var provider = AppBuilder.ServiceProvider;
-            var user = provider?.GetService<UserBo>();
-            var api = provider?.GetService<IPermissionApi>();
-            var service = provider?.GetService<IUserPermissionsMapper>();
-            if (api == null || user == null || service == null) return response;
-            try
-            {
-                var resp = await service.Map(api, user, response);
-                return resp;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                return response;
-            }
-        }
-
         private BrowserHelper GetHelper()
         {
             var window = (Window)this;
@@ -212,14 +175,14 @@ namespace legallead.desktop
 
         internal void NavigateChild(string destination)
         {
-            var sublanding = SubLandings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
+            var sublanding = NavigationHelper.SubLandings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
             if (sublanding == null) return;
             var directions = sublanding.Split('-');
             var parentName = directions[0];
             var parentView = NavigateTo(parentName);
             if (string.IsNullOrEmpty(parentView)) return;
 
-            var targetWindow = GetBrowserTarget(parentView);
+            var targetWindow = NavigationHelper.GetBrowserTarget(parentView);
             if (targetWindow is not ChromiumWebBrowser web) return;
             var script = $"setDisplay( '{directions[1]}' );";
             var replacements = new Dictionary<string, string>()
@@ -237,7 +200,7 @@ namespace legallead.desktop
 
         internal string? NavigateTo(string destination, int errorCode = 0)
         {
-            var landing = Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
+            var landing = NavigationHelper.Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
             if (landing == null) return null;
             switch (landing)
             {
@@ -275,7 +238,7 @@ namespace legallead.desktop
                         Task.Run(async () =>
                         {
                             Thread.Sleep(500);
-                            await MapMyAccountDetails();
+                            await NavigationHelper.PopulateMyAccount();
                         });
                         mnuMyAccount.Visibility = Visibility.Visible;
                         tabMyAccount.IsSelected = true;
@@ -289,52 +252,5 @@ namespace legallead.desktop
             }
             return landing;
         }
-
-        private object? GetBrowserTarget(string name)
-        {
-            return Dispatcher.Invoke(() =>
-            {
-                return name.Equals("home") ? content1.Content : contentMyAccount.Content;
-            });
-        }
-
-        private async Task MapMyAccountDetails()
-        {
-            var content = Dispatcher.Invoke(() =>
-            {
-                var container = contentMyAccount.Content;
-                if (container is not ChromiumWebBrowser web) return string.Empty;
-                return web.GetHTML(Dispatcher);
-            });
-            if (string.IsNullOrEmpty(content)) return;
-            var profile = await MapProfileResponse(content);
-            if (string.IsNullOrEmpty(profile)) return;
-            var permissions = await MapPermissionsResponse(profile);
-            permissions ??= profile;
-            Dispatcher.Invoke(() =>
-            {
-                var container = contentMyAccount.Content;
-                if (container is not ChromiumWebBrowser web) return;
-                web.SetHTML(Dispatcher, permissions);
-            });
-        }
-
-        private static readonly List<string> Landings = new()
-        {
-            "home",
-            "myaccount",
-            "error",
-            "exit"
-        };
-
-        private static readonly List<string> SubLandings = new()
-        {
-            "home-home",
-            "home-login",
-            "home-register",
-            "myaccount-home",
-            "myaccount-profile",
-            "myaccount-permissions"
-        };
     }
 }

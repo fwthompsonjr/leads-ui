@@ -21,7 +21,7 @@
 
 	function setActiveDiv( name ) {
 		if (names.indexOf( name ) < 0 ) { return; }
-		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions" ];
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions", "dv-subcontent-password" ];
 		
 		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);

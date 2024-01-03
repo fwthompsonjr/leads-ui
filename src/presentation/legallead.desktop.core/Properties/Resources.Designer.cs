@@ -545,6 +545,24 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-password&quot; name=&quot;subcontent-password&quot; class=&quot;subcontent card&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title&quot;&gt;Change Password&lt;/h5&gt;	
+        ///							&lt;form id=&quot;form-change-password&quot; name=&quot;form-change-password&quot;&gt;
+        ///								&lt;div class=&quot;mb-3&quot;&gt;
+        ///									&lt;label for=&quot;account-password-username&quot; class=&quot;form-label&quot;&gt;User Name:&lt;/label&gt;
+        ///									&lt;input  type=&quot;text&quot; class=&quot;form-control&quot; 
+        ///											id=&quot;account-password-username&quot; name=&quot;username&quot; 
+        ///											maxlength=&quot;255&quot; minlength=&quot;8 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_password_html {
+            get {
+                return ResourceManager.GetString("myaccount_password_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
         ///let profileAlertTimer = null;
         ///let profileNames = [ &quot;frm-profile-address&quot;, &quot;frm-profile-personal&quot;, &quot;frm-profile-phone&quot;, &quot;frm-profile-email&quot; ];
