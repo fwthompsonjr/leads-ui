@@ -111,6 +111,9 @@ namespace legallead.desktop.tests.utilities
         [Theory]
         [InlineData("list", 200)]
         [InlineData("read-me", 200)]
+        [InlineData("user-permissions-list", 200)]
+        [InlineData("user-us-county-list", 200)]
+        [InlineData("user-us-state-list", 200)]
         [InlineData("non-existing", 404)]
         public async Task ServiceShouldGetEndpoint(string pageName, int expectedCode)
         {

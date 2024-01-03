@@ -74,6 +74,7 @@ namespace legallead.desktop.js
         private static object MapPayload(string formName, object payload)
         {
             var js = Convert.ToString(payload);
+            if (js == null) return new();
             var typeMap = PayloadMap[formName];
             var mapped = JsonConvert.DeserializeObject(js, typeMap);
             return mapped ?? new();

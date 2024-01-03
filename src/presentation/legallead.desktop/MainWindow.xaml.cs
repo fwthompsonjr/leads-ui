@@ -136,6 +136,25 @@ namespace legallead.desktop
             }
         }
 
+        private static async Task<string> MapPermissionsResponse(string response)
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var user = provider?.GetService<UserBo>();
+            var api = provider?.GetService<IPermissionApi>();
+            var service = provider?.GetService<IUserPermissionsMapper>();
+            if (api == null || user == null || service == null) return response;
+            try
+            {
+                var resp = await service.Map(api, user, response);
+                return resp;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return response;
+            }
+        }
+
         private BrowserHelper GetHelper()
         {
             var window = (Window)this;
@@ -257,13 +276,15 @@ namespace legallead.desktop
                 return web.GetHTML(Dispatcher);
             });
             if (string.IsNullOrEmpty(content)) return;
-            var revised = await MapProfileResponse(content);
-            if (string.IsNullOrEmpty(revised)) return;
+            var profile = await MapProfileResponse(content);
+            if (string.IsNullOrEmpty(profile)) return;
+            var permissions = await MapPermissionsResponse(profile);
+            permissions ??= profile;
             Dispatcher.Invoke(() =>
             {
                 var container = contentMyAccount.Content;
                 if (container is not ChromiumWebBrowser web) return;
-                web.SetHTML(Dispatcher, revised);
+                web.SetHTML(Dispatcher, permissions);
             });
         }
 

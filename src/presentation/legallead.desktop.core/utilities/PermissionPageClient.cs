@@ -16,6 +16,33 @@ namespace legallead.desktop.utilities
         {
         }
 
+        public override async Task<ApiResponse> Get(string name, UserBo user)
+        {
+            var fallback = new ApiResponse { StatusCode = 500, Message = "Unexpected Error" };
+            var verify = await base.Get(name);
+            verify ??= fallback;
+            if (verify.StatusCode != 200) return verify;
+            var address = GetAddress(name);
+            if (address.StatusCode != 200) return address;
+            var url = address.Message;
+            using var client = GetHttpClient();
+            client.AppendAuthorization(user);
+            var result = await client.GetStringAsync(client.Client, url);
+            if (string.IsNullOrEmpty(result))
+            {
+                return new ApiResponse
+                {
+                    StatusCode = 500,
+                    Message = "Unable to communicate with remote server"
+                };
+            }
+            return new ApiResponse
+            {
+                StatusCode = 200,
+                Message = result
+            };
+        }
+
         public override async Task<ApiResponse> Get(string name)
         {
             var fallback = new ApiResponse { StatusCode = 500, Message = "Unexpected Error" };

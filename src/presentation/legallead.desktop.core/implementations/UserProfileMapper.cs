@@ -8,7 +8,7 @@ namespace legallead.desktop.implementations
 {
     internal class UserProfileMapper : IUserProfileMapper
     {
-        public async Task<string> Map(IPermissionApi api, UserBo user, string source)
+        public virtual async Task<string> Map(IPermissionApi api, UserBo user, string source)
         {
             var profile = await GetProfile(api, user);
             if (profile == null) return source;
@@ -120,7 +120,7 @@ namespace legallead.desktop.implementations
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member to be tested from public method")]
-        private static bool IsValidXPath(string xpath)
+        protected static bool IsValidXPath(string xpath)
         {
             if (string.IsNullOrEmpty(xpath)) return false;
             try
@@ -135,7 +135,7 @@ namespace legallead.desktop.implementations
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member to be tested from public method")]
-        private static HtmlDocument? GetDocument(string source)
+        protected static HtmlDocument? GetDocument(string source)
         {
             try
             {

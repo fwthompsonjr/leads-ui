@@ -89,6 +89,16 @@ namespace legallead.desktop.utilities
             return new KeyValuePair<bool, ApiResponse>(true, accepted);
         }
 
+        public virtual async Task<ApiResponse> Get(string name, UserBo user)
+        {
+            if (!user.IsAuthenicated)
+            {
+                return new ApiResponse { StatusCode = 401, Message = "Unauthorized" };
+            }
+            var canGet = await Get(name);
+            return canGet;
+        }
+
         public virtual async Task<ApiResponse> Get(string name)
         {
             var response = await Task.Run(() =>
@@ -134,7 +144,10 @@ namespace legallead.desktop.utilities
         protected static readonly Dictionary<string, string> GetAddresses = new()
         {
             { "application-read-me", "{0}/api/application/read-me" },
-            { "application-list", "{0}/api/application/apps" }
+            { "application-list", "{0}/api/application/apps" },
+            { "user-permissions-list", "{0}/api/lists/user-permissions" },
+            { "user-us-county-list", "{0}/api/lists/us-county-list" },
+            { "user-us-state-list", "{0}/api/lists/us-state-list" }
         };
 
         protected static readonly Dictionary<string, string> PostAddresses = new()
