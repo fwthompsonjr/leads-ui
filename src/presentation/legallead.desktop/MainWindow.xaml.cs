@@ -7,6 +7,7 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,8 +28,33 @@ namespace legallead.desktop
             InitializeComponent();
             InitializeBrowserContent();
             InitializeErrorContent();
+            InitializeUserChanged();
             ContentRendered += MainWindow_ContentRendered;
             mnuExit.Click += MnuExit_Click;
+        }
+
+        private void InitializeUserChanged()
+        {
+            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            if (user == null) return;
+            user.AuthenicatedChanged = () =>
+            {
+                var menus = Dispatcher.Invoke(() => { return new[] { mnuMyAccount, mnuMySearch }.ToList(); });
+                if (user.IsAuthenicated)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        menus.ForEach(m => { m.Visibility = Visibility.Visible; });
+                    });
+                }
+                else
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        menus.ForEach(m => { m.Visibility = Visibility.Hidden; });
+                    });
+                }
+            };
         }
 
         private void InitializeBrowserContent()
@@ -94,11 +120,16 @@ namespace legallead.desktop
             Environment.Exit(0);
         }
 
-        private void MnuAccount_Click(object sender, RoutedEventArgs e)
+        private void MnuDefault_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not MenuItem mnu) return;
             if (mnu.Tag is not string mnuCommand) return;
             if (string.IsNullOrEmpty(mnuCommand)) return;
+            if (mnuCommand.Contains("mysearch"))
+            {
+                tabMySearch.IsSelected = true;
+                return;
+            }
             NavigateChild(mnuCommand);
         }
 
