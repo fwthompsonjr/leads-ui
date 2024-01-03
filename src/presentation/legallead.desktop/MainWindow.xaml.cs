@@ -243,7 +243,7 @@ namespace legallead.desktop
                         InitializeMyAccountContent();
                         Task.Run(async () =>
                         {
-                            Thread.Sleep(1000);
+                            Thread.Sleep(500);
                             await MapMyAccountDetails();
                         });
                         mnuMyAccount.Visibility = Visibility.Visible;
