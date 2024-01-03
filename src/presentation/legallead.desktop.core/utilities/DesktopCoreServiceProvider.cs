@@ -18,6 +18,8 @@ namespace legallead.desktop.utilities
             builder.AddScoped<IContentParser, ContentParser>();
             builder.AddSingleton<IInternetStatus, InternetStatus>();
             builder.AddSingleton<IUserProfileMapper, UserProfileMapper>();
+            builder.AddSingleton<IUserPermissionsMapper, UserPermissionsMapper>();
+            builder.AddSingleton<ICopyrightBuilder>(new CopyrightBuilder());
             var menucontent = Properties.Resources.contextmenu;
             if (string.IsNullOrEmpty(menucontent)) return builder.BuildServiceProvider();
             builder.AddSingleton(s =>

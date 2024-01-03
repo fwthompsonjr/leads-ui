@@ -154,12 +154,39 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script&gt;
+        ///	
+        ///	let clientScriptActivated = false;
+        ///
+        ///	function commonClientScript() {
+        ///		try {
+        ///			/* user injected block */
+        ///		} catch(err) {
+        ///			console.debug(err);
+        ///		}
+        ///	}
+        ///	if (clientScriptActivated) {
+        ///		setTimeout( () =&gt; { commonClientScript(); }, 250);
+        ///	}
+        ///	
+        ///&lt;/script&gt;.
+        /// </summary>
+        internal static string commonclientinjection_js {
+            get {
+                return ResourceManager.GetString("commonclientinjection_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///
         ///      &lt;footer class=&quot;mastfoot mt-auto&quot;&gt;
-        ///        &lt;div class=&quot;inner&quot;&gt;
-        ///          &lt;p&gt;(c) 2023 - Legal Lead UI&lt;/p&gt;
-        ///        &lt;/div&gt;
+        ///			&lt;div id=&quot;footer-copy&quot; class=&quot;float-end&quot;&gt;
+        ///				&lt;span id=&quot;footer-copy-span&quot;&gt;{0}&lt;/span&gt;
+        ///			&lt;/div&gt;
+        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start&quot;&gt;
+        ///				&lt;a id=&quot;footer-reload-link&quot; href=&quot;javascript:reloadContent()&quot; class=&quot;text-secondary text-decoration-none&quot;&gt;Reload&lt;/a&gt;
+        ///			&lt;/div&gt;
         ///      &lt;/footer&gt;.
         /// </summary>
         internal static string commonfooter_html {
@@ -172,14 +199,40 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to 
         ///		&lt;!-- googleapis : fonts --&gt;
         ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;stylesheet&quot; /&gt;
+        ///		
+        ///		&lt;!-- popper --&gt;
+        ///		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js&quot;&gt;&lt;/script&gt;
+        ///
         ///		&lt;!-- bootstrap --&gt;
         ///		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
         ///		&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css&quot;&gt;
-        ///		&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css&quot; integrity=&quot;sha384-4LISF5TTJ [rest of string was truncated]&quot;;.
+        ///		&lt;link re [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string commonheadings_html {
             get {
                 return ResourceManager.GetString("commonheadings_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///		
+        ///	function getPageName() {
+        ///		const defaultName = &quot;home&quot;;
+        ///		const colon = &quot;:&quot;;
+        ///		var current_title = $(document).attr(&apos;title&apos;);
+        ///		if ( undefined === current_title || null === current_title || current_title.length === 0) return defaultName;
+        ///		if (current_title.indexOf(colon) &lt; 0 || current_title.split(colon).length &lt; 2) return defaultName;
+        ///		var landing = current_title.split(&apos;:&apos;)[1].trim();
+        ///		return landing == &quot;account&quot; ? &quot;myaccount-~0&quot; : &quot;home-~0&quot;;
+        ///	}
+        ///		
+        ///	function getDisplay( ) {
+        ///			const fin [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string commonreload_js {
+            get {
+                return ResourceManager.GetString("commonreload_js", resourceCulture);
             }
         }
         
@@ -474,16 +527,16 @@ namespace legallead.desktop.Properties {
         ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
         ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
         ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///		&lt;title&gt;legallead.ui: home&lt;/title&gt;
+        ///		&lt;title&gt;legallead.ui: account&lt;/title&gt;
         ///		&lt;!-- block: common-headings --&gt;
         ///		&lt;!-- common styles --&gt;	
         ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
-        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
+        ///		&lt;!-- style: my-account-subcontent-css --&gt;
+        ///	&lt;/head&gt;
         ///
-        ///			div.subcontent {
-        ///				width: 50%; 
-        ///				min-width: 400px;
-        ///				ma [rest of string was truncated]&quot;;.
+        ///	&lt;body class=&quot;text-center&quot;&gt;
+        ///
+        ///    &lt;div cla [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_html {
             get {
@@ -493,19 +546,19 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
-        ///
+        ///let profileAlertTimer = null;
         ///let profileNames = [ &quot;frm-profile-address&quot;, &quot;frm-profile-personal&quot;, &quot;frm-profile-phone&quot;, &quot;frm-profile-email&quot; ];
         ///let profileButtonName = &quot;frm-profile-submit-button&quot;;
+        ///let profileStatusDiv = &quot;frm-profile-error-message&quot;;
         ///var profileicons = {
         ///    spin: &quot;#form-profile-icon-spin&quot;,
         ///    normal: &quot;#form-profile-icon&quot;
         ///}
         ///
-        ///
-        ///
-        ///function isValidProfileEmail( email ) {
-        ///	if( undefined === email || null === email || email.length === 0) { return true; }
-        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[ [rest of string was truncated]&quot;;.
+        ///function setSuccessAlert( isActive ) {
+        ///	const hddn = &quot;d-none&quot;;
+        ///	const parentDv = &quot;#dv-subcontent-profile-row-00&quot;;
+        ///	const alertDv = &quot;#dv-subcontent-pr [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_profile_validation_js {
             get {
@@ -563,10 +616,10 @@ namespace legallead.desktop.Properties {
         ///						&lt;div class=&quot;card-body&quot;&gt;
         ///							&lt;h5 class=&quot;card-title text-start&quot;&gt;Account Permissions&lt;/h5&gt;
         ///						&lt;/div&gt;
-        ///						&lt;div class=&quot;card-footer&quot;&gt;
-        ///							&lt;button class=&quot;btn btn-sm btn-primary&quot;&gt;Save&lt;/button&gt;
-        ///						&lt;/div&gt;
-        ///					&lt;/div&gt;.
+        ///						&lt;div id=&quot;dv-subcontent-permissions-container&quot; class=&quot;row&quot;&gt;
+        ///								&lt;div id=&quot;dv-subcontent-permissions-row-01&quot; class=&quot;mb-3 text-start&quot;&gt;
+        ///									&lt;label for=&quot;cbo-permissions-group&quot; class=&quot;form-label text-secondary&quot;&gt;Section&lt;/label&gt;
+        ///									&lt;select id=&quot;cbo-permissions-group&quot; class=&quot;form-control [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountpermissions_html {
             get {
@@ -575,14 +628,16 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;dv-subcontent-profile&quot; name=&quot;subcontent-profile&quot; class=&quot;subcontent card&quot;&gt;
-        ///						&lt;div class=&quot;card-body&quot;&gt;
-        ///							&lt;h5 class=&quot;card-title text-start&quot;&gt;Account Profile&lt;/h5&gt;	
-        ///							&lt;div class=&quot;row&quot;&gt;
-        ///								&lt;form id=&quot;frm-user-profile&quot; name=&quot;frm-user-profile&quot;&gt;
-        ///									&lt;div id=&quot;dv-subcontent-profile-row-01&quot; class=&quot;mb-3 text-start&quot;&gt;
-        ///										&lt;label for=&quot;cbo-profile-group&quot; class=&quot;form-label text-secondary&quot;&gt;Section&lt;/label&gt;
-        ///										&lt;select id=&quot;cbo-profile-group&quot; class=&quot;form-control&quot; onchange=&quot;profile [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-profile&quot; name=&quot;subcontent-profile&quot; class=&quot;subcontent card&quot;&gt;
+        ///						&lt;div id=&quot;dv-subcontent-profile-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
+        ///							&lt;div id=&quot;dv-subcontent-profile-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
+        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
+        ///								&lt;div&gt;
+        ///								Your account information has been updated successfully
+        ///								&lt;/div&gt;
+        ///							&lt;/div&gt;
+        ///		 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountprofile_html {
             get {

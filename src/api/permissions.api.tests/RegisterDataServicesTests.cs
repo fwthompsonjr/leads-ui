@@ -30,6 +30,8 @@ namespace permissions.api.tests
                 collection.AddSingleton<IConfiguration>(config);
                 collection.RegisterAuthentication(config);
                 collection.RegisterDataServices();
+                collection.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(collection));
+                collection.RegisterHealthChecks();
                 _serviceProvider = collection.BuildServiceProvider();
             }
         }

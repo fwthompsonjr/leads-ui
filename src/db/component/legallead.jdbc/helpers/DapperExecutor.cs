@@ -2,6 +2,7 @@
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.jdbc.helpers
 {
@@ -35,6 +36,7 @@ namespace legallead.jdbc.helpers
             return response.FirstOrDefault();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private static testing from parent method.")]
         private static List<T> GetResult<T>(IDbConnection conn, string sql, DynamicParameters? arg = null) where T : BaseDto, new()
         {
             try
@@ -61,6 +63,8 @@ namespace legallead.jdbc.helpers
             }
         }
 
+
+        [ExcludeFromCodeCoverage(Justification = "Private static testing from parent method.")]
         private static void Execute(IDbConnection conn, string sql, DynamicParameters? arg = null)
         {
             try
@@ -74,6 +78,8 @@ namespace legallead.jdbc.helpers
             }
         }
 
+
+        [ExcludeFromCodeCoverage(Justification = "Private static testing from parent method.")]
         private static IDbCommand CreateCommand(IDbConnection conn, string sql, DynamicParameters? arg = null)
         {
             if (conn.State != ConnectionState.Open) conn.Open();

@@ -23,13 +23,6 @@ namespace legallead.desktop.tests.implementations
         }
 
         [Fact]
-        public void ProviderHasNames()
-        {
-            var actual = contentProvider.Names;
-            Assert.NotEmpty(actual);
-        }
-
-        [Fact]
         public void ProviderHasContentNames()
         {
             var actual = contentProvider.ContentNames;

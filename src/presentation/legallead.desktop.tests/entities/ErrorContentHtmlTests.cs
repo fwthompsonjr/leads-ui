@@ -36,6 +36,7 @@ namespace legallead.desktop.tests.entities
                 {
                     int statusCode = expected[i];
                     var list = errors;
+                    Assert.NotNull(list);
                     var item = list.Find(x => x.StatusCode == statusCode);
                     if (item == null)
                     {
@@ -52,6 +53,7 @@ namespace legallead.desktop.tests.entities
         {
             lock (locker)
             {
+                Assert.NotNull(errors);
                 var list = errors.Where(w => w.IsDefault);
                 Assert.NotNull(list);
                 Assert.Single(list);

@@ -25,11 +25,10 @@ namespace legallead.desktop.tests.entities
         [Fact]
         public void ContactProfileResponsehasDefaultValues()
         {
-            const string notFound = " - n/a -";
             var exception = Record.Exception(() =>
             {
                 var id = new ContactProfileResponse();
-                Assert.Equal(false, id.IsOK);
+                Assert.False(id.IsOK);
                 Assert.Equal("", id.ResponseType);
                 Assert.Equal("", id.Data);
                 Assert.Equal("", id.Message);

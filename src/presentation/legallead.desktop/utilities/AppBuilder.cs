@@ -73,6 +73,8 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<MenuConfiguration>());
             services.AddSingleton(s => provider.GetRequiredService<IErrorContentProvider>());
             services.AddSingleton(s => provider.GetRequiredService<IUserProfileMapper>());
+            services.AddSingleton(s => provider.GetRequiredService<IUserPermissionsMapper>());
+            services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
         }
     }
 }

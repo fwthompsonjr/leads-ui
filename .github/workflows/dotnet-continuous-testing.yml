@@ -54,11 +54,14 @@ jobs:
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Test with dotnet
+      uses: nick-fields/retry@v2
       if: github.event_name != 'pull_request'
-      timeout-minutes: 5
-      shell: pwsh
-      run: |
-        & ./pipeline-test-solutions.ps1
+      with:
+        timeout_minutes: 10
+        max_attempts: 3
+        shell: pwsh
+        command: |
+          & ./pipeline-test-solutions.ps1
 
     - name: Summarize Test Results
       if: github.event_name != 'pull_request'

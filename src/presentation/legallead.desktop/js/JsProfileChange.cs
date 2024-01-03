@@ -37,7 +37,6 @@ namespace legallead.desktop.js
             if (!isMapped) { return; }
             try
             {
-                Start();
                 var js = MapPayload(formName, json);
                 var response = permissionApi?.Post(AddressMap[name], js, user).Result;
                 var htm = JsCompletedHandler.ConvertHTML(response);
@@ -51,38 +50,6 @@ namespace legallead.desktop.js
                 var exmsg = JsCompletedHandler.ConvertHTML(exresponse);
                 SetMessage(exmsg);
             }
-            finally
-            {
-                End();
-            }
-        }
-
-        /// <summary>
-        /// At start of execution.
-        /// Start UI animation
-        /// Clear any status messages
-        /// </summary>
-        private void Start()
-        {
-            if (!HasBrowser || web == null) return;
-            scriptNames.ForEach(s =>
-            {
-                if (scriptNames.IndexOf(s) == 0)
-                {
-                    // setup animation so user knows process is running
-                    web.ExecuteScriptAsync(s, true);
-                }
-                if (scriptNames.IndexOf(s) == 1)
-                {
-                    // clear any previous submission messages
-                    web.ExecuteScriptAsync(s, "", false);
-                }
-                if (scriptNames.IndexOf(s) == 3)
-                {
-                    // hide success alert, if visible
-                    web.ExecuteScriptAsync(s, false);
-                }
-            });
         }
 
         /// <summary>
@@ -104,18 +71,10 @@ namespace legallead.desktop.js
             web.ExecuteScriptAsync(scriptNames[2]);
         }
 
-        /// <summary>
-        /// At End of Execution. Stop UI animation
-        /// </summary>
-        private void End()
-        {
-            if (!HasBrowser || web == null) return;
-            web.ExecuteScriptAsync(scriptNames[0], false);
-        }
-
         private static object MapPayload(string formName, object payload)
         {
             var js = Convert.ToString(payload);
+            if (js == null) return new();
             var typeMap = PayloadMap[formName];
             var mapped = JsonConvert.DeserializeObject(js, typeMap);
             return mapped ?? new();

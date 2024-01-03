@@ -1,5 +1,7 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -7,6 +9,13 @@ namespace legallead.desktop.implementations
 {
     internal class ContentHtmlNames : IContentHtmlNames
     {
+        private readonly ICopyrightBuilder? _copyrightBuilder;
+
+        public ContentHtmlNames()
+        {
+            _copyrightBuilder = DesktopCoreServiceProvider.Provider.GetService<ICopyrightBuilder>();
+        }
+
         public List<ContentHtml> ContentNames => _contents;
 
         public List<string> Names => _names ??= GetNames();
@@ -28,6 +37,20 @@ namespace legallead.desktop.implementations
             {
                 MapResourceContent(item);
             }
+            item = TransformFooterCopyRight(item);
+            return item;
+        }
+
+        private ContentHtml TransformFooterCopyRight(ContentHtml item)
+        {
+            if (_copyrightBuilder == null) { return item; }
+            var content = item.Content;
+            var hasFooter = content.Contains(HtmCommonFooterCopyRight);
+            if (!hasFooter) { return item; }
+            var copy = _copyrightBuilder.GetCopyright();
+            var text = string.Format(HtmCommonFooterCopyRight, copy);
+            content = content.Replace(HtmCommonFooterCopyRight, text);
+            item.Content = content;
             return item;
         }
 
@@ -202,10 +225,13 @@ namespace legallead.desktop.implementations
         private const string HtmAccountProfileInclude = "<p>My Profile</p>";
         private const string HtmAccountPermissionsInclude = "<p>My Permissions</p>";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
+        private const string HtmCommonFooterCopyRight = "<span id=\"footer-copy-span\">{0}</span>";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
         private const string HtmLoginInclude = "<p>Login form</p>";
         private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
+        private const string JsCommonReload = "/* js-include-common-reload */";
+        private const string JsCommonClientInclude = "<!-- script: common-client-include -->";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
@@ -227,7 +253,9 @@ namespace legallead.desktop.implementations
             { JsMyAccountProfile, Properties.Resources.myaccount_profile_validation_js },
             { HtmCommonFooter, GetCommonFooterInclude() },
             { HtmCommonHeading, GetCommonHeaderInclude() },
-            { HtmWelcomeInclude, GetWelcomeInclude() }
+            { HtmWelcomeInclude, GetWelcomeInclude() },
+            { JsCommonReload, Properties.Resources.commonreload_js },
+            { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
         };
     }
 }

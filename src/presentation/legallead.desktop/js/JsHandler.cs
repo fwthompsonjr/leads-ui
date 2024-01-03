@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace legallead.desktop.js
 {
@@ -21,6 +22,14 @@ namespace legallead.desktop.js
 
         public virtual void OnPageLoaded()
         {
+        }
+
+        public virtual void Reload(string pageName)
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            if (mainWindow is not MainWindow main) return;
+            main.NavigateChild(pageName);
         }
 
         public virtual void Submit(string formName, string json)
