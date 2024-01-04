@@ -78,7 +78,7 @@ namespace legallead.desktop.tests.Properties {
         ///		&lt;title&gt;legallead.ui: account&lt;/title&gt;
         ///		
         ///		&lt;!-- googleapis : fonts --&gt;
-        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;amp;display=swap&quot; rel= [rest of string was truncated]&quot;;.
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;amp;d [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_test {
             get {
