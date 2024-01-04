@@ -19,6 +19,7 @@ namespace legallead.desktop.implementations
         public List<ContentHtml> ContentNames => _contents;
 
         public List<string> Names => _names ??= GetNames();
+        public static List<ContentReplacementItem> ContentReplacements => contentReplacementItems ??= GetContentReplacements();
 
         public bool IsValid(string name)
         {
@@ -236,6 +237,7 @@ namespace legallead.desktop.implementations
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
+        private const string JsMyAccountPermissions = "/* inject: permissions-validation script */";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -258,6 +260,20 @@ namespace legallead.desktop.implementations
             { HtmWelcomeInclude, GetWelcomeInclude() },
             { JsCommonReload, Properties.Resources.commonreload_js },
             { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
+            { JsMyAccountPermissions, Properties.Resources.myaccount_permissions_validation_js },
         };
+
+        private static List<ContentReplacementItem>? contentReplacementItems = null;
+
+        private static List<ContentReplacementItem> GetContentReplacements()
+        {
+            var list = new List<ContentReplacementItem>();
+            var keys = Replacements.Keys.ToList();
+            keys.ForEach(k =>
+            {
+                list.Add(new ContentReplacementItem { Key = k, Value = Replacements[k] });
+            });
+            return list;
+        }
     }
 }

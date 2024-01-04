@@ -1,5 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.models;
@@ -59,7 +60,8 @@ namespace legallead.desktop.utilities
         internal static string GetAddressBase64(ContentHtml content)
         {
             const string bs64address = "data:text/html;base64,{0}";
-            var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(content.Content));
+            var html = parser.BeautfyHTML(content.Content);
+            var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(html));
             return string.Format(bs64address, base64EncodedHtml);
         }
 
@@ -78,5 +80,7 @@ namespace legallead.desktop.utilities
             "introduction",
             "home"
         };
+
+        private static readonly ContentParser parser = new();
     }
 }

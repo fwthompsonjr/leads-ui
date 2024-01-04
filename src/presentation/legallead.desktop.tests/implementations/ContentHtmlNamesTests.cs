@@ -12,6 +12,43 @@ namespace legallead.desktop.tests.implementations
         }
 
         [Fact]
+        public void ContentHtmlNamesContentReplacements()
+        {
+            var sut = ContentHtmlNames.ContentReplacements;
+            Assert.NotNull(sut);
+            Assert.NotEmpty(sut);
+        }
+
+        [Theory]
+        [InlineData("bootstrap.min.css")]
+        [InlineData("css/error.css")]
+        [InlineData("my-account-custom-css")]
+        [InlineData("my-account-subcontent-css")]
+        [InlineData("common-cef-handler")]
+        [InlineData("<p>My Account</p>")]
+        [InlineData("<p>My Password</p>")]
+        [InlineData("<p>My Profile</p>")]
+        [InlineData("<p>My Permissions</p>")]
+        [InlineData("common-footer")]
+        [InlineData("common-headings")]
+        [InlineData("<p>Login form</p>")]
+        [InlineData("<p>Welcome form</p>")]
+        [InlineData("<p>Registration form</p>")]
+        [InlineData("js-include-common-reload")]
+        [InlineData("common-client-include")]
+        [InlineData("home-form-validation")]
+        [InlineData("my-account-navigation")]
+        [InlineData("my-account-profile-valid")]
+        [InlineData("inject: permissions-validation")]
+        public void ContentReplacementExistsAndIsNotEmpty(string find)
+        {
+            var sut = ContentHtmlNames.ContentReplacements;
+            var item = sut.Find(x => x.Key.Contains(find));
+            Assert.NotNull(item);
+            Assert.False(string.IsNullOrWhiteSpace(item.Value));
+        }
+
+        [Fact]
         public void ContentHtmlNamesContainsNames()
         {
             var sut = new ContentHtmlNames();
