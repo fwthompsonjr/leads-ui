@@ -28,7 +28,8 @@ div[name="main-content"] {
 
 div[name="subcontent-home"],
 div[name="subcontent-profile"],
-div[name="subcontent-permissions"] {
+div[name="subcontent-permissions"],
+div[name="subcontent-password"] {
 	text-align: left;
 	justify-content: left;
 	margin-bottom: 20px;

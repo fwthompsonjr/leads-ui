@@ -16,11 +16,16 @@
                 <MenuItem x:Name="mnuExit" Header="_Exit" />
             </MenuItem>
             <MenuItem x:Name="mnuMyAccount" Header="My _Account" Visibility="Hidden">
-                <MenuItem x:Name="mnuMyAccountHome" Header="_Account" Click="MnuAccount_Click" Tag="myaccount-home" />
-                <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuAccount_Click" Tag="myaccount-profile" />
-                <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuAccount_Click" Tag="myaccount-permissions" />
+                <MenuItem x:Name="mnuMyAccountHome" Header="_Account" Click="MnuDefault_Click" Tag="myaccount-home" />
+                <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuDefault_Click" Tag="myaccount-profile" />
+                <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuDefault_Click" Tag="myaccount-permissions" />
                 <Separator />
-                <MenuItem x:Name="mnuMyAccountLogout" Header="_Logout" Click="MnuAccount_Click" />
+                <MenuItem x:Name="mnuMyAccountLogout" Header="_Logout" Click="MnuDefault_Click" />
+            </MenuItem>
+            <MenuItem x:Name="mnuMySearch" Header="_Search" Visibility="Hidden">
+                <MenuItem x:Name="mnuMySearchHome" Header="_Search" Click="MnuDefault_Click" Tag="mysearch-home" />
+                <MenuItem x:Name="mnuMySearchProfile" Header="_History" Click="MnuDefault_Click" Tag="mysearch-history" />
+                <MenuItem x:Name="mnuMySearchPermissions" Header="_Purchases" Click="MnuDefault_Click" Tag="mysearch-purchases" />
             </MenuItem>
             <MenuItem Header="_Error" Visibility="Hidden">
                 <MenuItem x:Name="mnu500" Header="_Unexpected Error" Click="MnuError_Click" />
@@ -40,6 +45,9 @@
                 </TabItem>
                 <TabItem x:Name="tabMyAccount" IsSelected="False" Tag="MyAccount" Visibility="Collapsed">
                     <ContentControl x:Name="contentMyAccount" />
+                </TabItem>
+                <TabItem x:Name="tabMySearch" IsSelected="False" Tag="MyAccount" Visibility="Collapsed">
+                    <ContentControl x:Name="contentMySearch" Content="Hello World!" />
                 </TabItem>
                 <TabItem x:Name="tabError" IsSelected="False" Tag="Error" Visibility="Collapsed">
                     <ContentControl x:Name="contentError" />

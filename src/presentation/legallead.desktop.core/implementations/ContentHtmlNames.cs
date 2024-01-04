@@ -222,6 +222,7 @@ namespace legallead.desktop.implementations
         private const string CssMyAccountSubContent = "<!-- style: my-account-subcontent-css -->";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
         private const string HtmAccountHomeInclude = "<p>My Account</p>";
+        private const string HtmAccountPasswordInclude = "<p>My Password</p>";
         private const string HtmAccountProfileInclude = "<p>My Profile</p>";
         private const string HtmAccountPermissionsInclude = "<p>My Permissions</p>";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
@@ -243,6 +244,7 @@ namespace legallead.desktop.implementations
             { CssMyAccountInclude, Properties.Resources.myaccount_css },
             { CssMyAccountSubContent, Properties.Resources.subcontent_css },
             { HtmAccountHomeInclude, Properties.Resources.myaccounthome_html },
+            { HtmAccountPasswordInclude, Properties.Resources.myaccount_password_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
             { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },
             { HtmLoginInclude, GetLoginInclude() },

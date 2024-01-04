@@ -34,9 +34,15 @@ namespace legallead.desktop.js
 
         public virtual void Submit(string formName, string json)
         {
-            if (ProfileForms.Exists(f => f.Equals(formName, StringComparison.OrdinalIgnoreCase)))
+            const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
+            if (ProfileForms.Exists(f => f.Equals(formName, comparison)))
             {
                 var handler = new JsProfileChange(web);
+                handler.Submit(formName, json);
+            }
+            if (ProfileForms.Exists(f => f.Equals(formName, comparison)))
+            {
+                var handler = new JsPermissionChange(web);
                 handler.Submit(formName, json);
             }
         }
@@ -75,6 +81,13 @@ namespace legallead.desktop.js
             "frm-profile-address",
             "frm-profile-phone",
             "frm-profile-email"
+        };
+
+        protected static readonly List<string> PermissionForms = new()
+        {
+            "permissions-subscription-group",
+            "permissions-discounts",
+            "form-change-password"
         };
     }
 }

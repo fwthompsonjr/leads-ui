@@ -4,6 +4,9 @@
 			CefSharp.BindObjectAsync("jsHandler", "jsHandler");
 		} catch {}		
 	
+		
+		
+		
 		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -106,6 +109,9 @@ div[name="loader"] {
 }
 
 
+		
+		
+		
 		</style>
 		<style name="subcontent-css">
 
@@ -142,7 +148,8 @@ div[name="loader"] {
 
 			div[name="subcontent-home"],
 			div[name="subcontent-profile"],
-			div[name="subcontent-permissions"] {
+			div[name="subcontent-permissions"],
+			div[name="subcontent-password"] {
 				text-align: left;
 				justify-content: left;
 				margin-bottom: 20px;
@@ -165,6 +172,9 @@ div[name="loader"] {
 			}
 
 
+		
+		
+		
 		</style>
 	</head>
 	<body class="text-center">
@@ -198,6 +208,12 @@ div[name="loader"] {
 								</li>
 								<li>
 									<hr class="dropdown-divider">
+								</li>
+								<li>
+									<a id="account-dropdown-item-password" class="dropdown-item" href="javascript:setDisplay('password')">
+										<i class="bi bi-key m-1"></i>
+										<span id="account-text-item-password">Change Password</span>
+									</a>
 								</li>
 								<li>
 									<a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a>
@@ -350,7 +366,7 @@ div[name="loader"] {
 								
 								<!-- Error messages -->
 							</div>
-							<button id="frm-profile-submit-button" class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">
+							<button id="frm-profile-submit-button" class="btn btn-primary" onclick="profileSubmitButtonClicked()">
 								<i id="form-profile-icon" class="bi bi-pencil-square"></i>
 								<i id="form-profile-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
 							</button>
@@ -369,11 +385,11 @@ div[name="loader"] {
 									<option value="03">Discounts</option>
 								</select>
 							</div>
-							<div id="dv-subcontent-permissions-row-02" class="mb-3 text-start" style="">
+							<div id="dv-subcontent-permissions-row-02" class="mb-3 text-start" style="display: none;">
 								<h6>Permission Level</h6>
 								<ul id="permissions-subscription-group" class="list-group">
 									<li class="list-group-item">
-										<input class="form-check-input me-1" name="subscription-group" onchange="subscriptionLevelChanged()" type="radio" value="Guest" checked="" id="permissions-subscription-guest-radio">
+										<input class="form-check-input me-1" name="subscription-group" onchange="subscriptionLevelChanged()" type="radio" value="Guest" id="permissions-subscription-guest-radio" checked="checked">
 										<label class="form-check-label" for="permissions-subscription-guest-radio">Guest</label>
 									</li>
 									<li class="list-group-item">
@@ -416,22 +432,22 @@ div[name="loader"] {
 									</p>
 								</div>
 							</div>
-							<div id="dv-subcontent-permissions-row-03" class="mb-3 text-start" style="display: none;">
+							<div id="dv-subcontent-permissions-row-03" class="mb-3 text-start" style="">
 								<h6>State Discounts</h6>
 								<ul id="permissions-discounts-states-group" class="list-group">
 									<li class="list-group-item">
-										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx">
+										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx" checked="checked">
 										<label class="form-check-label" for="permissions-discounts-tx">Texas</label>
 									</li>
 								</ul>
 								<h6>County Discounts</h6>
 								<ul id="permissions-discounts-counties-group" class="list-group">
 									<li class="list-group-item">
-										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx-collin">
+										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx-collin" checked="checked">
 										<label class="form-check-label" for="permissions-discounts-tx-collin">Texas : Collin</label>
 									</li>
 									<li class="list-group-item">
-										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx-denton">
+										<input class="form-check-input me-1" type="checkbox" value="" id="permissions-discounts-tx-denton" checked="checked">
 										<label class="form-check-label" for="permissions-discounts-tx-denton">Texas : Denton</label>
 									</li>
 									<li class="list-group-item">
@@ -442,7 +458,35 @@ div[name="loader"] {
 							</div>
 						</div>
 						<div class="card-footer">
-							<button class="btn btn-sm btn-primary">Save</button>
+							<button class="btn btn-primary">Save</button>
+						</div>
+					</div>
+					<div id="dv-subcontent-password" name="subcontent-password" class="subcontent card">
+						<div class="card-body">
+							<h5 class="card-title">Change Password</h5>
+							<form id="form-change-password" name="form-change-password">
+								<div class="mb-3">
+									<label for="account-password-username" class="form-label">User Name:</label>
+									<input type="text" class="form-control" id="account-password-username" name="username" maxlength="255" minlength="8" readonly="readonly">
+								</div>
+								<div class="mb-3">
+									<label for="account-password-new-password" class="form-label">New Password</label>
+									<input type="password" class="form-control" id="account-password-new-password" name="account-password-new-password" maxlength="255" minlength="8" aria-describedby="account-password-new-password-help">
+									<div id="account-password-new-password-help" class="text-secondary help-text">
+										Provide a strong password.
+									</div>
+								</div>
+								<div class="mb-3">
+									<label for="account-password-confirmation" class="form-label">Confirm Password</label>
+									<input type="password" class="form-control" id="account-password-confirmation" name="account-password-confirmation" maxlength="255" minlength="8" aria-describedby="account-password-confirmation-help">
+									<div id="account-password-confirmation-help" class="text-secondary help-text">
+										Confirm password.
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="card-footer">
+							<button class="btn btn-primary">Save</button>
 						</div>
 					</div>
 				</div>
@@ -458,7 +502,7 @@ div[name="loader"] {
 		</div>
 		<script>
 	const actv = "active";
-	const names = [ "home", "profile", "permissions" ];
+	const names = [ "home", "profile", "permissions", "password" ];
 
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
@@ -469,6 +513,7 @@ div[name="loader"] {
 			for(let i = 0; i < thelinks.length; i++) {
 				let a = thelinks[i];
 				const aname = a.getAttribute("name");
+				if(null === aname || undefined === aname) { continue; }
 				if ( aname.indexOf(name) >= 0 ) {
 					a.classList.add(actv);
 				} else {
@@ -479,7 +524,7 @@ div[name="loader"] {
 
 	function setActiveDiv( name ) {
 		if (names.indexOf( name ) < 0 ) { return; }
-		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions" ];
+		const divnames = [ "dv-subcontent-home", "dv-subcontent-profile", "dv-subcontent-permissions", "dv-subcontent-password" ];
 		
 		for(let i = 0; i < divnames.length; i++) {
 			const d = document.getElementById(divnames[i]);
@@ -574,6 +619,9 @@ div[name="loader"] {
 		
 	profileComboBoxChanged()
 	
+		
+		
+		
 		</script>
 		
 		<!-- script: my-account-form-validation -->
@@ -866,10 +914,14 @@ function initializeProfileFormValidation()
 			return; 
 		}
 		try {
+			setProfileIconState( true );
+			setProfileStatusMessage( "<span class='text-warning'>Submitting form values ...</span>", true );
 			handler.submit(target, payload);
 		}
 		catch (err) {
 			setProfileStatusMessage( err, true );
+		} finally {
+			setProfileIconState( false );
 		}
 	}
 	
@@ -910,14 +962,17 @@ initializeProfileFormValidation();
 permissionsComboBoxChanged();
 
 
+		
+		
+		
 		</script>
 		<script>
 	
-	let clientScriptActivated = false;
+	let clientScriptActivated = true;
 
 	function commonClientScript() {
 		try {
-			/* user injected block */
+			setDisplay( 'permissions' );
 		} catch(err) {
 			console.debug(err);
 		}
@@ -927,6 +982,9 @@ permissionsComboBoxChanged();
 	}
 	
 
+		
+		
+		
 		</script>
 	
 </body></html>

@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
+using Moq;
 
 namespace legallead.desktop.tests.utilities
 {
@@ -30,6 +31,37 @@ namespace legallead.desktop.tests.utilities
             var mock = new ActiveInternetStatus();
             var service = new PermissionPageClient(faker.Internet.DomainName(), mock);
             var actual = service.CanGet(landing).Key;
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("read-me", true)]
+        [InlineData("list", true)]
+        [InlineData("login", false)]
+        [InlineData("misspelled", false)]
+        public async Task ServiceCanGetPageUrlWithUser(string landing, bool expected)
+        {
+            var user = new UserBoMock(true);
+            var mock = new ActiveInternetStatus();
+            var service = new PermissionApi(faker.Internet.DomainName(), mock);
+            var resp = await service.Get(landing, user);
+            var actual = resp?.StatusCode == 200;
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData("read-me")]
+        [InlineData("list")]
+        [InlineData("login")]
+        [InlineData("misspelled")]
+        public async Task ServiceCanNotGetPageWithOutUser(string landing)
+        {
+            const bool expected = false;
+            var user = new UserBoMock(false);
+            var mock = new ActiveInternetStatus();
+            var service = new PermissionApi(faker.Internet.DomainName(), mock);
+            var resp = await service.Get(landing, user);
+            var actual = resp?.StatusCode == 200;
             Assert.Equal(expected, actual);
         }
 
@@ -117,6 +149,16 @@ namespace legallead.desktop.tests.utilities
             {
                 return false;
             }
+        }
+
+        private sealed class UserBoMock : UserBo
+        {
+            private readonly bool _authenicated;
+
+            public UserBoMock(bool autenicationResponse)
+            { _authenicated = autenicationResponse; }
+
+            public override bool IsAuthenicated => _authenicated;
         }
     }
 }
