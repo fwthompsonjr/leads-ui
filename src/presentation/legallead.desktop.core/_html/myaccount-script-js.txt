@@ -1,6 +1,6 @@
 <script>
 	const actv = "active";
-	const names = [ "home", "profile", "permissions" ];
+	const names = [ "home", "profile", "permissions", "password" ];
 
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
@@ -11,6 +11,7 @@
 			for(let i = 0; i < thelinks.length; i++) {
 				let a = thelinks[i];
 				const aname = a.getAttribute("name");
+				if (null === aname || undefined === aname) { continue; }
 				if ( aname.indexOf(name) >= 0 ) {
 					a.classList.add(actv);
 				} else {

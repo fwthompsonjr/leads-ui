@@ -1,15 +1,5 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
-using legallead.desktop.entities;
-using legallead.desktop.helpers;
-using legallead.desktop.interfaces;
-using legallead.desktop.js;
-using legallead.desktop.utilities;
-using Microsoft.Extensions.DependencyInjection;
+﻿using legallead.desktop.utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,66 +24,10 @@ namespace legallead.desktop
             mnuExit.Click += MnuExit_Click;
         }
 
-        private void InitializeUserChanged()
+        private BrowserHelper GetHelper()
         {
-            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
-            if (user == null) return;
-            user.AuthenicatedChanged = () =>
-            {
-                var menus = Dispatcher.Invoke(() => { return new[] { mnuMyAccount, mnuMySearch }.ToList(); });
-                if (user.IsAuthenicated)
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        menus.ForEach(m => { m.Visibility = Visibility.Visible; });
-                    });
-                }
-                else
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        menus.ForEach(m => { m.Visibility = Visibility.Hidden; });
-                    });
-                }
-            };
-        }
-
-        private void InitializeBrowserContent()
-        {
-            string[] names = new[] { "home", "blank" };
-            var target = isBlankLoaded ? names[0] : names[1];
-            var blankContent = ContentHandler.GetLocalContent(target);
-            if (blankContent != null)
-            {
-                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
-                var browser = new ChromiumWebBrowser()
-                {
-                    Address = blankHtml
-                };
-                var handler = target == names[1] ? new JsHandler(browser) : new HomeJsHandler(browser);
-                browser.JavascriptObjectRepository.Register("jsHandler", handler);
-                content1.Content = browser;
-            }
-        }
-
-        private void InitializeErrorContent()
-        {
-            SetErrorContent(404);
-        }
-
-        private void InitializeMyAccountContent()
-        {
-            var blankContent = ContentHandler.GetLocalContent("myaccount");
-            if (blankContent != null)
-            {
-                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
-                var browser = new ChromiumWebBrowser()
-                {
-                    Address = blankHtml
-                };
-                browser.JavascriptObjectRepository.Register("jsHandler", new JsHandler(browser));
-                contentMyAccount.Content = browser;
-            }
+            var window = (Window)this;
+            return new BrowserHelper(window);
         }
 
         private void MainWindow_ContentRendered(object? sender, System.EventArgs e)
@@ -149,58 +83,9 @@ namespace legallead.desktop
             SetErrorContent(menuId);
         }
 
-        private BrowserHelper GetHelper()
-        {
-            var window = (Window)this;
-            return new BrowserHelper(window);
-        }
-
-        private void SetErrorContent(int errorCode)
-        {
-            var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
-            if (errorService == null) return;
-            var errorContent = errorService.GetContent(errorCode);
-            errorContent ??= errorService.GetContent(500);
-            if (errorContent != null)
-            {
-                var blankHtml = ContentHandler.GetAddressBase64(errorContent);
-                var browser = new ChromiumWebBrowser()
-                {
-                    Address = blankHtml
-                };
-                browser.JavascriptObjectRepository.Register("jsHandler", new JsHandler(browser));
-                contentError.Content = browser;
-            }
-        }
-
-        internal void NavigateChild(string destination)
-        {
-            var sublanding = NavigationHelper.SubLandings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
-            if (sublanding == null) return;
-            var directions = sublanding.Split('-');
-            var parentName = directions[0];
-            var parentView = NavigateTo(parentName);
-            if (string.IsNullOrEmpty(parentView)) return;
-
-            var targetWindow = NavigationHelper.GetBrowserTarget(parentView);
-            if (targetWindow is not ChromiumWebBrowser web) return;
-            var script = $"setDisplay( '{directions[1]}' );";
-            var replacements = new Dictionary<string, string>()
-            {
-                { "let clientScriptActivated = false;", "let clientScriptActivated = true;" },
-                { "/* user injected block */", script }
-            };
-            var html = new StringBuilder(web.GetHTML(Dispatcher));
-            foreach (var replace in replacements)
-            {
-                html.Replace(replace.Key, replace.Value);
-            }
-            web.SetHTML(Dispatcher, html.ToString());
-        }
-
         internal string? NavigateTo(string destination, int errorCode = 0)
         {
-            var landing = NavigationHelper.Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
+            var landing = Landings.Find(x => x.Equals(destination, StringComparison.OrdinalIgnoreCase));
             if (landing == null) return null;
             switch (landing)
             {
@@ -221,29 +106,7 @@ namespace legallead.desktop
                     break;
 
                 case "myaccount":
-                    var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
-                    if (user == null || !user.IsAuthenicated)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            mnuMyAccount.Visibility = Visibility.Hidden;
-                            SetErrorContent(401);
-                            tabError.IsSelected = true;
-                        });
-                        return null;
-                    }
-                    Dispatcher.Invoke(() =>
-                    {
-                        InitializeMyAccountContent();
-                        Task.Run(async () =>
-                        {
-                            Thread.Sleep(500);
-                            await NavigationHelper.PopulateMyAccount();
-                        });
-                        mnuMyAccount.Visibility = Visibility.Visible;
-                        tabMyAccount.IsSelected = true;
-                    });
-
+                    NavigateToMyAccount();
                     break;
 
                 case "exit":

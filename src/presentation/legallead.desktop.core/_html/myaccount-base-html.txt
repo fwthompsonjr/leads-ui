@@ -52,7 +52,8 @@
 								</li>
 								<li><hr class="dropdown-divider"></li>
 								<li>
-									<a id="account-dropdown-item-password" class="dropdown-item" href="javascript:setDisplay('password')">
+									<a	id="account-dropdown-item-password" 
+										class="dropdown-item" href="javascript:setDisplay('password')">
 										<i class="bi bi-key m-1"></i>
 										<span id="account-text-item-password">Change Password</span>
 									</a>
