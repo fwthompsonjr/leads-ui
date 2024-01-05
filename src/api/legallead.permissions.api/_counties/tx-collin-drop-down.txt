@@ -1,0 +1,70 @@
+{
+  "dropDowns": [
+    {
+      "id": 0,
+      "name": "criminal courts",
+      "options": [
+        {
+          "id": 0,
+          "name": "criminal case records"
+        },
+        {
+          "id": 1,
+          "name": "probate case records"
+        },
+        {
+          "id": 2,
+          "name": "magistrate case records"
+        },
+        {
+          "id": 3,
+          "name": "civil and family case records"
+        },
+        {
+          "id": 4,
+          "name": "justice of the peace case records"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "probate courts",
+      "options": [
+        {
+          "id": 0,
+          "name": "probate case records"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "magistrate courts",
+      "options": [
+        {
+          "id": 0,
+          "name": "magistrate case records"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "civil and family courts",
+      "options": [
+        {
+          "id": 0,
+          "name": "civil and family case records"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "justice courts",
+      "options": [
+        {
+          "id": 0,
+          "name": "justice of the peace case records"
+        }
+      ]
+    }
+  ]
+}
