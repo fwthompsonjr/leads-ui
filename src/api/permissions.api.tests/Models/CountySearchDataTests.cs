@@ -36,7 +36,7 @@ namespace permissions.api.tests.Models
                 var count = y.Random.Int(1, 10);
                 return searchFaker.Generate(count);
             });
-			
+
 
         private static readonly Faker<CountySearchData> faker =
             new Faker<CountySearchData>()

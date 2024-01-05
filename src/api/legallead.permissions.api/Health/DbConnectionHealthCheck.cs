@@ -25,14 +25,14 @@ namespace legallead.permissions.api.Health
                     if (db == null) return HealthCheckResult.Unhealthy("Unable to initialize data context object");
                     using var connection = db.CreateConnection();
                     _ = GetScalar(connection, "SELECT 1");
-                    return HealthCheckResult.Healthy();
+                    return HealthCheckResult.Healthy("Database connection opened successfully.");
                 });
                 return response;
             }
             catch (Exception ex)
             {
                 return HealthCheckResult.Unhealthy(
-                    description: "Create Controller Context",
+                    description: "Create DbConnection Context",
                     exception: ex);
             }
         }

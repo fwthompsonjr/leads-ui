@@ -6,45 +6,25 @@ using System.Diagnostics.CodeAnalysis;
 namespace legallead.permissions.api.Health
 {
     [ExcludeFromCodeCoverage]
-    public class ControllerHealthCheck : IHealthCheck
+    public class ControllerHealthCheck : BaseServiceHealthCheck, IHealthCheck
     {
-        private readonly IInternalServiceProvider _provider;
+        private const string ClassContextName = "Create Controller Context";
 
-        public ControllerHealthCheck(IInternalServiceProvider provider)
+        public ControllerHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
         {
-            _provider = provider;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await Task.Run(() =>
-                {
-                    var result = new List<HealthCheckResult>();
-                    types.ForEach(type =>
-                    {
-                        var obj = _provider.ServiceProvider.GetService(type);
-                        if (obj != null)
-                        {
-                            result.Add(HealthCheckResult.Healthy());
-                        }
-                        else
-                        {
-                            var message = $"Unable to create controller type: {type.Name}";
-                            result.Add(HealthCheckResult.Unhealthy(message));
-                        }
-                    });
-                    return result;
-                });
-                var unhealthy = response.Exists(x => x.Status == HealthStatus.Unhealthy);
-                if (unhealthy) return response.Find(x => x.Status == HealthStatus.Unhealthy);
-                return HealthCheckResult.Healthy();
+                var response = await CanCreate(types);
+                return response;
             }
             catch (Exception ex)
             {
                 return HealthCheckResult.Unhealthy(
-                    description: "Create Controller Context",
+                    description: ClassContextName,
                     exception: ex);
             }
         }

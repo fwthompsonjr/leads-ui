@@ -5,45 +5,25 @@ using System.Diagnostics.CodeAnalysis;
 namespace legallead.permissions.api.Health
 {
     [ExcludeFromCodeCoverage]
-    public class RepositoryHealthCheck : IHealthCheck
+    public class RepositoryHealthCheck : BaseServiceHealthCheck, IHealthCheck
     {
-        private readonly IInternalServiceProvider _provider;
+        private const string ClassContextName = "Create Repository Context";
 
-        public RepositoryHealthCheck(IInternalServiceProvider provider)
+        public RepositoryHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
         {
-            _provider = provider;
         }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await Task.Run(() =>
-                {
-                    var result = new List<HealthCheckResult>();
-                    types.ForEach(type =>
-                    {
-                        var obj = _provider.ServiceProvider.GetService(type);
-                        if (obj != null)
-                        {
-                            result.Add(HealthCheckResult.Healthy());
-                        }
-                        else
-                        {
-                            var message = $"Unable to create repository type: {type.Name}";
-                            result.Add(HealthCheckResult.Unhealthy(message));
-                        }
-                    });
-                    return result;
-                });
-                var unhealthy = response.Exists(x => x.Status == HealthStatus.Unhealthy);
-                if (unhealthy) return response.Find(x => x.Status == HealthStatus.Unhealthy);
-                return HealthCheckResult.Healthy();
+                var response = await CanCreate(types);
+                return response;
             }
             catch (Exception ex)
             {
                 return HealthCheckResult.Unhealthy(
-                    description: "Create Repository Context",
+                    description: ClassContextName,
                     exception: ex);
             }
         }
