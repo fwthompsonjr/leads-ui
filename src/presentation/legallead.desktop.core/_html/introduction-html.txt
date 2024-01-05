@@ -31,10 +31,7 @@
 		class="masthead mb-auto" 
 		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 		<div class="inner">
-			<h3 class="masthead-brand">
-				<i class="bi bi-bank2"></i>
-				<span>Legal Lead UI</span>
-			</h3>
+			<!-- block: common-mast-heading -->
 			<nav style="display: none" class="nav nav-masthead justify-content-center">
 				<a class="nav-link active" href="#">Home</a>
 				<a class="nav-link" href="#">Login</a>

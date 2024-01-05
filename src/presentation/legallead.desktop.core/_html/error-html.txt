@@ -15,10 +15,7 @@
 		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
 			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 				<div class="inner">
-					<h3 class="masthead-brand">
-						<i class="bi bi-bank2"></i>
-						<span>Legal Lead UI</span>
-					</h3>
+					<!-- block: common-mast-heading -->
 				</div>
 			</header>
 			<main role="main" class="inner cover">

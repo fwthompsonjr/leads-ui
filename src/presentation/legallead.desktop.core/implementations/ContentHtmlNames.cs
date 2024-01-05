@@ -214,6 +214,7 @@ namespace legallead.desktop.implementations
             new() { Index = 310, Name = "myaccounthome-html"},
             new() { Index = 315, Name = "myaccountpermissions-html"},
             new() { Index = 320, Name = "myaccountprofile-html"},
+            new() { Index = 400, Name = "mysearch-html"},
         };
 
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
@@ -229,6 +230,7 @@ namespace legallead.desktop.implementations
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonFooterCopyRight = "<span id=\"footer-copy-span\">{0}</span>";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
+        private const string HtmCommonMastHead = "<!-- block: common-mast-heading -->";
         private const string HtmLoginInclude = "<p>Login form</p>";
         private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
@@ -258,6 +260,7 @@ namespace legallead.desktop.implementations
             { HtmCommonFooter, GetCommonFooterInclude() },
             { HtmCommonHeading, GetCommonHeaderInclude() },
             { HtmWelcomeInclude, GetWelcomeInclude() },
+            { HtmCommonMastHead, Properties.Resources.common_mast_head_html },
             { JsCommonReload, Properties.Resources.commonreload_js },
             { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
             { JsMyAccountPermissions, Properties.Resources.myaccount_permissions_validation_js },
