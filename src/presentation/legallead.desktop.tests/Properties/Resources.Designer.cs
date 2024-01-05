@@ -85,5 +85,29 @@ namespace legallead.desktop.tests.Properties {
                 return ResourceManager.GetString("myaccount-test", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///    {
+        ///        &quot;counties&quot;: [
+        ///            {
+        ///                &quot;data&quot;: {
+        ///                    &quot;dropDowns&quot;: [
+        ///                        {
+        ///                            &quot;id&quot;: 0,
+        ///                            &quot;name&quot;: &quot;criminal courts&quot;,
+        ///                            &quot;members&quot;: [
+        ///                                {
+        ///                                    &quot;id&quot;: 0,
+        ///                                    &quot;name&quot;: &quot;criminal case records&quot;
+        ///                                },
+        ///                                {
+        ///                  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string state_config_response {
+            get {
+                return ResourceManager.GetString("state_config_response", resourceCulture);
+            }
+        }
     }
 }
