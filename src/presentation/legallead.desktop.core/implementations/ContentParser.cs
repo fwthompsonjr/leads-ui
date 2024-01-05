@@ -59,7 +59,7 @@ namespace legallead.desktop.implementations
 
             public void Standardize()
             {
-                int basicIndent = 10;
+                int basicIndent = 20;
                 var text = _node.InnerText;
                 var trimmed = text.Trim();
                 if (string.IsNullOrWhiteSpace(trimmed)) return;

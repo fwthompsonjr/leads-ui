@@ -30,6 +30,7 @@ namespace legallead.desktop.implementations
                 new { node = "", find = "//*[@id=\"tbx-profile-phone-02\"]", replace = GetProfileItem(profile, "Phone", "Business")},
                 new { node = "", find = "//*[@id=\"tbx-profile-phone-03\"]", replace = GetProfileItem(profile, "Phone", "Other")},
                 new { node = "div", find = "//*[@id=\"account-user-name\"]", replace = identity.UserName},
+                new { node = "", find = "//*[@id=\"account-password-username\"]", replace = identity.UserName},
                 new { node = "div", find = "//*[@id=\"account-user-email\"]", replace = identity.Email},
                 new { node = "div", find = "//*[@id=\"account-create-date\"]", replace = identity.Created},
                 new { node = "div", find = "//*[@id=\"account-role\"]", replace = identity.Role},

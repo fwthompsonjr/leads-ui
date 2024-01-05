@@ -161,7 +161,10 @@ namespace legallead.desktop.utilities
             { "profile-edit-contact-address", "{0}/api/profiles/edit-contact-address" },
             { "profile-edit-contact-email", "{0}/api/profiles/edit-contact-email" },
             { "profile-edit-contact-name", "{0}/api/profiles/edit-contact-name" },
-            { "profile-edit-contact-phone", "{0}/api/profiles/edit-contact-phone" }
+            { "profile-edit-contact-phone", "{0}/api/profiles/edit-contact-phone" },
+            { "permissions-change-password", "{0}/api/signon/change-password" },
+            { "permissions-set-discount", "{0}/api/permissions/set-discount" },
+            { "permissions-set-permission", "{0}/api/permissions/set-permission" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)

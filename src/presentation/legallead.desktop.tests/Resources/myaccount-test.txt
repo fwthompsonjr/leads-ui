@@ -41,6 +41,11 @@
 /*
 * Forms
 */
+.form-control:focus {
+    background-color: #E5E7E9;
+	border-color: #34495E;
+    color: ghostwhite;
+}
 .form-control {
     background-color: transparent;
     border-color: #555;

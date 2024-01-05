@@ -1,6 +1,11 @@
+using AngleSharp;
 using CefSharp.Wpf;
+using HtmlAgilityPack;
+using legallead.desktop.entities;
 using legallead.desktop.js;
 using legallead.desktop.utilities;
+using System;
+using System.Linq;
 
 namespace legallead.desktop
 {

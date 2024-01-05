@@ -1,4 +1,5 @@
 ﻿using CefSharp.Wpf;
+using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
@@ -7,6 +8,7 @@ using legallead.desktop.models;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -60,6 +62,10 @@ namespace legallead.desktop.utilities
         internal static string GetAddressBase64(ContentHtml content)
         {
             const string bs64address = "data:text/html;base64,{0}";
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                content = InjectUser(content);
+            }
             var html = parser.BeautfyHTML(content.Content);
             var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(html));
             return string.Format(bs64address, base64EncodedHtml);
@@ -80,6 +86,29 @@ namespace legallead.desktop.utilities
             "introduction",
             "home"
         };
+
+        private static ContentHtml InjectUser(ContentHtml content)
+        {
+            AppBuilder.Build();
+            var config = AppBuilder.Configuration;
+            if (config == null) return content;
+            var values = new[] {
+                config["debug.user:name"],
+                config["debug.user:code"] }.ToList();
+            if (values.Exists(a => string.IsNullOrWhiteSpace(a))) { return content; }
+            var document = new HtmlDocument();
+            document.LoadHtml(content.Content);
+            var parent = document.DocumentNode;
+            var searches = new[] { "//*[@id=\"username\"]", "//*[@id=\"login-password\"]" };
+            for (var i = 0; i < searches.Length; i++)
+            {
+                var element = parent.SelectSingleNode(searches[i]);
+                if (element == null) continue;
+                element.SetAttributeValue("value", values[i]);
+            }
+            content.Content = parent.OuterHtml;
+            return content;
+        }
 
         private static readonly ContentParser parser = new();
     }
