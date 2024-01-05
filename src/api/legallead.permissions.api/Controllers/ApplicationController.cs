@@ -112,6 +112,7 @@ namespace legallead.permissions.api.Controllers
         {
             try
             {
+                user.CreateDate = DateTime.UtcNow;
                 await _db.UserDb.Create(user);
                 return true;
             }

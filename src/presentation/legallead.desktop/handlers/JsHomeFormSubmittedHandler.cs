@@ -93,6 +93,13 @@ namespace legallead.desktop.handlers
                     var loginResponse = await api.Post("login", obj, user) ?? failed;
                     return loginResponse;
 
+                case "form-register":
+                    var data1 = TryDeserialize<UserRegistrationModel>(json);
+                    if (data1 == null) return failed;
+                    var obj1 = data1.ToApiModel();
+                    var registerResponse = await api.Post("register", obj1, user) ?? failed;
+                    return registerResponse;
+
                 default:
                     return succeeded;
             }

@@ -1,0 +1,53 @@
+<html>
+
+	<head>
+		<!-- script: common-cef-handler -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: search</title>
+		<!-- block: common-headings -->
+		<!-- common styles -->	
+		<link rel="stylesheet" name="base" href="css/base.css" />
+		<!-- style: my-account-subcontent-css -->
+	</head>
+
+	<body class="text-center">
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header 
+		class="masthead mb-auto" 
+		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+		<div class="inner">
+			<h3 class="masthead-brand">
+				<i class="bi bi-bank2"></i>
+				<span>Legal Lead UI</span>
+			</h3>
+			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+				<a name="subcontent-search" class="nav-link active" href="javascript:void()">Search</a>
+				<a name="subcontent-search-history" class="nav-link" href="javascript:void()">History</a>
+				<a name="subcontent-purchases" class="nav-link" href="javascript:void()">Purchases</a>
+			</nav>
+		</div>
+      </header>
+
+      <main role="main" class="inner cover">
+		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
+			<p>My Search Base</p>
+			
+			<p>My Search History</p>
+			
+			<p>My Purchase History</p>
+		</div>
+      </main>
+
+      <!-- block: common-footer -->
+
+    </div>
+
+	<!-- script: common-client-include -->
+  </body>
+
+
+</html>

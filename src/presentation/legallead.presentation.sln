@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "a-core", "a-core", "{0AB23E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-tests", "c-tests", "{FFE95784-CEBD-4BA2-AF1B-88D1B8FA7E8C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "b-ui", "b-ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "u-ui", "u-ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

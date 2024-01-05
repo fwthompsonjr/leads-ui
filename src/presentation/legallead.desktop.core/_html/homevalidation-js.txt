@@ -77,7 +77,7 @@ function initializeFormValidation()
 							required: true,
 							minlength: 8,
 							maxlength: 255,
-							isPassword: true
+							isEmail: true
 						},
 						"register-password": {
 							required: true,
