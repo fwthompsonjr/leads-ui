@@ -108,5 +108,13 @@ namespace permissions.api.tests.Models
             Assert.False(isValid);
             Assert.NotEmpty(results);
         }
+
+        [Fact]
+        public void ModelDefaultIsValid()
+        {
+            var test = faker.Generate();
+            _ = test.Validate(out bool isValid);
+            Assert.True(isValid);
+        }
     }
 }
