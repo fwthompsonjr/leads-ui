@@ -15,10 +15,12 @@ namespace legallead.permissions.api.Controllers
         private static readonly object _instance = new();
         private static string? _readme;
         private readonly DataProvider _db;
+        private readonly IStateSearchProvider _searchProvider;
 
-        public ApplicationController(DataProvider db)
+        public ApplicationController(DataProvider db, IStateSearchProvider stateSearch)
         {
             _db = db;
+            _searchProvider = stateSearch;
         }
 
         [HttpGet]
@@ -99,6 +101,14 @@ namespace legallead.permissions.api.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("state-configuration")]
+        public IActionResult StateList()
+        {
+            var data = _searchProvider.GetStates();
+            return Ok(data);
         }
 
         private static void GenerateReadMe(ref string? readme)
