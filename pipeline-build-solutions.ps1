@@ -38,6 +38,26 @@ function isSolutionNotExcluded( $name ) {
     return  $true;
 }
 
+function deleteNuPkgFiles( $homedir ) {
+    try {
+        $dii = [System.IO.DirectoryInfo]::new( $homedir );
+        $packages = $dii.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories)
+        if ( $packages.Count -eq $null ) {
+            $pname = $packages.FullName;
+            if ( $pname.IndexOf("1.0.0") -lt 0 ) { return; }
+            [System.IO.File]::Delete( $pname ) | Out-Null
+        } else {
+            $packages.GetEnumerator() | ForEach-Object {
+                $pname = ([system.io.fileinfo]$_).FullName
+                if ( $pname.IndexOf("1.0.0") -ge 0 ) {
+                    [System.IO.File]::Delete( $pname ) | Out-Null
+                }
+            }
+        }
+    } catch {
+        ## no action on failed
+    }
+}
 
 $startedAt = [datetime]::UtcNow
 ## find all files matching *.sln 
@@ -86,10 +106,11 @@ $jobs = $commands | Foreach-Object { Start-Job -ScriptBlock $_["obj"] -ArgumentL
 $jobs | Receive-Job -Wait -AutoRemoveJob
 
 "All jobs completed. Total runtime in secs.: $(([datetime]::UtcNow - $startedAt).TotalSeconds)"
-
+deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
     return 1000;
 }
+
 return 0;
