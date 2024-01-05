@@ -1,5 +1,6 @@
 ﻿using legallead.permissions.api;
 using legallead.permissions.api.Model;
+using System.Text;
 
 namespace permissions.api.tests.Models
 {
@@ -8,7 +9,7 @@ namespace permissions.api.tests.Models
         private static readonly Faker<RegisterAccountModel> faker =
             new Faker<RegisterAccountModel>()
             .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Password, y => y.Random.AlphaNumeric(22))
+            .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
             .RuleFor(x => x.Email, y => y.Person.Email);
 
         [Fact]
@@ -113,8 +114,35 @@ namespace permissions.api.tests.Models
         public void ModelDefaultIsValid()
         {
             var test = faker.Generate();
-            _ = test.Validate(out bool isValid);
+            var results = test.Validate(out bool isValid);
             Assert.True(isValid);
+            Assert.Empty(results);
+        }
+
+        private static string AppendSpecialCharacter(string source)
+        {
+            const string special = ".!#$%^*_+-=";
+            var tmpFaker = new Faker();
+            var charlist = special.ToCharArray();
+            if (string.IsNullOrWhiteSpace(source)) return source;
+            var items = source.ToCharArray();
+            var builder = new StringBuilder();
+            var additions = 0;
+            var upperCase = 0;
+            for (int i = 0; i < items.Length; i++)
+            {
+                var item = items[i];
+                if (!char.IsDigit(item) && upperCase < 2)
+                {
+                    builder.Append(tmpFaker.Lorem.Word()[..1].ToUpper());
+                    upperCase++;
+                }
+                builder.Append(items[i]);
+                if (additions > 2) continue;
+                builder.Append(tmpFaker.PickRandom(charlist));
+                additions++;
+            }
+            return builder.ToString();
         }
     }
 }

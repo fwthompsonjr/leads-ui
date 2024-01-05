@@ -141,6 +141,19 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///			&lt;h3 class=&quot;masthead-brand&quot;&gt;
+        ///				&lt;i class=&quot;bi bi-bank2&quot;&gt;&lt;/i&gt;
+        ///				&lt;span&gt;Legal Lead UI&lt;/span&gt;
+        ///			&lt;/h3&gt;.
+        /// </summary>
+        internal static string common_mast_head_html {
+            get {
+                return ResourceManager.GetString("common_mast_head_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 	&lt;script type=&quot;text/javascript&quot;&gt;
         ///		try {
         ///			CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
@@ -561,18 +574,23 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to let permissions_data = {
-        /// &quot;group_panel&quot;: &quot;#dv-subcontent-permissions&quot;,
-        /// &quot;change_panel&quot;: &quot;#dv-subcontent-password&quot;,
-        /// &quot;cbox&quot;: &quot;#cbo-permissions-group&quot;,
-        /// &quot;password_shown&quot;: function() {
-        ///	let backup = $(&quot;#account-user-name&quot;).text();
-        ///	let currentName = $(&quot;#account-password-username&quot;).val();
-        ///	if ( null != currentName &amp;&amp; currentName.trim().length &gt; 2 ) { return; }
-        ///	$(&quot;#account-password-username&quot;).val(backup);
-        /// },
-        /// &quot;discounts&quot;: function() {
-        ///		let isContentVisible = $( permissions_data.group_panel ).is(&quot;:v [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to let permissions_general = {
+        /// &quot;change_form&quot;: {
+        ///	&quot;alertTimer&quot; : null,
+        ///	&quot;button&quot;: &quot;#frm-permissions-submit-button&quot;,
+        ///	&quot;icons&quot;: {
+        ///		&quot;normal&quot;: &quot;#form-permissions-icon&quot;,
+        ///		&quot;spin&quot;: &quot;#form-permissions-icon-spin&quot;
+        ///	},
+        ///	&quot;error&quot;: &quot;#frm-permissions-error-message&quot;,
+        ///	&quot;setIcon&quot;: function( isSpinning ) {
+        ///		const dsb = &quot;disabled&quot;;
+        ///		const hddn = &quot;d-none&quot;;
+        ///		let frm = permissions_general.change_form;
+        ///		let icons = [ frm.icons.normal, frm.icons.spin ];
+        ///		var bttn = frm.button;
+        ///		let a = isSpinning ? 0 : 1;
+        ///		let [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_permissions_validation_js {
             get {
@@ -582,6 +600,7 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
+        ////* inject: permissions-validation script */
         ///let profileAlertTimer = null;
         ///let profileNames = [ &quot;frm-profile-address&quot;, &quot;frm-profile-personal&quot;, &quot;frm-profile-phone&quot;, &quot;frm-profile-email&quot; ];
         ///let profileButtonName = &quot;frm-profile-submit-button&quot;;
@@ -593,8 +612,7 @@ namespace legallead.desktop.Properties {
         ///
         ///function setSuccessAlert( isActive ) {
         ///	const hddn = &quot;d-none&quot;;
-        ///	const parentDv = &quot;#dv-subcontent-profile-row-00&quot;;
-        ///	const alertDv = &quot;#dv-subcontent-pr [rest of string was truncated]&quot;;.
+        ///	const parentDv = &quot;#dv-subcontent-profile- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_profile_validation_js {
             get {
@@ -675,6 +693,32 @@ namespace legallead.desktop.Properties {
         internal static string myaccountprofile_html {
             get {
                 return ResourceManager.GetString("myaccountprofile-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: search&lt;/title&gt;
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;!-- style: my-account-subcontent-css --&gt;
+        ///	&lt;/head&gt;
+        ///
+        ///	&lt;body class=&quot;text-center&quot;&gt;
+        ///
+        ///    &lt;div clas [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_base_html {
+            get {
+                return ResourceManager.GetString("mysearch_base_html", resourceCulture);
             }
         }
         
