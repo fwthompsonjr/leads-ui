@@ -119,6 +119,9 @@ namespace permissions.api.tests.Models
             Assert.Empty(results);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
+            "S2589:Boolean expressions should not be gratuitous",
+            Justification = "Lint eror. Int variable is incremented")]
         private static string AppendSpecialCharacter(string source)
         {
             const string special = ".!#$%^*_+-=";

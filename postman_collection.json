@@ -124,6 +124,63 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "State Configuration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 400 (BadRequest)\", function () {\r",
+									"  pm.response.to.not.have.status(400) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"  pm.response.to.have.status(200) \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{APP_CONFIGURATION_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{APP_CONFIGURATION_URL}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -659,7 +716,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Choices\": [\r\n        { \"StateName\": \"TX\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Tarrant\", \"IsSelected\": false }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"Choices\": [\r\n        { \"StateName\": \"TX\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Tarrant\", \"IsSelected\": false },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Denton\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2278,6 +2335,11 @@
 		{
 			"key": "PROFILES_CONTACT_IDENTITY_URL",
 			"value": "api/profiles/get-contact-identity",
+			"type": "string"
+		},
+		{
+			"key": "APP_CONFIGURATION_URL",
+			"value": "api/application/state-configuration",
 			"type": "string"
 		}
 	]

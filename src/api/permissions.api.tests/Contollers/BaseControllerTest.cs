@@ -64,6 +64,7 @@ namespace permissions.api.tests.Contollers
             var permissionHistoryDb = new Mock<IUserPermissionHistoryRepository>();
             var profileHistoryDb = new Mock<IUserProfileHistoryRepository>();
             var userMk = new Mock<IUserRepository>();
+            var stateMock = new Mock<IStateSearchProvider>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
             collection.AddScoped(s => userMk);
@@ -94,6 +95,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => permissionHistoryDb.Object);
             collection.AddScoped(s => profileHistoryDb);
             collection.AddScoped(s => profileHistoryDb.Object);
+            collection.AddScoped(s => stateMock);
+            collection.AddScoped(s => stateMock.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -118,7 +121,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(a =>
             {
                 var db = a.GetRequiredService<DataProvider>();
-                return new ApplicationController(db)
+                var sprovider = a.GetRequiredService<IStateSearchProvider>();
+                return new ApplicationController(db, sprovider)
                 {
                     ControllerContext = controllerContext
                 };

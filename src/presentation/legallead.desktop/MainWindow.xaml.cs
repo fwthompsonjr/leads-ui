@@ -60,11 +60,6 @@ namespace legallead.desktop
             if (sender is not MenuItem mnu) return;
             if (mnu.Tag is not string mnuCommand) return;
             if (string.IsNullOrEmpty(mnuCommand)) return;
-            if (mnuCommand.Contains("mysearch"))
-            {
-                tabMySearch.IsSelected = true;
-                return;
-            }
             NavigateChild(mnuCommand);
         }
 
@@ -107,6 +102,10 @@ namespace legallead.desktop
 
                 case "myaccount":
                     NavigateToMyAccount();
+                    break;
+
+                case "mysearch":
+                    NavigateToMySearch();
                     break;
 
                 case "exit":

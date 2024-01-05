@@ -716,9 +716,9 @@ namespace legallead.desktop.Properties {
         ///
         ///    &lt;div clas [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string mysearch_base_html {
+        internal static string mysearch_html {
             get {
-                return ResourceManager.GetString("mysearch_base_html", resourceCulture);
+                return ResourceManager.GetString("mysearch-html", resourceCulture);
             }
         }
         

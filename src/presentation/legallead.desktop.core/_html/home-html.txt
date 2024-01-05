@@ -56,10 +56,7 @@
 		class="masthead mb-auto" 
 		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 		<div class="inner">
-			<h3 class="masthead-brand">
-				<i class="bi bi-bank2"></i>
-				<span>Legal Lead UI</span>
-			</h3>
+			<!-- block: common-mast-heading -->
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
 				<a name="subcontent-login" class="nav-link active" href="javascript:setDisplay('login')">Login</a>
 				<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>

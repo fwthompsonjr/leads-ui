@@ -136,4 +136,13 @@
   <data name="README" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\README.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="tx_collin_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_counties\tx-collin-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tx_denton_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_counties\tx-denton-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tx_tarrant_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_counties\tx-tarrant-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>

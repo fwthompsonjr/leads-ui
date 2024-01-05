@@ -61,21 +61,22 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;hr /&gt;
-        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///   Looks up a localized string similar to 
+        ///&lt;hr class=&quot;m-2 w-75&quot; /&gt;
+        ///&lt;h5&gt;Admin&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Guest Account. 
+        ///        You have a Administrator Account. 
         ///        As a Guest you have the following search restrictions.
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
-        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
-        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
-        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
+        ///        &lt;li&gt;Searches: There are no limits to the number of records returned from a search.&lt;/li&gt;
+        ///        &lt;li&gt;Monthly Limit: There are no monthly limits applied to your account.&lt;/li&gt;
+        ///        &lt;li&gt;Annual Limit: There are no annual limits.&lt;/li&gt;
         ///    &lt;/ol&gt;
-        ///    &lt;p&gt;
-        ///        Data restriction: 
-        ///        Any search res [rest of string was truncated]&quot;;.
+        ///    &lt;p class=&quot;text-primary&quot;&gt;
+        ///        Pricing: 
+        ///    &lt;/p&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_admin {
             get {
@@ -84,21 +85,23 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;hr /&gt;
-        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///   Looks up a localized string similar to 
+        ///&lt;hr class=&quot;m-2 w-75&quot; /&gt;
+        ///&lt;h5&gt;Gold&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Guest Account. 
-        ///        As a Guest you have the following search restrictions.
+        ///        You have a Gold Account. 
+        ///        With a Gold you have the following search restrictions.
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
-        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
-        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
-        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
-        ///    &lt;/ol&gt;
-        ///    &lt;p&gt;
-        ///        Data restriction: 
-        ///        Any search res [rest of string was truncated]&quot;;.
+        ///        &lt;li&gt;
+        ///            Searches: 
+        ///            The first 20 records returned from a search are billed at 4 cents per lead.
+        ///            Additional records in the search are billed at 5 cents per lead.
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            Monthly Limit: 
+        ///            Your account is limited to receive 1500 leads  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_gold {
             get {
@@ -107,7 +110,8 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;hr /&gt;
+        ///   Looks up a localized string similar to 
+        ///&lt;hr class=&quot;m-2 w-75&quot; /&gt;
         ///&lt;h5&gt;Guest&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
@@ -121,7 +125,7 @@ namespace legallead.permissions.api.Properties {
         ///    &lt;/ol&gt;
         ///    &lt;p&gt;
         ///        Data restriction: 
-        ///        Any search res [rest of string was truncated]&quot;;.
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_guest {
             get {
@@ -130,21 +134,24 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;hr /&gt;
-        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///   Looks up a localized string similar to 
+        ///&lt;hr class=&quot;m-2 w-75&quot; /&gt;
+        ///&lt;h5&gt;Platinum&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Guest Account. 
-        ///        As a Guest you have the following search restrictions.
+        ///        You have a Platinum Account. 
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
-        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
-        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
-        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
-        ///    &lt;/ol&gt;
-        ///    &lt;p&gt;
-        ///        Data restriction: 
-        ///        Any search res [rest of string was truncated]&quot;;.
+        ///        &lt;li&gt;
+        ///            Searches: 
+        ///            The first 1000 records returned from a search are billed at 3 cents per lead.
+        ///            Additional records in the search are billed at 5 cents per lead.
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            Monthly Limit: 
+        ///            Your account is limited to receive 10,000 leads in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;
+        ///             [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_platinum {
             get {
@@ -153,21 +160,25 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;hr /&gt;
-        ///&lt;h5&gt;Guest&lt;/h5&gt;
+        ///   Looks up a localized string similar to 
+        ///&lt;hr class=&quot;m-2 w-75&quot; /&gt;
+        ///&lt;h5&gt;Silver&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Guest Account. 
-        ///        As a Guest you have the following search restrictions.
+        ///        You have a Silver Account. 
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
-        ///        &lt;li&gt;Searches: A limit of 5 records can returned from any a search.&lt;/li&gt;
-        ///        &lt;li&gt;Monthly Limit: A maximum of 15 records can be retrieved in a calendar month.&lt;/li&gt;
-        ///        &lt;li&gt;Annual Limit: A maximum of 50 records can be retrieved in a calendar year.&lt;/li&gt;
-        ///    &lt;/ol&gt;
-        ///    &lt;p&gt;
-        ///        Data restriction: 
-        ///        Any search res [rest of string was truncated]&quot;;.
+        ///        &lt;li&gt;
+        ///            Searches: 
+        ///            Records in the search are billed at 5 cents per lead.
+        ///        &lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            Monthly Limit: 
+        ///            Your account is limited to receive 200 leads in a calendar month.&lt;/li&gt;
+        ///        &lt;li&gt;
+        ///            Annual Limit: 
+        ///            Your account is limited to receive 1500 leads in a calendar year.&lt;/li&gt;
+        ///    &lt;/ol&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_silver {
             get {
@@ -186,6 +197,108 @@ namespace legallead.permissions.api.Properties {
         internal static string README {
             get {
                 return ResourceManager.GetString("README", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;dropDowns&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 0,
+        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;options&quot;: [
+        ///        {
+        ///          &quot;id&quot;: 0,
+        ///          &quot;name&quot;: &quot;criminal case records&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 1,
+        ///          &quot;name&quot;: &quot;probate case records&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 2,
+        ///          &quot;name&quot;: &quot;magistrate case records&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 3,
+        ///          &quot;name&quot;: &quot;civil and family case records&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 4,
+        ///          &quot;name&quot;: &quot;justice of  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tx_collin_drop_down {
+            get {
+                return ResourceManager.GetString("tx_collin_drop_down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;dropDowns&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 0,
+        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;options&quot;: [
+        ///        {
+        ///          &quot;id&quot;: 1,
+        ///          &quot;name&quot;: &quot;All JP And County Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 2,
+        ///          &quot;name&quot;: &quot;All JP Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 3,
+        ///          &quot;name&quot;: &quot;Justice of the Peace Pct #1&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 4,
+        ///          &quot;name&quot;: &quot;Justice of the Peace Pct #2&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 5,
+        ///          &quot;name&quot;: &quot;Justice of th [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tx_denton_drop_down {
+            get {
+                return ResourceManager.GetString("tx_denton_drop_down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;dropDowns&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 0,
+        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;options&quot;: [
+        ///        {
+        ///          &quot;id&quot;: 0,
+        ///          &quot;name&quot;: &quot;All Probate Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 1,
+        ///          &quot;name&quot;: &quot;All JP Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 2,
+        ///          &quot;name&quot;: &quot;All CCL Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 3,
+        ///          &quot;name&quot;: &quot;JP No. 1&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 4,
+        ///          &quot;name&quot;: &quot;JP No. 2&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 5 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tx_tarrant_drop_down {
+            get {
+                return ResourceManager.GetString("tx_tarrant_drop_down", resourceCulture);
             }
         }
     }

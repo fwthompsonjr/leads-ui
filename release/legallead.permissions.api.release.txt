@@ -27,3 +27,4 @@ Release information - legallead.permissions.api
 01/01/2023 08:28:00 PM added health check tp api
 01/04/2023 07:30:00 PM change configuration for jwt manager
 01/04/2023 21:09:00 PM register account to populate create date
+01/05/2023 12:55:00 PM added method to get configuration details
