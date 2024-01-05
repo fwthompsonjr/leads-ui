@@ -49,6 +49,7 @@ $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where
         $isNotExcluded = ( isSolutionNotExcluded -name $nme ) 
         return $isNotExcluded;
 }
+$prjfound = $di.GetFiles('*.legallead.desktop.core.csproj', [System.IO.SearchOption]::AllDirectories);
 $commands = @();
 
 if( $found.Count -eq $null ) {
@@ -58,6 +59,19 @@ if( $found.Count -eq $null ) {
 }
 else {
     $found.GetEnumerator() | ForEach-Object {
+        $solutionFile = ([system.io.fileinfo]$_).FullName
+        $cmmd = generateBuildCommand -solution $solutionFile
+        $commands += $cmmd
+    }
+}
+	
+if( $prjfound.Count -eq $null ) {
+    $solutionFile = $prjfound.FullName
+    $cmmd = generateBuildCommand -solution $solutionFile
+    $commands += $cmmd
+}
+else {
+    $prjfound.GetEnumerator() | ForEach-Object {
         $solutionFile = ([system.io.fileinfo]$_).FullName
         $cmmd = generateBuildCommand -solution $solutionFile
         $commands += $cmmd
