@@ -34,12 +34,20 @@
 
 
 	<ItemGroup>
-		<Content Include="AppSettings.json">
+		<None Include="AppSettings.Debug.json">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
+		</None>
+		<None Include="AppSettings.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<Content Include="legallead-icon.ico" />
 	</ItemGroup>
-
+	
+	<ItemGroup>
+		<None Update="appsettings.debug.json">
+			<DependentUpon>appsettings.json</DependentUpon>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.80" />

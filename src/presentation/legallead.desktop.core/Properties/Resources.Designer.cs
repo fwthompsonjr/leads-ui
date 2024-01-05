@@ -547,18 +547,36 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///					&lt;div id=&quot;dv-subcontent-password&quot; name=&quot;subcontent-password&quot; class=&quot;subcontent card&quot;&gt;
-        ///						&lt;div class=&quot;card-body&quot;&gt;
-        ///							&lt;h5 class=&quot;card-title&quot;&gt;Change Password&lt;/h5&gt;	
-        ///							&lt;form id=&quot;form-change-password&quot; name=&quot;form-change-password&quot;&gt;
-        ///								&lt;div class=&quot;mb-3&quot;&gt;
-        ///									&lt;label for=&quot;account-password-username&quot; class=&quot;form-label&quot;&gt;User Name:&lt;/label&gt;
-        ///									&lt;input  type=&quot;text&quot; class=&quot;form-control&quot; 
-        ///											id=&quot;account-password-username&quot; name=&quot;username&quot; 
-        ///											maxlength=&quot;255&quot; minlength=&quot;8 [rest of string was truncated]&quot;;.
+        ///                        &lt;div id=&quot;dv-subcontent-password-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
+        ///							&lt;div id=&quot;dv-subcontent-password-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
+        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
+        ///								&lt;div&gt;
+        ///								Your account information has been updated successfully
+        ///								&lt;/d [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_password_html {
             get {
                 return ResourceManager.GetString("myaccount_password_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to let permissions_data = {
+        /// &quot;group_panel&quot;: &quot;#dv-subcontent-permissions&quot;,
+        /// &quot;change_panel&quot;: &quot;#dv-subcontent-password&quot;,
+        /// &quot;cbox&quot;: &quot;#cbo-permissions-group&quot;,
+        /// &quot;password_shown&quot;: function() {
+        ///	let backup = $(&quot;#account-user-name&quot;).text();
+        ///	let currentName = $(&quot;#account-password-username&quot;).val();
+        ///	if ( null != currentName &amp;&amp; currentName.trim().length &gt; 2 ) { return; }
+        ///	$(&quot;#account-password-username&quot;).val(backup);
+        /// },
+        /// &quot;discounts&quot;: function() {
+        ///		let isContentVisible = $( permissions_data.group_panel ).is(&quot;:v [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_permissions_validation_js {
+            get {
+                return ResourceManager.GetString("myaccount_permissions_validation_js", resourceCulture);
             }
         }
         
@@ -587,7 +605,7 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;script&gt;
         ///	const actv = &quot;active&quot;;
-        ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot; ];
+        ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot;, &quot;password&quot; ];
         ///
         ///	function setDisplay( name ) {
         ///			if (names.indexOf( name ) &lt; 0 ) { return; }
@@ -598,9 +616,8 @@ namespace legallead.desktop.Properties {
         ///			for(let i = 0; i &lt; thelinks.length; i++) {
         ///				let a = thelinks[i];
         ///				const aname = a.getAttribute(&quot;name&quot;);
-        ///				if ( aname.indexOf(name) &gt;= 0 ) {
-        ///					a.classList.add(actv);
-        ///				} else  [rest of string was truncated]&quot;;.
+        ///				if (null === aname || undefined === aname) { continue; }
+        ///				i [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_script_js {
             get {
@@ -631,13 +648,11 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 
         ///					&lt;div id=&quot;dv-subcontent-permissions&quot; name=&quot;subcontent-permissions&quot; class=&quot;subcontent card&quot;&gt;
-        ///						&lt;div class=&quot;card-body&quot;&gt;
-        ///							&lt;h5 class=&quot;card-title text-start&quot;&gt;Account Permissions&lt;/h5&gt;
-        ///						&lt;/div&gt;
-        ///						&lt;div id=&quot;dv-subcontent-permissions-container&quot; class=&quot;row&quot;&gt;
-        ///								&lt;div id=&quot;dv-subcontent-permissions-row-01&quot; class=&quot;mb-3 text-start&quot;&gt;
-        ///									&lt;label for=&quot;cbo-permissions-group&quot; class=&quot;form-label text-secondary&quot;&gt;Section&lt;/label&gt;
-        ///									&lt;select id=&quot;cbo-permissions-group&quot; class=&quot;form-control [rest of string was truncated]&quot;;.
+        ///                        &lt;div id=&quot;dv-subcontent-permissions-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
+        ///							&lt;div id=&quot;dv-subcontent-permissions-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
+        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
+        ///								&lt;div&gt;
+        ///								Your account information has been updated successfully        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountpermissions_html {
             get {

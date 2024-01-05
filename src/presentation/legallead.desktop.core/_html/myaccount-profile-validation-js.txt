@@ -1,4 +1,5 @@
 <script>
+/* inject: permissions-validation script */
 let profileAlertTimer = null;
 let profileNames = [ "frm-profile-address", "frm-profile-personal", "frm-profile-phone", "frm-profile-email" ];
 let profileButtonName = "frm-profile-submit-button";
@@ -143,13 +144,24 @@ function initializeProfileValidator() {
 		if (value.length == 0) { return true; }
 		return isValidProfileAddress(String(value));
 	}, 'Must be a valid address.');
+
+	jQuery.validator.addMethod("isPassword", function (value, element, params) {
+		if (!value) { return false; }
+		if (value == null) { return false; }
+		if (value.length == 0) { return false; }
+		const res = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,255}$/im;
+		return res.test(String(value));
+	}, 'Password must meet minimum requirement.');
 }
 
 function initializeProfileFormValidation()
 {
-	for(var i = 0; i < profileNames.length; i++) {
-		var frm = document.getElementById(profileNames[i]);
-		var formJq = "#" + profileNames[i];
+	let form_names = [];
+	profileNames.forEach(p => form_names.push(p));
+	form_names.push('form-change-password');
+	for(var i = 0; i < form_names.length; i++) {
+		var frm = document.getElementById(form_names[i]);
+		var formJq = "#" + form_names[i];
 		switch (i) {
 			case 0: // address
 				$(formJq).validate({
@@ -206,6 +218,23 @@ function initializeProfileFormValidation()
 							minlength: 4,
 							maxlength: 255,
 							isValidProfileEmail: true
+						}
+					}
+				});
+				break;
+			case 4: // change-password
+				$(formJq).validate({
+					rules: {
+						"account-password": {
+							required: true,
+							minlength: 8,
+							maxlength: 255,
+							isPassword: true
+						},
+						"account-password-confirmation": {
+							minlength: 8,
+							maxlength: 255,
+							equalTo: "#account-password-new-password"
 						}
 					}
 				});

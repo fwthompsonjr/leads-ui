@@ -1,5 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using System.Windows.Threading;
 
 namespace legallead.desktop.utilities
@@ -15,11 +16,14 @@ namespace legallead.desktop.utilities
 
         public static void SetHTML(this ChromiumWebBrowser web, Dispatcher dispatcher, string source)
         {
-            var conversion = ContentHandler.GetAddressBase64(new ContentHtml { Content = source });
+            var html = parser.BeautfyHTML(source);
+            var conversion = ContentHandler.GetAddressBase64(new ContentHtml { Content = html });
             dispatcher.Invoke(() =>
             {
                 web.Address = conversion;
             });
         }
+
+        private static readonly ContentParser parser = new();
     }
 }

@@ -40,7 +40,7 @@ namespace legallead.desktop.js
                 var handler = new JsProfileChange(web);
                 handler.Submit(formName, json);
             }
-            if (ProfileForms.Exists(f => f.Equals(formName, comparison)))
+            if (PermissionForms.Exists(f => f.Equals(formName, comparison)))
             {
                 var handler = new JsPermissionChange(web);
                 handler.Submit(formName, json);

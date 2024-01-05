@@ -25,7 +25,10 @@ namespace legallead.desktop.utilities
                 var builder = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
+                if (System.Diagnostics.Debugger.IsAttached)
+                {
+                    builder.AddJsonFile("appsettings.debug.json", optional: true, reloadOnChange: true);
+                }
                 Configuration = builder.Build();
             }
             if (string.IsNullOrEmpty(PermissionApiBase))

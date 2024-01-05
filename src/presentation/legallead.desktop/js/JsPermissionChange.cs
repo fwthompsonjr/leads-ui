@@ -1,13 +1,13 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.handlers;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.js
 {
@@ -33,7 +33,77 @@ namespace legallead.desktop.js
             if (!HasBrowser || user == null) return;
             var name = PermissionForms.Find(p => p.Equals(formName, StringComparison.OrdinalIgnoreCase));
             if (name == null) { return; }
-            Console.WriteLine(json);
+            var submission = ObjectExtensions.TryGet<UserPermissionChangeRequest>(json);
+            if (submission == null || !submission.CanSubmit) return;
+            var js = MapPayload(submission);
+            var response = permissionApi?.Post(AddressMap[submission.SubmissionName], js, user).Result;
+            var htm = JsCompletedHandler.ConvertHTML(response);
+            SetMessage(htm);
+            if (response == null || response.StatusCode != 200) return;
+            SubmitCompleted();
         }
+
+        /// <summary>
+        /// Echo a message to UI in the submission status div
+        /// </summary>
+        /// <param name="htm"></param>
+        private void SetMessage(string htm)
+        {
+            if (!HasBrowser || web == null) return;
+            web.ExecuteScriptAsync(scriptNames[1], htm, true);
+        }
+
+        /// <summary>
+        /// Resets UI to proper post submission completed state
+        /// </summary>
+        private void SubmitCompleted()
+        {
+            if (!HasBrowser || web == null) return;
+            web.ExecuteScriptAsync(scriptNames[2]);
+        }
+
+        private static object MapPayload(UserPermissionChangeRequest request)
+        {
+            try
+            {
+                var changeType = request.SubmissionName;
+                switch (changeType)
+                {
+                    case "Subscription":
+                        return JsonConvert.DeserializeObject<ContactLevel>(request.Subscription) ?? new();
+
+                    case "Discounts":
+                        var selections = JsonConvert.DeserializeObject<DiscountChoice[]>(request.Discounts);
+                        if (selections == null) return new();
+                        var discountRequest = new { Choices = selections };
+                        return discountRequest;
+
+                    case "Changes":
+                        return JsonConvert.DeserializeObject<ContactChangePassword>(request.Changes) ?? new();
+
+                    default:
+                        return new();
+                }
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
+        private static readonly Dictionary<string, string> AddressMap = new()
+        {
+            { "Changes", "permissions-change-password" },
+            { "Discounts", "permissions-set-discount" },
+            { "Subscription", "permissions-set-permission" }
+        };
+
+        private static readonly List<string> scriptNames = new()
+            {
+                "setProfileIconState",
+                "setProfileStatusMessage",
+                "profileActionCompleted",
+                "setSuccessAlert"
+            };
     }
 }

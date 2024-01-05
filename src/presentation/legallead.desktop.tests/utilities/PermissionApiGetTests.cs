@@ -92,6 +92,9 @@ namespace legallead.desktop.tests.utilities
         [InlineData("edit-contact-email", true)]
         [InlineData("edit-contact-name", true)]
         [InlineData("edit-contact-phone", true)]
+        [InlineData("permissions-change-password", true)]
+        [InlineData("permissions-set-discount", true)]
+        [InlineData("permissions-set-permission", true)]
         public void ServiceCanGetPostPageUrl(string landing, bool expected)
         {
             var mock = new ActiveInternetStatus();
@@ -114,6 +117,9 @@ namespace legallead.desktop.tests.utilities
         [InlineData("edit-contact-email", false)]
         [InlineData("edit-contact-name", false)]
         [InlineData("edit-contact-phone", false)]
+        [InlineData("permissions-change-password", false)]
+        [InlineData("permissions-set-discount", false)]
+        [InlineData("permissions-set-permission", false)]
         public void ServiceCanNotGetPostPageWithNonInitializedUser(string landing, bool expected)
         {
             var mock = new ActiveInternetStatus();

@@ -61,20 +61,20 @@
 				<span>Legal Lead UI</span>
 			</h3>
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-				<a name="subcontent-home" class="nav-link active" href="javascript:setDisplay('home')">Home</a>
-				<a name="subcontent-login" class="nav-link" href="javascript:setDisplay('login')">Login</a>
+				<a name="subcontent-login" class="nav-link active" href="javascript:setDisplay('login')">Login</a>
 				<a name="subcontent-register" class="nav-link" href="javascript:setDisplay('register')">Register</a>
+				<a name="subcontent-home" class="nav-link" href="javascript:setDisplay('home')">About</a>
 			</nav>
 		</div>
       </header>
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent active">
+			<div id="dv-subcontent-home" name="subcontent-home"  class="subcontent">
 				<p>Welcome form</p>
             </div>
 			
-			<div id="dv-subcontent-login" name="subcontent-login"  class="subcontent">
+			<div id="dv-subcontent-login" name="subcontent-login"  class="subcontent active">
 				<p>Login form</p>
             </div>
 			
