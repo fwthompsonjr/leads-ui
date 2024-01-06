@@ -3,6 +3,7 @@ using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,19 @@ namespace legallead.desktop.tests.implementations
             Assert.Null(exception);
         }
 
+        [Fact]
+        public void TestCanDeserialize()
+        {
+            var exception = Record.Exception(() =>
+            {
+                var content = Properties.Resources.state_config_response;
+                var obj = JsonConvert.DeserializeObject<StateSearchConfiguration[]>(content);
+                Assert.NotNull(obj);
+                Assert.Single(obj);
+            });
+            Assert.Null(exception);
+        }
+
         private static IPermissionApi GetApi()
         {
             return new MyMockApi();
@@ -57,21 +71,21 @@ namespace legallead.desktop.tests.implementations
         private sealed class MyMockApi : PermissionApi
         {
             private static readonly IInternetStatus internetStatus = new ActiveInternetStatus();
+            private readonly ApiResponse response;
 
-            public MyMockApi() : base(string.Empty, internetStatus)
+            public MyMockApi() : base("www.testcase.com", internetStatus)
             {
+                response = new ApiResponse
+                {
+                    StatusCode = 200,
+                    Message = Properties.Resources.state_config_response
+                };
             }
 
             public override async Task<ApiResponse> Get(string name)
             {
-                return await Task.Run(() =>
-                {
-                    return new ApiResponse
-                    {
-                        Message = Properties.Resources.state_config_response,
-                        StatusCode = 200
-                    };
-                });
+                var obj = await Task.FromResult(response);
+                return obj;
             }
         }
 

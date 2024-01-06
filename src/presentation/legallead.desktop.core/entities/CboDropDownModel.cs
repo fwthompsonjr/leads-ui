@@ -12,5 +12,7 @@ namespace legallead.desktop.entities
 
         [JsonProperty("options")]
         public List<DropDownModel> Members { get; set; } = new();
+
+        public int? CountyId { get; set; }
     }
 }

@@ -9,5 +9,7 @@ namespace legallead.desktop.entities
 
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
+
+        public int? CountyId { get; set; }
     }
 }

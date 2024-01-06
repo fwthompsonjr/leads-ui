@@ -13,6 +13,7 @@ namespace legallead.desktop.entities
         [JsonProperty("isActive")]
         public bool IsActive { get; set; }
 
-        public List<CountySearchConfiguration>? Counties { get; set; }
+        [JsonProperty("counties")]
+        public CountySearchConfiguration[] Counties { get; set; } = Array.Empty<CountySearchConfiguration>();
     }
 }

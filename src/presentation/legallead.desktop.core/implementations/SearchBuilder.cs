@@ -8,9 +8,8 @@ namespace legallead.desktop.implementations
     internal class SearchBuilder : ISearchBuilder
     {
         private const string PageName = "application-state-configuration";
-        private const string PageKeyName = "application-state-configuration-key";
         private readonly IPermissionApi _api;
-        private static readonly MemoryCache memoryCache = MemoryCache.Default;
+        private string? _jsConfiguration;
 
         public SearchBuilder(IPermissionApi api)
         {
@@ -19,7 +18,8 @@ namespace legallead.desktop.implementations
 
         public string GetHtml()
         {
-            _ = Configuration();
+            var search = Configuration()?.ToList();
+
             var doc = new HtmlDocument();
             var parent = doc.CreateElement("div");
             var wrapper = doc.CreateElement("div");
@@ -30,8 +30,8 @@ namespace legallead.desktop.implementations
             BuildWrapper(wrapper);
             BuildParent(doc, parent);
             BuildTable(doc, table);
-            BuildTableBody(doc, tbody);
-            BuildTableFooter(doc, tfoot);
+            BuildTableBody(doc, tbody, search);
+            BuildTableFooter(doc, tfoot, _jsConfiguration);
             // append to parents
             parent.AppendChild(wrapper);
             table.AppendChild(tbody);
@@ -40,31 +40,21 @@ namespace legallead.desktop.implementations
             return parent.OuterHtml;
         }
 
-        public IEnumerable<StateSearchConfiguration>? GetConfiguration()
+        public StateSearchConfiguration[]? GetConfiguration()
         {
             return Configuration();
         }
 
-        protected IEnumerable<StateSearchConfiguration>? Configuration()
+        protected StateSearchConfiguration[]? Configuration()
         {
-            if (!memoryCache.Contains(PageKeyName))
+            if (string.IsNullOrEmpty(_jsConfiguration))
             {
-                var expiration = DateTimeOffset.UtcNow.AddMinutes(30);
-                var message = string.Empty;
-                _ = Task.Run(() =>
-                {
-                    var response = _api.Get(PageName).Result;
-                    if (response == null || response.StatusCode != 200) return null;
-                    if (string.IsNullOrEmpty(response.Message)) return null;
-                    message = response.Message;
-                    return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(message);
-                });
-                if (string.IsNullOrEmpty(message)) return null;
-                memoryCache.Add($"{PageKeyName}-text", message, expiration);
+                var response = _api.Get(PageName).Result;
+                if (response == null || response.StatusCode != 200) return null;
+                if (string.IsNullOrEmpty(response.Message)) return null;
+                _jsConfiguration = response.Message;
             }
-            var keyvalue = memoryCache.Get($"{PageKeyName}-text");
-            if (keyvalue is not string config) return null;
-            return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(config);
+            return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration).ToArray();
         }
 
         private static void BuildWrapper(HtmlNode node)
@@ -104,7 +94,7 @@ namespace legallead.desktop.implementations
             node.AppendChild(colgroup);
         }
 
-        private static void BuildTableBody(HtmlDocument doc, HtmlNode node)
+        private static void BuildTableBody(HtmlDocument doc, HtmlNode node, List<StateSearchConfiguration>? configurations = null)
         {
             var indexes = new[] { 0, 1 };
             var rows = new[] {
@@ -147,12 +137,12 @@ namespace legallead.desktop.implementations
                     cbo.Attributes.Add("name", "search-field");
                     cbo.Attributes.Add("class", "form-control");
                     var indx = rows.IndexOf(r);
-                    if (indexes.Contains(indx)) PopulateOptions(indx, cbo);
+                    if (indexes.Contains(indx)) PopulateOptions(indx, cbo, configurations);
                     td2.AppendChild(cbo);
                 }
                 if (r.StartsWith("Dynamic-"))
                 {
-                    tr.Attributes.Add("class", "d-none");
+                    tr.Attributes.Add("style", "display: none");
                 }
                 tr.AppendChild(td1);
                 tr.AppendChild(td2);
@@ -160,7 +150,7 @@ namespace legallead.desktop.implementations
             });
         }
 
-        private static void BuildTableFooter(HtmlDocument doc, HtmlNode node)
+        private static void BuildTableFooter(HtmlDocument doc, HtmlNode node, string? json = null)
         {
             var tr = doc.CreateElement("tr");
             var td = doc.CreateElement("td");
@@ -172,60 +162,72 @@ namespace legallead.desktop.implementations
             button.Attributes.Add("class", "btn btn-primary");
             button.InnerHtml = "Search";
             tarea.Attributes.Add("style", "display: none");
-            tarea.InnerHtml = ConfigurationText();
+            tarea.InnerHtml = json ?? string.Empty;
             td.AppendChild(button);
             td.AppendChild(tarea);
             tr.AppendChild(td);
             node.AppendChild(tr);
         }
 
-        private static void PopulateOptions(int indx, HtmlNode cbo)
+        private static void PopulateOptions(int indx, HtmlNode cbo, List<StateSearchConfiguration>? configurations = null)
         {
             var indexes = new[] { 0, 1 };
-            var config = GetConfig();
+            if (configurations == null) return;
+            if (!indexes.Contains(indx)) return;
+            if (indx == 0) AppendStates(cbo, configurations);
+            if (indx == 1) AppendCounties(cbo, configurations);
+        }
+
+        private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration>? config)
+        {
             if (config == null) return;
+            var nde = cbo.OwnerDocument.CreateElement("option");
+            nde.Attributes.Add("value", "0");
+            nde.Attributes.Add("dat-county-index", "");
+            nde.Attributes.Add("dat-state-index", "");
+            nde.InnerHtml = "- select -";
+            cbo.AppendChild(nde);
+            var temp = config.SelectMany(s => s.Counties).ToList();
 
-            for (int i = 0; i < indexes.Length; i++)
+            temp.Sort((a, b) =>
             {
-                switch (indx)
-                {
-                    case 0:
-                        AppendStates(cbo, config);
-                        break;
+                var aa = (a.StateCode ?? string.Empty).CompareTo(b.StateCode ?? string.Empty);
+                if (aa != 0) return aa;
+                return (a.Name ?? string.Empty).CompareTo(b.Name ?? string.Empty);
+            });
 
-                    case 1:
-                        AppendCounties(cbo, config); break;
-                }
-            }
+            temp.ForEach(s =>
+            {
+                var id = s.Index.ToString();
+                var abrev = s.Name?.ToLower() ?? id;
+                var itm = cbo.OwnerDocument.CreateElement("option");
+                itm.Attributes.Add("value", id);
+                itm.Attributes.Add("dat-state-index", s.StateCode?.ToLower() ?? id);
+                itm.Attributes.Add("dat-county-index", abrev);
+                itm.Attributes.Add("style", "display: none");
+                itm.InnerHtml = s.Name ?? id;
+                cbo.AppendChild(itm);
+            });
         }
 
-        private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration> config)
+        private static void AppendStates(HtmlNode cbo, List<StateSearchConfiguration>? config)
         {
-            Console.WriteLine("Append Counties called with node: {0}. config {1}",
-                cbo.GetType().Name,
-                config.GetType().Name);
-        }
-
-        private static void AppendStates(HtmlNode cbo, List<StateSearchConfiguration> config)
-        {
-            Console.WriteLine("Append States called with node: {0}. config {1}",
-                cbo.GetType().Name,
-                config.GetType().Name);
-        }
-
-        private static string ConfigurationText()
-        {
-            var keyname = $"{PageKeyName}-text";
-            var keyvalue = memoryCache.Get(keyname);
-            if (keyvalue is not string config) return string.Empty;
-            return config;
-        }
-
-        private static List<StateSearchConfiguration>? GetConfig()
-        {
-            var txt = ConfigurationText();
-            if (string.IsNullOrEmpty(txt)) return null;
-            return ObjectExtensions.TryGet<List<StateSearchConfiguration>?>(txt);
+            if (config == null) return;
+            var nde = cbo.OwnerDocument.CreateElement("option");
+            nde.Attributes.Add("value", "0");
+            nde.Attributes.Add("dat-state-index", "");
+            nde.InnerHtml = "- select -";
+            cbo.AppendChild(nde);
+            config.ForEach(s =>
+            {
+                var id = (config.IndexOf(s) + 1).ToString();
+                var abrev = s.ShortName?.ToLower() ?? id;
+                var itm = cbo.OwnerDocument.CreateElement("option");
+                itm.Attributes.Add("value", id);
+                itm.Attributes.Add("dat-state-index", abrev);
+                itm.InnerHtml = s.Name ?? id;
+                cbo.AppendChild(itm);
+            });
         }
     }
 }

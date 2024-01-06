@@ -5,9 +5,9 @@ namespace legallead.desktop.entities
     internal class CountySearchDetail
     {
         [JsonProperty("dropDowns")]
-        public List<CboDropDownModel> DropDowns { get; set; } = new();
+        public CboDropDownModel[] DropDowns { get; set; } = Array.Empty<CboDropDownModel>();
 
         [JsonProperty("caseSearchTypes")]
-        public List<CaseSearchModel>? CaseSearchTypes { get; set; }
+        public CaseSearchModel[] CaseSearchTypes { get; set; } = Array.Empty<CaseSearchModel>();
     }
 }

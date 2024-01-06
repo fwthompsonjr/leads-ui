@@ -30,12 +30,12 @@ namespace legallead.desktop.tests.entities
             .RuleFor(x => x.DropDowns, y =>
             {
                 var count = y.Random.Int(1, 10);
-                return cbofaker.Generate(count);
+                return cbofaker.Generate(count).ToArray();
             })
             .RuleFor(x => x.CaseSearchTypes, y =>
             {
                 var count = y.Random.Int(1, 10);
-                return searchFaker.Generate(count);
+                return searchFaker.Generate(count).ToArray();
             });
 
         private static readonly Faker<CountySearchConfiguration> faker =

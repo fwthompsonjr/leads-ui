@@ -4,7 +4,7 @@ namespace legallead.desktop.interfaces
 {
     internal interface ISearchBuilder
     {
-        IEnumerable<StateSearchConfiguration>? GetConfiguration();
+        StateSearchConfiguration[]? GetConfiguration();
 
         string GetHtml();
     }
