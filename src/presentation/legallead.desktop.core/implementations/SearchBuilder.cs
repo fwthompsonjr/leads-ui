@@ -1,13 +1,14 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using System.Runtime.Caching;
+using Newtonsoft.Json;
 
 namespace legallead.desktop.implementations
 {
     internal class SearchBuilder : ISearchBuilder
     {
         private const string PageName = "application-state-configuration";
+        private static ContentParser Parser = new();
         private readonly IPermissionApi _api;
         private string? _jsConfiguration;
 
@@ -18,6 +19,7 @@ namespace legallead.desktop.implementations
 
         public string GetHtml()
         {
+            const string fmt = "<html><body>{0}</body></html>";
             var search = Configuration()?.ToList();
 
             var doc = new HtmlDocument();
@@ -28,16 +30,26 @@ namespace legallead.desktop.implementations
             var tfoot = doc.CreateElement("tfoot");
             // build elements
             BuildWrapper(wrapper);
-            BuildParent(doc, parent);
+            var parentIndex = BuildParent(doc, parent);
             BuildTable(doc, table);
             BuildTableBody(doc, tbody, search);
-            BuildTableFooter(doc, tfoot, _jsConfiguration);
+            var jsonIndex = BuildTableFooter(doc, tfoot, _jsConfiguration);
             // append to parents
             parent.AppendChild(wrapper);
             table.AppendChild(tbody);
             table.AppendChild(tfoot);
             wrapper.AppendChild(table);
-            return parent.OuterHtml;
+            var tempHtml = parent.OuterHtml;
+            var html = Parser.BeautfyHTML(string.Format(fmt, tempHtml));
+            doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var element = doc.DocumentNode.SelectSingleNode($"//*[@id='{parentIndex}']");
+            if (element == null) return tempHtml;
+            tempHtml = element.OuterHtml;
+            var txtbox = element.SelectSingleNode($"//*[@id='{jsonIndex}']");
+            if (txtbox == null) return tempHtml;
+            txtbox.InnerHtml = _jsConfiguration ?? string.Empty;
+            return element.OuterHtml;
         }
 
         public StateSearchConfiguration[]? GetConfiguration()
@@ -53,6 +65,11 @@ namespace legallead.desktop.implementations
                 if (response == null || response.StatusCode != 200) return null;
                 if (string.IsNullOrEmpty(response.Message)) return null;
                 _jsConfiguration = response.Message;
+                var mapped = ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration);
+                if (mapped.Any())
+                {
+                    _jsConfiguration = JsonConvert.SerializeObject(mapped, Formatting.None);
+                }
             }
             return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration).ToArray();
         }
@@ -64,18 +81,20 @@ namespace legallead.desktop.implementations
             node.Attributes.Add("class", "table-responsive");
         }
 
-        private static void BuildParent(HtmlDocument doc, HtmlNode node)
+        private static string BuildParent(HtmlDocument doc, HtmlNode node)
         {
+            const string parentId = "dv-search-container";
             var heading = doc.CreateElement("h4");
             var subheading = doc.CreateElement("p");
             heading.InnerHtml = "Search";
             subheading.InnerHtml = "Complete the fields below to begin search";
             subheading.Attributes.Add("class", "lead");
-            node.Attributes.Add("id", "dv-search-container");
+            node.Attributes.Add("id", parentId);
             node.Attributes.Add("name", "search-container");
             node.Attributes.Add("class", "container p-2 w-75 rounded border-secondary");
             node.AppendChild(heading);
             node.AppendChild(subheading);
+            return parentId;
         }
 
         private static void BuildTable(HtmlDocument doc, HtmlNode node)
@@ -150,8 +169,9 @@ namespace legallead.desktop.implementations
             });
         }
 
-        private static void BuildTableFooter(HtmlDocument doc, HtmlNode node, string? json = null)
+        private static string BuildTableFooter(HtmlDocument doc, HtmlNode node, string? json = null)
         {
+            const string tareaId = "tarea-search-js-content";
             var tr = doc.CreateElement("tr");
             var td = doc.CreateElement("td");
             var tarea = doc.CreateElement("textarea");
@@ -161,12 +181,14 @@ namespace legallead.desktop.implementations
             button.Attributes.Add("id", "search-submit-button");
             button.Attributes.Add("class", "btn btn-primary");
             button.InnerHtml = "Search";
+            tarea.Attributes.Add("id", tareaId);
             tarea.Attributes.Add("style", "display: none");
             tarea.InnerHtml = json ?? string.Empty;
             td.AppendChild(button);
             td.AppendChild(tarea);
             tr.AppendChild(td);
             node.AppendChild(tr);
+            return tareaId;
         }
 
         private static void PopulateOptions(int indx, HtmlNode cbo, List<StateSearchConfiguration>? configurations = null)
