@@ -1,4 +1,5 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -78,6 +79,11 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IUserProfileMapper>());
             services.AddSingleton(s => provider.GetRequiredService<IUserPermissionsMapper>());
             services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
+            services.AddSingleton<ISearchBuilder>(s =>
+            {
+                var api = s.GetRequiredService<IPermissionApi>();
+                return new SearchBuilder(api);
+            });
         }
     }
 }

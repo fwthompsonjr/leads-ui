@@ -145,6 +145,7 @@ namespace legallead.desktop.utilities
         {
             { "application-read-me", "{0}/api/application/read-me" },
             { "application-list", "{0}/api/application/apps" },
+            { "application-state-configuration", "{0}/api/application/state-configuration" },
             { "user-permissions-list", "{0}/api/lists/user-permissions" },
             { "user-us-county-list", "{0}/api/lists/us-county-list" },
             { "user-us-state-list", "{0}/api/lists/us-state-list" }

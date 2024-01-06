@@ -23,6 +23,7 @@ namespace legallead.desktop.tests.utilities
         [Theory]
         [InlineData("read-me", true)]
         [InlineData("list", true)]
+        [InlineData("application-state-configuration", true)]
         [InlineData("login", false)]
         [InlineData("misspelled", false)]
         public void ServiceCanGetPageUrl(string landing, bool expected)
@@ -36,6 +37,7 @@ namespace legallead.desktop.tests.utilities
         [Theory]
         [InlineData("read-me", true)]
         [InlineData("list", true)]
+        [InlineData("application-state-configuration", true)]
         [InlineData("login", false)]
         [InlineData("misspelled", false)]
         public async Task ServiceCanGetPageUrlWithUser(string landing, bool expected)
@@ -52,6 +54,7 @@ namespace legallead.desktop.tests.utilities
         [InlineData("read-me")]
         [InlineData("list")]
         [InlineData("login")]
+        [InlineData("application-state-configuration")]
         [InlineData("misspelled")]
         public async Task ServiceCanNotGetPageWithOutUser(string landing)
         {
@@ -81,6 +84,7 @@ namespace legallead.desktop.tests.utilities
         [InlineData("read-me", false)]
         [InlineData("list", false)]
         [InlineData("misspelled", false)]
+        [InlineData("application-state-configuration", false)]
         [InlineData("login", true)]
         [InlineData("register", true)]
         [InlineData("refresh", true)]
@@ -106,6 +110,7 @@ namespace legallead.desktop.tests.utilities
         [Theory]
         [InlineData("read-me", false)]
         [InlineData("list", false)]
+        [InlineData("application-state-configuration", false)]
         [InlineData("misspelled", false)]
         [InlineData("login", false)]
         [InlineData("register", false)]

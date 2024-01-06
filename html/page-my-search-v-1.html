@@ -1,0 +1,393 @@
+<html>
+
+	<head>
+		<!-- script: common-cef-handler -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: search</title>
+		<!-- block: common-headings -->
+		<!-- common styles -->	
+		<link rel="stylesheet" name="base" href="css/base.css" />
+		<!-- style: my-account-subcontent-css -->
+	</head>
+
+	<body class="text-center">
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header 
+		class="masthead mb-auto" 
+		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+		<div class="inner">
+			<!-- block: common-mast-heading -->
+			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+				<a name="subcontent-search" class="nav-link active" href="javascript:void()">Search</a>
+				<a name="subcontent-search-history" class="nav-link" href="javascript:void()">History</a>
+				<a name="subcontent-purchases" class="nav-link" href="javascript:void()">Purchases</a>
+			</nav>
+		</div>
+      </header>
+
+      <main role="main" class="inner cover">
+		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
+			<div id="dv-search-container" name="search-container" class="container p-2 w-75 rounded border-secondary">
+	<h4>Search</h4>
+	<p class="lead">Complete the fields below to begin search</p>
+	<div id="dv-search-table-wrapper" name="search-wrapper" class="table-responsive">
+		<table id="table-search" name="search-table" class="container p-2 w-75 rounded border-secondary">
+			<colgroup>
+				<col style="width: 150px;">
+					<col/>
+				</colgroup>
+				<tbody>
+					<tr id="tr-search-state">
+						<td>
+							<label>State</label>
+						</td>
+						<td>
+							<select id="cbo-search-state" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-county">
+						<td>
+							<label>County</label>
+						</td>
+						<td>
+							<select id="cbo-search-county" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-0" class="d-none">
+						<td>
+							<label>Dynamic-0</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-0" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-1" class="d-none">
+						<td>
+							<label>Dynamic-1</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-1" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-2" class="d-none">
+						<td>
+							<label>Dynamic-2</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-2" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-3" class="d-none">
+						<td>
+							<label>Dynamic-3</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-3" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-4" class="d-none">
+						<td>
+							<label>Dynamic-4</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-4" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-5" class="d-none">
+						<td>
+							<label>Dynamic-5</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-5" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-dynamic-6" class="d-none">
+						<td>
+							<label>Dynamic-6</label>
+						</td>
+						<td>
+							<select id="cbo-search-dynamic-6" name="search-field" class="form-control"/>
+						</td>
+					</tr>
+					<tr id="tr-search-start-date">
+						<td>
+							<label>Start Date</label>
+						</td>
+						<td>
+							<input id="tbx-search-startdate" name="search-field" type="date" class="form-control"/>
+						</tr>
+						<tr id="tr-search-end-date">
+							<td>
+								<label>End Date</label>
+							</td>
+							<td>
+								<input id="tbx-search-enddate" name="search-field" type="date" class="form-control"/>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="2" class="p-1">
+									<button id="search-submit-button" class="btn btn-primary">Search</button>
+									<textarea style="display: none">[
+    {
+        "counties": [
+            {
+                "data": {
+                    "dropDowns": [
+                        {
+                            "id": 0,
+                            "name": "criminal courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "criminal case records"
+                                },
+                                {
+                                    "id": 1,
+                                    "name": "probate case records"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "magistrate case records"
+                                },
+                                {
+                                    "id": 3,
+                                    "name": "civil and family case records"
+                                },
+                                {
+                                    "id": 4,
+                                    "name": "justice of the peace case records"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 1,
+                            "name": "probate courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "probate case records"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "name": "magistrate courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "magistrate case records"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "name": "civil and family courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "civil and family case records"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "name": "justice courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "justice of the peace case records"
+                                }
+                            ]
+                        }
+                    ],
+                    "caseSearchTypes": null
+                },
+                "name": "Collin",
+                "index": 26550,
+                "stateCode": "TX",
+                "shortName": null,
+                "isActive": true
+            },
+            {
+                "data": {
+                    "dropDowns": [
+                        {
+                            "id": 0,
+                            "name": "criminal courts",
+                            "members": [
+                                {
+                                    "id": 1,
+                                    "name": "All JP And County Courts"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "All JP Courts"
+                                },
+                                {
+                                    "id": 3,
+                                    "name": "Justice of the Peace Pct #1"
+                                },
+                                {
+                                    "id": 4,
+                                    "name": "Justice of the Peace Pct #2"
+                                },
+                                {
+                                    "id": 5,
+                                    "name": "Justice of the Peace Pct #3"
+                                },
+                                {
+                                    "id": 6,
+                                    "name": "Justice of the Peace Pct #4"
+                                },
+                                {
+                                    "id": 7,
+                                    "name": "Justice of the Peace Pct #5"
+                                },
+                                {
+                                    "id": 8,
+                                    "name": "Justice of the Peace Pct #6"
+                                },
+                                {
+                                    "id": 9,
+                                    "name": "All County Courts"
+                                },
+                                {
+                                    "id": 10,
+                                    "name": "County Court At Law #1"
+                                },
+                                {
+                                    "id": 11,
+                                    "name": "County Court At Law #2"
+                                },
+                                {
+                                    "id": 12,
+                                    "name": "County Criminal Court #1"
+                                },
+                                {
+                                    "id": 13,
+                                    "name": "County Criminal Court #2"
+                                },
+                                {
+                                    "id": 14,
+                                    "name": "County Criminal Court #3"
+                                },
+                                {
+                                    "id": 15,
+                                    "name": "County Criminal Court #4"
+                                },
+                                {
+                                    "id": 16,
+                                    "name": "County Criminal Court #5"
+                                }
+                            ]
+                        }
+                    ],
+                    "caseSearchTypes": [
+                        {
+                            "id": 0,
+                            "name": "JP and County Courts"
+                        },
+                        {
+                            "id": 1,
+                            "name": "District Courts"
+                        }
+                    ]
+                },
+                "name": "Denton",
+                "index": 26730,
+                "stateCode": "TX",
+                "shortName": null,
+                "isActive": true
+            },
+            {
+                "data": {
+                    "dropDowns": [
+                        {
+                            "id": 0,
+                            "name": "criminal courts",
+                            "members": [
+                                {
+                                    "id": 0,
+                                    "name": "All Probate Courts"
+                                },
+                                {
+                                    "id": 1,
+                                    "name": "All JP Courts"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "All CCL Courts"
+                                },
+                                {
+                                    "id": 3,
+                                    "name": "JP No. 1"
+                                },
+                                {
+                                    "id": 4,
+                                    "name": "JP No. 2"
+                                },
+                                {
+                                    "id": 5,
+                                    "name": "JP No. 3"
+                                },
+                                {
+                                    "id": 6,
+                                    "name": "JP No. 4"
+                                },
+                                {
+                                    "id": 7,
+                                    "name": "JP No. 5"
+                                },
+                                {
+                                    "id": 8,
+                                    "name": "JP No. 6"
+                                },
+                                {
+                                    "id": 9,
+                                    "name": "JP No. 7"
+                                },
+                                {
+                                    "id": 10,
+                                    "name": "JP No. 8"
+                                }
+                            ]
+                        }
+                    ],
+                    "caseSearchTypes": null
+                },
+                "name": "Tarrant",
+                "index": 28330,
+                "stateCode": "TX",
+                "shortName": null,
+                "isActive": true
+            }
+        ],
+        "id": null,
+        "name": "Texas",
+        "shortName": "TX",
+        "isActive": true
+    }
+]</textarea>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+      </main>
+
+      <!-- block: common-footer -->
+
+    </div>
+
+	<!-- script: common-client-include -->
+  </body>
+
+
+</html>
