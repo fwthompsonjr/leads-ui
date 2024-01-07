@@ -135,6 +135,7 @@ namespace legallead.desktop.implementations
                 var td1 = doc.CreateElement("td");
                 var td2 = doc.CreateElement("td");
                 var rwname = r.Replace(' ', '-').ToLower();
+                var isParameterRow = r.StartsWith("Dynamic-");
                 tr.Attributes.Add("id", $"tr-search-{rwname}");
                 lbl.InnerHtml = r;
                 td1.AppendChild(lbl);
@@ -159,12 +160,14 @@ namespace legallead.desktop.implementations
                     if (indexes.Contains(indx)) PopulateOptions(indx, cbo, configurations);
                     td2.AppendChild(cbo);
                 }
-                if (r.StartsWith("Dynamic-"))
-                {
-                    tr.Attributes.Add("style", "display: none");
-                }
                 tr.AppendChild(td1);
                 tr.AppendChild(td2);
+                if (isParameterRow)
+                {
+                    tr.Attributes.Add("style", "display: none");
+                    var rowId = Convert.ToInt32(r.Split('-')[1]);
+                    PopulateParameters(rowId, tr, configurations);
+                }
                 node.AppendChild(tr);
             });
         }
@@ -191,15 +194,6 @@ namespace legallead.desktop.implementations
             return tareaId;
         }
 
-        private static void PopulateOptions(int indx, HtmlNode cbo, List<StateSearchConfiguration>? configurations = null)
-        {
-            var indexes = new[] { 0, 1 };
-            if (configurations == null) return;
-            if (!indexes.Contains(indx)) return;
-            if (indx == 0) AppendStates(cbo, configurations);
-            if (indx == 1) AppendCounties(cbo, configurations);
-        }
-
         private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration>? config)
         {
             if (config == null) return;
@@ -220,12 +214,17 @@ namespace legallead.desktop.implementations
 
             temp.ForEach(s =>
             {
+                var hasCase = (s.Data?.CaseSearchTypes ?? Array.Empty<CaseSearchModel>()).Length > 0;
+                var dropDownCount = 0;
+                if (s.Data != null) { dropDownCount = s.Data.DropDowns.Length; }
                 var id = s.Index.ToString();
                 var abrev = s.Name?.ToLower() ?? id;
                 var itm = cbo.OwnerDocument.CreateElement("option");
                 itm.Attributes.Add("value", id);
                 itm.Attributes.Add("dat-state-index", s.StateCode?.ToLower() ?? id);
                 itm.Attributes.Add("dat-county-index", abrev);
+                itm.Attributes.Add("dat-has-case-search", hasCase ? "true" : "false");
+                itm.Attributes.Add("dat-parameter-count", dropDownCount.ToString());
                 itm.Attributes.Add("style", "display: none");
                 itm.InnerHtml = s.Name ?? id;
                 cbo.AppendChild(itm);
@@ -250,6 +249,142 @@ namespace legallead.desktop.implementations
                 itm.InnerHtml = s.Name ?? id;
                 cbo.AppendChild(itm);
             });
+        }
+
+        private static void PopulateOptions(int indx, HtmlNode cbo, List<StateSearchConfiguration>? configurations = null)
+        {
+            var indexes = new[] { 0, 1 };
+            if (configurations == null) return;
+            if (!indexes.Contains(indx)) return;
+            if (indx == 0) AppendStates(cbo, configurations);
+            if (indx == 1) AppendCounties(cbo, configurations);
+        }
+
+        private static void PopulateParameters(int indx, HtmlNode tr, List<StateSearchConfiguration>? configurations = null)
+        {
+            var indexes = new[] { 0, 1, 2, 3, 4, 5, 6 };
+            if (configurations == null) return;
+            if (!indexes.Contains(indx)) return;
+            var cbo = FindComboBox(tr);
+            if (cbo == null) return;
+            /* find all configurations,
+             * county having count of drop-downs
+             * greater than zero */
+            if (indx != indexes[^1])
+            {
+                AppendDropDownValues(indx, cbo, configurations);
+                return;
+            }
+            AppendCaseTypeValues(cbo, configurations);
+        }
+
+        private static HtmlNode? FindComboBox(HtmlNode tr)
+        {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+            if (tr.ChildNodes.Count != 2) return null;
+            if (tr.ChildNodes[1].ChildNodes.Count < 1) return null;
+            var element = tr.ChildNodes[1].ChildNodes[0];
+            if (!element.Name.Equals("select", oic)) return null;
+            return element;
+        }
+
+        private static void AppendDropDownValues(int indx, HtmlNode cbo, List<StateSearchConfiguration> configurations)
+        {
+            var temp = configurations
+            .SelectMany(s => s.Counties)
+            .Where(w => w.Data != null && w.Data.DropDowns.Length > 0)
+            .ToList();
+            if (!temp.Any()) return;
+            CreateDefaultCountyOption(cbo);
+            temp.ForEach(t =>
+            {
+                if (t.Data != null && t.Data.DropDowns.Any())
+                {
+                    var dd = t.Data.DropDowns;
+                    foreach (var dd2 in dd) { dd2.CountyId = t.Index; }
+                }
+            });
+            var dropdowns = temp.Select(s =>
+            {
+                if (s.Data == null || !s.Data.DropDowns.Any() || s.Data.DropDowns.Length < indx)
+                    return null;
+                return s.Data.DropDowns;
+            }).Where(w => w != null).ToList();
+            dropdowns.ForEach(s =>
+            {
+                if (s != null)
+                {
+                    foreach (var item in s)
+                    {
+                        if (item.Id != indx) continue;
+                        var countyIndex = item.CountyId.GetValueOrDefault();
+                        var countyNumber = countyIndex.ToString();
+                        var rowLabel = item.Name ?? $"Parameter {indx + 1}";
+                        foreach (var child in item.Members)
+                        {
+                            var itm = cbo.OwnerDocument.CreateElement("option");
+                            itm.Attributes.Add("value", child.Id.ToString());
+                            itm.Attributes.Add("dat-row-index", indx.ToString());
+                            itm.Attributes.Add("dat-row-name", rowLabel);
+                            itm.Attributes.Add("dat-county-index", countyNumber);
+                            itm.Attributes.Add("style", "display: none");
+                            itm.InnerHtml = child.Name ?? child.Id.ToString();
+                            cbo.AppendChild(itm);
+                        }
+                    }
+                }
+            });
+        }
+
+        private static void AppendCaseTypeValues(HtmlNode cbo, List<StateSearchConfiguration> configurations)
+        {
+            var temp = configurations
+            .SelectMany(s => s.Counties)
+            .Where(w => w.Data != null && w.Data.CaseSearchTypes != null)
+            .ToList();
+            if (!temp.Any()) return;
+            CreateDefaultCountyOption(cbo);
+            temp.ForEach(t =>
+            {
+                if (t.Data?.CaseSearchTypes != null && t.Data.CaseSearchTypes.Any())
+                {
+                    var dd = t.Data.CaseSearchTypes;
+                    foreach (var dd2 in dd) { dd2.CountyId = t.Index; }
+                }
+            });
+            var dropdowns = temp.Select(s =>
+            {
+                if (s.Data?.CaseSearchTypes == null || !s.Data.CaseSearchTypes.Any())
+                    return null;
+                return new { searches = s.Data.CaseSearchTypes };
+            }).Where(w => w != null).ToList();
+            dropdowns.ForEach(s =>
+            {
+                if (s != null)
+                {
+                    foreach (var item in s.searches)
+                    {
+                        var id = item.CountyId.GetValueOrDefault();
+                        var itm = cbo.OwnerDocument.CreateElement("option");
+                        itm.Attributes.Add("value", item.Id.ToString());
+                        itm.Attributes.Add("dat-county-index", id.ToString());
+                        itm.Attributes.Add("style", "display: none");
+                        itm.InnerHtml = item.Name ?? item.Id.ToString();
+                        cbo.AppendChild(itm);
+                    }
+                }
+            });
+        }
+
+        private static void CreateDefaultCountyOption(HtmlNode cbo)
+        {
+            if (cbo.HasChildNodes) return;
+            var nde = cbo.OwnerDocument.CreateElement("option");
+            nde.Attributes.Add("value", "");
+            nde.Attributes.Add("dat-county-index", "");
+            nde.Attributes.Add("dat-state-index", "");
+            nde.InnerHtml = "- select -";
+            cbo.AppendChild(nde);
         }
     }
 }
