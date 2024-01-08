@@ -2,14 +2,13 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace legallead.desktop.implementations
 {
     internal class SearchBuilder : ISearchBuilder
     {
         private const string PageName = "application-state-configuration";
-        private static ContentParser Parser = new();
+        private static readonly ContentParser Parser = new();
         private readonly IPermissionApi _api;
         private string? _jsConfiguration;
 
@@ -34,7 +33,7 @@ namespace legallead.desktop.implementations
             var parentIndex = BuildParent(doc, parent);
             BuildTable(doc, table);
             BuildTableBody(doc, tbody, search);
-            var jsonIndex = BuildTableFooter(doc, tfoot, _jsConfiguration);
+            var jsonIndex = BuildTableFooter(doc, tfoot);
             // append to parents
             parent.AppendChild(wrapper);
             table.AppendChild(tbody);
@@ -166,6 +165,7 @@ namespace legallead.desktop.implementations
                 if (isParameterRow)
                 {
                     tr.Attributes.Add("style", "display: none");
+                    tr.Attributes.Add("name", "tr-search-dynamic");
                     var rowId = Convert.ToInt32(r.Split('-')[1]);
                     PopulateParameters(rowId, tr, configurations);
                 }
@@ -173,23 +173,18 @@ namespace legallead.desktop.implementations
             });
         }
 
-        private static string BuildTableFooter(HtmlDocument doc, HtmlNode node, string? json = null)
+        private static string BuildTableFooter(HtmlDocument doc, HtmlNode node)
         {
             const string tareaId = "tarea-search-js-content";
             var tr = doc.CreateElement("tr");
             var td = doc.CreateElement("td");
-            var tarea = doc.CreateElement("textarea");
             var button = doc.CreateElement("button");
             td.Attributes.Add("colspan", "2");
             td.Attributes.Add("class", "p-1");
             button.Attributes.Add("id", "search-submit-button");
             button.Attributes.Add("class", "btn btn-primary");
             button.InnerHtml = "Search";
-            tarea.Attributes.Add("id", tareaId);
-            tarea.Attributes.Add("style", "display: none");
-            tarea.InnerHtml = json ?? string.Empty;
             td.AppendChild(button);
-            td.AppendChild(tarea);
             tr.AppendChild(td);
             node.AppendChild(tr);
             return tareaId;

@@ -10,6 +10,7 @@ namespace legallead.desktop.implementations
     internal class ContentHtmlNames : IContentHtmlNames
     {
         private readonly ICopyrightBuilder? _copyrightBuilder;
+        private ISearchBuilder? uiBuilder;
 
         public ContentHtmlNames()
         {
@@ -19,6 +20,24 @@ namespace legallead.desktop.implementations
         public List<ContentHtml> ContentNames => _contents;
 
         public List<string> Names => _names ??= GetNames();
+
+        public ISearchBuilder? SearchUi
+        {
+            get { return uiBuilder; }
+            set
+            {
+                uiBuilder = value;
+                if (uiBuilder != null)
+                {
+                    var content = uiBuilder.GetHtml();
+                    if (Replacements.ContainsKey(HtmMySearchInclude))
+                    {
+                        Replacements[HtmMySearchInclude] = content;
+                    }
+                }
+            }
+        }
+
         public static List<ContentReplacementItem> ContentReplacements => contentReplacementItems ??= GetContentReplacements();
 
         public bool IsValid(string name)
@@ -234,12 +253,14 @@ namespace legallead.desktop.implementations
         private const string HtmLoginInclude = "<p>Login form</p>";
         private const string HtmWelcomeInclude = "<p>Welcome form</p>";
         private const string HtmRegistrationInclude = "<p>Registration form</p>";
+        private const string HtmMySearchInclude = "<p>My Search Base</p>";
         private const string JsCommonReload = "/* js-include-common-reload */";
         private const string JsCommonClientInclude = "<!-- script: common-client-include -->";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
         private const string JsMyAccountNavigation = "<!-- script: my-account-navigation -->";
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
         private const string JsMyAccountPermissions = "/* inject: permissions-validation script */";
+        private const string JsMySearchBehavior = "<!-- script: my-search-searching-behaviors -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -251,6 +272,7 @@ namespace legallead.desktop.implementations
             { HtmAccountPasswordInclude, Properties.Resources.myaccount_password_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
             { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },
+            { HtmMySearchInclude, Properties.Resources.mysearch_search_html },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
             { JsHomeValidation, GetHomeValidationScript() },
@@ -264,6 +286,7 @@ namespace legallead.desktop.implementations
             { JsCommonReload, Properties.Resources.commonreload_js },
             { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
             { JsMyAccountPermissions, Properties.Resources.myaccount_permissions_validation_js },
+            { JsMySearchBehavior, Properties.Resources.mysearch_script_js },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

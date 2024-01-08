@@ -205,6 +205,12 @@
   <data name="mysearch-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\mysearch-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="mysearch_script_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mysearch-script-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="mysearch_search_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mysearch-search-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="subcontent_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\subcontent-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

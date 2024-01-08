@@ -1,3 +1,5 @@
+<script name="search-form-js">
+
 let jsSearchForm = {
 	attributes: {
 		name: "style",
@@ -88,3 +90,5 @@ let jsSearchForm = {
 }
 
 jsSearchForm.initialize();
+
+</script>

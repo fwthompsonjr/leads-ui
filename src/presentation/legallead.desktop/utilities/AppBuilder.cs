@@ -70,6 +70,11 @@ namespace legallead.desktop.utilities
             var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
             services.AddTransient<IPermissionApi>(s => new PermissionPageClient(PermissionApiBase ?? string.Empty));
+            services.AddSingleton<ISearchBuilder>(s =>
+            {
+                var api = s.GetRequiredService<IPermissionApi>();
+                return new SearchBuilder(api);
+            });
             services.AddSingleton(typeof(MainWindow));
             if (provider == null) return;
             services.AddTransient(s => provider.GetRequiredService<IContentParser>());
@@ -79,11 +84,6 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IUserProfileMapper>());
             services.AddSingleton(s => provider.GetRequiredService<IUserPermissionsMapper>());
             services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
-            services.AddSingleton<ISearchBuilder>(s =>
-            {
-                var api = s.GetRequiredService<IPermissionApi>();
-                return new SearchBuilder(api);
-            });
         }
     }
 }
