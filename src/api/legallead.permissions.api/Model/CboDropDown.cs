@@ -10,6 +10,9 @@ namespace legallead.permissions.api.Model
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [JsonProperty("isDisplayed")]
+        public bool? IsDisplayed { get; set; } = true;
+
         [JsonProperty("options")]
         public List<DropDownOption> Members { get; set; } = new();
     }

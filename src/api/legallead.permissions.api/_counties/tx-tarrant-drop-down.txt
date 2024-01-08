@@ -2,7 +2,7 @@
   "dropDowns": [
     {
       "id": 0,
-      "name": "criminal courts",
+      "name": "Search Type",
       "options": [
         {
           "id": 0,

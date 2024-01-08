@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace legallead.desktop.implementations
 {
@@ -320,9 +321,11 @@ namespace legallead.desktop.implementations
                         var countyIndex = item.CountyId.GetValueOrDefault();
                         var countyNumber = countyIndex.ToString();
                         var rowLabel = item.Name ?? $"Parameter {indx + 1}";
-                        foreach (var child in item.Members)
+                        foreach (var (child, itm) in from child in item.Members
+                                                     where item.IsDisplayed.GetValueOrDefault()
+                                                     let itm = cbo.OwnerDocument.CreateElement("option")
+                                                     select (child, itm))
                         {
-                            var itm = cbo.OwnerDocument.CreateElement("option");
                             itm.Attributes.Add("value", child.Id.ToString());
                             itm.Attributes.Add("dat-row-index", indx.ToString());
                             itm.Attributes.Add("dat-row-name", rowLabel);

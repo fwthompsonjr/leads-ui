@@ -6,7 +6,7 @@
                     "dropDowns": [
                         {
                             "id": 0,
-                            "name": "criminal courts",
+                            "name": "Search Type",
                             "members": [
                                 {
                                     "id": 0,
@@ -33,6 +33,7 @@
                         {
                             "id": 1,
                             "name": "probate courts",
+                            "isDisplayed": false,
                             "members": [
                                 {
                                     "id": 0,
@@ -43,6 +44,7 @@
                         {
                             "id": 2,
                             "name": "magistrate courts",
+                            "isDisplayed": false,
                             "members": [
                                 {
                                     "id": 0,
@@ -53,6 +55,7 @@
                         {
                             "id": 3,
                             "name": "civil and family courts",
+                            "isDisplayed": false,
                             "members": [
                                 {
                                     "id": 0,
@@ -63,6 +66,7 @@
                         {
                             "id": 4,
                             "name": "justice courts",
+                            "isDisplayed": false,
                             "members": [
                                 {
                                     "id": 0,
@@ -84,7 +88,7 @@
                     "dropDowns": [
                         {
                             "id": 0,
-                            "name": "criminal courts",
+                            "name": "Court Type",
                             "members": [
                                 {
                                     "id": 1,
@@ -175,7 +179,7 @@
                     "dropDowns": [
                         {
                             "id": 0,
-                            "name": "criminal courts",
+                            "name": "Court Type",
                             "members": [
                                 {
                                     "id": 0,

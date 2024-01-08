@@ -10,6 +10,9 @@ namespace legallead.desktop.entities
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [JsonProperty("isDisplayed")]
+        public bool? IsDisplayed { get; set; } = true;
+
         [JsonProperty("members")]
         public List<DropDownModel> Members { get; set; } = new();
 

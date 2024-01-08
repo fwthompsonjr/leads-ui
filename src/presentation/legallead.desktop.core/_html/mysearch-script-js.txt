@@ -1,0 +1,90 @@
+let jsSearchForm = {
+	attributes: {
+		name: "style",
+		hide: "display: none",
+		block: "display: block"
+	},
+	controls : {
+		state: "#cbo-search-state",
+		county: "#cbo-search-county",
+		rows: "#table-search tr[name = 'tr-search-dynamic']"
+	},
+	initialize: function() {
+		var jscontrols = jsSearchForm.controls;
+		$( jscontrols.state ).attr( "onchange", "jsSearchForm.stateChanged()" );
+		$( jscontrols.county ).attr( "onchange", "jsSearchForm.countyChanged()" );
+	},
+	stateChanged: function(){
+		const attrName = "dat-state-index";
+		let cbo = $( jsSearchForm.controls.state );
+		let cboCounty = $( jsSearchForm.controls.county );
+		let rows = $( jsSearchForm.controls.rows );
+		var a = jsSearchForm.attributes;
+		rows.attr( a.name, a.hide );
+		cboCounty.val("0");
+		var options = cboCounty.find("option").not("[value='0']");
+		options.attr( a.name, a.hide );
+		var attr = cbo.find("option:selected").attr(attrName);
+		if ( null != attr && attr.length > 0) {
+			let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr);
+			cboCounty.find(selector).removeAttr( a.name );		
+		}
+	},
+	stateChanged: function(){
+		const attrName = "dat-state-index";
+		let cbo = $( jsSearchForm.controls.state );
+		let cboCounty = $( jsSearchForm.controls.county );
+		let rows = $( jsSearchForm.controls.rows );
+		var a = jsSearchForm.attributes;
+		rows.attr( a.name, a.hide );
+		cboCounty.val("0");
+		var options = cboCounty.find("option").not("[value='0']");
+		options.attr( a.name, a.hide );
+		var attr = cbo.find("option:selected").attr(attrName);
+		if ( null != attr && attr.length > 0) {
+			let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr);
+			cboCounty.find(selector).removeAttr( a.name );		
+		}
+	},
+	containsCounty: function( rwselector, countyIndex ) {
+		let selector = $( rwselector ).find( "select" );
+		if ( null == selector ) return false;
+		let search = "option[dat-county-index='~0']".replace('~0', countyIndex);
+		let children = selector.find( search );
+		return children != null;
+	},
+	countyOptionDisplay: function( rwselector, countyIndex ) {
+		let selector = $( rwselector ).find( "select" );
+		if ( null == selector ) return;
+		let search = "option[dat-county-index='~0']".replace('~0', countyIndex);
+		let children = selector.find( search );
+		var a = jsSearchForm.attributes;
+		var options = selector.find("option").not("[value='']");
+		options.attr( a.name, a.hide );
+		selector.val('');
+		if ( children == null || children.length == 0 ) return;
+		let option1 = children.first();
+		let groupName = option1.attr("dat-row-name");
+		if (groupName == null) { groupName = "Select:" }
+		$( rwselector ).find( "label").text( groupName );
+		children.removeAttr( a.name );
+		$( rwselector ).removeAttr( a.name );
+	},
+	countyChanged: function(){
+		var a = jsSearchForm.attributes;
+		let cbo = $( jsSearchForm.controls.county );
+		let countyId = cbo.val();
+		let rows = $( jsSearchForm.controls.rows );
+		rows.attr( a.name, a.hide );
+		rows.each( function( rw ) {
+			let rowid = "#" + $(this).attr("id");
+			let hasCounty = jsSearchForm.containsCounty( rowid, countyId );
+			if ( hasCounty ) {
+				// set options
+				jsSearchForm.countyOptionDisplay( rowid, countyId );
+			}
+		});
+	}
+}
+
+jsSearchForm.initialize();

@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6414FF76-621E-4208-930A-1968994421B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{B658BCAC-DB86-4361-B9FD-7994D2ED55AD}"
+	ProjectSection(SolutionItems) = preProject
+		..\CodeCoverage.runsettings = ..\CodeCoverage.runsettings
+		..\..\release\legallead.content.api.release.txt = ..\..\release\legallead.content.api.release.txt
+		..\..\release\legallead.permissions.api.release.txt = ..\..\release\legallead.permissions.api.release.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{AA1BF24C-561A-4D86-B17C-592FEEF58C8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.permissions.api", "legallead.permissions.api\legallead.permissions.api.csproj", "{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{77C1CB34-A5BB-4D4F-BA3D-13447F655D83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "permissions.api.tests", "permissions.api.tests\permissions.api.tests.csproj", "{A0001DC1-1938-48A2-824B-325354A82F75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deploy", "_deploy", "{E2C63662-CFE2-41E7-964B-682FEFEE89CB}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\pipeline-aws-deploy-project.ps1 = ..\..\pipeline-aws-deploy-project.ps1
+		..\..\pipeline-build-solutions.ps1 = ..\..\pipeline-build-solutions.ps1
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Local|Any CPU = Local|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Zip|Any CPU = Zip|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Local|Any CPU.Build.0 = Local|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05}.Zip|Any CPU.Build.0 = Zip|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Local|Any CPU.Build.0 = Local|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0001DC1-1938-48A2-824B-325354A82F75}.Zip|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AA1BF24C-561A-4D86-B17C-592FEEF58C8A} = {6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}
+		{E6A03EC1-4AC3-4330-BE86-7F038EAD8C05} = {AA1BF24C-561A-4D86-B17C-592FEEF58C8A}
+		{77C1CB34-A5BB-4D4F-BA3D-13447F655D83} = {6414FF76-621E-4208-930A-1968994421B3}
+		{A0001DC1-1938-48A2-824B-325354A82F75} = {77C1CB34-A5BB-4D4F-BA3D-13447F655D83}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFCBB44C-A4CD-4F04-A5F2-DB8291697D28}
+	EndGlobalSection
+EndGlobal
