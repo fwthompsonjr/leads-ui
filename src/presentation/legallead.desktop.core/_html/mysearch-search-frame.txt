@@ -1,0 +1,24 @@
+<div id="dv-subcontent-search" name="subcontent-search" class="card">
+	<div id="dv-subcontent-search-card-body" name="subcontent-search-body" class="card-body">
+		<h5 class="card-title text-start">Search</h5>
+		<div class="row">
+			<div id="dv-search-table-wrapper" name="search-wrapper" class="table-responsive">
+				<table id="table-search" name="search-table" class="m-2 w-75 rounded border-secondary">
+					<colgroup>
+						<col style="width: 120px;">
+						<col>
+					</colgroup>
+					<tfoot>
+						<tr>
+							<td colspan="2" class="p-1">
+								<hr/>
+								<button id="search-submit-button" class="btn btn-primary">Search</button>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>			
+</div>
+				

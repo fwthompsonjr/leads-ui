@@ -728,6 +728,7 @@ namespace legallead.desktop.Properties {
         ///let jsSearchForm = {
         ///	attributes: {
         ///		name: &quot;style&quot;,
+        ///		dslb: &quot;disabled&quot;,
         ///		hide: &quot;display: none&quot;,
         ///		block: &quot;display: block&quot;
         ///	},
@@ -739,12 +740,32 @@ namespace legallead.desktop.Properties {
         ///	initialize: function() {
         ///		var jscontrols = jsSearchForm.controls;
         ///		$( jscontrols.state ).attr( &quot;onchange&quot;, &quot;jsSearchForm.stateChanged()&quot; );
-        ///		$( jscontrols.county ).attr( &quot;onchange&quot;, &quot;jsSearchForm.countyChanged()&quot; );
-        /// [rest of string was truncated]&quot;;.
+        ///		$( jscontrols.county ).attr( &quot;onchange&quot;, &quot;jsSearchForm. [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_script_js {
             get {
                 return ResourceManager.GetString("mysearch_script_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;dv-subcontent-search&quot; name=&quot;subcontent-search&quot; class=&quot;card&quot;&gt;
+        ///	&lt;div id=&quot;dv-subcontent-search-card-body&quot; name=&quot;subcontent-search-body&quot; class=&quot;card-body&quot;&gt;
+        ///		&lt;h5 class=&quot;card-title text-start&quot;&gt;Search&lt;/h5&gt;
+        ///		&lt;div class=&quot;row&quot;&gt;
+        ///			&lt;div id=&quot;dv-search-table-wrapper&quot; name=&quot;search-wrapper&quot; class=&quot;table-responsive&quot;&gt;
+        ///				&lt;table id=&quot;table-search&quot; name=&quot;search-table&quot; class=&quot;m-2 w-75 rounded border-secondary&quot;&gt;
+        ///					&lt;colgroup&gt;
+        ///						&lt;col style=&quot;width: 120px;&quot;&gt;
+        ///						&lt;col&gt;
+        ///					&lt;/colgroup&gt;
+        ///					&lt;tfoot&gt;
+        ///						&lt;tr&gt;
+        ///			 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_search_frame {
+            get {
+                return ResourceManager.GetString("mysearch_search_frame", resourceCulture);
             }
         }
         

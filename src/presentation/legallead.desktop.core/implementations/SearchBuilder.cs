@@ -20,32 +20,19 @@ namespace legallead.desktop.implementations
 
         public string GetHtml()
         {
+            const string parentXpath = "//*[@id='dv-subcontent-search']";
             const string fmt = "<html><body>{0}</body></html>";
             var search = Configuration()?.ToList();
 
             var doc = new HtmlDocument();
-            var parent = doc.CreateElement("div");
-            var wrapper = doc.CreateElement("div");
-            var table = doc.CreateElement("table");
+            var frame = string.Format(fmt, Properties.Resources.mysearch_search_frame);
+            doc.LoadHtml(frame);
+            var table = doc.DocumentNode.SelectSingleNode($"//*[@id='table-search']");
             var tbody = doc.CreateElement("tbody");
-            var tfoot = doc.CreateElement("tfoot");
-            // build elements
-            var parentIndex = BuildParent(doc, parent);
-            var parentXpath = $"//*[@id='{parentIndex}']";
-            var contentXpath = $"//*[@id='{parentIndex}-row-01']";
-            // build child elements
-            BuildWrapper(wrapper);
-            BuildTable(doc, table);
             BuildTableBody(doc, tbody, search);
-            BuildTableFooter(doc, tfoot);
-            var content = parent.SelectSingleNode(contentXpath) ?? parent;
-            // append to parents
             table.AppendChild(tbody);
-            table.AppendChild(tfoot);
-            wrapper.AppendChild(table);
-            content.AppendChild(wrapper);
-            var tempHtml = parent.OuterHtml;
-            var html = Parser.BeautfyHTML(string.Format(fmt, tempHtml));
+            var tempHtml = doc.DocumentNode.OuterHtml;
+            var html = Parser.BeautfyHTML(tempHtml);
             doc = new HtmlDocument();
             doc.LoadHtml(html);
             var element = doc.DocumentNode.SelectSingleNode(parentXpath);
@@ -73,60 +60,6 @@ namespace legallead.desktop.implementations
                 }
             }
             return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration).ToArray();
-        }
-
-        private static void BuildWrapper(HtmlNode node)
-        {
-            node.Attributes.Add("id", "dv-search-table-wrapper");
-            node.Attributes.Add("name", "search-wrapper");
-            node.Attributes.Add("class", "table-responsive");
-        }
-
-        private static string BuildParent(HtmlDocument doc, HtmlNode node)
-        {
-            const string parentId = "dv-subcontent-search";
-            var cardbody = doc.CreateElement("div");
-            var cardrow1 = doc.CreateElement("div");
-            var heading = doc.CreateElement("h5");
-            var subheading = doc.CreateElement("p");
-            heading.InnerHtml = "Search";
-            heading.Attributes.Add("class", "card-title text-start");
-
-            subheading.InnerHtml = "Complete the fields below to begin search";
-            subheading.Attributes.Add("class", "lead");
-            node.Attributes.Add("id", parentId);
-            node.Attributes.Add("name", "subcontent-search");
-            node.Attributes.Add("class", "subcontent card");
-
-            cardbody.Attributes.Add("id", $"{parentId}-card-body");
-            cardbody.Attributes.Add("name", "subcontent-search-body");
-            cardbody.Attributes.Add("class", "card-body");
-
-            cardrow1.Attributes.Add("id", $"{parentId}-row-01");
-            cardrow1.Attributes.Add("name", "subcontent-search-row");
-            cardrow1.Attributes.Add("class", "row");
-
-            cardbody.AppendChild(heading);
-            cardrow1.AppendChild(subheading);
-            node.AppendChild(cardbody);
-            node.AppendChild(cardrow1);
-            return parentId;
-        }
-
-        private static void BuildTable(HtmlDocument doc, HtmlNode node)
-        {
-            var cols = new[] { "width: 150px;", "" }.ToList();
-            var colgroup = doc.CreateElement("colgroup");
-            cols.ForEach(c =>
-            {
-                var col = doc.CreateElement("col");
-                if (!string.IsNullOrEmpty(c)) col.Attributes.Add("style", c);
-                colgroup.AppendChild(col);
-            });
-            node.Attributes.Add("id", "table-search");
-            node.Attributes.Add("name", "search-table");
-            node.Attributes.Add("class", "container p-2 w-75 rounded border-secondary");
-            node.AppendChild(colgroup);
         }
 
         private static void BuildTableBody(HtmlDocument doc, HtmlNode node, List<StateSearchConfiguration>? configurations = null)
@@ -188,23 +121,6 @@ namespace legallead.desktop.implementations
                 }
                 node.AppendChild(tr);
             });
-        }
-
-        private static void BuildTableFooter(HtmlDocument doc, HtmlNode node)
-        {
-            var tr = doc.CreateElement("tr");
-            var td = doc.CreateElement("td");
-            var rule = doc.CreateElement("hr");
-            var button = doc.CreateElement("button");
-            td.Attributes.Add("colspan", "2");
-            td.Attributes.Add("class", "p-1");
-            button.Attributes.Add("id", "search-submit-button");
-            button.Attributes.Add("class", "btn btn-primary");
-            button.InnerHtml = "Search";
-            td.AppendChild(rule);
-            td.AppendChild(button);
-            tr.AppendChild(td);
-            node.AppendChild(tr);
         }
 
         private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration>? config)
