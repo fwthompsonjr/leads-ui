@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace legallead.desktop.implementations
 {
@@ -29,26 +30,26 @@ namespace legallead.desktop.implementations
             var tbody = doc.CreateElement("tbody");
             var tfoot = doc.CreateElement("tfoot");
             // build elements
-            BuildWrapper(wrapper);
             var parentIndex = BuildParent(doc, parent);
+            var parentXpath = $"//*[@id='{parentIndex}']";
+            var contentXpath = $"//*[@id='{parentIndex}-row-02']";
+            // build child elements
+            BuildWrapper(wrapper);
             BuildTable(doc, table);
             BuildTableBody(doc, tbody, search);
-            var jsonIndex = BuildTableFooter(doc, tfoot);
+            BuildTableFooter(doc, tfoot);
+            var content = doc.DocumentNode.SelectSingleNode(contentXpath) ?? parent;
             // append to parents
-            parent.AppendChild(wrapper);
             table.AppendChild(tbody);
             table.AppendChild(tfoot);
             wrapper.AppendChild(table);
+            content.AppendChild(wrapper);
             var tempHtml = parent.OuterHtml;
             var html = Parser.BeautfyHTML(string.Format(fmt, tempHtml));
             doc = new HtmlDocument();
             doc.LoadHtml(html);
-            var element = doc.DocumentNode.SelectSingleNode($"//*[@id='{parentIndex}']");
+            var element = doc.DocumentNode.SelectSingleNode(parentXpath);
             if (element == null) return tempHtml;
-            tempHtml = element.OuterHtml;
-            var txtbox = element.SelectSingleNode($"//*[@id='{jsonIndex}']");
-            if (txtbox == null) return tempHtml;
-            txtbox.InnerHtml = _jsConfiguration ?? string.Empty;
             return element.OuterHtml;
         }
 
@@ -83,17 +84,33 @@ namespace legallead.desktop.implementations
 
         private static string BuildParent(HtmlDocument doc, HtmlNode node)
         {
-            const string parentId = "dv-search-container";
-            var heading = doc.CreateElement("h4");
+            const string parentId = "dv-subcontent-search";
+            var cardbody = doc.CreateElement("div");
+            var cardrow1 = doc.CreateElement("div");
+            var cardrow2 = doc.CreateElement("div");
+            var heading = doc.CreateElement("h5");
             var subheading = doc.CreateElement("p");
             heading.InnerHtml = "Search";
+            heading.Attributes.Add("class", "card-title text-start");
+
             subheading.InnerHtml = "Complete the fields below to begin search";
             subheading.Attributes.Add("class", "lead");
             node.Attributes.Add("id", parentId);
-            node.Attributes.Add("name", "search-container");
-            node.Attributes.Add("class", "container p-2 w-75 rounded border-secondary");
-            node.AppendChild(heading);
-            node.AppendChild(subheading);
+            node.Attributes.Add("name", "subcontent-search");
+            node.Attributes.Add("class", "subcontent card");
+
+            cardbody.Attributes.Add("id", $"{parentId}-card-body");
+            cardbody.Attributes.Add("name", "subcontent-search-body");
+            cardbody.Attributes.Add("class", "card-body");
+
+            cardrow1.Attributes.Add("id", $"{parentId}-row-01");
+            cardrow1.Attributes.Add("name", "subcontent-search-row");
+            cardrow1.Attributes.Add("class", "row");
+
+            cardbody.AppendChild(heading);
+            cardrow1.AppendChild(subheading);
+            node.AppendChild(cardbody);
+            node.AppendChild(cardrow1);
             return parentId;
         }
 
@@ -137,6 +154,7 @@ namespace legallead.desktop.implementations
                 var rwname = r.Replace(' ', '-').ToLower();
                 var isParameterRow = r.StartsWith("Dynamic-");
                 tr.Attributes.Add("id", $"tr-search-{rwname}");
+                lbl.Attributes.Add("class", "m-1 form-label text-secondary");
                 lbl.InnerHtml = r;
                 td1.AppendChild(lbl);
                 if (r.EndsWith("Date"))
@@ -173,9 +191,8 @@ namespace legallead.desktop.implementations
             });
         }
 
-        private static string BuildTableFooter(HtmlDocument doc, HtmlNode node)
+        private static void BuildTableFooter(HtmlDocument doc, HtmlNode node)
         {
-            const string tareaId = "tarea-search-js-content";
             var tr = doc.CreateElement("tr");
             var td = doc.CreateElement("td");
             var button = doc.CreateElement("button");
@@ -187,7 +204,6 @@ namespace legallead.desktop.implementations
             td.AppendChild(button);
             tr.AppendChild(td);
             node.AppendChild(tr);
-            return tareaId;
         }
 
         private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration>? config)
@@ -313,10 +329,12 @@ namespace legallead.desktop.implementations
                     foreach (var item in s)
                     {
                         if (item.Id != indx) continue;
+                        var members = item.Members.ToList();
+                        members.Sort((a, b) => a.Name.CompareTo(b.Name));
                         var countyIndex = item.CountyId.GetValueOrDefault();
                         var countyNumber = countyIndex.ToString();
                         var rowLabel = item.Name ?? $"Parameter {indx + 1}";
-                        foreach (var (child, itm) in from child in item.Members
+                        foreach (var (child, itm) in from child in members
                                                      where item.IsDisplayed.GetValueOrDefault()
                                                      let itm = cbo.OwnerDocument.CreateElement("option")
                                                      select (child, itm))
@@ -326,7 +344,7 @@ namespace legallead.desktop.implementations
                             itm.Attributes.Add("dat-row-name", rowLabel);
                             itm.Attributes.Add("dat-county-index", countyNumber);
                             itm.Attributes.Add("style", "display: none");
-                            itm.InnerHtml = child.Name ?? child.Id.ToString();
+                            itm.InnerHtml = textInfo.ToTitleCase(child.Name ?? child.Id.ToString());
                             cbo.AppendChild(itm);
                         }
                     }
@@ -336,6 +354,7 @@ namespace legallead.desktop.implementations
 
         private static void AppendCaseTypeValues(HtmlNode cbo, List<StateSearchConfiguration> configurations)
         {
+            const string caseType = "Case Type";
             var temp = configurations
             .SelectMany(s => s.Counties)
             .Where(w => w.Data != null && w.Data.CaseSearchTypes != null)
@@ -365,9 +384,10 @@ namespace legallead.desktop.implementations
                         var id = item.CountyId.GetValueOrDefault();
                         var itm = cbo.OwnerDocument.CreateElement("option");
                         itm.Attributes.Add("value", item.Id.ToString());
+                        itm.Attributes.Add("dat-row-name", caseType);
                         itm.Attributes.Add("dat-county-index", id.ToString());
                         itm.Attributes.Add("style", "display: none");
-                        itm.InnerHtml = item.Name ?? item.Id.ToString();
+                        itm.InnerHtml = textInfo.ToTitleCase(item.Name ?? item.Id.ToString());
                         cbo.AppendChild(itm);
                     }
                 }
@@ -384,5 +404,7 @@ namespace legallead.desktop.implementations
             nde.InnerHtml = "- select -";
             cbo.AppendChild(nde);
         }
+
+        private static readonly TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
     }
 }

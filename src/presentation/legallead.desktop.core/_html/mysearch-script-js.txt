@@ -3,6 +3,7 @@
 let jsSearchForm = {
 	attributes: {
 		name: "style",
+		dslb: "disabled",
 		hide: "display: none",
 		block: "display: block"
 	},
@@ -23,29 +24,15 @@ let jsSearchForm = {
 		let rows = $( jsSearchForm.controls.rows );
 		var a = jsSearchForm.attributes;
 		rows.attr( a.name, a.hide );
-		cboCounty.val("0");
+		cboCounty.val("0");		
+		cboCounty.attr(a.dslb, a.dslb);
 		var options = cboCounty.find("option").not("[value='0']");
 		options.attr( a.name, a.hide );
 		var attr = cbo.find("option:selected").attr(attrName);
 		if ( null != attr && attr.length > 0) {
 			let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr);
 			cboCounty.find(selector).removeAttr( a.name );		
-		}
-	},
-	stateChanged: function(){
-		const attrName = "dat-state-index";
-		let cbo = $( jsSearchForm.controls.state );
-		let cboCounty = $( jsSearchForm.controls.county );
-		let rows = $( jsSearchForm.controls.rows );
-		var a = jsSearchForm.attributes;
-		rows.attr( a.name, a.hide );
-		cboCounty.val("0");
-		var options = cboCounty.find("option").not("[value='0']");
-		options.attr( a.name, a.hide );
-		var attr = cbo.find("option:selected").attr(attrName);
-		if ( null != attr && attr.length > 0) {
-			let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr);
-			cboCounty.find(selector).removeAttr( a.name );		
+			cboCounty.removeAttr(a.dslb);
 		}
 	},
 	containsCounty: function( rwselector, countyIndex ) {

@@ -38,6 +38,10 @@
                     /* 
                     * Forms 
                     */ 
+						 .form-control:focus {
+							background-color: #444;
+							color: rgb(240, 240, 240)
+						 }
                          .form-control { 
                          background-color: transparent; 
                          border-color: #555; 
@@ -122,7 +126,7 @@
                          max-width: 1200px; 
                          } 
                          div[name="main-content"] div.card { 
-                         height: 95%; 
+                         height: 75%; 
                          min-height: 560px; 
                          } 
                     div[name="subcontent-home"], 
@@ -166,174 +170,185 @@
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div id="dv-search-container" name="search-container" class="container p-2 w-75 rounded border-secondary">
-						<h4>Search</h4>
-						<p class="lead">Complete the fields below to begin search</p>
-						<div id="dv-search-table-wrapper" name="search-wrapper" class="table-responsive">
-							<table id="table-search" name="search-table" class="container p-2 w-75 rounded border-secondary">
-								<colgroup>
-									<col style="width: 150px;">
-									<col>
-								</colgroup>
-								<tbody>
-									<tr id="tr-search-state">
-										<td>
-											<label>State</label>
-										</td>
-										<td>
-											<select id="cbo-search-state" name="search-field" class="form-control" onchange="jsSearchForm.stateChanged()">
-												<option value="0" dat-state-index="">- select -</option>
-												<option value="1" dat-state-index="tx">Texas</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-county">
-										<td>
-											<label>County</label>
-										</td>
-										<td>
-											<select id="cbo-search-county" name="search-field" class="form-control" onchange="jsSearchForm.countyChanged()">
-												<option value="0" dat-county-index="" dat-state-index="">- select -</option>
-												<option value="26550" dat-state-index="tx" dat-county-index="collin" dat-has-case-search="false" dat-parameter-count="5">Collin</option>
-												<option value="26730" dat-state-index="tx" dat-county-index="denton" dat-has-case-search="true" dat-parameter-count="1">Denton</option>
-												<option value="28330" dat-state-index="tx" dat-county-index="tarrant" dat-has-case-search="false" dat-parameter-count="1">Tarrant</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-0" style="display: none">
-										<td>
-											<label>Dynamic-0</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-0" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-												<option value="0" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">criminal case records</option>
-												<option value="1" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">probate case records</option>
-												<option value="2" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">magistrate case records</option>
-												<option value="3" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">civil and family case records</option>
-												<option value="4" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">justice of the peace case records</option>
-												<option value="1" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All JP And County Courts</option>
-												<option value="2" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All JP Courts</option>
-												<option value="3" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #1</option>
-												<option value="4" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #2</option>
-												<option value="5" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #3</option>
-												<option value="6" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #4</option>
-												<option value="7" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #5</option>
-												<option value="8" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice of the Peace Pct #6</option>
-												<option value="9" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All County Courts</option>
-												<option value="10" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Court At Law #1</option>
-												<option value="11" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Court At Law #2</option>
-												<option value="12" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #1</option>
-												<option value="13" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #2</option>
-												<option value="14" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #3</option>
-												<option value="15" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #4</option>
-												<option value="16" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #5</option>
-												<option value="0" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All Probate Courts</option>
-												<option value="1" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All JP Courts</option>
-												<option value="2" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All CCL Courts</option>
-												<option value="3" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 1</option>
-												<option value="4" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 2</option>
-												<option value="5" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 3</option>
-												<option value="6" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 4</option>
-												<option value="7" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 5</option>
-												<option value="8" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 6</option>
-												<option value="9" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 7</option>
-												<option value="10" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 8</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-1" style="display: none">
-										<td>
-											<label>Dynamic-1</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-1" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-2" style="display: none">
-										<td>
-											<label>Dynamic-2</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-2" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-3" style="display: none">
-										<td>
-											<label>Dynamic-3</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-3" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-4" style="display: none">
-										<td>
-											<label>Dynamic-4</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-4" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-5" style="display: none">
-										<td>
-											<label>Dynamic-5</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-5" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-dynamic-6" style="display: none">
-										<td>
-											<label>Dynamic-6</label>
-										</td>
-										<td>
-											<select id="cbo-search-dynamic-6" name="search-field" class="form-control">
-												<option value="" dat-county-index="" dat-state-index="">- select -</option>
-												<option value="0" dat-county-index="26730" style="display: none">JP and County Courts</option>
-												<option value="1" dat-county-index="26730" style="display: none">District Courts</option>
-											</select>
-										</td>
-									</tr>
-									<tr id="tr-search-start-date">
-										<td>
-											<label>Start Date</label>
-										</td>
-										<td>
-											<input id="tbx-search-startdate" name="search-field" type="date" class="form-control">
-										</td>
-									</tr>
-									<tr id="tr-search-end-date">
-										<td>
-											<label>End Date</label>
-										</td>
-										<td>
-											<input id="tbx-search-enddate" name="search-field" type="date" class="form-control">
-										</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="2" class="p-1">
-											<button id="search-submit-button" class="btn btn-primary">Search</button>
-											<textarea id="tarea-search-js-content" style="display: none">[{"name":"Texas","shortName":"TX","isActive":true,"counties":[{"Name":"Collin","Index":26550,"StateCode":"TX","ShortName":null,"IsActive":true,"Data":{"dropDowns":[{"id":0,"name":"Search Type","isDisplayed":true,"members":[{"id":0,"name":"criminal case records"},{"id":1,"name":"probate case records"},{"id":2,"name":"magistrate case records"},{"id":3,"name":"civil and family case records"},{"id":4,"name":"justice of the peace case records"}],"CountyId":null},{"id":1,"name":"probate courts","isDisplayed":false,"members":[{"id":0,"name":"probate case records"}],"CountyId":null},{"id":2,"name":"magistrate courts","isDisplayed":false,"members":[{"id":0,"name":"magistrate case records"}],"CountyId":null},{"id":3,"name":"civil and family courts","isDisplayed":false,"members":[{"id":0,"name":"civil and family case records"}],"CountyId":null},{"id":4,"name":"justice courts","isDisplayed":false,"members":[{"id":0,"name":"justice of the peace case records"}],"CountyId":null}],"caseSearchTypes":null}},{"Name":"Denton","Index":26730,"StateCode":"TX","ShortName":null,"IsActive":true,"Data":{"dropDowns":[{"id":0,"name":"Court Selection","isDisplayed":true,"members":[{"id":1,"name":"All JP And County Courts"},{"id":2,"name":"All JP Courts"},{"id":3,"name":"Justice of the Peace Pct #1"},{"id":4,"name":"Justice of the Peace Pct #2"},{"id":5,"name":"Justice of the Peace Pct #3"},{"id":6,"name":"Justice of the Peace Pct #4"},{"id":7,"name":"Justice of the Peace Pct #5"},{"id":8,"name":"Justice of the Peace Pct #6"},{"id":9,"name":"All County Courts"},{"id":10,"name":"County Court At Law #1"},{"id":11,"name":"County Court At Law #2"},{"id":12,"name":"County Criminal Court #1"},{"id":13,"name":"County Criminal Court #2"},{"id":14,"name":"County Criminal Court #3"},{"id":15,"name":"County Criminal Court #4"},{"id":16,"name":"County Criminal Court #5"}],"CountyId":null}],"caseSearchTypes":[{"id":0,"name":"JP and County Courts","CountyId":null},{"id":1,"name":"District Courts","CountyId":null}]}},{"Name":"Tarrant","Index":28330,"StateCode":"TX","ShortName":null,"IsActive":true,"Data":{"dropDowns":[{"id":0,"name":"Search Type","isDisplayed":true,"members":[{"id":0,"name":"All Probate Courts"},{"id":1,"name":"All JP Courts"},{"id":2,"name":"All CCL Courts"},{"id":3,"name":"JP No. 1"},{"id":4,"name":"JP No. 2"},{"id":5,"name":"JP No. 3"},{"id":6,"name":"JP No. 4"},{"id":7,"name":"JP No. 5"},{"id":8,"name":"JP No. 6"},{"id":9,"name":"JP No. 7"},{"id":10,"name":"JP No. 8"}],"CountyId":null}],"caseSearchTypes":null}}]}]</textarea>
-										</td>
-									</tr>
-								</tfoot>
-							</table>
+					<div id="dv-subcontent-search" name="subcontent-search" class="card">
+						<div id="dv-subcontent-search-card-body" name="subcontent-search-body" class="card-body">
+							<h5 class="card-title text-start">Search</h5>
+							
+						<div class="row">
+							<div id="dv-search-table-wrapper" name="search-wrapper" class="table-responsive">
+								<table id="table-search" name="search-table" class="m-2 w-75 rounded border-secondary">
+									<colgroup>
+										<col style="width: 120px;">
+										<col>
+									</colgroup>
+									<thead>
+										<tr>
+											<td colspan="2">
+												<p class="lead">Complete the fields below to begin search</p>
+											</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id="tr-search-state">
+											<td>
+												<label class="m-1 form-label text-secondary">State</label>
+											</td>
+											<td>
+												<select id="cbo-search-state" name="search-field" class="form-control">
+													<option value="0" dat-state-index="">- select -</option>
+													<option value="1" dat-state-index="tx">Texas</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-county">
+											<td>
+												<label class="form-label text-secondary">County</label>
+											</td>
+											<td>
+												<select id="cbo-search-county" name="search-field" class="form-control">
+													<option value="0" dat-county-index="" dat-state-index="">- select -</option>
+													<option value="26550" dat-state-index="tx" dat-county-index="collin" dat-has-case-search="false" dat-parameter-count="5" style="display: none">Collin</option>
+													<option value="26730" dat-state-index="tx" dat-county-index="denton" dat-has-case-search="true" dat-parameter-count="1" style="display: none">Denton</option>
+													<option value="28330" dat-state-index="tx" dat-county-index="tarrant" dat-has-case-search="false" dat-parameter-count="1" style="display: none">Tarrant</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-0" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-0</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-0" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													<option value="3" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Civil And Family Case Records</option>
+													<option value="0" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Criminal Case Records</option>
+													<option value="4" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Justice Of The Peace Case Records</option>
+													<option value="2" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Magistrate Case Records</option>
+													<option value="1" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Probate Case Records</option>
+													<option value="9" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">All County Courts</option>
+													<option value="1" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">All JP And County Courts</option>
+													<option value="2" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">All JP Courts</option>
+													<option value="10" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Court At Law #1</option>
+													<option value="11" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Court At Law #2</option>
+													<option value="12" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Criminal Court #1</option>
+													<option value="13" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Criminal Court #2</option>
+													<option value="14" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Criminal Court #3</option>
+													<option value="15" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Criminal Court #4</option>
+													<option value="16" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">County Criminal Court #5</option>
+													<option value="3" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #1</option>
+													<option value="4" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #2</option>
+													<option value="5" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #3</option>
+													<option value="6" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #4</option>
+													<option value="7" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #5</option>
+													<option value="8" dat-row-index="0" dat-row-name="Court Type" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #6</option>
+													<option value="2" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">All CCL Courts</option>
+													<option value="1" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">All JP Courts</option>
+													<option value="0" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">All Probate Courts</option>
+													<option value="3" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 1</option>
+													<option value="4" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 2</option>
+													<option value="5" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 3</option>
+													<option value="6" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 4</option>
+													<option value="7" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 5</option>
+													<option value="8" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 6</option>
+													<option value="9" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 7</option>
+													<option value="10" dat-row-index="0" dat-row-name="Court Type" dat-county-index="28330" style="display: none">JP No. 8</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-1" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-1</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-1" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-2" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-2</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-2" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-3" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-3</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-3" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-4" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-4</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-4" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-5" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-5</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-5" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-dynamic-6" style="display: none" name="tr-search-dynamic">
+											<td>
+												<label class="form-label text-secondary">Dynamic-6</label>
+											</td>
+											<td>
+												<select id="cbo-search-dynamic-6" name="search-field" class="form-control">
+													<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													<option value="0" dat-row-name="Case Type" dat-county-index="26730" style="display: none">JP And County Courts</option>
+													<option value="1" dat-row-name="Case Type" dat-county-index="26730" style="display: none">District Courts</option>
+												</select>
+											</td>
+										</tr>
+										<tr id="tr-search-start-date">
+											<td>
+												<label class="form-label text-secondary">Start Date</label>
+											</td>
+											<td>
+												<input id="tbx-search-startdate" name="search-field" type="date" class="form-control">
+											</td>
+										</tr>
+										<tr id="tr-search-end-date">
+											<td>
+												<label class="form-label text-secondary">End Date</label>
+											</td>
+											<td>
+												<input id="tbx-search-enddate" name="search-field" type="date" class="form-control">
+											</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2" class="p-1">
+												<hr/>
+												<button id="search-submit-button" class="btn btn-primary">Search</button>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
 						</div>
+					
+						</div>
+						
 					</div>
-					<p>My Search History</p>
-					<p>My Purchase History</p>
 				</div>
 			</main>
 			<footer class="mastfoot mt-auto">

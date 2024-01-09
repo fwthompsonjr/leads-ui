@@ -62,6 +62,9 @@ div[name="loader"] {
     border-bottom: #444 solid 1px;
     padding-bottom: 5px;
  }
+ .card .card-footer {
+    border-top: #555 solid 1px;
+ }
 @media screen and (max-width: 500px) {
   .card {
     width: 300px;
