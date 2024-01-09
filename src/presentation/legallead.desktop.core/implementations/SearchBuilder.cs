@@ -32,13 +32,13 @@ namespace legallead.desktop.implementations
             // build elements
             var parentIndex = BuildParent(doc, parent);
             var parentXpath = $"//*[@id='{parentIndex}']";
-            var contentXpath = $"//*[@id='{parentIndex}-row-02']";
+            var contentXpath = $"//*[@id='{parentIndex}-row-01']";
             // build child elements
             BuildWrapper(wrapper);
             BuildTable(doc, table);
             BuildTableBody(doc, tbody, search);
             BuildTableFooter(doc, tfoot);
-            var content = doc.DocumentNode.SelectSingleNode(contentXpath) ?? parent;
+            var content = parent.SelectSingleNode(contentXpath) ?? parent;
             // append to parents
             table.AppendChild(tbody);
             table.AppendChild(tfoot);
@@ -87,7 +87,6 @@ namespace legallead.desktop.implementations
             const string parentId = "dv-subcontent-search";
             var cardbody = doc.CreateElement("div");
             var cardrow1 = doc.CreateElement("div");
-            var cardrow2 = doc.CreateElement("div");
             var heading = doc.CreateElement("h5");
             var subheading = doc.CreateElement("p");
             heading.InnerHtml = "Search";
@@ -195,12 +194,14 @@ namespace legallead.desktop.implementations
         {
             var tr = doc.CreateElement("tr");
             var td = doc.CreateElement("td");
+            var rule = doc.CreateElement("hr");
             var button = doc.CreateElement("button");
             td.Attributes.Add("colspan", "2");
             td.Attributes.Add("class", "p-1");
             button.Attributes.Add("id", "search-submit-button");
             button.Attributes.Add("class", "btn btn-primary");
             button.InnerHtml = "Search";
+            td.AppendChild(rule);
             td.AppendChild(button);
             tr.AppendChild(td);
             node.AppendChild(tr);
