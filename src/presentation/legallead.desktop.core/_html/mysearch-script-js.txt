@@ -64,7 +64,7 @@ let jsSearchForm = {
 	var arr = jsSearchForm.fields;
 	try {
 		arr.forEach(a => $(a).attr(dsb, dsb));
-		handler.submit( "dv-search-table-wrapper", submission );
+		handler.submit( "frm-search", submission );
 	} catch {
 		jsSearchForm.seticon( false );
 	}

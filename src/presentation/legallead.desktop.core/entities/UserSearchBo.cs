@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace legallead.desktop.entities
 {
@@ -14,11 +15,15 @@ namespace legallead.desktop.entities
         [StringLength(2)]
         public string State { get; set; } = string.Empty;
         [Required]
-        public string County { get; set; } = string.Empty;
+        public UserSearchCounty County { get; set; } = new();
         [Required]
-        public DateTime? StartDate { get; set; }
+        [JsonProperty("start")]
+        public long? StartDate { get; set; }
         [Required]
-        public DateTime? EndDate { get; set; }
+        [JsonProperty("end")]
+        public long? EndDate { get; set; }
+
+        [JsonProperty("details")]
         public IEnumerable<CountyParameterModel> Parameters { 
             get {  return _parameters; } 
             set 
