@@ -21,6 +21,20 @@ namespace legallead.permissions.api
     {
         public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton(configuration);
+            services.AddSingleton(a =>
+            {
+                var cfg = a.GetRequiredService<IConfiguration>();
+                var mx = Convert.ToInt32(cfg["Search:MaxDays"]);
+                var mn = Convert.ToInt64(cfg["Search:MinStartDate"]);
+                var api = cfg["Search:Api"] ?? string.Empty;
+                return new UserSearchValidator { MinStartDate = mn, MaxDays = mx, Api = api };
+            });
+            services.AddScoped(s =>
+            {
+                var validator = s.GetRequiredService<UserSearchValidator>();
+                return new SearchController(validator);
+            });
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

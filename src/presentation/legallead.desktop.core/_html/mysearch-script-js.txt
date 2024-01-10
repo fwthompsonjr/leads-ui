@@ -153,6 +153,19 @@ let jsSearchForm = {
 		emsg.removeClass("d-none");
 		return false;
 	}
+	const minumimDate = 1514764800095;
+	if (d1.getTime() < minumimDate ) {
+		$( jsSearchForm.controls.start).addClass(errclass);
+		emsg.text('Start date can not be prior to Jan 1, 2018.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	if (d2.getTime() < minumimDate ) {
+		$( jsSearchForm.controls.end).addClass(errclass);
+		emsg.text('End date can not be prior to Jan 1, 2018.');
+		emsg.removeClass("d-none");
+		return false;
+	}
 	return true;
 	},
     initialize: function() { 
