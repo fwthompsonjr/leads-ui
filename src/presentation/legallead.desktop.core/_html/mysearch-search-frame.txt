@@ -12,10 +12,18 @@
 						<tr>
 							<td colspan="2" class="p-1">
 								<hr/>
+							</td>
+						</tr>
+						<tr>
+							<td class="p-1">
 								<button id="search-submit-button" class="btn btn-primary">
-								<i id="search-submit-icon" class="bi bi-bi bi-search" ></i>
-								<i id="fsearch-submit-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Search
+									<i id="search-submit-icon" class="bi bi-bi bi-search" ></i>
+									<i id="search-submit-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Search
 								</button>
+							</td>
+							<td class="p-1">
+								<span id="search-submit-error-message" class="m-1 text-danger d-none">Please fill all required fields.</span>
+								<span id="search-submit-success-message" class="m-1 text-success d-none">Your search has been submitted.</span>
 							</td>
 						</tr>
 					</tfoot>
