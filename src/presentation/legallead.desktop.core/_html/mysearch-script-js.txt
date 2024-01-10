@@ -10,13 +10,17 @@ let jsSearchForm = {
 	controls : {
 		state: "#cbo-search-state",
 		county: "#cbo-search-county",
-		rows: "#table-search tr[name = 'tr-search-dynamic']"
+		rows: "#table-search tr[name = 'tr-search-dynamic']",
+		start: "#tbx-search-startdate",
+		end: "#tbx-search-enddate"
 	},
 	initialize: function() {
 		var jscontrols = jsSearchForm.controls;
 		$( jscontrols.state ).attr( "onchange", "jsSearchForm.stateChanged()" );
 		$( jscontrols.county ).attr( "onchange", "jsSearchForm.countyChanged()" );
 	},
+	serialized: function() {
+	}
 	stateChanged: function(){
 		const attrName = "dat-state-index";
 		let cbo = $( jsSearchForm.controls.state );

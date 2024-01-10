@@ -2,6 +2,11 @@
 /*
 * Forms
 */
+.form-control:focus {
+	background-color: #444;
+	color: rgb(240, 240, 240)
+}
+
 .form-control {
     background-color: transparent;
     border-color: #555;

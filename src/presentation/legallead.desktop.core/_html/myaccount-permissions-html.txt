@@ -2,9 +2,9 @@
 					<div id="dv-subcontent-permissions" name="subcontent-permissions" class="subcontent card">
                         <div id="dv-subcontent-permissions-row-00" class="row d-none w-75">
 							<div id="dv-subcontent-permissions-success" class="alert alert-success d-flex align-items-center" role="alert">
-								<svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-								<div>
-								Your account information has been updated successfully
+								<div class="row">
+                                    <i class="bi bi-check-circle-fill"></i>
+								    <span>Your account information has been updated successfully</span>
 								</div>
 							</div>
 						</div>

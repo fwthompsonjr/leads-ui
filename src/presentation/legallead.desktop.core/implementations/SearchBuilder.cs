@@ -79,12 +79,13 @@ namespace legallead.desktop.implementations
                 "End Date"}.ToList();
             rows.ForEach(r =>
             {
+                // add error rows to collection
+                var rwname = r.Replace(' ', '-').ToLower();
+                var isParameterRow = r.StartsWith("Dynamic-");
                 var tr = doc.CreateElement("tr");
                 var lbl = doc.CreateElement("label");
                 var td1 = doc.CreateElement("td");
                 var td2 = doc.CreateElement("td");
-                var rwname = r.Replace(' ', '-').ToLower();
-                var isParameterRow = r.StartsWith("Dynamic-");
                 tr.Attributes.Add("id", $"tr-search-{rwname}");
                 lbl.Attributes.Add("class", "m-1 form-label text-secondary");
                 lbl.InnerHtml = r;
