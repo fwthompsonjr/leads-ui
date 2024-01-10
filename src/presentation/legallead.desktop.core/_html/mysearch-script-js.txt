@@ -1,0 +1,239 @@
+<script name="search-form-js">
+
+let jsSearchForm = { 
+    attributes: { 
+    name: "style", 
+    hide: "display: none", 
+    block: "display: block" 
+    }, 
+	fields: [],
+    controls : { 
+    state: "#cbo-search-state", 
+    county: "#cbo-search-county", 
+    button: "#search-submit-button", 
+    errormessage: "#search-submit-error-message", 
+    rows: "#table-search tr[name = 'tr-search-dynamic']",
+    start: "#tbx-search-startdate", 
+    end: "#tbx-search-enddate",
+    },
+    serialized: function() {
+	let js = {
+		"state": $( jsSearchForm.controls.state).find("option:selected").attr("dat-state-index"),
+		"county": {
+			"name": $( jsSearchForm.controls.county).find("option:selected").attr("dat-county-index"),
+			"value": parseInt($( jsSearchForm.controls.county).val())
+		},
+		"details": [],
+		"start": Date.parse( $(jsSearchForm.controls.start).val() ),
+		"end": Date.parse( $(jsSearchForm.controls.end).val() ),
+	};
+	$( jsSearchForm.controls.rows).each(function() {
+		let $tr = $( this );
+		if( $tr.is(":not(:hidden)")) {
+			const lb = $tr.find("label").text();
+			const cboption = $tr.find("select").find("option:selected");
+			js.details.push( { "name": lb, "text": cboption.text(), "value": cboption.val() } );
+		}
+	});
+	return js;
+    },
+	seticon: function( isSpinning ) { 
+	const dsb = "disabled";
+	const hddn = "d-none";								
+	const icons = [ "#search-submit-icon", "#search-submit-icon-spin"];
+	const bttn = jsSearchForm.controls.button;
+	const a = isSpinning ? 0 : 1;
+	const b = isSpinning ? 1 : 0;
+								
+	$( icons[a] ).addClass( hddn );
+	$( icons[b] ).removeClass( hddn );
+	if( isSpinning ) {
+		$( bttn ).attr(dsb, dsb);
+	} else {
+		$( bttn ).removeAttr(dsb);
+	}
+	},
+	onsubmitclicked: function() {
+	const dsb = "disabled";
+	let isValid = jsSearchForm.validate();
+	if(!isValid) { return; }
+	let submission = JSON.stringify( jsSearchForm.serialized() );
+	let handler = window.jsHandler;
+	if( undefined === handler || null === handler || !(handler) ) { return; }
+	jsSearchForm.seticon( true );
+	var arr = jsSearchForm.fields;
+	try {
+		arr.forEach(a => $(a).attr(dsb, dsb));
+		handler.submit( "frm-search", submission );
+	} catch {
+		jsSearchForm.seticon( false );
+	}
+	finally {
+		arr.forEach(a => $(a).removeAttr(dsb));
+	}					
+	},
+	validate: function() {
+	const errclass = "error";
+	let emsg = $( jsSearchForm.controls.errormessage);
+	let js = jsSearchForm.serialized();
+	emsg.addClass("d-none");
+	emsg.text('Please fill all required fields.');
+	if( null == js) return false;
+	if( js.state.length == 0) {
+		$( jsSearchForm.controls.state).addClass(errclass);
+		emsg.text('State is a required field.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	$( jsSearchForm.controls.state).removeClass(errclass);
+	if( js.county.value == '0') {
+		$( jsSearchForm.controls.county).addClass(errclass);
+		emsg.text('County is a required field.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	$( jsSearchForm.controls.county).removeClass(errclass);
+	let errors = [];
+	$( jsSearchForm.controls.rows).each(function() {
+		let $tr = $( this );
+		if( $tr.is(":not(:hidden)")) {
+			const lb = $tr.find("label").text();
+			const cbo = $tr.find("select");
+			const cboption = cbo.find("option:selected");
+			if( null == cboption || null == cboption.val() || cboption.val().length == 0 ) {
+				errors.push( "#" + cbo.attr("id") );
+				cbo.addClass(errclass);
+				if (errors.length == 1) { emsg.removeClass("d-none"); }
+			}
+			else {
+				cbo.removeClass(errclass);
+			}
+		}
+	});
+	if (errors.length > 0) { return false; }
+	$( jsSearchForm.controls.start).removeClass(errclass);
+	if (isNaN(js.start)) {
+		$( jsSearchForm.controls.start).addClass(errclass);
+		emsg.text('Please enter a valid start date.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	$( jsSearchForm.controls.end).removeClass(errclass);
+	if (isNaN(js.end)) {
+		$( jsSearchForm.controls.end).addClass(errclass);
+		emsg.text('Please enter a valid end date.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	let d1 = new Date(js.start);
+	let d2 = new Date(js.end);
+	if (d2.getTime() < d1.getTime()) {
+		$( jsSearchForm.controls.end).addClass(errclass);
+		emsg.text('End date should be later than start date.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	var difference = Math.round(d2 - d1) / (1000 * 3600 * 24);
+	if (difference > 7) {
+		$( jsSearchForm.controls.end).addClass(errclass);
+		emsg.text('Date range should be (7) days or less.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	const currentDate = new Date();
+	if (d1.getTime() > currentDate.getTime() ) {
+		$( jsSearchForm.controls.start).addClass(errclass);
+		emsg.text('Start date can not be in the future.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	if (d2.getTime() > currentDate.getTime() ) {
+		$( jsSearchForm.controls.end).addClass(errclass);
+		emsg.text('End date can not be in the future.');
+		emsg.removeClass("d-none");
+		return false;
+	}
+	return true;
+	},
+    initialize: function() { 
+    var jscontrols = jsSearchForm.controls; 
+    $( jscontrols.state ).attr( "onchange", "jsSearchForm.stateChanged()" ); 
+    $( jscontrols.county ).attr( "onchange", "jsSearchForm.countyChanged()" ); 
+    $( jscontrols.button ).attr( "onclick", "jsSearchForm.onsubmitclicked()" ); 
+	$( jscontrols.state ).val("0");
+	$( jscontrols.county ).val("0");
+	$( jscontrols.start ).val(null);
+	$( jscontrols.end ).val(null);
+	var arr = jsSearchForm.fields;
+	arr.push( jsSearchForm.controls.state );
+	arr.push( jsSearchForm.controls.county );
+	arr.push( jsSearchForm.controls.rows + " select" );
+	arr.push( jsSearchForm.controls.start );
+	arr.push( jsSearchForm.controls.end );
+	arr.forEach(a => $(a).attr("onblur", "jsSearchForm.oncontrolleave()"));
+    }, 
+	oncontrolleave: function() {
+	var arr = jsSearchForm.fields;
+	arr.forEach(a => $(a).removeClass('error'));								
+	let emsg = $( jsSearchForm.controls.errormessage);
+	if (!emsg.hasClass("d-none")) { jsSearchForm.validate(); }
+	},
+    stateChanged: function(){ 
+    const attrName = "dat-state-index"; 
+    let cbo = $( jsSearchForm.controls.state ); 
+    let cboCounty = $( jsSearchForm.controls.county ); 
+    let rows = $( jsSearchForm.controls.rows ); 
+    var a = jsSearchForm.attributes; 
+    rows.attr( a.name, a.hide ); 
+    cboCounty.val("0"); 
+    var options = cboCounty.find("option").not("[value='0']"); 
+    options.attr( a.name, a.hide ); 
+    var attr = cbo.find("option:selected").attr(attrName); 
+        if ( null != attr && attr.length > 0) { 
+        let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr); 
+        cboCounty.find(selector).removeAttr( a.name ); 
+        } 
+    }, 
+    containsCounty: function( rwselector, countyIndex ) { 
+    let selector = $( rwselector ).find( "select" ); 
+    if ( null == selector ) return false; 
+    let search = "option[dat-county-index='~0']".replace('~0', countyIndex); 
+    let children = selector.find( search ); 
+    return children != null; 
+    }, 
+    countyOptionDisplay: function( rwselector, countyIndex ) { 
+    let selector = $( rwselector ).find( "select" ); 
+    if ( null == selector ) return; 
+    let search = "option[dat-county-index='~0']".replace('~0', countyIndex); 
+    let children = selector.find( search ); 
+    var a = jsSearchForm.attributes; 
+    var options = selector.find("option").not("[value='']"); 
+    options.attr( a.name, a.hide ); 
+    selector.val(''); 
+    if ( children == null || children.length == 0 ) return; 
+    let option1 = children.first(); 
+    let groupName = option1.attr("dat-row-name"); 
+        if (groupName == null) { groupName = "Select:" } 
+    $( rwselector ).find( "label").text( groupName ); 
+    children.removeAttr( a.name ); 
+    $( rwselector ).removeAttr( a.name ); 
+    }, 
+    countyChanged: function(){ 
+    var a = jsSearchForm.attributes; 
+    let cbo = $( jsSearchForm.controls.county ); 
+    let countyId = cbo.val(); 
+    let rows = $( jsSearchForm.controls.rows ); 
+    rows.attr( a.name, a.hide ); 
+        rows.each( function( rw ) { 
+        let rowid = "#" + $(this).attr("id"); 
+        let hasCounty = jsSearchForm.containsCounty( rowid, countyId ); 
+            if ( hasCounty ) { 
+            // set options 
+            jsSearchForm.countyOptionDisplay( rowid, countyId ); 
+            } 
+        }); 
+    } 
+} 
+                    
+jsSearchForm.initialize(); 
+</script>

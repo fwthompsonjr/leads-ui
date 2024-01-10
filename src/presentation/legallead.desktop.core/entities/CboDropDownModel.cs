@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace legallead.permissions.api.Model
+namespace legallead.desktop.entities
 {
-    public class CboDropDown
+    internal class CboDropDownModel
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -13,7 +13,9 @@ namespace legallead.permissions.api.Model
         [JsonProperty("isDisplayed")]
         public bool? IsDisplayed { get; set; } = true;
 
-        [JsonProperty("options")]
-        public List<DropDownOption> Members { get; set; } = new();
+        [JsonProperty("members")]
+        public List<DropDownModel> Members { get; set; } = new();
+
+        public int? CountyId { get; set; }
     }
 }

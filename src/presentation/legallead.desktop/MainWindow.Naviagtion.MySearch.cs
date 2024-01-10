@@ -1,13 +1,10 @@
 using CefSharp.Wpf;
 using legallead.desktop.entities;
-using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace legallead.desktop
 {

@@ -45,6 +45,11 @@ namespace legallead.desktop.js
                 var handler = new JsPermissionChange(web);
                 handler.Submit(formName, json);
             }
+            if (SearchForms.Exists(f => f.Equals(formName, comparison)))
+            {
+                var handler = new JsSearchSubmission(web);
+                handler.Submit(formName, json);
+            }
         }
 
         public virtual Action<object?>? OnInitCompleted { get; set; }
@@ -88,6 +93,12 @@ namespace legallead.desktop.js
             "permissions-subscription-group",
             "permissions-discounts",
             "form-change-password"
+        };
+        protected static readonly List<string> SearchForms = new()
+        {
+            "frm-search",
+            "frm-search-history",
+            "frm-search-purchases"
         };
     }
 }

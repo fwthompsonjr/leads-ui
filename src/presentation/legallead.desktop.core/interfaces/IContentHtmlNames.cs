@@ -6,6 +6,7 @@ namespace legallead.desktop.interfaces
     {
         List<ContentHtml> ContentNames { get; }
         List<string> Names { get; }
+        ISearchBuilder? SearchUi { get; set; }
 
         ContentHtml? GetContent(string name);
 

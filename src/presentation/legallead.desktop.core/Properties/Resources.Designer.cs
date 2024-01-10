@@ -723,6 +723,72 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;search-form-js&quot;&gt;
+        ///
+        ///let jsSearchForm = {
+        ///	attributes: {
+        ///		name: &quot;style&quot;,
+        ///		dslb: &quot;disabled&quot;,
+        ///		hide: &quot;display: none&quot;,
+        ///		block: &quot;display: block&quot;
+        ///	},
+        ///	controls : {
+        ///		state: &quot;#cbo-search-state&quot;,
+        ///		county: &quot;#cbo-search-county&quot;,
+        ///		rows: &quot;#table-search tr[name = &apos;tr-search-dynamic&apos;]&quot;
+        ///	},
+        ///	initialize: function() {
+        ///		var jscontrols = jsSearchForm.controls;
+        ///		$( jscontrols.state ).attr( &quot;onchange&quot;, &quot;jsSearchForm.stateChanged()&quot; );
+        ///		$( jscontrols.county ).attr( &quot;onchange&quot;, &quot;jsSearchForm. [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_script_js {
+            get {
+                return ResourceManager.GetString("mysearch_script_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;dv-subcontent-search&quot; name=&quot;subcontent-search&quot; class=&quot;card&quot;&gt;
+        ///	&lt;div id=&quot;dv-subcontent-search-card-body&quot; name=&quot;subcontent-search-body&quot; class=&quot;card-body&quot;&gt;
+        ///		&lt;h5 class=&quot;card-title text-start&quot;&gt;Search&lt;/h5&gt;
+        ///		&lt;div class=&quot;row&quot;&gt;
+        ///			&lt;div id=&quot;dv-search-table-wrapper&quot; name=&quot;search-wrapper&quot; class=&quot;table-responsive&quot;&gt;
+        ///				&lt;table id=&quot;table-search&quot; name=&quot;search-table&quot; class=&quot;m-2 w-75 rounded border-secondary&quot;&gt;
+        ///					&lt;colgroup&gt;
+        ///						&lt;col style=&quot;width: 120px;&quot;&gt;
+        ///						&lt;col&gt;
+        ///					&lt;/colgroup&gt;
+        ///					&lt;tfoot&gt;
+        ///						&lt;tr&gt;
+        ///			 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_search_frame {
+            get {
+                return ResourceManager.GetString("mysearch_search_frame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div id=&quot;dv-search-container&quot; name=&quot;search-container&quot; class=&quot;container p-2 w-75 rounded border-secondary&quot;&gt;
+        ///			&lt;h4&gt;Search&lt;/h4&gt;
+        ///			&lt;p class=&quot;lead&quot;&gt;Complete the fields below to begin search&lt;/p&gt;
+        ///			&lt;div id=&quot;dv-search-table-wrapper&quot; name=&quot;search-wrapper&quot; class=&quot;table-responsive&quot;&gt;
+        ///				&lt;table id=&quot;table-search&quot; name=&quot;search-table&quot; class=&quot;container p-2 w-75 rounded border-secondary&quot;&gt;
+        ///					&lt;colgroup&gt;
+        ///						&lt;col style=&quot;width: 150px;&quot;&gt;
+        ///						&lt;col&gt;
+        ///					&lt;/colgroup&gt;
+        ///					&lt;tbody&gt;
+        ///						&lt;tr id=&quot;tr-search-state&quot;&gt;        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_search_html {
+            get {
+                return ResourceManager.GetString("mysearch_search_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {

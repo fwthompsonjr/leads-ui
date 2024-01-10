@@ -39,6 +39,8 @@ namespace legallead.desktop.handlers
                 if (objectData.StatusCode != 200) return;
                 handler.LoginCompleted(formName);
                 handler.SetMessage("Login completed");
+                var data = TryDeserialize<LoginFormModel>(json);
+                SetUserSession(data, Guid.NewGuid().ToString());
                 NavigateTo("MyAccount", objectData);
             }
             catch (Exception ex)
@@ -51,6 +53,16 @@ namespace legallead.desktop.handlers
             {
                 handler.End();
             }
+        }
+
+        private static void SetUserSession(LoginFormModel? login, string sessionId)
+        {
+            var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            var user = AppBuilder.ServiceProvider?.GetService<UserSearchBo>();
+            if (login == null || user == null || bo == null) return;
+            bo.UserName = login.UserName;
+            user.UserName = login.UserName;
+            user.SessionId = sessionId;
         }
 
         private static void NavigateTo(string destination, ApiResponse objectData)

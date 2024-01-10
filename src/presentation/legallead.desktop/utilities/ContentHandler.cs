@@ -41,10 +41,18 @@ namespace legallead.desktop.utilities
 
         internal static ContentHtml? GetLocalContent(string name)
         {
+            var provider = AppBuilder.ServiceProvider;
             var contentProvider = ContentProvider.LocalContentProvider;
+            if (contentProvider.SearchUi == null)
+            {
+                var searchUI = provider?.GetService<ISearchBuilder>();
+                if (searchUI != null)
+                {
+                    contentProvider.SearchUi = searchUI;
+                }
+            }
             var raw = contentProvider.GetContent(name);
             if (raw == null) return null;
-            var provider = AppBuilder.ServiceProvider;
             var beutifier = provider?.GetRequiredService<IContentParser>();
             if (beutifier == null) return raw;
             raw.Content = beutifier.BeautfyHTML(raw.Content);

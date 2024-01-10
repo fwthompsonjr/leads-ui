@@ -1,4 +1,5 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,7 +69,13 @@ namespace legallead.desktop.utilities
         {
             var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
+            services.AddSingleton<UserSearchBo>();
             services.AddTransient<IPermissionApi>(s => new PermissionPageClient(PermissionApiBase ?? string.Empty));
+            services.AddSingleton<ISearchBuilder>(s =>
+            {
+                var api = s.GetRequiredService<IPermissionApi>();
+                return new SearchBuilder(api);
+            });
             services.AddSingleton(typeof(MainWindow));
             if (provider == null) return;
             services.AddTransient(s => provider.GetRequiredService<IContentParser>());

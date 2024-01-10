@@ -2,6 +2,11 @@
 /*
 * Forms
 */
+.form-control:focus {
+	background-color: #444;
+	color: rgb(240, 240, 240)
+}
+
 .form-control {
     background-color: transparent;
     border-color: #555;
@@ -61,6 +66,9 @@ div[name="loader"] {
  .card .card-body .card-title {
     border-bottom: #444 solid 1px;
     padding-bottom: 5px;
+ }
+ .card .card-footer {
+    border-top: #555 solid 1px;
  }
 @media screen and (max-width: 500px) {
   .card {
