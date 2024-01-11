@@ -3,6 +3,7 @@ using legallead.jdbc.interfaces;
 using legallead.logging.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -59,11 +60,13 @@ namespace permissions.api.tests
         [InlineData(typeof(IProfileInfrastructure))]
         [InlineData(typeof(ILogConfiguration))]
         [InlineData(typeof(ILoggingInfrastructure))]
+        [InlineData(typeof(UserSearchValidator))]
         [InlineData(typeof(PermissionsController))]
         [InlineData(typeof(ApplicationController))]
         [InlineData(typeof(SignonController))]
         [InlineData(typeof(ListsController))]
         [InlineData(typeof(HomeController))]
+        [InlineData(typeof(SearchController))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
