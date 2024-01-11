@@ -33,6 +33,7 @@ namespace legallead.permissions.api.Health
             typeof(IProfileInfrastructure),
             typeof(ILoggingInfrastructure),
             typeof(IStateSearchProvider),
+            typeof(ISearchInfrastructure)
         };
     }
 }

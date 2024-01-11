@@ -37,6 +37,7 @@ namespace legallead.permissions.api.Health
             typeof(PermissionsController),
             typeof(ProfilesController),
             typeof(SignonController),
+            typeof(SearchController),
         };
     }
 }
