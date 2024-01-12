@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.permissions.api
@@ -27,35 +28,15 @@ namespace legallead.permissions.api
                 var cfg = a.GetRequiredService<IConfiguration>();
                 var mx = Convert.ToInt32(cfg["Search:MaxDays"]);
                 var mn = Convert.ToInt64(cfg["Search:MinStartDate"]);
-                var api = cfg["Search:Api"] ?? string.Empty;
-                return new UserSearchValidator { MinStartDate = mn, MaxDays = mx, Api = api };
+                return new UserSearchValidator { MinStartDate = mn, MaxDays = mx };
             });
             services.AddScoped(s =>
             {
+                var db = s.GetRequiredService<ISearchInfrastructure>();
                 var validator = s.GetRequiredService<UserSearchValidator>();
-                return new SearchController(validator);
+                return new SearchController(validator, db);
             });
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                var keyconfig = configuration["JWT:Key"] ?? string.Empty;
-                var Key = Encoding.UTF8.GetBytes(keyconfig);
-                o.SaveToken = true;
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidAudience = configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Key),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+            services.SetupJwt(configuration);
         }
 
         public static void RegisterDataServices(this IServiceCollection services)
@@ -119,6 +100,11 @@ namespace legallead.permissions.api
             {
                 var provider = p.GetRequiredService<IDataProvider>();
                 return new ProfileInfrastructure(provider);
+            });
+            services.AddScoped<ISearchInfrastructure>(p =>
+            {
+                var provider = p.GetRequiredService<IDataProvider>();
+                return new SearchInfrastructure(provider);
             });
             services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();
@@ -188,6 +174,7 @@ namespace legallead.permissions.api
             return validationResults;
         }
 
+
         public static string IfNull(this string? s, string fallback)
         {
             if (s == null) return fallback;
@@ -243,6 +230,31 @@ namespace legallead.permissions.api
             var matched = appNames.Exists(x => x.Equals(name, StringComparison.OrdinalIgnoreCase));
             var message = matched ? "application is valid" : "Target application is not found or mismatched.";
             return new KeyValuePair<bool, string>(matched, message);
+        }
+        [ExcludeFromCodeCoverage(Justification = "Private method tested via public method.")]
+        private static void SetupJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                var keyconfig = configuration["JWT:Key"] ?? string.Empty;
+                var Key = Encoding.UTF8.GetBytes(keyconfig);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidAudience = configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
         }
     }
 }

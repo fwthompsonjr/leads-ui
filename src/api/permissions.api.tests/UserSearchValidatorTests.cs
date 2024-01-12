@@ -132,8 +132,7 @@ namespace permissions.api.tests
             return new UserSearchValidator
             {
                 MaxDays = 7,
-                MinStartDate = 1514764800095,
-                Api = "search.leads.test"
+                MinStartDate = 1514764800095
             };
         }
         private static UserSearchRequest GetRequest()
@@ -162,7 +161,7 @@ namespace permissions.api.tests
             var unixStart = ((long)start
                 .Subtract(unixEpoch)
                 .TotalMilliseconds).ToString();
-            unixStart = unixStart.Substring(0, unixStart.Length - 3);
+            unixStart = unixStart[..^3];
             unixStart += milliseconds;
             return Convert.ToInt64(unixStart);
         }

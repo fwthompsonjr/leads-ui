@@ -8,22 +8,26 @@ namespace legallead.permissions.api.Controllers
     [ApiController]
     public class SearchController : ControllerBase
     {
-        private readonly UserSearchValidator searchValidator;
-        public SearchController(UserSearchValidator validator)
+        private readonly IUserSearchValidator searchValidator;
+        private readonly ISearchInfrastructure infrastructure;
+        public SearchController(IUserSearchValidator validator, ISearchInfrastructure infrastructure)
         {
             searchValidator = validator;
+            this.infrastructure = infrastructure;
         }
 
         [HttpPost]
         [Route("search-begin")]
-        public IActionResult BeginSearch(UserSearchRequest request)
+        public async Task<IActionResult> BeginSearch(UserSearchRequest request)
         {
             var isValid = searchValidator.IsValid(request);
             if (!isValid.Key)
             {
                 return BadRequest(isValid);
             }
-            return Ok(isValid);
+            var result = await infrastructure.Begin(Request, request);
+            if (result == null) return Conflict(request);
+            return Ok(result);
         }
     }
 }
