@@ -1,12 +1,9 @@
-﻿using legallead.jdbc.entities;
+﻿using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.implementations
 {
@@ -15,25 +12,136 @@ namespace legallead.jdbc.implementations
         public UserSearchRepository(DataContext context) : base(context)
         {
         }
-
-        public Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, string data)
+        public async Task<IEnumerable<SearchDtoHeader>> History(string userId)
         {
-            throw new NotImplementedException();
+            const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<SearchDto>(connection, command);
+            var translation = response.Select(x => new SearchDtoHeader
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                Name = x.Name,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                EstimatedRowCount = x.ExpectedRows,
+                CreateDate = x.CreateDate
+            });
+            return translation;
+        }
+        public async Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data)
+        {
+            try
+            {
+                var procedure = AppendProcs[search];
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("searchItemId", id);
+                dapperParm.Add("jscontent", data);
+                using (var connection = _context.CreateConnection())
+                    await _command.ExecuteAsync(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, string>(true, "Command executed succesfully");
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, ex.Message);
+            }
         }
 
-        public Task<KeyValuePair<bool, string>> Begin(string userId, string payload)
+        public async Task<KeyValuePair<bool, string>> Begin(string userId, string payload)
         {
-            throw new NotImplementedException();
+            const string procedure = "CALL USP_APPEND_USER_SEARCH_AND_REQUEST ( ?, ?, ?, ? );";
+
+            try
+            {
+                var searchGuid = Guid.NewGuid().ToString("D");
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("userRefId", userId);
+                dapperParm.Add("searchGuid", searchGuid);
+                dapperParm.Add("searchStart", DateTime.UtcNow);
+                dapperParm.Add("jscontent", Encoding.UTF8.GetBytes(payload));
+                using (var connection = _context.CreateConnection())
+                    await _command.ExecuteAsync(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, string>(true, searchGuid);
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, ex.Message);
+            }
         }
 
-        public Task<KeyValuePair<bool, string>> Complete(string id)
+        public async Task<KeyValuePair<bool, string>> Complete(string id)
         {
-            throw new NotImplementedException();
+            const string procedure = "CALL USP_UPDATE_USER_SEARCH_COMPLETION(?, ?, ?);";
+
+            try
+            {
+                int? noRecordCount = null;
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("searchUid", id);
+                dapperParm.Add("estimatedRecords", noRecordCount);
+                dapperParm.Add("completionDate", DateTime.UtcNow);
+                using (var connection = _context.CreateConnection())
+                    await _command.ExecuteAsync(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, string>(true, "Record update completed.");
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, ex.Message);
+            }
         }
 
-        Task<IEnumerable<SearchTargetModel>> IUserSearchRepository.GetTargets(SearchTargetTypes search, string? id)
+        public async Task<KeyValuePair<bool, string>> UpdateRowCount(string id, int rowCount)
         {
-            throw new NotImplementedException();
+            const string procedure = "CALL USP_UPDATE_USER_SEARCH_COMPLETION(?, ?, ?);";
+
+            try
+            {
+                DateTime? noDate = null;
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("searchUid", id);
+                dapperParm.Add("estimatedRecords", rowCount);
+                dapperParm.Add("completionDate", noDate);
+                using (var connection = _context.CreateConnection())
+                    await _command.ExecuteAsync(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, string>(true, "Record update completed.");
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, ex.Message);
+            }
         }
+        public async Task<IEnumerable<SearchTargetModel>?> GetTargets(SearchTargetTypes search, string? userId, string? id)
+        {
+            string prc = QueryProcs[search];
+            var parms = new DynamicParameters();
+            parms.Add("userUid", userId);
+            parms.Add("searchUid", id);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<SearchTargetDto>(connection, prc, parms);
+            if (response == null) return null;
+            var translation = response.Select(x => new SearchTargetModel
+            {
+                Component = x.Component,
+                SearchId = x.SearchId,
+                LineNbr = x.LineNbr,
+                Line = x.Line,
+                CreateDate = x.CreateDate
+            });
+            return translation;
+        }
+
+        private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
+            { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
+            { SearchTargetTypes.Request, "CALL USP_APPEND_USER_SEARCH_REQUEST( ?, ? );" },
+            { SearchTargetTypes.Response, "CALL USP_APPEND_USER_SEARCH_RESPONSE( ?, ? );" },
+            { SearchTargetTypes.Status, "CALL USP_APPEND_USER_SEARCH_STATUS( ?, ? );" },
+            };
+        private static readonly Dictionary<SearchTargetTypes, string> QueryProcs = new(){
+            { SearchTargetTypes.Detail, "CALL USP_QUERY_USER_SEARCH_DETAIL( ?, ? );" },
+            { SearchTargetTypes.Request, "CALL USP_QUERY_USER_SEARCH_REQUEST( ?, ? );" },
+            { SearchTargetTypes.Response, "CALL USP_QUERY_USER_SEARCH_RESPONSE( ?, ? );" },
+            { SearchTargetTypes.Status, "CALL USP_QUERY_USER_SEARCH_STATUS( ?, ? );" },
+            };
     }
 }

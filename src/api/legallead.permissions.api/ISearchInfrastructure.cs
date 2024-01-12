@@ -19,5 +19,6 @@ namespace legallead.permissions.api
         Task<bool> SetDetail(string id, object detail);
 
         Task<bool> SetResult(string id, object result);
+        Task<bool> SetResponse(string id, object response);
     }
 }

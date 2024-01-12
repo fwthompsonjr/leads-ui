@@ -1,6 +1,6 @@
 ﻿namespace legallead.jdbc.models
 {
-    internal class SearchTargetModel
+    public class SearchTargetModel
     {
         public string? Component { get; set; }
         public string? SearchId { get; set; }

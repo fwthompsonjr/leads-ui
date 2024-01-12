@@ -80,6 +80,10 @@ namespace legallead.permissions.api.Utility
         {
             return Task.FromResult(true);
         }
+        public Task<bool> SetResponse(string id, object response)
+        {
+            return Task.FromResult(true);
+        }
 
         public async Task<User?> GetUser(HttpRequest request)
         {
