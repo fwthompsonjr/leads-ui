@@ -31,7 +31,7 @@
 			<_Parameter1>legallead.permissions.api</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>legallead.*</_Parameter1>
+			<_Parameter1>legallead.models</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>permissions.api.tests</_Parameter1>
