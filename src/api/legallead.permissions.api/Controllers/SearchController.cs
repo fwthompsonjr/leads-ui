@@ -26,6 +26,7 @@ namespace legallead.permissions.api.Controllers
             }
             var result = await infrastructure.Begin(Request, request);
             if (result == null) return Conflict(request);
+            if (string.IsNullOrWhiteSpace(result.RequestId)) return UnprocessableEntity(result);
             return Ok(result);
         }
     }

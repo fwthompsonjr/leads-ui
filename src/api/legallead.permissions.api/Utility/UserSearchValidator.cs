@@ -90,7 +90,7 @@ namespace legallead.permissions.api.Utility
             var failedCase = new KeyValuePair<bool, string>(false, $"Parameter invalid for case type");
             var caseid = caseselection == null ? -1 : Convert.ToInt32(caseselection.Value);
             if (caseselection == null) return failedCase;
-            var isfound = property.CaseSearchTypes.Exists(a => a.Name.Equals(caseselection.Text, oic) && a.Id == caseid);
+            var isfound = property.CaseSearchTypes.Exists(a => a.Id == caseid);
             if (!isfound) return failedCase;
             return success;
         }

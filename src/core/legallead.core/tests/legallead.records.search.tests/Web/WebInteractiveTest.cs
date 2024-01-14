@@ -104,12 +104,12 @@ namespace legallead.records.search.Tests
             WriteToExcel(found);
         }
 
-        private void WriteToExcel(WebFetchResult found)
+        private static void WriteToExcel(WebFetchResult found)
         {
             ExcelWriter.WriteToExcel(found);
         }
 
-        private bool CanExecuteFetch()
+        private static bool CanExecuteFetch()
         {
             return ExecutionManagement.CanExecuteFetch();
         }

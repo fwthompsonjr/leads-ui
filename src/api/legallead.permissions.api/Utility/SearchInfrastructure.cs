@@ -1,21 +1,30 @@
 ﻿using legallead.jdbc.entities;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Model;
+using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Utility
 {
     public class SearchInfrastructure : ISearchInfrastructure
     {
         protected readonly IDataProvider _db;
-        public SearchInfrastructure(IDataProvider db)
+        private readonly IUserSearchRepository _repo;
+        internal SearchInfrastructure(IDataProvider db, IUserSearchRepository repo)
         {
             _db = db;
+            _repo = repo;
         }
 
         public async Task<UserSearchBeginResponse?> Begin(HttpRequest http, UserSearchRequest request)
         {
             var user = await GetUser(http);
             if (user == null) return null;
-            return new();
+            var searchRecord = await _repo.Begin(user.Id, JsonConvert.SerializeObject(request));
+            return new()
+            {
+                Request = request,
+                RequestId = searchRecord.Key ? searchRecord.Value : string.Empty
+            };
         }
 
         public async Task<IEnumerable<UserSearchHeader>?> GetHeader(HttpRequest http, string? id)

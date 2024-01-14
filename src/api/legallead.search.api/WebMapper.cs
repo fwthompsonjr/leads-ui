@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using legallead.models.Search;
 using legallead.permissions.api.Model;
+using legallead.records.search.Classes;
+using legallead.records.search.Models;
+using Newtonsoft.Json;
 
 namespace legallead.search.api
 {
@@ -32,6 +35,8 @@ namespace legallead.search.api
 
                 c.CreateMap<UserSearchRequest, SearchNavigationParameter>()
                     .ConvertUsing(ConvertTo);
+                c.CreateMap<UserSearchRequest, WebInteractive>()
+                    .ConvertUsing(ConvertTo);
             });
         }
         private static int GetWebIndex(string? county, string? st)
@@ -47,6 +52,16 @@ namespace legallead.search.api
         {
             var dte = DateTimeOffset.FromUnixTimeMilliseconds(unixTime).Date;
             return dte.ToString("yyyy-MM-dd");
+        }
+
+        private static WebInteractive ConvertTo(UserSearchRequest source, WebInteractive dest)
+        {
+            var startDate = DateTimeOffset.FromUnixTimeMilliseconds(source.StartDate).Date;
+            var endingDate = DateTimeOffset.FromUnixTimeMilliseconds(source.EndDate).Date;
+            var parameter = MapFrom<UserSearchRequest, SearchNavigationParameter>(source);
+            var serialized = JsonConvert.SerializeObject(parameter);
+            var translated = JsonConvert.DeserializeObject<WebNavigationParameter>(serialized) ?? new();
+            return new WebInteractive(translated, startDate, endingDate);
         }
         private static SearchNavigationParameter ConvertTo(UserSearchRequest source, SearchNavigationParameter dest)
         {
