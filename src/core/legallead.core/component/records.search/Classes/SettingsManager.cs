@@ -66,7 +66,11 @@ namespace legallead.records.search.Classes
         /// </value>
         public static string Content
         {
-            get { return LoadFile("settings.xml"); }
+            get
+            {
+                var settings = Properties.Resources.xml_settings_xml;
+                return settings;
+            }
         }
 
         /// <summary>
@@ -77,7 +81,7 @@ namespace legallead.records.search.Classes
         /// </value>
         public string Layout
         {
-            get { return _layoutContent ??= LoadFile("caselayout.xml"); }
+            get { return _layoutContent ??= Properties.Resources.xml_caselayout_xml; }
         }
 
         #endregion Properties
@@ -311,24 +315,6 @@ namespace legallead.records.search.Classes
             }
 
             return parameter;
-        }
-
-        /// <summary>
-        /// Loads the resource xml file from data folder.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>the contents of specified file as string</returns>
-        private static string LoadFile(string fileName)
-        {
-            string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
-            execName = Path.GetDirectoryName(execName);
-            string targetFile = new Uri(string.Format(
-                CultureInfo.CurrentCulture,
-                @"{0}\xml\{1}", execName, fileName)).AbsolutePath;
-            var backup = GetXmlContent(fileName);
-            var content = !File.Exists(targetFile) ? backup : File.ReadAllText(targetFile);
-            if (string.IsNullOrWhiteSpace(content)) { return backup; }
-            return content;
         }
 
         public static string GetXmlContent(string fileName)

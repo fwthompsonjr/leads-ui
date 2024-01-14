@@ -74,11 +74,15 @@
   "caseSearchTypes": [
     {
       "id": 0,
-      "name": "JP and County Courts"
+      "name": "JP and County Court: Civil, Family and Probate"
     },
     {
       "id": 1,
-      "name": "District Courts"
+      "name": "JP and County Court: Criminal Case Records"
+    },
+    {
+      "id": 2,
+      "name": "District Court Case Records"
     }
   ]
 }
