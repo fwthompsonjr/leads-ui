@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\legallead.search.api\legallead.search.api.csproj" />
+  </ItemGroup>
+
 </Project>
