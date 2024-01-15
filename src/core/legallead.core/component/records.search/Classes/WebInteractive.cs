@@ -1,4 +1,5 @@
 ﻿using legallead.records.search.Dto;
+using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using System.Xml;
 
@@ -144,6 +145,12 @@ namespace legallead.records.search.Classes
         }
 
         #endregion Public Methods
+        
+        #region Public Properties
+
+        public IStagingPersistence? Persistence { get; set; }
+
+        #endregion
 
         #region Private Methods
 

@@ -80,9 +80,14 @@ namespace legallead.search.api
 
         private static void DentonCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
         {
+            const string dentonCountyIndex = "1";
             var accepted = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15".Split(',');
             var cbxIndex = source.Details.Find(x => x.Name == "Court Type")?.Value ?? accepted[0];
             if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
+
+            AppendKeys(dest, dentonCountyIndex);
+            AppendInstructions(dest, dentonCountyIndex);
+            AppendCaseInstructions(dest, dentonCountyIndex);
             var keyZero = new SearchNavigationKey { Name = "SearchComboIndex", Value = cbxIndex };
             var caseSearch = new SearchNavigationKey
             {
@@ -107,18 +112,20 @@ namespace legallead.search.api
             {
                 dest.Keys.Add(districtSearch);
             }
-            var exclusions = new[] { "startDate", "endDate" };
+        }
+        private static void AppendKeys(SearchNavigationParameter dest, string index)
+        {
             var nodeWebSite = WebSettings.DocumentElement?.ChildNodes[0];
             if (nodeWebSite == null) return;
             var list = nodeWebSite.ChildNodes.Cast<XmlNode>().ToList();
-            var settings = list.Find(x => x.Attributes?.GetNamedItem("id")?.Value == "1");
+            var settings = list.Find(x => x.Attributes?.GetNamedItem("id")?.Value == index);
             if (settings != null && settings.HasChildNodes)
             {
                 foreach (XmlNode item in settings.ChildNodes)
                 {
                     var name = item.Attributes?.GetNamedItem("name")?.Value;
-                    if (string.IsNullOrEmpty(name) || exclusions.Contains(name)) continue;
-                    if(!item.HasChildNodes) { continue; }
+                    if (string.IsNullOrEmpty(name)) continue;
+                    if (!item.HasChildNodes) { continue; }
                     if (item.ChildNodes[0] is not XmlCDataSection section) continue;
                     var key = new SearchNavigationKey { Name = name, Value = section.Data };
                     dest.Keys.Add(key);
@@ -126,6 +133,71 @@ namespace legallead.search.api
             }
         }
 
+        private static void AppendInstructions(SearchNavigationParameter dest, string index)
+        {
+            var nodeWebSite = WebSettings.DocumentElement?.ChildNodes[1];
+            if (nodeWebSite == null) return;
+            var list = nodeWebSite.ChildNodes.Cast<XmlNode>().ToList();
+            var settings = list.Find(x =>
+                x.Attributes?.GetNamedItem("id")?.Value == index &&
+                x.Name.Equals("instructions"));
+            if (settings != null && settings.HasChildNodes)
+            {
+                foreach (XmlNode item in settings.ChildNodes)
+                {
+                    var name = item.Attributes?.GetNamedItem("name")?.Value;
+                    var instructionType = item.Attributes?.GetNamedItem("type")?.Value;
+                    var by = item.Attributes?.GetNamedItem("By")?.Value;
+                    var friendlyName = item.Attributes?.GetNamedItem("FriendlyName")?.Value;
+                    if (string.IsNullOrEmpty(name)) continue;
+                    if (!item.HasChildNodes) { continue; }
+                    if (item.ChildNodes[0] is not XmlCDataSection section) continue;
+                    var instruction = new SearchNavInstruction
+                    {
+                        Name = name ?? string.Empty,
+                        CommandType = instructionType ?? string.Empty,
+                        By = by ?? string.Empty,
+                        FriendlyName = friendlyName ?? string.Empty,
+                        Value = section.Data
+                    };
+                    dest.Instructions.Add(instruction);
+                }
+            }
+        }
+
+
+        private static void AppendCaseInstructions(SearchNavigationParameter dest, string index)
+        {
+            var nodeWebSite = WebSettings.DocumentElement?.ChildNodes[1];
+            if (nodeWebSite == null) return;
+            var list = nodeWebSite.ChildNodes.Cast<XmlNode>().ToList();
+            var settings = list.Find(x =>
+                x.Attributes?.GetNamedItem("id")?.Value == index &&
+                x.Attributes?.GetNamedItem("type")?.Value == "normal" &&
+                x.Name.Equals("caseInspection"));
+            if (settings != null && settings.HasChildNodes)
+            {
+                foreach (XmlNode item in settings.ChildNodes)
+                {
+                    var name = item.Attributes?.GetNamedItem("name")?.Value;
+                    var instructionType = item.Attributes?.GetNamedItem("type")?.Value;
+                    var by = item.Attributes?.GetNamedItem("By")?.Value;
+                    var friendlyName = item.Attributes?.GetNamedItem("FriendlyName")?.Value;
+                    if (string.IsNullOrEmpty(name)) continue;
+                    if (!item.HasChildNodes) { continue; }
+                    if (item.ChildNodes[0] is not XmlCDataSection section) continue;
+                    var instruction = new SearchNavInstruction
+                    {
+                        Name = name ?? string.Empty,
+                        CommandType = instructionType ?? string.Empty,
+                        By = by ?? string.Empty,
+                        FriendlyName = friendlyName ?? string.Empty,
+                        Value = section.Data
+                    };
+                    dest.CaseInstructions.Add(instruction);
+                }
+            }
+        }
         private static readonly Dictionary<string, string> dentonLinkMap = new() {
                 { "0", "//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]" },
                 { "1", "//a[@class='ssSearchHyperlink'][contains(text(),'Criminal Case Records')]" },
