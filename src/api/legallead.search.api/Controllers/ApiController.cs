@@ -3,6 +3,7 @@ using legallead.models.Search;
 using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace legallead.search.api.Controllers
 {
@@ -37,7 +38,8 @@ namespace legallead.search.api.Controllers
                 return UnprocessableEntity(source.Request);
             }
             js.Name = uniqueId;
-            var mapped = await _repo.Append(jdbc.SearchTargetTypes.Detail, uniqueId, js);
+            var obj = JsonConvert.SerializeObject(js);
+            var mapped = await _repo.Append(jdbc.SearchTargetTypes.Detail, uniqueId, obj);
             if (!mapped.Key)
             {
                 return UnprocessableEntity(new { source.Request, mapped.Value });
@@ -47,7 +49,7 @@ namespace legallead.search.api.Controllers
             {
                 return StatusCode(500, "Unable to construct web interactive search");
             }
-            TaskScheduler uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            TaskScheduler uiScheduler = TaskScheduler.Default;
             _ = Task.Factory.StartNew(async () =>
             {
                 var response = web.Fetch();
@@ -57,7 +59,7 @@ namespace legallead.search.api.Controllers
                     if (responseSaved.Key) await _repo.Complete(uniqueId);
                 }
             }, CancellationToken.None, TaskCreationOptions.None, uiScheduler);
-            return Ok(source);
+            return Ok(new { SearchId = uniqueId });
         }
     }
 }
