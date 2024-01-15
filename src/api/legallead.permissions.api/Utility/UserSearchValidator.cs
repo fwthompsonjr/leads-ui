@@ -1,7 +1,6 @@
 ﻿using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Model;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
 
@@ -57,7 +56,7 @@ namespace legallead.permissions.api.Utility
             return DateTimeOffset.FromUnixTimeMilliseconds(time).DateTime;
         }
 
-        [ExcludeFromCodeCoverage(Justification ="Private member tested from public exposed method.")]
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public exposed method.")]
         private static KeyValuePair<bool, string> CheckParameters(UsStateCounty findCounty, List<CountyParameterModel> details)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
@@ -79,7 +78,7 @@ namespace legallead.permissions.api.Utility
             }
             var members = property.DropDowns.SelectMany(m => m.Members).ToList();
             var dropdowns = details.FindAll(x => x.Name != "Case Type");
-            foreach ( var dropdown in dropdowns )
+            foreach (var dropdown in dropdowns)
             {
                 var failedDropDown = new KeyValuePair<bool, string>(false, $"Parameter invalid for {dropdown.Name}");
                 if (!int.TryParse(dropdown.Value, out var ddIndex)) return failedDropDown;
@@ -91,11 +90,11 @@ namespace legallead.permissions.api.Utility
             var failedCase = new KeyValuePair<bool, string>(false, $"Parameter invalid for case type");
             var caseid = caseselection == null ? -1 : Convert.ToInt32(caseselection.Value);
             if (caseselection == null) return failedCase;
-            var isfound = property.CaseSearchTypes.Exists(a => a.Name.Equals(caseselection.Text, oic) && a.Id == caseid);
+            var isfound = property.CaseSearchTypes.Exists(a => a.Id == caseid);
             if (!isfound) return failedCase;
             return success;
         }
-        
+
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public exposed method.")]
         private static CountySearchDetail? TryGetResource(string name)
         {
@@ -106,7 +105,8 @@ namespace legallead.permissions.api.Utility
                 var content = manager.GetString(itemName);
                 if (string.IsNullOrWhiteSpace(content)) { return null; }
                 return JsonConvert.DeserializeObject<CountySearchDetail>(content);
-            } catch
+            }
+            catch
             {
                 return null;
             }

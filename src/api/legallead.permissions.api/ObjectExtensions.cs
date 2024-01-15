@@ -23,6 +23,13 @@ namespace legallead.permissions.api
         public static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton(configuration);
+            services.AddSingleton<IUserSearchValidator>(a =>
+            {
+                var cfg = a.GetRequiredService<IConfiguration>();
+                var mx = Convert.ToInt32(cfg["Search:MaxDays"]);
+                var mn = Convert.ToInt64(cfg["Search:MinStartDate"]);
+                return new UserSearchValidator { MinStartDate = mn, MaxDays = mx };
+            });
             services.AddSingleton(a =>
             {
                 var cfg = a.GetRequiredService<IConfiguration>();
@@ -64,6 +71,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
+            services.AddScoped<IUserSearchRepository, UserSearchRepository>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -104,7 +112,8 @@ namespace legallead.permissions.api
             services.AddScoped<ISearchInfrastructure>(p =>
             {
                 var provider = p.GetRequiredService<IDataProvider>();
-                return new SearchInfrastructure(provider);
+                var repo = p.GetRequiredService<IUserSearchRepository>();
+                return new SearchInfrastructure(provider, repo);
             });
             services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();

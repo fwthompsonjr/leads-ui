@@ -60,9 +60,13 @@ namespace legallead.jdbc.implementations
                 dapperParm.Add("searchGuid", searchGuid);
                 dapperParm.Add("searchStart", DateTime.UtcNow);
                 dapperParm.Add("jscontent", Encoding.UTF8.GetBytes(payload));
-                using (var connection = _context.CreateConnection())
-                    await _command.ExecuteAsync(connection, procedure, dapperParm);
-                return new KeyValuePair<bool, string>(true, searchGuid);
+                using var connection = _context.CreateConnection();
+                var inserted = await _command.QuerySingleOrDefaultAsync<SearchDto>(connection, procedure, dapperParm);
+                if (inserted != null && !string.IsNullOrWhiteSpace(inserted.Id))
+                {
+                    return new KeyValuePair<bool, string>(true, inserted.Id);
+                }
+                return new KeyValuePair<bool, string>(false, "Insert new request failed to send response");
             }
             catch (Exception ex)
             {

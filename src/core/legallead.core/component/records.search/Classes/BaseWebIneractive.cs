@@ -41,6 +41,14 @@ namespace legallead.records.search.Classes
         /// </value>
         public string Result { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Gets or sets the unique index of this instance
+        /// </summary>
+        /// <value>
+        /// The result.
+        /// </value>
+        public string UniqueId { get; set; } = string.Empty;
+
         #endregion Properties
 
         #region Public Properties

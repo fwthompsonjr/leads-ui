@@ -2,7 +2,8 @@
   "dropDowns": [
     {
       "id": 0,
-      "name": "Court Selection",
+      "name": "criminal courts",
+      "query": "#sbxControlID2",
       "options": [
         {
           "id": 1,
@@ -74,15 +75,13 @@
   "caseSearchTypes": [
     {
       "id": 0,
-      "name": "JP and County Court: Civil, Family and Probate"
+      "name": "JP and County Courts",
+      "query": "//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]"
     },
     {
       "id": 1,
-      "name": "JP and County Court: Criminal Case Records"
-    },
-    {
-      "id": 2,
-      "name": "District Court Case Records"
+      "name": "District Courts",
+      "query": "//a[@class='ssSearchHyperlink'][contains(text(),'District Court')]"
     }
   ]
 }
