@@ -50,13 +50,13 @@ namespace legallead.records.search.Classes
                     }
                     catch
                     {
-                        driver.Quit();
+                        driver?.Quit();
                         throw;
                     }
                     finally
                     {
-                        driver.Close();
-                        driver.Quit();
+                        driver?.Close();
+                        driver?.Quit();
                     }
                 }
 

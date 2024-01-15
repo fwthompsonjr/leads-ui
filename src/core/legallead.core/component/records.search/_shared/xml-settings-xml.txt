@@ -90,6 +90,7 @@
       <command type="GetCases" name="SetComboIndex" By="Id" FriendlyName="District-Type-Selection"><![CDATA[sbxControlID2,?SetComboIndex]]></command>
       <command type="GetCases" name="WaitForElementExist" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
       <command type="GetCases" name="Click" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
+      <command type="GetCases" name="Click" By="XPath" FriendlyName="Cases-Radio-Button"><![CDATA[//*[@id="Case"]]]></command>
       <command type="GetCases" name="Click" By="Id" FriendlyName="Date-Filed-Radio-Button"><![CDATA[DateFiled]]></command>
       <command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-On-TextBox"><![CDATA[DateFiledOnAfter,?StartDate]]></command>
       <command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-Before-TextBox"><![CDATA[DateFiledOnBefore,?EndingDate]]></command>
