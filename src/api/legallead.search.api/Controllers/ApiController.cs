@@ -1,8 +1,8 @@
 ﻿using legallead.jdbc.interfaces;
-using legallead.permissions.api.Model;
 using legallead.models.Search;
-using Microsoft.AspNetCore.Mvc;
+using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.search.api.Controllers
 {
@@ -11,7 +11,7 @@ namespace legallead.search.api.Controllers
     public class ApiController : ControllerBase
     {
         private readonly IUserSearchRepository _repo;
-        
+
         public ApiController(IServiceProvider provider) : this(provider.GetRequiredService<IUserSearchRepository>()) { }
         internal ApiController(IUserSearchRepository repo)
         {
@@ -35,7 +35,7 @@ namespace legallead.search.api.Controllers
             if (js == null)
             {
                 return UnprocessableEntity(source.Request);
-            }            
+            }
             js.Name = uniqueId;
             var mapped = await _repo.Append(jdbc.SearchTargetTypes.Detail, uniqueId, js);
             if (!mapped.Key)

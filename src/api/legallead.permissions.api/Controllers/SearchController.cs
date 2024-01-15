@@ -1,7 +1,4 @@
-﻿using legallead.jdbc.helpers;
-using legallead.jdbc.implementations;
-using legallead.permissions.api.Model;
-using legallead.permissions.api.Utility;
+﻿using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +23,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> BeginSearch(UserSearchRequest request)
         {
             var user = await infrastructure.GetUser(Request);
-            if(user == null) { return Unauthorized(); }
+            if (user == null) { return Unauthorized(); }
             var isValid = searchValidator.IsValid(request);
             if (!isValid.Key)
             {
