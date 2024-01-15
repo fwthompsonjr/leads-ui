@@ -26,6 +26,7 @@ services.AddScoped(x =>
     var context = x.GetRequiredService<IUserSearchRepository>();
     return new ApiController(context);
 });
+services.AddSingleton(s => { return s; });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

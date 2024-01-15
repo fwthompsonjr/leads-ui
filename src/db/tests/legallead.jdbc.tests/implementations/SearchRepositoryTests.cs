@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
@@ -34,14 +35,40 @@ namespace legallead.jdbc.tests.implementations
         [Fact]
         public async Task RepoCanBeginHappyPath()
         {
-            var completion = Task.CompletedTask;
+            var completion = new SearchDto { Id = Guid.NewGuid().ToString("D") };
             var provider = new SearchRepoContainer();
             var mock = provider.CommandMock;
             var service = provider.SearchRepo;
-            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
-                .Returns(completion);
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
             var response = await service.Begin("", "");
             Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanBeginEmptyId()
+        {
+            var completion = new SearchDto { Id = string.Empty };
+            var provider = new SearchRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.SearchRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.Begin("", "");
+            Assert.False(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanBeginNoResponse()
+        {
+            SearchDto? completion = default;
+            var provider = new SearchRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.SearchRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.Begin("", "");
+            Assert.False(response.Key);
         }
 
         [Fact]
@@ -51,7 +78,7 @@ namespace legallead.jdbc.tests.implementations
             var provider = new SearchRepoContainer();
             var mock = provider.CommandMock;
             var service = provider.SearchRepo;
-            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
                 .ThrowsAsync(completion);
             var response = await service.Begin("", "");
             Assert.False(response.Key);

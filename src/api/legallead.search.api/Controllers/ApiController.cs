@@ -11,6 +11,8 @@ namespace legallead.search.api.Controllers
     public class ApiController : ControllerBase
     {
         private readonly IUserSearchRepository _repo;
+        
+        public ApiController(IServiceProvider provider) : this(provider.GetRequiredService<IUserSearchRepository>()) { }
         internal ApiController(IUserSearchRepository repo)
         {
             _repo = repo;
