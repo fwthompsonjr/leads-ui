@@ -30,3 +30,4 @@ Release information - legallead.permissions.api
 01/05/2024 12:55:00 PM added method to get configuration details
 01/07/2024 18:51:00 PM added is-displayed attribute to configuration details
 01/10/2024 17:03:00 PM added method begin-search to api
+01/14/2024 21:16:00 PM promote new database operations for search
