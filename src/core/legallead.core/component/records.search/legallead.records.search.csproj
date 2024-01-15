@@ -5,8 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
-		<Title>LegalLead Logging Repository</Title>
-		<Description>This is a database wrapper exposing HTML content to authenticated users</Description>
+		<Title>LegalLead Records Search Component</Title>
+		<Description>This is the search engine that retrieves records for legal lead components.</Description>
 		<PackageReleaseNotes>
 			3.2.0 - 20231215 - Initial package creation
 		</PackageReleaseNotes>
@@ -15,81 +15,81 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="xml\collinCountyUserMap.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
+		<Content Include="xml\collinCountyUserMap.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\..\shared\CourtRecordSearch.xlsm" Link="Utilities\CourtRecordSearch.xlsm">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\geckodriver.exe" Link="geckodriver.exe">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\settings.xml" Link="xml\settings.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\caselayout.xml" Link="xml\caselayout.xml">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\collinCountyCaseType.json" Link="xml\collinCountyCaseType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\collinCountyMapping_1.json" Link="xml\collinCountyMapping_1.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\courtAddress.json" Link="xml\courtAddress.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\denton-settings.json" Link="xml\denton-settings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\dentonCaseCustomInstruction.json" Link="xml\dentonCaseCustomInstruction.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\dentonCaseCustomInstruction_1.json" Link="xml\dentonCaseCustomInstruction_1.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\dentonCountyCaseType.json" Link="xml\dentonCountyCaseType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\dentonDistrictCaseType.json" Link="xml\dentonDistrictCaseType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\harris-civil-settings.json" Link="xml\harris-civil-settings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\harrisCivilCaseType.json" Link="xml\harrisCivilCaseType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\harrisCivilMapping.json" Link="xml\harrisCivilMapping.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCountyCaseType.json" Link="xml\tarrantCountyCaseType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCountyCustomType.json" Link="xml\tarrantCountyCustomType.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCountyDataPoint.json" Link="xml\tarrantCountyDataPoint.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCountyMapping_1.json" Link="xml\tarrantCountyMapping_1.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCountyMapping_2.json" Link="xml\tarrantCountyMapping_2.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\tarrantCourtSearchDropDown.json" Link="xml\tarrantCourtSearchDropDown.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\shared\webDrivers.json" Link="xml\webDrivers.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Include="..\..\..\..\_Utilities\chromedriver.exe" Link="Legacy\chromedriver.exe">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Include="..\..\..\..\shared\CourtRecordSearch.xlsm" Link="Utilities\CourtRecordSearch.xlsm">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\geckodriver.exe" Link="geckodriver.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\settings.xml" Link="xml\settings.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\caselayout.xml" Link="xml\caselayout.xml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\collinCountyCaseType.json" Link="xml\collinCountyCaseType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\collinCountyMapping_1.json" Link="xml\collinCountyMapping_1.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\courtAddress.json" Link="xml\courtAddress.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\denton-settings.json" Link="xml\denton-settings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\dentonCaseCustomInstruction.json" Link="xml\dentonCaseCustomInstruction.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\dentonCaseCustomInstruction_1.json" Link="xml\dentonCaseCustomInstruction_1.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\dentonCountyCaseType.json" Link="xml\dentonCountyCaseType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\dentonDistrictCaseType.json" Link="xml\dentonDistrictCaseType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\harris-civil-settings.json" Link="xml\harris-civil-settings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\harrisCivilCaseType.json" Link="xml\harrisCivilCaseType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\harrisCivilMapping.json" Link="xml\harrisCivilMapping.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCountyCaseType.json" Link="xml\tarrantCountyCaseType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCountyCustomType.json" Link="xml\tarrantCountyCustomType.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCountyDataPoint.json" Link="xml\tarrantCountyDataPoint.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCountyMapping_1.json" Link="xml\tarrantCountyMapping_1.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCountyMapping_2.json" Link="xml\tarrantCountyMapping_2.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\tarrantCourtSearchDropDown.json" Link="xml\tarrantCourtSearchDropDown.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\shared\webDrivers.json" Link="xml\webDrivers.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\_Utilities\chromedriver.exe" Link="Legacy\chromedriver.exe">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -127,35 +127,42 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="xml\ReadMe.txt">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_html\sample-harris-criminal-record.html">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="_html\sample-harris-criminal-search-result.html">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="xml\ReadMe.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_html\sample-harris-criminal-record.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="_html\sample-harris-criminal-search-result.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Legacy\" />
-	  <Folder Include="Utilities\" />
+		<Folder Include="Legacy\" />
+		<Folder Include="Utilities\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Properties\Resources.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Resources.resx</DependentUpon>
-	  </Compile>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Properties\Resources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>
