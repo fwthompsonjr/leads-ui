@@ -154,6 +154,14 @@ namespace legallead.records.search.Classes
                 {
                     return null;
                 }
+                if (string.IsNullOrEmpty(target.Value) && string.IsNullOrEmpty(query.Value))
+                {
+                    return string.Empty;
+                }
+                if (string.IsNullOrEmpty(query.Value))
+                {
+                    return target.Value;
+                }
                 return string.Format(
                     CultureInfo.CurrentCulture,
                     CommonKeyIndexes.QueryString, target.Value, query.Value);

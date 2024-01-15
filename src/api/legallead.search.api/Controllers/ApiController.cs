@@ -35,6 +35,7 @@ namespace legallead.search.api.Controllers
             var js = WebMapper.MapFrom<UserSearchRequest, SearchNavigationParameter>(source.Request);
             if (js == null)
             {
+                await _repo.Append(jdbc.SearchTargetTypes.Status, uniqueId, "ERROR: Search request format is invalid.");
                 return UnprocessableEntity(source.Request);
             }
             js.Name = uniqueId;
@@ -42,11 +43,13 @@ namespace legallead.search.api.Controllers
             var mapped = await _repo.Append(jdbc.SearchTargetTypes.Detail, uniqueId, obj);
             if (!mapped.Key)
             {
+                await _repo.Append(jdbc.SearchTargetTypes.Status, uniqueId, "ERROR: Search request internal database conflict.");
                 return UnprocessableEntity(new { source.Request, mapped.Value });
             }
             var web = WebMapper.MapFrom<UserSearchRequest, WebInteractive>(source.Request);
             if (web == null)
             {
+                await _repo.Append(jdbc.SearchTargetTypes.Status, uniqueId, "ERROR: Search request could not be mapped to web request.");
                 return StatusCode(500, "Unable to construct web interactive search");
             }
             TaskScheduler uiScheduler = TaskScheduler.Default;

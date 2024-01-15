@@ -4,9 +4,11 @@ using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
 using Newtonsoft.Json;
+using System.Xml;
 
 namespace legallead.search.api
 {
+    using PropXml = legallead.records.search.Properties.Resources;
     public static class WebMapper
     {
 
@@ -105,6 +107,23 @@ namespace legallead.search.api
             {
                 dest.Keys.Add(districtSearch);
             }
+            var exclusions = new[] { "startDate", "endDate" };
+            var nodeWebSite = WebSettings.DocumentElement?.ChildNodes[0];
+            if (nodeWebSite == null) return;
+            var list = nodeWebSite.ChildNodes.Cast<XmlNode>().ToList();
+            var settings = list.Find(x => x.Attributes?.GetNamedItem("id")?.Value == "1");
+            if (settings != null && settings.HasChildNodes)
+            {
+                foreach (XmlNode item in settings.ChildNodes)
+                {
+                    var name = item.Attributes?.GetNamedItem("name")?.Value;
+                    if (string.IsNullOrEmpty(name) || exclusions.Contains(name)) continue;
+                    if(!item.HasChildNodes) { continue; }
+                    if (item.ChildNodes[0] is not XmlCDataSection section) continue;
+                    var key = new SearchNavigationKey { Name = name, Value = section.Data };
+                    dest.Keys.Add(key);
+                }
+            }
         }
 
         private static readonly Dictionary<string, string> dentonLinkMap = new() {
@@ -112,5 +131,15 @@ namespace legallead.search.api
                 { "1", "//a[@class='ssSearchHyperlink'][contains(text(),'Criminal Case Records')]" },
                 { "2", "//a[@class='ssSearchHyperlink'][contains(text(),'District Court Case')]" }
             };
+
+        private static XmlDocument WebSettings => webSettingDoc ??= GetWebSetting();
+        private static readonly string webSetting = PropXml.xml_settings_xml;
+        private static XmlDocument? webSettingDoc;
+        private static XmlDocument GetWebSetting()
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(webSetting);
+            return doc;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using legallead.jdbc.entities;
+﻿using legallead.jdbc;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Model;
 using Newtonsoft.Json;
@@ -20,6 +21,10 @@ namespace legallead.permissions.api.Utility
             var user = await GetUser(http);
             if (user == null) return null;
             var searchRecord = await _repo.Begin(user.Id, JsonConvert.SerializeObject(request));
+            if (searchRecord.Key)
+            {
+                await _repo.Append(SearchTargetTypes.Status, searchRecord.Value, "INFO: Search request submitted.");
+            }
             return new()
             {
                 Request = request,
@@ -31,72 +36,91 @@ namespace legallead.permissions.api.Utility
         {
             var user = await GetUser(http);
             if (user == null) return null;
-            return Enumerable.Empty<UserSearchHeader>();
+            var histories = await _repo.History(user.Id);
+            if (histories == null || !histories.Any()) return Enumerable.Empty<UserSearchHeader>();
+            if (!string.IsNullOrEmpty(id))
+            {
+                histories = histories.Where(h => (h.Id ?? "-").Equals(id, StringComparison.OrdinalIgnoreCase));
+            }
+            var models = histories.Select(x => new UserSearchHeader
+            {
+                Id = x.Id ?? string.Empty,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                EstimatedRowCount = x.EstimatedRowCount,
+                CreateDate = x.CreateDate
+            });
+            return models;
         }
 
         public async Task<IEnumerable<UserSearchDetail>?> GetDetail(HttpRequest http, string? id)
         {
-            var user = await GetUser(http);
-            if (user == null) return null;
-            return new[]
-            {
-                new UserSearchDetail
-                {
-                    Context = "Detail"
-                }
-            };
+            return await GetData(http, SearchTargetTypes.Detail, id);
         }
 
         public async Task<IEnumerable<UserSearchDetail>?> GetResult(HttpRequest http, string? id)
         {
-            var user = await GetUser(http);
-            if (user == null)
-                return null;
-            return new[]
-            {
-                new UserSearchDetail
-                {
-                    Context = "Result"
-                }
-            };
+            return await GetData(http, SearchTargetTypes.Response, id);
         }
 
         public async Task<IEnumerable<UserSearchDetail>?> GetStatus(HttpRequest http, string? id)
         {
-            var user = await GetUser(http);
-            if (user == null)
-                return null;
-            return new[]
-            {
-                new UserSearchDetail
-                {
-                    Context = "Status"
-                }
-            };
+            return await GetData(http, SearchTargetTypes.Status, id);
         }
 
-        public Task<bool> SetDetail(string id, object detail)
+        public async Task<bool> SetDetail(string id, object detail)
         {
-            return Task.FromResult(true);
+            var payload = JsonConvert.SerializeObject(detail) ?? string.Empty;
+            var response = await SetData(SearchTargetTypes.Detail, id, payload);
+            return response.Key;
         }
 
-        public Task<bool> SetResult(string id, object result)
+        public async Task<bool> SetResult(string id, object result)
         {
-            return Task.FromResult(true);
+            var payload = JsonConvert.SerializeObject(result) ?? string.Empty;
+            var response = await SetData(SearchTargetTypes.Response, id, payload);
+            return response.Key;
         }
 
-        public Task<bool> SetStatus(string id, string message)
+        public async Task<bool> SetStatus(string id, string message)
         {
-            return Task.FromResult(true);
+            var response = await SetData(SearchTargetTypes.Status, id, message);
+            return response.Key;
         }
-        public Task<bool> SetResponse(string id, object response)
+        public async Task<bool> SetResponse(string id, object response)
         {
-            return Task.FromResult(true);
+            var payload = JsonConvert.SerializeObject(response) ?? string.Empty;
+            var data = await SetData(SearchTargetTypes.Response, id, payload);
+            return data.Key;
         }
 
         public async Task<User?> GetUser(HttpRequest request)
         {
             return await request.GetUser(_db);
+        }
+
+        private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)
+        {
+            var user = await GetUser(http);
+            if (user == null) return null;
+            var records = await _repo.GetTargets(target, user.Id, id);
+            if (records == null || !records.Any()) return Enumerable.Empty<UserSearchDetail>();
+            var models = records.Select(x => new UserSearchDetail
+            {
+                Id = x.SearchId ?? string.Empty,
+                Context = x.Component ?? target.ToString().ToUpper(),
+                LineNumber = x.LineNbr.GetValueOrDefault(),
+                Line = x.Line ?? string.Empty,
+                CreateDate = x.CreateDate.GetValueOrDefault(),
+            });
+            return models;
+        }
+
+
+        private async Task<KeyValuePair<bool, string>> SetData(SearchTargetTypes target, string id, string message)
+        {
+            var records = await _repo.Append(target, id, message);
+            return records;
         }
     }
 }
