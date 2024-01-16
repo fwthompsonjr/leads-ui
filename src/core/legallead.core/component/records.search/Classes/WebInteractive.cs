@@ -1,6 +1,8 @@
 ﻿using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
+using Newt = Newtonsoft.Json;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
 using System.Xml;
 
 namespace legallead.records.search.Classes
@@ -66,6 +68,9 @@ namespace legallead.records.search.Classes
             //results.Document
             data.FindAll(x => x.IsCriminal & x.IsMapped & !string.IsNullOrEmpty(x.CriminalCaseStyle))
                 .ForEach(y => y.CaseStyle = y.CriminalCaseStyle);
+            // serialize and save this data object
+            var dsobject = JsonConvert.SerializeObject(data, Newt.Formatting.Indented);
+            _ = Persistence?.Add(UniqueId, "data-case-list-json", dsobject);
 
             string caseList = ReadFromFile(Result);
             List<PersonAddress> personAddresses = results.GetPersonAddresses();
@@ -145,12 +150,6 @@ namespace legallead.records.search.Classes
         }
 
         #endregion Public Methods
-        
-        #region Public Properties
-
-        public IStagingPersistence? Persistence { get; set; }
-
-        #endregion
 
         #region Private Methods
 

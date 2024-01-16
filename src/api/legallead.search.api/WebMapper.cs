@@ -84,11 +84,11 @@ namespace legallead.search.api
             var accepted = "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15".Split(',');
             var cbxIndex = source.Details.Find(x => x.Name == "Court Type")?.Value ?? accepted[0];
             if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
-
+            var idx = (int.Parse(cbxIndex) - 1).ToString();
             AppendKeys(dest, dentonCountyIndex);
             AppendInstructions(dest, dentonCountyIndex);
             AppendCaseInstructions(dest, dentonCountyIndex);
-            var keyZero = new SearchNavigationKey { Name = "SearchComboIndex", Value = cbxIndex };
+            var keyZero = new SearchNavigationKey { Name = "SearchComboIndex", Value = idx };
             var caseSearch = new SearchNavigationKey
             {
                 Name = "CaseSearchType",
@@ -115,6 +115,7 @@ namespace legallead.search.api
         }
         private static void AppendKeys(SearchNavigationParameter dest, string index)
         {
+            var dates = new[] { "startDate", "endDate" };
             var nodeWebSite = WebSettings.DocumentElement?.ChildNodes[0];
             if (nodeWebSite == null) return;
             var list = nodeWebSite.ChildNodes.Cast<XmlNode>().ToList();
@@ -125,6 +126,13 @@ namespace legallead.search.api
                 {
                     var name = item.Attributes?.GetNamedItem("name")?.Value;
                     if (string.IsNullOrEmpty(name)) continue;
+                    if(dates.Contains(name))
+                    {
+                        var dte = name.Equals(dates[0]) ? dest.StartDate : dest.EndDate;
+                        var dtstring = dte.ToString("MM/dd/yyyy");
+                        dest.Keys.Add(new SearchNavigationKey { Name = name, Value = dtstring });
+                        continue;
+                    }
                     if (!item.HasChildNodes) { continue; }
                     if (item.ChildNodes[0] is not XmlCDataSection section) continue;
                     var key = new SearchNavigationKey { Name = name, Value = section.Data };
@@ -198,6 +206,7 @@ namespace legallead.search.api
                 }
             }
         }
+
         private static readonly Dictionary<string, string> dentonLinkMap = new() {
                 { "0", "//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]" },
                 { "1", "//a[@class='ssSearchHyperlink'][contains(text(),'Criminal Case Records')]" },

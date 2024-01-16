@@ -28,10 +28,11 @@ namespace legallead.search.api.tests
         }
         private static WebInteractive? GetInteractive()
         {
-            DateTime? dt1 = new DateTime(2023, 10, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime? dt1 = new DateTime(2023, 10, 3, 0, 0, 0, DateTimeKind.Utc);
+            DateTime? dt2 = dt1.Value.AddDays(1);
             var source = GetRequest();
             source.StartDate = dt1.ToUnixTime();
-            source.EndDate = dt1.ToUnixTime();
+            source.EndDate = dt2.ToUnixTime();
             return WebMapper.MapFrom<UserSearchRequest, WebInteractive>(source);
         }
         private static UserSearchRequest GetRequest()

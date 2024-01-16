@@ -21,4 +21,8 @@
     <ProjectReference Include="..\legallead.models\legallead.models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utility\" />
+  </ItemGroup>
+
 </Project>

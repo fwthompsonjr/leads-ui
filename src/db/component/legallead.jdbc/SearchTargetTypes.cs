@@ -5,6 +5,7 @@
         Detail,
         Request,
         Response,
-        Status
+        Status,
+        Staging
     }
 }
