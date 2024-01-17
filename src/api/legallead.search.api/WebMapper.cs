@@ -3,6 +3,7 @@ using legallead.models.Search;
 using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using legallead.search.api.Utility;
 using Newtonsoft.Json;
 using System.Xml;
 
@@ -63,7 +64,15 @@ namespace legallead.search.api
             var parameter = MapFrom<UserSearchRequest, SearchNavigationParameter>(source);
             var serialized = JsonConvert.SerializeObject(parameter);
             var translated = JsonConvert.DeserializeObject<WebNavigationParameter>(serialized) ?? new();
-            return new WebInteractive(translated, startDate, endingDate);
+            WebInteractive interactive = translated.Id switch
+            {
+                0 => new WebInteractive(translated, startDate, endingDate),
+                10 => new TarrantWebInteractive(translated, startDate, endingDate),
+                20 => new CollinWebInteractive(translated, startDate, endingDate),
+                _ => new WebInteractive(translated, startDate, endingDate)
+            };
+            interactive.Persistence = new StagingPersistence();
+            return interactive;
         }
         private static SearchNavigationParameter ConvertTo(UserSearchRequest source, SearchNavigationParameter dest)
         {

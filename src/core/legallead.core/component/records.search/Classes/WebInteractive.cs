@@ -71,6 +71,7 @@ namespace legallead.records.search.Classes
             // serialize and save this data object
             var dsobject = JsonConvert.SerializeObject(data, Newt.Formatting.Indented);
             _ = Persistence?.Add(UniqueId, "data-case-list-json", dsobject);
+            _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
 
             string caseList = ReadFromFile(Result);
             List<PersonAddress> personAddresses = results.GetPersonAddresses();
