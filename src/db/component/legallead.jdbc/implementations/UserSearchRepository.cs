@@ -30,7 +30,8 @@ namespace legallead.jdbc.implementations
             });
             return translation;
         }
-        public async Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data)
+
+        public async Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data, string? keyname = null)
         {
             try
             {
@@ -38,6 +39,12 @@ namespace legallead.jdbc.implementations
                 var dapperParm = new DynamicParameters();
                 dapperParm.Add("searchItemId", id);
                 dapperParm.Add("jscontent", data);
+                if (keyname != null)
+                {
+                    dapperParm.Add("stagingName", keyname);
+                    var isByte = data is byte[];
+                    dapperParm.Add("isByteArray", Convert.ToByte(isByte ? 1 : 0));
+                }
                 using (var connection = _context.CreateConnection())
                     await _command.ExecuteAsync(connection, procedure, dapperParm);
                 return new KeyValuePair<bool, string>(true, "Command executed succesfully");
@@ -115,6 +122,7 @@ namespace legallead.jdbc.implementations
                 return new KeyValuePair<bool, string>(false, ex.Message);
             }
         }
+
         public async Task<IEnumerable<SearchTargetModel>?> GetTargets(SearchTargetTypes search, string? userId, string? id)
         {
             string prc = QueryProcs[search];
@@ -135,17 +143,38 @@ namespace legallead.jdbc.implementations
             return translation;
         }
 
+        public async Task<KeyValuePair<bool, object>> GetStaged(string id, string keyname)
+        {
+            const string procedure = "CALL USP_FIND_USER_SEARCH_STAGING(?, ?);";
+
+            try
+            {
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("searchItemId", id);
+                dapperParm.Add("stagingName", keyname);
+                using var connection = _context.CreateConnection();
+                var staging = await _command.QueryAsync<SearchStagingDto>(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, object>(true, staging);
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, object>(false, ex.Message);
+            }
+        }
+
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_APPEND_USER_SEARCH_REQUEST( ?, ? );" },
             { SearchTargetTypes.Response, "CALL USP_APPEND_USER_SEARCH_RESPONSE( ?, ? );" },
             { SearchTargetTypes.Status, "CALL USP_APPEND_USER_SEARCH_STATUS( ?, ? );" },
+            { SearchTargetTypes.Staging, "CALL USP_APPEND_USER_SEARCH_STAGING( ?, ?, ?, ? );" },
             };
         private static readonly Dictionary<SearchTargetTypes, string> QueryProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_QUERY_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_QUERY_USER_SEARCH_REQUEST( ?, ? );" },
             { SearchTargetTypes.Response, "CALL USP_QUERY_USER_SEARCH_RESPONSE( ?, ? );" },
             { SearchTargetTypes.Status, "CALL USP_QUERY_USER_SEARCH_STATUS( ?, ? );" },
+            { SearchTargetTypes.Staging, "CALL USP_QUERY_USER_SEARCH_STAGING( ?, ? );" },
             };
     }
 }

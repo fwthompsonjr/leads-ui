@@ -356,8 +356,8 @@ namespace legallead.records.search.Classes
         private static List<ElementNavigationBase> GetNavigators()
         {
             Type type = typeof(ElementNavigationBase);
-            List<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
+            var assembly = type.Assembly;
+            List<Type> types = assembly.GetTypes()
                 .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
                 .ToList();
             List<ElementNavigationBase> commands = new();

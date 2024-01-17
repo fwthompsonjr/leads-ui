@@ -50,6 +50,9 @@ namespace legallead.search.api.tests
             Assert.Equal(0, dest.Id);
             Assert.Equal(expectedStart, dest.StartDate);
             Assert.Equal(expectedEnd, dest.EndDate);
+            Assert.True(dest.Keys.Count >= 10);
+            Assert.True(dest.Instructions.Count >= 15);
+            Assert.True(dest.CaseInstructions.Count >= 5);
         }
 
         [Theory]

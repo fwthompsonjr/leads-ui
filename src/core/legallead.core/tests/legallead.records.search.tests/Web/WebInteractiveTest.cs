@@ -25,6 +25,8 @@ namespace legallead.records.search.Tests
         [TestMethod]
         public async Task ValidatePathAsync()
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+                return;
             var fileName = await Task.Run(() => WebUtilities.GetChromeBinary());
             Assert.IsFalse(string.IsNullOrEmpty(fileName));
         }

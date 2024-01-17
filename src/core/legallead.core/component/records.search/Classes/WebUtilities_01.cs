@@ -50,13 +50,13 @@ namespace legallead.records.search.Classes
                     }
                     catch
                     {
-                        driver.Quit();
+                        driver?.Quit();
                         throw;
                     }
                     finally
                     {
-                        driver.Close();
-                        driver.Quit();
+                        driver?.Close();
+                        driver?.Quit();
                     }
                 }
 
@@ -153,6 +153,14 @@ namespace legallead.records.search.Classes
                 if (target == null || query == null)
                 {
                     return null;
+                }
+                if (string.IsNullOrEmpty(target.Value) && string.IsNullOrEmpty(query.Value))
+                {
+                    return string.Empty;
+                }
+                if (string.IsNullOrEmpty(query.Value))
+                {
+                    return target.Value;
                 }
                 return string.Format(
                     CultureInfo.CurrentCulture,
