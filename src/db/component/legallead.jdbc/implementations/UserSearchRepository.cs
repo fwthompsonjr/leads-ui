@@ -143,6 +143,25 @@ namespace legallead.jdbc.implementations
             return translation;
         }
 
+        public async Task<KeyValuePair<bool, object>> GetStaged(string id, string keyname)
+        {
+            const string procedure = "CALL USP_FIND_USER_SEARCH_STAGING(?, ?);";
+
+            try
+            {
+                var dapperParm = new DynamicParameters();
+                dapperParm.Add("searchItemId", id);
+                dapperParm.Add("stagingName", keyname);
+                using var connection = _context.CreateConnection();
+                var staging = await _command.QueryAsync<SearchStagingDto>(connection, procedure, dapperParm);
+                return new KeyValuePair<bool, object>(true, staging);
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, object>(false, ex.Message);
+            }
+        }
+
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_APPEND_USER_SEARCH_REQUEST( ?, ? );" },
