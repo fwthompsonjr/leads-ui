@@ -7,8 +7,8 @@ using legallead.records.search.Models;
 
 namespace legallead.search.api.Utility
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", 
-        "VSTHRD002:Avoid problematic synchronous waits", 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage",
+        "VSTHRD002:Avoid problematic synchronous waits",
         Justification = "Avoid duplication of code.")]
     public class StagingPersistence : IStagingPersistence
     {
@@ -43,7 +43,7 @@ namespace legallead.search.api.Utility
             return response;
         }
 
-        
+
         public KeyValuePair<bool, StagedContentModel> Fetch(string searchid, string key)
         {
             return FetchAsync(searchid, key).Result;

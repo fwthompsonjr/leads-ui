@@ -61,6 +61,56 @@ namespace legallead.records.search.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /*
+        ///* find the defendant, principal
+        ///*/
+        ///
+        ///
+        ///  
+        ///function getAddressNode() {
+        ///	let arr = [];
+        ///	let keywords = [ &quot;defendant&quot;, &quot;principal&quot;, &quot;petitioner&quot;, &quot;applicant&quot;, &quot;claimant&quot;, &quot;decedent&quot; ];
+        ///	let headings = document.getElementsByTagName(&quot;th&quot;);
+        ///	for(let n = 0; n &lt; headings.length; n++) {
+        ///		let hdr = headings[n];
+        ///		let attr = hdr.getAttribute(&quot;class&quot;);
+        ///		if(undefined == attr || null == attr || attr.indexOf(&quot;ssTableHeader&quot;) &lt; 0 ) continue;
+        ///		let rspan = hdr.getAttribute(&quot;rowspan&quot;);
+        ///		if(undefined == rsp [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string include_denton_tx_get_address_json {
+            get {
+                return ResourceManager.GetString("include_denton_tx_get_address_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /*
+        ///	get denton case style
+        /// */
+        /// function customTrim(data) {
+        ///	const colon = &apos;:&apos;;
+        ///	if( data.indexOf(colon) &lt; 0 ) return data;
+        ///	const arr = [];
+        ///	const items = data.split(colon);
+        ///	for (let i = 0; i &lt; items.length; i++) {
+        ///		let needsColon = i % 2 == 0;
+        ///		let datum = items[i].replace(/\s/g, &apos; &apos;).trim() + (needsColon ? colon : &quot;&quot;);
+        ///		arr.push(datum);
+        ///	}
+        ///	return arr.join(&quot; &quot;);
+        /// }
+        /// function getPageType() {
+        ///	let tbl = document.getElementsByTagName(&quot;table&quot;)[0];
+        ///	let txt = tbl.rows[0].cells[0].innerText [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string include_denton_tx_get_case_list_and_heading {
+            get {
+                return ResourceManager.GetString("include_denton_tx_get_case_list_and_heading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;search&gt;
         ///  &lt;parameters&gt;

@@ -135,7 +135,7 @@ namespace legallead.search.api
                 {
                     var name = item.Attributes?.GetNamedItem("name")?.Value;
                     if (string.IsNullOrEmpty(name)) continue;
-                    if(dates.Contains(name))
+                    if (dates.Contains(name))
                     {
                         var dte = name.Equals(dates[0]) ? dest.StartDate : dest.EndDate;
                         var dtstring = dte.ToString("MM/dd/yyyy");

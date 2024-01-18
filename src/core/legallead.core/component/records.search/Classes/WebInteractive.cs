@@ -1,9 +1,8 @@
 ﻿using legallead.records.search.Dto;
-using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
-using Newt = Newtonsoft.Json;
-using JsonConvert = Newtonsoft.Json.JsonConvert;
 using System.Xml;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
+using Newt = Newtonsoft.Json;
 
 namespace legallead.records.search.Classes
 {
