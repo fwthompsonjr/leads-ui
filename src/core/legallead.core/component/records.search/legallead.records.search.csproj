@@ -12,6 +12,10 @@
 		</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageVersion>$(PackageVersion)</PackageVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+
+		<IsPackable>true</IsPackable>
+		<IsTestProject>false</IsTestProject>
 	</PropertyGroup>
 
 	<ItemGroup>

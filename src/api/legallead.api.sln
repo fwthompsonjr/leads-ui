@@ -30,17 +30,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_deploy", "_deploy", "{E2C6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.search.api", "legallead.search.api\legallead.search.api.csproj", "{075EE0CB-D801-4C16-BB8A-C2B3BA89B621}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.models", "legallead.models\legallead.models.csproj", "{20D90661-E353-45B7-9000-81B906C453FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.models", "legallead.models\legallead.models.csproj", "{20D90661-E353-45B7-9000-81B906C453FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.search.api.tests", "legallead.search.api.tests\legallead.search.api.tests.csproj", "{C1251D42-F8B6-4005-8CE1-EAC929826658}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.search.api.tests", "legallead.search.api.tests\legallead.search.api.tests.csproj", "{C1251D42-F8B6-4005-8CE1-EAC929826658}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_webreader", "_webreader", "{82DEA021-5BBF-435C-9C89-3D65486C2FC3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search", "..\core\legallead.core\component\records.search\legallead.records.search.csproj", "{2D77F7B5-78E3-4C57-8AD0-733BF016B0EA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "core", "core", "{4E35644B-E7B7-4002-8BFD-B3FEC3EDFBA6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "..\core\legallead.core\tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{F5E0540E-E3B1-4994-A5DB-46211CAE5033}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,14 +94,6 @@ Global
 		{2D77F7B5-78E3-4C57-8AD0-733BF016B0EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D77F7B5-78E3-4C57-8AD0-733BF016B0EA}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
 		{2D77F7B5-78E3-4C57-8AD0-733BF016B0EA}.Zip|Any CPU.Build.0 = Zip|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Local|Any CPU.ActiveCfg = Local|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Local|Any CPU.Build.0 = Local|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033}.Zip|Any CPU.Build.0 = Zip|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,8 +107,6 @@ Global
 		{20D90661-E353-45B7-9000-81B906C453FD} = {AA1BF24C-561A-4D86-B17C-592FEEF58C8A}
 		{C1251D42-F8B6-4005-8CE1-EAC929826658} = {77C1CB34-A5BB-4D4F-BA3D-13447F655D83}
 		{2D77F7B5-78E3-4C57-8AD0-733BF016B0EA} = {82DEA021-5BBF-435C-9C89-3D65486C2FC3}
-		{4E35644B-E7B7-4002-8BFD-B3FEC3EDFBA6} = {6414FF76-621E-4208-930A-1968994421B3}
-		{F5E0540E-E3B1-4994-A5DB-46211CAE5033} = {4E35644B-E7B7-4002-8BFD-B3FEC3EDFBA6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AFCBB44C-A4CD-4F04-A5F2-DB8291697D28}
