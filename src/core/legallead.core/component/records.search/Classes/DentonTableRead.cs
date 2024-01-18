@@ -21,7 +21,8 @@ namespace legallead.records.search.Classes
                 {
                     Case = s.CaseNumber ?? string.Empty,
                     CaseStyle = s.CaseStyle ?? string.Empty,
-                    CaseType = string.Empty,
+                    CaseType = s.CaseType ?? string.Empty,
+                    Status = s.Status ?? string.Empty,
                     Court = s.Court ?? string.Empty,
                     DateFiled = s.DateFiled ?? string.Empty,
                     IsCriminal = isCriminalSearch,

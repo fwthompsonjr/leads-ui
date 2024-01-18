@@ -99,7 +99,10 @@ namespace legallead.records.search.Models
         {
             get
             {
-                _plantiff = ParseFromCaseStyle(0);
+                if (string.IsNullOrEmpty(_plantiff))
+                {
+                    _plantiff = ParseFromCaseStyle(0);
+                }
                 return _plantiff;
             }
             set { _plantiff = value; }

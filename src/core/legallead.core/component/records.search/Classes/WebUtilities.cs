@@ -105,11 +105,12 @@ namespace legallead.records.search.Classes
 
         internal static List<HLinkDataRow> FindForDenton(IWebDriver driver, HLinkDataRow linkData)
         {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             List<HLinkDataRow> list = new() { linkData };
             driver.Navigate().GoToUrl(linkData.WebAddress);
             var reader = new DentonCountyAddressMatch(driver);
             var addresses = new List<DentonAddressSummary>(reader.Addresses);
-            var plaintiff = addresses.Find(f => (f.PersonType() ?? string.Empty).Equals("plaintiff"));
+            var plaintiff = addresses.Find(f => (f.PersonType() ?? string.Empty).Equals("plaintiff", oic));
             if (plaintiff != null) addresses.Remove(plaintiff);
             
             addresses.ForEach(a =>
@@ -118,6 +119,7 @@ namespace legallead.records.search.Classes
                 line.Defendant = a.PersonName() ?? string.Empty;
                 line.Address = a.Address() ?? string.Empty;
                 line.Data = a.PersonHTML ?? string.Empty;
+                line.Plaintiff = plaintiff?.PersonName() ?? string.Empty;
                 list.Add(line);
             });
             return list;

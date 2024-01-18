@@ -8,6 +8,7 @@
         public string? DateFiled { get; set; }
         public string? Court { get; set; }
         public string? Officer { get; set; }
-
+        public string? CaseType { get; set; }
+        public string? Status { get; set; }
     }
 }

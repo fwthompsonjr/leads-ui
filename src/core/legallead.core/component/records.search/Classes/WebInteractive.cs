@@ -1,5 +1,6 @@
 ﻿using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using legallead.records.search.Tools;
 using System.Xml;
 using JsonConvert = Newtonsoft.Json.JsonConvert;
 using Newt = Newtonsoft.Json;
@@ -57,11 +58,11 @@ namespace legallead.records.search.Classes
             List<HLinkDataRow> data = WebUtilities.GetCases(this);
 
             Result = results.FileName;
-            foreach (HLinkDataRow dta in data)
-            {
-                AppendExtraCaseInfo(dta);
+            data.ForEach(dta => {
+                if (DentonContent == null)
+                    AppendExtraCaseInfo(dta);
                 results.Append(dta);
-            }
+            });
             // change output of this item.
             // return the person-address collection
             // and the case-list as html table
@@ -72,11 +73,16 @@ namespace legallead.records.search.Classes
             var dsobject = JsonConvert.SerializeObject(data, Newt.Formatting.Indented);
             _ = Persistence?.Add(UniqueId, "data-case-list-json", dsobject);
             _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
-            
-            string caseList = ReadFromFile(Result);
-            List<PersonAddress> personAddresses = results.GetPersonAddresses();
-            personAddresses = MapCaseStyle(data, personAddresses);
+            var isDenton = DentonContent != null;
+            string caseList = isDenton ? string.Empty : ReadFromFile(Result);
+            List<PersonAddress> personAddresses = isDenton ? 
+                DentonLinkDataMapper.ConvertFrom(data) : 
+                results.GetPersonAddresses();
+            if (!isDenton) { personAddresses = MapCaseStyle(data, personAddresses); }            
             personAddresses = CleanUp(personAddresses);
+            var addressobject = JsonConvert.SerializeObject(personAddresses, Newt.Formatting.Indented);
+            _ = Persistence?.Add(UniqueId, "data-output-person-address", addressobject);
+
             return new WebFetchResult
             {
                 Result = Result,
@@ -127,7 +133,7 @@ namespace legallead.records.search.Classes
             {
                 return new();
             }
-
+            
             data = data.FindAll(x => !string.IsNullOrEmpty(x.Case));
             foreach (PersonAddress person in personAddresses)
             {
@@ -162,6 +168,7 @@ namespace legallead.records.search.Classes
         private void AppendExtraCaseInfo(HLinkDataRow dta)
         {
             string tableHtml = dta.Data;
+            if(string.IsNullOrEmpty(tableHtml)) { return; }
             if (tableHtml.Contains(CommonKeyIndexes.ImageOpenTag))
             {
                 tableHtml = RemoveElement(tableHtml, CommonKeyIndexes.ImageOpenTag);

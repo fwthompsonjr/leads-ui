@@ -185,7 +185,11 @@ namespace legallead.records.search.Web
                 if (tr1 == null) return null;
                 var cells = tr1.SelectNodes("//td");
                 var divId = typeId == 0 || typeId == 1 ? 2 : 3;
+                var caseTypeId = divId + 1;
                 var divs = cells[divId].SelectNodes("//div");
+                var csdivs = cells[caseTypeId].SelectNodes("//div");
+                var casediv = csdivs.Count > 0 ? csdivs[0].InnerText.Trim() : string.Empty;
+                var stsdiv = csdivs.Count > 1 ? csdivs[1].InnerText.Trim() : string.Empty;
                 var caseNumber = lnk.InnerText.Trim();
                 var caseStyle = typeId == 0 || typeId == 1 ?
                     cells[1].InnerText.Trim() :
@@ -199,9 +203,11 @@ namespace legallead.records.search.Web
                     webAddress,
                     caseNumber,
                     caseStyle,
+                    caseType = casediv,
                     dateFiled = dteFiled,
                     court,
-                    officer = jdo
+                    officer = jdo,
+                    status = stsdiv
                 };
                 return JsonConvert.SerializeObject(obj);
             }
