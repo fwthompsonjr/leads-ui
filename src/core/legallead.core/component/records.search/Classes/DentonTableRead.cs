@@ -13,7 +13,7 @@ namespace legallead.records.search.Classes
         internal List<HLinkDataRow> ToCaseList(bool isCriminalSearch = false)
         {
             var list = new List<HLinkDataRow>();
-            if(RecordSet == null || !RecordSet.Any()) return list;
+            if (RecordSet == null || !RecordSet.Any()) return list;
             var source = RecordSet.ToList();
             source.ForEach(s =>
             {

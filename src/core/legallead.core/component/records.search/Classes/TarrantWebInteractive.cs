@@ -4,7 +4,6 @@ using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OpenQA.Selenium;
 using System.Text;
 using System.Xml;
@@ -510,8 +509,8 @@ namespace legallead.records.search.Classes
             return true;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Cube", 
-            "S2589:Boolean expressions should not be gratuitous", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Cube",
+            "S2589:Boolean expressions should not be gratuitous",
             Justification = "This method is legacy code to be refactored at later date")]
         private static List<XmlNode> GetCaseInspector(int parameterId, XmlDocument doc, string typeName = "normal")
         {

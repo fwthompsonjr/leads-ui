@@ -85,7 +85,7 @@ namespace legallead.records.search.Classes
 
             private static bool DoesNotHaveScheme(string? webAddress)
             {
-                if(string.IsNullOrEmpty(webAddress)) return false;
+                if (string.IsNullOrEmpty(webAddress)) return false;
                 string[] find = new[] { "http:", "https:" };
                 foreach (var match in find)
                 {
@@ -122,7 +122,7 @@ namespace legallead.records.search.Classes
                     cases = collection;
                     return;
                 }
-                
+
                 people.ForEach(d => Find(driver, d));
             }
 

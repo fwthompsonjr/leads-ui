@@ -2,10 +2,8 @@
 using legallead.records.search.DriverFactory;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
-using legallead.records.search.Parsing;
 using OpenQA.Selenium;
 using System.Configuration;
-using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 
 namespace legallead.records.search.Classes
@@ -45,7 +43,7 @@ namespace legallead.records.search.Classes
             {
                 return null;
             }
-            if(data.DentonContent != null)
+            if (data.DentonContent != null)
             {
                 var collection = data.DentonContent.ToCaseList(isCriminalSearch);
                 cases.AddRange(collection);
@@ -112,7 +110,7 @@ namespace legallead.records.search.Classes
             var addresses = new List<DentonAddressSummary>(reader.Addresses);
             var plaintiff = addresses.Find(f => (f.PersonType() ?? string.Empty).Equals("plaintiff", oic));
             if (plaintiff != null) addresses.Remove(plaintiff);
-            
+
             addresses.ForEach(a =>
             {
                 var line = Copy(linkData);
