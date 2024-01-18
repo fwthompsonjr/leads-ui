@@ -121,9 +121,6 @@
   <data name="include_denton_tx_get_address_json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_shared\include-denton-tx-get-address-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="include_denton_tx_get_case_list_and_heading" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\include-denton-tx-get-case-list-and-heading.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="xml-caselayout-xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_shared\xml-caselayout-xml.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

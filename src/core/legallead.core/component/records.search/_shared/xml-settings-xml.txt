@@ -96,7 +96,7 @@
       <command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-Before-TextBox"><![CDATA[DateFiledOnBefore,?EndingDate]]></command>
       <command type="GetCases" name="ClickElement" By="Id" FriendlyName="Search-Records-Submit"><![CDATA[SearchSubmit]]></command>
       <command type="GetCases" name="WaitForNavigation" By="" FriendlyName=""><![CDATA[ ]]></command>
-      <command type="GetCases" name="DentonReadList" By="XPath" FriendlyName="Search-Records-Result-Table"><![CDATA[include-denton-tx-get-case-list-and-heading]]></command>
+      <command type="GetCases" name="DentonReadList" By="XPath" FriendlyName="Search-Records-JScript"><![CDATA[include-denton-tx-get-case-list-and-heading]]></command>
       <command type="GetCases" name="GetElement" By="XPath" FriendlyName="Search-Records-Result-Table"><![CDATA[/html/body/table[4]]]></command>
     </instructions>
     <caseInspection id="1" type="normal">

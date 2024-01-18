@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using legallead.records.search.Tools;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using System.Diagnostics.CodeAnalysis;
@@ -10,6 +11,7 @@ namespace legallead.records.search.Web
     public class ElementDentonReadList : ElementNavigationBase
     {
         public DentonTableRead? JsContent { get; set; }
+        public string? TableXPath { get; set; }
         public override IWebElement? Execute(WebNavInstruction item)
         {
             if (item == null)
@@ -31,7 +33,9 @@ namespace legallead.records.search.Web
             jsreader.Header = header;
             jsreader.RecordSet = records;
             JsContent = jsreader;
-            return null;
+            if(string.IsNullOrEmpty(TableXPath)) { return null; }
+            var table = driver.TryFindElement(By.XPath(TableXPath));
+            return table;
         }
 
 
@@ -49,25 +53,45 @@ namespace legallead.records.search.Web
             }
         }
 
+
+        [SuppressMessage("Sonar Cube",
+            "S2589:Boolean expressions should not be gratuitous",
+            Justification = "Conflicting lint suggestion. Suppressing.")]
         [ExcludeFromCodeCoverage(Justification = "Private method unit tested from public accessor.")]
         private class GetPageTable
         {
             private int? _pageTypeIndex;
             private readonly IWebDriver driver;
+            private readonly string UriPrefix;
             public GetPageTable(IWebDriver driver)
             {
+                string[] supported = new[] { "http", "https" };
                 this.driver = driver;
-                this.Table = GetSearchHeading();
+                Table = GetSearchHeading();
+                UriPrefix = string.Empty;
+                var hasUri = Uri.TryCreate(driver.Url, UriKind.RelativeOrAbsolute, out var result);
+                if (hasUri && 
+                    result != null &&
+                    result.AbsoluteUri.Contains('/') &&
+                    supported.Contains(result.Scheme, StringComparer.OrdinalIgnoreCase))
+                {
+                    var fulladdress = result.AbsoluteUri;
+                    var last = fulladdress.Split('/')[^1];
+                    var length = fulladdress.Length - (last.Length);
+                    UriPrefix = fulladdress[..length];
+                }
+                
             }
 
             public DentonTableRead? Table { get; private set; }
+
             private int GetPageType()
             {
                 const int fallback = -1;
                 if (_pageTypeIndex != null) return _pageTypeIndex.Value;
                 var table = driver.FindElements(By.TagName("table"))[0];
                 var content = table.GetAttribute("outerHTML");
-                var tb = GetNode(content); 
+                var tb = content.GetNode(); 
                 if (tb == null)
                 {
                     _pageTypeIndex = fallback;
@@ -94,10 +118,11 @@ namespace legallead.records.search.Web
                 var txt = cells[0].InnerText.Trim().ToLower();
                 if (txt.Contains("criminal", StringComparison.CurrentCulture)) { _pageTypeIndex = 2; }
                 if (_pageTypeIndex == null && txt.Contains("district", StringComparison.CurrentCulture)) { _pageTypeIndex = 1; }
-                if (_pageTypeIndex == null && txt.Contains("civil, family & probate case", StringComparison.CurrentCulture)) { _pageTypeIndex = 0; }
-                if (_pageTypeIndex == null) { _pageTypeIndex = fallback; }
+                if (_pageTypeIndex == null && txt.StartsWith("civil, family", StringComparison.CurrentCulture)) { _pageTypeIndex = 0; }
+                _pageTypeIndex ??= fallback;
                 return _pageTypeIndex.GetValueOrDefault(fallback);
             }
+
             private DentonTableRead? GetSearchHeading()
             {
                 const string parmid = "SearchParamList";
@@ -105,10 +130,10 @@ namespace legallead.records.search.Web
                 var td = driver.TryFindElement(By.Id(parmid));
                 if (td == null) return null;
                 var response = new DentonTableRead();
-                var parent = FindParent(td, "table");
+                var parent = td.FindParent("table");
                 if (parent == null) return response;
                 var content = parent.GetAttribute("outerHTML");
-                var tb = GetNode(content);
+                var tb = content.GetNode();
                 if (tb == null) return response;
                 var rows = tb.SelectNodes("//tr");
                 if (rows == null || rows.Count == 0) return response;
@@ -135,71 +160,28 @@ namespace legallead.records.search.Web
                         return true;
                     });
                 if (linklist.Count == 0) return null;
-                var parentTable = FindParent(linklist[0], "table");
+                var parentTable = linklist[0].FindParent("table");
                 var html = parentTable?.GetAttribute("outerHTML");
                 if (string.IsNullOrEmpty(html)) return null;
-                var node = GetNode(html);
+                var node = html.GetNode();
                 if (node == null) return null;
                 var elements = node.SelectNodes(string.Format(casefmt, caseindicator))?.ToList();
                 if (elements == null) return null;
                 var links = new List<string>();
                 elements.ForEach(ele =>
                 {
-                    var casedata = GetCaseStyle(ele, pageTypeId);
+                    var casedata = GetCaseStyle(ele, pageTypeId, UriPrefix);
                     if (casedata != null) links.Add(casedata);
                 });
                 var rows = string.Join($",{Environment.NewLine}", links);
                 return $"[ {rows} ]";
             }
 
-            private static IWebElement? FindParent(IWebElement element, string tagName)
-            {
-                const StringComparison oic = StringComparison.OrdinalIgnoreCase;
-                const string locator = "..";
-                var search = By.XPath(locator);
-                var target = element.TryFindElement(search);
-                while (target != null && !target.TagName.Equals(tagName, oic))
-                {
-                    target = target.TryFindElement(search);
-                }
-                if(target != null && target.TagName.Equals(tagName, oic)) return target;
-                return null;
-            }
-
-            private static HtmlNode? FindParent(HtmlNode element, string tagName)
-            {
-                const StringComparison oic = StringComparison.OrdinalIgnoreCase;
-                const string locator = "..";
-                var target = element.SelectSingleNode(locator);
-                while (target != null && !target.Name.Equals(tagName, oic))
-                {
-                    target = target.SelectSingleNode(locator);
-                }
-                if (target != null && target.Name.Equals(tagName, oic)) return target;
-                return null;
-            }
-
-            private static HtmlNode? GetNode(string content)
-            {
-                try
-                {
-                    var document = new HtmlDocument();
-                    var doc = $"<html><body>{content}</body></html>";
-                    document.LoadHtml(doc);
-                    var body = document.DocumentNode.SelectSingleNode("//body");
-                    return body?.FirstChild;
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-
-            private static string? GetCaseStyle(HtmlNode lnk, int typeId)
+            private static string? GetCaseStyle(HtmlNode lnk, int typeId, string prefix = "")
             {
                 int[] itemIndexes = new[] { 0, 1, 2 };
                 if (!itemIndexes.Contains(typeId)) return null;
-                var tr1 = FindParent(lnk, "tr");
+                var tr1 = lnk.FindParent("tr");
                 if (tr1 == null) return null;
                 var cells = tr1.SelectNodes("//td");
                 var divId = typeId == 0 || typeId == 1 ? 2 : 3;
@@ -211,9 +193,10 @@ namespace legallead.records.search.Web
                 var dteFiled = divs[0].InnerText.Trim();
                 var court = divs[1].InnerText.Trim();
                 var jdo = divs[2].InnerText.Trim();
-
+                var webAddress = string.Concat(prefix, lnk.Attributes["href"].Value);
                 var obj = new
                 {
+                    webAddress,
                     caseNumber,
                     caseStyle,
                     dateFiled = dteFiled,

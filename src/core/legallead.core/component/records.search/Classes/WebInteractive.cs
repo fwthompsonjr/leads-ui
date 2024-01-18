@@ -12,6 +12,7 @@ namespace legallead.records.search.Classes
     /// </summary>
     public class WebInteractive : BaseWebIneractive
     {
+        public DentonTableRead? DentonContent { get; internal set; }
         #region Constructors
 
         public WebInteractive()
@@ -65,13 +66,13 @@ namespace legallead.records.search.Classes
             // return the person-address collection
             // and the case-list as html table
             //results.Document
-            data.FindAll(x => x.IsCriminal & x.IsMapped & !string.IsNullOrEmpty(x.CriminalCaseStyle))
+            data.FindAll(x => x.IsCriminal && x.IsMapped && !string.IsNullOrEmpty(x.CriminalCaseStyle))
                 .ForEach(y => y.CaseStyle = y.CriminalCaseStyle);
             // serialize and save this data object
             var dsobject = JsonConvert.SerializeObject(data, Newt.Formatting.Indented);
             _ = Persistence?.Add(UniqueId, "data-case-list-json", dsobject);
             _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
-
+            
             string caseList = ReadFromFile(Result);
             List<PersonAddress> personAddresses = results.GetPersonAddresses();
             personAddresses = MapCaseStyle(data, personAddresses);

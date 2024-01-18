@@ -2,6 +2,7 @@
 {
     public class DentonTableReadRecord
     {
+        public string? WebAddress { get; set; }
         public string? CaseNumber { get; set; }
         public string? CaseStyle { get; set; }
         public string? DateFiled { get; set; }

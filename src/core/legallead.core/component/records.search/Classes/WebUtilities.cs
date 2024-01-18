@@ -2,8 +2,10 @@
 using legallead.records.search.DriverFactory;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using legallead.records.search.Parsing;
 using OpenQA.Selenium;
 using System.Configuration;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 
 namespace legallead.records.search.Classes
@@ -42,6 +44,12 @@ namespace legallead.records.search.Classes
             if (tbResult == null)
             {
                 return null;
+            }
+            if(data.DentonContent != null)
+            {
+                var collection = data.DentonContent.ToCaseList(isCriminalSearch);
+                cases.AddRange(collection);
+                return tbResult;
             }
             System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> rows = tbResult.FindElements(By.TagName("tr"));
             foreach (IWebElement? rw in rows)
@@ -93,6 +101,26 @@ namespace legallead.records.search.Classes
                     break;
                 }
             }
+        }
+
+        internal static List<HLinkDataRow> FindForDenton(IWebDriver driver, HLinkDataRow linkData)
+        {
+            List<HLinkDataRow> list = new() { linkData };
+            driver.Navigate().GoToUrl(linkData.WebAddress);
+            var reader = new DentonCountyAddressMatch(driver);
+            var addresses = new List<DentonAddressSummary>(reader.Addresses);
+            var plaintiff = addresses.Find(f => (f.PersonType() ?? string.Empty).Equals("plaintiff"));
+            if (plaintiff != null) addresses.Remove(plaintiff);
+            
+            addresses.ForEach(a =>
+            {
+                var line = Copy(linkData);
+                line.Defendant = a.PersonName() ?? string.Empty;
+                line.Address = a.Address() ?? string.Empty;
+                line.Data = a.PersonHTML ?? string.Empty;
+                list.Add(line);
+            });
+            return list;
         }
 
         /// <summary>
@@ -171,6 +199,21 @@ namespace legallead.records.search.Classes
             }
             _chromeBinaryName = string.Empty;
             return _chromeBinaryName;
+        }
+
+        private static HLinkDataRow Copy(HLinkDataRow row)
+        {
+            return new HLinkDataRow
+            {
+                Case = row.Case,
+                CaseStyle = row.CaseStyle,
+                CaseType = row.CaseType,
+                Court = row.Court,
+                DateFiled = row.DateFiled,
+                IsCriminal = row.IsCriminal,
+                CriminalCaseStyle = row.CriminalCaseStyle,
+                WebAddress = row.WebAddress,
+            };
         }
     }
 }

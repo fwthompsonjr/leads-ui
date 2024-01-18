@@ -2,11 +2,6 @@
 using legallead.records.search.Models;
 using legallead.records.search.Web;
 using legallead.search.api.tests.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.search.api.tests
 {
@@ -29,7 +24,7 @@ namespace legallead.search.api.tests
             var content = Properties.Resources.tx_denton_criminal_search_result;
             var exception = Record.Exception(() =>
             {
-                TestContent(content);
+                TestContent(content, true);
             });
             Assert.Null(exception);
         }
@@ -45,16 +40,44 @@ namespace legallead.search.api.tests
             Assert.Null(exception);
         }
 
-        private static void TestContent(string content)
+
+        [Fact]
+        public void ReaderListIsEmptyByDefault()
         {
-            var reader = new ElementDentonReadList();
-            var item = new WebNavInstruction(); using var web = new LocalContentDriver(content);
+            var sut = new DentonTableRead();
+            var list = sut.ToCaseList();
+            Assert.NotNull(list);
+            Assert.Empty(list);
+        }
+
+        [Fact]
+        public void ReaderListIsEmptyWithNoData()
+        {
+            var sut = new DentonTableRead { RecordSet = Array.Empty<DentonTableReadRecord>() };
+            var list = sut.ToCaseList();
+            Assert.NotNull(list);
+            Assert.Empty(list);
+        }
+        private static void TestContent(string content, bool isCrime = false)
+        {
+            const string tblx = "/html/body/table[4]";
+            var reader = new ElementDentonReadList
+            {
+                TableXPath = tblx
+            };
+            var item = new WebNavInstruction();
+            using var web = new LocalContentDriver(content);
             Assert.NotNull(web.Driver);
             reader.Assertion = new ElementAssertion(web.Driver);
-            reader.Execute(item);
-            Assert.NotNull(reader.JsContent);
-            Assert.NotNull(reader.JsContent.Header);
-            Assert.NotNull(reader.JsContent.RecordSet);
+            var response = reader.Execute(item);
+            var jsContent = reader.JsContent;
+            var rows = jsContent?.ToCaseList(isCrime);
+            Assert.NotNull(jsContent);
+            Assert.NotNull(jsContent.Header);
+            Assert.NotNull(jsContent.RecordSet);
+            Assert.NotNull(rows);
+            Assert.NotEmpty(rows);
+            Assert.NotNull(response);
         }
     }
 }

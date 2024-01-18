@@ -119,5 +119,31 @@ namespace legallead.search.api.tests.Properties {
                 return ResourceManager.GetString("tx-denton-normal-search-result", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///
+        ///&lt;html&gt;
+        ///  &lt;head&gt;
+        ///    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;CSS/PublicAccess.css&quot;&gt;
+        ///  
+        ///  
+        ///  &lt;script language=&quot;javascript&quot;&gt;
+        ///
+        ///    function AddHiddenFormElement(form, name, value) {
+        ///      var hiddenField = document.createElement(&quot;input&quot;);
+        ///      hiddenField.setAttribute(&quot;type&quot;, &quot;hidden&quot;);
+        ///      hiddenField.setAttribute(&quot;name&quot;, name);
+        ///      hiddenField.setAttribute(&quot;value&quot;, value);
+        ///      form.appendChild(hiddenField);
+        ///    }
+        ///
+        ///    function LaunchSearch(sPartialQueryString, bNodeSelectorHidde [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string tx_denton_person_principal {
+            get {
+                return ResourceManager.GetString("tx_denton_person_principal", resourceCulture);
+            }
+        }
     }
 }

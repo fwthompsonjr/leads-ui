@@ -1,7 +1,7 @@
 /*
 * find the defendant, principal
 */
-	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent" ];
+	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent", "respondent", "condemnee", "guardian" ];
 hdrs = Array.prototype.slice.call( headings );
 ssheaders = hdrs.filter(x => {
 	let attr = x.getAttribute("class");
