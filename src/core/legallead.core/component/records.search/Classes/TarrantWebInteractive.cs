@@ -3,6 +3,8 @@ using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
+using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OpenQA.Selenium;
 using System.Text;
 using System.Xml;
@@ -45,16 +47,23 @@ namespace legallead.records.search.Classes
             WebFetchResult webFetch = new();
             List<ITarrantWebFetch> fetchers = (new FetchProvider(this)).GetFetches(customSearch);
             DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
+            if (!string.IsNullOrEmpty(Result))
+            {
+                _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
+            }
             while (startingDate.CompareTo(endingDate) <= 0)
             {
-                SetParameterValue(CommonKeyIndexes.StartDate,
-                    startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate));
-                SetParameterValue(CommonKeyIndexes.EndDate,
-                    startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate));
+                var dte = startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate);
+                _ = Persistence?.Add(UniqueId, "data-fetch-date", dte);
+                SetParameterValue(CommonKeyIndexes.StartDate, dte);
+                SetParameterValue(CommonKeyIndexes.EndDate, dte);
                 foreach (ITarrantWebFetch obj in fetchers)
                 {
                     obj.Fetch(startingDate, out webFetch, out List<PersonAddress> people);
                     peopleList.AddRange(people);
+                    var addressobject = JsonConvert.SerializeObject(peopleList);
+                    _ = Persistence?.Add(UniqueId, "data-output-person-address", addressobject);
+                    _ = Persistence?.Add(UniqueId, "data-record-count", peopleList.Count.ToString());
                     webFetch.PeopleList = peopleList;
                 }
                 startingDate = startingDate.AddDays(1);
@@ -299,7 +308,7 @@ namespace legallead.records.search.Classes
             return cases;
         }
 
-        protected string GetCaseStyle(HLinkDataRow item)
+        protected static string GetCaseStyle(HLinkDataRow item)
         {
             if (item == null)
             {
@@ -501,6 +510,9 @@ namespace legallead.records.search.Classes
             return true;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Cube", 
+            "S2589:Boolean expressions should not be gratuitous", 
+            Justification = "This method is legacy code to be refactored at later date")]
         private static List<XmlNode> GetCaseInspector(int parameterId, XmlDocument doc, string typeName = "normal")
         {
             try

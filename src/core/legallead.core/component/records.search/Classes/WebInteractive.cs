@@ -56,7 +56,7 @@ namespace legallead.records.search.Classes
         {
             XmlContentHolder results = new SettingsManager().GetOutput(this);
             List<HLinkDataRow> data = WebUtilities.GetCases(this);
-
+            _ = Persistence?.Add(UniqueId, "data-record-count", data.Count.ToString());
             Result = results.FileName;
             data.ForEach(dta => {
                 if (DentonContent == null)

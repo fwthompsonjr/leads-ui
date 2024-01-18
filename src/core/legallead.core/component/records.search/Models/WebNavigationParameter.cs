@@ -67,8 +67,8 @@ namespace legallead.records.search.Models
 
         public bool IsProbate { get; internal set; }
         public bool IsJustice { get; internal set; }
-        public string? Plaintiff { get; set; }
-        public string Status { get; internal set; }
+        public string Plaintiff { get; internal set; } = string.Empty;
+        public string Status { get; internal set; } = string.Empty;
 
         public string this[string fieldName]
         {
