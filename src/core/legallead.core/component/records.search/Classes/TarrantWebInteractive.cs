@@ -425,6 +425,7 @@ namespace legallead.records.search.Classes
 
         private static void AppendToResult(string fileName, string caseData, string xpath)
         {
+
             XmlDocument doc = XmlDocProvider.Load(fileName);
             XmlNode? ndeCase = doc.DocumentElement?.SelectSingleNode(xpath);
             if (ndeCase == null)
@@ -616,7 +617,7 @@ namespace legallead.records.search.Classes
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
+            return JsonConvert.DeserializeObject<NavigationInstructionDto>(data) ?? new();
         }
 
         private static TarrantCourtDropDownDto? _tarrantComboBxValue;
@@ -625,22 +626,16 @@ namespace legallead.records.search.Classes
 
         public static TarrantCourtDropDownDto GetComboBoxValues()
         {
-            const string dataFormat = @"{0}\xml\{1}.json";
             const string suffix = "tarrantCourtSearchDropDown";
-            string appDirectory = ContextManagment.AppDirectory;
-            string dataFile = string.Format(
-                CultureInfo.CurrentCulture,
-                dataFormat,
-                appDirectory,
-                suffix);
+            var resourceText = Properties.Resources.xml_tarrantCourtSearchDropDown_json;
             var fallback = GetFallbackContent(suffix);
-            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            var data = !string.IsNullOrEmpty(resourceText) ? resourceText : fallback;
             if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(
                     CommonKeyIndexes.NavigationFileNotFound);
             }
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data) ?? new();
+            return JsonConvert.DeserializeObject<TarrantCourtDropDownDto>(data) ?? new();
         }
 
         #endregion Element Action Helpers
@@ -937,5 +932,7 @@ namespace legallead.records.search.Classes
         }
 
         #endregion Fallback Content
+
+
     }
 }
