@@ -33,7 +33,7 @@ namespace legallead.records.search.Web
             jsreader.Header = header;
             jsreader.RecordSet = records;
             JsContent = jsreader;
-            if(string.IsNullOrEmpty(TableXPath)) { return null; }
+            if (string.IsNullOrEmpty(TableXPath)) { return null; }
             var table = driver.TryFindElement(By.XPath(TableXPath));
             return table;
         }
@@ -70,7 +70,7 @@ namespace legallead.records.search.Web
                 Table = GetSearchHeading();
                 UriPrefix = string.Empty;
                 var hasUri = Uri.TryCreate(driver.Url, UriKind.RelativeOrAbsolute, out var result);
-                if (hasUri && 
+                if (hasUri &&
                     result != null &&
                     result.AbsoluteUri.Contains('/') &&
                     supported.Contains(result.Scheme, StringComparer.OrdinalIgnoreCase))
@@ -80,7 +80,7 @@ namespace legallead.records.search.Web
                     var length = fulladdress.Length - (last.Length);
                     UriPrefix = fulladdress[..length];
                 }
-                
+
             }
 
             public DentonTableRead? Table { get; private set; }
@@ -91,7 +91,7 @@ namespace legallead.records.search.Web
                 if (_pageTypeIndex != null) return _pageTypeIndex.Value;
                 var table = driver.FindElements(By.TagName("table"))[0];
                 var content = table.GetAttribute("outerHTML");
-                var tb = content.GetNode(); 
+                var tb = content.GetNode();
                 if (tb == null)
                 {
                     _pageTypeIndex = fallback;

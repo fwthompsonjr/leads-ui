@@ -92,7 +92,7 @@ namespace legallead.records.search.Models
             {
                 return noMatch;
             }
-            pieces.ForEach(x => x = x.Trim());
+            pieces.ForEach(x => _ = x.Trim());
             address = string.Empty;
             // get the person part of this address
             for (int i = 0; i < pieces.Count; i++)

@@ -80,13 +80,27 @@ namespace legallead.search.api
             dest.Id = GetWebIndex(source.County.Name, source.State);
             dest.StartDate = DateTimeOffset.FromUnixTimeMilliseconds(source.StartDate).Date;
             dest.EndDate = DateTimeOffset.FromUnixTimeMilliseconds(source.EndDate).Date;
-            if (dest.Id == 0)
-            {
-                DentonCountyNavigationMap(source, dest);
-            }
+
+            if (dest.Id == 0) DentonCountyNavigationMap(source, dest);
+            if (dest.Id == 10) TarrantCountyNavigationMap(source, dest);
+            if (dest.Id == 20) CollinCountyNavigationMap(source, dest);
             return dest;
         }
 
+        private static void CollinCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
+        {
+            const string collinCountyIndex = "20";
+            var accepted = "0,1,2,3,4".Split(',');
+            var cbxIndex = source.Details.Find(x => x.Name == "Search Type")?.Value ?? accepted[0];
+            if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
+            var idx = int.Parse(cbxIndex).ToString();
+            AppendKeys(dest, collinCountyIndex);
+            AppendInstructions(dest, collinCountyIndex);
+            AppendCaseInstructions(dest, collinCountyIndex);
+            var keyZero = new SearchNavigationKey { Name = "searchTypeSelectedIndex", Value = idx };
+            // add key for combo-index
+            dest.Keys.Add(keyZero);
+        }
         private static void DentonCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
         {
             const string dentonCountyIndex = "1";
@@ -121,6 +135,21 @@ namespace legallead.search.api
             {
                 dest.Keys.Add(districtSearch);
             }
+        }
+
+        private static void TarrantCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
+        {
+            const string tarrantCountyIndex = "10";
+            var accepted = "0,1,2,3,4,5,6,7,8,9,10".Split(',');
+            var cbxIndex = source.Details.Find(x => x.Name == "Court Type")?.Value ?? accepted[0];
+            if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
+            var idx = int.Parse(cbxIndex).ToString();
+            AppendKeys(dest, tarrantCountyIndex);
+            AppendInstructions(dest, tarrantCountyIndex);
+            AppendCaseInstructions(dest, tarrantCountyIndex);
+            var keyZero = new SearchNavigationKey { Name = "SearchComboIndex", Value = idx };
+            // add key for combo-index
+            dest.Keys.Add(keyZero);
         }
         private static void AppendKeys(SearchNavigationParameter dest, string index)
         {

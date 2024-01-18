@@ -1,6 +1,7 @@
 ﻿using legallead.records.search.Addressing;
 using legallead.records.search.Dto;
 using legallead.records.search.Models;
+using Newtonsoft.Json;
 using OpenQA.Selenium;
 
 namespace legallead.records.search.Classes
@@ -28,10 +29,17 @@ namespace legallead.records.search.Classes
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
             List<PersonAddress> peopleList = new();
             WebFetchResult? webFetch = null;
+            DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
+            if (!string.IsNullOrEmpty(Result))
+            {
+                _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
+            }
             while (startingDate.CompareTo(endingDate) <= 0)
             {
                 XmlContentHolder results = new SettingsManager().GetOutput(this);
 
+                var dte = startingDate.ToString(CommonKeyIndexes.DateTimeShort, formatDate);
+                _ = Persistence?.Add(UniqueId, "data-fetch-date", dte);
                 // need to open the navigation file(s)
                 List<NavigationStep> steps = new();
                 string navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile) ?? string.Empty;
@@ -55,6 +63,9 @@ namespace legallead.records.search.Classes
                     ref cases, out List<PersonAddress>? people);
                 peopleList.AddRange(people);
                 webFetch.PeopleList = peopleList;
+                var addressobject = JsonConvert.SerializeObject(peopleList);
+                _ = Persistence?.Add(UniqueId, "data-output-person-address", addressobject);
+                _ = Persistence?.Add(UniqueId, "data-record-count", peopleList.Count.ToString());
                 startingDate = startingDate.AddDays(1);
             }
             return webFetch ?? new();

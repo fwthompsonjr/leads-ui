@@ -56,9 +56,10 @@ namespace legallead.records.search.Classes
         {
             XmlContentHolder results = new SettingsManager().GetOutput(this);
             List<HLinkDataRow> data = WebUtilities.GetCases(this);
-
+            _ = Persistence?.Add(UniqueId, "data-record-count", data.Count.ToString());
             Result = results.FileName;
-            data.ForEach(dta => {
+            data.ForEach(dta =>
+            {
                 if (DentonContent == null)
                     AppendExtraCaseInfo(dta);
                 results.Append(dta);
@@ -75,10 +76,10 @@ namespace legallead.records.search.Classes
             _ = Persistence?.Add(UniqueId, "data-output-file-name", Result);
             var isDenton = DentonContent != null;
             string caseList = isDenton ? string.Empty : ReadFromFile(Result);
-            List<PersonAddress> personAddresses = isDenton ? 
-                DentonLinkDataMapper.ConvertFrom(data) : 
+            List<PersonAddress> personAddresses = isDenton ?
+                DentonLinkDataMapper.ConvertFrom(data) :
                 results.GetPersonAddresses();
-            if (!isDenton) { personAddresses = MapCaseStyle(data, personAddresses); }            
+            if (!isDenton) { personAddresses = MapCaseStyle(data, personAddresses); }
             personAddresses = CleanUp(personAddresses);
             var addressobject = JsonConvert.SerializeObject(personAddresses, Newt.Formatting.Indented);
             _ = Persistence?.Add(UniqueId, "data-output-person-address", addressobject);
@@ -133,7 +134,7 @@ namespace legallead.records.search.Classes
             {
                 return new();
             }
-            
+
             data = data.FindAll(x => !string.IsNullOrEmpty(x.Case));
             foreach (PersonAddress person in personAddresses)
             {
@@ -168,7 +169,7 @@ namespace legallead.records.search.Classes
         private void AppendExtraCaseInfo(HLinkDataRow dta)
         {
             string tableHtml = dta.Data;
-            if(string.IsNullOrEmpty(tableHtml)) { return; }
+            if (string.IsNullOrEmpty(tableHtml)) { return; }
             if (tableHtml.Contains(CommonKeyIndexes.ImageOpenTag))
             {
                 tableHtml = RemoveElement(tableHtml, CommonKeyIndexes.ImageOpenTag);

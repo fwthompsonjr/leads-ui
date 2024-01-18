@@ -4,8 +4,8 @@ namespace legallead.records.search.Tools
 {
     internal static class DentonLinkDataMapper
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Cube", 
-            "S4158:Empty collections should not be accessed or iterated", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Cube",
+            "S4158:Empty collections should not be accessed or iterated",
             Justification = "List is populated in lambda expression.")]
         public static List<PersonAddress> ConvertFrom(List<HLinkDataRow> data)
         {
@@ -16,10 +16,11 @@ namespace legallead.records.search.Tools
                 var item = ConvertFrom(x);
                 list.Add(item);
             });
-            
+
             list.RemoveAll(x => string.IsNullOrEmpty(x.Name) && string.IsNullOrEmpty(x.Address1));
 
-            list.ForEach(item => {
+            list.ForEach(item =>
+            {
                 var isOk = HasReadableAddress(item);
                 if (!isOk)
                 {

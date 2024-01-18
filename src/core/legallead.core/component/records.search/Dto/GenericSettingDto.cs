@@ -43,7 +43,6 @@ namespace legallead.records.search.Dto
             {
                 _name = value;
                 string fileSuffix = value;
-                string searchSettingFileNotFound = CommonKeyIndexes.SearchSettingFileNotFound;
                 const string dataFormat = @"{0}\xml\{1}.json";
                 string appDirectory = ContextManagment.AppDirectory;
                 string dataFile = string.Format(

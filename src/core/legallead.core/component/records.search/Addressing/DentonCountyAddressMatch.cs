@@ -74,7 +74,7 @@ namespace legallead.records.search.Addressing
         {
             var doc = table.OwnerDocument;
             var rows = table.SelectNodes("//tr").ToList();
-            foreach ( var row in rows )
+            foreach (var row in rows)
             {
                 var attribute = doc.CreateAttribute("row-index");
                 var id = rows.IndexOf(row);
