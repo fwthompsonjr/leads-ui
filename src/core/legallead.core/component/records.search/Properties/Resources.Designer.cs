@@ -61,6 +61,25 @@ namespace legallead.records.search.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to /*
+        ///* find the defendant, principal
+        ///*/
+        ///	let keywords = [ &quot;defendant&quot;, &quot;principal&quot;, &quot;petitioner&quot;, &quot;applicant&quot;, &quot;claimant&quot;, &quot;decedent&quot;, &quot;respondent&quot;, &quot;condemnee&quot;, &quot;guardian&quot; ];
+        ///hdrs = Array.prototype.slice.call( headings );
+        ///ssheaders = hdrs.filter(x =&gt; {
+        ///	let attr = x.getAttribute(&quot;class&quot;);
+        ///	if(undefined == attr || null == attr || attr.indexOf(&quot;ssTableHeader&quot;) &lt; 0 ) return false;
+        ///	let rspan = x.getAttribute(&quot;rowspan&quot;);
+        ///	if(undefined == rspan || null == rspan || rspan != &quot;2&quot; ) return false;
+        ///	let txt = [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string include_denton_tx_get_address_json {
+            get {
+                return ResourceManager.GetString("include_denton_tx_get_address_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;search&gt;
         ///  &lt;parameters&gt;

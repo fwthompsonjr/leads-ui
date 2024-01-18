@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using legallead.records.search.Web;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace legallead.records.search.Classes
@@ -314,7 +315,7 @@ namespace legallead.records.search.Classes
                 districtItems.ForEach(x => x.Value = districtType);
             }
             List<ElementNavigationBase> navigations = GetNavigationBases(startDate);
-
+            var dentonTableNode = itms.Find(x => x.FriendlyName.Equals("Search-Records-Result-Table"))?.Value;
             foreach (Models.WebNavInstruction item in itms)
             {
                 Console.WriteLine(
@@ -328,7 +329,16 @@ namespace legallead.records.search.Classes
                 {
                     continue;
                 }
-
+                if (navigator is ElementDentonReadList dentonReader)
+                {
+                    dentonReader.TableXPath = dentonTableNode;
+                    var response = dentonReader.Execute(item);
+                    if (response != null && dentonReader.JsContent != null)
+                    {
+                        data.DentonContent = dentonReader.JsContent;
+                        return response;
+                    }
+                }
                 IWebElement? webElement = navigator.Execute(item);
                 if (webElement != null)
                 {

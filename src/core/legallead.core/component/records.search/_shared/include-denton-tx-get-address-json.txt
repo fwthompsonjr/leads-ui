@@ -1,0 +1,45 @@
+/*
+* find the defendant, principal
+*/
+	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent", "respondent", "condemnee", "guardian" ];
+hdrs = Array.prototype.slice.call( headings );
+ssheaders = hdrs.filter(x => {
+	let attr = x.getAttribute("class");
+	if(undefined == attr || null == attr || attr.indexOf("ssTableHeader") < 0 ) return false;
+	let rspan = x.getAttribute("rowspan");
+	if(undefined == rspan || null == rspan || rspan != "2" ) return false;
+	let txt = x.innerText.trim().toLowerCase();
+	var found = keywords.find(x => x == txt);
+	return null != found;
+});
+  
+  ssheaders.forEach(h => {
+	let rw = h.closest("tr");
+	let tbl = rw.closest("table");
+	let rowIndex = rw.rowIndex;
+	let personhtm = rw.outerHTML;
+	let addrrow = tbl.rows[rowIndex + 1];
+	let addrhtm = addrrow.outerHTML;
+	
+  });
+  
+  
+function getAddressNode() {
+	let arr = [];
+	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent" ];
+	let headings = document.getElementsByTagName("th");
+	for(let n = 0; n < headings.length; n++) {
+		let hdr = headings[n];
+		let attr = hdr.getAttribute("class");
+		if(undefined == attr || null == attr || attr.indexOf("ssTableHeader") < 0 ) continue;
+		let rspan = hdr.getAttribute("rowspan");
+		if(undefined == rspan || null == rspan || rspan != "2" ) continue;
+		let txt = hdr.innerText.trim().toLowerCase();
+		var found = keywords.find(x => x == txt);
+		if (found == null) continue;
+		arr.push( hdr.closest("tr").innerHTML );
+	}
+	return JSON.stringify(arr);
+}
+
+getAddressNode();

@@ -26,7 +26,6 @@ namespace legallead.records.search.Classes
             }
             Assertion.ControlSetValue(idx, txt);
             return null;
-            throw new NotImplementedException();
         }
     }
 }

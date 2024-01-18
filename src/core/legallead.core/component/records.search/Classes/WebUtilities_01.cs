@@ -46,7 +46,16 @@ namespace legallead.records.search.Classes
                         WebInteractive data = Data;
                         ElementAssertion helper = new(driver);
                         _ = GetCaseData(data, ref cases, navTo, helper);
-                        GetPersonData(cases, driver, data);
+                        if (data.DentonContent != null && cases.Exists(x => DoesNotHaveScheme(x.WebAddress)))
+                        {
+                            string prefix = GetBaseAddress(driver.Url);
+                            cases.ForEach(c =>
+                            {
+                                if (DoesNotHaveScheme(c.WebAddress))
+                                    c.WebAddress = string.Concat(prefix, c.WebAddress);
+                            });
+                        }
+                        GetPersonData(ref cases, driver, data);
                     }
                     catch
                     {
@@ -63,7 +72,29 @@ namespace legallead.records.search.Classes
                 return cases;
             }
 
-            protected virtual void GetPersonData(List<HLinkDataRow> cases, IWebDriver driver, WebInteractive data)
+            private static string GetBaseAddress(string? webAddress)
+            {
+                if (string.IsNullOrEmpty(webAddress)) return string.Empty;
+                _ = Uri.TryCreate(webAddress, UriKind.RelativeOrAbsolute, out var result);
+                if (result == null || !result.AbsoluteUri.Contains('/')) return string.Empty;
+                var fulladdress = result.AbsoluteUri;
+                var last = fulladdress.Split('/')[^1];
+                var length = fulladdress.Length - (last.Length);
+                return fulladdress[..length];
+            }
+
+            private static bool DoesNotHaveScheme(string? webAddress)
+            {
+                if(string.IsNullOrEmpty(webAddress)) return false;
+                string[] find = new[] { "http:", "https:" };
+                foreach (var match in find)
+                {
+                    if (webAddress.StartsWith(match)) return false;
+                }
+                return true;
+            }
+
+            protected virtual void GetPersonData(ref List<HLinkDataRow> cases, IWebDriver driver, WebInteractive data)
             {
                 if (cases == null)
                 {
@@ -79,8 +110,19 @@ namespace legallead.records.search.Classes
                 {
                     throw new ArgumentNullException(nameof(data));
                 }
-
                 List<HLinkDataRow> people = cases.FindAll(x => !string.IsNullOrEmpty(x.WebAddress));
+                if (data.DentonContent != null)
+                {
+                    List<HLinkDataRow> collection = new();
+                    people.ForEach(d =>
+                    {
+                        var subset = FindForDenton(driver, d);
+                        collection.AddRange(subset);
+                    });
+                    cases = collection;
+                    return;
+                }
+                
                 people.ForEach(d => Find(driver, d));
             }
 

@@ -50,8 +50,8 @@ namespace legallead.records.search.Classes
         /// </value>
         public string UniqueId { get; set; } = string.Empty;
 
-                
-        
+
+
         public IStagingPersistence? Persistence { get; set; }
 
         #endregion Properties

@@ -1,6 +1,9 @@
 ﻿using legallead.models;
 using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
+using legallead.records.search.Models;
+using legallead.records.search.Web;
+using legallead.search.api.tests.Utility;
 using Newtonsoft.Json;
 
 
@@ -26,10 +29,11 @@ namespace legallead.search.api.tests
             var response = interactive?.Fetch();
             Assert.NotNull(response);
         }
+
         private static WebInteractive? GetInteractive()
         {
             DateTime? dt1 = new DateTime(2023, 10, 3, 0, 0, 0, DateTimeKind.Utc);
-            DateTime? dt2 = dt1.Value.AddDays(1);
+            DateTime? dt2 = dt1.Value.AddDays(0);
             var source = GetRequest();
             source.StartDate = dt1.ToUnixTime();
             source.EndDate = dt2.ToUnixTime();

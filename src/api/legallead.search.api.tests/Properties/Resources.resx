@@ -118,67 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="include_denton_tx_get_address_json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\include-denton-tx-get-address-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tx-denton-criminal-search-result" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\tx-denton-criminal-search-result.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="xml-caselayout-xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-caselayout-xml.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tx-denton-district-search-result" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\tx-denton-district-search-result.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="xml-collinCountyCaseType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-collinCountyCaseType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tx-denton-normal-search-result" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\tx-denton-normal-search-result.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="xml-collinCountyMapping-1-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-collinCountyMapping-1-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-courtAddress-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-courtAddress-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-denton-settings-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-denton-settings-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-dentonCaseCustomInstruction-1-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-dentonCaseCustomInstruction-1-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-dentonCaseCustomInstruction-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-dentonCaseCustomInstruction-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-dentonCountyCaseType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-dentonCountyCaseType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-dentonDistrictCaseType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-dentonDistrictCaseType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-harris-civil-settings-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-harris-civil-settings-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-harrisCivilCaseType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-harrisCivilCaseType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-harrisCivilMapping-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-harrisCivilMapping-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-settings-xml" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-settings-xml.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCountyCaseType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCountyCaseType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCountyCustomType-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCountyCustomType-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCountyDataPoint-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCountyDataPoint-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCountyMapping-1-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCountyMapping-1-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCountyMapping-2-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCountyMapping-2-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-tarrantCourtSearchDropDown-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-tarrantCourtSearchDropDown-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="xml-webDrivers-json" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_shared\xml-webDrivers-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="tx_denton_person_principal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\tx-denton-person-principal.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
