@@ -16,13 +16,15 @@ namespace legallead.logging.implementations
         public LoggingService(
             Guid? requestId = null,
             ILogContentRepository? contentRepository = null,
-            ILogConfiguration? config = null)
+            ILogConfiguration? config = null,
+            string className = "")
         {
             _id = requestId.GetValueOrDefault(Guid.NewGuid());
             contentRepository ??= InternalDbServiceProvider.GetService<ILogContentRepository>();
             config ??= InternalDbServiceProvider.GetService<ILogConfiguration>();
             _contentRepository = contentRepository;
             _config = config;
+            ClassContext = className;
         }
 
         private enum SeverityCodes
@@ -35,12 +37,14 @@ namespace legallead.logging.implementations
             Error = 5000
         }
 
+        public string ClassContext { get; set; }
+
         public async Task<LogInsertModel> LogVerbose(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Verbose, _id, callerLineNumber, callerMethodName, message);
+            var model = GetInsertModel(SeverityCodes.Verbose, _id, callerLineNumber, callerMethodName, message, ClassContext);
             await Write(model);
             return model;
         }
@@ -50,7 +54,7 @@ namespace legallead.logging.implementations
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Debug, _id, callerLineNumber, callerMethodName, message);
+            var model = GetInsertModel(SeverityCodes.Debug, _id, callerLineNumber, callerMethodName, message, ClassContext);
             await Write(model);
             return model;
         }
@@ -60,7 +64,7 @@ namespace legallead.logging.implementations
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Information, _id, callerLineNumber, callerMethodName, message);
+            var model = GetInsertModel(SeverityCodes.Information, _id, callerLineNumber, callerMethodName, message, ClassContext);
             await Write(model);
             return model;
         }
@@ -70,7 +74,7 @@ namespace legallead.logging.implementations
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Warning, _id, callerLineNumber, callerMethodName, message);
+            var model = GetInsertModel(SeverityCodes.Warning, _id, callerLineNumber, callerMethodName, message, ClassContext);
             await Write(model);
             return model;
         }
@@ -80,7 +84,7 @@ namespace legallead.logging.implementations
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Critical, _id, callerLineNumber, callerMethodName, message);
+            var model = GetInsertModel(SeverityCodes.Critical, _id, callerLineNumber, callerMethodName, message, ClassContext);
             await Write(model);
             return model;
         }
@@ -90,7 +94,7 @@ namespace legallead.logging.implementations
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
-            var model = GetInsertModel(SeverityCodes.Error, _id, callerLineNumber, callerMethodName, exception.Message);
+            var model = GetInsertModel(SeverityCodes.Error, _id, callerLineNumber, callerMethodName, exception.Message, ClassContext);
             model.Detail = exception.ToString();
             await Write(model);
             return model;
@@ -135,10 +139,12 @@ namespace legallead.logging.implementations
             return string.Join(", ", parms);
         }
 
-        private static LogInsertModel GetInsertModel(SeverityCodes codes, Guid requestId, int lineNumber, string methodName, string message)
+        private static LogInsertModel GetInsertModel(SeverityCodes codes, Guid requestId, int lineNumber, string methodName, string message, string className = "")
         {
             var callingMethod = new StackTrace().GetFrame(1)?.GetMethod();
             var details = CallerDetails.GetDetails(callingMethod);
+            var reflectedClassName = details.ClassName.Truncate(255);
+            var clsname = string.IsNullOrEmpty(className) ? reflectedClassName : className;
             return new LogInsertModel
             {
                 RequestId = requestId.ToString("D"),
@@ -147,7 +153,7 @@ namespace legallead.logging.implementations
                 NameSpace = details.NameSpace.Truncate(255),
                 MethodName = methodName.Truncate(255),
                 Message = message.Truncate(500),
-                ClassName = details.ClassName.Truncate(255)
+                ClassName = clsname
             };
         }
 
