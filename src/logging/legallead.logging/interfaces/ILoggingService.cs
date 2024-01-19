@@ -2,7 +2,7 @@
 
 namespace legallead.logging.interfaces
 {
-    internal interface ILoggingService
+    public interface ILoggingService
     {
         Task<LogInsertModel> LogCritical(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "");
 

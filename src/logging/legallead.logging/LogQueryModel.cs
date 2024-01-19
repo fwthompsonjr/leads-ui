@@ -1,6 +1,6 @@
 ﻿namespace legallead.logging
 {
-    internal class LogQueryModel
+    public class LogQueryModel
     {
         public long? Id { get; set; }
         public string? RequestId { get; set; }
