@@ -25,16 +25,18 @@ namespace legallead.search.api.Services
             DataService = new Svcs(logger);
         }
 
-        public Task StartAsync(CancellationToken stoppingToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var message = $"{typeof(T).Name} : {DateTime.Now:s} : Timed Process is starting";
             Console.WriteLine(message);
             _timer = new Timer(OnTimer, null, TimeSpan.FromSeconds(DelayedStartInSeconds), TimeSpan.FromMinutes(IntervalInMinutes));
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken stoppingToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var message = $"{typeof(T).Name} : {DateTime.Now:s} : Timed Process is stopping";
             Console.WriteLine(message);
 
