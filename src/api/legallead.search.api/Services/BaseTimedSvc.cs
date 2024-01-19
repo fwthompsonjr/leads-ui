@@ -7,6 +7,7 @@ namespace legallead.search.api.Services
     internal abstract class BaseTimedSvc<T> : IHostedService, IDisposable where T : class
     {
         protected readonly ILoggingRepository _logger;
+        // protected readonly ILoggingInfrastructure _logdata;
         protected readonly ISearchQueueRepository _queueDb;
         protected readonly Svcs DataService;
 

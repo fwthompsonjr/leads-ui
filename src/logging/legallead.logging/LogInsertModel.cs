@@ -1,6 +1,6 @@
 ﻿namespace legallead.logging
 {
-    internal class LogInsertModel
+    public class LogInsertModel
     {
         public string? RequestId { get; set; }
         public int? StatusId { get; set; }

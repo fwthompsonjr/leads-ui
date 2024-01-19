@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace legallead.logging.implementations
 {
-    internal class LoggingService : ILoggingService
+    public class LoggingService : ILoggingService
     {
         private readonly Guid _id;
         private readonly ILogContentRepository _contentRepository;

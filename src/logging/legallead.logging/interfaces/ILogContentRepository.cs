@@ -2,7 +2,7 @@
 
 namespace legallead.logging.interfaces
 {
-    internal interface ILogContentRepository
+    public interface ILogContentRepository
     {
         Task Insert(LogInsertModel dto);
 
