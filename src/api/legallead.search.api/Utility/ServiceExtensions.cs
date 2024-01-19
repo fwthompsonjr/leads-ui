@@ -23,6 +23,11 @@ namespace legallead.search.api.Utility
                 var context = x.GetRequiredService<DataContext>();
                 return new UserSearchRepository(context);
             });
+            services.AddScoped<ISearchQueueRepository, SearchQueueRepository>(x =>
+            {
+                var context = x.GetRequiredService<DataContext>();
+                return new SearchQueueRepository(context);
+            });
             services.AddScoped(x =>
             {
                 var context = x.GetRequiredService<IUserSearchRepository>();

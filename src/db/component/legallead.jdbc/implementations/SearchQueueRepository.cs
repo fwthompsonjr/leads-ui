@@ -1,13 +1,10 @@
-﻿using Dapper;
-using legallead.jdbc.entities;
+﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
-using System.Text;
 
 namespace legallead.jdbc.implementations
 {
-    public class SearchQueueRepository : 
+    public class SearchQueueRepository :
         BaseRepository<SearchDto>, ISearchQueueRepository
     {
         private readonly IUserSearchRepository searchrepo;
@@ -16,11 +13,11 @@ namespace legallead.jdbc.implementations
             searchrepo = new UserSearchRepository(context);
         }
 
-        public async Task<List<SearchDto>> GetQueue()
+        public async Task<List<SearchQueueDto>> GetQueue()
         {
             const string prc = "CALL USP_QUERY_USER_SEARCH_QUEUE();";
             using var connection = _context.CreateConnection();
-            var response = await _command.QueryAsync<SearchDto>(connection, prc);
+            var response = await _command.QueryAsync<SearchQueueDto>(connection, prc);
             return response.ToList();
         }
 
