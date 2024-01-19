@@ -2,17 +2,25 @@
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.search.api.Controllers;
+using legallead.search.api.Models;
 
 namespace legallead.search.api.Utility
 {
     public static class ServiceExtensions
     {
-        public static void Initialize(this IServiceCollection services)
+        public static void Initialize(this IServiceCollection services, IConfiguration? configuration = null)
         {
+            var setting = new BackgroundServiceSettings
+            {
+                Enabled = configuration?.GetValue<bool>("BackgroundServices:Enabled") ?? true,
+                Delay = configuration?.GetValue<int>("BackgroundServices:Delay") ?? 45,
+                Interval = configuration?.GetValue<int>("BackgroundServices:Interval") ?? 10
+            };
             services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddSingleton<IBackgroundServiceSettings>(x => setting);
             services.AddScoped(x =>
             {
                 var command = new DapperExecutor();

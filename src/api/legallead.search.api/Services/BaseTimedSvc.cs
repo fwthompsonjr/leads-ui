@@ -13,20 +13,29 @@ namespace legallead.search.api.Services
         private Timer? _timer = null;
         private bool disposedValue;
         protected readonly object _lock = new();
-        protected virtual int DelayedStartInSeconds { get; set; } = 15;
-        protected virtual int IntervalInMinutes { get; set; } = 15;
+        protected virtual int DelayedStartInSeconds { get; set; }
+        protected virtual int IntervalInMinutes { get; set; }
+        protected virtual bool IsServiceEnabled { get; set; }
 
         public bool IsWorking { get; protected set; }
 
-        protected BaseTimedSvc(ILoggingRepository logger, ISearchQueueRepository repo)
+        protected BaseTimedSvc(
+            ILoggingRepository logger, 
+            ISearchQueueRepository repo,
+            IBackgroundServiceSettings settings)
         {
             _logger = logger;
             _queueDb = repo;
+            
+            IsServiceEnabled = settings.Enabled;
+            DelayedStartInSeconds = settings.Delay;
+            IntervalInMinutes = settings.Interval;
             DataService = new Svcs(logger);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            if (!IsServiceEnabled) return Task.CompletedTask;
             cancellationToken.ThrowIfCancellationRequested();
             var message = $"{typeof(T).Name} : {DateTime.Now:s} : Timed Process is starting";
             Console.WriteLine(message);
