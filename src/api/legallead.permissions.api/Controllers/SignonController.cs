@@ -51,7 +51,7 @@ namespace legallead.permissions.api.Controllers
                 }
 
                 var token = _jWTManager.GenerateToken(user);
-                
+
                 if (token == null)
                 {
                     await _logSvc.LogWarning("Failed : Generate Access Token. Returning 401 - Unauthorized");
@@ -63,7 +63,7 @@ namespace legallead.permissions.api.Controllers
                     RefreshToken = token.RefreshToken,
                     UserId = user.Id
                 };
-                
+
                 await _db.UserTokenDb.Add(obj);
                 return Ok(token);
             }

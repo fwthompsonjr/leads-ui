@@ -1,6 +1,4 @@
-﻿using legallead.records.search.Classes;
-
-namespace legallead.records.search.Dto
+﻿namespace legallead.records.search.Dto
 {
     using JConn = Newtonsoft.Json.JsonConvert;
 

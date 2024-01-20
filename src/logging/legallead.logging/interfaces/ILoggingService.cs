@@ -4,6 +4,8 @@ namespace legallead.logging.interfaces
 {
     public interface ILoggingService
     {
+        string ClassContext { get; set; }
+
         Task<LogInsertModel> LogCritical(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "");
 
         Task<LogInsertModel> LogDebug(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "");

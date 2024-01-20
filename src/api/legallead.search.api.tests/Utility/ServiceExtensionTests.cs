@@ -1,4 +1,6 @@
 ﻿using legallead.jdbc.helpers;
+using legallead.jdbc.interfaces;
+using legallead.logging.interfaces;
 using legallead.search.api.Controllers;
 using legallead.search.api.Utility;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +32,12 @@ namespace legallead.search.api.tests.Utility
         [Theory]
         [InlineData(typeof(DataContext))]
         [InlineData(typeof(ApiController))]
+        [InlineData(typeof(ILogConfiguration))]
+        [InlineData(typeof(ILoggingService))]
+        [InlineData(typeof(ILoggingRepository))]
+        [InlineData(typeof(ISearchQueueRepository))]
+        [InlineData(typeof(IBgComponentRepository))]
+        [InlineData(typeof(IBackgroundServiceSettings))]
         public void ProviderCanRetrieveType(Type target)
         {
             var provider = GetProvider();
