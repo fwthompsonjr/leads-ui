@@ -47,16 +47,12 @@ namespace legallead.search.api.Utility
                 var context = x.GetRequiredService<DataContext>();
                 return new BgComponentRepository(context);
             });
-            services.AddScoped<IBgComponentRepository, BgComponentRepository>(x =>
-            {
-                var context = x.GetRequiredService<DataContext>();
-                return new BgComponentRepository(context);
-            });
             services.AddScoped(x =>
             {
                 var context = x.GetRequiredService<IUserSearchRepository>();
                 return new ApiController(context);
             });
+            services.AddScoped<IExcelGenerator, ExcelGenerator>();
             // logging
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped(p =>

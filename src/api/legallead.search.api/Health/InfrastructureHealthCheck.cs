@@ -40,7 +40,8 @@ namespace legallead.search.api.Health
             typeof(ILoggingRepository),
             typeof(ISearchQueueRepository),
             typeof(IBgComponentRepository),
-            typeof(IBackgroundServiceSettings)
+            typeof(IBackgroundServiceSettings),
+            typeof(IExcelGenerator)
         };
     }
 }

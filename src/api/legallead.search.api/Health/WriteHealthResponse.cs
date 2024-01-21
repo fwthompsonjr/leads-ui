@@ -6,6 +6,7 @@ namespace legallead.search.api.Health
 {
     internal static class WriteHealthResponse
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
         public static Task WriteResponse(HttpContext context, HealthReport healthReport)
         {
             context.Response.ContentType = "application/json; charset=utf-8";

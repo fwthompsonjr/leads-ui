@@ -38,6 +38,7 @@ namespace legallead.search.api.tests.Utility
         [InlineData(typeof(ISearchQueueRepository))]
         [InlineData(typeof(IBgComponentRepository))]
         [InlineData(typeof(IBackgroundServiceSettings))]
+        [InlineData(typeof(IExcelGenerator))]
         public void ProviderCanRetrieveType(Type target)
         {
             var provider = GetProvider();
