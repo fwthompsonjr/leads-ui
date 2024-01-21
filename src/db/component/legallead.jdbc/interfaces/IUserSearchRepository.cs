@@ -3,7 +3,7 @@ using legallead.jdbc.models;
 
 namespace legallead.jdbc.interfaces
 {
-    internal interface IUserSearchRepository
+    public interface IUserSearchRepository
     {
         Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data, string? keyname = null);
         Task<KeyValuePair<bool, string>> Begin(string userId, string payload);
