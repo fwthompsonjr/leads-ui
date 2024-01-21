@@ -13,7 +13,8 @@ namespace legallead.jdbc.tests.entities
             .RuleFor(x => x.SearchId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.StagingType, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.LineNbr, y => y.Random.Int(1, 100000))
-            .RuleFor(x => x.LineData, y => {
+            .RuleFor(x => x.LineData, y =>
+            {
                 var m = y.Hacker.Phrase();
                 return Encoding.UTF8.GetBytes(m);
             })

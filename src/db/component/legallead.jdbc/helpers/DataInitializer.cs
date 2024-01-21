@@ -625,7 +625,7 @@ namespace legallead.jdbc.helpers
                 await connection.ExecuteAsync(stmt);
             }
         }
-        
+
         private static readonly List<PermissionGroup> permissionGroups = new()
         {
             new() {  Name = "None", GroupId = 100, OrderId = 10, PerRequest = 0, PerMonth = 0, PerYear = 0 },

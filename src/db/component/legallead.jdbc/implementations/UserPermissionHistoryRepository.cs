@@ -29,7 +29,6 @@ namespace legallead.jdbc.implementations
             var sql = _sut.SelectSQL(parm);
             var parms = _sut.SelectParameters(parm);
             var list = await _command.QueryAsync<UserPermissionHistory>(connection, sql, parms);
-            if (list == null) return Array.Empty<UserPermissionHistory>();
             var data = list.ToList();
             data.Sort((a, b) =>
             {

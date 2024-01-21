@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using legallead.jdbc.entities;
-using System.Text;
 
 namespace legallead.jdbc.tests.entities
 {

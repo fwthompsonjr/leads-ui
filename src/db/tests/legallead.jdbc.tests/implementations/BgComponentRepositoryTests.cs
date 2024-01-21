@@ -107,22 +107,6 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
         }
-        private sealed class RepoContainer
-        {
-            private readonly BgComponentRepository repo;
-            private readonly Mock<IDapperCommand> command;
-            public RepoContainer()
-            {
-                command = new Mock<IDapperCommand>();
-                var dataContext = new MockDataContext(command.Object);
-                repo = new BgComponentRepository(dataContext);
-            }
-
-            public BgComponentRepository Repo => repo;
-            public Mock<IDapperCommand> CommandMock => command;
-
-        }
-
 
         [Fact]
         public async Task RepoSetStatusHappyPath()
@@ -163,6 +147,21 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()));
         }
 
+        private sealed class RepoContainer
+        {
+            private readonly BgComponentRepository repo;
+            private readonly Mock<IDapperCommand> command;
+            public RepoContainer()
+            {
+                command = new Mock<IDapperCommand>();
+                var dataContext = new MockDataContext(command.Object);
+                repo = new BgComponentRepository(dataContext);
+            }
+
+            public BgComponentRepository Repo => repo;
+            public Mock<IDapperCommand> CommandMock => command;
+
+        }
         private sealed class MockDataContext : DataContext
         {
             public MockDataContext(IDapperCommand command) : base(command)
