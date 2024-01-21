@@ -2,10 +2,13 @@
 
 namespace legallead.search.api
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods",
+        Justification = "Following convention from remote package.")]
     public interface ILoggingRepository
     {
         string ClassContext { get; set; }
         Task LogCritical(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "");
+
 
         Task LogDebug(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "");
 

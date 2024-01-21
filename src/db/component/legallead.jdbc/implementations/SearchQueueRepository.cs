@@ -8,9 +8,9 @@ namespace legallead.jdbc.implementations
         BaseRepository<SearchDto>, ISearchQueueRepository
     {
         private readonly IUserSearchRepository searchrepo;
-        public SearchQueueRepository(DataContext context) : base(context)
+        public SearchQueueRepository(DataContext context, IUserSearchRepository userSearch) : base(context)
         {
-            searchrepo = new UserSearchRepository(context);
+            searchrepo = userSearch;
         }
 
         public async Task<List<SearchQueueDto>> GetQueue()
