@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
 		<PackageReference Include="legallead.logging" Version="3.2.*" />
 		<PackageReference Include="legallead.models" Version="3.2.*" />
 		<PackageReference Include="legallead.records.search" Version="3.2.*" />
@@ -32,6 +31,10 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>legallead.models.tests</_Parameter1>
 		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\db\component\legallead.jdbc\legallead.jdbc.csproj" />
 	</ItemGroup>
 
 </Project>

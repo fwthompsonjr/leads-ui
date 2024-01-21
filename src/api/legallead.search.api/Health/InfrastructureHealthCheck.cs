@@ -34,6 +34,7 @@ namespace legallead.search.api.Health
         private static readonly List<Type> types = new()
         {
             typeof(DataContext),
+            typeof(IDapperCommand),
             typeof(ApiController),
             typeof(ILogConfiguration),
             typeof(ILoggingService),

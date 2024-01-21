@@ -27,9 +27,10 @@ namespace legallead.search.api.Utility
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddSingleton<IBackgroundServiceSettings>(x => setting);
+            services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(x =>
             {
-                var command = new DapperExecutor();
+                var command = x.GetRequiredService<IDapperCommand>();
                 return new DataContext(command);
             });
             services.AddScoped<IUserSearchRepository, UserSearchRepository>(x =>
@@ -40,7 +41,8 @@ namespace legallead.search.api.Utility
             services.AddScoped<ISearchQueueRepository, SearchQueueRepository>(x =>
             {
                 var context = x.GetRequiredService<DataContext>();
-                return new SearchQueueRepository(context);
+                var service = x.GetRequiredService<IUserSearchRepository>();
+                return new SearchQueueRepository(context, service);
             });
             services.AddScoped<IBgComponentRepository, BgComponentRepository>(x =>
             {

@@ -30,6 +30,7 @@ namespace legallead.search.api.tests.Utility
         }
 
         [Theory]
+        [InlineData(typeof(IDapperCommand))]
         [InlineData(typeof(DataContext))]
         [InlineData(typeof(ApiController))]
         [InlineData(typeof(ILogConfiguration))]
