@@ -30,7 +30,6 @@ namespace legallead.jdbc.implementations
                     var command = sb.ToString();
                     await _command.ExecuteAsync(connection, command);
                 });
-                Debugger.Break();
             });
         }
 
