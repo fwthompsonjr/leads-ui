@@ -13,10 +13,11 @@ namespace legallead.desktop
     public partial class MainWindow : Window
     {
         private bool isBlankLoaded = false;
-
+        private CommonStatusHelper? StatusHelper;
         public MainWindow()
         {
             InitializeComponent();
+            SetupStatus();
             InitializeBrowserContent();
             InitializeErrorContent();
             InitializeUserChanged();
@@ -37,7 +38,7 @@ namespace legallead.desktop
             {
                 Task.Run(() =>
                 {
-                    Thread.Sleep(1500);
+                    Thread.Sleep(500);
                     var initialPage = AppBuilder.InitialViewName ?? "introduction";
                     var helper = GetHelper();
                     helper.Load(initialPage, Dispatcher, content1);

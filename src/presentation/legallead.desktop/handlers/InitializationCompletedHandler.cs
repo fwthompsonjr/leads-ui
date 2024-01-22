@@ -24,11 +24,13 @@ namespace legallead.desktop.handlers
             if (user == null || !user.IsInitialized)
             {
                 // load an error page, unable to communicate remote
+                GetStatusHelper()?.SetStatus(CommonStatusTypes.Error);
                 SetErrorContent(500, dispatcher, control);
                 return;
             }
 
             const string target = "home";
+            GetStatusHelper()?.SetStatus(CommonStatusTypes.Ready);
             ContentHandler.LoadLocal(target, dispatcher, control);
             dispatcher.Invoke(() => { window.Title = BrowserHelper.GetPageTitle(target); });
         }
@@ -56,6 +58,13 @@ namespace legallead.desktop.handlers
                     control.Content = browser;
                 });
             }
+        }
+
+        private static CommonStatusHelper? GetStatusHelper()
+        {
+            var tmp = AppBuilder.ServiceProvider?.GetService(typeof(CommonStatusHelper));
+            if (tmp is CommonStatusHelper helper) return helper;
+            return null;
         }
     }
 }

@@ -1,0 +1,20 @@
+[
+	{
+		"id": 1,
+		"name": "Loading",
+		"message": "Reading application configuration",
+		"color": "Gray"
+	},
+	{
+		"id": 10,
+		"name": "Ready",
+		"message": "",
+		"color": "ForestGreen"
+	},
+	{
+		"id": 20,
+		"name": "Error",
+		"message": "An error occurred during application processing.",
+		"color": "Red"
+	}
+]

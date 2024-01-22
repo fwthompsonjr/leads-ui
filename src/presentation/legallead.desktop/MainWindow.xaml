@@ -88,22 +88,29 @@
                             <Rectangle.Fill>
                                 <VisualBrush Stretch="None">
                                     <VisualBrush.Visual>
-                                        <Border Width="12" Height="16" CornerRadius="2,0,0,0" Background="ForestGreen"/>
+                                        <Border Width="12" Height="16" CornerRadius="2,0,0,0" Background="Gray"/>
                                     </VisualBrush.Visual>
                                 </VisualBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <TextBlock Grid.Column="1" Name="sbStatusApplicationText">Ready</TextBlock>
+                        <TextBlock Grid.Column="1" Name="sbStatusApplicationText">Loading</TextBlock>
                     </Grid>
                 </StatusBarItem>
-                <Separator Grid.Column="1" Name="sbarSeparator1" Visibility="Collapsed" Width="1"/>
                 <StatusBarItem Grid.Column="2" HorizontalAlignment="Left">
-                    <TextBlock Name="sbComment" Visibility="Collapsed">-</TextBlock>
+                    <Border  BorderBrush="#FF0B232F" BorderThickness="1,0,0,0" VerticalAlignment="Top">
+                        <TextBlock 
+                            Margin="10,0,10,1" 
+                            Name="sbComment" HorizontalAlignment="Left">Reading application configuration</TextBlock>
+                    </Border>
                 </StatusBarItem>
-                <Separator Grid.Column="3" Name="sbarSeparator2" Visibility="Collapsed" Width="1"/>
-                <StatusBarItem Grid.Column="4" HorizontalAlignment="Right" >
-                    <TextBlock Name="sbStatusUserText">Offline</TextBlock>
+
+                <StatusBarItem Grid.Column="4" HorizontalAlignment="Right">
+                    <Border  BorderBrush="#FF0B232F" BorderThickness="1,0,0,0" VerticalAlignment="Top">
+                        <TextBlock Name="sbConnectionStatusText"
+                            Margin="5,0,5,0" HorizontalAlignment="Right">Offline</TextBlock>
+                    </Border>
                 </StatusBarItem>
+                
             </StatusBar>
         </Grid>
     </DockPanel>

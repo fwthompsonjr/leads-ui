@@ -85,6 +85,12 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IUserProfileMapper>());
             services.AddSingleton(s => provider.GetRequiredService<IUserPermissionsMapper>());
             services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
+            services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
+            services.AddSingleton(s =>
+            {
+                var list = s.GetRequiredService<CommonMessageList>();
+                return new CommonStatusHelper(list);
+            });
         }
     }
 }
