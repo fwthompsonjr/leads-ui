@@ -118,7 +118,7 @@ namespace legallead.desktop.utilities
 
         protected virtual IHttpClientWrapper GetHttpClient()
         {
-            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
+            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(15) };
             var wrapper = new HttpClientWrapper(client);
             return wrapper;
         }
