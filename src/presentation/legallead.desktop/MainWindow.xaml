@@ -39,7 +39,11 @@
         </Menu>
 
         <Grid>
-            <TabControl x:Name="mdiContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="0" x:Name="mdiContainer">
                 <TabItem x:Name="tabHome" IsSelected="True" Tag="Home" Visibility="Collapsed">
                     <ContentControl x:Name="content1" />
                 </TabItem>
@@ -56,6 +60,51 @@
                     <ContentControl x:Name="contentExit" />
                 </TabItem>
             </TabControl>
+            <StatusBar Grid.Row="1" Name="sbar" VerticalAlignment="Bottom"  >
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="3"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0" HorizontalAlignment="Left">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="0" 
+                                   Name="sbStatusApplicationIcon" 
+                                   HorizontalAlignment="Left" 
+                                   Height="12" Width="12" 
+                                   VerticalAlignment="Center" >
+                            <Rectangle.Fill>
+                                <VisualBrush Stretch="None">
+                                    <VisualBrush.Visual>
+                                        <Border Width="12" Height="16" CornerRadius="2,0,0,0" Background="ForestGreen"/>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Grid.Column="1" Name="sbStatusApplicationText">Ready</TextBlock>
+                    </Grid>
+                </StatusBarItem>
+                <Separator Grid.Column="1" Name="sbarSeparator1" Visibility="Collapsed" Width="1"/>
+                <StatusBarItem Grid.Column="2" HorizontalAlignment="Left">
+                    <TextBlock Name="sbComment" Visibility="Collapsed">-</TextBlock>
+                </StatusBarItem>
+                <Separator Grid.Column="3" Name="sbarSeparator2" Visibility="Collapsed" Width="1"/>
+                <StatusBarItem Grid.Column="4" HorizontalAlignment="Right" >
+                    <TextBlock Name="sbStatusUserText">Offline</TextBlock>
+                </StatusBarItem>
+            </StatusBar>
         </Grid>
     </DockPanel>
 </Window>

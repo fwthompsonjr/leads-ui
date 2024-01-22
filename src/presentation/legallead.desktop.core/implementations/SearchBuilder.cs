@@ -49,7 +49,7 @@ namespace legallead.desktop.implementations
         {
             if (string.IsNullOrEmpty(_jsConfiguration))
             {
-                var response = _api.Get(PageName).Result;
+                var response = TryRequest();
                 if (response == null || response.StatusCode != 200) return null;
                 if (string.IsNullOrEmpty(response.Message)) return null;
                 _jsConfiguration = response.Message;
@@ -61,6 +61,21 @@ namespace legallead.desktop.implementations
             }
             return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration).ToArray();
         }
+
+        private ApiResponse TryRequest()
+        {
+            var failed = new ApiResponse { Message = "Unable to connect to remote source", StatusCode = 500 };
+            try
+            {
+                return _api.Get(PageName).Result;
+            }
+            catch (Exception ex)
+            {
+                failed.Message = ex.Message;
+                return failed;
+            }
+        }
+
 
         private static void BuildTableBody(HtmlDocument doc, HtmlNode node, List<StateSearchConfiguration>? configurations = null)
         {

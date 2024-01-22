@@ -46,58 +46,74 @@ namespace legallead.desktop.utilities
         public override async Task<ApiResponse> Get(string name)
         {
             var fallback = new ApiResponse { StatusCode = 500, Message = "Unexpected Error" };
-            var verify = await base.Get(name);
-            verify ??= fallback;
-            if (verify.StatusCode != 200) return verify;
-            var address = GetAddress(name);
-            if (address.StatusCode != 200) return address;
-            var url = address.Message;
-            var user = GetUserOrDefault();
-            using var client = GetHttpClient();
-            client.AppendAuthorization(user);
-            var result = await client.GetStringAsync(client.Client, url);
-            if (string.IsNullOrEmpty(result))
+            try
             {
+                var verify = await base.Get(name);
+                verify ??= fallback;
+                if (verify.StatusCode != 200) return verify;
+                var address = GetAddress(name);
+                if (address.StatusCode != 200) return address;
+                var url = address.Message;
+                var user = GetUserOrDefault();
+                using var client = GetHttpClient();
+                client.AppendAuthorization(user);
+                var result = await client.GetStringAsync(client.Client, url);
+                if (string.IsNullOrEmpty(result))
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = 500,
+                        Message = "Unable to communicate with remote server"
+                    };
+                }
                 return new ApiResponse
                 {
-                    StatusCode = 500,
-                    Message = "Unable to communicate with remote server"
+                    StatusCode = 200,
+                    Message = result
                 };
             }
-            return new ApiResponse
+            catch (Exception ex)
             {
-                StatusCode = 200,
-                Message = result
-            };
+                fallback.Message = ex.Message;
+                return fallback;
+            }
         }
 
         public override async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
             var fallback = new ApiResponse { StatusCode = 500, Message = "Unexpected Error" };
-            var verify = await base.Post(name, payload, user);
-            verify ??= fallback;
-            if (verify.StatusCode != 200) return verify;
-            var address = PostAddress(name, user);
-            if (address.StatusCode != 200) return address;
-            var url = address.Message;
-            using var client = GetHttpClient();
-            client.AppendAuthorization(user);
-            client.AppendHeader("APP_IDENTITY", user.GetAppServiceHeader());
-            var result = await client.PostAsJsonAsync(client.Client, url, payload);
-            var content = await result.Content.ReadAsStringAsync();
-            if (!result.IsSuccessStatusCode)
+            try
             {
+                var verify = await base.Post(name, payload, user);
+                verify ??= fallback;
+                if (verify.StatusCode != 200) return verify;
+                var address = PostAddress(name, user);
+                if (address.StatusCode != 200) return address;
+                var url = address.Message;
+                using var client = GetHttpClient();
+                client.AppendAuthorization(user);
+                client.AppendHeader("APP_IDENTITY", user.GetAppServiceHeader());
+                var result = await client.PostAsJsonAsync(client.Client, url, payload);
+                var content = await result.Content.ReadAsStringAsync();
+                if (!result.IsSuccessStatusCode)
+                {
+                    return new ApiResponse
+                    {
+                        StatusCode = (int)result.StatusCode,
+                        Message = content
+                    };
+                }
                 return new ApiResponse
                 {
                     StatusCode = (int)result.StatusCode,
                     Message = content
                 };
             }
-            return new ApiResponse
+            catch (Exception ex)
             {
-                StatusCode = (int)result.StatusCode,
-                Message = content
-            };
+                fallback.Message = ex.Message;
+                return fallback;
+            }
         }
 
         protected virtual IHttpClientWrapper GetHttpClient()
