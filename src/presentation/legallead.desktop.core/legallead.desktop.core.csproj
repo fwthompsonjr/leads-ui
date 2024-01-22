@@ -24,6 +24,9 @@
 			<_Parameter1>legallead.desktop</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>legallead.ui</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>legallead.desktop.tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
