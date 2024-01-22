@@ -46,7 +46,7 @@
         
         <WebView Grid.Row="0"  x:Name="mainWebViewer">
             <WebView.Source>
-                <HtmlWebViewSource Html="&lt;HTML&gt;&lt;BODY&gt;&lt;H1&gt;.NET MAUI&lt;/H1&gt;&lt;P&gt;Welcome to WebView.&lt;/P&gt;&lt;/BODY&gt;&lt;HTML&gt;" />
+                <HtmlWebViewSource x:Name="mainWebContent" Html="This is content placeholder." />
             </WebView.Source>
         </WebView>
         
