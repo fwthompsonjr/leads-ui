@@ -101,32 +101,46 @@ namespace legallead.desktop.utilities
 
         public virtual async Task<ApiResponse> Get(string name)
         {
-            var response = await Task.Run(() =>
+            try
             {
-                var verify = CanGet(name);
-                if (!verify.Key) return verify.Value;
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "API call is to be executed from derived class."
-                };
-            });
-            return response;
+                var response = await Task.Run(() =>
+                    {
+                        var verify = CanGet(name);
+                        if (!verify.Key) return verify.Value;
+                        return new ApiResponse
+                        {
+                            StatusCode = 200,
+                            Message = "API call is to be executed from derived class."
+                        };
+                    });
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse { StatusCode = 500, Message = ex.Message };
+            }
         }
 
         public virtual async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
-            var response = await Task.Run(() =>
+            try
             {
-                var verify = CanPost(name, payload, user);
-                if (!verify.Key) return verify.Value;
-                return new ApiResponse
-                {
-                    StatusCode = 200,
-                    Message = "API call is to be executed from derived class."
-                };
-            });
-            return response;
+                var response = await Task.Run(() =>
+                    {
+                        var verify = CanPost(name, payload, user);
+                        if (!verify.Key) return verify.Value;
+                        return new ApiResponse
+                        {
+                            StatusCode = 200,
+                            Message = "API call is to be executed from derived class."
+                        };
+                    });
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse { StatusCode = 500, Message = ex.Message };
+            }
         }
 
         protected string GetUrl(string address)

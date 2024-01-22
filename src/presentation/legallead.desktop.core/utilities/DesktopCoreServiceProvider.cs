@@ -20,6 +20,7 @@ namespace legallead.desktop.utilities
             builder.AddSingleton<IUserProfileMapper, UserProfileMapper>();
             builder.AddSingleton<IUserPermissionsMapper, UserPermissionsMapper>();
             builder.AddSingleton<ICopyrightBuilder>(new CopyrightBuilder());
+            builder.AddSingleton(new CommonMessageList());
             var menucontent = Properties.Resources.contextmenu;
             if (string.IsNullOrEmpty(menucontent)) return builder.BuildServiceProvider();
             builder.AddSingleton(s =>

@@ -1,5 +1,7 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.interfaces;
+using legallead.desktop.js;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -19,14 +21,50 @@ namespace legallead.desktop.handlers
             var provider = AppBuilder.ServiceProvider;
             if (provider == null) return;
             var user = provider.GetRequiredService<UserBo>();
-            if (user == null || !user.IsInitialized) return;
+            if (user == null || !user.IsInitialized)
+            {
+                // load an error page, unable to communicate remote
+                GetStatusHelper()?.SetStatus(CommonStatusTypes.Error);
+                SetErrorContent(500, dispatcher, control);
+                return;
+            }
+
             const string target = "home";
+            GetStatusHelper()?.SetStatus(CommonStatusTypes.Ready);
             ContentHandler.LoadLocal(target, dispatcher, control);
             dispatcher.Invoke(() => { window.Title = BrowserHelper.GetPageTitle(target); });
         }
 
         public override void Submit(string formName, string json)
         {
+        }
+
+
+        private static void SetErrorContent(int errorCode, Dispatcher dispatcher, ContentControl control)
+        {
+            var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
+            if (errorService == null) return;
+            var errorContent = errorService.GetContent(errorCode);
+            errorContent ??= errorService.GetContent(500);
+            if (errorContent != null)
+            {
+                dispatcher.Invoke(() =>
+                {
+                    var blankHtml = ContentHandler.GetAddressBase64(errorContent); 
+                    var browser = new ChromiumWebBrowser()
+                    {
+                        Address = blankHtml
+                    };
+                    control.Content = browser;
+                });
+            }
+        }
+
+        private static CommonStatusHelper? GetStatusHelper()
+        {
+            var tmp = AppBuilder.ServiceProvider?.GetService(typeof(CommonStatusHelper));
+            if (tmp is CommonStatusHelper helper) return helper;
+            return null;
         }
     }
 }

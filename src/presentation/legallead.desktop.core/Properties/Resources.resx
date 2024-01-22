@@ -145,6 +145,9 @@
   <data name="common_mast_head_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\common-mast-head-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="common_status" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\common-status.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="contextmenu" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\contextmenu.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

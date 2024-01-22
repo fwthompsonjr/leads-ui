@@ -65,6 +65,11 @@ namespace legallead.desktop.Properties {
         ////*
         ///* Forms
         ///*/
+        ///.form-control:focus {
+        ///	background-color: #444;
+        ///	color: rgb(240, 240, 240)
+        ///}
+        ///
         ///.form-control {
         ///    background-color: transparent;
         ///    border-color: #555;
@@ -95,10 +100,7 @@ namespace legallead.desktop.Properties {
         ////*
         /// * Loader
         /// */
-        ///div[name=&quot;loader&quot;] {
-        ///  margin-top: 20px;
-        ///  margin-bottom: 20px;
-        ///  border: 16px soli [rest of string was truncated]&quot;;.
+        ///div[ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string base_css {
             get {
@@ -150,6 +152,34 @@ namespace legallead.desktop.Properties {
         internal static string common_mast_head_html {
             get {
                 return ResourceManager.GetString("common_mast_head_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///	{
+        ///		&quot;id&quot;: 1,
+        ///		&quot;name&quot;: &quot;Loading&quot;,
+        ///		&quot;message&quot;: &quot;Reading application configuration&quot;,
+        ///		&quot;color&quot;: &quot;Gray&quot;
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 10,
+        ///		&quot;name&quot;: &quot;Ready&quot;,
+        ///		&quot;message&quot;: &quot;&quot;,
+        ///		&quot;color&quot;: &quot;Green&quot;
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 20,
+        ///		&quot;name&quot;: &quot;Error&quot;,
+        ///		&quot;message&quot;: &quot;An error occurred during application processing.&quot;,
+        ///		&quot;color&quot;: &quot;Red&quot;
+        ///	}
+        ///].
+        /// </summary>
+        internal static string common_status {
+            get {
+                return ResourceManager.GetString("common_status", resourceCulture);
             }
         }
         
@@ -562,10 +592,11 @@ namespace legallead.desktop.Properties {
         ///					&lt;div id=&quot;dv-subcontent-password&quot; name=&quot;subcontent-password&quot; class=&quot;subcontent card&quot;&gt;
         ///                        &lt;div id=&quot;dv-subcontent-password-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
         ///							&lt;div id=&quot;dv-subcontent-password-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
-        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
-        ///								&lt;div&gt;
-        ///								Your account information has been updated successfully
-        ///								&lt;/d [rest of string was truncated]&quot;;.
+        ///								&lt;div class=&quot;row&quot;&gt;
+        ///                                    &lt;i class=&quot;bi bi-check-circle-fill&quot;&gt;&lt;/i&gt;
+        ///								    &lt;span&gt;Your account information has been updated successfully&lt;/span&gt;
+        ///								&lt;/div&gt;
+        ///							&lt;/di [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_password_html {
             get {
@@ -668,9 +699,10 @@ namespace legallead.desktop.Properties {
         ///					&lt;div id=&quot;dv-subcontent-permissions&quot; name=&quot;subcontent-permissions&quot; class=&quot;subcontent card&quot;&gt;
         ///                        &lt;div id=&quot;dv-subcontent-permissions-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
         ///							&lt;div id=&quot;dv-subcontent-permissions-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
-        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
-        ///								&lt;div&gt;
-        ///								Your account information has been updated successfully        /// [rest of string was truncated]&quot;;.
+        ///								&lt;div class=&quot;row&quot;&gt;
+        ///                                    &lt;i class=&quot;bi bi-check-circle-fill&quot;&gt;&lt;/i&gt;
+        ///								    &lt;span&gt;Your account information has been updated successfully&lt;/span&gt;
+        ///								&lt;/div&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountpermissions_html {
             get {
@@ -683,12 +715,13 @@ namespace legallead.desktop.Properties {
         ///					&lt;div id=&quot;dv-subcontent-profile&quot; name=&quot;subcontent-profile&quot; class=&quot;subcontent card&quot;&gt;
         ///						&lt;div id=&quot;dv-subcontent-profile-row-00&quot; class=&quot;row d-none w-75&quot;&gt;
         ///							&lt;div id=&quot;dv-subcontent-profile-success&quot; class=&quot;alert alert-success d-flex align-items-center&quot; role=&quot;alert&quot;&gt;
-        ///								&lt;svg class=&quot;bi flex-shrink-0 me-2&quot; role=&quot;img&quot; aria-label=&quot;Success:&quot;&gt;&lt;use xlink:href=&quot;#check-circle-fill&quot;/&gt;&lt;/svg&gt;
-        ///								&lt;div&gt;
-        ///								Your account information has been updated successfully
+        ///								&lt;div class=&quot;row&quot;&gt;
+        ///                                    &lt;i class=&quot;bi bi-check-circle-fill&quot;&gt;&lt;/i&gt;
+        ///								    &lt;span&gt;Your account information has been updated successfully&lt;/span&gt;
         ///								&lt;/div&gt;
         ///							&lt;/div&gt;
-        ///		 [rest of string was truncated]&quot;;.
+        ///						&lt;/div&gt;
+        ///				 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccountprofile_html {
             get {
@@ -725,22 +758,23 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;script name=&quot;search-form-js&quot;&gt;
         ///
-        ///let jsSearchForm = {
-        ///	attributes: {
-        ///		name: &quot;style&quot;,
-        ///		dslb: &quot;disabled&quot;,
-        ///		hide: &quot;display: none&quot;,
-        ///		block: &quot;display: block&quot;
-        ///	},
-        ///	controls : {
-        ///		state: &quot;#cbo-search-state&quot;,
-        ///		county: &quot;#cbo-search-county&quot;,
-        ///		rows: &quot;#table-search tr[name = &apos;tr-search-dynamic&apos;]&quot;
-        ///	},
-        ///	initialize: function() {
-        ///		var jscontrols = jsSearchForm.controls;
-        ///		$( jscontrols.state ).attr( &quot;onchange&quot;, &quot;jsSearchForm.stateChanged()&quot; );
-        ///		$( jscontrols.county ).attr( &quot;onchange&quot;, &quot;jsSearchForm. [rest of string was truncated]&quot;;.
+        ///let jsSearchForm = { 
+        ///    attributes: { 
+        ///    name: &quot;style&quot;, 
+        ///    hide: &quot;display: none&quot;, 
+        ///    block: &quot;display: block&quot; 
+        ///    }, 
+        ///	fields: [],
+        ///    controls : { 
+        ///    state: &quot;#cbo-search-state&quot;, 
+        ///    county: &quot;#cbo-search-county&quot;, 
+        ///    button: &quot;#search-submit-button&quot;, 
+        ///    errormessage: &quot;#search-submit-error-message&quot;, 
+        ///    rows: &quot;#table-search tr[name = &apos;tr-search-dynamic&apos;]&quot;,
+        ///    start: &quot;#tbx-search-startdate&quot;, 
+        ///    end: &quot;#tbx-search-enddate&quot;,
+        ///    },
+        ///    serialized [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_script_js {
             get {
@@ -760,7 +794,6 @@ namespace legallead.desktop.Properties {
         ///						&lt;col&gt;
         ///					&lt;/colgroup&gt;
         ///					&lt;tfoot&gt;
-        ///						&lt;tr&gt;
         ///			 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_search_frame {

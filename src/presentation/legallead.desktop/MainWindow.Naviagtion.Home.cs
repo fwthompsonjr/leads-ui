@@ -26,5 +26,13 @@ namespace legallead.desktop
                 content1.Content = browser;
             }
         }
+
+        private void SetupStatus()
+        {
+
+            var tmp = AppBuilder.ServiceProvider?.GetService(typeof(CommonStatusHelper));
+            if (tmp is CommonStatusHelper helper) StatusHelper = helper;
+            StatusHelper?.SetStatus(CommonStatusTypes.Loading);
+        }
     }
 }

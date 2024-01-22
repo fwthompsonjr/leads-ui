@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.models", "legalle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.search.api.tests", "legallead.search.api.tests\legallead.search.api.tests.csproj", "{C1251D42-F8B6-4005-8CE1-EAC929826658}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.jdbc", "..\db\component\legallead.jdbc\legallead.jdbc.csproj", "{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,14 @@ Global
 		{C1251D42-F8B6-4005-8CE1-EAC929826658}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1251D42-F8B6-4005-8CE1-EAC929826658}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1251D42-F8B6-4005-8CE1-EAC929826658}.Zip|Any CPU.Build.0 = Debug|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Local|Any CPU.Build.0 = Local|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
+		{9041DEBD-3E39-42FD-9DF7-1F4EC04E50C6}.Zip|Any CPU.Build.0 = Zip|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

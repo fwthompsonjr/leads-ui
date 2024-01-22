@@ -29,13 +29,11 @@
 								<h1 id="errorbox-error-code" class="text-danger">404</h1>
 								<h2 id="errorbox-error-text" class="text-secondary">Page Not Found</h2>
 								<p id="errorbox-error-text-description">Sorry but the page you are looking for does not exist, have been removed. name changed or is temporarily unavailable</p>
-								<a href="#">Back to homepage</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</main>
-			<!-- block: common-footer -->
 		</div>
 		<script>
 
