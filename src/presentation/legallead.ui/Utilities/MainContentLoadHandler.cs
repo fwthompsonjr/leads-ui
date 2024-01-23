@@ -2,30 +2,6 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
-using legallead.ui.Models;
-
-/* Unmerged change from project 'legallead.ui (net8.0-maccatalyst)'
-Before:
-using Mmg = Microsoft.Maui.Graphics;
-After:
-using Mmg = Microsoft.Maui.Graphics.Converters;
-*/
-
-/* Unmerged change from project 'legallead.ui (net8.0-ios)'
-Before:
-using Mmg = Microsoft.Maui.Graphics;
-After:
-using Mmg = Microsoft.Maui.Graphics.Converters;
-*/
-
-/* Unmerged change from project 'legallead.ui (net8.0-windows10.0.19041.0)'
-Before:
-using Mmg = Microsoft.Maui.Graphics;
-After:
-using Mmg = Microsoft.Maui.Graphics.Converters;
-*/
-using Microsoft.Maui.Graphics.Converters;
-using Mmg = Microsoft.Maui.Graphics;
 
 namespace legallead.ui.Utilities
 {
@@ -64,17 +40,7 @@ namespace legallead.ui.Utilities
             mainPage.Dispatcher.Dispatch(() =>
             {
                 mainPage.WebViewSource.Html = html;
-                try
-                {
-                    mainPage.WebViewer.Reload();
-                }
-                catch
-                {
-                    // this empty catch block is intended
-                    // if reload fails the content is not valid html
-                    // and doesnt need a reload
-                }
-
+                TryContentReload();
             });
         }
 
@@ -86,26 +52,19 @@ namespace legallead.ui.Utilities
             errorContent ??= errorService.GetContent(500)?.Content;
             SetView(errorContent);
         }
-        private void SetStatus(int statusId)
+
+        private void TryContentReload()
         {
-            var model = serviceProvider?.GetService<MainWindowViewModel>();
-            var messages = serviceProvider?.GetService<CommonMessageList>()?.Messages;
-            if (model == null || messages == null) return;
-            var status = messages.Find(x => x.Id == statusId);
-            if (status == null) return;
-            mainPage.Dispatcher?.Dispatch(() =>
+            try
             {
-                mainPage.StatusIcon.Background = GetColorFromString(status.Color);
-                mainPage.StatusText.Text = status.Name;
-                mainPage.StatusMessage.Text = status.Message;
-                var current = mainPage.StatusConnection.Text;
-                mainPage.StatusConnection.Text = status.Id switch
-                {
-                    1 => "Offline",
-                    10 => "Connected",
-                    _ => current
-                };
-            });
+                mainPage.WebViewer.Reload();
+            }
+            catch
+            {
+                // this empty catch block is intended
+                // if reload fails the content is not valid html
+                // and doesnt need a reload
+            }
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -130,12 +89,12 @@ namespace legallead.ui.Utilities
                         {
                             timer.Stop();
                             int errorId = (int)CommonStatusTypes.Error;
-                            SetStatus(errorId);
+                            StatusBarHelper.SetStatus(errorId);
                             SetErrorContent(500);
                             return;
                         }
                         int readyId = (int)CommonStatusTypes.Ready;
-                        SetStatus(readyId);
+                        StatusBarHelper.SetStatus(readyId);
                         timer.Interval = IntervalHomePage;
                         break;
                 }
@@ -143,23 +102,6 @@ namespace legallead.ui.Utilities
             finally
             {
                 IsPageIntroduced = true;
-            }
-        }
-
-
-        private static SolidColorBrush GetColorFromString(string colorString)
-        {
-            var fallback = Brush.Black;
-            try
-            {
-                ColorTypeConverter converter = new();
-                var obj = converter.ConvertFromInvariantString(colorString);
-                if (obj is not Mmg.Color color) return fallback;
-                return new SolidColorBrush(color);
-            }
-            catch (Exception)
-            {
-                return fallback;
             }
         }
 

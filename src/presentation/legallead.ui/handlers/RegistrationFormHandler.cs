@@ -2,11 +2,11 @@
 
 namespace legallead.ui.handlers
 {
-    internal class LoginFormHandler : IFormHandler
+    internal class RegistrationFormHandler : IFormHandler
     {
-        private const int FormIndex = 0;
+        private const int FormIndex = 1;
         private readonly WebView _web;
-        public LoginFormHandler(MainPage main)
+        public RegistrationFormHandler(MainPage main)
         {
             _web = main.WebViewer;
         }

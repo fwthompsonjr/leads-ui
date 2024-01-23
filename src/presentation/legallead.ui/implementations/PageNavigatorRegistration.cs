@@ -1,19 +1,18 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using legallead.desktop.models;
 using legallead.desktop.utilities;
 using legallead.ui.handlers;
 using legallead.ui.interfaces;
 
 namespace legallead.ui.implementations
 {
-    internal class PageNavigatorHome : PageNavigatorBase, IPageNavigator
+    internal class PageNavigatorRegistration : PageNavigatorBase, IPageNavigator
     {
-        public PageNavigatorHome() : base()
+        public PageNavigatorRegistration() : base()
         {
             FormHandler ??= new DefaultFormHandler();
             if (mainPage != null)
-                FormHandler = new LoginFormHandler(mainPage);
+                FormHandler = new RegistrationFormHandler(mainPage);
         }
 
         protected override IFormHandler FormHandler { get; set; }
@@ -32,12 +31,13 @@ namespace legallead.ui.implementations
             var user = provider.GetRequiredService<UserBo>();
             if (user == null || !user.IsInitialized) return failed;
 
-            var data = TryDeserialize<LoginFormModel>(json);
+            var data = TryDeserialize<UserRegistrationModel>(json);
             if (data == null) return failed;
-            var obj = new { data.UserName, data.Password };
-            var loginResponse = await api.Post("login", obj, user) ?? failed;
-            return loginResponse;
-        }
+            var obj = data.ToApiModel();
 
+            var registerResponse = await api.Post("register", obj, user) ?? failed;
+            return registerResponse;
+
+        }
     }
 }

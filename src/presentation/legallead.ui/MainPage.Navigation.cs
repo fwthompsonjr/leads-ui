@@ -27,6 +27,7 @@ namespace legallead.ui
         {
             var services = new ServiceCollection();
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorHome>("home-form-login-submit");
+            services.AddKeyedSingleton<IPageNavigator, PageNavigatorRegistration>("home-form-register-submit");
             return services.BuildServiceProvider();
         }
     }
