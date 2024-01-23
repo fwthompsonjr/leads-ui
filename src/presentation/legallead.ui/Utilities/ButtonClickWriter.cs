@@ -51,7 +51,8 @@ namespace legallead.ui.Utilities
         }
         private static readonly Dictionary<string, string> PageButtons = new()
         {
-            { "home", "form-login-submit,form-register-submit" }
+            { "home", "form-login-submit,form-register-submit" },
+            { "myaccount", "frm-change-password-submit-button,frm-permissions-submit-button,frm-profile-submit-button" }
         };
     }
 }

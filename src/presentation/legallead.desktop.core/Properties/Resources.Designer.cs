@@ -61,6 +61,40 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
+        ///  &quot;api.permissions&quot;: {
+        ///    &quot;destination&quot;: &quot;remote&quot;,
+        ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
+        ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
+        ///  },
+        ///  &quot;Initial_View&quot;: &quot;introduction&quot;
+        ///}.
+        /// </summary>
+        internal static string appsettings {
+            get {
+                return ResourceManager.GetString("appsettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;debug.user&quot;: {
+        ///    &quot;name&quot;: &quot;test.account&quot;,
+        ///    &quot;code&quot;: &quot;1234-AbcD4321&quot;
+        ///  },
+        ///  &quot;debug.login&quot;: {
+        ///    &quot;passthru&quot;: true
+        ///  }
+        ///}.
+        /// </summary>
+        internal static string appsettings_debug {
+            get {
+                return ResourceManager.GetString("appsettings_debug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ////*
         ///* Forms
@@ -167,15 +201,24 @@ namespace legallead.desktop.Properties {
         ///		&quot;id&quot;: 10,
         ///		&quot;name&quot;: &quot;Ready&quot;,
         ///		&quot;message&quot;: &quot;&quot;,
-        ///		&quot;color&quot;: &quot;Green&quot;
+        ///		&quot;color&quot;: &quot;ForestGreen&quot;
         ///	},
         ///	{
         ///		&quot;id&quot;: 20,
         ///		&quot;name&quot;: &quot;Error&quot;,
         ///		&quot;message&quot;: &quot;An error occurred during application processing.&quot;,
         ///		&quot;color&quot;: &quot;Red&quot;
-        ///	}
-        ///].
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 30,
+        ///		&quot;name&quot;: &quot;Submitting&quot;,
+        ///		&quot;message&quot;: &quot;Sending form data to api server.&quot;,
+        ///		&quot;color&quot;: &quot;Mango&quot;
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 40,
+        ///		&quot;name&quot;: &quot;Failed&quot;,
+        ///		&quot;message&quot;: &quot;Data transmissi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string common_status {
             get {

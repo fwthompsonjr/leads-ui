@@ -24,7 +24,7 @@
             item.RefreshVisibility();
         }
 
-        private void RefreshVisibility()
+        internal void RefreshVisibility()
         {
             if (Parent == null)
             {

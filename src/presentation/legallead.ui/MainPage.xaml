@@ -19,9 +19,10 @@
                             Command="{Binding OnItemClicked}"
                             CommandParameter="menuExit"/>
         </MenuBarItem>
-        <controls:BindableToolbarItem  Text="Account" IsVisible="{Binding IsMyAccountVisible}">
+        <controls:BindableToolbarItem x:Name="bndMenuMyAccount" Text="Account" IsVisible="{Binding IsMyAccountVisible, Mode=TwoWay}">
             <MenuFlyoutItem AutomationId="menuHome"
                             Text="Home"
+                            CommandParameter="myaccount-home"
                             Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem AutomationId="mnuMyAccountHome" Text="Account" Command="{Binding OnItemClicked}"  />
             <MenuFlyoutItem AutomationId="mnuMyAccountProfile" Text="Profile" Command="{Binding OnItemClicked}" />
@@ -30,7 +31,7 @@
             <MenuFlyoutItem AutomationId="mnuMyAccountLogout" Text="Logout" Command="{Binding OnItemClicked}" />
         </controls:BindableToolbarItem >
 
-        <controls:BindableToolbarItem AutomationId="mnuMySearch" Text="Search" IsVisible="{Binding IsMySearchVisible}">
+        <controls:BindableToolbarItem x:Name="bndMenuMySearch" AutomationId="mnuMySearch" Text="Search" IsVisible="{Binding IsMySearchVisible, Mode=TwoWay}">
             <MenuFlyoutItem AutomationId="mnuMySearchHome" Text="Search" Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem AutomationId="mnuMySearchProfile" Text="History" Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem AutomationId="mnuMySearchPermissions" Text="Purchases" Command="{Binding OnItemClicked}" />

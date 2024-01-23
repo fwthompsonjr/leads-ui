@@ -1,20 +1,10 @@
 ﻿using legallead.desktop;
 using legallead.desktop.entities;
-using legallead.desktop.interfaces;
-using legallead.desktop.utilities;
 
 namespace legallead.ui.Utilities
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell",
-            "S3604:Member initializer values should not be redundant",
-            Justification = "Technical debt. Will address in future release.")]
-    internal class MainContentLoadHandler(MainPage main)
+    internal class MainContentLoadHandler : ContentLoadBase
     {
-
-        private readonly MainPage mainPage = main;
-        private readonly IServiceProvider? serviceProvider = AppBuilder.ServiceProvider;
-        private System.Timers.Timer? timer;
-
 
         private bool IsPageIntroduced { get; set; }
 
@@ -32,39 +22,6 @@ namespace legallead.ui.Utilities
         {
             var homepage = ButtonClickWriter.ReWrite("home");
             SetView(homepage);
-        }
-
-        private void SetView(string? html)
-        {
-            if (string.IsNullOrEmpty(html)) return;
-            mainPage.Dispatcher.Dispatch(() =>
-            {
-                mainPage.WebViewSource.Html = html;
-                TryContentReload();
-            });
-        }
-
-        private void SetErrorContent(int errorCode)
-        {
-            var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
-            if (errorService == null) return;
-            var errorContent = errorService.GetContent(errorCode)?.Content;
-            errorContent ??= errorService.GetContent(500)?.Content;
-            SetView(errorContent);
-        }
-
-        private void TryContentReload()
-        {
-            try
-            {
-                mainPage.WebViewer.Reload();
-            }
-            catch
-            {
-                // this empty catch block is intended
-                // if reload fails the content is not valid html
-                // and doesnt need a reload
-            }
         }
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)

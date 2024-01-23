@@ -1,9 +1,11 @@
 ﻿using legallead.desktop;
 using legallead.desktop.entities;
 using legallead.desktop.models;
+using legallead.desktop.utilities;
 using legallead.ui.handlers;
 using legallead.ui.interfaces;
 using legallead.ui.Utilities;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace legallead.ui.implementations
@@ -44,12 +46,10 @@ namespace legallead.ui.implementations
 
         protected static string? GetScriptFromUrl(string? url)
         {
-            if (string.IsNullOrWhiteSpace(url)) return null;
+            var keyname = GetContextFromUrl(url);
+            if (string.IsNullOrWhiteSpace(url) || string.IsNullOrEmpty(keyname)) return null;
             if (!url.Contains(MainPage.InternalDomain)) return null;
-            var components = url.Split('/');
-            if (components.Length < 5) return null;
-            var componentName = $"{components[3]}-{components[4]}";
-            if (!ScriptLib.TryGetValue(componentName, out var scriptjs)) return null;
+            if (!ScriptLib.TryGetValue(keyname, out var scriptjs)) return null;
             return scriptjs;
         }
 
@@ -62,6 +62,7 @@ namespace legallead.ui.implementations
             var web = mainPage.WebViewer;
             var response = await web.EvaluateJavaScriptAsync(jscript);
             if (response == null) return;
+            if (BypassLogin(url)) return;
             var handler = FormHandler;
             try
             {
@@ -94,12 +95,37 @@ namespace legallead.ui.implementations
 
         }
 
+        private static bool BypassLogin(string url)
+        {
+            const string allowBypassKey = "debug.login:passthru";
+            var context = GetContextFromUrl(url);
+            if (string.IsNullOrWhiteSpace(context) || !context.Equals(ScriptKeyNames()[0])) return false;
+            var config = AppBuilder.ServiceProvider?.GetService<IConfiguration>();
+            if (config == null) return false;
+            var kv = config[allowBypassKey];
+            if (kv == null || !bool.TryParse(kv, out var allowed)) return false;
+            if (!allowed) return false;
+            // set status to OK, set user to authenticated
+            UserAuthenicationHelper.AuthenicationCompleted(Guid.NewGuid().ToString());
+            StatusBarHelper.SetStatus(SubmitSucceeded);
+            return true;
+        }
+
+        private static string? GetContextFromUrl(string? url)
+        {
+            if (string.IsNullOrWhiteSpace(url)) return null;
+            if (!url.Contains(MainPage.InternalDomain)) return null;
+            var components = url.Split('/');
+            if (components.Length < 5) return null;
+            return $"{components[3]}-{components[4]}";
+        }
+
         protected const int SubmitError = (int)CommonStatusTypes.Error;
         protected const int SubmitFailed = (int)CommonStatusTypes.SubmitFailed;
         protected const int SubmitSucceeded = (int)CommonStatusTypes.SubmitSucceeded;
         protected const int Submitting = (int)CommonStatusTypes.Submitting;
 
-
+        private static string[] ScriptKeyNames() => ScriptLib.Keys.ToArray();
         protected static readonly Dictionary<string, string> ScriptLib = new()
         {
             { "home-form-login-submit", "serializeFormToObject(0);" },

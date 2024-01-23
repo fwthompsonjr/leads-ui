@@ -1,4 +1,5 @@
-﻿using legallead.ui.Utilities;
+﻿using legallead.ui.Controls;
+using legallead.ui.Utilities;
 using Msp = Microsoft.Maui.Controls.Shapes;
 
 namespace legallead.ui
@@ -12,7 +13,10 @@ namespace legallead.ui
         internal Label StatusText => statusBar.Text;
         internal Label StatusMessage => statusBar.Message;
         internal Label StatusConnection => statusBar.Connection;
+
+
         internal MainContentLoadHandler HomeHandler => mainContentLoadHandler;
+        internal MyAccountContentLoadHandler MyAccountHandler => myAccountContentLoadHandler;
         internal const string InternalDomain = "internal.legalead.com";
 
         private sealed class StatusBar
