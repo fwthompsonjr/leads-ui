@@ -1,25 +1,28 @@
-﻿namespace legallead.ui
+﻿using legallead.desktop.utilities;
+using legallead.ui.Models;
+using legallead.ui.Utilities;
+namespace legallead.ui
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
+        private readonly StatusBar statusBar;
+        private readonly MainContentLoadHandler mainContentLoadHandler;
         public MainPage()
         {
             InitializeComponent();
+            statusBar = new StatusBar(this);
+            this.BindingContext = AppBuilder.ServiceProvider?.GetService<MainWindowViewModel>() ?? new();
+            mainContentLoadHandler = new MainContentLoadHandler(this);
+            mainWebViewer.Navigating += MainWebViewer_Navigating;
+            InitializeContent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+
+        private void InitializeContent()
         {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+            mainContentLoadHandler.SetBlank();
         }
+
     }
 
 }

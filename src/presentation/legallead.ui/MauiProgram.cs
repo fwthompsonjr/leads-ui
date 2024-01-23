@@ -1,5 +1,4 @@
-﻿using legallead.desktop.utilities;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace legallead.ui
 {
@@ -18,7 +17,7 @@ namespace legallead.ui
 
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

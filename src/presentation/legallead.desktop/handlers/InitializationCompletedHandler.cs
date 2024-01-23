@@ -1,7 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
-using legallead.desktop.js;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -50,7 +49,7 @@ namespace legallead.desktop.handlers
             {
                 dispatcher.Invoke(() =>
                 {
-                    var blankHtml = ContentHandler.GetAddressBase64(errorContent); 
+                    var blankHtml = ContentHandler.GetAddressBase64(errorContent);
                     var browser = new ChromiumWebBrowser()
                     {
                         Address = blankHtml
