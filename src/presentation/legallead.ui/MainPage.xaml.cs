@@ -1,28 +1,45 @@
 ﻿using legallead.desktop.utilities;
 using legallead.ui.Models;
 using legallead.ui.Utilities;
-
+using Msp = Microsoft.Maui.Controls.Shapes;
 namespace legallead.ui
 {
     public partial class MainPage : ContentPage
     {
+        private readonly StatusBar statusBar;
+        private readonly MainContentLoadHandler mainContentLoadHandler;
         public MainPage()
         {
             InitializeComponent();
+            statusBar = new StatusBar(this);
             this.BindingContext = AppBuilder.ServiceProvider?.GetService<MainWindowViewModel>() ?? new();
+            mainContentLoadHandler = new MainContentLoadHandler(this);
             InitializeContent();
         }
 
         private void InitializeContent()
+        {            
+            mainContentLoadHandler.SetBlank();
+        }
+
+        internal WebView WebViewer => mainWebViewer;
+        internal HtmlWebViewSource WebViewSource => mainWebContent;
+        internal Msp.Rectangle StatusIcon => statusBar.Icon;
+        internal Label StatusText => statusBar.Text;
+        internal Label StatusMessage => statusBar.Message;
+        internal Label StatusConnection => statusBar.Connection;
+        internal MainContentLoadHandler HomeHandler => mainContentLoadHandler;
+        private sealed class StatusBar
         {
-            var bindingobj = AppBuilder.ServiceProvider?.GetService<MainWindowViewModel>() ?? new();
-            this.BindingContext = bindingobj;
-            var blank = ContentHandler.GetLocalContent("blank")?.Content;
-            if (string.IsNullOrEmpty(blank)) return;
-            this.Dispatcher.Dispatch(() =>
+            private readonly MainPage main;
+            public StatusBar(MainPage main)
             {
-                this.mainWebContent.Html = blank;
-            });
+                this.main = main;
+            }
+            public Msp.Rectangle Icon => main.sbStatusApplicationIcon;
+            public Label Text => main.sbStatusApplicationText;
+            public Label Message => main.sbComment;
+            public Label Connection => main.sbConnectionStatusText;
         }
     }
 

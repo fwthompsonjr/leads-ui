@@ -2,6 +2,6 @@
 {
     internal interface IMenuClickHandler
     {
-        void Click(object? sender, EventArgs? e);
+        void Click();
     }
 }

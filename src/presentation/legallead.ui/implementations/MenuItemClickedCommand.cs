@@ -16,7 +16,7 @@ namespace legallead.ui.implementations
         {
             if (parameter is not string menuItem) return;
             var service = MenuProvider.GetKeyedService<IMenuClickHandler>(menuItem);
-            service?.Click(null, null);
+            service?.Click();
         }
 
         private static ServiceProvider MenuProvider => menuServices ??= GetServices();
@@ -24,7 +24,8 @@ namespace legallead.ui.implementations
         private static ServiceProvider GetServices()
         {
             var services = new ServiceCollection();
-            services.AddKeyedSingleton<IMenuClickHandler, ExitMenuClicked>("menuExit");
+            services.AddKeyedSingleton<IMenuClickHandler, ExitMenuClicked>("menuExit"); 
+            services.AddKeyedSingleton<IMenuClickHandler, HomeMenuClicked>("menuHome");
             return services.BuildServiceProvider();
         }
     }

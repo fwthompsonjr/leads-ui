@@ -4,7 +4,7 @@ namespace legallead.ui.implementations
 {
     internal class ExitMenuClicked : IMenuClickHandler
     {
-        public void Click(object? sender, EventArgs? e)
+        public void Click()
         {
             Environment.Exit(0);
         }

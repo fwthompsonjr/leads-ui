@@ -46,7 +46,7 @@
         
         <WebView Grid.Row="0"  x:Name="mainWebViewer">
             <WebView.Source>
-                <HtmlWebViewSource x:Name="mainWebContent" Html="This is content placeholder." />
+                <HtmlWebViewSource x:Name="mainWebContent" Html="Place holder." />
             </WebView.Source>
         </WebView>
         
@@ -77,7 +77,7 @@
                 Grid.Column="1" 
                 HorizontalOptions="Center" 
                 VerticalOptions="Center"
-                BackgroundColor="Gray" 
+                BackgroundColor="{Binding CommonStatus.Color}" 
                 x:Name="sbStatusApplicationIcon"  />
 
             <Label 
@@ -85,14 +85,14 @@
                 Grid.Column="2"
                 Margin="10,0,10,1"
                 x:Name="sbStatusApplicationText" 
-                Text="Loading" />
+                Text="{Binding CommonStatus.Name}" />
 
             <Label 
 				Grid.RowSpan="3"
 				Grid.Column="4"
                 Margin="10,0,10,1" 
                 x:Name="sbComment" 
-				Text="Reading application configuration" />
+				Text="{Binding CommonStatus.Message}" />
 
             <Label 
 				Grid.RowSpan="3"
