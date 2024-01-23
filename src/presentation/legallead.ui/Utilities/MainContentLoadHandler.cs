@@ -43,6 +43,16 @@ namespace legallead.ui.Utilities
             mainPage.Dispatcher.Dispatch(() =>
             {
                 mainPage.WebViewSource.Html = html;
+                try
+                {
+                    mainPage.WebViewer.Reload();
+                }
+                catch { 
+                    // this empty catch block is intended
+                    // if reload fails the content is not valid html
+                    // and doesnt need a reload
+                }
+                
             });
         }
 
