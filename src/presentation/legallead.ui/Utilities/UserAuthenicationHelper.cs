@@ -21,7 +21,10 @@ namespace legallead.ui.Utilities
             user.Token = new AccessTokenBo { AccessToken = token, RefreshToken = token, Expires = DateTime.UtcNow.AddMinutes(60) };
             model.IsMyAccountVisible = true;
             model.IsMySearchVisible = true;
-            
+            main.BindableToolbars?.ToList().ForEach(toolbar => { 
+                toolbar.IsEnabled = true;
+                toolbar.StyleId = "EnabledLink";
+            });
         }
 
         private static MainWindowViewModel? GetModel(MainPage main)

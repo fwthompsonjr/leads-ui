@@ -1,5 +1,4 @@
-﻿using legallead.ui.Controls;
-using legallead.ui.Utilities;
+﻿using legallead.ui.Utilities;
 using Msp = Microsoft.Maui.Controls.Shapes;
 
 namespace legallead.ui
@@ -13,6 +12,7 @@ namespace legallead.ui
         internal Label StatusText => statusBar.Text;
         internal Label StatusMessage => statusBar.Message;
         internal Label StatusConnection => statusBar.Connection;
+        internal MenuBarItem[]? BindableToolbars => toolbars;
 
 
         internal MainContentLoadHandler HomeHandler => mainContentLoadHandler;

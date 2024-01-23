@@ -8,7 +8,7 @@ namespace legallead.ui
         private readonly StatusBar statusBar;
         private readonly MainContentLoadHandler mainContentLoadHandler;
         private readonly MyAccountContentLoadHandler myAccountContentLoadHandler;
-
+        private MenuBarItem[]? toolbars;
         public MainPage()
         {
             InitializeComponent();
@@ -22,6 +22,7 @@ namespace legallead.ui
 
         private void MainPage_Loaded(object? sender, EventArgs e)
         {
+            toolbars = [this.bndMenuMyAccount, this.bndMenuMySearch];
             InitializeContent();
         }
 

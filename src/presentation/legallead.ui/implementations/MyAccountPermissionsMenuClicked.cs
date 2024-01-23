@@ -3,7 +3,7 @@ using legallead.ui.Utilities;
 
 namespace legallead.ui.implementations
 {
-    internal class MyAccountMenuClicked : IMenuClickHandler
+    internal class MyAccountPermissionsMenuClicked : IMenuClickHandler
     {
         public void Click()
         {
@@ -13,9 +13,9 @@ namespace legallead.ui.implementations
             handler.SetHome();
             Task.Run(async () =>
             {
-                await main.WebViewer.EvaluateJavaScriptAsync("setDisplay('home')");
+                Thread.Sleep(500);
+                await main.WebViewer.EvaluateJavaScriptAsync("setDisplay('permissions')");
             });
-            
         }
     }
 }

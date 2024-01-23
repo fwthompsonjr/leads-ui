@@ -108,6 +108,7 @@ namespace legallead.ui.implementations
             // set status to OK, set user to authenticated
             UserAuthenicationHelper.AuthenicationCompleted(Guid.NewGuid().ToString());
             StatusBarHelper.SetStatus(SubmitSucceeded);
+            MainPageFinder.GetMain()?.MyAccountHandler.SetHome();
             return true;
         }
 

@@ -1,9 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:legallead.ui.Controls"
              xmlns:local="clr-namespace:legallead.ui.Models"
              x:Class="legallead.ui.MainPage">
+    <ContentPage.Resources>
+        <Style x:Key="DisabledLink" TargetType="Element">
+            <Setter Property="Shell.TitleColor" Value="Silver" />
+        </Style>
+        <Style x:Key="EnabledLink" TargetType="Element">
+            <Setter Property="Shell.TitleColor" Value="Black" />
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.BindingContext>
         <local:MainWindowViewModel />
     </ContentPage.BindingContext>
@@ -19,23 +26,27 @@
                             Command="{Binding OnItemClicked}"
                             CommandParameter="menuExit"/>
         </MenuBarItem>
-        <controls:BindableToolbarItem x:Name="bndMenuMyAccount" Text="Account" IsVisible="{Binding IsMyAccountVisible, Mode=TwoWay}">
-            <MenuFlyoutItem AutomationId="menuHome"
-                            Text="Home"
+        <MenuBarItem x:Name="bndMenuMyAccount" Text="Account" 
+                     IsEnabled="False" 
+                     StyleId="DisabledLink">
+            <MenuFlyoutItem Text="Home"
                             CommandParameter="myaccount-home"
                             Command="{Binding OnItemClicked}" />
-            <MenuFlyoutItem AutomationId="mnuMyAccountHome" Text="Account" Command="{Binding OnItemClicked}"  />
-            <MenuFlyoutItem AutomationId="mnuMyAccountProfile" Text="Profile" Command="{Binding OnItemClicked}" />
-            <MenuFlyoutItem AutomationId="mnuMyAccountPermissions" Text="Permissions" Command="{Binding OnItemClicked}" />
+            <MenuFlyoutItem Text="Profile" 
+                            CommandParameter="myaccount-profile"
+                            Command="{Binding OnItemClicked}"  />
+            <MenuFlyoutItem Text="Permissions" 
+                            CommandParameter="myaccount-permissions"
+                            Command="{Binding OnItemClicked}" />
             <MenuFlyoutSeparator />
             <MenuFlyoutItem AutomationId="mnuMyAccountLogout" Text="Logout" Command="{Binding OnItemClicked}" />
-        </controls:BindableToolbarItem >
+        </MenuBarItem >
 
-        <controls:BindableToolbarItem x:Name="bndMenuMySearch" AutomationId="mnuMySearch" Text="Search" IsVisible="{Binding IsMySearchVisible, Mode=TwoWay}">
+        <MenuBarItem x:Name="bndMenuMySearch" AutomationId="mnuMySearch" Text="Search" IsEnabled="False" StyleId="DisabledLink">
             <MenuFlyoutItem AutomationId="mnuMySearchHome" Text="Search" Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem AutomationId="mnuMySearchProfile" Text="History" Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem AutomationId="mnuMySearchPermissions" Text="Purchases" Command="{Binding OnItemClicked}" />
-        </controls:BindableToolbarItem>
+        </MenuBarItem>
     </ContentPage.MenuBarItems>
 
     <Grid>
