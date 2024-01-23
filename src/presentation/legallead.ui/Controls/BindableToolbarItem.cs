@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace legallead.ui.Controls
+﻿namespace legallead.ui.Controls
 {
     internal class BindableToolbarItem : MenuBarItem
     {

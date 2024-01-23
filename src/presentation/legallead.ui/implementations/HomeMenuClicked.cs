@@ -1,4 +1,5 @@
 ﻿using legallead.ui.interfaces;
+using legallead.ui.Utilities;
 
 namespace legallead.ui.implementations
 {
@@ -6,9 +7,8 @@ namespace legallead.ui.implementations
     {
         public void Click()
         {
-            var page = Application.Current?.MainPage;
-            if (page is not AppShell app) return;
-            if (app.CurrentPage is not MainPage main) return;
+            var main = MainPageFinder.GetMain();
+            if (main == null) return;
             var handler = main.HomeHandler;
             handler.SetHome();
         }

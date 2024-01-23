@@ -1,7 +1,6 @@
 ﻿using legallead.desktop.utilities;
 using legallead.ui.Models;
 using legallead.ui.Utilities;
-using Msp = Microsoft.Maui.Controls.Shapes;
 namespace legallead.ui
 {
     public partial class MainPage : ContentPage
@@ -14,33 +13,16 @@ namespace legallead.ui
             statusBar = new StatusBar(this);
             this.BindingContext = AppBuilder.ServiceProvider?.GetService<MainWindowViewModel>() ?? new();
             mainContentLoadHandler = new MainContentLoadHandler(this);
+            mainWebViewer.Navigating += MainWebViewer_Navigating;
             InitializeContent();
         }
 
+
         private void InitializeContent()
-        {            
+        {
             mainContentLoadHandler.SetBlank();
         }
 
-        internal WebView WebViewer => mainWebViewer;
-        internal HtmlWebViewSource WebViewSource => mainWebContent;
-        internal Msp.Rectangle StatusIcon => statusBar.Icon;
-        internal Label StatusText => statusBar.Text;
-        internal Label StatusMessage => statusBar.Message;
-        internal Label StatusConnection => statusBar.Connection;
-        internal MainContentLoadHandler HomeHandler => mainContentLoadHandler;
-        private sealed class StatusBar
-        {
-            private readonly MainPage main;
-            public StatusBar(MainPage main)
-            {
-                this.main = main;
-            }
-            public Msp.Rectangle Icon => main.sbStatusApplicationIcon;
-            public Label Text => main.sbStatusApplicationText;
-            public Label Message => main.sbComment;
-            public Label Connection => main.sbConnectionStatusText;
-        }
     }
 
 }

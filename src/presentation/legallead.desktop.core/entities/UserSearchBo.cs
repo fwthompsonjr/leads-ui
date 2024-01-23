@@ -5,7 +5,7 @@ namespace legallead.desktop.entities
 {
     internal class UserSearchBo
     {
-        private IEnumerable<CountyParameterModel> _parameters = 
+        private IEnumerable<CountyParameterModel> _parameters =
             Enumerable.Empty<CountyParameterModel>();
 
         public string UserName { get; set; } = string.Empty;
@@ -24,10 +24,11 @@ namespace legallead.desktop.entities
         public long? EndDate { get; set; }
 
         [JsonProperty("details")]
-        public IEnumerable<CountyParameterModel> Parameters { 
-            get {  return _parameters; } 
-            set 
-            { 
+        public IEnumerable<CountyParameterModel> Parameters
+        {
+            get { return _parameters; }
+            set
+            {
                 _parameters = value;
                 SearchStarted = DateTime.UtcNow;
                 ParameterChanged?.Invoke();

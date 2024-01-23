@@ -3,9 +3,29 @@ using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using legallead.ui.Models;
+
+/* Unmerged change from project 'legallead.ui (net8.0-maccatalyst)'
+Before:
 using Mmg = Microsoft.Maui.Graphics;
-using System.Drawing;
+After:
+using Mmg = Microsoft.Maui.Graphics.Converters;
+*/
+
+/* Unmerged change from project 'legallead.ui (net8.0-ios)'
+Before:
+using Mmg = Microsoft.Maui.Graphics;
+After:
+using Mmg = Microsoft.Maui.Graphics.Converters;
+*/
+
+/* Unmerged change from project 'legallead.ui (net8.0-windows10.0.19041.0)'
+Before:
+using Mmg = Microsoft.Maui.Graphics;
+After:
+using Mmg = Microsoft.Maui.Graphics.Converters;
+*/
 using Microsoft.Maui.Graphics.Converters;
+using Mmg = Microsoft.Maui.Graphics;
 
 namespace legallead.ui.Utilities
 {
@@ -14,13 +34,13 @@ namespace legallead.ui.Utilities
             Justification = "Technical debt. Will address in future release.")]
     internal class MainContentLoadHandler(MainPage main)
     {
-        
+
         private readonly MainPage mainPage = main;
         private readonly IServiceProvider? serviceProvider = AppBuilder.ServiceProvider;
         private System.Timers.Timer? timer;
 
 
-        private bool IsPageIntroduced {  get; set; }
+        private bool IsPageIntroduced { get; set; }
 
         public void SetBlank()
         {
@@ -34,7 +54,8 @@ namespace legallead.ui.Utilities
 
         public void SetHome()
         {
-            SetView(ContentHandler.GetLocalContent("home")?.Content);
+            var homepage = ButtonClickWriter.ReWrite("home");
+            SetView(homepage);
         }
 
         private void SetView(string? html)
@@ -47,12 +68,13 @@ namespace legallead.ui.Utilities
                 {
                     mainPage.WebViewer.Reload();
                 }
-                catch { 
+                catch
+                {
                     // this empty catch block is intended
                     // if reload fails the content is not valid html
                     // and doesnt need a reload
                 }
-                
+
             });
         }
 

@@ -2,7 +2,6 @@
 using legallead.desktop.entities;
 using legallead.desktop.utilities;
 using legallead.ui.implementations;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Input;
 
 namespace legallead.ui.Models

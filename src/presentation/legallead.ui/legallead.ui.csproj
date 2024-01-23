@@ -62,6 +62,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Include="..\legallead.desktop\models\LoginFormModel.cs" Link="Models\LoginFormModel.cs" />
 	  <Compile Include="..\legallead.desktop\utilities\ContentProvider.cs" Link="Utilities\ContentProvider.cs" />
 	</ItemGroup>
 

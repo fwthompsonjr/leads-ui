@@ -3,11 +3,6 @@ using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.ui.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace legallead.desktop.utilities
