@@ -61,6 +61,46 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
+        ///  &quot;api.permissions&quot;: {
+        ///    &quot;destination&quot;: &quot;remote&quot;,
+        ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
+        ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
+        ///  },
+        ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
+        ///  &quot;landings&quot;: {
+        ///    &quot;search&quot;: &quot;mysearch&quot;
+        ///  }
+        ///}.
+        /// </summary>
+        internal static string appsettings {
+            get {
+                return ResourceManager.GetString("appsettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;debug.user&quot;: {
+        ///    &quot;name&quot;: &quot;test.account&quot;,
+        ///    &quot;code&quot;: &quot;1234-AbcD4321&quot;
+        ///  },
+        ///  &quot;debug.login&quot;: {
+        ///    &quot;passthru&quot;: true
+        ///  },
+        ///  &quot;landings&quot;: {
+        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
+        ///  }
+        ///}.
+        /// </summary>
+        internal static string appsettings_debug {
+            get {
+                return ResourceManager.GetString("appsettings_debug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ////*
         ///* Forms
@@ -167,15 +207,24 @@ namespace legallead.desktop.Properties {
         ///		&quot;id&quot;: 10,
         ///		&quot;name&quot;: &quot;Ready&quot;,
         ///		&quot;message&quot;: &quot;&quot;,
-        ///		&quot;color&quot;: &quot;Green&quot;
+        ///		&quot;color&quot;: &quot;ForestGreen&quot;
         ///	},
         ///	{
         ///		&quot;id&quot;: 20,
         ///		&quot;name&quot;: &quot;Error&quot;,
         ///		&quot;message&quot;: &quot;An error occurred during application processing.&quot;,
         ///		&quot;color&quot;: &quot;Red&quot;
-        ///	}
-        ///].
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 30,
+        ///		&quot;name&quot;: &quot;Submitting&quot;,
+        ///		&quot;message&quot;: &quot;Sending form data to api server.&quot;,
+        ///		&quot;color&quot;: &quot;Mango&quot;
+        ///	},
+        ///	{
+        ///		&quot;id&quot;: 40,
+        ///		&quot;name&quot;: &quot;Failed&quot;,
+        ///		&quot;message&quot;: &quot;Data transmissi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string common_status {
             get {
@@ -227,7 +276,7 @@ namespace legallead.desktop.Properties {
         ///			&lt;div id=&quot;footer-copy&quot; class=&quot;float-end&quot;&gt;
         ///				&lt;span id=&quot;footer-copy-span&quot;&gt;{0}&lt;/span&gt;
         ///			&lt;/div&gt;
-        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start&quot;&gt;
+        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start d-none&quot;&gt;
         ///				&lt;a id=&quot;footer-reload-link&quot; href=&quot;javascript:reloadContent()&quot; class=&quot;text-secondary text-decoration-none&quot;&gt;Reload&lt;/a&gt;
         ///			&lt;/div&gt;
         ///      &lt;/footer&gt;.
@@ -578,12 +627,30 @@ namespace legallead.desktop.Properties {
         ///	&lt;/head&gt;
         ///
         ///	&lt;body class=&quot;text-center&quot;&gt;
-        ///
-        ///    &lt;div cla [rest of string was truncated]&quot;;.
+        ///	&lt;!-- componen [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_html {
             get {
                 return ResourceManager.GetString("myaccount-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!-- Logout Modal --&gt;
+        ///&lt;!-- Button trigger modal --&gt;
+        ///&lt;button id=&quot;btn-my-account-logout-show&quot; type=&quot;button&quot; class=&quot;btn btn-primary d-none&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#my-account-logout-modal&quot;&gt;
+        ///  Launch static backdrop modal
+        ///&lt;/button&gt;
+        ///
+        ///&lt;!-- Modal --&gt;
+        ///&lt;div class=&quot;modal fade&quot; id=&quot;my-account-logout-modal&quot; data-bs-backdrop=&quot;static&quot; data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; aria-labelledby=&quot;my-account-logout-label&quot; aria-hidden=&quot;true&quot;&gt;
+        ///  &lt;div class=&quot;modal-dialog&quot;&gt;
+        ///    &lt;div class=&quot;modal-content&quot;&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_logout {
+            get {
+                return ResourceManager.GetString("myaccount_logout", resourceCulture);
             }
         }
         
@@ -656,6 +723,12 @@ namespace legallead.desktop.Properties {
         ///	const actv = &quot;active&quot;;
         ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot;, &quot;password&quot; ];
         ///
+        ///	function showLogout() {
+        ///		let bttn = &quot;#btn-my-account-logout-show&quot;;
+        ///		$( bttn ).click();
+        ///		return &quot;true&quot;;
+        ///	}
+        ///
         ///	function setDisplay( name ) {
         ///			if (names.indexOf( name ) &lt; 0 ) { return; }
         ///			setActiveDiv(name);
@@ -663,10 +736,7 @@ namespace legallead.desktop.Properties {
         ///			let thelinks = themenu.getElementsByTagName(&quot;a&quot;);
         ///
         ///			for(let i = 0; i &lt; thelinks.length; i++) {
-        ///				let a = thelinks[i];
-        ///				const aname = a.getAttribute(&quot;name&quot;);
-        ///				if (null === aname || undefined === aname) { continue; }
-        ///				i [rest of string was truncated]&quot;;.
+        ///				let a = thelink [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_script_js {
             get {
@@ -746,8 +816,7 @@ namespace legallead.desktop.Properties {
         ///	&lt;/head&gt;
         ///
         ///	&lt;body class=&quot;text-center&quot;&gt;
-        ///
-        ///    &lt;div clas [rest of string was truncated]&quot;;.
+        ///	&lt;!-- component [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_html {
             get {
@@ -822,6 +891,31 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///                         try { 
+        ///                         CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                              } catch {} 
+        ///
+        ///
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: search&lt;/title&gt;
+        ///		
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link h [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchtemplate_html {
+            get {
+                return ResourceManager.GetString("mysearchtemplate_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {
@@ -855,6 +949,32 @@ namespace legallead.desktop.Properties {
         internal static string subcontent_css {
             get {
                 return ResourceManager.GetString("subcontent_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;verify-and-post&quot;&gt;
+        ///
+        ///function verifyAndPost(pagename, buttonname) {
+        ///	const domain = &quot;http://internal.legalead.com/&quot;
+        ///	const target = &quot;&quot;.concat(pagename, &quot;/&quot;, buttonname);
+        ///	const destination = &quot;&quot;.concat(domain, target);
+        ///	let isvalid = true;
+        ///	let prms = {
+        ///		&quot;formname&quot; : null,
+        ///		&quot;formid&quot; : null,
+        ///		&quot;frm&quot;: null
+        ///	}
+        ///	switch (target) {
+        ///		case &quot;home-form-login-submit&quot;:
+        ///			prms.formname = formNames[0];
+        ///			prms.formid = &quot;#&quot; + prms.formname;
+        ///			prms.frm = $(prms.formid);
+        ///			prms.frm.validate [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string verifyandpost_js {
+            get {
+                return ResourceManager.GetString("verifyandpost_js", resourceCulture);
             }
         }
     }

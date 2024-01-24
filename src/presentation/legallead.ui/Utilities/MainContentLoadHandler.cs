@@ -1,20 +1,13 @@
-﻿using legallead.desktop;
+﻿using HtmlAgilityPack;
+using legallead.desktop;
 using legallead.desktop.entities;
-using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
+using Microsoft.Extensions.Configuration;
 
 namespace legallead.ui.Utilities
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell",
-            "S3604:Member initializer values should not be redundant",
-            Justification = "Technical debt. Will address in future release.")]
-    internal class MainContentLoadHandler(MainPage main)
+    internal class MainContentLoadHandler : ContentLoadBase
     {
-
-        private readonly MainPage mainPage = main;
-        private readonly IServiceProvider? serviceProvider = AppBuilder.ServiceProvider;
-        private System.Timers.Timer? timer;
-
 
         private bool IsPageIntroduced { get; set; }
 
@@ -30,43 +23,9 @@ namespace legallead.ui.Utilities
 
         public void SetHome()
         {
-            var homepage = ButtonClickWriter.ReWrite("home");
+            var homepage = Transform(ButtonClickWriter.ReWrite("home"));
             SetView(homepage);
         }
-
-        private void SetView(string? html)
-        {
-            if (string.IsNullOrEmpty(html)) return;
-            mainPage.Dispatcher.Dispatch(() =>
-            {
-                mainPage.WebViewSource.Html = html;
-                TryContentReload();
-            });
-        }
-
-        private void SetErrorContent(int errorCode)
-        {
-            var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
-            if (errorService == null) return;
-            var errorContent = errorService.GetContent(errorCode)?.Content;
-            errorContent ??= errorService.GetContent(500)?.Content;
-            SetView(errorContent);
-        }
-
-        private void TryContentReload()
-        {
-            try
-            {
-                mainPage.WebViewer.Reload();
-            }
-            catch
-            {
-                // this empty catch block is intended
-                // if reload fails the content is not valid html
-                // and doesnt need a reload
-            }
-        }
-
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             try
@@ -103,6 +62,37 @@ namespace legallead.ui.Utilities
             {
                 IsPageIntroduced = true;
             }
+        }
+
+
+        private static string Transform(string html)
+        {
+            if (!System.Diagnostics.Debugger.IsAttached) { return html; }
+            var config = AppBuilder.ServiceProvider?.GetService<IConfiguration>();
+            if (config == null) { return html; }
+            var targets = new Dictionary<string, string?>
+            {
+                { "//*[@id='username']", config["debug.user:name"] },
+                { "//*[@id='login-password']", config["debug.user:code"] }
+            };
+            var finders = targets.Keys.ToList();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            finders.ForEach(x =>
+            {
+                var node = doc.DocumentNode.SelectSingleNode(x);
+                var attr = node?.Attributes.FirstOrDefault(a => a.Name.Equals("value"));
+                if (node != null && !string.IsNullOrEmpty(targets[x]))
+                {
+                    if (attr == null)
+                    {
+                        attr = doc.CreateAttribute("value");
+                        node.Attributes.Add(attr);
+                    }
+                    attr.Value = targets[x];
+                }
+            });
+            return doc.DocumentNode.OuterHtml;
         }
 
         private const int IntervalHomePage = 200;

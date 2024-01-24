@@ -50,6 +50,7 @@
 	</head>
 
 	<body class="text-center">
+	<!-- component: my-account-logout -->
 
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header 
@@ -88,6 +89,12 @@
 	<script>
 	const actv = "active";
 	const names = [ "home", "login", "register" ];
+	
+	function showLogout() {
+		let bttn = "#btn-my-account-logout-show";
+		$( bttn ).click();
+		return "true";
+	}
 
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
@@ -127,6 +134,7 @@
 	</script>
 	<!-- script: home-form-validation -->
 	<!-- script: common-client-include -->
+	<!-- script: verify-and-post -->
   </body>
 
 

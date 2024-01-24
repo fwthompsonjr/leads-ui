@@ -119,6 +119,12 @@ namespace legallead.desktop.implementations
         {
             if (item == null) return;
             if (!string.IsNullOrEmpty(item.Content)) return;
+            if (_mappedcontents.Exists(x => x.Name == item.Name))
+            {
+                var mapped = _mappedcontents.Find(x => x.Name == item.Name);
+                item.Content = CommonReplacement(mapped?.Content ?? string.Empty);
+                return;
+            }
             var manager = Properties.Resources.ResourceManager;
             var resourceText = CommonReplacement(manager.GetString(item.Name));
             item.Content = resourceText;
@@ -234,8 +240,13 @@ namespace legallead.desktop.implementations
             new() { Index = 315, Name = "myaccountpermissions-html"},
             new() { Index = 320, Name = "myaccountprofile-html"},
             new() { Index = 400, Name = "mysearch-html"},
+            new() { Index = 405, Name = "mysearchtemplate-html"},
         };
 
+        private static readonly List<ContentHtml> _mappedcontents = new()
+        {
+            new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
+        };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
         private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
@@ -246,6 +257,7 @@ namespace legallead.desktop.implementations
         private const string HtmAccountPasswordInclude = "<p>My Password</p>";
         private const string HtmAccountProfileInclude = "<p>My Profile</p>";
         private const string HtmAccountPermissionsInclude = "<p>My Permissions</p>";
+        private const string HtmAccountLogoutInclude = "<!-- component: my-account-logout -->";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonFooterCopyRight = "<span id=\"footer-copy-span\">{0}</span>";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
@@ -261,6 +273,7 @@ namespace legallead.desktop.implementations
         private const string JsMyAccountProfile = "<!-- script: my-account-profile-valid -->";
         private const string JsMyAccountPermissions = "/* inject: permissions-validation script */";
         private const string JsMySearchBehavior = "<!-- script: my-search-searching-behaviors -->";
+        private const string JsVerifyAndPost = "<!-- script: verify-and-post -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -272,6 +285,7 @@ namespace legallead.desktop.implementations
             { HtmAccountPasswordInclude, Properties.Resources.myaccount_password_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
             { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },
+            { HtmAccountLogoutInclude, Properties.Resources.myaccount_logout },
             { HtmMySearchInclude, Properties.Resources.mysearch_search_html },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
@@ -287,6 +301,7 @@ namespace legallead.desktop.implementations
             { JsCommonClientInclude, Properties.Resources.commonclientinjection_js },
             { JsMyAccountPermissions, Properties.Resources.myaccount_permissions_validation_js },
             { JsMySearchBehavior, Properties.Resources.mysearch_script_js },
+            { JsVerifyAndPost, Properties.Resources.verifyandpost_js },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

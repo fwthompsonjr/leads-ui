@@ -12,7 +12,11 @@ namespace legallead.ui
         internal Label StatusText => statusBar.Text;
         internal Label StatusMessage => statusBar.Message;
         internal Label StatusConnection => statusBar.Connection;
+        internal MenuBarItem[]? BindableToolbars => toolbars;
+
+
         internal MainContentLoadHandler HomeHandler => mainContentLoadHandler;
+        internal MyAccountContentLoadHandler MyAccountHandler => myAccountContentLoadHandler;
         internal const string InternalDomain = "internal.legalead.com";
 
         private sealed class StatusBar

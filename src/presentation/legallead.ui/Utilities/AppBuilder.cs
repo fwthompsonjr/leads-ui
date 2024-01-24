@@ -3,7 +3,7 @@ using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.ui.Models;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
+using System.Text;
 
 namespace legallead.desktop.utilities
 {
@@ -20,15 +20,15 @@ namespace legallead.desktop.utilities
         {
             if (Configuration == null)
             {
-                var assembly = Assembly.GetExecutingAssembly();
-                using var settingjs = assembly.GetManifestResourceStream("appsettings.json");
+                var settingjs = GetConfiguration(1);
+                var debugjs = GetConfiguration(0);
                 var builder = new ConfigurationBuilder();
                 if (settingjs != null) builder.AddJsonStream(settingjs);
-                if (System.Diagnostics.Debugger.IsAttached)
+                if (System.Diagnostics.Debugger.IsAttached && debugjs != null)
                 {
-                    using var debugjs = assembly.GetManifestResourceStream("appsettings.debug.json");
-                    if (debugjs != null) builder.AddJsonStream(debugjs);
+                    builder.AddJsonStream(debugjs);
                 }
+
                 Configuration = builder.Build();
             }
             if (string.IsNullOrEmpty(PermissionApiBase))
@@ -42,6 +42,7 @@ namespace legallead.desktop.utilities
             if (ServiceProvider == null)
             {
                 var serviceCollection = new ServiceCollection();
+                serviceCollection.AddSingleton(Configuration);
                 ConfigureServices(serviceCollection);
                 ServiceProvider = serviceCollection.BuildServiceProvider();
             }
@@ -85,6 +86,15 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IUserPermissionsMapper>());
             services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
             services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
+        }
+
+        private static Stream GetConfiguration(int index)
+        {
+            var app = Properties.Resources.appsettings;
+            var debug = Properties.Resources.appsettings_debug;
+            var content = index == 0 ? debug : app;
+            byte[] array = Encoding.UTF8.GetBytes(content);
+            return new MemoryStream(array);
         }
     }
 }

@@ -7,16 +7,24 @@ namespace legallead.ui
     {
         private readonly StatusBar statusBar;
         private readonly MainContentLoadHandler mainContentLoadHandler;
+        private readonly MyAccountContentLoadHandler myAccountContentLoadHandler;
+        private MenuBarItem[]? toolbars;
         public MainPage()
         {
             InitializeComponent();
             statusBar = new StatusBar(this);
             this.BindingContext = AppBuilder.ServiceProvider?.GetService<MainWindowViewModel>() ?? new();
-            mainContentLoadHandler = new MainContentLoadHandler(this);
+            mainContentLoadHandler = new MainContentLoadHandler();
+            myAccountContentLoadHandler = new MyAccountContentLoadHandler();
             mainWebViewer.Navigating += MainWebViewer_Navigating;
-            InitializeContent();
+            this.Loaded += MainPage_Loaded;
         }
 
+        private void MainPage_Loaded(object? sender, EventArgs e)
+        {
+            toolbars = [this.bndMenuMyAccount, this.bndMenuMySearch];
+            InitializeContent();
+        }
 
         private void InitializeContent()
         {
