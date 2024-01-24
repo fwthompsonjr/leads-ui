@@ -256,7 +256,7 @@ function initializeProfileFormValidation()
 		setProfileStatusMessage( '', false );
 		var current = $(cboxid).val();
 		if (null === current || current.length === 0 || suffixes.indexOf(current) < 0) {
-			return;
+			return false;
 		}
 		
 		let target = frmprefix.replace(find, current);
@@ -264,7 +264,7 @@ function initializeProfileFormValidation()
 		let jqobj = "#" + target;
 		if( $( jqobj ).valid() == false ) { 
 			setProfileStatusMessage( 'Please review submission, you have one or more invalid values.', true );
-			return; 
+			return false; 
 		}
 		let payload = "";
 		
@@ -307,18 +307,19 @@ function initializeProfileFormValidation()
 		}
 		if ( null === payload || payload.length == 0 ) { 
 			setProfileStatusMessage( 'Error: Unable to capture form submission values', true );
-			return; 
+			return false; 
 		}
 	
 		let handler = window.jsHandler;
 		if( undefined === handler || null === handler || !(handler) ) { 
 			setProfileStatusMessage( 'Error: Unable to bind form submission handler', true );
-			return; 
+			return true; 
 		}
 		try {
 			setProfileIconState( true );
 			setProfileStatusMessage( "<span class='text-warning'>Submitting form values ...</span>", true );
 			handler.submit(target, payload);
+			return false;
 		}
 		catch (err) {
 			setProfileStatusMessage( err, true );

@@ -174,18 +174,18 @@ let permissions_data = {
  "submission": function() {
 	const frmname = "permissions-subscription-group";
 	const jsobj = window.jsHandler;
-	if ( undefined === jsobj || null === jsobj ) return;
 	let dta = {
 		"subscription": permissions_data.subscriptions(),
 		"discounts": permissions_data.discounts(),
 		"changes": permissions_data.changerequest()
 	}
-	if ( dta.subscription.length == 0 && dta.discounts.length == 0 && dta.changes.length == 0 ) return;
+	if ( dta.subscription.length == 0 && dta.discounts.length == 0 && dta.changes.length == 0 ) return false;
 	const isChangePassword = dta.changes.length > 0;
 	const targetScreen = isChangePassword ? permissions_data.change_form : permissions_general.change_form;
 	targetScreen.setIcon( false );
 	targetScreen.setAlert( false );
 	targetScreen.setStatus( '', false );
+	if ( undefined === jsobj || null === jsobj ) return true;
 	try {
 		const submitmessage = "<span class='text-warning'>Submitting form values ...</span>";
 		targetScreen.setStatus( submitmessage, true );
@@ -199,6 +199,7 @@ let permissions_data = {
 	} finally {
 		targetScreen.setIcon( false );
 	}
+	return false;
  }
 };
 

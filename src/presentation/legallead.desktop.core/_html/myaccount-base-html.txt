@@ -82,6 +82,7 @@
 	<!-- script: my-account-form-validation -->
 	<!-- script: my-account-profile-valid -->
 	<!-- script: common-client-include -->
+	<!-- script: verify-and-post -->
   </body>
 
 

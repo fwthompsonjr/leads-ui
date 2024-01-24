@@ -5,5 +5,8 @@
     "remote": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/",
     "local": "https://localhost:44345/"
   },
-  "Initial_View": "introduction"
+  "Initial_View": "introduction",
+  "landings": {
+    "search": "mysearchtemplate"
+  }
 }

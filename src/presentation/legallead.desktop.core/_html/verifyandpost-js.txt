@@ -1,0 +1,57 @@
+<script name="verify-and-post">
+
+function verifyAndPost(pagename, buttonname) { 
+    const domain = "http://internal.legalead.com/" 
+    const target = "".concat(pagename, "/", buttonname); 
+    const keyname = "".concat(pagename, "-", buttonname); 
+    const destination = "".concat(domain, target); 
+    let isvalid = true; 
+        let prms = { 
+        "formname" : null, 
+        "formid" : null, 
+        "frm": null 
+        } 
+        switch (keyname) { 
+        case "home-form-login-submit": 
+        prms.formname = formNames[0]; 
+        prms.formid = "#" + prms.formname; 
+        prms.frm = $(prms.formid); 
+        prms.frm.validate(); 
+        isvalid = prms.frm.valid(); 
+            if( !isvalid ) { return; } 
+        break; 
+        case "home-form-register-submit": 
+        prms.formname = formNames[1]; 
+        prms.formid = "#" + prms.formname; 
+        prms.frm = $(prms.formid); 
+        prms.frm.validate(); 
+        isvalid = prms.frm.valid(); 
+            if( !isvalid ) { return; } 
+        break; 
+        case "myaccount-frm-change-password-submit-button": 
+        prms.formname = "form-change-password"; 
+        prms.formid = "#" + prms.formname; 
+        prms.frm = $(prms.formid); 
+        prms.frm.validate(); 
+        isvalid = prms.frm.valid(); 
+            if( !isvalid ) { return; } 
+        break; 
+        case "myaccount-frm-permissions-submit-button": 
+        isvalid = permissions_data.submission(); 
+            if( !isvalid ) { return; } 
+        break; 
+        case "myaccount-frm-profile-submit-button": 
+        isvalid = profileSubmitButtonClicked(); 
+            if( !isvalid ) { return; } 
+        break; 
+        case "mysearch-search-submit-button": 
+        isvalid = jsSearchForm.validate(); 
+            if( !isvalid ) { return; } 
+        break; 
+        } 
+        if (isvalid) { 
+        window.location.href = destination; 
+        } 
+    }
+
+</script>

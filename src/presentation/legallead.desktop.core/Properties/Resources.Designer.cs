@@ -68,7 +68,10 @@ namespace legallead.desktop.Properties {
         ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
         ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
         ///  },
-        ///  &quot;Initial_View&quot;: &quot;introduction&quot;
+        ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
+        ///  &quot;landings&quot;: {
+        ///    &quot;search&quot;: &quot;mysearch&quot;
+        ///  }
         ///}.
         /// </summary>
         internal static string appsettings {
@@ -85,6 +88,9 @@ namespace legallead.desktop.Properties {
         ///  },
         ///  &quot;debug.login&quot;: {
         ///    &quot;passthru&quot;: true
+        ///  },
+        ///  &quot;landings&quot;: {
+        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
         ///  }
         ///}.
         /// </summary>
@@ -717,6 +723,12 @@ namespace legallead.desktop.Properties {
         ///	const actv = &quot;active&quot;;
         ///	const names = [ &quot;home&quot;, &quot;profile&quot;, &quot;permissions&quot;, &quot;password&quot; ];
         ///
+        ///	function showLogout() {
+        ///		let bttn = &quot;#btn-my-account-logout-show&quot;;
+        ///		$( bttn ).click();
+        ///		return &quot;true&quot;;
+        ///	}
+        ///
         ///	function setDisplay( name ) {
         ///			if (names.indexOf( name ) &lt; 0 ) { return; }
         ///			setActiveDiv(name);
@@ -724,10 +736,7 @@ namespace legallead.desktop.Properties {
         ///			let thelinks = themenu.getElementsByTagName(&quot;a&quot;);
         ///
         ///			for(let i = 0; i &lt; thelinks.length; i++) {
-        ///				let a = thelinks[i];
-        ///				const aname = a.getAttribute(&quot;name&quot;);
-        ///				if (null === aname || undefined === aname) { continue; }
-        ///				i [rest of string was truncated]&quot;;.
+        ///				let a = thelink [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_script_js {
             get {
@@ -807,8 +816,7 @@ namespace legallead.desktop.Properties {
         ///	&lt;/head&gt;
         ///
         ///	&lt;body class=&quot;text-center&quot;&gt;
-        ///
-        ///    &lt;div clas [rest of string was truncated]&quot;;.
+        ///	&lt;!-- component [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_html {
             get {
@@ -883,6 +891,31 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html&gt;&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///                         try { 
+        ///                         CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                              } catch {} 
+        ///
+        ///
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: search&lt;/title&gt;
+        ///		
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link h [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchtemplate_html {
+            get {
+                return ResourceManager.GetString("mysearchtemplate_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {
@@ -916,6 +949,32 @@ namespace legallead.desktop.Properties {
         internal static string subcontent_css {
             get {
                 return ResourceManager.GetString("subcontent_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;verify-and-post&quot;&gt;
+        ///
+        ///function verifyAndPost(pagename, buttonname) {
+        ///	const domain = &quot;http://internal.legalead.com/&quot;
+        ///	const target = &quot;&quot;.concat(pagename, &quot;/&quot;, buttonname);
+        ///	const destination = &quot;&quot;.concat(domain, target);
+        ///	let isvalid = true;
+        ///	let prms = {
+        ///		&quot;formname&quot; : null,
+        ///		&quot;formid&quot; : null,
+        ///		&quot;frm&quot;: null
+        ///	}
+        ///	switch (target) {
+        ///		case &quot;home-form-login-submit&quot;:
+        ///			prms.formname = formNames[0];
+        ///			prms.formid = &quot;#&quot; + prms.formname;
+        ///			prms.frm = $(prms.formid);
+        ///			prms.frm.validate [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string verifyandpost_js {
+            get {
+                return ResourceManager.GetString("verifyandpost_js", resourceCulture);
             }
         }
     }

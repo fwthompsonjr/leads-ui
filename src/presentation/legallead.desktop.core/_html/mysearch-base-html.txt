@@ -53,6 +53,7 @@
 	</script>
 	<!-- script: common-client-include -->
 	<!-- script: my-search-searching-behaviors -->
+	<!-- script: verify-and-post -->
   </body>
 
 

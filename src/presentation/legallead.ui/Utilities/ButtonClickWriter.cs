@@ -7,7 +7,7 @@ namespace legallead.ui.Utilities
         public static string ReWrite(string? page)
         {
             const string onclick = "onclick";
-            const string changescript = "window.location.href = 'http://internal.legalead.com/{0}/{1}';";
+            const string changescript = "verifyAndPost('{0}', '{1}');";
             if (string.IsNullOrEmpty(page)) return string.Empty;
             page = page.ToLower().Trim();
             if (!PageButtons.TryGetValue(page, out string? value))
@@ -16,6 +16,10 @@ namespace legallead.ui.Utilities
             }
             var content = ContentHandler.GetLocalContent(page)?.Content;
             if (string.IsNullOrEmpty(content)) return string.Empty;
+            if (PageAlias.TryGetValue(page, out string? alias))
+            {
+                page = alias;
+            }
             var doc = GetDocument(content);
             var keys = value.Split(',').ToList();
             var parent = doc.DocumentNode;
@@ -52,7 +56,13 @@ namespace legallead.ui.Utilities
         private static readonly Dictionary<string, string> PageButtons = new()
         {
             { "home", "form-login-submit,form-register-submit" },
-            { "myaccount", "frm-change-password-submit-button,frm-permissions-submit-button,frm-profile-submit-button" }
+            { "myaccount", "frm-change-password-submit-button,frm-permissions-submit-button,frm-profile-submit-button" },
+            { "mysearch", "search-submit-button" },
+            { "mysearchtemplate", "search-submit-button" }
+        };
+        private static readonly Dictionary<string, string> PageAlias = new()
+        {
+            { "mysearchtemplate", "mysearch" }
         };
     }
 }
