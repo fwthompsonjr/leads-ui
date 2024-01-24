@@ -4,7 +4,7 @@
     {
         public void SetHome()
         {
-            var homepage = ButtonClickWriter.ReWrite("myaccount");
+            var homepage = GetHTML("myaccount");
             SetView(homepage);
         }
     }

@@ -11,6 +11,12 @@ namespace legallead.ui.Utilities
         protected MainPage? mainPage;
         protected readonly IServiceProvider? serviceProvider = AppBuilder.ServiceProvider;
 
+
+        internal static string GetHTML(string page)
+        {
+            return ButtonClickWriter.ReWrite(page);
+        }
+
         protected void SetErrorContent(int errorCode)
         {
             var errorService = AppBuilder.ServiceProvider?.GetRequiredService<IErrorContentProvider>();
@@ -27,22 +33,8 @@ namespace legallead.ui.Utilities
             mainPage.Dispatcher.Dispatch(() =>
             {
                 mainPage.WebViewSource.Html = html;
-                TryContentReload();
+                MainPageFinder.TryContentReload();
             });
-        }
-
-        private void TryContentReload()
-        {
-            try
-            {
-                mainPage?.WebViewer.Reload();
-            }
-            catch
-            {
-                // this empty catch block is intended
-                // if reload fails the content is not valid html
-                // and doesnt need a reload
-            }
         }
     }
 }

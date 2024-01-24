@@ -9,5 +9,19 @@
             if (app.CurrentPage is not MainPage main) return null;
             return main;
         }
+
+        internal static void TryContentReload()
+        {
+            try
+            {
+                GetMain()?.WebViewer.Reload();
+            }
+            catch
+            {
+                // this empty catch block is intended
+                // if reload fails the content is not valid html
+                // and doesnt need a reload
+            }
+        }
     }
 }

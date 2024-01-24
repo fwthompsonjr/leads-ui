@@ -1,5 +1,8 @@
-﻿using legallead.desktop;
+﻿using HtmlAgilityPack;
+using legallead.desktop;
 using legallead.desktop.entities;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.Configuration;
 
 namespace legallead.ui.Utilities
 {
@@ -20,10 +23,9 @@ namespace legallead.ui.Utilities
 
         public void SetHome()
         {
-            var homepage = ButtonClickWriter.ReWrite("home");
+            var homepage = Transform(ButtonClickWriter.ReWrite("home"));
             SetView(homepage);
         }
-
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             try
@@ -60,6 +62,37 @@ namespace legallead.ui.Utilities
             {
                 IsPageIntroduced = true;
             }
+        }
+
+
+        private static string Transform(string html)
+        {
+            if (!System.Diagnostics.Debugger.IsAttached) { return html; }
+            var config = AppBuilder.ServiceProvider?.GetService<IConfiguration>();
+            if (config == null) { return html; }
+            var targets = new Dictionary<string, string?>
+            {
+                { "//*[@id='username']", config["debug.user:name"] },
+                { "//*[@id='login-password']", config["debug.user:code"] }
+            };
+            var finders = targets.Keys.ToList();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            finders.ForEach(x =>
+            {
+                var node = doc.DocumentNode.SelectSingleNode(x);
+                var attr = node?.Attributes.FirstOrDefault(a => a.Name.Equals("value"));
+                if (node != null && !string.IsNullOrEmpty(targets[x]))
+                {
+                    if (attr == null)
+                    {
+                        attr = doc.CreateAttribute("value");
+                        node.Attributes.Add(attr);
+                    }
+                    attr.Value = targets[x];
+                }
+            });
+            return doc.DocumentNode.OuterHtml;
         }
 
         private const int IntervalHomePage = 200;
