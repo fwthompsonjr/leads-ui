@@ -270,7 +270,7 @@ namespace legallead.desktop.Properties {
         ///			&lt;div id=&quot;footer-copy&quot; class=&quot;float-end&quot;&gt;
         ///				&lt;span id=&quot;footer-copy-span&quot;&gt;{0}&lt;/span&gt;
         ///			&lt;/div&gt;
-        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start&quot;&gt;
+        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start d-none&quot;&gt;
         ///				&lt;a id=&quot;footer-reload-link&quot; href=&quot;javascript:reloadContent()&quot; class=&quot;text-secondary text-decoration-none&quot;&gt;Reload&lt;/a&gt;
         ///			&lt;/div&gt;
         ///      &lt;/footer&gt;.
@@ -621,12 +621,30 @@ namespace legallead.desktop.Properties {
         ///	&lt;/head&gt;
         ///
         ///	&lt;body class=&quot;text-center&quot;&gt;
-        ///
-        ///    &lt;div cla [rest of string was truncated]&quot;;.
+        ///	&lt;!-- componen [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_html {
             get {
                 return ResourceManager.GetString("myaccount-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!-- Logout Modal --&gt;
+        ///&lt;!-- Button trigger modal --&gt;
+        ///&lt;button id=&quot;btn-my-account-logout-show&quot; type=&quot;button&quot; class=&quot;btn btn-primary d-none&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#my-account-logout-modal&quot;&gt;
+        ///  Launch static backdrop modal
+        ///&lt;/button&gt;
+        ///
+        ///&lt;!-- Modal --&gt;
+        ///&lt;div class=&quot;modal fade&quot; id=&quot;my-account-logout-modal&quot; data-bs-backdrop=&quot;static&quot; data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; aria-labelledby=&quot;my-account-logout-label&quot; aria-hidden=&quot;true&quot;&gt;
+        ///  &lt;div class=&quot;modal-dialog&quot;&gt;
+        ///    &lt;div class=&quot;modal-content&quot;&gt;
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string myaccount_logout {
+            get {
+                return ResourceManager.GetString("myaccount_logout", resourceCulture);
             }
         }
         

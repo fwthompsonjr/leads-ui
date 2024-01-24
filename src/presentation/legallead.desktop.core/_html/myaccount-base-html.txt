@@ -14,7 +14,7 @@
 	</head>
 
 	<body class="text-center">
-
+	<!-- component: my-account-logout -->
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header 
 		class="masthead mb-auto" 
@@ -55,7 +55,7 @@
 										<span id="account-text-item-password">Change Password</span>
 									</a>
 								</li>
-								<li><a id="account-dropdown-item-logout" class="dropdown-item" href="#">Logout</a></li>
+								<li><a id="account-dropdown-item-logout" class="dropdown-item" href="javascript:showLogout()">Logout</a></li>
 							  </ul>
 						</div>
 			</nav>

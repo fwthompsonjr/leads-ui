@@ -39,13 +39,22 @@
                             CommandParameter="myaccount-permissions"
                             Command="{Binding OnItemClicked}" />
             <MenuFlyoutSeparator />
-            <MenuFlyoutItem AutomationId="mnuMyAccountLogout" Text="Logout" Command="{Binding OnItemClicked}" />
+            <MenuFlyoutItem Text="Logout" 
+                            CommandParameter="myaccount-logout"
+                            Command="{Binding OnItemClicked}" />
         </MenuBarItem >
 
         <MenuBarItem x:Name="bndMenuMySearch" AutomationId="mnuMySearch" Text="Search" IsEnabled="False" StyleId="DisabledLink">
-            <MenuFlyoutItem AutomationId="mnuMySearchHome" Text="Search" Command="{Binding OnItemClicked}" />
-            <MenuFlyoutItem AutomationId="mnuMySearchProfile" Text="History" Command="{Binding OnItemClicked}" />
-            <MenuFlyoutItem AutomationId="mnuMySearchPermissions" Text="Purchases" Command="{Binding OnItemClicked}" />
+            <MenuFlyoutItem 
+                Text="Search" 
+                CommandParameter="mysearch-home"
+                Command="{Binding OnItemClicked}" />
+            <MenuFlyoutItem 
+                Text="History" 
+                Command="{Binding OnItemClicked}" />
+            <MenuFlyoutItem 
+                Text="Purchases" 
+                Command="{Binding OnItemClicked}" />
         </MenuBarItem>
     </ContentPage.MenuBarItems>
 

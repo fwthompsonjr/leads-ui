@@ -10,6 +10,10 @@ namespace legallead.ui
         {
             var url = e.Url;
             if (string.IsNullOrEmpty(url)) { return; }
+            if (url.EndsWith('#')) { 
+                e.Cancel = true;
+                return; 
+            }
             if (!url.Contains(InternalDomain)) return;
             e.Cancel = true;
             var pieces = url.Split('/');

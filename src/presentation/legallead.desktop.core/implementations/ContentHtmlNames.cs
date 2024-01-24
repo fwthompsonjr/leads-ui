@@ -246,6 +246,7 @@ namespace legallead.desktop.implementations
         private const string HtmAccountPasswordInclude = "<p>My Password</p>";
         private const string HtmAccountProfileInclude = "<p>My Profile</p>";
         private const string HtmAccountPermissionsInclude = "<p>My Permissions</p>";
+        private const string HtmAccountLogoutInclude = "<!-- component: my-account-logout -->";
         private const string HtmCommonFooter = "<!-- block: common-footer -->";
         private const string HtmCommonFooterCopyRight = "<span id=\"footer-copy-span\">{0}</span>";
         private const string HtmCommonHeading = "<!-- block: common-headings -->";
@@ -272,6 +273,7 @@ namespace legallead.desktop.implementations
             { HtmAccountPasswordInclude, Properties.Resources.myaccount_password_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
             { HtmAccountPermissionsInclude, Properties.Resources.myaccountpermissions_html },
+            { HtmAccountLogoutInclude, Properties.Resources.myaccount_logout },
             { HtmMySearchInclude, Properties.Resources.mysearch_search_html },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },

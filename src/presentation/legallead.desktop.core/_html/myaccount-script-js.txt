@@ -2,6 +2,12 @@
 	const actv = "active";
 	const names = [ "home", "profile", "permissions", "password" ];
 
+	function showLogout() {
+		let bttn = "#btn-my-account-logout-show";
+		$( bttn ).click();
+		return "true";
+	}
+
 	function setDisplay( name ) {
 			if (names.indexOf( name ) < 0 ) { return; }
 			setActiveDiv(name);
