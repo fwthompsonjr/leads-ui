@@ -53,7 +53,7 @@ namespace legallead.ui.implementations
             return scriptjs;
         }
 
-        public async Task Submit(string url)
+        public virtual async Task Submit(string url)
         {
             if (mainPage == null) return;
             var jscript = GetScriptFromUrl(url);

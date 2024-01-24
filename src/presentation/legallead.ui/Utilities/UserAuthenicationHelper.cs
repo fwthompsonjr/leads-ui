@@ -28,6 +28,24 @@ namespace legallead.ui.Utilities
             });
         }
 
+        public static void LogoutRequested()
+        {
+            var main = MainPageFinder.GetMain();
+            if (main == null) return;
+            var provider = AppBuilder.ServiceProvider;
+            var user = provider?.GetService<UserBo>();
+            var model = GetModel(main);
+            if (provider == null || user == null || model == null) return;
+            user.Token = null;
+            model.IsMyAccountVisible = false;
+            model.IsMySearchVisible = false;
+            main.BindableToolbars?.ToList().ForEach(toolbar =>
+            {
+                toolbar.IsEnabled = false;
+                toolbar.StyleId = "DisabledLink";
+            });
+        }
+
         private static MainWindowViewModel? GetModel(MainPage main)
         {
             if (main.BindingContext is MainWindowViewModel viewModel) return viewModel;
