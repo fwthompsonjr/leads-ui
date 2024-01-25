@@ -155,6 +155,7 @@
 		</style>
 	</head>
 	<body class="text-center">
+	<!-- component: my-account-logout -->
 		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
 			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 				<div class="inner">
@@ -629,7 +630,11 @@
                     
 					jsSearchForm.initialize(); 
 
-
+					
+					function showLogout() {
+						let bttn = "#btn-my-account-logout-show";
+						$( bttn ).click();
+					}
 		</script>
 	<!-- script: verify-and-post -->
 	
