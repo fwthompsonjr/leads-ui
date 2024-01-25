@@ -33,6 +33,7 @@ namespace legallead.ui
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorHome>("home-form-login-submit");
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorRegistration>("home-form-register-submit");
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorLogout>("myaccount-logout");
+            services.AddKeyedSingleton<IPageNavigator, PageNavigatorGetSession>("user-session");
             return services.BuildServiceProvider();
         }
     }

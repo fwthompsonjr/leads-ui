@@ -28,6 +28,10 @@ function verifyAndPost(pagename, buttonname) {
         isvalid = prms.frm.valid(); 
             if( !isvalid ) { return; } 
         break; 
+        case "user-re-authorize": 
+        isvalid = jsreauthorize.isvalid(); 
+            if( !isvalid ) { return; } 
+        break; 
         case "myaccount-frm-change-password-submit-button": 
         prms.formname = "form-change-password"; 
         prms.formid = "#" + prms.formname; 

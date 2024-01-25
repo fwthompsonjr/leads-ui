@@ -139,6 +139,9 @@
   <data name="commonclientinjection_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\commonclientinjection-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="commondialogscript_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\commondialogscript-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="commonfooter_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\commonfooter-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -147,6 +150,9 @@
   </data>
   <data name="commonreload_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\commonreload-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="common_dialogue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\common-dialogue.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="common_mast_head_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\common-mast-head-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>

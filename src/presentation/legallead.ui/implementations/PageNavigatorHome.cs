@@ -4,6 +4,7 @@ using legallead.desktop.models;
 using legallead.desktop.utilities;
 using legallead.ui.handlers;
 using legallead.ui.interfaces;
+using legallead.ui.Utilities;
 
 namespace legallead.ui.implementations
 {
@@ -36,6 +37,10 @@ namespace legallead.ui.implementations
             if (data == null) return failed;
             var obj = new { data.UserName, data.Password };
             var loginResponse = await api.Post("login", obj, user) ?? failed;
+            if (loginResponse.StatusCode == 200)
+            {
+                UserAuthenicationHelper.AuthenicationCompleted(loginResponse.Message, obj.UserName);
+            }
             return loginResponse;
         }
 

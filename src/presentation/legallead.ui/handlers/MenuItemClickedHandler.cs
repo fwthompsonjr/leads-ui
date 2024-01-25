@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace legallead.ui.implementations
 {
-    internal class MenuItemClickedCommand : ICommand
+    internal class MenuItemClickedHandler : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 

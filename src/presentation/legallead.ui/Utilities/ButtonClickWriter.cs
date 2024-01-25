@@ -1,4 +1,6 @@
 ﻿using HtmlAgilityPack;
+using legallead.desktop.entities;
+using legallead.desktop.utilities;
 
 namespace legallead.ui.Utilities
 {
@@ -43,6 +45,21 @@ namespace legallead.ui.Utilities
                     }
                 }
             });
+            var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            var dialogue = ContentHandler.GetLocalContent("commondialogue")?.Content;
+            var jscript = ContentHandler.GetLocalContent("commondialoguescript")?.Content;
+            if (user != null && dialogue != null && jscript != null)
+            {
+                var body = parent.SelectSingleNode("//body");
+                var node_dialogue = doc.CreateElement("div");
+                node_dialogue.InnerHtml = dialogue;
+                body.PrependChild(node_dialogue);
+                var node_jscript = doc.CreateElement("script");
+                var attr = doc.CreateAttribute("name", "comon-dialogue");
+                node_jscript.Attributes.Add(attr);
+                node_jscript.InnerHtml = jscript;
+                body.AppendChild(node_jscript);
+            }
             return parent.OuterHtml;
         }
 

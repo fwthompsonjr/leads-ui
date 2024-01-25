@@ -231,6 +231,8 @@ namespace legallead.desktop.implementations
             new() { Index = -1, Name = "test"},
             new() { Index = 0, Name = "blank-html"},
             new() { Index = 10, Name = "base-css"},
+            new() { Index = 20, Name = "commondialogue-html"},
+            new() { Index = 30, Name = "commondialoguescript-js"},
             new() { Index = 100, Name = "introduction-html"},
             new() { Index = 110, Name = "home-html"},
             new() { Index = 110, Name = "homelogin-html"},
@@ -245,6 +247,8 @@ namespace legallead.desktop.implementations
 
         private static readonly List<ContentHtml> _mappedcontents = new()
         {
+            new() { Index = 20, Name = "commondialogue-html", Content = Properties.Resources.common_dialogue },
+            new() { Index = 30, Name = "commondialoguescript-js", Content = Properties.Resources.commondialogscript_js },
             new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
         };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";

@@ -98,6 +98,7 @@ namespace legallead.ui.implementations
         private static bool BypassLogin(string url)
         {
             const string allowBypassKey = "debug.login:passthru";
+            const string loginKey = "debug.user:name";
             var context = GetContextFromUrl(url);
             if (string.IsNullOrWhiteSpace(context) || !context.Equals(ScriptKeyNames()[0])) return false;
             var config = AppBuilder.ServiceProvider?.GetService<IConfiguration>();
@@ -106,7 +107,8 @@ namespace legallead.ui.implementations
             if (kv == null || !bool.TryParse(kv, out var allowed)) return false;
             if (!allowed) return false;
             // set status to OK, set user to authenticated
-            UserAuthenicationHelper.AuthenicationCompleted(Guid.NewGuid().ToString());
+            var username = config[loginKey] ?? "bypass.user.account";
+            UserAuthenicationHelper.AuthenicationCompleted(Guid.NewGuid().ToString(), username);
             StatusBarHelper.SetStatus(SubmitSucceeded);
             MainPageFinder.GetMain()?.MyAccountHandler.SetHome();
             return true;

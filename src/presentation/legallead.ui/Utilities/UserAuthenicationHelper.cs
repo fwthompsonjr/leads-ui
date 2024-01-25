@@ -6,7 +6,7 @@ namespace legallead.ui.Utilities
 {
     internal static class UserAuthenicationHelper
     {
-        public static void AuthenicationCompleted(string token)
+        public static void AuthenicationCompleted(string token, string username = "")
         {
             var main = MainPageFinder.GetMain();
             if (main == null) return;
@@ -18,7 +18,11 @@ namespace legallead.ui.Utilities
             if (string.IsNullOrEmpty(token) ||
                 user == null ||
                 model == null) return;
-            user.Token = new AccessTokenBo { AccessToken = token, RefreshToken = token, Expires = DateTime.UtcNow.AddMinutes(60) };
+            if (!string.IsNullOrEmpty(username))
+            {
+                user.UserName = username;
+            }
+            user.Token = new AccessTokenBo { AccessToken = token, RefreshToken = token, Expires = DateTime.UtcNow.AddMinutes(30) };
             model.IsMyAccountVisible = true;
             model.IsMySearchVisible = true;
             main.BindableToolbars?.ToList().ForEach(toolbar =>

@@ -8,7 +8,7 @@ namespace legallead.ui.Models
 {
     internal class MainWindowViewModel
     {
-        public ICommand OnItemClicked { get; set; } = new MenuItemClickedCommand();
+        public ICommand OnItemClicked { get; set; } = new MenuItemClickedHandler();
 
         public bool IsMyAccountVisible { get; set; } = false;
 
