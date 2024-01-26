@@ -1,12 +1,15 @@
 {
+  "Initial_View": "introduction",
   "Permissions_API": "https://localhost:44345/",
   "api.permissions": {
     "destination": "remote",
     "remote": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/",
     "local": "https://localhost:44345/"
   },
-  "Initial_View": "introduction",
   "landings": {
-    "search": "mysearchtemplate"
+    "search": "mysearch"
+  },
+  "user": {
+    "session_timeout": 20
   }
 }

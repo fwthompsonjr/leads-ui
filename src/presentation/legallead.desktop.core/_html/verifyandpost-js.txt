@@ -6,6 +6,10 @@ function verifyAndPost(pagename, buttonname) {
     const keyname = "".concat(pagename, "-", buttonname); 
     const destination = "".concat(domain, target);
     const nonauthorization = [ "user", "home" ];
+    if (buttonname.indexOf('logout') >= 0) {
+        window.location.href = destination;
+        return;
+    }
     let isvalid = true; 
         let prms = { 
         "formname" : null, 

@@ -22,7 +22,7 @@ namespace legallead.ui.Utilities
             {
                 user.UserName = username;
             }
-            user.Token = new AccessTokenBo { AccessToken = token, RefreshToken = token, Expires = DateTime.UtcNow.AddMinutes(30) };
+            user.Token = new AccessTokenBo { AccessToken = token, RefreshToken = token, Expires = GetExpirationDate() };
             model.IsMyAccountVisible = true;
             model.IsMySearchVisible = true;
             main.BindableToolbars?.ToList().ForEach(toolbar =>
@@ -55,5 +55,32 @@ namespace legallead.ui.Utilities
             if (main.BindingContext is MainWindowViewModel viewModel) return viewModel;
             return null;
         }
+
+        private static DateTime GetExpirationDate()
+        {
+            return DateTime.UtcNow.AddMinutes(ExpirationInterval());
+        }
+
+        private static int ExpirationInterval()
+        {
+            const int fallback = 30;
+            if (sessionTimeout.HasValue) return sessionTimeout.Value;
+            var configuration = AppBuilder.Configuration;
+            if (configuration == null)
+            {
+                sessionTimeout = fallback;
+                return fallback;
+            }
+
+            var timeoutString = configuration["user:session_timeout"];
+            if (!int.TryParse(timeoutString, out var timeout))
+            {
+                sessionTimeout = fallback;
+                return fallback;
+            }
+            sessionTimeout = timeout;
+            return timeout;
+        }
+        private static int? sessionTimeout;
     }
 }

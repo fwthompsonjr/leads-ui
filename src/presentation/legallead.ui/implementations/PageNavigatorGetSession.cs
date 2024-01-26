@@ -1,4 +1,5 @@
-﻿using legallead.desktop.entities;
+﻿using HtmlAgilityPack;
+using legallead.desktop.entities;
 using legallead.desktop.utilities;
 using legallead.ui.interfaces;
 using legallead.ui.Utilities;
@@ -18,27 +19,22 @@ namespace legallead.ui.implementations
                 SetSession(main, "-unset-");
                 return Task.CompletedTask;
             }
-            if (user.IsAuthenicated)
-            {
-                SetSession(main, user.SessionId);
-            }
+            SetSession(main, user.GetSessionId());
             return Task.CompletedTask;
         }
 
         private static void SetSession(MainPage? main, string sessionId)
         {
             var web = main?.WebViewer;
-            if (main == null || web == null) { return; }
-            var js = new StringBuilder("let sessioninput = document.getElementById('spn-user-session-status');");
-            js.AppendLine();
-            js.AppendLine("if (undefined == sessioninput || null == sessioninput) return;");
-            js.AppendLine($"sessioninput.setAttribute( 'value', '{sessionId}' );");
-            var script = js.ToString();
-            main.Dispatcher.Dispatch(async () =>
-            {
-                _ = await web.EvaluateJavaScriptAsync(script);
-
-            });
+            var wcontent = main?.WebViewSource.Html;
+            if (main == null || web == null || string.IsNullOrEmpty(wcontent)) { return; }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(wcontent);
+            var node = doc.DocumentNode.SelectSingleNode("//span[@id = 'spn-user-session-status']");
+            if (node == null || node.Attributes["value"].Value == sessionId) { return; }
+            node.Attributes["value"].Value = sessionId;
+            main.WebViewSource.Html = doc.DocumentNode.OuterHtml;
+            web.Reload();
         }
     }
 }
