@@ -4,13 +4,22 @@ function verifyAndPost(pagename, buttonname) {
     const domain = "http://internal.legalead.com/" 
     const target = "".concat(pagename, "/", buttonname); 
     const keyname = "".concat(pagename, "-", buttonname); 
-    const destination = "".concat(domain, target); 
+    const destination = "".concat(domain, target);
+    const nonauthorization = [ "user", "home" ];
     let isvalid = true; 
         let prms = { 
         "formname" : null, 
         "formid" : null, 
         "frm": null 
-        } 
+        };
+        if(nonauthorization.find(x => x == pagename) == null) {
+            let sts = document.getElementById('spn-user-session-status');
+            let attrSts = sts == null ? null : sts.getAttribute('value');
+            if (null !== attrSts && attrSts.indexOf('-') >= 0) {
+                document.getElementById('btn-account-authorize-show').click();
+                return;
+            }
+        }
         switch (keyname) { 
         case "home-form-login-submit": 
         prms.formname = formNames[0]; 

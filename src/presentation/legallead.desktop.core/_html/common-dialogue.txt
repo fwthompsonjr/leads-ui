@@ -5,7 +5,6 @@
 </button>
 
 <!-- Reauthorize: Modal Content -->
-<input type="hidden" id="input-user-session-status" value="-unset-" />
 <div class="modal fade" id="account-authorize-modal" data-bs-backdrop="static"
         data-bs-keyboard="false" tabindex="-1" 
         aria-labelledby="account-authorize-label" aria-hidden="true">
@@ -26,6 +25,7 @@
                     <tr>
                         <td>
                             <form id="form-re-authorize" name="form-re-authorize">
+                                <span type="text" style="display:none" id="spn-user-session-status">-unset-</span>
                                 <div class="mb-3">
                                     <label for="form-re-authorize-username" class="form-label">User Name / Email:</label>
                                     <input type="text" readonly="readonly" class="form-control" id="form-re-authorize-username" name="username" aria-describedby="form-re-authorize-username-help">

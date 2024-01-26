@@ -87,3 +87,4 @@ customvalidators.forEach(v => {
 	}
 });
 jsreauthorize.init();
+var jsReauthorizeInterval = setInterval(() => { jsreauthorize.update_session();}, 15000);

@@ -29,7 +29,7 @@ namespace legallead.ui.implementations
         {
             var web = main?.WebViewer;
             if (main == null || web == null) { return; }
-            var js = new StringBuilder("let sessioninput = document.getElementById('input-user-session-status');");
+            var js = new StringBuilder("let sessioninput = document.getElementById('spn-user-session-status');");
             js.AppendLine();
             js.AppendLine("if (undefined == sessioninput || null == sessioninput) return;");
             js.AppendLine($"sessioninput.setAttribute( 'value', '{sessionId}' );");

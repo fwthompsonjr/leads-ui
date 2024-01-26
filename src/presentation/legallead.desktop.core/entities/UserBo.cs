@@ -8,7 +8,7 @@ namespace legallead.desktop.entities
 
         public virtual bool IsAuthenicated => Token != null && Token.Expires.HasValue && !IsExpired(Token.Expires.Value);
         public string UserName { get; set; } = string.Empty;
-        public string SessionId { get; private set; } = string.Empty;
+        public string SessionId { get; private set; } = unset;
         public ApiContext[]? Applications { get; set; }
         public bool IsInitialized => Applications != null && Applications.Length > 0;
 
@@ -20,7 +20,7 @@ namespace legallead.desktop.entities
                 token = value;
                 if( token == null || string.IsNullOrEmpty(token.AccessToken))
                 {
-                    SessionId = "-unset-";
+                    SessionId = unset;
                 }
                 else
                 {
@@ -43,7 +43,19 @@ namespace legallead.desktop.entities
         private static bool IsExpired(DateTime expires)
         {
             var difference = expires - DateTime.UtcNow;
-            return difference.TotalMinutes > 1;
+            return difference.TotalMinutes < 1;
         }
+
+        internal string GetSessionId()
+        {
+            if (!IsAuthenicated)
+            {
+                SessionId = unset;
+            }
+            return SessionId;
+
+            throw new NotImplementedException();
+        }
+        private const string unset = "-unset-";
     }
 }

@@ -101,6 +101,8 @@ namespace legallead.desktop.implementations
             return names;
         }
 
+        internal static string CommonDialogueJs => Properties.Resources.commondialogscript_js;
+
         internal static string CommonReplacement(string? source)
         {
             if (string.IsNullOrEmpty(source)) return string.Empty;
@@ -248,7 +250,7 @@ namespace legallead.desktop.implementations
         private static readonly List<ContentHtml> _mappedcontents = new()
         {
             new() { Index = 20, Name = "commondialogue-html", Content = Properties.Resources.common_dialogue },
-            new() { Index = 30, Name = "commondialoguescript-js", Content = Properties.Resources.commondialogscript_js },
+            new() { Index = 30, Name = "commondialoguescript-js", Content = CommonDialogueJs },
             new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
         };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
