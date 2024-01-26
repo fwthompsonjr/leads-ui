@@ -1,5 +1,6 @@
 ﻿
 using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 
@@ -7,6 +8,7 @@ namespace legallead.ui.Utilities
 {
     internal static class ContentHandler
     {
+        internal static string DialogueJs => ContentHtmlNames.CommonDialogueJs;
 
         internal static void InitializeSearch()
         {

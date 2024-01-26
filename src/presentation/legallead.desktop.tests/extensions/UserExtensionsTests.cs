@@ -81,6 +81,28 @@ namespace legallead.desktop.tests.extensions
         }
 
         [Fact]
+        public void ValidUserShouldHaveASessionId()
+        {
+            var user = userfaker.Generate();
+            user.Token = tokenfaker.Generate();
+            user.Token.Expires = DateTime.UtcNow.AddMinutes(5);
+            var actual = user.GetSessionId();
+            Assert.False(string.IsNullOrWhiteSpace(actual));
+            Assert.False(actual.Contains('-'));
+        }
+
+        [Fact]
+        public void ExpiringUserShouldHaveASessionId()
+        {
+            var user = userfaker.Generate();
+            user.Token = tokenfaker.Generate();
+            user.Token.Expires = DateTime.UtcNow.AddSeconds(45);
+            var actual = user.GetSessionId();
+            Assert.False(string.IsNullOrWhiteSpace(actual));
+            Assert.True(actual.Contains('-'));
+        }
+
+        [Fact]
         public async Task ExtendTokenWithoutApiShouldExit()
         {
             IPermissionApi? api = null;

@@ -10,7 +10,8 @@ namespace legallead.ui.implementations
             const string js = "showLogout()";
             var main = MainPageFinder.GetMain();
             if (main == null) return;
-            main.Dispatcher.Dispatch(async () => {
+            main.Dispatcher.Dispatch(async () =>
+            {
                 await main.WebViewer.EvaluateJavaScriptAsync(js);
             });
         }

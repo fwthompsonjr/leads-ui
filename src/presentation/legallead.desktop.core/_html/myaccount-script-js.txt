@@ -5,7 +5,7 @@
 	function showLogout() {
 		let bttn = "#btn-my-account-logout-show";
 		$( bttn ).click();
-		return "true";
+		return null;
 	}
 
 	function setDisplay( name ) {

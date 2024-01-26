@@ -47,8 +47,7 @@
 	
 		function showLogout() {
 			let bttn = "#btn-my-account-logout-show";
-			$( bttn ).click();
-			return "true";
+			$( bttn ).click(); 
 		}
 	</script>
 	<!-- script: common-client-include -->

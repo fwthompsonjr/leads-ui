@@ -70,7 +70,7 @@ namespace legallead.desktop.Properties {
         ///  },
         ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
         ///  &quot;landings&quot;: {
-        ///    &quot;search&quot;: &quot;mysearch&quot;
+        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
         ///  }
         ///}.
         /// </summary>
@@ -88,9 +88,6 @@ namespace legallead.desktop.Properties {
         ///  },
         ///  &quot;debug.login&quot;: {
         ///    &quot;passthru&quot;: true
-        ///  },
-        ///  &quot;landings&quot;: {
-        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
         ///  }
         ///}.
         /// </summary>
@@ -183,6 +180,25 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!-- Reauthorize Modal --&gt;
+        ///&lt;!-- Reauthorize: trigger modal --&gt;
+        ///&lt;button id=&quot;btn-account-authorize-show&quot; type=&quot;button&quot; class=&quot;btn btn-primary d-none&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#account-authorize-modal&quot;&gt;
+        ///  Launch static backdrop modal
+        ///&lt;/button&gt;
+        ///
+        ///&lt;!-- Reauthorize: Modal Content --&gt;
+        ///&lt;input type=&quot;hidden&quot; id=&quot;input-user-session-status&quot; value=&quot;-unset-&quot; /&gt;
+        ///&lt;div class=&quot;modal fade&quot; id=&quot;account-authorize-modal&quot; data-bs-backdrop=&quot;static&quot;
+        ///        data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; 
+        ///        aria [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string common_dialogue {
+            get {
+                return ResourceManager.GetString("common_dialogue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///			&lt;h3 class=&quot;masthead-brand&quot;&gt;
         ///				&lt;i class=&quot;bi bi-bank2&quot;&gt;&lt;/i&gt;
@@ -260,7 +276,6 @@ namespace legallead.desktop.Properties {
         ///	if (clientScriptActivated) {
         ///		setTimeout( () =&gt; { commonClientScript(); }, 250);
         ///	}
-        ///	
         ///&lt;/script&gt;.
         /// </summary>
         internal static string commonclientinjection_js {
@@ -271,12 +286,33 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
+        ///if (typeof isValidEmail != &apos;function&apos;) {
+        ///	window.isValidEmail = function(email){
+        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        ///	return res.test(email.toLowerCase());};
+        ///}
+        ///let customvalidators = [
+        ///	{
+        ///		&quot;name&quot;: &quot;isEmailOrUser&quot;,
+        ///		&quot;action&quot;: function (value, element, params) {
+        ///			if (!value) { return false; }
+        ///			if (value == null) { return false; }
+        ///			if (value.length == 0) { ret [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string commondialogscript_js {
+            get {
+                return ResourceManager.GetString("commondialogscript_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
         ///
         ///      &lt;footer class=&quot;mastfoot mt-auto&quot;&gt;
         ///			&lt;div id=&quot;footer-copy&quot; class=&quot;float-end&quot;&gt;
         ///				&lt;span id=&quot;footer-copy-span&quot;&gt;{0}&lt;/span&gt;
         ///			&lt;/div&gt;
-        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start d-none&quot;&gt;
+        ///			&lt;div id=&quot;footer-reload&quot; class=&quot;float-start&quot; style=&quot;display:none&quot;&gt;
         ///				&lt;a id=&quot;footer-reload-link&quot; href=&quot;javascript:reloadContent()&quot; class=&quot;text-secondary text-decoration-none&quot;&gt;Reload&lt;/a&gt;
         ///			&lt;/div&gt;
         ///      &lt;/footer&gt;.
@@ -726,7 +762,6 @@ namespace legallead.desktop.Properties {
         ///	function showLogout() {
         ///		let bttn = &quot;#btn-my-account-logout-show&quot;;
         ///		$( bttn ).click();
-        ///		return &quot;true&quot;;
         ///	}
         ///
         ///	function setDisplay( name ) {
@@ -736,7 +771,8 @@ namespace legallead.desktop.Properties {
         ///			let thelinks = themenu.getElementsByTagName(&quot;a&quot;);
         ///
         ///			for(let i = 0; i &lt; thelinks.length; i++) {
-        ///				let a = thelink [rest of string was truncated]&quot;;.
+        ///				let a = thelinks[i];
+        ///				const a [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_script_js {
             get {
@@ -955,22 +991,19 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;script name=&quot;verify-and-post&quot;&gt;
         ///
-        ///function verifyAndPost(pagename, buttonname) {
-        ///	const domain = &quot;http://internal.legalead.com/&quot;
-        ///	const target = &quot;&quot;.concat(pagename, &quot;/&quot;, buttonname);
-        ///	const destination = &quot;&quot;.concat(domain, target);
-        ///	let isvalid = true;
-        ///	let prms = {
-        ///		&quot;formname&quot; : null,
-        ///		&quot;formid&quot; : null,
-        ///		&quot;frm&quot;: null
-        ///	}
-        ///	switch (target) {
-        ///		case &quot;home-form-login-submit&quot;:
-        ///			prms.formname = formNames[0];
-        ///			prms.formid = &quot;#&quot; + prms.formname;
-        ///			prms.frm = $(prms.formid);
-        ///			prms.frm.validate [rest of string was truncated]&quot;;.
+        ///function verifyAndPost(pagename, buttonname) { 
+        ///    const domain = &quot;http://internal.legalead.com/&quot; 
+        ///    const target = &quot;&quot;.concat(pagename, &quot;/&quot;, buttonname); 
+        ///    const keyname = &quot;&quot;.concat(pagename, &quot;-&quot;, buttonname); 
+        ///    const destination = &quot;&quot;.concat(domain, target); 
+        ///    let isvalid = true; 
+        ///        let prms = { 
+        ///        &quot;formname&quot; : null, 
+        ///        &quot;formid&quot; : null, 
+        ///        &quot;frm&quot;: null 
+        ///        } 
+        ///        switch (keyname) { 
+        ///        case &quot;home-form-login-submi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string verifyandpost_js {
             get {

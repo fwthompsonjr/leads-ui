@@ -15,7 +15,7 @@ namespace legallead.desktop.extensions
         public static async Task ExtendToken(this UserBo user, IPermissionApi? api)
         {
             if (api == null) return;
-            if (user.Token == null || string.IsNullOrEmpty(user.Token.AccessToken) || !user.IsAuthenicated) return;
+            if (user.Token == null || string.IsNullOrEmpty(user.Token.AccessToken)) return;
             var expiration = DateTime.UtcNow.Subtract(user.Token.Expires.GetValueOrDefault());
             if (expiration.TotalSeconds < -45) return;
             var token = user.Token;
