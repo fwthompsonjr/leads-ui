@@ -38,6 +38,7 @@ namespace legallead.ui.Utilities
             if (user != null)
             {
                 AppendCommonDialogue(doc, parent);
+                InitializeUserNameControls(user, doc);
             }
             return parent.OuterHtml;
         }
@@ -77,6 +78,25 @@ namespace legallead.ui.Utilities
             }
         }
 
+        private static void InitializeUserNameControls(UserBo user, HtmlDocument doc)
+        {
+            UserNameControls.ForEach(k =>
+            {
+                var txt = $"//*[@id='{k}']";
+
+                var tbox = doc.DocumentNode.SelectSingleNode(txt);
+                if (tbox != null)
+                {
+                    var attr = tbox.Attributes.FirstOrDefault(x => x.Name == "value");
+                    if (attr == null)
+                    {
+                        attr = doc.CreateAttribute("value");
+                        tbox.Attributes.Add(attr);
+                    }
+                    attr.Value = user.UserName;
+                }
+            });
+        }
         private static void AppendCommonDialogue(HtmlDocument doc, HtmlNode parent)
         {
             const string find = "id=\"spn-user-session-status\"";
@@ -121,6 +141,10 @@ namespace legallead.ui.Utilities
         private static readonly Dictionary<string, string> CommonControls = new() {
             { "commondialogue", "" },
             { "commondialoguescript", ContentHandler.DialogueJs },
+        };
+        private static readonly List<string> UserNameControls = new() {
+            "form-re-authorize-username",
+            "account-password-username",
         };
     }
 }

@@ -91,7 +91,7 @@
 							<div id="frm-profile-error-message" class="d-none">
 								<!-- Error messages -->
 							</div>
-							<button id="frm-profile-submit-button" class="btn btn-sm btn-primary" onclick="profileSubmitButtonClicked()">
+							<button id="frm-profile-submit-button" class="btn btn-primary" onclick="profileSubmitButtonClicked()">
 								<i id="form-profile-icon" class="bi bi-pencil-square" ></i>
 								<i id="form-profile-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
 							</button>

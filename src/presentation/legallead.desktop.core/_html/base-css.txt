@@ -76,3 +76,11 @@ div[name="loader"] {
     margin-left: 40px;
  }
 }
+
+/*
+ * Modal
+ */
+ div.modal-content {
+    background-color: lightgray;
+    color: rgb(240, 240, 240);
+ }
