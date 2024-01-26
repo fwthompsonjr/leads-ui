@@ -23,9 +23,9 @@
 		<div class="inner">
 			<!-- block: common-mast-heading -->
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-				<a name="subcontent-search" class="nav-link active" href="javascript:void()">Search</a>
-				<a name="subcontent-search-history" class="nav-link" href="javascript:void()">History</a>
-				<a name="subcontent-purchases" class="nav-link" href="javascript:void()">Purchases</a>
+				<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:jssearchviews.setIndex(0)">Search</a>
+				<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:jssearchviews.setIndex(1)">History</a>
+				<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:jssearchviews.setIndex(2)">Purchases</a>
 			</nav>
 		</div>
       </header>

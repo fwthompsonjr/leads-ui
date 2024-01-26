@@ -31,6 +31,8 @@ namespace legallead.ui.implementations
             services.AddKeyedSingleton<IMenuClickHandler, MyAccountProfileMenuClicked>("myaccount-profile");
             services.AddKeyedSingleton<IMenuClickHandler, MyLogoutMenuClicked>("myaccount-logout");
             services.AddKeyedSingleton<IMenuClickHandler, MySearchMenuClicked>("mysearch-home");
+            services.AddKeyedSingleton<IMenuClickHandler, MySearchHistoryMenuClicked>("mysearch-history");
+            services.AddKeyedSingleton<IMenuClickHandler, MySearchPurchasesMenuClicked>("mysearch-purchases");
             return services.BuildServiceProvider();
         }
     }

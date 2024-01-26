@@ -51,9 +51,11 @@
                 Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem 
                 Text="History" 
+                CommandParameter="mysearch-history"
                 Command="{Binding OnItemClicked}" />
             <MenuFlyoutItem 
                 Text="Purchases" 
+                CommandParameter="mysearch-purchases"
                 Command="{Binding OnItemClicked}" />
         </MenuBarItem>
     </ContentPage.MenuBarItems>

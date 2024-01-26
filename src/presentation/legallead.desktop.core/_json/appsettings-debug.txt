@@ -6,10 +6,7 @@
   "debug.login": {
     "passthru": true
   },
-  "landings": {
-    "search": "mysearchtemplate"
-  },
   "user": {
-    "session_timeout": 3
+    "session_timeout": 2
   }
 }

@@ -1,0 +1,49 @@
+
+					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card d-none w-75">
+						<div class="card-body">
+							<h5 class="card-title">Purchase History</h5>	
+							<table class="table table-responsive table-striped">
+								<colgroup>
+									<col name="purchase-date" style="width: 100px" />
+									<col name="item-name" />
+									<col name="item-quantity" style="width: 50px" />
+									<col name="unit-price" style="width: 100px" />
+									<col name="total-price" style="width: 100px" />
+									<col name="purchase-status" style="width: 50px" />
+								</colgroup>
+								<thead>
+									<tr>
+										<td>Purchase Date</td>
+										<td>Item Description</td>
+										<td>Quantity</td>
+										<td>Unit Price</td>
+										<td>Total</td>
+										<td>Status</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="tr-subcontent-purchases-data-template" style="display: none" search-uuid="~0">
+										<td class="text-end"><span name="purchase-date">~1</span></td>
+										<td><span name="item-name">~2</span></td>
+										<td class="text-end"><span name="item-quantity">~3</span></td>
+										<td class="text-end"><span name="unit-price">~4</span></td>
+										<td class="text-end"><span name="total-price">~5</span></td>
+										<td class="text-end" search-uuid="~0"><span name="purchase-status">~6</span></td>
+									</tr>
+									<tr id="tr-subcontent-purchases-no-data">
+										<td colspan="6">
+										<span name="no-data">No Records Found</span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+							<div id="frm-purchase-history-error-message" class="d-none">
+								<!-- Error messages -->
+							</div>
+							<button id="frm-purchase-history-submit-button" class="btn btn-primary">
+								<i id="frm-purchase-history-icon" class="bi bi-clock-history" ></i>
+								<i id="frm-purchase-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
+							</button>
+						</div>
+					</div>

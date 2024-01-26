@@ -18,7 +18,9 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Your session has timed out.</td>
+                        <td>
+                            <span class="text-dark">Your session has timed out.</span>
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,14 +29,14 @@
                             <form id="form-re-authorize" name="form-re-authorize">
                                 <span type="text" style="display:none" id="spn-user-session-status">-unset-</span>
                                 <div class="mb-3">
-                                    <label for="form-re-authorize-username" class="form-label">User Name / Email:</label>
+                                    <label for="form-re-authorize-username" class="form-label text-dark">User Name / Email:</label>
                                     <input type="text" readonly="readonly" class="form-control" id="form-re-authorize-username" name="username" aria-describedby="form-re-authorize-username-help">
                                     <div id="form-re-authorize-username-help" class="text-secondary help-text">
                                         Provide user-name or email address.
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="form-re-authorize-password" class="form-label">Password</label>
+                                    <label for="form-re-authorize-password" class="form-label text-dark">Password</label>
                                     <input type="password" class="form-control" name="login-password" id="form-re-authorize-password">
                                     <div id="form-re-authorize-password-help" class="text-secondary help-text" aria-describedby="form-re-authorize-password-help">
                                         Provide password.
