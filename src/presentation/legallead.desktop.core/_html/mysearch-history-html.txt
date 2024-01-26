@@ -1,0 +1,49 @@
+
+					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card d-none w-75">
+						<div class="card-body">
+							<h5 class="card-title">Search History</h5>	
+							<table class="table table-responsive table-striped">
+								<colgroup>
+									<col name="requested-date" style="width: 100px" />
+									<col name="state-abbr" style="width: 30px" />
+									<col name="county-name" />
+									<col name="begin-date" style="width: 100px" />
+									<col name="ending-date" style="width: 100px" />
+									<col name="search-status" style="width: 50px" />
+								</colgroup>
+								<thead>
+									<tr>
+										<td>Requested Date</td>
+										<td>State</td>
+										<td>County</td>
+										<td>Search Begin</td>
+										<td>Search Ending</td>
+										<td>Status</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="tr-subcontent-history-data-template" style="display: none" search-uuid="~0">
+										<td class="text-end" ><span name="requested-date">~1</span></td>
+										<td><span name="state-abbr">~2</span></td>
+										<td><span name="county-name">~3</span></td>
+										<td class="text-end"><span name="begin-date">~4</span></td>
+										<td class="text-end"><span name="ending-date">~5</span></td>
+										<td class="text-end" search-uuid="~0"><span name="search-status">~6</span></td>
+									</tr>
+									<tr id="tr-subcontent-history-no-data">
+										<td colspan="6">
+										<span name="no-data">No Records Found</span></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+							<div id="frm-search-history-error-message" class="d-none">
+								<!-- Error messages -->
+							</div>
+							<button id="frm-search-history-submit-button" class="btn btn-primary">
+								<i id="frm-search-history-icon" class="bi bi-clock-history" ></i>
+								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
+							</button>
+						</div>
+					</div>

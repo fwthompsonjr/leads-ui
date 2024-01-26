@@ -62,15 +62,18 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
+        ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
         ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
         ///  &quot;api.permissions&quot;: {
         ///    &quot;destination&quot;: &quot;remote&quot;,
         ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
         ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
         ///  },
-        ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
         ///  &quot;landings&quot;: {
-        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
+        ///    &quot;search&quot;: &quot;mysearch&quot;
+        ///  },
+        ///  &quot;user&quot;: {
+        ///    &quot;session_timeout&quot;: 20
         ///  }
         ///}.
         /// </summary>
@@ -88,6 +91,12 @@ namespace legallead.desktop.Properties {
         ///  },
         ///  &quot;debug.login&quot;: {
         ///    &quot;passthru&quot;: true
+        ///  },
+        ///  &quot;landings&quot;: {
+        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
+        ///  },
+        ///  &quot;user&quot;: {
+        ///    &quot;session_timeout&quot;: 2
         ///  }
         ///}.
         /// </summary>
@@ -187,10 +196,10 @@ namespace legallead.desktop.Properties {
         ///&lt;/button&gt;
         ///
         ///&lt;!-- Reauthorize: Modal Content --&gt;
-        ///&lt;input type=&quot;hidden&quot; id=&quot;input-user-session-status&quot; value=&quot;-unset-&quot; /&gt;
         ///&lt;div class=&quot;modal fade&quot; id=&quot;account-authorize-modal&quot; data-bs-backdrop=&quot;static&quot;
         ///        data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; 
-        ///        aria [rest of string was truncated]&quot;;.
+        ///        aria-labelledby=&quot;account-authorize-label&quot; aria-hidden=&quot;true&quot;&gt;
+        ///  &lt;div class= [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string common_dialogue {
             get {
@@ -762,6 +771,7 @@ namespace legallead.desktop.Properties {
         ///	function showLogout() {
         ///		let bttn = &quot;#btn-my-account-logout-show&quot;;
         ///		$( bttn ).click();
+        ///		return null;
         ///	}
         ///
         ///	function setDisplay( name ) {
@@ -771,8 +781,7 @@ namespace legallead.desktop.Properties {
         ///			let thelinks = themenu.getElementsByTagName(&quot;a&quot;);
         ///
         ///			for(let i = 0; i &lt; thelinks.length; i++) {
-        ///				let a = thelinks[i];
-        ///				const a [rest of string was truncated]&quot;;.
+        ///				let a = thelinks[ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string myaccount_script_js {
             get {
@@ -836,6 +845,25 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-history&quot; name=&quot;subcontent-history&quot; class=&quot;subcontent card d-none&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title&quot;&gt;Search History&lt;/h5&gt;	
+        ///							&lt;table class=&quot;table table-responsive table-striped w-75&quot;&gt;
+        ///								&lt;colgroup&gt;
+        ///									&lt;col name=&quot;requested-date&quot; style=&quot;width: 100px&quot; /&gt;
+        ///									&lt;col name=&quot;state-abbr&quot; style=&quot;width: 30px&quot; /&gt;
+        ///									&lt;col name=&quot;county-name&quot; /&gt;
+        ///									&lt;col name=&quot;begin-date&quot; style=&quot;width: 100px&quot; /&gt;
+        ///									&lt;col name=&quot;ending-date&quot; s [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_history_html {
+            get {
+                return ResourceManager.GetString("mysearch_history_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///
         ///	&lt;head&gt;
@@ -857,6 +885,25 @@ namespace legallead.desktop.Properties {
         internal static string mysearch_html {
             get {
                 return ResourceManager.GetString("mysearch-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///					&lt;div id=&quot;dv-subcontent-purchases&quot; name=&quot;subcontent-purchases&quot; class=&quot;subcontent card d-none&quot;&gt;
+        ///						&lt;div class=&quot;card-body&quot;&gt;
+        ///							&lt;h5 class=&quot;card-title&quot;&gt;Purchase History&lt;/h5&gt;	
+        ///							&lt;table class=&quot;table table-responsive table-striped w-75&quot;&gt;
+        ///								&lt;colgroup&gt;
+        ///									&lt;col name=&quot;purchase-date&quot; style=&quot;width: 100px&quot; /&gt;
+        ///									&lt;col name=&quot;item-name&quot; /&gt;
+        ///									&lt;col name=&quot;item-quantity&quot; style=&quot;width: 50px&quot; /&gt;
+        ///									&lt;col name=&quot;unit-price&quot; style=&quot;width: 100px&quot; /&gt;
+        ///									&lt;col name=&quot;total-pr [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_purchases_html {
+            get {
+                return ResourceManager.GetString("mysearch_purchases_html", resourceCulture);
             }
         }
         
@@ -995,15 +1042,14 @@ namespace legallead.desktop.Properties {
         ///    const domain = &quot;http://internal.legalead.com/&quot; 
         ///    const target = &quot;&quot;.concat(pagename, &quot;/&quot;, buttonname); 
         ///    const keyname = &quot;&quot;.concat(pagename, &quot;-&quot;, buttonname); 
-        ///    const destination = &quot;&quot;.concat(domain, target); 
+        ///    const destination = &quot;&quot;.concat(domain, target);
+        ///    const nonauthorization = [ &quot;user&quot;, &quot;home&quot; ];
+        ///    if (buttonname.indexOf(&apos;logout&apos;) &gt;= 0) {
+        ///        window.location.href = destination;
+        ///        return;
+        ///    }
         ///    let isvalid = true; 
-        ///        let prms = { 
-        ///        &quot;formname&quot; : null, 
-        ///        &quot;formid&quot; : null, 
-        ///        &quot;frm&quot;: null 
-        ///        } 
-        ///        switch (keyname) { 
-        ///        case &quot;home-form-login-submi [rest of string was truncated]&quot;;.
+        ///        let p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string verifyandpost_js {
             get {
