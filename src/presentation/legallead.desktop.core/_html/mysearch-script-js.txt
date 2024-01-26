@@ -247,6 +247,38 @@ let jsSearchForm = {
         }); 
     } 
 } 
-                    
+
+
+let jssearchviews = {
+	"links": [ 
+		"#nvlink-subcontent-search", 
+		"#nvlink-subcontent-search-history", 
+		"#nvlink-subcontent-search-purchases" ],
+	"views": [ 
+		"#dv-search-container", 
+		"#dv-subcontent-history", 
+		"#dv-subcontent-purchases" ],
+	"setIndex": function( index ) {
+		const actv = "active";
+		const dnone = "d-none";
+		let id = parseInt( index );
+		if(isNaN(id) || id < 0 || id > 2) { return; }
+		for(let i = 0; i < jssearchviews.links.length; i++) {
+			let nv = jssearchviews.links[i];
+			let vw = jssearchviews.views[i];
+			if( i == id ) {
+				$( nv ).addClass(actv);
+				$( vw ).addClass(actv);
+				$( vw ).removeClass(dnone);
+				$( vw ).show();
+			} else {
+				$( nv ).removeClass(actv);
+				$( vw ).removeClass(actv);
+				$( vw ).hide();
+			}
+		}
+	}
+}
+
 jsSearchForm.initialize(); 
 </script>
