@@ -2,13 +2,13 @@
 					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card d-none w-75">
 						<div class="card-body">
 							<h5 class="card-title">Search History</h5>	
-							<table class="table table-responsive table-striped">
+							<table name="search-dt-table">
 								<colgroup>
-									<col name="requested-date" style="width: 100px" />
-									<col name="state-abbr" style="width: 30px" />
+									<col name="requested-date" style="width: 90px" />
+									<col name="state-abbr" style="width: 40px" />
 									<col name="county-name" />
-									<col name="begin-date" style="width: 100px" />
-									<col name="ending-date" style="width: 100px" />
+									<col name="begin-date" style="width: 75px" />
+									<col name="ending-date" style="width: 75px" />
 									<col name="search-status" style="width: 50px" />
 								</colgroup>
 								<thead>

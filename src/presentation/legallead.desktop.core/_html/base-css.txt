@@ -84,3 +84,28 @@ div[name="loader"] {
     background-color: lightgray;
     color: rgb(240, 240, 240);
  }
+
+/*
+ * Data Tables
+ */
+table[name='search-dt-table'] {
+    font-size: 14px;
+    border: 1px solid #444;
+    width: 100%;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+table[name='search-dt-table'] tbody, 
+table[name='search-dt-table'] td, 
+table[name='search-dt-table'] tfoot, 
+table[name='search-dt-table'] th, 
+table[name='search-dt-table'] thead, 
+table[name='search-dt-table'] tr {
+    border: 1px solid #444;
+}
+
+table[name='search-dt-table'] td {
+	padding-left: 4px;
+	padding-right: 4px;
+}
