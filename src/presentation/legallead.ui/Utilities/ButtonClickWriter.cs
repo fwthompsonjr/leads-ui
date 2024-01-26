@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.utilities;
-using System.Collections.ObjectModel;
 
 namespace legallead.ui.Utilities
 {
@@ -49,10 +48,10 @@ namespace legallead.ui.Utilities
             keys.ForEach(k =>
             {
                 var txt = CommonControls[k];
-                if(string.IsNullOrEmpty(txt))
+                if (string.IsNullOrEmpty(txt))
                 {
                     var remote = ContentHandler.GetLocalContent(k)?.Content;
-                    if(remote != null) { CommonControls[k] = remote; }
+                    if (remote != null) { CommonControls[k] = remote; }
                 }
             });
         }

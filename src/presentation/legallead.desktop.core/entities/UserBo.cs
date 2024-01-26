@@ -18,17 +18,27 @@ namespace legallead.desktop.entities
             internal set
             {
                 token = value;
-                if( token == null || string.IsNullOrEmpty(token.AccessToken))
+                if (token == null || string.IsNullOrEmpty(token.AccessToken))
                 {
                     SessionId = unset;
                 }
                 else
                 {
-                     SessionId = Guid.NewGuid().ToString().Split('-')[^1];
+                    SessionId = Guid.NewGuid().ToString().Split('-')[^1];
                 }
                 AuthenicatedChanged?.Invoke();
             }
         }
+
+        public bool IsSessionTimeout()
+        {
+            var sessionid = GetSessionId();
+            if (!sessionid.Contains('-')) return false;
+            if (Token == null || !Token.Expires.HasValue) return false;
+            var difference = Token.Expires.Value - DateTime.UtcNow;
+            return difference.TotalMinutes < -4;
+        }
+
 
         public Action? AuthenicatedChanged { get; internal set; }
 
@@ -53,8 +63,6 @@ namespace legallead.desktop.entities
                 SessionId = unset;
             }
             return SessionId;
-
-            throw new NotImplementedException();
         }
         private const string unset = "-unset-";
     }

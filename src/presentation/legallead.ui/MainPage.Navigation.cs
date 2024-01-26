@@ -1,6 +1,5 @@
 ﻿using legallead.ui.implementations;
 using legallead.ui.interfaces;
-using System.Diagnostics;
 
 namespace legallead.ui
 {
@@ -24,7 +23,7 @@ namespace legallead.ui
                 var pieces = url.Split('/');
                 var componentName = $"{pieces[3]}-{pieces[4]}";
                 var navigator = NavProvider.GetKeyedService<IPageNavigator>(componentName);
-                navigator?.Submit(url); 
+                navigator?.Submit(url);
             }
         }
 

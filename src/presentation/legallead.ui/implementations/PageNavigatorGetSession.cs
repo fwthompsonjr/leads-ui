@@ -3,7 +3,6 @@ using legallead.desktop.entities;
 using legallead.desktop.utilities;
 using legallead.ui.interfaces;
 using legallead.ui.Utilities;
-using System.Text;
 
 namespace legallead.ui.implementations
 {
@@ -17,6 +16,11 @@ namespace legallead.ui.implementations
                 main == null)
             {
                 SetSession(main, "-unset-");
+                return Task.CompletedTask;
+            }
+            if (user.IsSessionTimeout())
+            {
+                UserAuthenicationHelper.LogoutRequested();
                 return Task.CompletedTask;
             }
             SetSession(main, user.GetSessionId());
