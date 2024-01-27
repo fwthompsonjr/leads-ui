@@ -7,6 +7,6 @@
     "passthru": true
   },
   "user": {
-    "session_timeout": 2
+    "session_timeout": 60
   }
 }

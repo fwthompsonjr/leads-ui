@@ -77,6 +77,15 @@ let jsreauthorize = {
 		var formJq = jsreauthorize.jqid;
 		$(formJq).validate();
 		return $(formJq).valid();
+	},
+	"serialize": function(){
+		const usr = "#form-re-authorize-username";
+		const pwd = "#form-re-authorize-password";
+		let js = {
+			"username": $( usr ).val(),
+			"login-password": $( pwd ).val();
+		};
+		return JSON.stringify( js );
 	}
 };
 

@@ -2,7 +2,7 @@
 					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card d-none w-75">
 						<div class="card-body">
 							<h5 class="card-title">Purchase History</h5>	
-							<table class="table table-responsive table-striped">
+							<table name="search-dt-table">
 								<colgroup>
 									<col name="purchase-date" style="width: 100px" />
 									<col name="item-name" />

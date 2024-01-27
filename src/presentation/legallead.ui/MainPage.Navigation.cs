@@ -40,6 +40,7 @@ namespace legallead.ui
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorLogout>("user-logout");
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorLogout>("myaccount-logout");
             services.AddKeyedSingleton<IPageNavigator, PageNavigatorGetSession>("user-session");
+            services.AddKeyedSingleton<IPageNavigator, ReAuthorizeNavigator>("user-re-authorize");
             return services.BuildServiceProvider();
         }
     }

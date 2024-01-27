@@ -99,8 +99,11 @@ namespace legallead.ui.implementations
         {
             const string allowBypassKey = "debug.login:passthru";
             const string loginKey = "debug.user:name";
+            var keynames = ScriptKeyNames();
+            string[] bypassuris = [keynames[0], keynames[2]];
             var context = GetContextFromUrl(url);
-            if (string.IsNullOrWhiteSpace(context) || !context.Equals(ScriptKeyNames()[0])) return false;
+            var canbypass = bypassuris.Any(x => x == context);
+            if (string.IsNullOrWhiteSpace(context) || !canbypass) return false;
             var config = AppBuilder.ServiceProvider?.GetService<IConfiguration>();
             if (config == null) return false;
             var kv = config[allowBypassKey];
@@ -132,7 +135,8 @@ namespace legallead.ui.implementations
         protected static readonly Dictionary<string, string> ScriptLib = new()
         {
             { "home-form-login-submit", "serializeFormToObject(0);" },
-            { "home-form-register-submit", "serializeFormToObject(1);" }
+            { "home-form-register-submit", "serializeFormToObject(1);" },
+            { "user-re-authorize", "jsreauthorize.serialize();" }
         };
     }
 }
