@@ -9,9 +9,13 @@ namespace legallead.logging.helpers
         private readonly string _connectionString;
         private readonly ILoggingDbCommand _dbexecutor;
 
-        public LoggingDbContext(ILoggingDbCommand command)
+        public LoggingDbContext(ILoggingDbCommand command) : this(command, environ, db)
         {
-            _connectionString = LoggingDb.GetConnectionString();
+        }
+
+        public LoggingDbContext(ILoggingDbCommand command, string environment, string database)
+        {
+            _connectionString = LoggingDb.GetConnectionString(environment, database);
             _dbexecutor = command;
         }
 
@@ -21,5 +25,7 @@ namespace legallead.logging.helpers
         {
             return new MySqlConnection(_connectionString);
         }
+        private const string environ = "local";
+        private const string db = "error";
     }
 }

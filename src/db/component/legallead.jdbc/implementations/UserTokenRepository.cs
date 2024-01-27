@@ -13,7 +13,7 @@ namespace legallead.jdbc.implementations
         public async Task<IEnumerable<UserRefreshToken>> GetAll(User user)
         {
             using var connection = _context.CreateConnection();
-            var parm = new UserRefreshToken { UserId = user.Id ?? string.Empty };
+            var parm = new UserRefreshToken { UserId = user.Id };
             var sql = _sut.SelectSQL(parm);
             var parms = _sut.SelectParameters(parm);
             return await _command.QueryAsync<UserRefreshToken>(connection, sql, parms);
@@ -36,7 +36,7 @@ namespace legallead.jdbc.implementations
         public async Task DeleteTokens(User user)
         {
             var current = await GetAll(user);
-            if (current == null) return;
+            if (!current.Any()) return;
             current.ToList().ForEach(async token =>
             {
                 if (!string.IsNullOrEmpty(token.Id)) { await Delete(token.Id); }

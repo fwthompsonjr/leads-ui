@@ -10,15 +10,15 @@ namespace legallead.jdbc.helpers
         private readonly IDapperCommand _dbexecutor;
         private readonly IDataInitializer _dbinit;
 
-        public DataContext(IDapperCommand command) : this(command, null)
+        public DataContext(IDapperCommand command) : this(command, null, local, app)
         {
         }
 
-        internal DataContext(IDapperCommand command, IDataInitializer? dbint)
+        internal DataContext(IDapperCommand command, IDataInitializer? dbint, string environment = local, string database = app)
         {
             dbint ??= new DataInitializer();
             _dbinit = dbint;
-            _connectionString = AwsData.GetPostGreString();
+            _connectionString = AwsData.GetPostGreString(environment, database);
             _dbexecutor = command;
         }
 
@@ -33,5 +33,7 @@ namespace legallead.jdbc.helpers
         {
             await _dbinit.Init();
         }
+        private const string app = "app";
+        private const string local = "Local";
     }
 }

@@ -1,26 +1,21 @@
-﻿namespace legallead.jdbc
+﻿using legallead.jdbc.models;
+using Newtonsoft.Json;
+
+namespace legallead.jdbc
 {
     internal static class AwsData
     {
-        private const string Endpoint = "database-leads.cmmu8tkizri9.us-east-2.rds.amazonaws.com";
-        private const string PostGresCommand = "server=<localhost>;user=<username>;password=<password>;Database=defaultdb;port=3306;";
-
-        private static string[] GetPassCode()
+        public static string GetPostGreString(string connectionType = "Local", string databaseName = "app")
         {
-            const string saltLocal = "legal.lead.awsd.passcode";
-            const string conversion = "+mnWfJqr8rejN8Gi1GcnibZj+/zTaRqWvP5oQ8uCwwU=";
-            const string vector = "X+jEaHnsFfQ3IZgF23b12w==";
-            return CryptoManager.Decrypt(conversion, saltLocal, vector).Split('|');
+            DbConnectProvider.Target = connectionType;
+            return DbConnectProvider.ConnectionString(databaseName);
         }
-
-        public static string GetPostGreString()
+        private static DbConnect DbConnectProvider => _provider ??= GetConnect();
+        private static DbConnect? _provider;
+        private static readonly string DbConnectString = Properties.Resources.connectionstring_json;
+        private static DbConnect GetConnect()
         {
-            var secret = GetPassCode();
-            var connection = PostGresCommand;
-            connection = connection.Replace("<localhost>", $"{Endpoint}");
-            connection = connection.Replace("<username>", secret[0]);
-            connection = connection.Replace("<password>", secret[1]);
-            return connection;
+            return JsonConvert.DeserializeObject<DbConnect>(DbConnectString) ?? new();
         }
     }
 }
