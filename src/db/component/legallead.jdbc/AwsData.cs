@@ -1,4 +1,5 @@
-﻿using legallead.jdbc.models;
+﻿using legallead.jdbc.helpers;
+using legallead.jdbc.models;
 using Newtonsoft.Json;
 
 namespace legallead.jdbc
@@ -16,7 +17,7 @@ namespace legallead.jdbc
         }
         private static DbConnect DbConnectProvider => _provider ??= GetConnect();
         private static DbConnect? _provider;
-        private static readonly string DbConnectString = Properties.Resources.connectionstring_json;
+        private static readonly string DbConnectString = ConnectionStringHelper.GetConfiguration();
         private static DbConnect GetConnect()
         {
             return JsonConvert.DeserializeObject<DbConnect>(DbConnectString) ?? new();
