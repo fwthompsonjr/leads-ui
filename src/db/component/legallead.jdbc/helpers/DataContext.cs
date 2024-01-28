@@ -6,7 +6,6 @@ namespace legallead.jdbc.helpers
 {
     public class DataContext
     {
-        private readonly string _connectionString;
         private readonly IDapperCommand _dbexecutor;
         private readonly IDataInitializer _dbinit;
 
@@ -18,14 +17,18 @@ namespace legallead.jdbc.helpers
         {
             dbint ??= new DataInitializer();
             _dbinit = dbint;
-            _connectionString = AwsData.GetPostGreString(environment, database);
+            EnvironmentName = environment;
+            DatabaseName = database;
             _dbexecutor = command;
         }
+        public string EnvironmentName { get; private set; }
+        public string DatabaseName { get; private set; }
 
         public virtual IDapperCommand GetCommand => _dbexecutor;
 
         public virtual IDbConnection CreateConnection()
         {
+            var _connectionString = AwsData.GetPostGreString(EnvironmentName, DatabaseName);
             return new MySqlConnection(_connectionString);
         }
 
