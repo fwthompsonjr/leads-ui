@@ -41,7 +41,7 @@ namespace legallead.jdbc.helpers
             await InitReasonCodes();
             IsDbInitialized = true;
         }
-        
+
         private async Task InitTables()
         {
             // create tables if they don't exist
@@ -264,7 +264,7 @@ namespace legallead.jdbc.helpers
                 }
             }
         }
-        
+
         private async Task InitViews()
         {
             // create views if they don't exist
@@ -323,7 +323,7 @@ namespace legallead.jdbc.helpers
                 }
             }
         }
-        
+
         private async Task InitApplications()
         {
             var applicationNames = "legallead.permissions.api".Split(',');
@@ -348,7 +348,7 @@ namespace legallead.jdbc.helpers
                 await TryExecuteAsync(connection, stmt);
             }
         }
-        
+
         private async Task InitProfile()
         {
             var keynames = new List<string> {
@@ -392,7 +392,7 @@ namespace legallead.jdbc.helpers
                 await TryExecuteAsync(connection, stmt);
             }
         }
-        
+
         private async Task InitPermissions()
         {
             var keynames = new List<string> {
@@ -435,7 +435,7 @@ namespace legallead.jdbc.helpers
                 await TryExecuteAsync(connection, stmt);
             }
         }
-        
+
         private async Task InitPermissionGroups()
         {
             try
@@ -469,7 +469,7 @@ namespace legallead.jdbc.helpers
                 Console.WriteLine(ex);
             }
         }
-        
+
         private async Task InitStoredProcedures()
         {
             // create procs if they don't exist
@@ -591,7 +591,7 @@ namespace legallead.jdbc.helpers
                 }
             }
         }
-        
+
         private static async Task TryExecuteAsync(IDbConnection connection, string command)
         {
             try
@@ -607,7 +607,7 @@ namespace legallead.jdbc.helpers
                 Console.WriteLine(ex.ToString());
             }
         }
-        
+
         private async Task InitReasonCodes()
         {
             var command = "INSERT INTO REASONCODES " + Environment.NewLine +

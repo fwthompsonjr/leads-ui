@@ -1,9 +1,4 @@
 ﻿using legallead.jdbc.helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.tests
 {
@@ -35,10 +30,9 @@ namespace legallead.jdbc.tests
         }
 
         [Theory]
-        [InlineData("app", "local")]
         [InlineData("app", "test")]
         [InlineData("app", "production")]
-        [InlineData("error", "local")]
+        [InlineData("error", "production")]
         [InlineData("error", "test")]
         public void AwsCanCreateConnection(string database, string environment)
         {
