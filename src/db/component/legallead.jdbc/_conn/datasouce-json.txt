@@ -1,4 +1,0 @@
-[
-	{ "name": "app", "source": "defaultdb" },
-	{ "name": "error", "source": "wlogpermissions" }
-]

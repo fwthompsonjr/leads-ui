@@ -2,6 +2,8 @@
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.logging;
+using legallead.logging.helpers;
+using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.search.api.Controllers;
 using legallead.search.api.Health;
@@ -9,6 +11,7 @@ using legallead.search.api.Models;
 using legallead.search.api.Services;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.search.api.Utility
 {
@@ -16,6 +19,7 @@ namespace legallead.search.api.Utility
     {
         public static void Initialize(this IServiceCollection services, IConfiguration? configuration = null)
         {
+            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Local");
             var setting = new BackgroundServiceSettings
             {
                 Enabled = configuration?.GetValue<bool>("BackgroundServices:Enabled") ?? true,
@@ -31,7 +35,7 @@ namespace legallead.search.api.Utility
             services.AddScoped(x =>
             {
                 var command = x.GetRequiredService<IDapperCommand>();
-                return new DataContext(command);
+                return new DataContext(command, null, environ, "app");
             });
             services.AddScoped<IUserSearchRepository, UserSearchRepository>(x =>
             {
@@ -57,17 +61,31 @@ namespace legallead.search.api.Utility
             services.AddScoped<IExcelGenerator, ExcelGenerator>();
             // logging
             services.AddSingleton<LoggingDbServiceProvider>();
+            services.AddScoped<ILoggingDbCommand, LoggingDbExecutor>();
+            services.AddScoped<ILoggingDbContext>(s => {
+                var command = s.GetRequiredService<ILoggingDbCommand>();
+                return new LoggingDbContext(command, environ, "error");
+            });
+            // logging content repository
+            services.AddScoped<ILogContentRepository>(s => {
+                var context = s.GetRequiredService<ILoggingDbContext>();
+                return new LogContentRepository(context);
+            });
+            // logging configuration
             services.AddScoped(p =>
             {
                 var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
                 return logprovider.GetRequiredService<ILogConfiguration>();
             });
-            // logging
-            services.AddScoped(p =>
+            // logging service
+            services.AddScoped<ILoggingService>(p =>
             {
-                var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
-                return logprovider.GetRequiredService<ILoggingService>();
+                var guid = Guid.NewGuid();
+                var repo = p.GetRequiredService<ILogContentRepository>();
+                var cfg = p.GetRequiredService<ILogConfiguration>();
+                return new LoggingService(guid, repo, cfg);
             });
+            // logging repository
             services.AddScoped<ILoggingRepository>(p =>
             {
                 var lg = p.GetRequiredService<ILoggingService>();
@@ -112,6 +130,20 @@ namespace legallead.search.api.Utility
                 endpoints.MapControllers();
             });
 
+        }
+
+        [ExcludeFromCodeCoverage]
+        private static string GetConfigOrDefault(IConfiguration? configuration, string key, string backup)
+        {
+            try
+            {
+                if (configuration == null) return backup;
+                return configuration.GetValue<string>(key) ?? backup;
+            }
+            catch (Exception)
+            {
+                return backup;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -46,8 +47,9 @@ namespace legallead.permissions.api
             services.SetupJwt(configuration);
         }
 
-        public static void RegisterDataServices(this IServiceCollection services)
+        public static void RegisterDataServices(this IServiceCollection services, IConfiguration configuration)
         {
+            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Local");
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();
@@ -56,7 +58,7 @@ namespace legallead.permissions.api
             {
                 var command = d.GetRequiredService<IDapperCommand>();
                 var dbint = d.GetRequiredService<IDataInitializer>();
-                return new DataContext(command, dbint);
+                return new DataContext(command, dbint, environ);
             });
             services.AddScoped<ISubscriptionInfrastructure, SubscriptionInfrastructure>();
             services.AddScoped<IComponentRepository, ComponentRepository>();
@@ -264,6 +266,20 @@ namespace legallead.permissions.api
                     ClockSkew = TimeSpan.Zero
                 };
             });
+        }
+
+        [ExcludeFromCodeCoverage]
+        private static string GetConfigOrDefault(IConfiguration? configuration, string key, string backup)
+        {
+            try
+            {
+                if (configuration == null) return backup;
+                return configuration.GetValue<string>(key) ?? backup;
+            }
+            catch (Exception)
+            {
+                return backup;
+            }
         }
     }
 }

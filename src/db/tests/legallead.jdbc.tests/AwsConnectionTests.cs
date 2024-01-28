@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using legallead.jdbc.helpers;
 
 namespace legallead.jdbc.tests
 {
@@ -31,6 +27,41 @@ namespace legallead.jdbc.tests
         {
             var actual = AwsData.GetPostGreString(environment, database);
             Assert.False(string.IsNullOrEmpty(actual));
+        }
+
+        [Theory]
+        [InlineData("app", "test")]
+        [InlineData("app", "production")]
+        [InlineData("error", "production")]
+        [InlineData("error", "test")]
+        public void AwsCanCreateConnection(string database, string environment)
+        {
+            var executor = new DapperExecutor();
+            var initializer = new DataInitializer(environment, database);
+            var context = new DataContext(executor, initializer, environment, database);
+            var actual = context.CreateConnection();
+            Assert.NotNull(actual);
+        }
+
+
+        [Fact]
+        public void AwsCanOpenTestConnection()
+        {
+            if (!System.Diagnostics.Debugger.IsAttached) return;
+            var ex = Record.Exception(() =>
+            {
+                string database = "app";
+                string environment = "test";
+                var executor = new DapperExecutor();
+                var initializer = new DataInitializer(environment, database);
+                var context = new DataContext(executor, initializer, environment, database);
+                using var actual = context.CreateConnection();
+                actual.Open();
+                var command = actual.CreateCommand();
+                command.CommandText = "SELECT 1";
+                command.ExecuteScalar();
+            });
+            Assert.Null(ex);
         }
     }
 }

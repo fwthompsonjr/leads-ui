@@ -23,5 +23,6 @@
             "Local",
             "Test",
             "Production"
-        };}
+        };
+    }
 }

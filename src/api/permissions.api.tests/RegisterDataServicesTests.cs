@@ -30,7 +30,7 @@ namespace permissions.api.tests
                 var collection = new ServiceCollection();
                 collection.AddSingleton<IConfiguration>(config);
                 collection.RegisterAuthentication(config);
-                collection.RegisterDataServices();
+                collection.RegisterDataServices(config);
                 collection.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(collection));
                 collection.RegisterHealthChecks();
                 _serviceProvider = collection.BuildServiceProvider();

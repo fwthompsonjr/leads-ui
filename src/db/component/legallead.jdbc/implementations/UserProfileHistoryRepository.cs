@@ -1,7 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using System.Diagnostics;
 using System.Text;
 
 namespace legallead.jdbc.implementations

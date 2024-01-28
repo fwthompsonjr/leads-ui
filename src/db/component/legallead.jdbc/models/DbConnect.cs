@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using legallead.jdbc.helpers;
+using Newtonsoft.Json;
 using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.models
 {
@@ -50,7 +45,7 @@ namespace legallead.jdbc.models
         }
         private static List<DbName> DbList => _names ??= GetNames();
         private const string ConnectCommandString = "server=<localhost>;user=<username>;password=<password>;Database=<database>;port=3306;";
-        private static readonly string DbNames = Properties.Resources.datasouce_json;
+        private static readonly string DbNames = DatabaseSourceHelper.GetConfiguration();
         private static List<DbName>? _names;
         private static List<DbName> GetNames()
         {

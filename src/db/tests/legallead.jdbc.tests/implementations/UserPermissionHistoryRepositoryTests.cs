@@ -26,7 +26,7 @@ namespace legallead.jdbc.tests.implementations
         [Fact]
         public async Task RepoCreateSnapshotHappyPath()
         {
-            var exception = await Record.ExceptionAsync( async () =>
+            var exception = await Record.ExceptionAsync(async () =>
             {
                 var change = faker.PickRandom<PermissionChangeTypes>();
                 var container = new RepoContainer();
