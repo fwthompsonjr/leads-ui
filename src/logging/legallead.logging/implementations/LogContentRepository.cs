@@ -4,7 +4,7 @@ using legallead.logging.interfaces;
 
 namespace legallead.logging.implementations
 {
-    internal class LogContentRepository : BaseLoggingDbRepository<LogContentDetailDto>, ILogContentRepository
+    public class LogContentRepository : BaseLoggingDbRepository<LogContentDetailDto>, ILogContentRepository
     {
         public LogContentRepository(ILoggingDbContext context) : base(context)
         {
