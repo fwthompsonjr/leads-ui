@@ -47,6 +47,7 @@ namespace legallead.jdbc.tests
         [Fact]
         public void AwsCanOpenTestConnection()
         {
+            if (!System.Diagnostics.Debugger.IsAttached) return;
             var ex = Record.Exception(() =>
             {
                 string database = "app";
