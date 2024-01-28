@@ -16,7 +16,7 @@ var config =
         .AddEnvironmentVariables()
         .Build();
 var services = builder.Services;
-services.RegisterDataServices();
+services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
 services.AddControllers();
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);

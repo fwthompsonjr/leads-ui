@@ -14,9 +14,13 @@ namespace legallead.jdbc.helpers
         private bool IsDbInitialized = false;
         private readonly string _connectionString;
 
-        public DataInitializer()
+        public DataInitializer() : this(local, app)
         {
-            _connectionString = AwsData.GetPostGreString();
+        }
+
+        public DataInitializer(string environment, string database)
+        {
+            _connectionString = AwsData.GetPostGreString(environment, database);
         }
 
         public virtual IDbConnection CreateConnection()
@@ -671,5 +675,7 @@ namespace legallead.jdbc.helpers
             public string Code { get; set; } = string.Empty;
             public string Description { get; set; } = string.Empty;
         }
+        private const string app = "app";
+        private const string local = "Local";
     }
 }
