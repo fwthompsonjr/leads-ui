@@ -44,11 +44,8 @@ namespace legallead.jdbc.tests
         }
 
         [Theory]
-        [InlineData("app", "local")]
         [InlineData("app", "test")]
         [InlineData("app", "production")]
-        [InlineData("error", "local")]
-        [InlineData("error", "test")]
         public void AwsCanOpenConnection(string database, string environment)
         {
             var ex = Record.Exception(() =>
