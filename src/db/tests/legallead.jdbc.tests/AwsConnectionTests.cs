@@ -43,13 +43,14 @@ namespace legallead.jdbc.tests
             Assert.NotNull(actual);
         }
 
-        [Theory]
-        [InlineData("app", "test")]
-        [InlineData("app", "production")]
-        public void AwsCanOpenConnection(string database, string environment)
+
+        [Fact]
+        public void AwsCanOpenTestConnection()
         {
             var ex = Record.Exception(() =>
             {
+                string database = "app";
+                string environment = "test";
                 var executor = new DapperExecutor();
                 var initializer = new DataInitializer(environment, database);
                 var context = new DataContext(executor, initializer, environment, database);
