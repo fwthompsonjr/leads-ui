@@ -5,7 +5,7 @@ namespace legallead.logging
 {
     internal static class LoggingDb
     {
-        public static string GetConnectionString(string connectionType = "Local", string databaseName = "error")
+        public static string GetConnectionString(string connectionType = "Test", string databaseName = "error")
         {
             ErConnectProvider.Target = connectionType;
             return ErConnectProvider.ConnectionString(databaseName);

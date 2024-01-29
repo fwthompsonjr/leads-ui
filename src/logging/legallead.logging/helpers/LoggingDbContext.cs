@@ -25,7 +25,7 @@ namespace legallead.logging.helpers
         {
             return new MySqlConnection(_connectionString);
         }
-        private const string environ = "local";
+        private const string environ = "test";
         private const string db = "error";
     }
 }
