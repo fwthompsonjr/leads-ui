@@ -41,7 +41,7 @@ namespace legallead.search.api.Services
             }
         }
 
-        private void Generate(SearchQueueDto dto)
+        protected void Generate(SearchQueueDto dto)
         {
             if (DataService == null || _queueDb == null) return;
             var uniqueId = dto.Id;

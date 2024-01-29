@@ -7,7 +7,7 @@ namespace legallead.jdbc
     internal static class AwsData
     {
         private static readonly object locker = new();
-        public static string GetPostGreString(string connectionType = "Local", string databaseName = "app")
+        public static string GetPostGreString(string connectionType = "Test", string databaseName = "app")
         {
             lock (locker)
             {

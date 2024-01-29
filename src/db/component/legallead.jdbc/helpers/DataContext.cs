@@ -37,6 +37,6 @@ namespace legallead.jdbc.helpers
             await _dbinit.Init();
         }
         private const string app = "app";
-        private const string local = "Local";
+        private const string local = "Test";
     }
 }

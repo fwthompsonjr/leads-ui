@@ -19,7 +19,7 @@ namespace legallead.records.search.Web
             var driver = GetWeb;
             By? selector = GetSelector(item);
             if (driver == null || selector == null) return;
-            IWebElement? element = driver.FindElement(selector);
+            IWebElement? element = TryGetElement(driver, selector, 5, 500);
             if (element == null) return;
             string outerHtml = element.GetAttribute("outerHTML");
             CollinWebInteractive helper = new();
@@ -37,6 +37,18 @@ namespace legallead.records.search.Web
 
             IsProbateSearch = probateLink != null;
             IsJusticeSearch = isCollinCounty && justiceLocation != null;
+        }
+
+        private static IWebElement? TryGetElement(IWebDriver driver, By selector, int retries, int wait)
+        {
+            var element = driver.TryFindElement(selector);
+            while (element == null && retries > 0)
+            {
+                Thread.Sleep(wait);
+                element = driver.TryFindElement(selector);
+                retries--;
+            }
+            return element;
         }
     }
 }

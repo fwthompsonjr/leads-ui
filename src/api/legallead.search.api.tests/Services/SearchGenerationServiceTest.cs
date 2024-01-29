@@ -36,7 +36,7 @@ namespace legallead.search.api.tests.Services
                 var component = provider.GetRequiredService<IBgComponentRepository>();
                 var settings = provider.GetRequiredService<IBackgroundServiceSettings>();
                 var gen = provider.GetRequiredService<IExcelGenerator>();
-                var service = new MockGenerationService(logger, repo, component, settings, gen);
+                var service = new DemoGenerationService(logger, repo, component, settings, gen);
                 service.TestWork();
             });
             Assert.Null(exception);
@@ -50,9 +50,9 @@ namespace legallead.search.api.tests.Services
             return collection.BuildServiceProvider();
         }
 
-        private class MockGenerationService : SearchGenerationService
+        private class DemoGenerationService : SearchGenerationService
         {
-            public MockGenerationService(ILoggingRepository? logger, ISearchQueueRepository? repo, IBgComponentRepository? component, IBackgroundServiceSettings? settings, IExcelGenerator excel) : base(logger, repo, component, settings, excel)
+            public DemoGenerationService(ILoggingRepository? logger, ISearchQueueRepository? repo, IBgComponentRepository? component, IBackgroundServiceSettings? settings, IExcelGenerator excel) : base(logger, repo, component, settings, excel)
             {
             }
 

@@ -340,6 +340,10 @@ namespace legallead.records.search.Classes
                     }
                 }
                 IWebElement? webElement = navigator.Execute(item);
+                if (item.FriendlyName == "PauseForTableSubmit")
+                {
+                    Thread.Sleep(1200);
+                }
                 if (webElement != null)
                 {
                     return webElement;
