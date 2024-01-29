@@ -36,15 +36,7 @@ namespace legallead.jdbc.implementations
             try
             {
                 var procedure = AppendProcs[search];
-                var dapperParm = new DynamicParameters();
-                dapperParm.Add("searchItemId", id);
-                dapperParm.Add("jscontent", data);
-                if (keyname != null)
-                {
-                    dapperParm.Add("stagingName", keyname);
-                    var isByte = data is byte[];
-                    dapperParm.Add("isByteArray", Convert.ToByte(isByte ? 1 : 0));
-                }
+                var dapperParm = GetParameters(search, id, data, keyname);
                 using (var connection = _context.CreateConnection())
                     await _command.ExecuteAsync(connection, procedure, dapperParm);
                 return new KeyValuePair<bool, string>(true, "Command executed succesfully");
@@ -160,6 +152,27 @@ namespace legallead.jdbc.implementations
             {
                 return new KeyValuePair<bool, object>(false, ex.Message);
             }
+        }
+
+        private static DynamicParameters GetParameters(SearchTargetTypes search, string? id, object data, string? keyname = null)
+        {
+
+            var dapperParm = new DynamicParameters();
+            if(search == SearchTargetTypes.Staging)
+            {
+                dapperParm.Add("searchItemId", id);
+                dapperParm.Add("stagingName", keyname);
+                dapperParm.Add("jscontent", data);
+                var isByte = data is byte[];
+                dapperParm.Add("isByteArray", Convert.ToByte(isByte ? 1 : 0));
+            } 
+            else
+            {
+                dapperParm.Add("searchItemId", id);
+                dapperParm.Add("jscontent", data);
+
+            }
+            return dapperParm;
         }
 
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){

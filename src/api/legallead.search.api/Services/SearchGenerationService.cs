@@ -55,6 +55,7 @@ namespace legallead.search.api.Services
                 _ = _queueDb.Complete(uniqueId);
                 return;
             }
+            PostStatus(uniqueId, bo);
             PostStatus(uniqueId, 0, 1);
             PostStatus(uniqueId, 1, 0);
             var interaction = WebMapper.MapFrom<UserSearchRequest, WebInteractive>(bo);
@@ -64,6 +65,7 @@ namespace legallead.search.api.Services
                 _ = _queueDb.Complete(uniqueId);
                 return;
             }
+            interaction.UniqueId = uniqueId;
             PostStatus(uniqueId, 1, 1);
             PostStatus(uniqueId, 2, 0);
             var response = Fetch(interaction);
@@ -75,6 +77,7 @@ namespace legallead.search.api.Services
             }
             PostStatus(uniqueId, 2, 1);
             PostStatus(uniqueId, 3, 0);
+            if (response.WebsiteId == 0) response.WebsiteId = 1;
             var addresses = GetAddresses(response);
             if (addresses == null)
             {
@@ -142,18 +145,28 @@ namespace legallead.search.api.Services
             }
         }
 
+
+        private void PostStatus(string uniqueId, UserSearchRequest request)
+        {
+            if (_queueDb == null) return;
+            var starting = DateTimeOffset.FromUnixTimeMilliseconds(request.StartDate).DateTime;
+            var ending = DateTimeOffset.FromUnixTimeMilliseconds(request.EndDate).DateTime;
+            var message = $"{_typeName}: search begin State: {request.State}, County: {request.County.Name}, Start: {starting:d}, Ending: {ending:d}";
+            _ = _queueDb.Status(uniqueId, message).ConfigureAwait(false);
+        }
         private void PostStatus(string uniqueId, int messageId, int statusId)
         {
             if (_queueDb == null) return;
             var indexes = new[] { 0, 1, 2 };
-            var statuses = new[] { "begin", "complete", "failed" };
+            var statuses = new[] { "begin", "complete", "failed" }.ToList();
+            var messageState = indexes.Contains(statusId) ? statuses[statusId] : "-";
             var messages = new[]
             {
-                $"{_typeName} parameter evaluation: {0}",
-                $"{_typeName} parameter conversion to search request: {0}",
-                $"{_typeName} search request processing: {0}",
-                $"{_typeName} excel content conversion: {0}",
-                $"{_typeName} excel content serialization: {0}",
+                $"{_typeName}: parameter evaluation: {messageState}",
+                $"{_typeName}: parameter conversion to search request: {messageState}",
+                $"{_typeName}: search request processing: {messageState}",
+                $"{_typeName}: excel content conversion: {messageState}",
+                $"{_typeName}: excel content serialization: {messageState}",
             };
             if (messageId < 0 || messageId > messages.Length - 1) { return; }
             var state = indexes.Contains(statusId) ? statuses[statusId] : "status";

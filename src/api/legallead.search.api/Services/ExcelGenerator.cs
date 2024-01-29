@@ -1,4 +1,6 @@
 ﻿using legallead.jdbc.interfaces;
+using legallead.records.search.Classes;
+using legallead.records.search;
 using legallead.records.search.Models;
 using OfficeOpenXml;
 
@@ -8,7 +10,24 @@ namespace legallead.search.api.Services
     {
         public ExcelPackage? GetAddresses(WebFetchResult fetchResult, ILoggingRepository logging)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string extXml = CommonKeyIndexes.ExtensionXml;
+                string extFile = CommonKeyIndexes.ExtensionXlsx;
+                string tmpFileName = fetchResult.Result.Replace(extXml, extFile);
+                ExcelWriter writer = new();
+                return writer.ConvertToPersonTable(
+                addressList: fetchResult.PeopleList,
+                worksheetName: "Addresses",
+                saveFile: false,
+                outputFileName: tmpFileName,
+                websiteId: fetchResult.WebsiteId);
+            }
+            catch (Exception ex)
+            {
+                _ = logging.LogError(ex).ConfigureAwait(false);
+                return null;
+            }
         }
 
         public bool SerializeResult(string uniqueId, ExcelPackage package, ISearchQueueRepository repo, ILoggingRepository logging)
