@@ -3,6 +3,8 @@ using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.logging;
+using legallead.logging.helpers;
+using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Health;
@@ -132,17 +134,32 @@ namespace legallead.permissions.api
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
             // logging
+            services.AddSingleton<LoggingDbServiceProvider>();
+            services.AddScoped<ILoggingDbCommand, LoggingDbExecutor>();
+            services.AddScoped<ILoggingDbContext>(s => {
+                var command = s.GetRequiredService<ILoggingDbCommand>();
+                return new LoggingDbContext(command, environ, "error");
+            });
+            // logging content repository
+            services.AddScoped<ILogContentRepository>(s => {
+                var context = s.GetRequiredService<ILoggingDbContext>();
+                return new LogContentRepository(context);
+            });
+            // logging configuration
             services.AddScoped(p =>
             {
                 var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
                 return logprovider.GetRequiredService<ILogConfiguration>();
             });
-            // logging
-            services.AddScoped(p =>
+            // logging service
+            services.AddScoped<ILoggingService>(p =>
             {
-                var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
-                return logprovider.GetRequiredService<ILoggingService>();
+                var guid = Guid.NewGuid();
+                var repo = p.GetRequiredService<ILogContentRepository>();
+                var cfg = p.GetRequiredService<ILogConfiguration>();
+                return new LoggingService(guid, repo, cfg);
             });
+            // logging repository
             services.AddScoped<ILoggingInfrastructure>(p =>
             {
                 var lg = p.GetRequiredService<ILoggingService>();

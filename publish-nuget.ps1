@@ -9,11 +9,16 @@ $found = $di.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories) | Whe
 
 if( $found.Count -eq $null) {
     $package = $found.FullName
-    dotnet nuget push $package --api-key $apikey --source $publishurl
+    if ($package.IndexOf("1.0.0") -lt 0) {
+        dotnet nuget push $package --api-key $apikey --source $publishurl
+    }
+    
     return;
 }
 
 $found.GetEnumerator() | ForEach-Object {
     $package = ([system.io.fileinfo]$_).FullName
-    dotnet nuget push $package --api-key $apikey --source $publishurl
+    if ($package.IndexOf("1.0.0") -lt 0) {
+        dotnet nuget push $package --api-key $apikey --source $publishurl
+    }
 }
