@@ -19,7 +19,7 @@ namespace legallead.search.api.Utility
     {
         public static void Initialize(this IServiceCollection services, IConfiguration? configuration = null)
         {
-            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Local");
+            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Test");
             var setting = new BackgroundServiceSettings
             {
                 Enabled = configuration?.GetValue<bool>("BackgroundServices:Enabled") ?? true,

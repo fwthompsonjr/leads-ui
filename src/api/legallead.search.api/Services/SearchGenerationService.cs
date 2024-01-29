@@ -34,7 +34,7 @@ namespace legallead.search.api.Services
                 IsWorking = true;
                 var queue = GetQueue().Result;
                 if (!queue.Any()) { return; }
-                var message = "Found ( {queue.Count} ) records to process.";
+                var message = $"Found ( {queue.Count} ) records to process.";
                 DataService.Echo(message);
                 queue.ForEach(Generate);
                 IsWorking = false;
