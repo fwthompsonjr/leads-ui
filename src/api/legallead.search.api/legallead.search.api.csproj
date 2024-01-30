@@ -18,7 +18,8 @@
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="legallead.logging" Version="3.2.*" />
 		<PackageReference Include="legallead.models" Version="3.2.*" />
-		<!--<PackageReference Include="legallead.records.search" Version="3.2.*" />-->
+		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
+		<PackageReference Include="legallead.records.search" Version="3.2.*" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
@@ -32,10 +33,10 @@
 			<_Parameter1>legallead.models.tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-
+<!--
 	<ItemGroup>
 	  <ProjectReference Include="..\..\core\legallead.core\component\records.search\legallead.records.search.csproj" />
 	  <ProjectReference Include="..\..\db\component\legallead.jdbc\legallead.jdbc.csproj" />
 	</ItemGroup>
-
+-->
 </Project>

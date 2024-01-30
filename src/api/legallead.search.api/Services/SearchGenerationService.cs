@@ -29,14 +29,21 @@ namespace legallead.search.api.Services
         {
             if (IsWorking) { return; }
             if (DataService == null || _queueDb == null) return;
-            lock (_lock)
+            try
             {
-                IsWorking = true;
-                var queue = GetQueue().Result;
-                if (!queue.Any()) { return; }
-                var message = $"Found ( {queue.Count} ) records to process.";
-                DataService.Echo(message);
-                queue.ForEach(Generate);
+
+                lock (_lock)
+                {
+                    IsWorking = true;
+                    var queue = GetQueue().Result;
+                    if (!queue.Any()) { return; }
+                    var message = $"Found ( {queue.Count} ) records to process.";
+                    DataService.Echo(message);
+                    queue.ForEach(Generate);
+                }
+            }
+            finally
+            {
                 IsWorking = false;
             }
         }
