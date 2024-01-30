@@ -51,7 +51,7 @@ namespace legallead.permissions.api
 
         public static void RegisterDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Local");
+            string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Test");
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();

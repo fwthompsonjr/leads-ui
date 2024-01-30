@@ -3,7 +3,6 @@ using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Xml;
@@ -40,11 +39,6 @@ namespace legallead.records.search.Classes
             string extXml = CommonKeyIndexes.ExtensionXml;
             string extFile = CommonKeyIndexes.ExtensionXlsx;
             string tmpFileName = fetchResult.Result.Replace(extXml, extFile);
-            if (true)
-            {
-                string htmlCaseList = fetchResult.CaseList;
-                Debug.Assert(!string.IsNullOrEmpty(htmlCaseList));
-            }
 
             using ExcelPackage workBook = writer.ConvertToPersonTable(
                 addressList: fetchResult.PeopleList,
@@ -52,13 +46,16 @@ namespace legallead.records.search.Classes
                 saveFile: false,
                 outputFileName: tmpFileName,
                 websiteId: fetchResult.WebsiteId);
-            writer.ConvertToDataTable(
-            excelPackage: workBook,
-            htmlTable: fetchResult.CaseList,
-            worksheetName: "CaseData",
-            saveFile: true,
-            outputFileName: tmpFileName,
-            websiteId: fetchResult.WebsiteId);
+            if (!string.IsNullOrEmpty(fetchResult.CaseList))
+            {
+                writer.ConvertToDataTable(
+                excelPackage: workBook,
+                htmlTable: fetchResult.CaseList,
+                worksheetName: "CaseData",
+                saveFile: true,
+                outputFileName: tmpFileName,
+                websiteId: fetchResult.WebsiteId);
+            }
         }
 
         public ExcelPackage ConvertToPersonTable(

@@ -51,7 +51,7 @@ namespace legallead.jdbc.helpers
                     for (int index = 0; index < columnCount; index++)
                     {
                         var name = reader.GetName(index);
-                        record[name] = reader[index];
+                        record[name] = GetFieldValue(reader, index);
                     }
                     response.Add(record);
                 }
@@ -85,6 +85,7 @@ namespace legallead.jdbc.helpers
             if (conn.State != ConnectionState.Open) conn.Open();
             var cmmd = conn.CreateCommand();
             cmmd.CommandText = sql;
+            cmmd.CommandTimeout = 30;
             arg?.ParameterNames.ToList().ForEach(parameter =>
             {
                 var p = cmmd.CreateParameter();
@@ -93,6 +94,13 @@ namespace legallead.jdbc.helpers
                 cmmd.Parameters.Add(p);
             });
             return cmmd;
+        }
+
+        private static object GetFieldValue(IDataReader reader, int index)
+        {
+            var data = reader[index];
+            if (data is not Guid guid) return data;
+            return guid.ToString("D");
         }
     }
 }

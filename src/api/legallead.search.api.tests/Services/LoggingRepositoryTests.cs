@@ -115,5 +115,36 @@ namespace legallead.search.api.tests.Services
             });
             Assert.Null(failure);
         }
+        [Theory]
+        [InlineData("LogCritical")]
+        [InlineData("LogDebug")]
+        [InlineData("LogError")]
+        [InlineData("LogInformation")]
+        [InlineData("LogVerbose")]
+        [InlineData("LogWarning")]
+        public async Task RepoLogServiceException(string methodName)
+        {
+            var attribute = faker.Random.AlphaNumeric(10);
+            var exception = faker.System.Exception();
+            var infra = new Mock<ILoggingService>();
+
+            infra.Setup(m => m.LogCritical(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            infra.Setup(m => m.LogDebug(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            infra.Setup(m => m.LogInformation(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            infra.Setup(m => m.LogVerbose(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            infra.Setup(m => m.LogWarning(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            infra.Setup(m => m.LogError(It.IsAny<Exception>(), It.IsAny<int>(), It.IsAny<string>())).ThrowsAsync(exception);
+            var sut = new LoggingRepository(infra.Object);
+            var failure = await Record.ExceptionAsync(async () =>
+            {
+                if (methodName == "LogCritical") await sut.LogCritical(attribute);
+                if (methodName == "LogDebug") await sut.LogDebug(attribute);
+                if (methodName == "LogError") await sut.LogError(exception);
+                if (methodName == "LogInformation") await sut.LogInformation(attribute);
+                if (methodName == "LogVerbose") await sut.LogVerbose(attribute);
+                if (methodName == "LogWarning") await sut.LogWarning(attribute);
+            });
+            Assert.Null(failure);
+        }
     }
 }

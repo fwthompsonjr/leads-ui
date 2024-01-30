@@ -81,21 +81,23 @@
   </setting>
   <directions>
     <instructions id="1">
-      <command type="GetCases" name="WaitForElementExist" By="Id" FriendlyName="Court-Type-Selection"><![CDATA[sbxControlID2]]></command>
-      <command type="GetCases" name="SetComboIndex" By="Id" FriendlyName="Court-Type-Selection"><![CDATA[sbxControlID2,?SetComboIndex]]></command>
-      <command type="GetCases" name="WaitForElementExist" By="XPath" FriendlyName="Search-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>
-      <command type="GetCases" name="Click" By="XPath" FriendlyName="Search-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>
-      <command type="GetCases" name="WaitForNavigation" By="" FriendlyName=""><![CDATA[ ]]></command>
-      <command type="GetCases" name="WaitForElementExist" By="Id" FriendlyName="District-Type-Selection"><![CDATA[sbxControlID2]]></command>
-      <command type="GetCases" name="SetComboIndex" By="Id" FriendlyName="District-Type-Selection"><![CDATA[sbxControlID2,?SetComboIndex]]></command>
-      <command type="GetCases" name="WaitForElementExist" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
-      <command type="GetCases" name="Click" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
-      <command type="GetCases" name="Click" By="Id" FriendlyName="Date-Filed-Radio-Button"><![CDATA[DateFiled]]></command>
-      <command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-On-TextBox"><![CDATA[DateFiledOnAfter,?StartDate]]></command>
-      <command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-Before-TextBox"><![CDATA[DateFiledOnBefore,?EndingDate]]></command>
-      <command type="GetCases" name="ClickElement" By="Id" FriendlyName="Search-Records-Submit"><![CDATA[SearchSubmit]]></command>
-      <command type="GetCases" name="WaitForNavigation" By="" FriendlyName=""><![CDATA[ ]]></command>
-      <command type="GetCases" name="GetElement" By="XPath" FriendlyName="Search-Records-Result-Table"><![CDATA[/html/body/table[4]]]></command>
+		<command type="GetCases" name="WaitForElementExist" By="Id" FriendlyName="Court-Type-Selection"><![CDATA[sbxControlID2]]></command>
+		<command type="GetCases" name="SetComboIndex" By="Id" FriendlyName="Court-Type-Selection"><![CDATA[sbxControlID2,?SetComboIndex]]></command>
+		<command type="GetCases" name="WaitForElementExist" By="XPath" FriendlyName="Search-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>
+		<command type="GetCases" name="Click" By="XPath" FriendlyName="Search-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'County Court: Civil, Family')]]]></command>
+		<command type="GetCases" name="WaitForNavigation" By="" FriendlyName=""><![CDATA[ ]]></command>
+		<command type="GetCases" name="WaitForElementExist" By="Id" FriendlyName="District-Type-Selection"><![CDATA[sbxControlID2]]></command>
+		<command type="GetCases" name="SetComboIndex" By="Id" FriendlyName="District-Type-Selection"><![CDATA[sbxControlID2,?SetComboIndex]]></command>
+		<command type="GetCases" name="WaitForElementExist" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
+		<command type="GetCases" name="Click" By="XPath" FriendlyName="District-Hyperlink"><![CDATA[//a[@class='ssSearchHyperlink'][contains(text(),'District Clerk Civil')]]]></command>
+		<command type="GetCases" name="Click" By="XPath" FriendlyName="Cases-Radio-Button"><![CDATA[//*[@id="Case"]]]></command>
+		<command type="GetCases" name="Click" By="Id" FriendlyName="Date-Filed-Radio-Button"><![CDATA[DateFiled]]></command>
+		<command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-On-TextBox"><![CDATA[DateFiledOnAfter,?StartDate]]></command>
+		<command type="GetCases" name="SetControlValue" By="Id" FriendlyName="Date-Filed-Before-TextBox"><![CDATA[DateFiledOnBefore,?EndingDate]]></command>
+		<command type="GetCases" name="ClickElement" By="Id" FriendlyName="Search-Records-Submit"><![CDATA[SearchSubmit]]></command>
+		<command type="GetCases" name="WaitForNavigation" By="" FriendlyName=""><![CDATA[ ]]></command>
+		<command type="GetCases" name="DentonReadList" By="XPath" FriendlyName="Search-Records-JScript"><![CDATA[include-denton-tx-get-case-list-and-heading]]></command>
+		<command type="GetCases" name="GetElement" By="XPath" FriendlyName="Search-Records-Result-Table"><![CDATA[/html/body/table[4]]]></command>
     </instructions>
     <caseInspection id="1" type="normal">
       <command type="string" name="DateFiled" By="XPath" FriendlyName="Filing-Date-Selection"><![CDATA[td[3]/div[1]]]></command>

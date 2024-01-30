@@ -2,6 +2,7 @@
 using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using Newtonsoft.Json;
+using System.Xml;
 
 
 namespace legallead.search.api.tests
@@ -75,7 +76,13 @@ namespace legallead.search.api.tests
             var source = GetRequest(target);
             source.StartDate = dt1.ToUnixTime();
             source.EndDate = dt2.ToUnixTime();
-            return WebMapper.MapFrom<UserSearchRequest, WebInteractive>(source);
+            var mapped = WebMapper.MapFrom<UserSearchRequest, WebInteractive>(source);
+            if (mapped == null) return null;
+            if (string.IsNullOrEmpty(mapped.UniqueId))
+            {
+                mapped.UniqueId = Guid.NewGuid().ToString("D");
+            }
+            return mapped;
         }
         private static UserSearchRequest GetRequest(string target = "denton")
         {
