@@ -1,8 +1,9 @@
 ﻿using legallead.jdbc.interfaces;
+using legallead.reader.component;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
-namespace legallead.search.api.Services
+namespace component
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage",
         "VSTHRD002:Avoid problematic synchronous waits", Justification = "<Pending>")]
