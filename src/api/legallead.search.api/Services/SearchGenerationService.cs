@@ -114,6 +114,7 @@ namespace legallead.search.api.Services
             catch (Exception ex)
             {
                 _ = _logger?.LogError(ex).ConfigureAwait(false);
+                AppendError(ex.Message);
                 return null;
             }
         }
@@ -180,5 +181,21 @@ namespace legallead.search.api.Services
             var message = string.Format(messages[messageId], state);
             _ = _queueDb.Status(uniqueId, message).ConfigureAwait(false);
         }
+
+        private class RecentError
+        {
+            public DateTime CreateDate { get; set; }
+            public string Message { get; set; } = string.Empty;
+        }
+
+        private static void AppendError(string message)
+        {
+            var addition = new RecentError { Message = message, CreateDate = DateTime.UtcNow };
+            ErrorCollection.Add(addition);
+            var tolerance = DateTime.UtcNow.AddMinutes(-10);
+            ErrorCollection.RemoveAll(x => x.CreateDate < tolerance);
+        }
+
+        private static readonly List<RecentError> ErrorCollection = new();
     }
 }

@@ -5,16 +5,55 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM --platform=linux/amd64  python:3.9
-RUN apt-get install -y wget
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-RUN apt-get update && apt-get -y install google-chrome-stable
+FROM selenium/node-base:3.5.3-boron
+LABEL authors=SeleniumHQ
 
-FROM --platform=linux/amd64  python:3.9
-RUN echo "deb http://deb.debian.org/debian/ unstable main contrib non-free" >> /etc/apt/sources.list.d/debian.list
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends firefox
+USER root
+
+#============================================
+# Google Chrome
+#============================================
+# can specify versions by CHROME_VERSION;
+#  e.g. google-chrome-stable=53.0.2785.101-1
+#       google-chrome-beta=53.0.2785.92-1
+#       google-chrome-unstable=54.0.2840.14-1
+#       latest (equivalent to google-chrome-stable)
+#       google-chrome-beta  (pull latest beta)
+#============================================
+ARG CHROME_VERSION="google-chrome-stable"
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+  && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+  && apt-get update -qqy \
+  && apt-get -qqy install \
+    ${CHROME_VERSION:-google-chrome-stable} \
+  && rm /etc/apt/sources.list.d/google-chrome.list \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+USER seluser
+
+#============================================
+# Chrome webdriver
+#============================================
+# can specify versions by CHROME_DRIVER_VERSION
+# Latest released version will be used by default
+#============================================
+ARG CHROME_DRIVER_VERSION="latest"
+RUN CD_VERSION=$(if [ ${CHROME_DRIVER_VERSION:-latest} = "latest" ]; then echo $(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE); else echo $CHROME_DRIVER_VERSION; fi) \
+  && echo "Using chromedriver version: "$CD_VERSION \
+  && wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CD_VERSION/chromedriver_linux64.zip \
+  && rm -rf /opt/selenium/chromedriver \
+  && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
+  && rm /tmp/chromedriver_linux64.zip \
+  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CD_VERSION \
+  && chmod 755 /opt/selenium/chromedriver-$CD_VERSION \
+  && sudo ln -fs /opt/selenium/chromedriver-$CD_VERSION /usr/bin/chromedriver
+
+COPY generate_config /opt/bin/generate_config
+
+#=================================
+# Chrome Launch Script Modification
+#=================================
+COPY chrome_launcher.sh /opt/google/chrome/google-chrome
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -31,5 +70,6 @@ RUN dotnet publish "./legallead.search.api.csproj" -c $BUILD_CONFIGURATION -o /a
 
 FROM base AS final
 WORKDIR /app
+ENV PATH="${PATH}:/app"
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "legallead.search.api.dll"]

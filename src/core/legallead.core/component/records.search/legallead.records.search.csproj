@@ -131,6 +131,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="chromedriver.exe">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="xml\ReadMe.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -184,6 +187,12 @@
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>legallead.models.tests</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>legallead.reader.component</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>legallead.reader.component.tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 </Project>

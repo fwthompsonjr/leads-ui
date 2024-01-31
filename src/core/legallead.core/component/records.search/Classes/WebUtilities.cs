@@ -139,7 +139,7 @@ namespace legallead.records.search.Classes
 
         public static string? GetChromeBinary()
         {
-            const string linuxChromLocation = @"/usr/bin/google-chrome";
+            const string linuxChromLocation = @"/opt/google/chrome/google-chrome";
             bool isLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
             return isLinux ? linuxChromLocation : ChromeBinaryFileName();
         }

@@ -1,0 +1,6 @@
+[
+  {
+    "tag": "3.2.300",
+    "description": "Update search api to use selenium.firefox.webdriver package"
+  }
+]
