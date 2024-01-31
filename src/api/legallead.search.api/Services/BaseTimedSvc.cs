@@ -37,8 +37,8 @@ namespace legallead.search.api.Services
             _typeName = typeof(T).Name;
 
             IsServiceEnabled = settings?.Enabled ?? false;
-            DelayedStartInSeconds = settings?.Delay ?? 45;
-            IntervalInMinutes = settings?.Interval ?? 10;
+            DelayedStartInSeconds = 15;//  settings?.Delay ?? 15;
+            IntervalInMinutes = settings?.Interval ?? 3;
             DataService = new Svcs(logger, component, _componentName, _typeName);
         }
 
@@ -96,6 +96,11 @@ namespace legallead.search.api.Services
                 if (disposing)
                 {
                     _timer?.Dispose();
+                    var processes = new List<string> {
+                    "geckodriver",
+                    "chromedriver",
+                    "IEDriverServer" };
+                    processes.ForEach(Kill);
                 }
                 disposedValue = true;
             }
@@ -146,6 +151,7 @@ namespace legallead.search.api.Services
                 try
                 {
                     var log = $"{_componentName}:{_typeName} -- {message}";
+                    _logging.ClassContext = _componentName;
                     _ = _logging.LogInformation(log).ConfigureAwait(false);
                 }
                 catch (Exception ex)
