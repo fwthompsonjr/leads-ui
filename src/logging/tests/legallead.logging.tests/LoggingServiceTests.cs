@@ -26,11 +26,29 @@ namespace legallead.logging.tests
         }
 
         [Fact]
+        public async Task SutCanWriteErrorWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception();
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogError(ex, "", ""); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
         public async Task SutCanWriteCritical()
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
             var exception = await Record.ExceptionAsync(async () => { _ = await service.LogCritical(ex); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task SutCanWriteCriticalWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception().Message;
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogCritical(ex, "", ""); });
             Assert.Null(exception);
         }
 
@@ -44,11 +62,29 @@ namespace legallead.logging.tests
         }
 
         [Fact]
+        public async Task SutCanWriteWarningWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception().Message;
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogWarning(ex, "", ""); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
         public async Task SutCanWriteInformation()
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
             var exception = await Record.ExceptionAsync(async () => { _ = await service.LogInformation(ex); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task SutCanWriteInformationWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception().Message;
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogInformation(ex, "", ""); });
             Assert.Null(exception);
         }
 
@@ -62,11 +98,29 @@ namespace legallead.logging.tests
         }
 
         [Fact]
+        public async Task SutCanWriteDebugWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception().Message;
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogDebug(ex, "", ""); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
         public async Task SutCanWriteVerbose()
         {
             var service = new LoggingService(null, new MockRepository());
             var ex = faker.System.Exception().Message;
             var exception = await Record.ExceptionAsync(async () => { _ = await service.LogVerbose(ex); });
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public async Task SutCanWriteVerboseWithParameters()
+        {
+            var service = new LoggingService(null, new MockRepository());
+            var ex = faker.System.Exception().Message;
+            var exception = await Record.ExceptionAsync(async () => { _ = await service.LogVerbose(ex, "", ""); });
             Assert.Null(exception);
         }
 
