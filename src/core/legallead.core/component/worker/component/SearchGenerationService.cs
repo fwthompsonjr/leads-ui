@@ -13,6 +13,9 @@ namespace component
         "VSTHRD110:Observe result of async calls", Justification = "This is a fire and forget call. No observer needed.")]
     internal class SearchGenerationService : BaseTimedSvc<SearchGenerationService>, ISearchGenerationService
     {
+        private const string ns = "legallead.reader.component";
+        private const string clsname = "search.generation.service";
+
         private readonly IExcelGenerator generator;
         public SearchGenerationService(
             ILoggingRepository? logger,
@@ -35,7 +38,7 @@ namespace component
                 var statuses = action;
                 var stmt = string.Join(Environment.NewLine, statuses);
                 var message = string.Format(stmt, GetServiceHealth(), IsWorking, ErrorCollection.Count > 0, ErrorCollection.Count);
-                _logger?.LogInformation(message);
+                _logger?.LogInformation(message, ns, clsname);
             });
         }
 
@@ -136,7 +139,7 @@ namespace component
             }
             catch (Exception ex)
             {
-                _ = _logger?.LogError(ex).ConfigureAwait(false);
+                _ = _logger?.LogError(ex, ns, clsname).ConfigureAwait(false);
                 AppendError(ex.Message);
                 return null;
             }
