@@ -48,6 +48,19 @@ namespace legallead.logging.implementations
             await Write(model);
             return model;
         }
+        public async Task<LogInsertModel> LogVerbose(
+            string message,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Verbose, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
+            await Write(model);
+            return model;
+        }
 
         public async Task<LogInsertModel> LogDebug(
             string message,
@@ -55,6 +68,20 @@ namespace legallead.logging.implementations
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Debug, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            await Write(model);
+            return model;
+        }
+
+        public async Task<LogInsertModel> LogDebug(
+            string message,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Debug, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
             await Write(model);
             return model;
         }
@@ -69,12 +96,40 @@ namespace legallead.logging.implementations
             return model;
         }
 
+        public async Task<LogInsertModel> LogInformation(
+            string message,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Information, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
+            await Write(model);
+            return model;
+        }
+
         public async Task<LogInsertModel> LogWarning(
             string message,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Warning, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            await Write(model);
+            return model;
+        }
+
+        public async Task<LogInsertModel> LogWarning(
+            string message,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Warning, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
             await Write(model);
             return model;
         }
@@ -89,12 +144,41 @@ namespace legallead.logging.implementations
             return model;
         }
 
+        public async Task<LogInsertModel> LogCritical(
+            string message,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Critical, _id, callerLineNumber, callerMethodName, message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
+            await Write(model);
+            return model;
+        }
+
         public async Task<LogInsertModel> LogError(
             Exception exception,
             [CallerLineNumber] int callerLineNumber = 0,
             [CallerMemberName] string callerMethodName = "")
         {
             var model = GetInsertModel(SeverityCodes.Error, _id, callerLineNumber, callerMethodName, exception.Message, ClassContext);
+            model.Detail = exception.ToString(); 
+            await Write(model);
+            return model;
+        }
+
+        public async Task<LogInsertModel> LogError(
+            Exception exception,
+            string namespaceName,
+            string className,
+            [CallerLineNumber] int callerLineNumber = 0,
+            [CallerMemberName] string callerMethodName = "")
+        {
+            var model = GetInsertModel(SeverityCodes.Error, _id, callerLineNumber, callerMethodName, exception.Message, ClassContext);
+            model.NameSpace = namespaceName;
+            model.ClassName = className;
             model.Detail = exception.ToString();
             await Write(model);
             return model;

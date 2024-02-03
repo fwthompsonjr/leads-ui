@@ -3,10 +3,11 @@ namespace component;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-
-    public Worker(ILogger<Worker> logger)
+    private readonly ISearchGenerationService _searchGenerationService;
+    public Worker(ILogger<Worker> logger, ISearchGenerationService service)
     {
         _logger = logger;
+        _searchGenerationService = service;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -17,7 +18,10 @@ public class Worker : BackgroundService
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
             }
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(ReportingInterval, stoppingToken);
+            _searchGenerationService.Report();
         }
     }
+
+    private const int ReportingInterval = 600000; // 10 minutes
 }
