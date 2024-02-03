@@ -143,6 +143,7 @@ namespace component
                 _typeName = typeName;
             }
 
+            private const string ns = "legallead.reader.component";
 
             /// <summary>
             /// This method writes an information record to the log.
@@ -155,11 +156,11 @@ namespace component
                 {
                     var log = $"{_componentName}:{_typeName} -- {message}";
                     _logging.ClassContext = _componentName;
-                    _ = _logging.LogInformation(log).ConfigureAwait(false);
+                    _ = _logging.LogInformation(log, ns, _componentName).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex);
+                    _ = _logging.LogError(ex, ns, _componentName);
                 }
             }
             /// <summary>
@@ -182,7 +183,7 @@ namespace component
                 }
                 catch (Exception ex)
                 {
-                    await _logging.LogError(ex);
+                    await _logging.LogError(ex, ns, _componentName);
                     return true;
                 }
             }
@@ -206,11 +207,11 @@ namespace component
                         DateCreated = DateTime.UtcNow
                     };
                     var serial = JsonConvert.SerializeObject(log);
-                    _ = _logging.LogInformation(serial).ConfigureAwait(false);
+                    _ = _logging.LogInformation(serial, ns, _componentName).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex);
+                    _ = _logging.LogError(ex, ns, _componentName);
                 }
             }
 
@@ -230,7 +231,7 @@ namespace component
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex);
+                    _ = _logging.LogError(ex, ns, _componentName);
                 }
             }
         }

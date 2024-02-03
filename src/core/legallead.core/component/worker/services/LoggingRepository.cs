@@ -55,6 +55,22 @@ namespace legallead.reader.component.services
                 Console.WriteLine(ex.Message);
             }
         }
+        public async Task LogError(Exception exception,
+        string namespaceName,
+        string className,
+        [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "")
+        {
+            try
+            {
+                if (_logger == null) return;
+                Console.WriteLine("Error in process: {0}.{1}", namespaceName, className);
+                await _logger.LogError(exception, callerLineNumber, callerMethodName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
 
         public async Task LogInformation(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "")
         {
@@ -68,7 +84,21 @@ namespace legallead.reader.component.services
                 Console.WriteLine(ex.Message);
             }
         }
-
+        public async Task LogInformation(string message,
+        string namespaceName,
+        string className, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "")
+        {
+            try
+            {
+                if (_logger == null) return;
+                Console.WriteLine("Information: {0}.{1}", namespaceName, className);
+                await _logger.LogInformation(message, callerLineNumber, callerMethodName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
         public async Task LogVerbose(string message, [CallerLineNumber] int callerLineNumber = 0, [CallerMemberName] string callerMethodName = "")
         {
             try
