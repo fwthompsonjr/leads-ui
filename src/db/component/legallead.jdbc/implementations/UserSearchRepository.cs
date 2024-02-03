@@ -12,6 +12,17 @@ namespace legallead.jdbc.implementations
         public UserSearchRepository(DataContext context) : base(context)
         {
         }
+
+        public async Task<SearchRestrictionDto> GetSearchRestriction(string userId)
+        {
+            const string prc = "CALL USP_GET_SEARCH_RESTRICTION_PARAMETERS( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<SearchRestrictionDto>(connection, command);
+            return response ?? new();
+
+        }
+
         public async Task<IEnumerable<SearchDtoHeader>> History(string userId)
         {
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";

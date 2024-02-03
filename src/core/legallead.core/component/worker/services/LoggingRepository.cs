@@ -63,8 +63,7 @@ namespace legallead.reader.component.services
             try
             {
                 if (_logger == null) return;
-                Console.WriteLine("Error in process: {0}.{1}", namespaceName, className);
-                await _logger.LogError(exception, callerLineNumber, callerMethodName);
+                await _logger.LogError(exception, namespaceName, className, callerLineNumber, callerMethodName);
             }
             catch (Exception ex)
             {
@@ -91,8 +90,7 @@ namespace legallead.reader.component.services
             try
             {
                 if (_logger == null) return;
-                Console.WriteLine("Information: {0}.{1}", namespaceName, className);
-                await _logger.LogInformation(message, callerLineNumber, callerMethodName);
+                await _logger.LogInformation(message, namespaceName, className, callerLineNumber, callerMethodName);
             }
             catch (Exception ex)
             {
