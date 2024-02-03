@@ -202,6 +202,39 @@ namespace legallead.permissions.api
             return validationResults;
         }
 
+        public static bool IsRestricted(this SearchRestrictionDto dto)
+        {
+            if (!dto.MaxPerMonth.HasValue) return true;
+            if (dto.IsLocked.GetValueOrDefault()) return true;
+            if (dto.ThisMonth.GetValueOrDefault() >= dto.MaxPerMonth.GetValueOrDefault()) return true;
+            if (dto.ThisYear.GetValueOrDefault() >= dto.MaxPerYear.GetValueOrDefault()) return true;
+            return false;
+        }
+
+        public static UserSearchBeginResponse GetRestrictionResponse(this SearchRestrictionDto dto)
+        {
+            var response = new UserSearchBeginResponse();
+            
+            if (!dto.MaxPerMonth.HasValue)
+            {
+                response.Request.Details.Add(new() { Name = "No Value Returned", Text = "Unable to calculate usage" });
+            }
+            if (dto.IsLocked.GetValueOrDefault())
+            {
+                response.Request.Details.Add(new() { Name = "Account restriction", Text = dto.Reason ?? "" });
+            }
+            if (dto.ThisMonth.GetValueOrDefault() >= dto.MaxPerMonth.GetValueOrDefault())
+            {
+                var mtd = $"Month to date: {dto.ThisMonth.GetValueOrDefault()}. Limit: {dto.MaxPerMonth.GetValueOrDefault()}";
+                response.Request.Details.Add(new() { Name = "Monthly Limit Exceeded", Text = mtd });
+            }
+            if (dto.ThisYear.GetValueOrDefault() >= dto.MaxPerYear.GetValueOrDefault())
+            {
+                var ytd = $"Year to date: {dto.ThisYear.GetValueOrDefault()}. Limit: {dto.MaxPerYear.GetValueOrDefault()}";
+                response.Request.Details.Add(new() { Name = "Annual Limit Exceeded", Text = ytd });
+            }
+            return response;
+        }
 
         public static string IfNull(this string? s, string fallback)
         {

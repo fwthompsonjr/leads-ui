@@ -20,6 +20,11 @@ namespace legallead.permissions.api.Utility
         {
             var user = await GetUser(http);
             if (user == null) return null;
+            var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
+            if (restrictions.IsRestricted())
+            {
+                return restrictions.GetRestrictionResponse();
+            }
             var searchRecord = await _repo.Begin(user.Id, JsonConvert.SerializeObject(request));
             if (searchRecord.Key)
             {
