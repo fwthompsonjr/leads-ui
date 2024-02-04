@@ -18,7 +18,15 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_QUERY_USER_SEARCH_QUEUE();";
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<SearchQueueDto>(connection, prc);
-            return response.ToList();
+            var removalids = new List<string>();
+            foreach (var item in response)
+            {
+                var isRestricted = await IsRestricted(item);
+                if (isRestricted) { removalids.Add(item.Id); }
+            }
+            var list = response.ToList();
+            list.RemoveAll(x => removalids.Contains(x.Id));
+            return list;
         }
 
         public async Task<KeyValuePair<bool, string>> Complete(string id)
@@ -42,6 +50,17 @@ namespace legallead.jdbc.implementations
         {
             var response = await searchrepo.Append(SearchTargetTypes.Response, id, content);
             return response;
+        }
+
+        private async Task<bool> IsRestricted(SearchQueueDto queued)
+        {
+            if (string.IsNullOrEmpty(queued.UserId)) return true;
+            var dto = await searchrepo.GetSearchRestriction(queued.UserId);
+            if (!dto.MaxPerMonth.HasValue) return true;
+            if (dto.IsLocked.GetValueOrDefault()) return true;
+            if (dto.ThisMonth.GetValueOrDefault() >= dto.MaxPerMonth.GetValueOrDefault()) return true;
+            if (dto.ThisYear.GetValueOrDefault() >= dto.MaxPerYear.GetValueOrDefault()) return true;
+            return false;
         }
     }
 }
