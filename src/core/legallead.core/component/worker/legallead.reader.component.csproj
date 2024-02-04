@@ -9,22 +9,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.34.0" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Include="..\..\..\..\shared\geckodriver.exe" Link="geckodriver.exe">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
-
-		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="legallead.logging" Version="3.2.*" />
-		<PackageReference Include="legallead.models" Version="3.2.*" />
-		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
-		<PackageReference Include="legallead.records.search" Version="3.2.*" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.34.0" />
+	  <ProjectReference Include="..\..\..\..\api\legallead.models\legallead.models.v1.csproj" />
+	  <ProjectReference Include="..\..\..\..\db\component\legallead.jdbc\legallead.jdbc.csproj" />
+	  <ProjectReference Include="..\..\..\..\logging\legallead.logging\legallead.logging.csproj" />
+	  <ProjectReference Include="..\records.search\legallead.records.search.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,10 +1,7 @@
-﻿using legallead.json.db.attr;
-
-namespace legallead.permissions.api.Model
+﻿namespace legallead.models
 {
     public class StateSubscriptionRequest
     {
-        [UsState]
         public string? Name { get; set; } = string.Empty;
     }
 }

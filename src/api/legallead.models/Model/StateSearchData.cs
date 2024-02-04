@@ -1,6 +1,7 @@
-﻿using legallead.json.db.entity;
+﻿
+using legallead.permissions.api.Model;
 
-namespace legallead.permissions.api.Model
+namespace legallead.models
 {
     public class StateSearchData : UsState
     {

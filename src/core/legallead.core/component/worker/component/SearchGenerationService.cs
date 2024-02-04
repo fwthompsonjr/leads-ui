@@ -161,7 +161,7 @@ namespace component
             Justification = "<Pending>")]
         private async Task<List<SearchQueueDto>> GetQueue()
         {
-            if (_queueDb == null) return new();
+            if (_queueDb == null) return [];
             var items = await _queueDb.GetQueue();
             return items;
         }

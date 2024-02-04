@@ -1,10 +1,7 @@
-﻿using legallead.jdbc.attr;
-
-namespace legallead.permissions.api.Model
+﻿namespace legallead.models
 {
     public class UserLevelRequest
     {
-        [PermissionName]
         public string Level { get; set; } = string.Empty;
     }
 }

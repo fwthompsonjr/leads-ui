@@ -29,6 +29,7 @@
 		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
 		<PackageReference Include="legallead.json.db" Version="3.2.*" />
 		<PackageReference Include="legallead.logging" Version="3.2.*" />
+		<PackageReference Include="legallead.models" Version="3.2.179" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
@@ -41,10 +42,6 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>permissions.api.tests</_Parameter1>
 		</AssemblyAttribute>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\legallead.models\legallead.models.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

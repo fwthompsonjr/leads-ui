@@ -1,4 +1,4 @@
-﻿using legallead.json.db.entity;
+﻿using legallead.models;
 
 namespace legallead.permissions.api.Model
 {
