@@ -38,7 +38,7 @@ namespace component
                 var statuses = action;
                 var stmt = string.Join(Environment.NewLine, statuses);
                 var message = string.Format(stmt, GetServiceHealth(), IsWorking, ErrorCollection.Count > 0, ErrorCollection.Count);
-                _logger?.LogInformation(message, ns, clsname);
+                _logger?.LogInformation(message);
             });
         }
 
@@ -139,7 +139,7 @@ namespace component
             }
             catch (Exception ex)
             {
-                _ = _logger?.LogError(ex, ns, clsname).ConfigureAwait(false);
+                _ = _logger?.LogError(ex).ConfigureAwait(false);
                 AppendError(ex.Message);
                 return null;
             }
