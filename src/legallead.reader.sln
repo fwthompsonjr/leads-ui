@@ -28,6 +28,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.reader.component", "core\legallead.core\component\worker\legallead.reader.component.csproj", "{C287A652-C752-45CA-88B1-668D7F5A40B8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7CA9556C-187A-4184-9500-AF7AEAFAF2F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "core\legallead.core\tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{53A0B739-5C49-42FD-995A-796499E87EAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +80,14 @@ Global
 		{C287A652-C752-45CA-88B1-668D7F5A40B8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C287A652-C752-45CA-88B1-668D7F5A40B8}.Zip|Any CPU.ActiveCfg = Debug|Any CPU
 		{C287A652-C752-45CA-88B1-668D7F5A40B8}.Zip|Any CPU.Build.0 = Debug|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Local|Any CPU.ActiveCfg = Local|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Local|Any CPU.Build.0 = Local|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Zip|Any CPU.ActiveCfg = Zip|Any CPU
+		{53A0B739-5C49-42FD-995A-796499E87EAB}.Zip|Any CPU.Build.0 = Zip|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +97,7 @@ Global
 		{BE85EAD2-3E49-4709-AECF-A9F438583603} = {F6FF28C5-4633-4E9E-85B9-873F1506F34B}
 		{1C843AC6-6255-478D-91AE-E6A6BA3CF1D4} = {F6FF28C5-4633-4E9E-85B9-873F1506F34B}
 		{4D0861CF-300B-44A4-AF4E-306776ECF1D1} = {F6FF28C5-4633-4E9E-85B9-873F1506F34B}
+		{53A0B739-5C49-42FD-995A-796499E87EAB} = {7CA9556C-187A-4184-9500-AF7AEAFAF2F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AFCBB44C-A4CD-4F04-A5F2-DB8291697D28}

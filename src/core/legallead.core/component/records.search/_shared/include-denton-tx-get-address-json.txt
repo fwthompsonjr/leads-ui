@@ -1,7 +1,8 @@
 /*
 * find the defendant, principal
 */
-	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent", "respondent", "condemnee", "guardian" ];
+headings = document.getElementsByTagName("th");
+keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent", "respondent", "condemnee", "guardian" ];
 hdrs = Array.prototype.slice.call( headings );
 ssheaders = hdrs.filter(x => {
 	let attr = x.getAttribute("class");
@@ -22,12 +23,35 @@ ssheaders = hdrs.filter(x => {
 	let addrhtm = addrrow.outerHTML;
 	
   });
-  
+function findCaseStyle() {
+	bb = document.getElementsByTagName("b");
+	bb_arr = Array.prototype.slice.call( bb, 0 );
+	txstyle = bb_arr.filter(x => x.innerText.indexOf("Texas") >= 0);
+	if ( txstyle != null && txstyle.length > 0 ) { return txstyle[0].innerText; }
+	if ( bb_arr != null && bb_arr.length > 0 ) { return bb_arr[0].innerText; }
+	return "";
+}
+
+function findCaseDetails() {
+
+casedetails = []; 
+casedetails.push( { "name": "Case Style", "value": findCaseStyle() } );
+th_coll = document.getElementsByTagName('th');
+th_arr = Array.prototype.slice.call( th_coll, 0 );
+searches = [ "Case Type:", "Date Filed:", "Location:" ]; 
+hdr_labels = th_arr.filter(x => x.getAttribute("class") && searches.indexOf(x.innerText) >= 0); 
+hdr_labels.forEach(function (h) {
+	let name = h.innerText.split(":")[0];
+	let vlu = h.closest('tr').children[1].innerText;
+	casedetails.push( { "name": name, "value": vlu } );
+});
+return JSON.stringify( casedetails );
+}
   
 function getAddressNode() {
 	let arr = [];
 	let keywords = [ "defendant", "principal", "petitioner", "applicant", "claimant", "decedent" ];
-	let headings = document.getElementsByTagName("th");
+	let details = findCaseDetails();
 	for(let n = 0; n < headings.length; n++) {
 		let hdr = headings[n];
 		let attr = hdr.getAttribute("class");
@@ -37,7 +61,7 @@ function getAddressNode() {
 		let txt = hdr.innerText.trim().toLowerCase();
 		var found = keywords.find(x => x == txt);
 		if (found == null) continue;
-		arr.push( hdr.closest("tr").innerHTML );
+		arr.push( { "addresses": hdr.closest("tr").innerHTML, "details": details } );
 	}
 	return JSON.stringify(arr);
 }

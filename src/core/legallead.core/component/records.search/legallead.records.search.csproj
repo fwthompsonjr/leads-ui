@@ -194,5 +194,8 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>legallead.reader.component.tests</_Parameter1>
 		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>legallead.records.search.tests</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 </Project>
