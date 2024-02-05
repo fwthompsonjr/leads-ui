@@ -2,24 +2,36 @@
 	"target": "local",
 	"endpoints":
 	{
-		"local": "127.0.0.1",
+		"local": "db-lead-restored.cmmu8tkizri9.us-east-2.rds.amazonaws.com",
 		"test": "db-lead-restored.cmmu8tkizri9.us-east-2.rds.amazonaws.com",
-		"production": "35.224.202.163"
+		"production": "db-lead-restored.cmmu8tkizri9.us-east-2.rds.amazonaws.com",
+		"fallback-local": "127.0.0.1",
+		"fallback-test": "db-lead-restored.cmmu8tkizri9.us-east-2.rds.amazonaws.com",
+		"fallback-production": "35.224.202.163"
 	},
 	"passcodes":
 	{
-		"local": "legal.lead.home.passcode",
+		"local": "legal.lead.test.passcode",
 		"test": "legal.lead.test.passcode",
-		"production": "legal.lead.last.passcode"
+		"production": "legal.lead.test.passcode",
+		"fallback-local": "legal.lead.home.passcode",
+		"fallback-test": "legal.lead.test.passcode",
+		"fallback-production": "legal.lead.last.passcode"
 	},
 	"secrets": {
-		"local": "jGJEauBDBO757dZo/eYL4iC1PUMsi8R5i0mBNXZh1YbsRt8aKWC3ELIheVqvHabU",
+		"local": "m/1Ata5kMzR+oEX0y8RHgOvav+k4LuEIbnSJDbhA2G5pMywLOb3eBufnQzSEN+ef",
 		"test": "m/1Ata5kMzR+oEX0y8RHgOvav+k4LuEIbnSJDbhA2G5pMywLOb3eBufnQzSEN+ef",
-		"production": "V25lHE5JZtZf8/D95vzjzbZT5AYqQ0gskx9mg6Pi5ILx+QJnvyTTf+y7Y1uHbwz1"
+		"production": "m/1Ata5kMzR+oEX0y8RHgOvav+k4LuEIbnSJDbhA2G5pMywLOb3eBufnQzSEN+ef",
+		"fallback-local": "jGJEauBDBO757dZo/eYL4iC1PUMsi8R5i0mBNXZh1YbsRt8aKWC3ELIheVqvHabU",
+		"fallback-test": "m/1Ata5kMzR+oEX0y8RHgOvav+k4LuEIbnSJDbhA2G5pMywLOb3eBufnQzSEN+ef",
+		"fallback-production": "V25lHE5JZtZf8/D95vzjzbZT5AYqQ0gskx9mg6Pi5ILx+QJnvyTTf+y7Y1uHbwz1"
 	},
 	"keys": {
-		"local": "0gNw7pB5/fEqq2UFihpqAw==",
+		"local": "CDODj4oxaiJKcKJEIBHnHw==",
 		"test": "CDODj4oxaiJKcKJEIBHnHw==",
-		"production": "z+0Qcqm6XJp1Uq+STRQ4Fg=="
+		"production": "CDODj4oxaiJKcKJEIBHnHw==",
+		"fallback-local": "0gNw7pB5/fEqq2UFihpqAw==",
+		"fallback-test": "CDODj4oxaiJKcKJEIBHnHw==",
+		"fallback-production": "z+0Qcqm6XJp1Uq+STRQ4Fg=="
 	}
 }
