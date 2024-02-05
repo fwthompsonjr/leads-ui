@@ -4,7 +4,7 @@
     "code": "1234-AbcD4321"
   },
   "debug.login": {
-    "passthru": true
+    "passthru": false
   },
   "user": {
     "session_timeout": 60

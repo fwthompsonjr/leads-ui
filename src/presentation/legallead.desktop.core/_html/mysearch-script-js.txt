@@ -260,9 +260,15 @@ let jssearchviews = {
 		"#dv-subcontent-purchases" ],
 	"setIndex": function( index ) {
 		const actv = "active";
+		const search_parent = "#dv-subcontent-search";
 		const dnone = "d-none";
 		let id = parseInt( index );
 		if(isNaN(id) || id < 0 || id > 2) { return; }
+		if (id == 0) {
+			$( search_parent ).show();
+		} else {
+			$( search_parent ).hide();
+		}
 		for(let i = 0; i < jssearchviews.links.length; i++) {
 			let nv = jssearchviews.links[i];
 			let vw = jssearchviews.views[i];

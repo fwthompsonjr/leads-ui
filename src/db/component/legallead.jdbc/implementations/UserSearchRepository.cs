@@ -28,7 +28,7 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
             var command = string.Format(prc, userId);
             using var connection = _context.CreateConnection();
-            var response = await _command.QueryAsync<SearchDto>(connection, command);
+            var response = await _command.QueryAsync<SearchQueryDto>(connection, command);
             var translation = response.Select(x => new SearchDtoHeader
             {
                 Id = x.Id,
@@ -37,7 +37,10 @@ namespace legallead.jdbc.implementations
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
                 EstimatedRowCount = x.ExpectedRows,
-                CreateDate = x.CreateDate
+                CreateDate = x.CreateDate,
+                SearchProgress = x.SearchProgress,
+                StateCode = x.StateCode,
+                CountyName = x.CountyName
             });
             return translation;
         }

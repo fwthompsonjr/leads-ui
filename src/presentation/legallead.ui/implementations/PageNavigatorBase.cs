@@ -7,6 +7,7 @@ using legallead.ui.interfaces;
 using legallead.ui.Utilities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace legallead.ui.implementations
 {
@@ -28,12 +29,34 @@ namespace legallead.ui.implementations
         {
             try
             {
+                if (string.IsNullOrEmpty(json)) return default;
                 return JsonConvert.DeserializeObject<T>(json);
             }
             catch (Exception)
             {
                 return default;
             }
+        }
+
+        protected static string GetSerializable<T>(string json)
+        {
+            if (string.IsNullOrEmpty(json)) return string.Empty;
+            string working = string.Empty;
+            var searches = new List<string>()
+            {
+                json,
+                Regex.Unescape(json)
+            }.ToList();
+            foreach ( var searchesEntry in searches)
+            {
+                var tmp = TryDeserialize<T>(searchesEntry);
+                if (tmp != null)
+                {
+                    working = searchesEntry;
+                    break;
+                }
+            }
+            return working;
         }
 
         protected static string ConvertHTML(ApiResponse? response)

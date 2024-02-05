@@ -84,9 +84,6 @@ namespace legallead.desktop.utilities
             var fallback = new ApiResponse { StatusCode = 500, Message = "Unexpected Error" };
             try
             {
-                var verify = await base.Post(name, payload, user);
-                verify ??= fallback;
-                if (verify.StatusCode != 200) return verify;
                 var address = PostAddress(name, user);
                 if (address.StatusCode != 200) return address;
                 var url = address.Message;

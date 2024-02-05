@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop;
 using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.Configuration;
 
@@ -8,7 +9,8 @@ namespace legallead.ui.Utilities
 {
     internal class MainContentLoadHandler : ContentLoadBase
     {
-
+        private const int IntroductionRetriesMax = 40;
+        private int IntroductionRetries = 0;
         private bool IsPageIntroduced { get; set; }
 
         public void SetBlank()
@@ -34,18 +36,35 @@ namespace legallead.ui.Utilities
                 if (timer.Interval == IntervalBlankPage && IsPageIntroduced) return;
                 switch (timer.Interval)
                 {
-                    case IntervalHomePage:
-                        timer.Stop();
-                        SetView(ContentHandler.GetLocalContent("home")?.Content);
-                        break;
                     case IntervalBlankPage:
                         SetView(ContentHandler.GetLocalContent("introduction")?.Content);
                         timer.Interval = IntervalIntroductionPage;
+                        Task.Run(() =>
+                        {
+                            var provider = serviceProvider;
+                            if (provider == null)
+                            {
+                                IntroductionRetries = IntroductionRetriesMax - 2;
+                                return;
+                            }
+                            var api = provider.GetRequiredService<IPermissionApi>();
+                            var user = provider.GetRequiredService<UserBo>();
+                            if (api == null || user == null || user.IsInitialized) return;
+                            var list = api.Get("list").Result;
+                            if (list == null || list.StatusCode != 200 || string.IsNullOrEmpty(list.Message)) return;
+                            var applications = list.Message.TryDeserialize<ApiContext[]>();
+                            user.Applications = applications;
+                        });
                         break;
                     case IntervalIntroductionPage:
                         var user = serviceProvider?.GetService<UserBo>();
                         if (user == null || !user.IsInitialized)
                         {
+                            if (IntroductionRetries < IntroductionRetriesMax)
+                            {
+                                IntroductionRetries++;
+                                return;
+                            }
                             timer.Stop();
                             int errorId = (int)CommonStatusTypes.Error;
                             StatusBarHelper.SetStatus(errorId);
@@ -55,6 +74,10 @@ namespace legallead.ui.Utilities
                         int readyId = (int)CommonStatusTypes.Ready;
                         StatusBarHelper.SetStatus(readyId);
                         timer.Interval = IntervalHomePage;
+                        break;
+                    case IntervalHomePage:
+                        timer.Stop();
+                        SetHome();
                         break;
                 }
             }

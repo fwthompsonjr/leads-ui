@@ -88,7 +88,7 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
         }
 
-        private static Stream GetConfiguration(int index)
+        private static MemoryStream GetConfiguration(int index)
         {
             var app = Properties.Resources.appsettings;
             var debug = Properties.Resources.appsettings_debug;
