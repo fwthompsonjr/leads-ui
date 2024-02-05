@@ -43,5 +43,10 @@
 		"label": "3.2.35",
 		"trackingDt": "2024-02-05T07:15",
 		"description": "Adding try/catch to search gen error reporting"
+	},
+	{
+		"label": "3.2.35",
+		"trackingDt": "2024-02-05T07:15",
+		"description": "NOTE: need to test new status reporting in debug"
 	}
 ]
