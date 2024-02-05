@@ -1,5 +1,6 @@
 using legallead.permissions.api;
 using legallead.permissions.api.Health;
+using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;

@@ -8,6 +8,7 @@ using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Health;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;

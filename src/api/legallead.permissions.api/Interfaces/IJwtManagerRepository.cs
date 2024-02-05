@@ -2,7 +2,7 @@
 using legallead.permissions.api.Model;
 using System.Security.Claims;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Interfaces
 {
     public interface IJwtManagerRepository
     {

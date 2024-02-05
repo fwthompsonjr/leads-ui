@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.models;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

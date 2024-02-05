@@ -1,4 +1,4 @@
-﻿namespace legallead.permissions.api
+﻿namespace legallead.permissions.api.Interfaces
 {
     public interface IStartupTask
     {

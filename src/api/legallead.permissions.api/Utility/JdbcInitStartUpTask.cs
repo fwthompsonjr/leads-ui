@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc.interfaces;
+using legallead.permissions.api.Interfaces;
 
 namespace legallead.permissions.api
 {

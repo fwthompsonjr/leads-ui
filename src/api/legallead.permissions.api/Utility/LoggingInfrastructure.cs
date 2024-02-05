@@ -1,4 +1,5 @@
 ﻿using legallead.logging.interfaces;
+using legallead.permissions.api.Interfaces;
 using System.Runtime.CompilerServices;
 
 namespace legallead.permissions.api.Utility

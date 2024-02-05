@@ -1,7 +1,8 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Interfaces
 {
     public interface ISearchInfrastructure
     {
@@ -12,7 +13,7 @@ namespace legallead.permissions.api
         Task<IEnumerable<UserSearchDetail>?> GetStatus(HttpRequest http, string? id);
         Task<IEnumerable<UserSearchDetail>?> GetDetail(HttpRequest http, string? id);
         Task<IEnumerable<UserSearchDetail>?> GetResult(HttpRequest http, string? id);
-        Task<IEnumerable<UserSearchHeader>?> GetHeader(HttpRequest http, string? id);
+        Task<IEnumerable<UserSearchQueryModel>?> GetHeader(HttpRequest http, string? id);
 
         Task<bool> SetStatus(string id, string message);
 
