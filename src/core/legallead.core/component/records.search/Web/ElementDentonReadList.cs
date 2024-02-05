@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using legallead.records.search.Classes;
+using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Tools;
 using Newtonsoft.Json;
@@ -10,6 +11,8 @@ namespace legallead.records.search.Web
 {
     public class ElementDentonReadList : ElementNavigationBase
     {
+        public string? UniqueId { get; set; }
+        public IStatusPersistence? StatusPersistence { get; set; }
         public DentonTableRead? JsContent { get; set; }
         public string? TableXPath { get; set; }
         public override IWebElement? Execute(WebNavInstruction item)
@@ -21,7 +24,7 @@ namespace legallead.records.search.Web
             JsContent = default;
             IWebDriver? driver = PageDriver;
             if (driver == null) { return null; }
-            var builder = new GetPageTable(driver);
+            var builder = new GetPageTable(driver, StatusPersistence, UniqueId);
             if (builder.Table == null) { return null; }
             var jsreader = builder.Table;
             if (jsreader == null ||
@@ -61,12 +64,16 @@ namespace legallead.records.search.Web
         private class GetPageTable
         {
             private int? _pageTypeIndex;
-            private readonly IWebDriver driver;
+            private readonly IWebDriver driver; 
+            private readonly IStatusPersistence? reporting;
+            private readonly string? uniqueId;
             private readonly string UriPrefix;
-            public GetPageTable(IWebDriver driver)
+            public GetPageTable(IWebDriver driver, IStatusPersistence? persistence = null, string? id = null)
             {
                 string[] supported = new[] { "http", "https" };
                 this.driver = driver;
+                reporting = persistence;
+                uniqueId = id;
                 Table = GetSearchHeading();
                 UriPrefix = string.Empty;
                 var hasUri = Uri.TryCreate(driver.Url, UriKind.RelativeOrAbsolute, out var result);
@@ -170,13 +177,21 @@ namespace legallead.records.search.Web
                 var links = new List<string>();
                 elements.ForEach(ele =>
                 {
+                    var recid = elements.IndexOf(ele) + 1;
+                    var message = $"Reading case detail - {recid:D4}";
+                    TryReporting(message);
                     var casedata = GetCaseStyle(ele, pageTypeId, UriPrefix);
                     if (casedata != null) links.Add(casedata);
                 });
                 var rows = string.Join($",{Environment.NewLine}", links);
                 return $"[ {rows} ]";
             }
-
+            private void TryReporting(string message)
+            {
+                if (string.IsNullOrEmpty(uniqueId)) return;
+                if (reporting == null) return;
+                reporting.Status(uniqueId, message);
+            }
             private static string? GetCaseStyle(HtmlNode lnk, int typeId, string prefix = "")
             {
                 int[] itemIndexes = new[] { 0, 1, 2 };

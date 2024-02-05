@@ -332,6 +332,11 @@ namespace legallead.records.search.Classes
                 if (navigator is ElementDentonReadList dentonReader)
                 {
                     dentonReader.TableXPath = dentonTableNode;
+                    if (data.StatusReporting != null)
+                    {
+                        dentonReader.StatusPersistence = data.StatusReporting;
+                        dentonReader.UniqueId = data.UniqueId;
+                    }
                     var response = dentonReader.Execute(item);
                     if (response != null && dentonReader.JsContent != null)
                     {

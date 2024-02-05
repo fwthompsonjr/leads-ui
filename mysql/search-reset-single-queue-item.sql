@@ -14,7 +14,7 @@ use defaultdb;
 
 
 
-SET @recid ='8f316534-bf75-11ee-be26-0af7a01f52e9';
+SET @recid ='38276732-c407-11ee-be26-0af7a01f52e9';
 SET @clear_item = TRUE;
 
 
