@@ -1,6 +1,7 @@
 ﻿using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -33,6 +34,16 @@ namespace legallead.permissions.api.Controllers
             if (result == null) return Conflict(request);
             if (string.IsNullOrWhiteSpace(result.RequestId)) return UnprocessableEntity(result);
             return Ok(result);
+        }
+        [HttpPost]
+        [Route("my-searches")]
+        public async Task<IActionResult> MySearches(ApplicationModel context)
+        {
+            var user = await infrastructure.GetUser(Request);
+            var guid = context.Id;
+            if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var searches = await infrastructure.GetHeader(Request, user.Id);
+            return Ok(searches);
         }
     }
 }

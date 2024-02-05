@@ -9,5 +9,8 @@
         public DateTime? EndDate { get; set; }
         public int? EstimatedRowCount { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string? SearchProgress { get; set; }
+        public string? StateCode { get; set; }
+        public string? CountyName { get; set; }
     }
 }
