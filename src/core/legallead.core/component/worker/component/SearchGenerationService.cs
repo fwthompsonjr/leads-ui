@@ -38,7 +38,7 @@ namespace component
                 var statuses = action;
                 var stmt = string.Join(Environment.NewLine, statuses);
                 var message = string.Format(stmt, GetServiceHealth(), IsWorking, ErrorCollection.Count > 0, ErrorCollection.Count);
-                _logger?.LogInformation(message);
+                _logger?.LogInformation(message, ns, clsname);
             });
         }
 
@@ -68,6 +68,11 @@ namespace component
                     queue.ForEach(Generate);
                 }
             }
+            catch (Exception ex)
+            {
+                _ = _logger?.LogError(ex, ns, clsname).ConfigureAwait(false);
+                AppendError(ex.Message);
+            }
             finally
             {
                 IsWorking = false;
@@ -76,59 +81,67 @@ namespace component
 
         protected void Generate(SearchQueueDto dto)
         {
-            if (DataService == null || _queueDb == null) return;
-            var uniqueId = dto.Id;
-            var payload = dto.Payload;
-            _ = _queueDb.Start(dto).ConfigureAwait(false);
-            PostStatus(uniqueId, 0, 0);
-            var bo = TryConvert<UserSearchRequest>(payload);
-            if (bo == null)
+            try
             {
-                PostStatus(uniqueId, 0, 2);
+                if (DataService == null || _queueDb == null) return;
+                var uniqueId = dto.Id;
+                var payload = dto.Payload;
+                _ = _queueDb.Start(dto).ConfigureAwait(false);
+                PostStatus(uniqueId, 0, 0);
+                var bo = TryConvert<UserSearchRequest>(payload);
+                if (bo == null)
+                {
+                    PostStatus(uniqueId, 0, 2);
+                    _ = _queueDb.Complete(uniqueId);
+                    return;
+                }
+                PostStatus(uniqueId, bo);
+                PostStatus(uniqueId, 0, 1);
+                PostStatus(uniqueId, 1, 0);
+                var interaction = WebMapper.MapFrom<UserSearchRequest, WebInteractive>(bo);
+                if (interaction == null)
+                {
+                    PostStatus(uniqueId, 1, 2);
+                    _ = _queueDb.Complete(uniqueId);
+                    return;
+                }
+                interaction.UniqueId = uniqueId;
+                PostStatus(uniqueId, 1, 1);
+                PostStatus(uniqueId, 2, 0);
+                var response = Fetch(interaction);
+                if (response == null)
+                {
+                    PostStatus(uniqueId, 2, 2);
+                    _ = _queueDb.Complete(uniqueId);
+                    return;
+                }
+                PostStatus(uniqueId, 2, 1);
+                PostStatus(uniqueId, 3, 0);
+                if (response.WebsiteId == 0) response.WebsiteId = 1;
+                var addresses = GetAddresses(response);
+                if (addresses == null)
+                {
+                    PostStatus(uniqueId, 3, 2);
+                    _ = _queueDb.Complete(uniqueId);
+                    return;
+                }
+                PostStatus(uniqueId, 3, 1);
+                PostStatus(uniqueId, 4, 0);
+                var serialized = SerializeResult(uniqueId, addresses, _queueDb);
+                if (!serialized)
+                {
+                    PostStatus(uniqueId, 4, 2);
+                    _ = _queueDb.Complete(uniqueId);
+                    return;
+                }
+                PostStatus(uniqueId, 4, 1);
                 _ = _queueDb.Complete(uniqueId);
-                return;
             }
-            PostStatus(uniqueId, bo);
-            PostStatus(uniqueId, 0, 1);
-            PostStatus(uniqueId, 1, 0);
-            var interaction = WebMapper.MapFrom<UserSearchRequest, WebInteractive>(bo);
-            if (interaction == null)
+            catch (Exception ex)
             {
-                PostStatus(uniqueId, 1, 2);
-                _ = _queueDb.Complete(uniqueId);
-                return;
+                _ = _logger?.LogError(ex, ns, clsname).ConfigureAwait(false);
+                AppendError(ex.Message);
             }
-            interaction.UniqueId = uniqueId;
-            PostStatus(uniqueId, 1, 1);
-            PostStatus(uniqueId, 2, 0);
-            var response = Fetch(interaction);
-            if (response == null)
-            {
-                PostStatus(uniqueId, 2, 2);
-                _ = _queueDb.Complete(uniqueId);
-                return;
-            }
-            PostStatus(uniqueId, 2, 1);
-            PostStatus(uniqueId, 3, 0);
-            if (response.WebsiteId == 0) response.WebsiteId = 1;
-            var addresses = GetAddresses(response);
-            if (addresses == null)
-            {
-                PostStatus(uniqueId, 3, 2);
-                _ = _queueDb.Complete(uniqueId);
-                return;
-            }
-            PostStatus(uniqueId, 3, 1);
-            PostStatus(uniqueId, 4, 0);
-            var serialized = SerializeResult(uniqueId, addresses, _queueDb);
-            if (!serialized)
-            {
-                PostStatus(uniqueId, 4, 2);
-                _ = _queueDb.Complete(uniqueId);
-                return;
-            }
-            PostStatus(uniqueId, 4, 1);
-            _ = _queueDb.Complete(uniqueId);
         }
 
         private WebFetchResult? Fetch(WebInteractive web)

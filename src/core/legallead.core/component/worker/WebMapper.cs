@@ -72,6 +72,7 @@ namespace legallead.reader.component
                 _ => new WebInteractive(translated, startDate, endingDate)
             };
             interactive.Persistence = new StagingPersistence();
+            interactive.StatusReporting = new StatusPersistence();
             return interactive;
         }
         private static SearchNavigationParameter ConvertTo(UserSearchRequest source, SearchNavigationParameter dest)

@@ -53,6 +53,7 @@ namespace legallead.records.search.Classes
 
 
         public IStagingPersistence? Persistence { get; set; }
+        public IStatusPersistence? StatusReporting { get; set; }
 
         #endregion Properties
 

@@ -1,0 +1,52 @@
+[
+	{
+		"label": "3.2.200.2024-1725",
+		"trackingDt": "2024-02-04T18:50",
+		"description": "Correction to Denton Case Detail"
+	},
+	{
+		"label": "3.2.200.2024-1731",
+		"trackingDt": "2024-02-04T17:31",
+		"description": "Correction to database connection strings"
+	},
+	{
+		"label": "3.200.19",
+		"trackingDt": "2024-02-04T18:50",
+		"description": "Change version label to major.minor.build.revision format"
+	},
+	{
+		"label": "3.200.20",
+		"trackingDt": "2024-02-04T18:50",
+		"description": "Checking pre-build event"
+	},
+	{
+		"label": "3.200.21",
+		"trackingDt": "2024-02-04T18:50",
+		"description": "Corretion to error in JSON layout"
+	},
+	{
+		"label": "3.2.21",
+		"trackingDt": "2024-02-04T18:55",
+		"description": "Changing version number to 3.2.21"
+	},
+	{
+		"label": "3.2.22",
+		"trackingDt": "2024-02-04T18:58",
+		"description": "Corretion to echo from pwsh"
+	},
+	{
+		"label": "3.2.30",
+		"trackingDt": "2024-02-05T06:45",
+		"description": "Adding behavior for verbose status reporting"
+	},
+	{
+		"label": "3.2.35",
+		"trackingDt": "2024-02-05T07:15",
+		"description": "Adding try/catch to search gen error reporting"
+	},
+	{
+		"label": "3.2.35",
+		"trackingDt": "2024-02-05T07:15",
+		"description": "NOTE: need to test new status reporting in debug"
+	}
+]

@@ -1,20 +1,32 @@
 ﻿<#
     Setup windows service
+    note: you might need to upgrade to powershell 7 ..
+
+    iex "& { $(irm https://aka.ms/install-powershell.ps1) } -UseMSI"
 
 #>
+param (
+    [int]$stepid = -1
+)
 $saccount = @{
     app = "legallead-reader"
     name = "svc-legallead"
     secret = "CVO8Axc2044aEwc31aie"
     user = "legallead-windows-ws-01\Administrator"
     exename = "legallead.reader.component.exe"
-    exefolder = "C:\Svcs\legallead-search"
+    exefolder = "C:\Svc\reader"
     }
 $exeFolder = $saccount.exefolder
 $exeLocation = [System.IO.Path]::Combine( $saccount.exefolder, $saccount.exename );
-$stepid = -1;
+
 if ($stepid -eq 0) {
-  New-LocalUser -Name $saccount.name;  
+  New-LocalUser -Name $saccount.name;
+  $paths = @( "C:\Svc", "C:\Svc\reader", "C:\Svc\setup")
+    foreach($p in $paths) {
+        if ( [System.IO.Directory]::Exists( $p ) -eq $false ) {
+            [System.IO.Directory]::CreateDirectory( $p );
+        }
+    }
 }
 if ($stepid -eq 1) {
     <#
@@ -34,4 +46,8 @@ if ($stepid -eq 2) {
     -Description "Legal Lead Background Queue Processor" `
     -DisplayName "Legal Lead Queue Processor" `
     -StartupType Automatic
+}
+if ($stepid -eq 3) {
+    #uninstall
+    Remove-Service -Name $saccount.app
 }
