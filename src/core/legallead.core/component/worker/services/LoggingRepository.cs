@@ -63,7 +63,7 @@ namespace legallead.reader.component.services
             try
             {
                 if (_logger == null) return;
-                await _logger.LogError(exception, namespaceName, className, callerLineNumber, callerMethodName);
+                await _logger.LogError(exception, callerLineNumber, callerMethodName);
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace legallead.reader.component.services
             try
             {
                 if (_logger == null) return;
-                await _logger.LogInformation(message, callerLineNumber, callerMethodName);
+                await _logger.LogInformation(message);
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace legallead.reader.component.services
             try
             {
                 if (_logger == null) return;
-                await _logger.LogInformation(message, namespaceName, className, callerLineNumber, callerMethodName);
+                await _logger.LogInformation(message, callerLineNumber, callerMethodName);
             }
             catch (Exception ex)
             {

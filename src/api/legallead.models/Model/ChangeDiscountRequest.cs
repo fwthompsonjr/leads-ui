@@ -1,4 +1,4 @@
-﻿namespace legallead.permissions.api.Model
+﻿namespace legallead.models
 {
     public class ChangeDiscountRequest
     {

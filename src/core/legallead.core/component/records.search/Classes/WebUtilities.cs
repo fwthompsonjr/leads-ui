@@ -118,6 +118,13 @@ namespace legallead.records.search.Classes
                 line.Address = a.Address() ?? string.Empty;
                 line.Data = a.PersonHTML ?? string.Empty;
                 line.Plaintiff = plaintiff?.PersonName() ?? string.Empty;
+                if (reader.CaseDetails != null)
+                {
+                    line.CaseStyle = reader.CaseDetails.CaseStyle ?? line.CaseStyle;
+                    line.DateFiled = reader.CaseDetails.DateFiled ?? line.DateFiled;
+                    line.Court = reader.CaseDetails.Court ?? line.Court;
+                    line.CaseType = reader.CaseDetails.CaseType ?? line.CaseType;
+                }
                 list.Add(line);
             });
             return list;

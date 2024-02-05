@@ -156,11 +156,11 @@ namespace component
                 {
                     var log = $"{_componentName}:{_typeName} -- {message}";
                     _logging.ClassContext = _componentName;
-                    _ = _logging.LogInformation(log, ns, _componentName).ConfigureAwait(false);
+                    _ = _logging.LogInformation(log).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex, ns, _componentName);
+                    _ = _logging.LogError(ex);
                 }
             }
             /// <summary>
@@ -183,7 +183,7 @@ namespace component
                 }
                 catch (Exception ex)
                 {
-                    await _logging.LogError(ex, ns, _componentName);
+                    await _logging.LogError(ex);
                     return true;
                 }
             }
@@ -207,11 +207,11 @@ namespace component
                         DateCreated = DateTime.UtcNow
                     };
                     var serial = JsonConvert.SerializeObject(log);
-                    _ = _logging.LogInformation(serial, ns, _componentName).ConfigureAwait(false);
+                    _ = _logging.LogInformation(serial).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex, ns, _componentName);
+                    _ = _logging.LogError(ex);
                 }
             }
 
@@ -231,7 +231,7 @@ namespace component
                 }
                 catch (Exception ex)
                 {
-                    _ = _logging.LogError(ex, ns, _componentName);
+                    _ = _logging.LogError(ex);
                 }
             }
         }

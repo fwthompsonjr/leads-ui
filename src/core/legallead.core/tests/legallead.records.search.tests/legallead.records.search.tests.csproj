@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\api\legallead.models\legallead.models.v1.csproj" />
     <ProjectReference Include="..\..\component\records.search\legallead.records.search.csproj" />
   </ItemGroup>
 

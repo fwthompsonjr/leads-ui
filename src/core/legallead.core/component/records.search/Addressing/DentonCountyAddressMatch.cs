@@ -14,8 +14,10 @@ namespace legallead.records.search.Addressing
         {
             driver = web;
             addresses = GetAddresses();
+            CaseDetails = GetSummary(web);
         }
 
+        public DentonCaseStyleSummary? CaseDetails { get; private set; }
         public List<DentonAddressSummary> Addresses => addresses;
 
         private List<DentonAddressSummary> GetAddresses()
@@ -54,6 +56,33 @@ namespace legallead.records.search.Addressing
             return parents;
         }
 
+        private static DentonCaseStyleSummary? GetSummary(IWebDriver driver)
+        {
+            var body = driver.TryFindElement(By.TagName("body"));
+            if (body == null) return null;
+            var text = body.GetAttribute("innerHTML");
+            if (text == null) return null;
+            var table = text.GetNode();
+            if (table == null) return null;
+            var bb = table.SelectNodes("//b").ToList();
+            var caseStyle = GetCaseStyle(bb);
+            var response = new DentonCaseStyleSummary { CaseStyle = caseStyle };
+            var th = table.SelectNodes("//th").ToList().FindAll(x => HasClass(x, "ssTableHeaderLabel"));
+            if (th == null || ! th.Any()) return response;
+            var searches = new[] { "Case Type:", "Date Filed:", "Location:" };
+            th = th.FindAll(x => searches.Contains(x.InnerText));
+            th.ForEach(h =>
+            {
+                var thtxt = h.InnerText.Split(":")[0];
+                var tr = h.FindParent("tr")?.ChildNodes[1].InnerText;
+                if (thtxt == "Location") { response.Court = tr ?? string.Empty; }
+                if (thtxt == "Date Filed") { response.DateFiled = tr ?? string.Empty; }
+                if (thtxt == "Case Type") { response.CaseType = tr ?? string.Empty; }
+            });
+            return response;
+        }
+
+
 
         private static DentonAddressSummary? TryParse(HtmlNode? row, HtmlNode? tbl)
         {
@@ -81,6 +110,22 @@ namespace legallead.records.search.Addressing
                 attribute.Value = id.ToString();
                 row.Attributes.Append(attribute);
             }
+        }
+
+        private static string GetCaseStyle(List<HtmlNode> rows)
+        {
+            if (!rows.Any()) return string.Empty;
+            var texas = rows.Find(x => x.InnerText.Contains("Texas", StringComparison.OrdinalIgnoreCase));
+            if (texas != null) return texas.InnerText;
+            return rows[0].InnerText;
+        }
+
+        private static bool HasClass(HtmlNode node, string className)
+        {
+            if (node == null || node.Attributes.Count == 0) return false;
+            var attr = node.Attributes.FirstOrDefault(x => x.Name == "class")?.Value;
+            if (attr == null || attr.IndexOf(className) < 0) return false;
+            return true;
         }
 
     }

@@ -8,6 +8,7 @@
 		<Description>This is shared library containing common POCO classes for legal lead components.</Description>
 		<PackageReleaseNotes>
 			3.2.0 - 20240115 - Initial package creation
+			3.2.01 - 20240204 - Removed dependency to json packages
 		</PackageReleaseNotes>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageVersion>$(PackageVersion)</PackageVersion>
@@ -16,8 +17,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
-		<PackageReference Include="legallead.json.db" Version="3.2.*" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 	
