@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-tests", "c-tests", "{FFE9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "u-ui", "u-ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_release", "_release", "{B89F45C3-C685-47B8-B668-CF4A27495573}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\release\legallead.desktop.release.txt = ..\..\release\legallead.desktop.release.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,7 @@
+[
+	{
+		"label": "3.2.10",
+		"trackingDt": "2024-02-05T10:15",
+		"description": "Setup version stamp for reader component."
+	}
+]
