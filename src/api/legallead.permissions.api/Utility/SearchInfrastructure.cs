@@ -12,10 +12,12 @@ namespace legallead.permissions.api.Utility
     {
         protected readonly IDataProvider _db;
         private readonly IUserSearchRepository _repo;
-        internal SearchInfrastructure(IDataProvider db, IUserSearchRepository repo)
+        private readonly IRequestedUser _usrDb;
+        internal SearchInfrastructure(IDataProvider db, IUserSearchRepository repo, IRequestedUser usr)
         {
             _db = db;
             _repo = repo;
+            _usrDb = usr;
         }
 
         public async Task<UserSearchBeginResponse?> Begin(HttpRequest http, UserSearchRequest request)
@@ -107,7 +109,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<User?> GetUser(HttpRequest request)
         {
-            return await request.GetUser(_db);
+            return await _usrDb.GetUser(request);
         }
 
         private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)
