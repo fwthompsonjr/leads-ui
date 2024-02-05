@@ -32,8 +32,8 @@ namespace legallead.ui.implementations
 
             var user = provider.GetRequiredService<UserBo>();
             if (user == null || !user.IsInitialized) return failed;
-
-            var data = TryDeserialize<LoginFormModel>(json);
+            var jspayload = GetSerializable<LoginFormModel>(json);
+            var data = TryDeserialize<LoginFormModel>(jspayload);
             if (data == null) return failed;
             var obj = new { data.UserName, data.Password };
             var loginResponse = await api.Post("login", obj, user) ?? failed;

@@ -30,13 +30,25 @@ namespace legallead.desktop.implementations
 
         public async Task<HttpResponseMessage> PostAsJsonAsync<TValue>(HttpClient client, string? requestUri, TValue value, JsonSerializerOptions? options = null, CancellationToken cancellationToken = default)
         {
-            _httpClient ??= client;
-            var response = await _httpClient.PostAsJsonAsync(
-                requestUri,
-                value,
-                options,
-                cancellationToken);
-            return response;
+            try
+            {
+                _httpClient ??= client;
+                _httpClient.Timeout = TimeSpan.FromSeconds(15);
+                var response = await _httpClient.PostAsJsonAsync(
+                    requestUri,
+                    value,
+                    options,
+                    cancellationToken);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseMessage
+                {
+                    StatusCode = System.Net.HttpStatusCode.InternalServerError,
+                    Content = new StringContent(ex.Message)
+                };
+            }
         }
 
         public void AppendHeader(string key, string value)

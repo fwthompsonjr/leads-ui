@@ -36,10 +36,6 @@ namespace legallead.ui.Utilities
                 if (timer.Interval == IntervalBlankPage && IsPageIntroduced) return;
                 switch (timer.Interval)
                 {
-                    case IntervalHomePage:
-                        timer.Stop();
-                        SetView(ContentHandler.GetLocalContent("home")?.Content);
-                        break;
                     case IntervalBlankPage:
                         SetView(ContentHandler.GetLocalContent("introduction")?.Content);
                         timer.Interval = IntervalIntroductionPage;
@@ -78,6 +74,10 @@ namespace legallead.ui.Utilities
                         int readyId = (int)CommonStatusTypes.Ready;
                         StatusBarHelper.SetStatus(readyId);
                         timer.Interval = IntervalHomePage;
+                        break;
+                    case IntervalHomePage:
+                        timer.Stop();
+                        SetHome();
                         break;
                 }
             }

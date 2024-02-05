@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "c-tests", "c-tests", "{FFE9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "u-ui", "u-ui", "{220C508F-348E-4128-8A9E-1DB37033CE43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.ui", "legallead.ui\legallead.ui.csproj", "{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,12 +33,6 @@ Global
 		{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +41,6 @@ Global
 		{6D96CC44-7769-4B87-9E14-4893A7CC7F29} = {220C508F-348E-4128-8A9E-1DB37033CE43}
 		{770873D7-C9DE-4F83-AD88-583F72F3EC43} = {FFE95784-CEBD-4BA2-AF1B-88D1B8FA7E8C}
 		{5CF8B373-DCE5-4565-89F5-E4EB5DFEB80F} = {0AB23E5A-9D9B-4C35-9A2B-2C6198C2C412}
-		{91A16A1D-6ECB-4FCE-B7AC-F00CE4D114C4} = {220C508F-348E-4128-8A9E-1DB37033CE43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5E53AA6-3778-4228-8ECF-D0FEB5164767}

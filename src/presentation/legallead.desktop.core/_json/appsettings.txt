@@ -1,6 +1,6 @@
 {
   "Initial_View": "introduction",
-  "Permissions_API": "https://localhost:44345/",
+  "Permissions_API": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/",
   "api.permissions": {
     "destination": "remote",
     "remote": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/",
