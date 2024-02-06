@@ -1,4 +1,6 @@
-﻿namespace legallead.permissions.api
+﻿using legallead.permissions.api.Interfaces;
+
+namespace legallead.permissions.api
 {
     public class InternalServiceProvider : IInternalServiceProvider
     {

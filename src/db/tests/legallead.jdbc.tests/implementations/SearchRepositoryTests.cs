@@ -6,6 +6,7 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
+using System.Text;
 
 namespace legallead.jdbc.tests.implementations
 {
@@ -29,6 +30,38 @@ namespace legallead.jdbc.tests.implementations
             mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
                 .Returns(completion);
             var response = await service.Append(SearchTargetTypes.Detail, "", "");
+            Assert.True(response.Key);
+        }
+
+        [Theory]
+        [InlineData(SearchTargetTypes.Detail)]
+        [InlineData(SearchTargetTypes.Request)]
+        [InlineData(SearchTargetTypes.Response)]
+        [InlineData(SearchTargetTypes.Status)]
+        [InlineData(SearchTargetTypes.Staging)]
+        public async Task RepoCanAppendAllTypes(SearchTargetTypes type)
+        {
+            var completion = Task.CompletedTask;
+            var provider = new SearchRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.SearchRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.Append(type, "", "");
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanAppendStagingBytes()
+        {
+            var type = SearchTargetTypes.Staging;
+            var completion = Task.CompletedTask;
+            var provider = new SearchRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.SearchRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.Append(type, "", Encoding.UTF8.GetBytes("message"));
             Assert.True(response.Key);
         }
 

@@ -1,4 +1,5 @@
-﻿using legallead.permissions.api.Model;
+﻿using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,7 +43,7 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var searches = await infrastructure.GetHeader(Request, user.Id);
+            var searches = await infrastructure.GetHeader(Request, null);
             return Ok(searches);
         }
     }

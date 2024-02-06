@@ -1,7 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.json.db.entity;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Interfaces
 {
     public interface ISubscriptionInfrastructure
     {

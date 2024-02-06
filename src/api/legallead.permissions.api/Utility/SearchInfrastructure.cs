@@ -1,7 +1,9 @@
 ﻿using legallead.jdbc;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Utility
@@ -10,10 +12,12 @@ namespace legallead.permissions.api.Utility
     {
         protected readonly IDataProvider _db;
         private readonly IUserSearchRepository _repo;
-        internal SearchInfrastructure(IDataProvider db, IUserSearchRepository repo)
+        private readonly IRequestedUser _usrDb;
+        internal SearchInfrastructure(IDataProvider db, IUserSearchRepository repo, IRequestedUser usr)
         {
             _db = db;
             _repo = repo;
+            _usrDb = usr;
         }
 
         public async Task<UserSearchBeginResponse?> Begin(HttpRequest http, UserSearchRequest request)
@@ -37,23 +41,27 @@ namespace legallead.permissions.api.Utility
             };
         }
 
-        public async Task<IEnumerable<UserSearchHeader>?> GetHeader(HttpRequest http, string? id)
+        public async Task<IEnumerable<UserSearchQueryModel>?> GetHeader(HttpRequest http, string? id)
         {
             var user = await GetUser(http);
             if (user == null) return null;
             var histories = await _repo.History(user.Id);
-            if (histories == null || !histories.Any()) return Enumerable.Empty<UserSearchHeader>();
+            if (histories == null || !histories.Any()) return Enumerable.Empty<UserSearchQueryModel>();
             if (!string.IsNullOrEmpty(id))
             {
                 histories = histories.Where(h => (h.Id ?? "-").Equals(id, StringComparison.OrdinalIgnoreCase));
             }
-            var models = histories.Select(x => new UserSearchHeader
+            var models = histories.Select(x => new UserSearchQueryModel
             {
                 Id = x.Id ?? string.Empty,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
                 EstimatedRowCount = x.EstimatedRowCount,
-                CreateDate = x.CreateDate
+                CreateDate = x.CreateDate,
+                SearchProgress = x.SearchProgress,
+                StateCode = x.StateCode,
+                CountyName = x.CountyName
+
             });
             return models;
         }
@@ -101,7 +109,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<User?> GetUser(HttpRequest request)
         {
-            return await request.GetUser(_db);
+            return await _usrDb.GetUser(request);
         }
 
         private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)

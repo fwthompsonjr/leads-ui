@@ -1,5 +1,6 @@
 ﻿using legallead.json.db;
 using legallead.json.db.entity;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;

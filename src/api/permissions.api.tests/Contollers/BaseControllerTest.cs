@@ -2,6 +2,7 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +66,8 @@ namespace permissions.api.tests.Contollers
             var profileHistoryDb = new Mock<IUserProfileHistoryRepository>();
             var userMk = new Mock<IUserRepository>();
             var stateMock = new Mock<IStateSearchProvider>();
+            var userSearchValidator = new Mock<IUserSearchValidator>();
+            var searchInfrastructure = new Mock<ISearchInfrastructure>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
             collection.AddScoped(s => userMk);
@@ -80,6 +83,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => userProfileVwMk);
             collection.AddScoped(s => permissionGroupMk);
             collection.AddScoped(s => permissionHistoryDb);
+            collection.AddScoped(s => userSearchValidator);
+            collection.AddScoped(s => searchInfrastructure);
             collection.AddScoped(s => userMk.Object);
             collection.AddScoped(s => permissionMk.Object);
             collection.AddScoped(s => profileMk.Object);
@@ -97,6 +102,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => profileHistoryDb.Object);
             collection.AddScoped(s => stateMock);
             collection.AddScoped(s => stateMock.Object);
+            collection.AddScoped(s => userSearchValidator.Object);
+            collection.AddScoped(s => searchInfrastructure.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -147,6 +154,7 @@ namespace permissions.api.tests.Contollers
                 };
             });
             collection.AddScoped(s => new Mock<ILoggingInfrastructure>().Object);
+            collection.AddScoped<SearchController>();
             _serviceProvider = collection.BuildServiceProvider();
             return _serviceProvider;
         }

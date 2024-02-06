@@ -8,6 +8,7 @@ using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Health;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
@@ -113,11 +114,18 @@ namespace legallead.permissions.api
                 var provider = p.GetRequiredService<IDataProvider>();
                 return new ProfileInfrastructure(provider);
             });
+            services.AddScoped<IRequestedUser>(p =>
+            {
+                var provider = p.GetRequiredService<IDataProvider>();
+                return new RequestedUserService(provider);
+            });
+
             services.AddScoped<ISearchInfrastructure>(p =>
             {
                 var provider = p.GetRequiredService<IDataProvider>();
                 var repo = p.GetRequiredService<IUserSearchRepository>();
-                return new SearchInfrastructure(provider, repo);
+                var usr = p.GetRequiredService<IRequestedUser>();
+                return new SearchInfrastructure(provider, repo, usr);
             });
             services.AddScoped<SignonController>();
             services.AddScoped<ApplicationController>();

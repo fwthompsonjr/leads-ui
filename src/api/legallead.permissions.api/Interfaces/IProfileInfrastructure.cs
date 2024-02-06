@@ -1,7 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Interfaces
 {
     public interface IProfileInfrastructure : ISubscriptionInfrastructure
     {

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Bogus;
+using Dapper;
 using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;

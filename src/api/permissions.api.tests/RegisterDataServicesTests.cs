@@ -3,6 +3,7 @@ using legallead.jdbc.interfaces;
 using legallead.logging.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Utility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
