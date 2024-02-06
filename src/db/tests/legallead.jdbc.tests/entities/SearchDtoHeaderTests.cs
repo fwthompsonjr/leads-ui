@@ -11,6 +11,9 @@ namespace legallead.jdbc.tests.entities
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Name, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.SearchProgress, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.StateCode, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CountyName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.StartDate, y => y.Date.Recent())
             .RuleFor(x => x.EndDate, y => y.Date.Recent())
             .RuleFor(x => x.EstimatedRowCount, y => y.Random.Int(5, 25055))
@@ -46,6 +49,9 @@ namespace legallead.jdbc.tests.entities
                 a.CreateDate = b.CreateDate;
                 a.EndDate = b.EndDate;
                 a.EstimatedRowCount = b.EstimatedRowCount;
+                a.SearchProgress = b.SearchProgress;
+                a.StateCode = b.StateCode;
+                a.CountyName = b.CountyName;
                 a.Id = b.Id;
                 a.Name = b.Name;
                 a.UserId = b.UserId;

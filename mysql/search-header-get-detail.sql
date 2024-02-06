@@ -1,10 +1,14 @@
 SET @usr = 'cf35094a-ad64-41dd-9f2d-32cbc942aaed';
 SELECT 
-Id, StartDate, EndDate, ExpectedRows, CreateDate, SearchProgress,
+Id, ExpectedRows, CreateDate, SearchProgress,
 CASE WHEN LineJs IS NULL THEN 'N/A'
 	ELSE UPPER( JSON_UNQUOTE(JSON_EXTRACT(LineJs, '$.state') ) ) END StateCode,
 CASE WHEN LineJs IS NULL THEN 'N/A'
-	ELSE UPPER( JSON_UNQUOTE(JSON_EXTRACT(LineJs, '$.county.name') ) ) END CountyName
+	ELSE UPPER( JSON_UNQUOTE(JSON_EXTRACT(LineJs, '$.county.name') ) ) END CountyName,
+CASE WHEN LineJs IS NULL THEN NULL
+	ELSE from_unixtime(floor( CAST(( JSON_UNQUOTE(JSON_EXTRACT(LineJs, '$.end') ) ) AS UNSIGNED) /1000)) END EndDate,
+CASE WHEN LineJs IS NULL THEN NULL
+	ELSE from_unixtime(floor( CAST(( JSON_UNQUOTE(JSON_EXTRACT(LineJs, '$.start') ) ) AS UNSIGNED) /1000)) END StartDate
 FROM (
 SELECT 
 S.Id,
