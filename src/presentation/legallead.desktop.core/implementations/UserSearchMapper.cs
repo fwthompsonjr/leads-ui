@@ -65,13 +65,22 @@ namespace legallead.desktop.implementations
             var template = node.SelectSingleNode(substitutions.Template);
             var nodata = node.SelectSingleNode(substitutions.NoDataTemplate);
             if (table == null || template == null) return node.OuterHtml;
-            var tbody = table.SelectSingleNode("//tbody");
-            tbody.RemoveChild(nodata);
+            var tbody = table.SelectSingleNode("tbody");
+            var style = document.CreateAttribute("style", "display: none");
+            nodata.Attributes.Add(style);
             foreach ( var item in data )
             {
+                var r = data.IndexOf(item);
+                var pg = r / 10;
                 var rowdata = document.CreateElement("tr");
-                var attr = document.CreateAttribute("search-uuid");
-                attr.Value = item[0];
+                var attr = document.CreateAttribute("search-uuid", item[0]);
+                var rwnumber = document.CreateAttribute("data-row-number", r.ToString());
+                var pgnumber = document.CreateAttribute("data-page-number", pg.ToString()); 
+                var rwstyle = document.CreateAttribute("style", "display: none");
+                rowdata.Attributes.Add(attr);
+                rowdata.Attributes.Add(rwnumber);
+                rowdata.Attributes.Add(pgnumber);
+                if (pg > 0) rowdata.Attributes.Add(rwstyle);
                 var row = template.InnerHtml;
                 for ( var i = 1; i < substitutions.Targets + 1; i++ ) 
                 {

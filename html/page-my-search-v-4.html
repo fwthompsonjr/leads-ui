@@ -187,7 +187,7 @@
 	</head>
 	<body class="text-center">
 		
-		<!-- Logout Modal -->  		 		 		
+		<!-- Logout Modal -->  		 		 		 		 		 		 		
 		<!-- Button trigger modal -->
 		<button id="btn-my-account-logout-show" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#my-account-logout-modal">
 			Launch static backdrop modal
@@ -219,15 +219,15 @@
 						<span>Legal Lead UI</span>
 					</h3>
 					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-						<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:jssearchviews.setIndex(0)">Search</a>
-						<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:jssearchviews.setIndex(1)">History</a>
+						<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link" href="javascript:jssearchviews.setIndex(0)">Search</a>
+						<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link active" href="javascript:jssearchviews.setIndex(1)">History</a>
 						<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:jssearchviews.setIndex(2)">Purchases</a>
 					</nav>
 				</div>
 			</header>
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-					<div id="dv-subcontent-search" name="subcontent-search" class="card">
+					<div id="dv-subcontent-search" name="subcontent-search" class="card" style="display: none;">
 						<div id="dv-subcontent-search-card-body" name="subcontent-search-body" class="card-body">
 							<h5 class="card-title text-start">Search</h5>
 							<div class="row">
@@ -408,10 +408,10 @@
 							</div>
 						</div>
 					</div>
-					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card w-75" style="display: none;">
+					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card w-75 active">
 						<div class="card-body">
 							<h5 class="card-title">Search History</h5>
-							<table automationId="search-history-table" name="search-dt-table">
+							<table automationid="search-history-table" name="search-dt-table">
 								<colgroup>
 									<col name="requested-date" style="width: 90px">
 									<col name="state-abbr" style="width: 40px">
@@ -451,9 +451,345 @@
 											<span name="search-status">~6</span>
 										</td>
 									</tr>
-									<tr id="tr-subcontent-history-no-data">
+									<tr id="tr-subcontent-history-no-data" style="display: none">
 										<td colspan="6">
 											<span name="no-data">No Records Found</span>
+										</td>
+									</tr>
+									<tr search-uuid="38276732-c407-11ee-be26-0af7a01f52e9" data-row-number="0" data-page-number="0">
+										<td class="text-end">
+											<span name="requested-date">Feb 5, 2024 9:16 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1df255ac-c3c4-11ee-be26-0af7a01f52e9" data-row-number="1" data-page-number="1">
+										<td class="text-end">
+											<span name="requested-date">Feb 5, 2024 1:15 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1bcdec07-c3c4-11ee-be26-0af7a01f52e9" data-row-number="2" data-page-number="2">
+										<td class="text-end">
+											<span name="requested-date">Feb 5, 2024 1:15 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1cb8bd15-c3b7-11ee-be26-0af7a01f52e9" data-row-number="3" data-page-number="3">
+										<td class="text-end">
+											<span name="requested-date">Feb 4, 2024 11:42 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="558dcb84-c3a7-11ee-be26-0af7a01f52e9" data-row-number="4" data-page-number="4">
+										<td class="text-end">
+											<span name="requested-date">Feb 4, 2024 9:49 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="a3d05e8c-c38b-11ee-be26-0af7a01f52e9" data-row-number="5" data-page-number="5">
+										<td class="text-end">
+											<span name="requested-date">Feb 4, 2024 6:31 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="69d984ba-c2f7-11ee-be26-0af7a01f52e9" data-row-number="6" data-page-number="6">
+										<td class="text-end">
+											<span name="requested-date">Feb 4, 2024 12:50 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="b442777f-c2ba-11ee-be26-0af7a01f52e9" data-row-number="7" data-page-number="7">
+										<td class="text-end">
+											<span name="requested-date">Feb 3, 2024 5:36 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="b34d8a49-c2ba-11ee-be26-0af7a01f52e9" data-row-number="8" data-page-number="8">
+										<td class="text-end">
+											<span name="requested-date">Feb 3, 2024 5:36 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="ad03038e-c236-11ee-be26-0af7a01f52e9" data-row-number="9" data-page-number="9">
+										<td class="text-end">
+											<span name="requested-date">Feb 3, 2024 1:50 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e02f1031-c234-11ee-be26-0af7a01f52e9" data-row-number="10" data-page-number="0">
+										<td class="text-end">
+											<span name="requested-date">Feb 3, 2024 1:38 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1e0cabed-c230-11ee-be26-0af7a01f52e9" data-row-number="11" data-page-number="1">
+										<td class="text-end">
+											<span name="requested-date">Feb 3, 2024 1:04 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="8f316534-bf75-11ee-be26-0af7a01f52e9" data-row-number="12" data-page-number="2">
+										<td class="text-end">
+											<span name="requested-date">Jan 30, 2024 1:43 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="902a4fed-bf12-11ee-be26-0af7a01f52e9" data-row-number="13" data-page-number="3">
+										<td class="text-end">
+											<span name="requested-date">Jan 30, 2024 1:54 AM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="4890f996-befc-11ee-be26-0af7a01f52e9" data-row-number="14" data-page-number="4">
+										<td class="text-end">
+											<span name="requested-date">Jan 29, 2024 11:15 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="0d3b51b2-befc-11ee-be26-0af7a01f52e9" data-row-number="15" data-page-number="5">
+										<td class="text-end">
+											<span name="requested-date">Jan 29, 2024 11:13 PM</span>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="search-status">
+												Completed</span>
 										</td>
 									</tr>
 								</tbody>
@@ -470,10 +806,10 @@
 							</button>
 						</div>
 					</div>
-					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card w-75" style="display: none;">
+					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card d-none w-75" style="display: none;">
 						<div class="card-body">
 							<h5 class="card-title">Purchase History</h5>
-							<table automationId="search-purchases-table" name="search-dt-table">
+							<table automationid="search-purchases-table" name="search-dt-table">
 								<colgroup>
 									<col name="purchase-date" style="width: 100px">
 									<col name="item-name">
@@ -823,16 +1159,16 @@
                          "#dv-subcontent-history", 
                          "#dv-subcontent-purchases" ], 
                               "setIndex": function( index ) { 
-							  const search_parent = "#dv-subcontent-search";
                               const actv = "active"; 
+                              const search_parent = "#dv-subcontent-search"; 
                               const dnone = "d-none"; 
                               let id = parseInt( index ); 
                                    if(isNaN(id) || id < 0 || id > 2) { return; } 
-								   if (id == 0) {
-									$( search_parent ).show();
-								   } else {
-									$( search_parent ).hide();
-								   }
+                                   if (id == 0) { 
+                                   $( search_parent ).show(); 
+                                        } else { 
+                                   $( search_parent ).hide(); 
+                                   } 
                                    for(let i = 0; i < jssearchviews.links.length; i++) { 
                                    let nv = jssearchviews.links[i]; 
                                    let vw = jssearchviews.views[i]; 

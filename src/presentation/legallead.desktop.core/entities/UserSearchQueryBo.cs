@@ -26,8 +26,8 @@
         {
             get
             {
-                const string dfmt1 = "Mmm d, YYYY h:mm tt";
-                const string dfmt2 = "M/d/YYYY";
+                const string dfmt1 = "M/d/yy h:mm tt";
+                const string dfmt2 = "M/d/yyyy";
                 const string dash = " - ";
                 if (index < 0 || index > 7) return string.Empty;
                 if (index == 0) return Id ?? string.Empty;
@@ -36,9 +36,17 @@
                 if (index == 3) return CountyName ?? dash;
                 if (index == 4) return StartDate.HasValue ? StartDate.Value.ToString(dfmt2) : dash;
                 if (index == 5) return EndDate.HasValue ? EndDate.Value.ToString(dfmt2) : dash;
-                if (index == 6) return SearchProgress ?? dash;
+                if (index == 6) return ConvertStatus(SearchProgress);
                 return string.Empty;
             }
+        }
+
+        private static string ConvertStatus(string? status)
+        {
+            const string dash = " - ";
+            if(string.IsNullOrEmpty(status)) return dash;
+            if (!status.Contains('-')) return status;
+            return status.Split('-')[^1];
         }
     }
 }

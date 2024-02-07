@@ -4,26 +4,26 @@
 							<h5 class="card-title">Search History</h5>	
 							<table automationId="search-history-table" name="search-dt-table">
 								<colgroup>
-									<col name="requested-date" style="width: 90px" />
-									<col name="state-abbr" style="width: 40px" />
-									<col name="county-name" />
+									<col name="requested-date" />
+									<col name="state-abbr" style="width: 50px" />
+									<col name="county-name" style="width: 100px" />
 									<col name="begin-date" style="width: 75px" />
 									<col name="ending-date" style="width: 75px" />
 									<col name="search-status" style="width: 50px" />
 								</colgroup>
 								<thead>
 									<tr>
-										<td>Requested Date</td>
-										<td>State</td>
-										<td>County</td>
-										<td>Search Begin</td>
-										<td>Search Ending</td>
-										<td>Status</td>
+										<th style="padding-left: 3px;">Request Date</th>
+										<th style="padding-left: 3px;">State</th>
+										<th style="padding-left: 3px;">County</th>
+										<th style="padding-left: 3px;">Starting</th>
+										<th style="padding-left: 3px;">Ending</th>
+										<th style="padding-left: 3px;">Status</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr id="tr-subcontent-history-data-template" style="display: none" search-uuid="~0">
-										<td class="text-end" ><span name="requested-date">~1</span></td>
+										<td class="text-start" ><span name="requested-date">~1</span></td>
 										<td><span name="state-abbr">~2</span></td>
 										<td><span name="county-name">~3</span></td>
 										<td class="text-end"><span name="begin-date">~4</span></td>
@@ -35,6 +35,19 @@
 										<span name="no-data">No Records Found</span></td>
 									</tr>
 								</tbody>
+								<tfoot>
+									<tr id="tr-subcontent-history-pager">
+										<td>
+											Records: 12
+										</td>
+										<td colspan="5" class="p-2">
+											<select id="cbo-subcontent-history-pager" class="w-75">
+												<option selected value="0">Page 1: 1 to 10</option>
+												<option value="1">Page 2: 11 to 20</option>
+											</select>
+										</td>
+									</tr>
+								</tfoot>
 							</table>
 						</div>
 						<div class="card-footer">
