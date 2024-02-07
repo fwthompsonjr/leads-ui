@@ -3,6 +3,7 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace legallead.jdbc.implementations
@@ -44,7 +45,19 @@ namespace legallead.jdbc.implementations
             });
             return translation;
         }
-
+        public async Task<IEnumerable<SearchPreviewBo>> Preview(string searchId)
+        {
+            const string prc = "CALL USP_GET_SEARCH_RECORD_PREVIEW( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<SearchPreviewDto>(connection, command);
+            var translation = response.Select(x =>
+            {
+                var tmp = JsonConvert.SerializeObject(x);
+                return JsonConvert.DeserializeObject<SearchPreviewBo>(tmp) ?? new();
+            });
+            return translation;
+        }
         public async Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data, string? keyname = null)
         {
             try
@@ -172,14 +185,14 @@ namespace legallead.jdbc.implementations
         {
 
             var dapperParm = new DynamicParameters();
-            if(search == SearchTargetTypes.Staging)
+            if (search == SearchTargetTypes.Staging)
             {
                 dapperParm.Add("searchItemId", id);
                 dapperParm.Add("stagingName", keyname);
                 dapperParm.Add("jscontent", data);
                 var isByte = data is byte[];
                 dapperParm.Add("isByteArray", Convert.ToByte(isByte ? 1 : 0));
-            } 
+            }
             else
             {
                 dapperParm.Add("searchItemId", id);

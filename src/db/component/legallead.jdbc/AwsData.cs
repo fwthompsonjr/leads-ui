@@ -12,7 +12,7 @@ namespace legallead.jdbc
             lock (locker)
             {
                 DbConnectProvider.Target = connectionType;
-                return DbConnectProvider.ConnectionString(databaseName); 
+                return DbConnectProvider.ConnectionString(databaseName);
             }
         }
         private static DbConnect DbConnectProvider => _provider ??= GetConnect();

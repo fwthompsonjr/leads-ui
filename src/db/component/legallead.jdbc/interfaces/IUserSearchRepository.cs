@@ -10,6 +10,7 @@ namespace legallead.jdbc.interfaces
         Task<KeyValuePair<bool, string>> Complete(string id);
         Task<IEnumerable<SearchTargetModel>?> GetTargets(SearchTargetTypes search, string? userId, string? id);
         Task<IEnumerable<SearchDtoHeader>> History(string userId);
+        Task<IEnumerable<SearchPreviewBo>> Preview(string searchId);
         Task<KeyValuePair<bool, string>> UpdateRowCount(string id, int rowCount);
         Task<KeyValuePair<bool, object>> GetStaged(string id, string keyname);
         Task<SearchRestrictionDto> GetSearchRestriction(string userId);
