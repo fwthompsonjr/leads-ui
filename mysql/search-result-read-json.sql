@@ -1,3 +1,4 @@
+-- note: the filing-date is not visible in final json
 SET @user_id = 'cf35094a-ad64-41dd-9f2d-32cbc942aaed';
 SET @search_id = (
 SELECT Id
