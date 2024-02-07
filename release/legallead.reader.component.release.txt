@@ -48,5 +48,10 @@
 		"label": "3.2.35",
 		"trackingDt": "2024-02-05T07:15",
 		"description": "NOTE: need to test new status reporting in debug"
+	},
+	{
+		"label": "3.2.40",
+		"trackingDt": "2024-02-07T08:35",
+		"description": "NOTE: need to test new status reporting in debug"
 	}
 ]

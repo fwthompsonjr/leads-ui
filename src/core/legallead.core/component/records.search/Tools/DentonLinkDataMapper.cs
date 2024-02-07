@@ -21,6 +21,16 @@ namespace legallead.records.search.Tools
 
             list.ForEach(item =>
             {
+                if (string.IsNullOrEmpty(item.DateFiled))
+                {
+                    var filing = data.Find(x =>
+                    {
+                        if (string.IsNullOrEmpty(x.DateFiled)) { return false; }
+                        if (x.Case.Equals(item.CaseNumber)) { return true; }
+                        return false;
+                    });
+                    if (filing != null) { item.DateFiled = filing.DateFiled; }
+                }
                 var isOk = HasReadableAddress(item);
                 if (!isOk)
                 {
@@ -52,6 +62,7 @@ namespace legallead.records.search.Tools
                 CaseStyle = row.CaseStyle,
                 CaseType = row.CaseType,
                 Court = row.Court,
+                DateFiled = row.DateFiled,
                 Name = row.Defendant,
                 Status = row.Status,
                 Plantiff = row.Plaintiff ?? string.Empty,

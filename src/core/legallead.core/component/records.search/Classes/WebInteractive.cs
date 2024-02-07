@@ -79,7 +79,8 @@ namespace legallead.records.search.Classes
             List<PersonAddress> personAddresses = isDenton ?
                 DentonLinkDataMapper.ConvertFrom(data) :
                 results.GetPersonAddresses();
-            if (!isDenton) { personAddresses = MapCaseStyle(data, personAddresses); }
+            if (!isDenton) { 
+                personAddresses = MapCaseStyle(data, personAddresses); }
             personAddresses = CleanUp(personAddresses);
             var addressobject = JsonConvert.SerializeObject(personAddresses, Newt.Formatting.Indented);
             _ = Persistence?.Add(UniqueId, "data-output-person-address", addressobject);

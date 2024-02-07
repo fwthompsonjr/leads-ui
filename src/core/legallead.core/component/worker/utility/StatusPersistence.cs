@@ -7,7 +7,7 @@ namespace legallead.reader.component.utility
 {
     public class StatusPersistence : IStatusPersistence
     {
-        private const jdbc.SearchTargetTypes targetType = jdbc.SearchTargetTypes.Staging;
+        private const jdbc.SearchTargetTypes targetType = jdbc.SearchTargetTypes.Status;
         private readonly IUserSearchRepository _repo;
         public StatusPersistence()
         {
