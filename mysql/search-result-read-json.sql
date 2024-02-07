@@ -1,10 +1,27 @@
+SET @user_id = 'cf35094a-ad64-41dd-9f2d-32cbc942aaed';
+SET @search_id = (
+SELECT Id
+  FROM SEARCH
+  WHERE UserId = @user_id
+  ORDER BY CreateDate DESC
+  LIMIT 1);
+  
+SET @search_staging_id = (
+SELECT Id
+  FROM SEARCHSTAGING
+  WHERE SearchId = @search_id
+    AND StagingType = 'data-output-person-addres'
+    ORDER BY LineNbr DESC
+    LIMIT 1);
+
 SET @txt = (
 SELECT
 CASE WHEN IsBinary = 0 THEN CONVERT(`Line` USING UTF8MB4) ELSE NULL END LineText
 FROM defaultdb.SEARCHSTAGING
-WHERE ID =
-'cacb8824-befc-11ee-be26-0af7a01f52e9');
+WHERE ID = @search_staging_id);
 SET @jstable = CAST( @txt as JSON);
+
+SELECT @jstable Tb;
 
 SELECT 
 	*

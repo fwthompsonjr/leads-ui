@@ -2,11 +2,6 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.implementations
 {
@@ -67,7 +62,7 @@ namespace legallead.desktop.implementations
             var tbody = table.SelectSingleNode("tbody");
             var style = document.CreateAttribute("style", "display: none");
             nodata.Attributes.Add(style);
-            foreach ( var item in data )
+            foreach (var item in data)
             {
                 var r = data.IndexOf(item);
                 var pg = r / tableRowCount;
@@ -84,7 +79,7 @@ namespace legallead.desktop.implementations
                 rowdata.Attributes.Add(attrwpos);
                 if (pg > 0) rowdata.Attributes.Add(rwstyle);
                 var row = template.InnerHtml;
-                for ( var i = 1; i < substitutions.Targets + 1; i++ ) 
+                for (var i = 1; i < substitutions.Targets + 1; i++)
                 {
                     var search = $"~{i}";
                     row = row.Replace(search, item[i]);
@@ -101,12 +96,12 @@ namespace legallead.desktop.implementations
             var tfoot = table.SelectSingleNode("tfoot");
             var trow = tfoot.SelectSingleNode("tr");
             var cells = trow.SelectNodes("td").ToArray();
-            var cbo = cells[1].SelectSingleNode("select");
-            var td = cells[0];
+            var cbo = cells[0].SelectSingleNode("select");
+            var td = cells[1];
             td.InnerHtml = $"Records: {data.Count}";
             cbo.ChildNodes.Clear();
             var doc = table.OwnerDocument;
-            for(var i = 0; i < data.Count; i+= tableRowCount) 
+            for (var i = 0; i < data.Count; i += tableRowCount)
             {
                 var pg = i / tableRowCount;
                 var mx = Math.Min(i + tableRowCount, data.Count);

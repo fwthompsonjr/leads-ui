@@ -290,9 +290,19 @@ let jssearchviews = {
 let jssearchpager = {
 	"pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager" ],
 	"set_page": function( cboId ) {
-		var indx = parseInt( cboId );
+		let indx = parseInt( cboId );
 		if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; }
-
+		let keyname = jssearchpager.pagers[indx];
+		let pg = $( keyname ).val();
+		let rows = $( keyname ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' );
+		rows.each(function(){
+			$current = $( this );
+			attr = $current.attr("data-page-number");
+			hscls = $current.attr("class");
+			if (typeof hscls !== typeof undefined && hscls !== false) { $current.removeAttr('class'); }
+			if ( attr == pg ) { $current.show() }
+			else { $current.hide(); }
+		});
 	}
 }
 

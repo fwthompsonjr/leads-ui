@@ -822,13 +822,13 @@
 								</tbody>
 								<tfoot>
 									<tr id="tr-subcontent-history-pager">
-										<td id="td-subcontent-history-record-count">Records: 16</td>
-										<td colspan="5" class="p-2">
-											<select id="cbo-subcontent-history-pager" class="w-75 form-control">
+										<td colspan="4" class="p-2">
+											<select id="cbo-subcontent-history-pager" class="form-control text-secondary" onchange="jssearchpager.set_page(0)">
 												<option value="0" selected="selected">Records: 1 to 10</option>
 												<option value="1">Records: 11 to 16</option>
 											</select>
 										</td>
+										<td colspan="2" id="td-subcontent-history-record-count" class="text-end text-secondary">Records: 16</td>
 									</tr>
 								</tfoot>
 							</table>
@@ -1226,6 +1226,24 @@
                     jsSearchForm.initialize(); 
 
 
+					let jssearchpager = {
+						"pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager" ],
+						"set_page": function( cboId ) {
+							let indx = parseInt( cboId );
+							if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; }
+							let keyname = jssearchpager.pagers[indx];
+							let pg = $( keyname ).val();
+							let rows = $( keyname ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' );
+							rows.each(function(){
+								$current = $( this );
+								attr = $current.attr("data-page-number");
+								hscls = $current.attr("class");
+								if (typeof hscls !== typeof undefined && hscls !== false) { $current.removeAttr('class'); }
+								if ( attr == pg ) { $current.show() }
+								else { $current.hide(); }
+							});
+						}
+					}
 		</script>
 		<script name="verify-and-post">
                          function verifyAndPost(pagename, buttonname) { 
