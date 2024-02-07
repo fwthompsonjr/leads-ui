@@ -70,6 +70,7 @@ namespace legallead.desktop.utilities
             var provider = DesktopCoreServiceProvider.Provider;
             services.AddSingleton<UserBo>();
             services.AddSingleton<UserSearchBo>();
+            services.AddSingleton<IUserSearchMapper>(s => new UserSearchMapper());
             services.AddTransient<IPermissionApi>(s => new PermissionPageClient(PermissionApiBase ?? string.Empty));
             services.AddSingleton<ISearchBuilder>(s =>
             {

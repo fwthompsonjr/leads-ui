@@ -1,6 +1,6 @@
-﻿namespace legallead.permissions.api.Models
+﻿namespace legallead.desktop.entities
 {
-    public class UserSearchQueryModel
+    internal class UserSearchQueryBo
     {
         public string? Id { get; set; }
 
@@ -24,7 +24,8 @@
 
         public string this[int index]
         {
-            get {
+            get
+            {
                 const string dfmt1 = "Mmm d, YYYY h:mm tt";
                 const string dfmt2 = "M/d/YYYY";
                 const string dash = " - ";
@@ -39,6 +40,5 @@
                 return string.Empty;
             }
         }
-
     }
 }

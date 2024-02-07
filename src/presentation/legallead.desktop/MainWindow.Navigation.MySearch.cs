@@ -1,5 +1,6 @@
 using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.js;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,11 +55,25 @@ namespace legallead.desktop
 
         private async Task MapMySearchDetails()
         {
-            _ = Dispatcher.Invoke(() =>
-            {
-                var container = contentMySearch.Content;
-                if (container is not ChromiumWebBrowser web) return string.Empty;
-                return web.GetHTML(Dispatcher);
+            var provider = AppBuilder.ServiceProvider;
+            if (provider == null) return;
+            var user = provider.GetService<UserBo>();
+            var api = provider.GetService<IPermissionApi>();
+            var mapper = provider.GetService<IUserSearchMapper>();
+            if (user == null || 
+                !user.IsAuthenicated || 
+                api == null ||
+                mapper == null) return;
+            await Task.Run(() => {
+                _ = Dispatcher.Invoke(async () =>
+                {
+                    var container = contentMySearch.Content;
+                    if (container is not ChromiumWebBrowser web) return string.Empty;
+                    var html = web.GetHTML(Dispatcher);
+                    html = await mapper.Map(api, user, html, "history");
+                    web.SetHTML(Dispatcher, html);
+                    return html;
+                });
             });
         }
     }

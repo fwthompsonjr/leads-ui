@@ -2,7 +2,7 @@
 					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card d-none w-75">
 						<div class="card-body">
 							<h5 class="card-title">Search History</h5>	
-							<table name="search-dt-table">
+							<table automationId="search-history-table" name="search-dt-table">
 								<colgroup>
 									<col name="requested-date" style="width: 90px" />
 									<col name="state-abbr" style="width: 40px" />

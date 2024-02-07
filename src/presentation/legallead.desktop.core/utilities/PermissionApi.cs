@@ -179,7 +179,8 @@ namespace legallead.desktop.utilities
             { "profile-edit-contact-phone", "{0}/api/profiles/edit-contact-phone" },
             { "permissions-change-password", "{0}/api/signon/change-password" },
             { "permissions-set-discount", "{0}/api/permissions/set-discount" },
-            { "permissions-set-permission", "{0}/api/permissions/set-permission" }
+            { "permissions-set-permission", "{0}/api/permissions/set-permission" },
+            { "search-get-history", "{0}/api/search/my-searches" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)
