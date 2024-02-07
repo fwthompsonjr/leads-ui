@@ -37,7 +37,7 @@
 								</tbody>
 								<tfoot>
 									<tr id="tr-subcontent-history-pager">
-										<td>
+										<td id="td-subcontent-history-record-count">
 											Records: 12
 										</td>
 										<td colspan="5" class="p-2">
