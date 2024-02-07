@@ -132,6 +132,33 @@
                          padding-left: 4px; 
                          padding-right: 4px; 
                          } 
+                         table[name='search-dt-table'] thead tr { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                         table[name='search-dt-table'] tfoot tr td { 
+                         border-style: none; 
+                         } 
+                         table[name='search-dt-table'] td { 
+                         padding-left: 4px; 
+                         padding-right: 4px; 
+                         } 
+                         tr[data-position] { 
+                         cursor: pointer; 
+                         } 
+                         tr[data-position]:hover { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                         tr[data-position='odd'] { 
+                         background-color: rgba(125, 125, 125, .25); 
+                         } 
+                         tr[data-position] a[name='link-show-details']:hover { 
+                         color: #0a58ca; 
+                         } 
+                         #cbo-subcontent-history-pager { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
 
 
 		</style>
@@ -413,27 +440,27 @@
 							<h5 class="card-title">Search History</h5>
 							<table automationid="search-history-table" name="search-dt-table">
 								<colgroup>
-									<col name="requested-date" style="width: 90px">
-									<col name="state-abbr" style="width: 40px">
-									<col name="county-name">
+									<col name="requested-date">
+									<col name="state-abbr" style="width: 50px">
+									<col name="county-name" style="width: 100px">
 									<col name="begin-date" style="width: 75px">
 									<col name="ending-date" style="width: 75px">
 									<col name="search-status" style="width: 50px">
 								</colgroup>
 								<thead>
 									<tr>
-										<td>Requested Date</td>
-										<td>State</td>
-										<td>County</td>
-										<td>Search Begin</td>
-										<td>Search Ending</td>
-										<td>Status</td>
+										<th style="padding-left: 3px;">Request Date</th>
+										<th style="padding-left: 3px;">State</th>
+										<th style="padding-left: 3px;">County</th>
+										<th style="padding-left: 3px;">Starting</th>
+										<th style="padding-left: 3px;">Ending</th>
+										<th style="padding-left: 3px;">Status</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="tr-subcontent-history-data-template" style="display: none" search-uuid="~0">
-										<td class="text-end">
-											<span name="requested-date">~1</span>
+									<tr id="tr-subcontent-history-data-template" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">~1</a>
 										</td>
 										<td>
 											<span name="state-abbr">~2</span>
@@ -447,7 +474,7 @@
 										<td class="text-end">
 											<span name="ending-date">~5</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">~6</span>
 										</td>
 									</tr>
@@ -456,9 +483,9 @@
 											<span name="no-data">No Records Found</span>
 										</td>
 									</tr>
-									<tr search-uuid="38276732-c407-11ee-be26-0af7a01f52e9" data-row-number="0" data-page-number="0">
-										<td class="text-end">
-											<span name="requested-date">Feb 5, 2024 9:16 AM</span>
+									<tr search-uuid="38276732-c407-11ee-be26-0af7a01f52e9" data-row-number="0" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/5/24 9:16 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -472,14 +499,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="1df255ac-c3c4-11ee-be26-0af7a01f52e9" data-row-number="1" data-page-number="1">
-										<td class="text-end">
-											<span name="requested-date">Feb 5, 2024 1:15 AM</span>
+									<tr search-uuid="1df255ac-c3c4-11ee-be26-0af7a01f52e9" data-row-number="1" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/5/24 1:15 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -493,14 +520,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="1bcdec07-c3c4-11ee-be26-0af7a01f52e9" data-row-number="2" data-page-number="2">
-										<td class="text-end">
-											<span name="requested-date">Feb 5, 2024 1:15 AM</span>
+									<tr search-uuid="1bcdec07-c3c4-11ee-be26-0af7a01f52e9" data-row-number="2" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/5/24 1:15 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -514,14 +541,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="1cb8bd15-c3b7-11ee-be26-0af7a01f52e9" data-row-number="3" data-page-number="3">
-										<td class="text-end">
-											<span name="requested-date">Feb 4, 2024 11:42 PM</span>
+									<tr search-uuid="1cb8bd15-c3b7-11ee-be26-0af7a01f52e9" data-row-number="3" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/4/24 11:42 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -535,14 +562,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Error</span>
 										</td>
 									</tr>
-									<tr search-uuid="558dcb84-c3a7-11ee-be26-0af7a01f52e9" data-row-number="4" data-page-number="4">
-										<td class="text-end">
-											<span name="requested-date">Feb 4, 2024 9:49 PM</span>
+									<tr search-uuid="558dcb84-c3a7-11ee-be26-0af7a01f52e9" data-row-number="4" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/4/24 9:49 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -556,14 +583,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="a3d05e8c-c38b-11ee-be26-0af7a01f52e9" data-row-number="5" data-page-number="5">
-										<td class="text-end">
-											<span name="requested-date">Feb 4, 2024 6:31 PM</span>
+									<tr search-uuid="a3d05e8c-c38b-11ee-be26-0af7a01f52e9" data-row-number="5" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/4/24 6:31 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -577,14 +604,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="69d984ba-c2f7-11ee-be26-0af7a01f52e9" data-row-number="6" data-page-number="6">
-										<td class="text-end">
-											<span name="requested-date">Feb 4, 2024 12:50 AM</span>
+									<tr search-uuid="69d984ba-c2f7-11ee-be26-0af7a01f52e9" data-row-number="6" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/4/24 12:50 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -598,14 +625,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="b442777f-c2ba-11ee-be26-0af7a01f52e9" data-row-number="7" data-page-number="7">
-										<td class="text-end">
-											<span name="requested-date">Feb 3, 2024 5:36 PM</span>
+									<tr search-uuid="b442777f-c2ba-11ee-be26-0af7a01f52e9" data-row-number="7" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/3/24 5:36 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -619,14 +646,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="b34d8a49-c2ba-11ee-be26-0af7a01f52e9" data-row-number="8" data-page-number="8">
-										<td class="text-end">
-											<span name="requested-date">Feb 3, 2024 5:36 PM</span>
+									<tr search-uuid="b34d8a49-c2ba-11ee-be26-0af7a01f52e9" data-row-number="8" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/3/24 5:36 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -640,14 +667,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="ad03038e-c236-11ee-be26-0af7a01f52e9" data-row-number="9" data-page-number="9">
-										<td class="text-end">
-											<span name="requested-date">Feb 3, 2024 1:50 AM</span>
+									<tr search-uuid="ad03038e-c236-11ee-be26-0af7a01f52e9" data-row-number="9" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/3/24 1:50 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -661,14 +688,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Error</span>
 										</td>
 									</tr>
-									<tr search-uuid="e02f1031-c234-11ee-be26-0af7a01f52e9" data-row-number="10" data-page-number="0">
-										<td class="text-end">
-											<span name="requested-date">Feb 3, 2024 1:38 AM</span>
+									<tr search-uuid="e02f1031-c234-11ee-be26-0af7a01f52e9" data-row-number="10" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/3/24 1:38 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -682,14 +709,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Error</span>
 										</td>
 									</tr>
-									<tr search-uuid="1e0cabed-c230-11ee-be26-0af7a01f52e9" data-row-number="11" data-page-number="1">
-										<td class="text-end">
-											<span name="requested-date">Feb 3, 2024 1:04 AM</span>
+									<tr search-uuid="1e0cabed-c230-11ee-be26-0af7a01f52e9" data-row-number="11" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">2/3/24 1:04 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -703,14 +730,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="8f316534-bf75-11ee-be26-0af7a01f52e9" data-row-number="12" data-page-number="2">
-										<td class="text-end">
-											<span name="requested-date">Jan 30, 2024 1:43 PM</span>
+									<tr search-uuid="8f316534-bf75-11ee-be26-0af7a01f52e9" data-row-number="12" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">1/30/24 1:43 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -724,14 +751,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="902a4fed-bf12-11ee-be26-0af7a01f52e9" data-row-number="13" data-page-number="3">
-										<td class="text-end">
-											<span name="requested-date">Jan 30, 2024 1:54 AM</span>
+									<tr search-uuid="902a4fed-bf12-11ee-be26-0af7a01f52e9" data-row-number="13" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">1/30/24 1:54 AM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -745,14 +772,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Error</span>
 										</td>
 									</tr>
-									<tr search-uuid="4890f996-befc-11ee-be26-0af7a01f52e9" data-row-number="14" data-page-number="4">
-										<td class="text-end">
-											<span name="requested-date">Jan 29, 2024 11:15 PM</span>
+									<tr search-uuid="4890f996-befc-11ee-be26-0af7a01f52e9" data-row-number="14" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">1/29/24 11:15 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -766,14 +793,14 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
-									<tr search-uuid="0d3b51b2-befc-11ee-be26-0af7a01f52e9" data-row-number="15" data-page-number="5">
-										<td class="text-end">
-											<span name="requested-date">Jan 29, 2024 11:13 PM</span>
+									<tr search-uuid="0d3b51b2-befc-11ee-be26-0af7a01f52e9" data-row-number="15" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">1/29/24 11:13 PM</a>
 										</td>
 										<td>
 											<span name="state-abbr">TX</span>
@@ -787,12 +814,23 @@
 										<td class="text-end">
 											<span name="ending-date">10/7/2023</span>
 										</td>
-										<td class="text-end" search-uuid="~0">
+										<td class="text-end">
 											<span name="search-status">
 												Completed</span>
 										</td>
 									</tr>
 								</tbody>
+								<tfoot>
+									<tr id="tr-subcontent-history-pager">
+										<td id="td-subcontent-history-record-count">Records: 16</td>
+										<td colspan="5" class="p-2">
+											<select id="cbo-subcontent-history-pager" class="w-75 form-control">
+												<option value="0" selected="selected">Records: 1 to 10</option>
+												<option value="1">Records: 11 to 16</option>
+											</select>
+										</td>
+									</tr>
+								</tfoot>
 							</table>
 						</div>
 						<div class="card-footer">

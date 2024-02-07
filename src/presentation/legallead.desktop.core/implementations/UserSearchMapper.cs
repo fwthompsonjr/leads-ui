@@ -36,8 +36,7 @@ namespace legallead.desktop.implementations
             var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
             if (items == null || items.Count == 0) return source;
             var document = ToDocument(source);
-            return TransformHistory(document, items, template);
-
+            return TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
         }
 
         private readonly Dictionary<string, MySearchSubstitutions> Substitutions =
@@ -58,7 +57,7 @@ namespace legallead.desktop.implementations
             return document;
         }
 
-        private static string TransformHistory(HtmlDocument document, List<UserSearchQueryBo> data, MySearchSubstitutions substitutions)
+        private static string TransformRows(HtmlDocument document, List<ISearchIndexable> data, MySearchSubstitutions substitutions)
         {
             var node = document.DocumentNode;
             var table = node.SelectSingleNode(substitutions.Table);
@@ -71,15 +70,18 @@ namespace legallead.desktop.implementations
             foreach ( var item in data )
             {
                 var r = data.IndexOf(item);
-                var pg = r / 10;
+                var pg = r / tableRowCount;
+                var position = r % 2 == 0 ? "even" : "odd";
                 var rowdata = document.CreateElement("tr");
                 var attr = document.CreateAttribute("search-uuid", item[0]);
                 var rwnumber = document.CreateAttribute("data-row-number", r.ToString());
-                var pgnumber = document.CreateAttribute("data-page-number", pg.ToString()); 
+                var pgnumber = document.CreateAttribute("data-page-number", pg.ToString());
+                var attrwpos = document.CreateAttribute("data-position", position);
                 var rwstyle = document.CreateAttribute("style", "display: none");
                 rowdata.Attributes.Add(attr);
                 rowdata.Attributes.Add(rwnumber);
                 rowdata.Attributes.Add(pgnumber);
+                rowdata.Attributes.Add(attrwpos);
                 if (pg > 0) rowdata.Attributes.Add(rwstyle);
                 var row = template.InnerHtml;
                 for ( var i = 1; i < substitutions.Targets + 1; i++ ) 
@@ -90,7 +92,38 @@ namespace legallead.desktop.implementations
                 rowdata.InnerHtml = row;
                 tbody.AppendChild(rowdata);
             }
+            TransformPaging(table, data);
             return node.OuterHtml;
         }
+
+        private static void TransformPaging(HtmlNode table, List<ISearchIndexable> data)
+        {
+            var tfoot = table.SelectSingleNode("tfoot");
+            var trow = tfoot.SelectSingleNode("tr");
+            var cells = trow.SelectNodes("td").ToArray();
+            var cbo = cells[1].SelectSingleNode("select");
+            var td = cells[0];
+            td.InnerHtml = $"Records: {data.Count}";
+            cbo.ChildNodes.Clear();
+            var doc = table.OwnerDocument;
+            for(var i = 0; i < data.Count; i+= tableRowCount) 
+            {
+                var pg = i / tableRowCount;
+                var mx = Math.Min(i + tableRowCount, data.Count);
+                var lbl = $"Records: {i + 1} to {mx}";
+                var optn = doc.CreateElement("option");
+                var att1 = doc.CreateAttribute("value", pg.ToString());
+                optn.InnerHtml = lbl;
+                optn.Attributes.Append(att1);
+                if (i == 0)
+                {
+                    var att2 = doc.CreateAttribute("selected", "selected");
+                    optn.Attributes.Add(att2);
+                }
+                cbo.AppendChild(optn);
+            }
+        }
+
+        private const int tableRowCount = 10;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace legallead.desktop.entities
 {
-    internal class UserSearchQueryBo
+    internal class UserSearchQueryBo : ISearchIndexable
     {
         public string? Id { get; set; }
 
@@ -44,7 +44,7 @@
         private static string ConvertStatus(string? status)
         {
             const string dash = " - ";
-            if(string.IsNullOrEmpty(status)) return dash;
+            if (string.IsNullOrEmpty(status)) return dash;
             if (!status.Contains('-')) return status;
             return status.Split('-')[^1];
         }

@@ -286,5 +286,15 @@ let jssearchviews = {
 	}
 }
 
+
+let jssearchpager = {
+	"pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager" ],
+	"set_page": function( cboId ) {
+		var indx = parseInt( cboId );
+		if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; }
+
+	}
+}
+
 jsSearchForm.initialize(); 
 </script>

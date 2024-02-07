@@ -22,13 +22,15 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr id="tr-subcontent-history-data-template" style="display: none" search-uuid="~0">
-										<td class="text-start" ><span name="requested-date">~1</span></td>
+									<tr id="tr-subcontent-history-data-template" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details">~1</a>
+										</td>
 										<td><span name="state-abbr">~2</span></td>
 										<td><span name="county-name">~3</span></td>
 										<td class="text-end"><span name="begin-date">~4</span></td>
 										<td class="text-end"><span name="ending-date">~5</span></td>
-										<td class="text-end" search-uuid="~0"><span name="search-status">~6</span></td>
+										<td class="text-end"><span name="search-status">~6</span></td>
 									</tr>
 									<tr id="tr-subcontent-history-no-data">
 										<td colspan="6">
@@ -41,7 +43,7 @@
 											Records: 12
 										</td>
 										<td colspan="5" class="p-2">
-											<select id="cbo-subcontent-history-pager" class="w-75">
+											<select id="cbo-subcontent-history-pager" name="search-field" class="form-control">
 												<option selected value="0">Page 1: 1 to 10</option>
 												<option value="1">Page 2: 11 to 20</option>
 											</select>
