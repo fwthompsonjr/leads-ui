@@ -63,7 +63,7 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
-        ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
+        ///  &quot;Permissions_API&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
         ///  &quot;api.permissions&quot;: {
         ///    &quot;destination&quot;: &quot;remote&quot;,
         ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
@@ -90,13 +90,10 @@ namespace legallead.desktop.Properties {
         ///    &quot;code&quot;: &quot;1234-AbcD4321&quot;
         ///  },
         ///  &quot;debug.login&quot;: {
-        ///    &quot;passthru&quot;: true
-        ///  },
-        ///  &quot;landings&quot;: {
-        ///    &quot;search&quot;: &quot;mysearchtemplate&quot;
+        ///    &quot;passthru&quot;: false
         ///  },
         ///  &quot;user&quot;: {
-        ///    &quot;session_timeout&quot;: 2
+        ///    &quot;session_timeout&quot;: 60
         ///  }
         ///}.
         /// </summary>
@@ -846,16 +843,16 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///					&lt;div id=&quot;dv-subcontent-history&quot; name=&quot;subcontent-history&quot; class=&quot;subcontent card d-none&quot;&gt;
+        ///					&lt;div id=&quot;dv-subcontent-history&quot; name=&quot;subcontent-history&quot; class=&quot;subcontent card d-none w-75&quot;&gt;
         ///						&lt;div class=&quot;card-body&quot;&gt;
         ///							&lt;h5 class=&quot;card-title&quot;&gt;Search History&lt;/h5&gt;	
-        ///							&lt;table class=&quot;table table-responsive table-striped w-75&quot;&gt;
+        ///							&lt;table automationId=&quot;search-history-table&quot; name=&quot;search-dt-table&quot;&gt;
         ///								&lt;colgroup&gt;
-        ///									&lt;col name=&quot;requested-date&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;col name=&quot;state-abbr&quot; style=&quot;width: 30px&quot; /&gt;
-        ///									&lt;col name=&quot;county-name&quot; /&gt;
-        ///									&lt;col name=&quot;begin-date&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;col name=&quot;ending-date&quot; s [rest of string was truncated]&quot;;.
+        ///									&lt;col name=&quot;requested-date&quot; /&gt;
+        ///									&lt;col name=&quot;state-abbr&quot; style=&quot;width: 50px&quot; /&gt;
+        ///									&lt;col name=&quot;county-name&quot; style=&quot;width: 100px&quot; /&gt;
+        ///									&lt;col name=&quot;begin-date&quot; style=&quot;width: 75px&quot; /&gt;
+        ///									&lt;col name=&quot;e [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_history_html {
             get {
@@ -889,17 +886,33 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;!-- Search Preview Modal --&gt;
+        ///&lt;!-- Modal --&gt;
+        ///&lt;div class=&quot;modal fade&quot; id=&quot;my-search-preview-modal&quot; data-bs-backdrop=&quot;static&quot; data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; aria-labelledby=&quot;my-search-preview-label&quot; aria-hidden=&quot;true&quot;&gt;
+        ///  &lt;div class=&quot;modal-dialog&quot;&gt;
+        ///    &lt;div class=&quot;modal-content&quot;&gt;
+        ///        &lt;div class=&quot;modal-header&quot;&gt;
+        ///            &lt;h1 class=&quot;modal-title fs-5 text-muted&quot; id=&quot;my-search-preview-label&quot;&gt;Preview Or Purchase&lt;/h1&gt;
+        ///            &lt;button id=&quot;my-search-preview-x-close&quot; type=&quot;button&quot; class=&quot;btn-cl [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearch_preview_html {
+            get {
+                return ResourceManager.GetString("mysearch_preview_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
-        ///					&lt;div id=&quot;dv-subcontent-purchases&quot; name=&quot;subcontent-purchases&quot; class=&quot;subcontent card d-none&quot;&gt;
+        ///					&lt;div id=&quot;dv-subcontent-purchases&quot; name=&quot;subcontent-purchases&quot; class=&quot;subcontent card d-none w-75&quot;&gt;
         ///						&lt;div class=&quot;card-body&quot;&gt;
         ///							&lt;h5 class=&quot;card-title&quot;&gt;Purchase History&lt;/h5&gt;	
-        ///							&lt;table class=&quot;table table-responsive table-striped w-75&quot;&gt;
+        ///							&lt;table automationId=&quot;search-purchases-table&quot; name=&quot;search-dt-table&quot;&gt;
         ///								&lt;colgroup&gt;
         ///									&lt;col name=&quot;purchase-date&quot; style=&quot;width: 100px&quot; /&gt;
         ///									&lt;col name=&quot;item-name&quot; /&gt;
         ///									&lt;col name=&quot;item-quantity&quot; style=&quot;width: 50px&quot; /&gt;
         ///									&lt;col name=&quot;unit-price&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;col name=&quot;total-pr [rest of string was truncated]&quot;;.
+        ///									&lt;co [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_purchases_html {
             get {
@@ -955,17 +968,18 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div id=&quot;dv-search-container&quot; name=&quot;search-container&quot; class=&quot;container p-2 w-75 rounded border-secondary&quot;&gt;
-        ///			&lt;h4&gt;Search&lt;/h4&gt;
-        ///			&lt;p class=&quot;lead&quot;&gt;Complete the fields below to begin search&lt;/p&gt;
-        ///			&lt;div id=&quot;dv-search-table-wrapper&quot; name=&quot;search-wrapper&quot; class=&quot;table-responsive&quot;&gt;
-        ///				&lt;table id=&quot;table-search&quot; name=&quot;search-table&quot; class=&quot;container p-2 w-75 rounded border-secondary&quot;&gt;
-        ///					&lt;colgroup&gt;
-        ///						&lt;col style=&quot;width: 150px;&quot;&gt;
-        ///						&lt;col&gt;
-        ///					&lt;/colgroup&gt;
-        ///					&lt;tbody&gt;
-        ///						&lt;tr id=&quot;tr-search-state&quot;&gt;        /// [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;div id=&quot;dv-search-container&quot; name=&quot;search-container&quot; class=&quot;subcontent card&quot;&gt;
+        ///	&lt;div class=&quot;card-body&quot;&gt;
+        ///		&lt;h5 class=&quot;card-title&quot;&gt;Search&lt;/h5&gt;
+        ///		&lt;p class=&quot;lead&quot;&gt;Complete the fields below to begin search&lt;/p&gt;
+        ///		&lt;div id=&quot;dv-search-table-wrapper&quot; name=&quot;search-wrapper&quot; class=&quot;table-responsive&quot;&gt;
+        ///			&lt;table id=&quot;table-search&quot; name=&quot;search-table&quot; class=&quot;container p-2 w-75 rounded border-secondary&quot;&gt;
+        ///				&lt;colgroup&gt;
+        ///				&lt;col style=&quot;width: 150px;&quot;&gt;
+        ///				&lt;col&gt;
+        ///				&lt;/colgroup&gt;
+        ///				&lt;tbody&gt;
+        ///					&lt;tr id=&quot;tr-search-sta [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_search_html {
             get {

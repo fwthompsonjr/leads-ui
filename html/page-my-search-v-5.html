@@ -113,7 +113,8 @@
                     /* 
                     * Data Tables 
                     */ 
-                         table[name='search-dt-table'] { 
+                    table[name='search-dt-table'], 
+                         table[automationId='search-preview-table'] { 
                          font-size: 14px; 
                          border: 1px solid #444; 
                          width: 100%; 
@@ -125,22 +126,34 @@
                     table[name='search-dt-table'] tfoot, 
                     table[name='search-dt-table'] th, 
                     table[name='search-dt-table'] thead, 
-                         table[name='search-dt-table'] tr { 
+                    table[name='search-dt-table'] tr, 
+                    table[automationId='search-preview-table'] tbody, 
+                    table[automationId='search-preview-table'] td, 
+                    table[automationId='search-preview-table'] tfoot, 
+                    table[automationId='search-preview-table'] th, 
+                    table[automationId='search-preview-table'] thead, 
+                         table[automationId='search-preview-table'] tr { 
                          border: 1px solid #444; 
                          } 
-                         table[name='search-dt-table'] td { 
+                    table[name='search-dt-table'] td, 
+                         table[automationId='search-preview-table'] td { 
                          padding-left: 4px; 
                          padding-right: 4px; 
                          } 
-                         table[name='search-dt-table'] thead tr { 
+                    table[name='search-dt-table'] thead tr, 
+                         table[automationId='search-preview-table'] thead tr { 
                          background-color: rgba(255, 255, 255, .25); 
                          } 
-                         table[name='search-dt-table'] tfoot tr td { 
-                         border-style: none; 
+                    table[name='search-dt-table'] tfoot tr td, 
+                         table[automationId='search-preview-table'] tfoot tr td { 
+                         border-top-style: double; 
+                         border-right-style: none; 
+                         border-bottom-style: none; 
+                         border-left-style: none; 
                          } 
-                         table[name='search-dt-table'] td { 
-                         padding-left: 4px; 
-                         padding-right: 4px; 
+                    table[name='search-dt-table'] tfoot, 
+                         table[automationId='search-preview-table'] tfoot { 
+                         margin-top: 10px; 
                          } 
                          tr[data-position] { 
                          cursor: pointer; 
@@ -212,7 +225,7 @@
 
 		</style>
 	</head>
-	<body class="text-center">
+	<body class="text-center" style="">
 		
 		<!-- Logout Modal -->  		 		 		 		 		 		 		
 		<!-- Button trigger modal -->
@@ -239,96 +252,116 @@
 			</div>
 		</div>
 		
-		<!-- Search Preview Modal -->
-<!-- Modal -->
-<div class="modal fade" id="my-search-preview-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-search-preview-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5 text-muted" id="my-search-preview-label">Preview Or Purchase</h1>
-            <button id="my-search-preview-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-dark">
-            <table automationId="search-preview-table" name="search-dt-table" class="text-dark">
-				<colgroup>
-					<col name="case-number" />
-					<col name="case-type" style="width: 75px" />
-					<col name="court" style="width: 75px" />
-					<col name="date-filed" style="width: 75px" />
-					<col name="user-name" style="width: 75px" />
-				</colgroup>
-				<thead>
-					<tr name="requested-date">
-						<th style="padding-left: 3px;">Request Date</th>
-						<td colspan="4">
-						<span name="requested-date">- n/a -</span>
-						<span class="d-none" name="search-uuid">- n/a -</span>
-						</td>
-					</tr>
-					<tr name="state-abbr">
-						<th style="padding-left: 3px;">State</th>
-						<td colspan="4"><span name="state-abbr">- n/a -</span></td>
-					</tr>
-					<tr name="county-name">
-						<th style="padding-left: 3px;">County</th>
-						<td colspan="4"><span name="county-name">- n/a -</span></td>
-					</tr>
-					<tr name="begin-date">
-						<th style="padding-left: 3px;">Starting</th>
-						<td colspan="4"><span name="begin-date">- n/a -</span></td>
-					</tr>
-					<tr name="ending-date">
-						<th style="padding-left: 3px;">Ending</th>
-						<td colspan="4"><span name="ending-date">- n/a -</span></td>
-					</tr>
-					<tr name="search-status">
-						<th style="padding-left: 3px;">Status</th>
-						<td colspan="4"><span name="search-status">- n/a -</span></td>
-					</tr>
-					<tr>
-						<th style="padding-left: 3px;">Case Number</th>
-						<th style="padding-left: 3px;">Case Type</th>
-						<th style="padding-left: 3px;">Court</th>
-						<th style="padding-left: 3px;">Date Filed</th>
-						<th style="padding-left: 3px;">Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr id="tr-subcontent-preview-data-template" style="display: none">
-						<td style="padding-left: 3px;"><span name="case-number">~1</span></td>
-						<td style="padding-left: 3px;"><span name="case-type">- n/a -</span></td>
-						<td style="padding-left: 3px;"><span name="court">~3</span></td>
-						<td style="padding-left: 3px;"><span name="date-filed">~4</span></td>
-						<td style="padding-left: 3px;"><span name="user-name">~5</span></td>
-					</tr>
-					<tr id="tr-subcontent-preview-no-data">
-						<td colspan="5">
-						<span name="no-data">No Records Found</span></td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr id="tr-subcontent-preview-pager">
-						<td colspan="3" class="p-2">
-							<select id="cbo-subcontent-preview-pager" onchange="jssearchpager.set_page(2)" class="form-control text-secondary">
-								<option selected value="0">Page 1: 1 to 10</option>
-								<option value="1">Page 2: 11 to 20</option>
-							</select>
-						</td>
-						<td id="td-subcontent-preview-record-count" class="text-end text-secondary" colspan="2">
-							Records: 12
-						</td>
-					</tr>
-				</tfoot>
-			</table>
-        </div>
-        <div class="modal-footer">
-            <button id="my-search-preview-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-            <button id="my-search-preview-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
-        </div>
-    </div>
-  </div>
-</div>
-		
+		<!-- Search Preview Modal -->  		 		 		 		 		 		 		
+		<!-- Modal -->
+		<div class="modal fade" id="my-search-preview-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-search-preview-label" aria-hidden="true" style="display: none;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-muted" id="my-search-preview-label">Preview Or Purchase</h1>
+						<button id="my-search-preview-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-dark">
+						<table automationid="search-preview-table" class="text-dark">
+							<colgroup>
+								<col name="case-number">
+								<col name="case-type" style="width: 75px">
+								<col name="court" style="width: 75px">
+								<col name="date-filed" style="width: 75px">
+								<col name="user-name" style="width: 75px">
+							</colgroup>
+							<thead>
+								<tr name="requested-date">
+									<th style="padding-left: 3px;">Request Date</th>
+									<td colspan="4">
+										<span name="requested-date">2/7/24 4:15 PM</span>
+										<span class="d-none" name="search-uuid">- n/a -</span>
+									</td>
+								</tr>
+								<tr name="state-abbr">
+									<th style="padding-left: 3px;">State</th>
+									<td colspan="4">
+										<span name="state-abbr">TX</span>
+									</td>
+								</tr>
+								<tr name="county-name">
+									<th style="padding-left: 3px;">County</th>
+									<td colspan="4">
+										<span name="county-name">DENTON</span>
+									</td>
+								</tr>
+								<tr name="begin-date">
+									<th style="padding-left: 3px;">Starting</th>
+									<td colspan="4">
+										<span name="begin-date">10/1/2023</span>
+									</td>
+								</tr>
+								<tr name="ending-date">
+									<th style="padding-left: 3px;">Ending</th>
+									<td colspan="4">
+										<span name="ending-date">10/7/2023</span>
+									</td>
+								</tr>
+								<tr name="search-status">
+									<th style="padding-left: 3px;">Status</th>
+									<td colspan="4">
+										<span name="search-status">Completed</span>
+									</td>
+								</tr>
+								<tr>
+									<th style="padding-left: 3px;">Case Number</th>
+									<th style="padding-left: 3px;">Case Type</th>
+									<th style="padding-left: 3px;">Court</th>
+									<th style="padding-left: 3px;">Date Filed</th>
+									<th style="padding-left: 3px;">Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id="tr-subcontent-preview-data-template" style="display: none">
+									<td style="padding-left: 3px;">
+										<span name="case-number">~1</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">- n/a -</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">~3</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">~4</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">~5</span>
+									</td>
+								</tr>
+								<tr id="tr-subcontent-preview-no-data">
+									<td colspan="5">
+										<span name="no-data">No Records Found</span>
+									</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr id="tr-subcontent-preview-pager">
+									<td colspan="3" class="p-2">
+										<select id="cbo-subcontent-preview-pager" onchange="jssearchpager.set_page(2)" class="form-control text-secondary">
+											<option selected="" value="0">Page 1: 1 to 10</option>
+											<option value="1">Page 2: 11 to 20</option>
+										</select>
+									</td>
+									<td id="td-subcontent-preview-record-count" class="text-end text-secondary" colspan="2">
+										Records: 12
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button id="my-search-preview-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+						<button id="my-search-preview-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
 			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
 				<div class="inner">
@@ -554,7 +587,7 @@
 											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '~0' )">~1</a>
 										</td>
 										<td>
-											<span name="state-abbr">- n/a -</span>
+											<span name="state-abbr">~2</span>
 										</td>
 										<td>
 											<span name="county-name">~3</span>
@@ -995,7 +1028,7 @@
 										</td>
 									</tr>
 								</tbody>
-								<tfoot>
+								<tfoot class="m-1 d-none">
 									<tr id="tr-subcontent-history-pager">
 										<td colspan="4" class="p-2">
 											<select id="cbo-subcontent-history-pager" onchange="jssearchpager.set_page(0)" class="form-control text-secondary">
@@ -1013,11 +1046,9 @@
 								
 								<!-- Error messages -->
 							</div>
-							<button id="frm-search-history-submit-button" 
-								class="btn btn-primary"
-								data-bs-toggle="modal" data-bs-target="#my-search-preview-modal">
+							<button id="frm-search-history-submit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#my-search-preview-modal">
 								<i id="frm-search-history-icon" class="bi bi-clock-history"></i>
-								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Preview / Purchase
+								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
 							</button>
 						</div>
 					</div>
@@ -1049,7 +1080,7 @@
 											<span name="purchase-date">~1</span>
 										</td>
 										<td>
-											<span name="item-name">- n/a -</span>
+											<span name="item-name">~2</span>
 										</td>
 										<td class="text-end">
 											<span name="item-quantity">~3</span>
@@ -1417,41 +1448,41 @@
                                         else { $current.hide(); } 
                                    }); 
                               }, 
-							  "get_preview_details" : function( rw ) { 
-								return {
-									"requested-date": rw.querySelector("a").innerText,
-									"state-abbr": rw.querySelector("span[name='state-abbr']").innerText,
-									"county-name": rw.querySelector("span[name='county-name']").innerText,
-									"begin-date": rw.querySelector("span[name='begin-date']").innerText,
-									"ending-date": rw.querySelector("span[name='ending-date']").innerText,
-									"search-status": rw.querySelector("span[name='search-status']").innerText
-								}
-							  },
+                              "get_preview_details" : function( rw ) { 
+                                   return { 
+                                   "requested-date": rw.querySelector("a").innerText, 
+                                   "state-abbr": rw.querySelector("span[name='state-abbr']").innerText, 
+                                   "county-name": rw.querySelector("span[name='county-name']").innerText, 
+                                   "begin-date": rw.querySelector("span[name='begin-date']").innerText, 
+                                   "ending-date": rw.querySelector("span[name='ending-date']").innerText, 
+                                   "search-status": rw.querySelector("span[name='search-status']").innerText 
+                                   } 
+                              }, 
                               "show_preview": function( row_index ) { 
                               let indx = parseInt( row_index ); 
                                    if (isNaN(indx)) { return; } 
                               let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
                               let historyName = jssearchpager.pagers[0]; 
                               let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
-							  let $rw = $rows[indx];
+                              let $rw = $rows[indx]; 
                               let search_index = $rw.getAttribute('search-uuid'); 
-							  if (undefined == search_index || null == search_index) { return; } 
-							  let details = jssearchpager.get_preview_details( $rw );
+                                   if (undefined == search_index || null == search_index) { return; } 
+                              let details = jssearchpager.get_preview_details( $rw ); 
                               let keyname = jssearchpager.pagers[2]; 
-                              let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' )
-							  const headings = [ 
-								"requested-date", 
-								"state-abbr", 
-								"county-name", 
-								"begin-date", 
-								"ending-date", 
-								"search-status" ];
+                              let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' ) 
+                              const headings = [ 
+                              "requested-date", 
+                              "state-abbr", 
+                              "county-name", 
+                              "begin-date", 
+                              "ending-date", 
+                              "search-status" ]; 
                               // populate table headings 
-                             headings.forEach(function(h){ 
-									let finder = "span[name='~0']".replace("~0", h);
-									heading.find(finder).text(details[h])
-								});
-								$("#frm-search-history-submit-button").click();
+                                   headings.forEach(function(h){ 
+                                   let finder = "span[name='~0']".replace("~0", h); 
+                                   heading.find(finder).text(details[h]) 
+                                   }); 
+                              $("#frm-search-history-submit-button").click(); 
                               } 
                          } 
                     jsSearchForm.initialize(); 

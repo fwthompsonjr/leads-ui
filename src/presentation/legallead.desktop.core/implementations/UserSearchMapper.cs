@@ -78,7 +78,7 @@ namespace legallead.desktop.implementations
                 rowdata.Attributes.Add(pgnumber);
                 rowdata.Attributes.Add(attrwpos);
                 if (pg > 0) rowdata.Attributes.Add(rwstyle);
-                var row = template.InnerHtml;
+                var row = template.InnerHtml.Replace("~0", r.ToString());
                 for (var i = 1; i < substitutions.Targets + 1; i++)
                 {
                     var search = $"~{i}";
@@ -101,6 +101,11 @@ namespace legallead.desktop.implementations
             td.InnerHtml = $"Records: {data.Count}";
             cbo.ChildNodes.Clear();
             var doc = table.OwnerDocument;
+            if(data.Count > 0 && tfoot.Attributes["class"] != null)
+            {
+                var attr = tfoot.Attributes["class"];
+                attr.Value = attr.Value.Replace("d-none", "").Trim();
+            }
             for (var i = 0; i < data.Count; i += tableRowCount)
             {
                 var pg = i / tableRowCount;

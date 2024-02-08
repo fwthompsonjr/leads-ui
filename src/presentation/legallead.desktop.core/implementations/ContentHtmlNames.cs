@@ -274,6 +274,7 @@ namespace legallead.desktop.implementations
         private const string HtmMySearchInclude = "<p>My Search Base</p>";
         private const string HtmMySearchHistory = "<p>My Search History</p>";
         private const string HtmMySearchPurchase = "<p>My Purchase History</p>";
+        private const string HtmMySearchPreview = "<!-- component: my-search-preview -->";
         private const string JsCommonReload = "/* js-include-common-reload */";
         private const string JsCommonClientInclude = "<!-- script: common-client-include -->";
         private const string JsHomeValidation = "<!-- script: home-form-validation -->";
@@ -297,6 +298,7 @@ namespace legallead.desktop.implementations
             { HtmMySearchInclude, Properties.Resources.mysearch_search_html },
             { HtmMySearchHistory, Properties.Resources.mysearch_history_html },
             { HtmMySearchPurchase, Properties.Resources.mysearch_purchases_html },
+            { HtmMySearchPreview, Properties.Resources.mysearch_preview_html },
             { HtmLoginInclude, GetLoginInclude() },
             { HtmRegistrationInclude, GetRegistrationInclude() },
             { JsHomeValidation, GetHomeValidationScript() },
