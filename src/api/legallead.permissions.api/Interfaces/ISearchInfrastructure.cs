@@ -21,5 +21,6 @@ namespace legallead.permissions.api.Interfaces
 
         Task<bool> SetResult(string id, object result);
         Task<bool> SetResponse(string id, object response);
+        Task<IEnumerable<SearchPreviewBo>?> GetPreview(HttpRequest http, string searchId);
     }
 }

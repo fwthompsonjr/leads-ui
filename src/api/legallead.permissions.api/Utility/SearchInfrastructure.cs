@@ -41,6 +41,24 @@ namespace legallead.permissions.api.Utility
             };
         }
 
+        public async Task<IEnumerable<SearchPreviewBo>?> GetPreview(HttpRequest http, string searchId)
+        {
+            var user = await GetUser(http);
+            if (user == null) return null;
+            var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
+            if (restrictions.IsRestricted())
+            {
+                return null;
+            }
+            var searches = await GetHeader(http, searchId);
+            if (searches == null || !searches.Any()) return Array.Empty<SearchPreviewBo>();
+            var rawdata = await _repo.Preview(searchId);
+            if (rawdata == null || !rawdata.Any()) return null;
+            // apply limit to max allowed per month/year
+            var filtered = SearchRestrictionFilter.FilterByRestriction(rawdata, restrictions);
+            return SearchRestrictionFilter.Sanitize(filtered);
+        }
+
         public async Task<IEnumerable<UserSearchQueryModel>?> GetHeader(HttpRequest http, string? id)
         {
             var user = await GetUser(http);
