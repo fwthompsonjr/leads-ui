@@ -10,12 +10,13 @@ using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Health;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Stripe;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -53,6 +54,8 @@ namespace legallead.permissions.api
         public static void RegisterDataServices(this IServiceCollection services, IConfiguration configuration)
         {
             string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Test");
+            var payment = MapOption(configuration);
+            services.AddSingleton(payment);
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();
@@ -141,15 +144,18 @@ namespace legallead.permissions.api
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
+            services.AddScoped(p => new PaymentController(payment));
             // logging
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped<ILoggingDbCommand, LoggingDbExecutor>();
-            services.AddScoped<ILoggingDbContext>(s => {
+            services.AddScoped<ILoggingDbContext>(s =>
+            {
                 var command = s.GetRequiredService<ILoggingDbCommand>();
                 return new LoggingDbContext(command, environ, "error");
             });
             // logging content repository
-            services.AddScoped<ILogContentRepository>(s => {
+            services.AddScoped<ILogContentRepository>(s =>
+            {
                 var context = s.GetRequiredService<ILoggingDbContext>();
                 return new LogContentRepository(context);
             });
@@ -222,7 +228,7 @@ namespace legallead.permissions.api
         public static UserSearchBeginResponse GetRestrictionResponse(this SearchRestrictionDto dto)
         {
             var response = new UserSearchBeginResponse();
-            
+
             if (!dto.MaxPerMonth.HasValue)
             {
                 response.Request.Details.Add(new() { Name = "No Value Returned", Text = "Unable to calculate usage" });
@@ -325,6 +331,28 @@ namespace legallead.permissions.api
                 };
             });
         }
+
+
+        private static PaymentStripeOption? _paymentOption;
+
+        private static PaymentStripeOption MapOption(IConfiguration configuration)
+        {
+            if (_paymentOption != null) { return _paymentOption; }
+            var key = configuration.GetValue<string>("Payment:key");
+            StripeConfiguration.ApiKey = key;
+            var child = new PaymentCode
+            {
+                Admin = configuration.GetValue<string>("Payment:codes:admin"),
+                Gold = configuration.GetValue<string>("Payment:codes:gold"),
+                Guest = configuration.GetValue<string>("Payment:codes:guest"),
+                Platinum = configuration.GetValue<string>("Payment:codes:platinum"),
+                Silver = configuration.GetValue<string>("Payment:codes:silver"),
+            };
+            _paymentOption = new PaymentStripeOption { Key = key, Codes = child };
+            return _paymentOption;
+        }
+
+
 
         [ExcludeFromCodeCoverage]
         private static string GetConfigOrDefault(IConfiguration? configuration, string key, string backup)

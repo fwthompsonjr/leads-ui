@@ -10,7 +10,7 @@ namespace legallead.permissions.api.Utility
             var mxpermonth = dto.MaxPerMonth.GetValueOrDefault(count) - dto.ThisMonth.GetValueOrDefault();
             var mxperyear = dto.MaxPerYear.GetValueOrDefault(count) - dto.ThisYear.GetValueOrDefault();
             var allowed = Math.Min(mxpermonth, mxperyear);
-            if(count <= allowed) { return source; }
+            if (count <= allowed) { return source; }
             return source.Take(allowed);
         }
 
