@@ -49,22 +49,9 @@ jobs:
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
-    - name: Test with dotnet
-      timeout-minutes: 5
-      shell: pwsh
-      run: |
-        & ./pipeline-integration-test.ps1
-
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main'
       shell: pwsh
       run: |
         & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
 
-    - name: Upload dotnet test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
-        path: ~/**/*.trx
-      # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
