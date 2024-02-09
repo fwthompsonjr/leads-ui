@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace legallead.desktop.handlers
 {
@@ -17,7 +18,15 @@ namespace legallead.desktop.handlers
         {
             scripts.ForEach(s =>
             {
-                web.ExecuteScriptAsync(string.Format(s, json));
+                if (s.Contains('{'))
+                {
+                    web.ExecuteScriptAsync(string.Format(s, json));
+                }   
+                else
+                {
+                    Thread.Sleep(500);
+                    web.ExecuteScriptAsync(s);
+                }
             });
         }
         private static readonly List<string> scripts = new()

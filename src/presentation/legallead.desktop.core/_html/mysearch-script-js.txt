@@ -302,6 +302,7 @@ let jssearchpager = {
 			jssearchpager.preview_content = $( previewName ).html();
 		},
 		bind_preview: function( jscontent ) {
+			const tableRowCount = 5;
 			const temp_mapping = [
 				"case-number|caseNumber",
 				"case-type|caseType",
@@ -326,9 +327,11 @@ let jssearchpager = {
 				t_body.append(template);
 			});			
 			i_pos = 0;
+			$( "#tr-subcontent-preview-no-data" ).hide();
+			$( "#td-subcontent-preview-record-count" ).text("".concat("Records: ", tempjs.length));
 			t_body.find("tr[name='injected-content']").each(function() {
 				rw = $( this );
-				pgnbr = Math.floor(i_pos / 10);
+				pgnbr = Math.floor(i_pos / tableRowCount);
 				rw.attr( "data-row-number", i_pos );
 				rw.attr( "data-page-number", pgnbr);
 				rw.attr( "data-position", i_pos % 2 == 0 ? "even" : "odd");
@@ -350,6 +353,7 @@ let jssearchpager = {
 				$("#cbo-subcontent-preview-pager").append(child);
 			}
 			$("#cbo-subcontent-preview-pager").val(0);
+			$("#frm-search-history-submit-button").click();
 		},
         "set_page": function( cboId ) { 
         let indx = parseInt( cboId ); 
@@ -365,6 +369,7 @@ let jssearchpager = {
                 if ( attr == pg ) { $current.show() } 
                 else { $current.hide(); } 
             }); 
+		$( keyname ).blur();
         }, 
 		"get_preview_details" : function( rw ) { 
 		return {
@@ -401,6 +406,10 @@ let jssearchpager = {
 			let finder = "span[name='~0']".replace("~0", h);
 			heading.find(finder).text(details[h])
 		});
+		if( details["search-status"] != "Completed" ){
+			$("#frm-search-history-submit-button").click();
+			return;
+		}
 		let handler = window.jsHandler;
 		if( undefined === handler || null === handler || !(handler) ) { return; }
 		var obj = JSON.stringify( { "id": search_index });
