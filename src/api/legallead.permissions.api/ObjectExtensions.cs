@@ -144,7 +144,10 @@ namespace legallead.permissions.api
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
-            services.AddScoped(p => new PaymentController(payment));
+            services.AddScoped(p => {
+                return new PaymentController(payment, 
+                    p.GetRequiredService<ISearchInfrastructure>());
+            });
             // logging
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped<ILoggingDbCommand, LoggingDbExecutor>();

@@ -68,6 +68,7 @@ namespace permissions.api.tests
         [InlineData(typeof(ListsController))]
         [InlineData(typeof(HomeController))]
         [InlineData(typeof(SearchController))]
+        [InlineData(typeof(PaymentController))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
