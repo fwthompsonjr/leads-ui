@@ -98,7 +98,8 @@ namespace legallead.desktop.js
         {
             "frm-search",
             "frm-search-history",
-            "frm-search-purchases"
+            "frm-search-purchases",
+            "frm-search-preview"
         };
     }
 }

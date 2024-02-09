@@ -287,24 +287,136 @@ let jssearchviews = {
 }
 
 
-let jssearchpager = {
-	"pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager" ],
-	"set_page": function( cboId ) {
-		let indx = parseInt( cboId );
-		if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; }
-		let keyname = jssearchpager.pagers[indx];
-		let pg = $( keyname ).val();
-		let rows = $( keyname ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' );
-		rows.each(function(){
-			$current = $( this );
-			attr = $current.attr("data-page-number");
-			hscls = $current.attr("class");
-			if (typeof hscls !== typeof undefined && hscls !== false) { $current.removeAttr('class'); }
-			if ( attr == pg ) { $current.show() }
-			else { $current.hide(); }
+let jssearchpager = { 
+    "pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager", "#cbo-subcontent-preview-pager" ], 
+		"preview_name": "table[automationid='search-preview-table']",
+		"preview_content": null,
+		"preview_reset": function() {
+			jssearchpager.initialize();
+			let previewName = jssearchpager.preview_name;
+			$( previewName ).html(jssearchpager.preview_content);
+		},
+		"initialize": function() {
+			if( null != jssearchpager.preview_content ) { return; }
+			let previewName = jssearchpager.preview_name;
+			jssearchpager.preview_content = $( previewName ).html();
+		},
+		bind_preview: function( jscontent ) {
+			const tableRowCount = 5;
+			const temp_mapping = [
+				"case-number|caseNumber",
+				"case-type|caseType",
+				"court|court",
+				"date-filed|dateFiled",
+				"user-name|name"
+				];
+			const template = "".concat(
+				"<tr name='injected-content' data-row-number='0' data-page-number='0' data-position='even'>",
+				$("#tr-subcontent-preview-data-template").html(),
+				"</tr>");
+			tempjs = JSON.parse(jscontent);
+			if( tempjs.length === 0 ) {
+				$("#frm-search-history-submit-button").click();
+				return;
+			}
+			t_body = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tbody' );
+			t_foot = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tfoot' );
+			t_foot.removeClass("d-none");
+			$("#cbo-subcontent-preview-pager").html("");
+			tempjs.forEach(function(j) {
+				t_body.append(template);
+			});			
+			i_pos = 0;
+			$( "#tr-subcontent-preview-no-data" ).hide();
+			$( "#td-subcontent-preview-record-count" ).text("".concat("Records: ", tempjs.length));
+			t_body.find("tr[name='injected-content']").each(function() {
+				rw = $( this );
+				pgnbr = Math.floor(i_pos / tableRowCount);
+				rw.attr( "data-row-number", i_pos );
+				rw.attr( "data-page-number", pgnbr);
+				rw.attr( "data-position", i_pos % 2 == 0 ? "even" : "odd");
+				temp_mapping.forEach(function(m) {
+					let src = tempjs[i_pos];
+					finder = "span[name='~0']".replace("~0",m.split('|')[0]);
+					fld = m.split('|')[1];
+					rw.find( finder ).text( src[fld] );
+				});
+				if( pgnbr > 0 ) { rw.hide(); }
+				i_pos++;
+			});
+			mxCount = tempjs.length;
+			for (var i = 0; i < mxCount; i += tableRowCount){
+				pgnbr = Math.floor(i / tableRowCount);
+				mx = Math.min(i + tableRowCount, mxCount);
+				lbl = "".concat("Records: ", i + 1, " to ", mx);
+				var child = "<option value='~0'>~1</option>".replace("~0", pgnbr).replace("~1", lbl);
+				$("#cbo-subcontent-preview-pager").append(child);
+			}
+			$("#cbo-subcontent-preview-pager").val(0);
+			$("#frm-search-history-submit-button").click();
+		},
+        "set_page": function( cboId ) { 
+        let indx = parseInt( cboId ); 
+            if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; } 
+        let keyname = jssearchpager.pagers[indx]; 
+        let pg = $( keyname ).val(); 
+        let rows = $( keyname ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+            rows.each(function(){ 
+            $current = $( this ); 
+            attr = $current.attr("data-page-number"); 
+            hscls = $current.attr("class"); 
+                if (typeof hscls !== typeof undefined && hscls !== false) { $current.removeAttr('class'); } 
+                if ( attr == pg ) { $current.show() } 
+                else { $current.hide(); } 
+            }); 
+		$( keyname ).blur();
+        }, 
+		"get_preview_details" : function( rw ) { 
+		return {
+			"requested-date": rw.querySelector("a").innerText,
+			"state-abbr": rw.querySelector("span[name='state-abbr']").innerText,
+			"county-name": rw.querySelector("span[name='county-name']").innerText,
+			"begin-date": rw.querySelector("span[name='begin-date']").innerText,
+			"ending-date": rw.querySelector("span[name='ending-date']").innerText,
+			"search-status": rw.querySelector("span[name='search-status']").innerText
+		}
+		},
+        "show_preview": function( row_index ) { 
+		jssearchpager.preview_reset();
+        let indx = parseInt( row_index ); 
+            if (isNaN(indx)) { return; } 
+        let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
+        let historyName = jssearchpager.pagers[0]; 
+        let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+		let $rw = $rows[indx];
+        let search_index = $rw.getAttribute('search-uuid'); 
+		if (undefined == search_index || null == search_index) { return; } 
+		let details = jssearchpager.get_preview_details( $rw );
+        let keyname = jssearchpager.pagers[2]; 
+        let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' )
+		const headings = [ 
+		"requested-date", 
+		"state-abbr", 
+		"county-name", 
+		"begin-date", 
+		"ending-date", 
+		"search-status" ];
+        // populate table headings 
+        headings.forEach(function(h){ 
+			let finder = "span[name='~0']".replace("~0", h);
+			heading.find(finder).text(details[h])
 		});
-	}
-}
+		if( details["search-status"] != "Completed" ){
+			$("#frm-search-history-submit-button").click();
+			return;
+		}
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { return; }
+		var obj = JSON.stringify( { "id": search_index });
+		handler.submit( "frm-search-preview", obj);
+        } 
+    } 
 
 jsSearchForm.initialize(); 
+
 </script>

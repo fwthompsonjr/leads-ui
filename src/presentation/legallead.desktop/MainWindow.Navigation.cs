@@ -26,6 +26,7 @@ namespace legallead.desktop
                     "home" => content1.Content,
                     "myaccount" => contentMyAccount.Content,
                     "search" => contentMySearch.Content,
+                    "mysearch" => contentMySearch.Content,
                     "error" => contentError.Content,
                     _ => content1.Content,
                 };
@@ -53,12 +54,19 @@ namespace legallead.desktop
                 { UserScriptActivationFalse, UserScriptActivationTrue },
                 { UserScriptInjectionToken, jscript }
             };
-
             var html = new StringBuilder(web.GetHTML(Dispatcher));
             var lookup = replacements.Keys.ToList();
             lookup.ForEach(x => { html.Replace(x, replacements[x]); });
+            var substitute = MySearchSubstitute(directions, html.ToString());
+            web.SetHTML(Dispatcher, substitute);
+        }
 
-            web.SetHTML(Dispatcher, html.ToString());
+        private static string MySearchSubstitute(string[] directions, string html)
+        {
+            if (directions.Length == 0) return html;
+            if (!directions[0].Equals("mysearch")) return html;
+            return SearchPageContentHelper.Transform(html, directions[1]);
+
         }
 
         private static readonly List<string> Landings = new()

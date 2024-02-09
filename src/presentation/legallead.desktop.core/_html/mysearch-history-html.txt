@@ -24,7 +24,7 @@
 								<tbody>
 									<tr id="tr-subcontent-history-data-template" style="display: none">
 										<td class="text-start">
-											<a title="View" name="link-show-details">~1</a>
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '~0' )">~1</a>
 										</td>
 										<td><span name="state-abbr">~2</span></td>
 										<td><span name="county-name">~3</span></td>
@@ -37,7 +37,7 @@
 										<span name="no-data">No Records Found</span></td>
 									</tr>
 								</tbody>
-								<tfoot>
+								<tfoot class="m-1 d-none">
 									<tr id="tr-subcontent-history-pager">
 										<td colspan="4" class="p-2">
 											<select id="cbo-subcontent-history-pager" onchange="jssearchpager.set_page(0)" class="form-control text-secondary">
@@ -56,9 +56,11 @@
 							<div id="frm-search-history-error-message" class="d-none">
 								<!-- Error messages -->
 							</div>
-							<button id="frm-search-history-submit-button" class="btn btn-primary">
+							<button id="frm-search-history-submit-button" 
+								class="btn btn-primary"
+								data-bs-toggle="modal" data-bs-target="#my-search-preview-modal">
 								<i id="frm-search-history-icon" class="bi bi-clock-history" ></i>
-								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
+								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Preview / Purchase
 							</button>
 						</div>
 					</div>

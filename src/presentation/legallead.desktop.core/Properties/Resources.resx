@@ -190,6 +190,12 @@
   <data name="introduction-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\introduction-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="invoice_content_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\invoice-content-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="invoice_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\invoice-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="myaccount-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\myaccount-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -228,6 +234,9 @@
   </data>
   <data name="mysearch_history_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\mysearch-history-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="mysearch_preview_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mysearch-preview-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="mysearch_purchases_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\mysearch-purchases-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
