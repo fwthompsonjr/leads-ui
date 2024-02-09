@@ -40,6 +40,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("my-account-navigation")]
         [InlineData("my-account-profile-valid")]
         [InlineData("inject: permissions-validation")]
+        [InlineData("<p>Invoice form</p>")]
         public void ContentReplacementExistsAndIsNotEmpty(string find)
         {
             var sut = ContentHtmlNames.ContentReplacements;
@@ -71,6 +72,9 @@ namespace legallead.desktop.tests.implementations
         [InlineData("Introduction", true)]
         [InlineData("home", true)]
         [InlineData("Home", true)]
+        [InlineData("Invoice", true)]
+        [InlineData("MyAccount", true)]
+        [InlineData("MySearch", true)]
         public void ContentHtmlNamesIsValid(string test, bool expected)
         {
             var sut = new ContentHtmlNames();

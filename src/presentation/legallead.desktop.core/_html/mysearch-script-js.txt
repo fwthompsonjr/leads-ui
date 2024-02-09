@@ -289,6 +289,68 @@ let jssearchviews = {
 
 let jssearchpager = { 
     "pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager", "#cbo-subcontent-preview-pager" ], 
+		"preview_name": "table[automationid='search-preview-table']",
+		"preview_content": null,
+		"preview_reset": function() {
+			jssearchpager.initialize();
+			let previewName = jssearchpager.preview_name;
+			$( previewName ).html(jssearchpager.preview_content);
+		},
+		"initialize": function() {
+			if( null != jssearchpager.preview_content ) { return; }
+			let previewName = jssearchpager.preview_name;
+			jssearchpager.preview_content = $( previewName ).html();
+		},
+		bind_preview: function( jscontent ) {
+			const temp_mapping = [
+				"case-number|caseNumber",
+				"case-type|caseType",
+				"court|court",
+				"date-filed|dateFiled",
+				"user-name|name"
+				];
+			const template = "".concat(
+				"<tr name='injected-content' data-row-number='0' data-page-number='0' data-position='even'>",
+				$("#tr-subcontent-preview-data-template").html(),
+				"</tr>");
+			tempjs = JSON.parse(jscontent);
+			if( tempjs.length === 0 ) {
+				$("#frm-search-history-submit-button").click();
+				return;
+			}
+			t_body = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tbody' );
+			t_foot = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tfoot' );
+			t_foot.removeClass("d-none");
+			$("#cbo-subcontent-preview-pager").html("");
+			tempjs.forEach(function(j) {
+				t_body.append(template);
+			});			
+			i_pos = 0;
+			t_body.find("tr[name='injected-content']").each(function() {
+				rw = $( this );
+				pgnbr = Math.floor(i_pos / 10);
+				rw.attr( "data-row-number", i_pos );
+				rw.attr( "data-page-number", pgnbr);
+				rw.attr( "data-position", i_pos % 2 == 0 ? "even" : "odd");
+				temp_mapping.forEach(function(m) {
+					let src = tempjs[i_pos];
+					finder = "span[name='~0']".replace("~0",m.split('|')[0]);
+					fld = m.split('|')[1];
+					rw.find( finder ).text( src[fld] );
+				});
+				if( pgnbr > 0 ) { rw.hide(); }
+				i_pos++;
+			});
+			mxCount = tempjs.length;
+			for (var i = 0; i < mxCount; i += tableRowCount){
+				pgnbr = Math.floor(i / tableRowCount);
+				mx = Math.min(i + tableRowCount, mxCount);
+				lbl = "".concat("Records: ", i + 1, " to ", mx);
+				var child = "<option value='~0'>~1</option>".replace("~0", pgnbr).replace("~1", lbl);
+				$("#cbo-subcontent-preview-pager").append(child);
+			}
+			$("#cbo-subcontent-preview-pager").val(0);
+		},
         "set_page": function( cboId ) { 
         let indx = parseInt( cboId ); 
             if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; } 
@@ -315,6 +377,7 @@ let jssearchpager = {
 		}
 		},
         "show_preview": function( row_index ) { 
+		jssearchpager.preview_reset();
         let indx = parseInt( row_index ); 
             if (isNaN(indx)) { return; } 
         let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
@@ -338,9 +401,13 @@ let jssearchpager = {
 			let finder = "span[name='~0']".replace("~0", h);
 			heading.find(finder).text(details[h])
 		});
-		$("#frm-search-history-submit-button").click();
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { return; }
+		var obj = JSON.stringify( { "id": search_index });
+		handler.submit( "frm-search-preview", obj);
         } 
     } 
 
 jsSearchForm.initialize(); 
+
 </script>

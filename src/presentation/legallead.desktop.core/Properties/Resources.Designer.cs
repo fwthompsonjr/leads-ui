@@ -75,7 +75,8 @@ namespace legallead.desktop.Properties {
         ///  &quot;user&quot;: {
         ///    &quot;session_timeout&quot;: 20
         ///  }
-        ///}.
+        ///  &quot;stripe&quot;:{
+        ///    &quot;key&quot;: &quot;sk_test_51LCZucDhgP60CL9xtS9RSEC5IhGsKkZwnNxwFwpHbDHLLBLvB87uICAJB5fVZNyqEHN [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string appsettings {
             get {
@@ -610,6 +611,54 @@ namespace legallead.desktop.Properties {
         internal static string introduction_html {
             get {
                 return ResourceManager.GetString("introduction-html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;card-body&quot;&gt;
+        ///	&lt;h5 class=&quot;card-title text-start&quot;&gt;
+        ///		&lt;span name=&quot;invoice-label&quot;&gt;Invoice: &lt;/span&gt;
+        ///		&lt;span name=&quot;invoice&quot; class=&quot;text-muted&quot;&gt;{0}&lt;/span&gt;
+        ///	&lt;/h5&gt;
+        ///	&lt;h6 name=&quot;invoice-date&quot; class=&quot;text-start&quot;&gt;
+        ///		&lt;span name=&quot;invoice-date-label&quot;&gt;Invoice Date: &lt;/span&gt;
+        ///		&lt;span name=&quot;invoice-date&quot; class=&quot;text-muted&quot;&gt;{1}&lt;/span&gt;
+        ///	&lt;/h6&gt;
+        ///	&lt;h6 class=&quot;text-start&quot;&gt;
+        ///		&lt;span name=&quot;invoice-description-label&quot;&gt;Description: &lt;/span&gt;
+        ///		&lt;span name=&quot;invoice-description&quot; class=&quot;text-muted&quot;&gt;{2}&lt;/span&gt;
+        ///	&lt;/h6&gt;
+        ///	&lt;ul nam [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string invoice_content_html {
+            get {
+                return ResourceManager.GetString("invoice_content_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: invoice&lt;/title&gt;
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
+        ///
+        ///			div.subcontent {
+        ///				width: 50%; 
+        ///				min-width: 400px;
+        ///			 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string invoice_html {
+            get {
+                return ResourceManager.GetString("invoice_html", resourceCulture);
             }
         }
         
