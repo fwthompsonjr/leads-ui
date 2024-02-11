@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Stripe.Checkout;
 using Stripe;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Utility;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -43,30 +44,59 @@ namespace legallead.permissions.api.Controllers
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
             var searches = await infrastructure.GetPreview(Request, guid);
             if (searches == null) return UnprocessableEntity(guid);
+            var invoice = await infrastructure.CreateInvoice(user.Id, guid);
+            if (invoice == null || !invoice.Any()) return UnprocessableEntity(guid);
+            var data = invoice.ToList();
+            var amount = data.Sum(x => x.Price.GetValueOrDefault(0));
+            const decimal minAmount = 0.50m;
+            if (amount <= minAmount)
+            {
+                // close invoice as paid
+                var nocost = new
+                {
+                    Id = Guid.Empty.ToString("D"),
+                    PaymentIntentId = Guid.Empty.ToString("D"),
+                    clientSecret = string.Empty,
+                    externalId = data[0].ExternalId ?? string.Empty,
+                    data
+                };
+                return Ok(nocost);
+            }
+            var successPg = $"{Request.Scheme}://{Request.Host}/payment-result?sts=success&id={guid}";
+            var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
             {
-                UiMode = "embedded",
-                LineItems = new List<SessionLineItemOptions>
+                PaymentMethodTypes = new List<string>
                 {
-                  new() {
-                    // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    Price = "{{PRICE_ID}}",
-                    Quantity = 1,
-
-                  },
+                    "card"
                 },
+                LineItems = new List<SessionLineItemOptions>(),
                 Metadata = new Dictionary<string, string>
                 {
                     { "user-name", user.UserName },
                     { "user-email", user.Email },
+                    { "external-id", data[0].ExternalId ?? string.Empty },
                     { "product-type", request.ProductType }
                 },
                 Mode = "payment",
-                AutomaticTax = new SessionAutomaticTaxOptions { Enabled = true },
+                AutomaticTax = new SessionAutomaticTaxOptions { Enabled = false },
+                SuccessUrl = successPg,
+                CancelUrl = failurePg,
             };
+            data.ForEach(d =>
+            {
+                var item = PricingConverter.ConvertFrom(d, user);
+                options.LineItems.Add(item);
+            });
             var service = new SessionService();
-            Session session = service.Create(options);
-            var response = new { clientSecret = session.RawJObject["client_secret"] };
+            Session session = await service.CreateAsync(options);
+            var response = new { 
+                session.Id,
+                session.PaymentIntentId,
+                clientSecret = session.RawJObject["client_secret"],
+                externalId = data[0].ExternalId ?? string.Empty,
+                data
+            };
             return Ok(response);
         }
     }

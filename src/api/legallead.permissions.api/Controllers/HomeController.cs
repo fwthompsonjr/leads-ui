@@ -14,6 +14,13 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+        [HttpGet("/payment-result")]
+        public IActionResult PaymentLanding([FromQuery] string sts, string id)
+        {
+            var content = IndexHtml;
+            return Content(content, "text/html");
+        }
+
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
 
