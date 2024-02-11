@@ -14,5 +14,7 @@ namespace legallead.jdbc.interfaces
         Task<KeyValuePair<bool, string>> UpdateRowCount(string id, int rowCount);
         Task<KeyValuePair<bool, object>> GetStaged(string id, string keyname);
         Task<SearchRestrictionDto> GetSearchRestriction(string userId);
+        Task<bool> CreateInvoice(string userId, string searchId);
+        Task<IEnumerable<SearchInvoiceBo>> Invoices(string userId, string? searchId);
     }
 }

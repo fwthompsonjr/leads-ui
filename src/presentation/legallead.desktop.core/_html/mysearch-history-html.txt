@@ -59,7 +59,7 @@
 							<button id="frm-search-history-submit-button" 
 								class="btn btn-primary"
 								data-bs-toggle="modal" data-bs-target="#my-search-preview-modal">
-								<i id="frm-search-history-icon" class="bi bi-clock-history" ></i>
+								<i id="frm-search-history-icon" class="bi bi-search" ></i>
 								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Preview / Purchase
 							</button>
 						</div>

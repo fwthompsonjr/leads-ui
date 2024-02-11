@@ -58,6 +58,42 @@ namespace legallead.jdbc.implementations
             });
             return translation;
         }
+
+        public async Task<bool> CreateInvoice(string userId, string searchId)
+        {
+            const string prc = "CALL USP_APPEND_SEARCH_INVOICE_HEADER( ?, ? );";
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("uu_index", userId);
+                parameters.Add("search_index", searchId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch
+            {
+                return false;
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<SearchInvoiceBo>> Invoices(string userId, string? searchId)
+        {
+            const string prc = "CALL USP_GET_SEARCH_INVOICE( ?, ? );";
+            var parameters = new DynamicParameters();
+            parameters.Add("uu_index", userId);
+            parameters.Add("search_index", searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<SearchInvoiceDto>(connection, prc, parameters);
+            var translation = response.Select(x =>
+            {
+                var tmp = JsonConvert.SerializeObject(x);
+                return JsonConvert.DeserializeObject<SearchInvoiceBo>(tmp) ?? new();
+            });
+            return translation;
+        }
+
         public async Task<KeyValuePair<bool, string>> Append(SearchTargetTypes search, string? id, object data, string? keyname = null)
         {
             try

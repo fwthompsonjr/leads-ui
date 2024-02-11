@@ -301,6 +301,16 @@ let jssearchpager = {
 			let previewName = jssearchpager.preview_name;
 			jssearchpager.preview_content = $( previewName ).html();
 		},
+		get_status_class: function( searchStatus ) {
+			if ( undefined == searchStatus || null == searchStatus ) { return null; }
+			switch ( searchStatus ) {
+				case "Completed": return "text-success";
+				case "Processing": return "text-warning-emphasis";
+				case "Error": return "text-danger";
+				default: return null;
+			}
+			return null;
+		},
 		bind_preview: function( jscontent ) {
 			const tableRowCount = 5;
 			const temp_mapping = [
@@ -340,6 +350,12 @@ let jssearchpager = {
 					finder = "span[name='~0']".replace("~0",m.split('|')[0]);
 					fld = m.split('|')[1];
 					rw.find( finder ).text( src[fld] );
+					if(m == "search-status") {
+						let clsStatus = jssearchpager.get_status_class( src[fld] );
+						if (clsStatus != null) {
+							rw.find( finder ).addClass(clsStatus);
+						}
+					}
 				});
 				if( pgnbr > 0 ) { rw.hide(); }
 				i_pos++;
@@ -393,7 +409,8 @@ let jssearchpager = {
 		if (undefined == search_index || null == search_index) { return; } 
 		let details = jssearchpager.get_preview_details( $rw );
         let keyname = jssearchpager.pagers[2]; 
-        let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' )
+        let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
+		let searchStatus = details["search-status"];
 		const headings = [ 
 		"requested-date", 
 		"state-abbr", 
@@ -404,8 +421,16 @@ let jssearchpager = {
         // populate table headings 
         headings.forEach(function(h){ 
 			let finder = "span[name='~0']".replace("~0", h);
-			heading.find(finder).text(details[h])
+			heading.find(finder).text(details[h]);
+			if(h == "search-status") {
+				let clsStatus = jssearchpager.get_status_class( searchStatus );
+				if (clsStatus != null) {
+					heading.find(finder).addClass(clsStatus);
+				}
+			}			
 		});
+		finder = "span[name='search-uuid']";
+		heading.find(finder).text(search_index);
 		if( details["search-status"] != "Completed" ){
 			$("#frm-search-history-submit-button").click();
 			return;
@@ -414,7 +439,18 @@ let jssearchpager = {
 		if( undefined === handler || null === handler || !(handler) ) { return; }
 		var obj = JSON.stringify( { "id": search_index });
 		handler.submit( "frm-search-preview", obj);
-        } 
+        },
+		get_invoice: function() {
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			$("#my-search-preview-bttn").attr("disabled", "disabled");
+			var uuidx = $("table[automationid='search-preview-table']")
+				.find("tr[name='requested-date']")
+				.find("span[name='search-uuid']")
+				.text();
+			var obj = JSON.stringify( { "id": uuidx });
+			handler.submit( "frm-search-invoice", obj);
+		}
     } 
 
 jsSearchForm.initialize(); 

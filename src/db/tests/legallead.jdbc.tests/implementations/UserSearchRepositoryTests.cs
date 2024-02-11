@@ -30,6 +30,22 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.LastName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Plantiff, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Status, y => y.Random.Guid().ToString("D"));
+
+        private static readonly Faker<SearchInvoiceDto> invoicefaker =
+            new Faker<SearchInvoiceDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LineId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ItemType, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ItemCount, y => y.Random.Int(1, 25))
+            .RuleFor(x => x.UnitPrice, y => y.Random.Int(1, 25))
+            .RuleFor(x => x.Price, y => y.Random.Int(1, 25))
+            .RuleFor(x => x.ReferenceId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.PurchaseDate, y => y.Date.Recent())
+            .RuleFor(x => x.IsDeleted, y => y.Random.Bool())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
         private static readonly Faker faker = new();
         [Fact]
         public void RepoCanBeCreated()
@@ -83,6 +99,42 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()));
         }
 
+        [Fact]
+        public async Task RepoCreateInvoiceHappyPath()
+        {
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+            var result = await service.CreateInvoice("abc123", "xyz223");
+            Assert.True(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Fact]
+        public async Task RepoCreateInvoiceExceptionPath()
+        {
+            var exception = faker.System.Exception;
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).Throws(exception);
+            var result = await service.CreateInvoice("abc123", "xyz223");
+            Assert.False(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
         [Fact]
         public async Task RepoHistoryNoResult()
         {
@@ -239,6 +291,30 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoInvoicesMultipleResult(string? searchid)
+        {
+            var result = invoicefaker.Generate(6).ToArray();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QueryAsync<SearchInvoiceDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.Invoices(uid, searchid);
+            mock.Verify(m => m.QueryAsync<SearchInvoiceDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
         }
         private sealed class RepoContainer
         {

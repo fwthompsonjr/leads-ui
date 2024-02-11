@@ -1,0 +1,1903 @@
+<html><head>
+		<script type="text/javascript">
+                         try { 
+                         CefSharp.BindObjectAsync("jsHandler", "jsHandler"); 
+                              } catch {} 
+
+
+		</script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: search</title>
+		
+		<!-- googleapis : fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+		
+		<!-- popper -->
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+		
+		<!-- bootstrap -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+		
+		<!-- font awesome -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+		
+		<!-- jquery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+		
+		<!-- common styles -->
+		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css">
+		
+		<!-- common styles -->
+		<style name="base-css">
+                    /* 
+                    * Forms 
+                    */ 
+                         .form-control:focus { 
+                         background-color: #444; 
+                         color: rgb(240, 240, 240) 
+                         } 
+                         .form-control { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+                         .form-control.error { 
+                         border-color: red; 
+                         } 
+                         label.error { 
+                         color: red; 
+                         font-size: small; 
+                         } 
+                         div.help-text { 
+                         font-size: small; 
+                         } 
+                    /* 
+                    * Header 
+                    */ 
+                         div[name="header"] { 
+                         height: 50px; 
+                         border-bottom: #444 solid 1px; 
+                         margin-top: 5px; 
+                         } 
+                    /* 
+                    * Loader 
+                    */ 
+                         div[name="loader"] { 
+                         margin-top: 20px; 
+                         margin-bottom: 20px; 
+                         border: 16px solid #cdcdb1; /* Light grey */ 
+                         border-top: 16px solid #9c9c63; /* Brown-ish */ 
+                         border-radius: 50%; 
+                         width: 120px; 
+                         height: 120px; 
+                         animation: spin 3s linear infinite; 
+                         } 
+                         @keyframes spin { 
+                              0% { transform: rotate(0deg); } 
+                              100% { transform: rotate(360deg); } 
+                         } 
+                    /* 
+                    * Card 
+                    */ 
+                         .card { 
+                         background-color: transparent; 
+                         border-color: #444; 
+                         color: #fff; 
+                         } 
+                         .card .card-body .card-title { 
+                         border-bottom: #444 solid 1px; 
+                         padding-bottom: 5px; 
+                         } 
+                         .card .card-footer { 
+                         border-top: #555 solid 1px; 
+                         } 
+                         @media screen and (max-width: 500px) { 
+                              .card { 
+                              width: 300px; 
+                              margin-left: 40px; 
+                              } 
+                         } 
+                    /* 
+                    * Modal 
+                    */ 
+                         div.modal-content { 
+                         background-color: lightgray; 
+                         color: rgb(240, 240, 240); 
+                         } 
+                    /* 
+                    * Data Tables 
+                    */ 
+                    table[name='search-dt-table'], 
+                         table[automationId='search-preview-table'] { 
+                         font-size: 14px; 
+                         border: 1px solid #444; 
+                         width: 100%; 
+                         margin-left: 5px; 
+                         margin-right: 10px; 
+                         } 
+                    table[name='search-dt-table'] tbody, 
+                    table[name='search-dt-table'] td, 
+                    table[name='search-dt-table'] tfoot, 
+                    table[name='search-dt-table'] th, 
+                    table[name='search-dt-table'] thead, 
+                    table[name='search-dt-table'] tr, 
+                    table[automationId='search-preview-table'] tbody, 
+                    table[automationId='search-preview-table'] td, 
+                    table[automationId='search-preview-table'] tfoot, 
+                    table[automationId='search-preview-table'] th, 
+                    table[automationId='search-preview-table'] thead, 
+                         table[automationId='search-preview-table'] tr { 
+                         border: 1px solid #444; 
+                         } 
+                    table[name='search-dt-table'] td, 
+                         table[automationId='search-preview-table'] td { 
+                         padding-left: 4px; 
+                         padding-right: 4px; 
+                         } 
+                    table[name='search-dt-table'] thead tr, 
+                         table[automationId='search-preview-table'] thead tr { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                    table[name='search-dt-table'] tfoot tr td, 
+                         table[automationId='search-preview-table'] tfoot tr td { 
+                         border-top-style: double; 
+                         border-right-style: none; 
+                         border-bottom-style: none; 
+                         border-left-style: none; 
+                         } 
+                    table[name='search-dt-table'] tfoot, 
+                         table[automationId='search-preview-table'] tfoot { 
+                         margin-top: 10px; 
+                         } 
+                         tr[data-position] { 
+                         cursor: pointer; 
+                         } 
+                         tr[data-position]:hover { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                         tr[data-position='odd'] { 
+                         background-color: rgba(125, 125, 125, .25); 
+                         } 
+                         tr[data-position] a[name='link-show-details']:hover { 
+                         color: #0a58ca; 
+                         } 
+                         #cbo-subcontent-history-pager { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+
+
+		</style>
+		<style name="subcontent-css">
+                         div.subcontent { 
+                         width: 50%; 
+                         min-width: 400px; 
+                         max-width: 1200px; 
+                         margin-bottom: 20px; 
+                         display: none; 
+                         } 
+                         div.subcontent.active { 
+                         display: block; 
+                         } 
+                         div[name="subcontent-home-bullet-list"] { 
+                         width: 50%; 
+                         margin-left: 35%; 
+                         text-align: left; 
+                         justify-content: left; 
+                         } 
+                         div[name="main-content"] { 
+                         width: 70%; 
+                         min-width: 800px; 
+                         max-width: 1200px; 
+                         } 
+                         div[name="main-content"] div.card { 
+                         height: 95%; 
+                         min-height: 560px; 
+                         } 
+                    div[name="subcontent-home"], 
+                    div[name="subcontent-profile"], 
+                    div[name="subcontent-permissions"], 
+                         div[name="subcontent-password"] { 
+                         text-align: left; 
+                         justify-content: left; 
+                         margin-bottom: 20px; 
+                         margin-left: 20px; 
+                         } 
+                    div[name="subcontent-permissions"] .form-check-input, 
+                    div[name="subcontent-permissions"] .list-group, 
+                         div[name="subcontent-permissions"] .list-group-item { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+                         #dv-subcontent-permissions-container { 
+                         width: 85%; 
+                         margin-left: 25px; 
+                         } 
+
+
+		</style>
+	</head>
+	<body class="text-center modal-open" style="overflow: hidden; padding-right: 0px;">
+		
+		<!-- Logout Modal -->  		 		 		 		 		 		 		 		 		 		 		
+		<!-- Button trigger modal -->
+		<button id="btn-my-account-logout-show" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#my-account-logout-modal">
+			Launch static backdrop modal
+		</button>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="my-account-logout-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-account-logout-label" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-muted" id="my-account-logout-label">Logout</h1>
+						<button id="my-account-logout-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-dark">
+						Are you sure you want to log out?
+					</div>
+					<div class="modal-footer">
+						<button id="my-account-logout-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+						<button id="my-account-logout-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Search Preview Modal -->  		 		 		 		 		 		 		 		 		 		 		
+		<!-- Modal -->
+		<div class="modal fade show" id="my-search-preview-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-search-preview-label" aria-modal="true" role="dialog" style="display: block;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-muted" id="my-search-preview-label">Preview Or Purchase</h1>
+						<button id="my-search-preview-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-dark">
+						<table automationid="search-preview-table" class="text-dark">
+							<colgroup>
+								<col name="case-number">
+								<col name="case-type" style="width: 75px">
+								<col name="court" style="width: 75px">
+								<col name="date-filed" style="width: 75px">
+								<col name="user-name" style="width: 75px">
+							</colgroup>
+							<thead>
+								<tr name="requested-date">
+									<th style="padding-left: 3px;">Request Date</th>
+									<td colspan="4">
+										<span name="requested-date">2/7/24 4:23 PM</span>
+										<span class="d-none" name="search-uuid">- n/a -</span>
+									</td>
+								</tr>
+								<tr name="state-abbr">
+									<th style="padding-left: 3px;">State</th>
+									<td colspan="4">
+										<span name="state-abbr">TX</span>
+									</td>
+								</tr>
+								<tr name="county-name">
+									<th style="padding-left: 3px;">County</th>
+									<td colspan="4">
+										<span name="county-name">DENTON</span>
+									</td>
+								</tr>
+								<tr name="begin-date">
+									<th style="padding-left: 3px;">Starting</th>
+									<td colspan="4">
+										<span name="begin-date">10/1/2023</span>
+									</td>
+								</tr>
+								<tr name="ending-date">
+									<th style="padding-left: 3px;">Ending</th>
+									<td colspan="4">
+										<span name="ending-date">10/7/2023</span>
+									</td>
+								</tr>
+								<tr name="search-status">
+									<th style="padding-left: 3px;">Status</th>
+									<td colspan="4">
+										<span name="search-status" class="text-success">Completed</span>
+									</td>
+								</tr>
+								<tr>
+									<th style="padding-left: 3px;">Case Number</th>
+									<th style="padding-left: 3px;">Case Type</th>
+									<th style="padding-left: 3px;">Court</th>
+									<th style="padding-left: 3px;">Date Filed</th>
+									<th style="padding-left: 3px;">Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id="tr-subcontent-preview-data-template" style="display: none">
+									<td style="padding-left: 3px;">
+										<span name="case-number">~1</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">- n/a -</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">~3</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">~4</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">~5</span>
+									</td>
+								</tr>
+								<tr id="tr-subcontent-preview-no-data" style="display: none;">
+									<td colspan="5">
+										<span name="no-data">No Records Found</span>
+									</td>
+								</tr>
+							<tr name="injected-content" data-row-number="0" data-page-number="0" data-position="even">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Ro:8912x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="1" data-page-number="0" data-position="odd">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Ro:7620x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="2" data-page-number="0" data-position="even">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Ba:7502x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="3" data-page-number="0" data-position="odd">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">De:7505x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="4" data-page-number="0" data-position="even">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Lo:7620x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="5" data-page-number="1" data-position="odd" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Ja:7622x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="6" data-page-number="1" data-position="even" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Mo:7621x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="7" data-page-number="1" data-position="odd" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Mo:7621x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="8" data-page-number="1" data-position="even" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">BF-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Judgment Nisi</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Wa:6303x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="9" data-page-number="1" data-position="odd" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Co:7622x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="10" data-page-number="2" data-position="even" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Ba:7501x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="11" data-page-number="2" data-position="odd" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Va:7500x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="12" data-page-number="2" data-position="even" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Lo:7620x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="13" data-page-number="2" data-position="odd" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Mc:7620x</span>
+									</td>
+								</tr><tr name="injected-content" data-row-number="14" data-page-number="2" data-position="even" style="display: none;">
+									<td style="padding-left: 3px;">
+										<span name="case-number">CV-2023-...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="case-type">Debt/Consumer: ...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="court">County Court At...</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="date-filed">10/02/2023</span>
+									</td>
+									<td style="padding-left: 3px;">
+										<span name="user-name">Mo:7500x</span>
+									</td>
+								</tr></tbody>
+							<tfoot class="m-1">
+								<tr id="tr-subcontent-preview-pager">
+									<td colspan="3" class="p-2">
+										<select id="cbo-subcontent-preview-pager" onchange="jssearchpager.set_page(2)" class="form-control text-secondary"><option value="0">Records: 1 to 5</option><option value="1">Records: 6 to 10</option><option value="2">Records: 11 to 15</option></select>
+									</td>
+									<td id="td-subcontent-preview-record-count" class="text-end text-secondary" colspan="2">Records: 15</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button id="my-search-preview-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+						<button id="my-search-preview-bttn" 
+							type="button" 
+							class="btn btn-primary" 
+							onclick="javascript:jssearchpager.get_invoice()">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+				<div class="inner">
+					<h3 class="masthead-brand">
+						<i class="bi bi-bank2"></i>
+						<span>Legal Lead UI</span>
+					</h3>
+					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+						<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link" href="javascript:jssearchviews.setIndex(0)">Search</a>
+						<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link active" href="javascript:jssearchviews.setIndex(1)">History</a>
+						<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:jssearchviews.setIndex(2)">Purchases</a>
+					</nav>
+				</div>
+			</header>
+			<main role="main" class="inner cover">
+				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
+					<div id="dv-subcontent-search" name="subcontent-search" class="card" style="display: none">
+						<div id="dv-subcontent-search-card-body" name="subcontent-search-body" class="card-body">
+							<h5 class="card-title text-start">Search</h5>
+							<div class="row">
+								<div id="dv-search-table-wrapper" name="search-wrapper" class="table-responsive">
+									<table id="table-search" name="search-table" class="m-2 w-75 rounded border-secondary">
+										<colgroup>
+											<col style="width: 120px;">
+											<col>
+										</colgroup>
+										<tfoot>
+											<tr>
+												<td colspan="2" class="p-1">
+													<hr>
+												</td>
+											</tr>
+											<tr>
+												<td class="p-1">
+													<button id="search-submit-button" class="btn btn-primary" onclick="jsSearchForm.onsubmitclicked()">
+														<i id="search-submit-icon" class="bi bi-bi bi-search"></i>
+														<i id="search-submit-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Search
+													</button>
+												</td>
+												<td class="p-1">
+													<span id="search-submit-error-message" class="m-1 text-danger d-none">Please fill all required fields.</span>
+													<span id="search-submit-success-message" class="m-1 text-success d-none">Your search has been submitted.</span>
+												</td>
+											</tr>
+										</tfoot>
+										<tbody>
+											<tr id="tr-search-state">
+												<td>
+													<label class="m-1 form-label text-secondary">State</label>
+												</td>
+												<td>
+													<select id="cbo-search-state" name="search-field" class="form-control" onchange="jsSearchForm.stateChanged()" onblur="jsSearchForm.oncontrolleave()">
+														<option value="0" dat-state-index="">- select -</option>
+														<option value="1" dat-state-index="tx">Texas</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-county">
+												<td>
+													<label class="m-1 form-label text-secondary">County</label>
+												</td>
+												<td>
+													<select id="cbo-search-county" name="search-field" class="form-control" onchange="jsSearchForm.countyChanged()" onblur="jsSearchForm.oncontrolleave()">
+														<option value="0" dat-county-index="" dat-state-index="">- select -</option>
+														<option value="26550" dat-state-index="tx" dat-county-index="collin" dat-has-case-search="false" dat-parameter-count="5" style="display: none">Collin</option>
+														<option value="26730" dat-state-index="tx" dat-county-index="denton" dat-has-case-search="true" dat-parameter-count="1" style="display: none">Denton</option>
+														<option value="28330" dat-state-index="tx" dat-county-index="tarrant" dat-has-case-search="false" dat-parameter-count="1" style="display: none">Tarrant</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-0" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-0</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-0" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+														<option value="3" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Civil And Family Case Records</option>
+														<option value="0" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Criminal Case Records</option>
+														<option value="4" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Justice Of The Peace Case Records</option>
+														<option value="2" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Magistrate Case Records</option>
+														<option value="1" dat-row-index="0" dat-row-name="Search Type" dat-county-index="26550" style="display: none">Probate Case Records</option>
+														<option value="9" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All County Courts</option>
+														<option value="1" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All JP And County Courts</option>
+														<option value="2" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">All JP Courts</option>
+														<option value="10" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Court At Law #1</option>
+														<option value="11" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Court At Law #2</option>
+														<option value="12" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #1</option>
+														<option value="13" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #2</option>
+														<option value="14" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #3</option>
+														<option value="15" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #4</option>
+														<option value="16" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">County Criminal Court #5</option>
+														<option value="3" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #1</option>
+														<option value="4" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #2</option>
+														<option value="5" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #3</option>
+														<option value="6" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #4</option>
+														<option value="7" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #5</option>
+														<option value="8" dat-row-index="0" dat-row-name="Court Selection" dat-county-index="26730" style="display: none">Justice Of The Peace Pct #6</option>
+														<option value="2" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All CCL Courts</option>
+														<option value="1" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All JP Courts</option>
+														<option value="0" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">All Probate Courts</option>
+														<option value="3" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 1</option>
+														<option value="4" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 2</option>
+														<option value="5" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 3</option>
+														<option value="6" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 4</option>
+														<option value="7" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 5</option>
+														<option value="8" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 6</option>
+														<option value="9" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 7</option>
+														<option value="10" dat-row-index="0" dat-row-name="Search Type" dat-county-index="28330" style="display: none">JP No. 8</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-1" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-1</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-1" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-2" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-2</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-2" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-3" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-3</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-3" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-4" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-4</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-4" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-5" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-5</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-5" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-dynamic-6" style="display: none" name="tr-search-dynamic">
+												<td>
+													<label class="m-1 form-label text-secondary">Dynamic-6</label>
+												</td>
+												<td>
+													<select id="cbo-search-dynamic-6" name="search-field" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+														<option value="" dat-county-index="" dat-state-index="">- select -</option>
+														<option value="0" dat-row-name="Case Type" dat-county-index="26730" style="display: none">JP And County Court: Civil, Family And Probate</option>
+														<option value="1" dat-row-name="Case Type" dat-county-index="26730" style="display: none">JP And County Court: Criminal Case Records</option>
+														<option value="2" dat-row-name="Case Type" dat-county-index="26730" style="display: none">District Court Case Records</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="tr-search-start-date">
+												<td>
+													<label class="m-1 form-label text-secondary">Start Date</label>
+												</td>
+												<td>
+													<input id="tbx-search-startdate" name="search-field" type="date" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+												</td>
+											</tr>
+											<tr id="tr-search-end-date">
+												<td>
+													<label class="m-1 form-label text-secondary">End Date</label>
+												</td>
+												<td>
+													<input id="tbx-search-enddate" name="search-field" type="date" class="form-control" onblur="jsSearchForm.oncontrolleave()">
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="dv-subcontent-history" name="subcontent-history" class="subcontent card  w-75 active">
+						<div class="card-body">
+							<h5 class="card-title">Search History</h5>
+							<table automationid="search-history-table" name="search-dt-table">
+								<colgroup>
+									<col name="requested-date">
+									<col name="state-abbr" style="width: 50px">
+									<col name="county-name" style="width: 100px">
+									<col name="begin-date" style="width: 75px">
+									<col name="ending-date" style="width: 75px">
+									<col name="search-status" style="width: 50px">
+								</colgroup>
+								<thead>
+									<tr>
+										<th style="padding-left: 3px;">Request Date</th>
+										<th style="padding-left: 3px;">State</th>
+										<th style="padding-left: 3px;">County</th>
+										<th style="padding-left: 3px;">Starting</th>
+										<th style="padding-left: 3px;">Ending</th>
+										<th style="padding-left: 3px;">Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="tr-subcontent-history-data-template" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '~0' )">~1</a>
+										</td>
+										<td>
+											<span name="state-abbr">~2</span>
+										</td>
+										<td>
+											<span name="county-name">~3</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">~4</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">~5</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status">~6</span>
+										</td>
+									</tr>
+									<tr id="tr-subcontent-history-no-data" style="display: none">
+										<td colspan="6">
+											<span name="no-data">No Records Found</span>
+										</td>
+									</tr>
+									<tr search-uuid="2b4a8291-c5d5-11ee-be26-0af7a01f52e9" data-row-number="0" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '0' )">2/7/24 4:23 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="17a6b38c-c5d4-11ee-be26-0af7a01f52e9" data-row-number="1" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '1' )">2/7/24 4:15 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="debb1c55-c5d0-11ee-be26-0af7a01f52e9" data-row-number="2" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '2' )">2/7/24 3:52 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="ed3c609d-c5ce-11ee-be26-0af7a01f52e9" data-row-number="3" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '3' )">2/7/24 3:38 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-warning-emphasis">
+												Processing</span>
+										</td>
+									</tr>
+									<tr search-uuid="38276732-c407-11ee-be26-0af7a01f52e9" data-row-number="4" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '4' )">2/5/24 9:16 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1df255ac-c3c4-11ee-be26-0af7a01f52e9" data-row-number="5" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '5' )">2/5/24 1:15 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1bcdec07-c3c4-11ee-be26-0af7a01f52e9" data-row-number="6" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '6' )">2/5/24 1:15 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="1cb8bd15-c3b7-11ee-be26-0af7a01f52e9" data-row-number="7" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '7' )">2/4/24 11:42 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="558dcb84-c3a7-11ee-be26-0af7a01f52e9" data-row-number="8" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '8' )">2/4/24 9:49 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="a3d05e8c-c38b-11ee-be26-0af7a01f52e9" data-row-number="9" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '9' )">2/4/24 6:31 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="69d984ba-c2f7-11ee-be26-0af7a01f52e9" data-row-number="10" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '10' )">2/4/24 12:50 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="b442777f-c2ba-11ee-be26-0af7a01f52e9" data-row-number="11" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '11' )">2/3/24 5:36 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="b34d8a49-c2ba-11ee-be26-0af7a01f52e9" data-row-number="12" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '12' )">2/3/24 5:36 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="ad03038e-c236-11ee-be26-0af7a01f52e9" data-row-number="13" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '13' )">2/3/24 1:50 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e02f1031-c234-11ee-be26-0af7a01f52e9" data-row-number="14" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '14' )">2/3/24 1:38 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1e0cabed-c230-11ee-be26-0af7a01f52e9" data-row-number="15" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '15' )">2/3/24 1:04 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="8f316534-bf75-11ee-be26-0af7a01f52e9" data-row-number="16" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '16' )">1/30/24 1:43 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="902a4fed-bf12-11ee-be26-0af7a01f52e9" data-row-number="17" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '17' )">1/30/24 1:54 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="4890f996-befc-11ee-be26-0af7a01f52e9" data-row-number="18" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '18' )">1/29/24 11:15 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="0d3b51b2-befc-11ee-be26-0af7a01f52e9" data-row-number="19" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:jssearchpager.show_preview( '19' )">1/29/24 11:13 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot class="m-1">
+									<tr id="tr-subcontent-history-pager">
+										<td colspan="4" class="p-2">
+											<select id="cbo-subcontent-history-pager" onchange="jssearchpager.set_page(0)" class="form-control text-secondary">
+												<option value="0" selected="selected">Records: 1 to 10</option>
+												<option value="1">Records: 11 to 20</option>
+											</select>
+										</td>
+										<td id="td-subcontent-history-record-count" class="text-end text-secondary" colspan="2">Records: 20</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+						<div class="card-footer">
+							<div id="frm-search-history-error-message" class="d-none">
+								
+								<!-- Error messages -->
+							</div>
+							<button id="frm-search-history-submit-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#my-search-preview-modal">
+								<i id="frm-search-history-icon" class="bi bi-search"></i>
+								<i id="frm-search-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Preview / Purchase
+							</button>
+						</div>
+					</div>
+					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card d-none w-75">
+						<div class="card-body">
+							<h5 class="card-title">Purchase History</h5>
+							<table automationid="search-purchases-table" name="search-dt-table">
+								<colgroup>
+									<col name="purchase-date" style="width: 100px">
+									<col name="item-name">
+									<col name="item-quantity" style="width: 50px">
+									<col name="unit-price" style="width: 100px">
+									<col name="total-price" style="width: 100px">
+									<col name="purchase-status" style="width: 50px">
+								</colgroup>
+								<thead>
+									<tr>
+										<td>Purchase Date</td>
+										<td>Item Description</td>
+										<td>Quantity</td>
+										<td>Unit Price</td>
+										<td>Total</td>
+										<td>Status</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="tr-subcontent-purchases-data-template" style="display: none" search-uuid="~0">
+										<td class="text-end">
+											<span name="purchase-date">~1</span>
+										</td>
+										<td>
+											<span name="item-name">~2</span>
+										</td>
+										<td class="text-end">
+											<span name="item-quantity">~3</span>
+										</td>
+										<td class="text-end">
+											<span name="unit-price">~4</span>
+										</td>
+										<td class="text-end">
+											<span name="total-price">~5</span>
+										</td>
+										<td class="text-end" search-uuid="~0">
+											<span name="purchase-status">~6</span>
+										</td>
+									</tr>
+									<tr id="tr-subcontent-purchases-no-data">
+										<td colspan="6">
+											<span name="no-data">No Records Found</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer">
+							<div id="frm-purchase-history-error-message" class="d-none">
+								
+								<!-- Error messages -->
+							</div>
+							<button id="frm-purchase-history-submit-button" class="btn btn-primary">
+								<i id="frm-purchase-history-icon" class="bi bi-clock-history"></i>
+								<i id="frm-purchase-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
+							</button>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="mastfoot mt-auto">
+				<div id="footer-copy" class="float-end">
+					<span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+				</div>
+				<div id="footer-reload" class="float-start" style="display:none">
+					<a id="footer-reload-link" href="javascript:reloadContent()" class="text-secondary text-decoration-none">Reload</a>
+				</div>
+			</footer>
+		</div>
+		<script>
+                         function showLogout() { 
+                         let bttn = "#btn-my-account-logout-show"; 
+                         $( bttn ).click(); 
+                         } 
+
+
+		</script>
+		<script>
+                    let clientScriptActivated = true; 
+                         function commonClientScript() { 
+                              try { 
+                              setDisplay( 'history' ); 
+                                   } catch(err) { 
+                              console.debug(err); 
+                              } 
+                         } 
+                         if (clientScriptActivated) { 
+                              setTimeout( () => { commonClientScript(); }, 250); 
+                         } 
+
+
+		</script>
+		<script name="search-form-js">
+                         let jsSearchForm = { 
+                              attributes: { 
+                              name: "style", 
+                              hide: "display: none", 
+                              block: "display: block" 
+                              }, 
+                         fields: [], 
+                              controls : { 
+                              state: "#cbo-search-state", 
+                              county: "#cbo-search-county", 
+                              button: "#search-submit-button", 
+                              errormessage: "#search-submit-error-message", 
+                              rows: "#table-search tr[name = 'tr-search-dynamic']", 
+                              start: "#tbx-search-startdate", 
+                              end: "#tbx-search-enddate", 
+                              }, 
+                              serialized: function() { 
+                                   let js = { 
+                                   "state": $( jsSearchForm.controls.state).find("option:selected").attr("dat-state-index"), 
+                                        "county": { 
+                                        "name": $( jsSearchForm.controls.county).find("option:selected").attr("dat-county-index"), 
+                                        "value": parseInt($( jsSearchForm.controls.county).val()) 
+                                        }, 
+                                   "details": [], 
+                                   "start": Date.parse( $(jsSearchForm.controls.start).val() ), 
+                                   "end": Date.parse( $(jsSearchForm.controls.end).val() ), 
+                                   }; 
+                                   $( jsSearchForm.controls.rows).each(function() { 
+                                   let $tr = $( this ); 
+                                        if( $tr.is(":not(:hidden)")) { 
+                                        const lb = $tr.find("label").text(); 
+                                        const cboption = $tr.find("select").find("option:selected"); 
+                                             js.details.push( { "name": lb, "text": cboption.text(), "value": cboption.val() } ); 
+                                        } 
+                                   }); 
+                              return js; 
+                              }, 
+                              seticon: function( isSpinning ) { 
+                              const dsb = "disabled"; 
+                              const hddn = "d-none"; 
+                              const icons = [ "#search-submit-icon", "#search-submit-icon-spin"]; 
+                              const bttn = jsSearchForm.controls.button; 
+                              const a = isSpinning ? 0 : 1; 
+                              const b = isSpinning ? 1 : 0; 
+                              $( icons[a] ).addClass( hddn ); 
+                              $( icons[b] ).removeClass( hddn ); 
+                                   if( isSpinning ) { 
+                                   $( bttn ).attr(dsb, dsb); 
+                                        } else { 
+                                   $( bttn ).removeAttr(dsb); 
+                                   } 
+                              }, 
+                              onsubmitclicked: function() { 
+                              const dsb = "disabled"; 
+                              let isValid = jsSearchForm.validate(); 
+                                   if(!isValid) { return; } 
+                              let submission = JSON.stringify( jsSearchForm.serialized() ); 
+                              let handler = window.jsHandler; 
+                                   if( undefined === handler || null === handler || !(handler) ) { return; } 
+                              jsSearchForm.seticon( true ); 
+                              var arr = jsSearchForm.fields; 
+                                   try { 
+                                   arr.forEach(a => $(a).attr(dsb, dsb)); 
+                                   handler.submit( "frm-search", submission ); 
+                                        } catch { 
+                                   jsSearchForm.seticon( false ); 
+                                   } 
+                                   finally { 
+                                   arr.forEach(a => $(a).removeAttr(dsb)); 
+                                   } 
+                              }, 
+                              validate: function() { 
+                              const errclass = "error"; 
+                              let emsg = $( jsSearchForm.controls.errormessage); 
+                              let js = jsSearchForm.serialized(); 
+                              emsg.addClass("d-none"); 
+                              emsg.text('Please fill all required fields.'); 
+                              if( null == js) return false; 
+                                   if( js.state.length == 0) { 
+                                   $( jsSearchForm.controls.state).addClass(errclass); 
+                                   emsg.text('State is a required field.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              $( jsSearchForm.controls.state).removeClass(errclass); 
+                                   if( js.county.value == '0') { 
+                                   $( jsSearchForm.controls.county).addClass(errclass); 
+                                   emsg.text('County is a required field.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              $( jsSearchForm.controls.county).removeClass(errclass); 
+                              let errors = []; 
+                                   $( jsSearchForm.controls.rows).each(function() { 
+                                   let $tr = $( this ); 
+                                        if( $tr.is(":not(:hidden)")) { 
+                                        const lb = $tr.find("label").text(); 
+                                        const cbo = $tr.find("select"); 
+                                        const cboption = cbo.find("option:selected"); 
+                                             if( null == cboption || null == cboption.val() || cboption.val().length == 0 ) { 
+                                             errors.push( "#" + cbo.attr("id") ); 
+                                             cbo.addClass(errclass); 
+                                                  if (errors.length == 1) { emsg.removeClass("d-none"); } 
+                                             } 
+                                             else { 
+                                             cbo.removeClass(errclass); 
+                                             } 
+                                        } 
+                                   }); 
+                                   if (errors.length > 0) { return false; } 
+                              $( jsSearchForm.controls.start).removeClass(errclass); 
+                                   if (isNaN(js.start)) { 
+                                   $( jsSearchForm.controls.start).addClass(errclass); 
+                                   emsg.text('Please enter a valid start date.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              $( jsSearchForm.controls.end).removeClass(errclass); 
+                                   if (isNaN(js.end)) { 
+                                   $( jsSearchForm.controls.end).addClass(errclass); 
+                                   emsg.text('Please enter a valid end date.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              let d1 = new Date(js.start); 
+                              let d2 = new Date(js.end); 
+                                   if (d2.getTime() < d1.getTime()) { 
+                                   $( jsSearchForm.controls.end).addClass(errclass); 
+                                   emsg.text('End date should be later than start date.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              var difference = Math.round(d2 - d1) / (1000 * 3600 * 24); 
+                                   if (difference > 7) { 
+                                   $( jsSearchForm.controls.end).addClass(errclass); 
+                                   emsg.text('Date range should be (7) days or less.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              const currentDate = new Date(); 
+                                   if (d1.getTime() > currentDate.getTime() ) { 
+                                   $( jsSearchForm.controls.start).addClass(errclass); 
+                                   emsg.text('Start date can not be in the future.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                                   if (d2.getTime() > currentDate.getTime() ) { 
+                                   $( jsSearchForm.controls.end).addClass(errclass); 
+                                   emsg.text('End date can not be in the future.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              const minumimDate = 1514764800095; 
+                                   if (d1.getTime() < minumimDate ) { 
+                                   $( jsSearchForm.controls.start).addClass(errclass); 
+                                   emsg.text('Start date can not be prior to Jan 1, 2018.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                                   if (d2.getTime() < minumimDate ) { 
+                                   $( jsSearchForm.controls.end).addClass(errclass); 
+                                   emsg.text('End date can not be prior to Jan 1, 2018.'); 
+                                   emsg.removeClass("d-none"); 
+                                   return false; 
+                                   } 
+                              return true; 
+                              }, 
+                              initialize: function() { 
+                              var jscontrols = jsSearchForm.controls; 
+                              $( jscontrols.state ).attr( "onchange", "jsSearchForm.stateChanged()" ); 
+                              $( jscontrols.county ).attr( "onchange", "jsSearchForm.countyChanged()" ); 
+                              $( jscontrols.button ).attr( "onclick", "jsSearchForm.onsubmitclicked()" ); 
+                              $( jscontrols.state ).val("0"); 
+                              $( jscontrols.county ).val("0"); 
+                              $( jscontrols.start ).val(null); 
+                              $( jscontrols.end ).val(null); 
+                              var arr = jsSearchForm.fields; 
+                              arr.push( jsSearchForm.controls.state ); 
+                              arr.push( jsSearchForm.controls.county ); 
+                              arr.push( jsSearchForm.controls.rows + " select" ); 
+                              arr.push( jsSearchForm.controls.start ); 
+                              arr.push( jsSearchForm.controls.end ); 
+                              arr.forEach(a => $(a).attr("onblur", "jsSearchForm.oncontrolleave()")); 
+                              }, 
+                              oncontrolleave: function() { 
+                              var arr = jsSearchForm.fields; 
+                              arr.forEach(a => $(a).removeClass('error')); 
+                              let emsg = $( jsSearchForm.controls.errormessage); 
+                                   if (!emsg.hasClass("d-none")) { jsSearchForm.validate(); } 
+                              }, 
+                              stateChanged: function(){ 
+                              const attrName = "dat-state-index"; 
+                              let cbo = $( jsSearchForm.controls.state ); 
+                              let cboCounty = $( jsSearchForm.controls.county ); 
+                              let rows = $( jsSearchForm.controls.rows ); 
+                              var a = jsSearchForm.attributes; 
+                              rows.attr( a.name, a.hide ); 
+                              cboCounty.val("0"); 
+                              var options = cboCounty.find("option").not("[value='0']"); 
+                              options.attr( a.name, a.hide ); 
+                              var attr = cbo.find("option:selected").attr(attrName); 
+                                   if ( null != attr && attr.length > 0) { 
+                                   let selector = "option[~0 = '~1']".replace('~0', attrName).replace('~1', attr); 
+                                   cboCounty.find(selector).removeAttr( a.name ); 
+                                   } 
+                              }, 
+                              containsCounty: function( rwselector, countyIndex ) { 
+                              let selector = $( rwselector ).find( "select" ); 
+                              if ( null == selector ) return false; 
+                              let search = "option[dat-county-index='~0']".replace('~0', countyIndex); 
+                              let children = selector.find( search ); 
+                              return children != null; 
+                              }, 
+                              countyOptionDisplay: function( rwselector, countyIndex ) { 
+                              let selector = $( rwselector ).find( "select" ); 
+                              if ( null == selector ) return; 
+                              let search = "option[dat-county-index='~0']".replace('~0', countyIndex); 
+                              let children = selector.find( search ); 
+                              var a = jsSearchForm.attributes; 
+                              var options = selector.find("option").not("[value='']"); 
+                              options.attr( a.name, a.hide ); 
+                              selector.val(''); 
+                              if ( children == null || children.length == 0 ) return; 
+                              let option1 = children.first(); 
+                              let groupName = option1.attr("dat-row-name"); 
+                                   if (groupName == null) { groupName = "Select:" } 
+                              $( rwselector ).find( "label").text( groupName ); 
+                              children.removeAttr( a.name ); 
+                              $( rwselector ).removeAttr( a.name ); 
+                              }, 
+                              countyChanged: function(){ 
+                              var a = jsSearchForm.attributes; 
+                              let cbo = $( jsSearchForm.controls.county ); 
+                              let countyId = cbo.val(); 
+                              let rows = $( jsSearchForm.controls.rows ); 
+                              rows.attr( a.name, a.hide ); 
+                                   rows.each( function( rw ) { 
+                                   let rowid = "#" + $(this).attr("id"); 
+                                   let hasCounty = jsSearchForm.containsCounty( rowid, countyId ); 
+                                        if ( hasCounty ) { 
+                                        // set options 
+                                        jsSearchForm.countyOptionDisplay( rowid, countyId ); 
+                                        } 
+                                   }); 
+                              } 
+                         } 
+                         let jssearchviews = { 
+                         "links": [ 
+                         "#nvlink-subcontent-search", 
+                         "#nvlink-subcontent-search-history", 
+                         "#nvlink-subcontent-search-purchases" ], 
+                         "views": [ 
+                         "#dv-search-container", 
+                         "#dv-subcontent-history", 
+                         "#dv-subcontent-purchases" ], 
+                              "setIndex": function( index ) { 
+                              const actv = "active"; 
+                              const search_parent = "#dv-subcontent-search"; 
+                              const dnone = "d-none"; 
+                              let id = parseInt( index ); 
+                                   if(isNaN(id) || id < 0 || id > 2) { return; } 
+                                   if (id == 0) { 
+                                   $( search_parent ).show(); 
+                                        } else { 
+                                   $( search_parent ).hide(); 
+                                   } 
+                                   for(let i = 0; i < jssearchviews.links.length; i++) { 
+                                   let nv = jssearchviews.links[i]; 
+                                   let vw = jssearchviews.views[i]; 
+                                        if( i == id ) { 
+                                        $( nv ).addClass(actv); 
+                                        $( vw ).addClass(actv); 
+                                        $( vw ).removeClass(dnone); 
+                                        $( vw ).show(); 
+                                             } else { 
+                                        $( nv ).removeClass(actv); 
+                                        $( vw ).removeClass(actv); 
+                                        $( vw ).hide(); 
+                                        } 
+                                   } 
+                              } 
+                         } 
+                         let jssearchpager = { 
+                         "pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager", "#cbo-subcontent-preview-pager" ], 
+                         "preview_name": "table[automationid='search-preview-table']", 
+                         "preview_content": null, 
+                              "preview_reset": function() { 
+                              jssearchpager.initialize(); 
+                              let previewName = jssearchpager.preview_name; 
+                              $( previewName ).html(jssearchpager.preview_content); 
+                              }, 
+                              "initialize": function() { 
+                                   if( null != jssearchpager.preview_content ) { return; } 
+                              let previewName = jssearchpager.preview_name; 
+                              jssearchpager.preview_content = $( previewName ).html(); 
+                              }, 
+                              get_status_class: function( searchStatus ) { 
+                                   if ( undefined == searchStatus || null == searchStatus ) { return null; } 
+                                   switch ( searchStatus ) { 
+                                   case "Completed": return "text-success"; 
+                                   case "Processing": return "text-warning-emphasis"; 
+                                   case "Error": return "text-danger"; 
+                                   default: return null; 
+                                   } 
+                              return null; 
+                              }, 
+                              bind_preview: function( jscontent ) { 
+                              const tableRowCount = 5; 
+                              const temp_mapping = [ 
+                              "case-number|caseNumber", 
+                              "case-type|caseType", 
+                              "court|court", 
+                              "date-filed|dateFiled", 
+                              "user-name|name" 
+                              ]; 
+                              const template = "".concat( 
+                              "<tr name='injected-content' data-row-number='0' data-page-number='0' data-position='even'>", 
+                              $("#tr-subcontent-preview-data-template").html(), 
+                              "</tr>"); 
+                              tempjs = JSON.parse(jscontent); 
+                                   if( tempjs.length === 0 ) { 
+                                   $("#frm-search-history-submit-button").click(); 
+                                   return; 
+                                   } 
+                              t_body = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tbody' ); 
+                              t_foot = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'tfoot' ); 
+                              t_foot.removeClass("d-none"); 
+                              $("#cbo-subcontent-preview-pager").html(""); 
+                                   tempjs.forEach(function(j) { 
+                                   t_body.append(template); 
+                                   }); 
+                              i_pos = 0; 
+                              $( "#tr-subcontent-preview-no-data" ).hide(); 
+                              $( "#td-subcontent-preview-record-count" ).text("".concat("Records: ", tempjs.length)); 
+                                   t_body.find("tr[name='injected-content']").each(function() { 
+                                   rw = $( this ); 
+                                   pgnbr = Math.floor(i_pos / tableRowCount); 
+                                   rw.attr( "data-row-number", i_pos ); 
+                                   rw.attr( "data-page-number", pgnbr); 
+                                   rw.attr( "data-position", i_pos % 2 == 0 ? "even" : "odd"); 
+                                        temp_mapping.forEach(function(m) { 
+                                        let src = tempjs[i_pos]; 
+                                        finder = "span[name='~0']".replace("~0",m.split('|')[0]); 
+                                        fld = m.split('|')[1]; 
+                                        rw.find( finder ).text( src[fld] ); 
+                                             if(m == "search-status") { 
+                                             let clsStatus = jssearchpager.get_status_class( src[fld] ); 
+                                                  if (clsStatus != null) { 
+                                                  rw.find( finder ).addClass(clsStatus); 
+                                                  } 
+                                             } 
+                                        }); 
+                                        if( pgnbr > 0 ) { rw.hide(); } 
+                                   i_pos++; 
+                                   }); 
+                              mxCount = tempjs.length; 
+                                   for (var i = 0; i < mxCount; i += tableRowCount){ 
+                                   pgnbr = Math.floor(i / tableRowCount); 
+                                   mx = Math.min(i + tableRowCount, mxCount); 
+                                   lbl = "".concat("Records: ", i + 1, " to ", mx); 
+                                   var child = "<option value='~0'>~1</option>".replace("~0", pgnbr).replace("~1", lbl); 
+                                   $("#cbo-subcontent-preview-pager").append(child); 
+                                   } 
+                              $("#cbo-subcontent-preview-pager").val(0); 
+                              $("#frm-search-history-submit-button").click(); 
+                              }, 
+                              "set_page": function( cboId ) { 
+                              let indx = parseInt( cboId ); 
+                                   if (isNaN(indx) || indx < 0 || indx > jssearchpager.pagers.length) { return; } 
+                              let keyname = jssearchpager.pagers[indx]; 
+                              let pg = $( keyname ).val(); 
+                              let rows = $( keyname ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+                                   rows.each(function(){ 
+                                   $current = $( this ); 
+                                   attr = $current.attr("data-page-number"); 
+                                   hscls = $current.attr("class"); 
+                                        if (typeof hscls !== typeof undefined && hscls !== false) { $current.removeAttr('class'); } 
+                                        if ( attr == pg ) { $current.show() } 
+                                        else { $current.hide(); } 
+                                   }); 
+                              $( keyname ).blur(); 
+                              }, 
+                              "get_preview_details" : function( rw ) { 
+                                   return { 
+                                   "requested-date": rw.querySelector("a").innerText, 
+                                   "state-abbr": rw.querySelector("span[name='state-abbr']").innerText, 
+                                   "county-name": rw.querySelector("span[name='county-name']").innerText, 
+                                   "begin-date": rw.querySelector("span[name='begin-date']").innerText, 
+                                   "ending-date": rw.querySelector("span[name='ending-date']").innerText, 
+                                   "search-status": rw.querySelector("span[name='search-status']").innerText 
+                                   } 
+                              }, 
+                              "show_preview": function( row_index ) { 
+                              jssearchpager.preview_reset(); 
+                              let indx = parseInt( row_index ); 
+                                   if (isNaN(indx)) { return; } 
+                              let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
+                              let historyName = jssearchpager.pagers[0]; 
+                              let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+                              let $rw = $rows[indx]; 
+                              let search_index = $rw.getAttribute('search-uuid'); 
+                                   if (undefined == search_index || null == search_index) { return; } 
+                              let details = jssearchpager.get_preview_details( $rw ); 
+                              let keyname = jssearchpager.pagers[2]; 
+                              let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' ); 
+                              let searchStatus = details["search-status"]; 
+                              const headings = [ 
+                              "requested-date", 
+                              "state-abbr", 
+                              "county-name", 
+                              "begin-date", 
+                              "ending-date", 
+                              "search-status" ]; 
+                              // populate table headings 
+                                   headings.forEach(function(h){ 
+                                   let finder = "span[name='~0']".replace("~0", h); 
+                                   heading.find(finder).text(details[h]); 
+                                        if(h == "search-status") { 
+                                        let clsStatus = jssearchpager.get_status_class( searchStatus ); 
+                                             if (clsStatus != null) { 
+                                             heading.find(finder).addClass(clsStatus); 
+                                             } 
+                                        } 
+                                   }); 
+                                   if( details["search-status"] != "Completed" ){ 
+                                   $("#frm-search-history-submit-button").click(); 
+                                   return; 
+                                   } 
+                              let handler = window.jsHandler; 
+                                   if( undefined === handler || null === handler || !(handler) ) { return; } 
+                                   var obj = JSON.stringify( { "id": search_index }); 
+                              handler.submit( "frm-search-preview", obj); 
+                              } 
+                         } 
+                    jsSearchForm.initialize(); 
+
+
+		</script>
+		<script name="verify-and-post">
+                         function verifyAndPost(pagename, buttonname) { 
+                         const domain = "http://internal.legalead.com/" 
+                         const target = "".concat(pagename, "/", buttonname); 
+                         const keyname = "".concat(pagename, "-", buttonname); 
+                         const destination = "".concat(domain, target); 
+                         const nonauthorization = [ "user", "home" ]; 
+                              if (buttonname.indexOf('logout') >= 0) { 
+                              window.location.href = destination; 
+                              return; 
+                              } 
+                         let isvalid = true; 
+                              let prms = { 
+                              "formname" : null, 
+                              "formid" : null, 
+                              "frm": null 
+                              }; 
+                              if(nonauthorization.find(x => x == pagename) == null) { 
+                              let sts = document.getElementById('spn-user-session-status'); 
+                              let attrSts = sts == null ? null : sts.getAttribute('value'); 
+                                   if (null !== attrSts && attrSts.indexOf('-') >= 0) { 
+                                   document.getElementById('btn-account-authorize-show').click(); 
+                                   return; 
+                                   } 
+                              } 
+                              switch (keyname) { 
+                              case "home-form-login-submit": 
+                              prms.formname = formNames[0]; 
+                              prms.formid = "#" + prms.formname; 
+                              prms.frm = $(prms.formid); 
+                              prms.frm.validate(); 
+                              isvalid = prms.frm.valid(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "home-form-register-submit": 
+                              prms.formname = formNames[1]; 
+                              prms.formid = "#" + prms.formname; 
+                              prms.frm = $(prms.formid); 
+                              prms.frm.validate(); 
+                              isvalid = prms.frm.valid(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "user-re-authorize": 
+                              isvalid = jsreauthorize.isvalid(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "myaccount-frm-change-password-submit-button": 
+                              prms.formname = "form-change-password"; 
+                              prms.formid = "#" + prms.formname; 
+                              prms.frm = $(prms.formid); 
+                              prms.frm.validate(); 
+                              isvalid = prms.frm.valid(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "myaccount-frm-permissions-submit-button": 
+                              isvalid = permissions_data.submission(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "myaccount-frm-profile-submit-button": 
+                              isvalid = profileSubmitButtonClicked(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              case "mysearch-search-submit-button": 
+                              isvalid = jsSearchForm.validate(); 
+                                   if( !isvalid ) { return; } 
+                              break; 
+                              } 
+                              if (isvalid) { 
+                              window.location.href = destination; 
+                              } 
+                         } 
+
+
+		</script>
+	
+<div class="modal-backdrop fade show"></div></body></html>

@@ -48,6 +48,12 @@ namespace legallead.desktop.js
                     clspreview.Complete();
                     return;
                 }
+                if (SearchForms[4] == formName)
+                {
+                    var clspreview = new JsPreviewCompleted(web, response.Message);
+                    clspreview.Complete();
+                    return;
+                }
                 SubmitCompleted();
             }
             catch (Exception ex)

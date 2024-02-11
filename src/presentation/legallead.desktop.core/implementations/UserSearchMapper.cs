@@ -31,9 +31,46 @@ namespace legallead.desktop.implementations
             var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
             if (items == null || items.Count == 0) return source;
             var document = ToDocument(source);
-            return TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
+            var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
+            var styled = ApplyHistoryStatus(ToDocument(transform), template);
+            return styled;
         }
 
+        private static string ApplyHistoryStatus(HtmlDocument document, MySearchSubstitutions substitutions)
+        {
+            var node = document.DocumentNode;
+            var table = node.SelectSingleNode(substitutions.Table);
+            if (table == null) return node.OuterHtml;
+            var tbody = table.SelectSingleNode("tbody");
+            if (tbody == null) return node.OuterHtml;
+            var rows = tbody.SelectNodes("//tr[@data-position]")?.ToList();
+            if (rows == null || rows.Count == 0) return node.OuterHtml;
+            rows.ForEach(row =>
+            {
+                var status = row.SelectNodes("td")?.ToList()[^1].SelectSingleNode("span");
+                var text = status?.InnerText.Trim();
+                if (status != null && !string.IsNullOrEmpty(text))
+                {
+                    var stsCss = GetStatusCss(text);
+                    if (stsCss != null)
+                    {
+                        var attr = document.CreateAttribute("class", stsCss);
+                        status.Attributes.Add(attr);
+                    }
+                }
+            });
+            return node.OuterHtml;
+        }
+        private static string? GetStatusCss(string searchStatus)
+        {
+            switch (searchStatus)
+            {
+                case "Completed": return "text-success";
+                case "Processing": return "text-warning-emphasis";
+                case "Error": return "text-danger";
+                default: return null;
+            }
+        }
         private readonly Dictionary<string, MySearchSubstitutions> Substitutions =
             new()
             {
