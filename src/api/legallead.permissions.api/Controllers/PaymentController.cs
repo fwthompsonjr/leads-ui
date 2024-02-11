@@ -62,6 +62,7 @@ namespace legallead.permissions.api.Controllers
                 };
                 return Ok(nocost);
             }
+            var intent = CreatePaymentIntent(amount);
             var successPg = $"{Request.Scheme}://{Request.Host}/payment-result?sts=success&id={guid}";
             var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
@@ -90,14 +91,31 @@ namespace legallead.permissions.api.Controllers
             });
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
+            session.PaymentIntent = intent;
             var response = new { 
                 session.Id,
-                session.PaymentIntentId,
-                clientSecret = session.RawJObject["client_secret"],
+                PaymentIntentId = intent.Id,
+                clientSecret = intent.ClientSecret,
                 externalId = data[0].ExternalId ?? string.Empty,
                 data
             };
             return Ok(response);
+        }
+
+
+        private static PaymentIntent CreatePaymentIntent(decimal amount)
+        {
+            var options = new PaymentIntentCreateOptions
+            {
+                Amount = Convert.ToInt64(amount * 100),
+                Currency = "usd",
+                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                {
+                    Enabled = true,
+                },
+            };
+            var service = new PaymentIntentService();
+            return service.Create(options);
         }
     }
 }
