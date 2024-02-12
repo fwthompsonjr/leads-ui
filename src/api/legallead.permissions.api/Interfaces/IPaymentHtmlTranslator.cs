@@ -2,6 +2,7 @@
 {
     public interface IPaymentHtmlTranslator
     {
-        bool IsRequestValid(string? status, string? id);
+        Task<bool> IsRequestValid(string? status, string? id);
+        Task<string> Transform(bool isvalid, string? status, string? id, string html);
     }
 }
