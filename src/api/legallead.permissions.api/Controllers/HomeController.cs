@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using legallead.permissions.api.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -6,11 +7,26 @@ namespace legallead.permissions.api.Controllers
     [Route("/")]
     public class HomeController : Controller
     {
+        private readonly IPaymentHtmlTranslator paymentSvc;
+        public HomeController(IPaymentHtmlTranslator service)
+        {
+            paymentSvc = service;
+        }
         [HttpGet]
         [Route("/")]
         public IActionResult Index()
         {
             var content = IndexHtml;
+            return Content(content, "text/html");
+        }
+
+        [HttpGet("/payment-result")]
+        public IActionResult PaymentLanding([FromQuery] string? sts, [FromQuery] string? id)
+        {
+            var isValid = paymentSvc.IsRequestValid(sts, id);
+            var content = 
+                isValid ? Properties.Resources.page_payment_completed
+                : Properties.Resources.page_payment_detail_invalid;
             return Content(content, "text/html");
         }
 

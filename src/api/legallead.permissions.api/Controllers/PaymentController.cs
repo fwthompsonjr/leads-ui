@@ -1,9 +1,6 @@
-﻿using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Stripe.Checkout;
-using Stripe;
-using legallead.permissions.api.Interfaces;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -13,11 +10,16 @@ namespace legallead.permissions.api.Controllers
     {
         private readonly PaymentStripeOption stripeOptions;
         private readonly ISearchInfrastructure infrastructure;
+        private readonly IStripeInfrastructure stripeService;
 
-        public PaymentController(PaymentStripeOption payment, ISearchInfrastructure infrastructure)
+        public PaymentController(
+            PaymentStripeOption payment,
+            ISearchInfrastructure infra,
+            IStripeInfrastructure stripe)
         {
             stripeOptions = payment;
-            this.infrastructure = infrastructure;
+            infrastructure = infra;
+            stripeService = stripe;
         }
 
         [HttpGet("product-codes")]
@@ -29,10 +31,7 @@ namespace legallead.permissions.api.Controllers
         [HttpGet]
         public IActionResult SessionStatus([FromQuery] string session_id)
         {
-            var sessionService = new SessionService();
-            Session session = sessionService.Get(session_id);
-            var response = new { status = session.RawJObject["status"], customer_email = session.RawJObject["customer_details"]["email"] };
-            return Ok(response);
+            return Ok(stripeService.SessionStatus(session_id));
         }
 
         [HttpPost("create-checkout-session")]
@@ -43,30 +42,11 @@ namespace legallead.permissions.api.Controllers
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
             var searches = await infrastructure.GetPreview(Request, guid);
             if (searches == null) return UnprocessableEntity(guid);
-            var options = new SessionCreateOptions
-            {
-                UiMode = "embedded",
-                LineItems = new List<SessionLineItemOptions>
-                {
-                  new() {
-                    // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    Price = "{{PRICE_ID}}",
-                    Quantity = 1,
-
-                  },
-                },
-                Metadata = new Dictionary<string, string>
-                {
-                    { "user-name", user.UserName },
-                    { "user-email", user.Email },
-                    { "product-type", request.ProductType }
-                },
-                Mode = "payment",
-                AutomaticTax = new SessionAutomaticTaxOptions { Enabled = true },
-            };
-            var service = new SessionService();
-            Session session = service.Create(options);
-            var response = new { clientSecret = session.RawJObject["client_secret"] };
+            var invoice = await infrastructure.CreateInvoice(user.Id, guid);
+            if (invoice == null || !invoice.Any()) return UnprocessableEntity(guid);
+            var data = invoice.ToList();
+            var model = new PaymentCreateModel(Request, user, guid, request.ProductType);
+            var response = await stripeService.CreatePaymentAsync(model, data);
             return Ok(response);
         }
     }

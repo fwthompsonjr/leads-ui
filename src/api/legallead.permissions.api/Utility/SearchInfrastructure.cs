@@ -130,6 +130,20 @@ namespace legallead.permissions.api.Utility
             return await _usrDb.GetUser(request);
         }
 
+        public async Task<IEnumerable<SearchInvoiceBo>?> CreateInvoice(string userid, string searchid)
+        {
+            var hasinvoice = await _repo.CreateInvoice(userid, searchid);
+            if (!hasinvoice) { return null; }
+            var records = await _repo.Invoices(userid, searchid);
+            return records;
+        }
+
+        public async Task<IEnumerable<SearchInvoiceBo>?> GetInvoices(string userid, string? searchid)
+        {
+            var records = await _repo.Invoices(userid, searchid);
+            return records;
+        }
+
         private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)
         {
             var user = await GetUser(http);

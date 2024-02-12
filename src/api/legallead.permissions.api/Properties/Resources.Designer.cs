@@ -187,6 +187,50 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			try {
+        ///				CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///			} catch {}		
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;styleshe [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_payment_completed {
+            get {
+                return ResourceManager.GetString("page_payment_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///			try {
+        ///				CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///			} catch {}		
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui&lt;/title&gt;
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;styleshe [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_payment_detail_invalid {
+            get {
+                return ResourceManager.GetString("page_payment_detail_invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to # leads-ui
         ///The ultimate lead sourcing application
         ///
@@ -205,7 +249,7 @@ namespace legallead.permissions.api.Properties {
         ///  &quot;dropDowns&quot;: [
         ///    {
         ///      &quot;id&quot;: 0,
-        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;name&quot;: &quot;Search Type&quot;,
         ///      &quot;options&quot;: [
         ///        {
         ///          &quot;id&quot;: 0,
@@ -225,7 +269,7 @@ namespace legallead.permissions.api.Properties {
         ///        },
         ///        {
         ///          &quot;id&quot;: 4,
-        ///          &quot;name&quot;: &quot;justice of  [rest of string was truncated]&quot;;.
+        ///          &quot;name&quot;: &quot;justice of the  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tx_collin_drop_down {
             get {
@@ -238,7 +282,7 @@ namespace legallead.permissions.api.Properties {
         ///  &quot;dropDowns&quot;: [
         ///    {
         ///      &quot;id&quot;: 0,
-        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;name&quot;: &quot;Court Selection&quot;,
         ///      &quot;options&quot;: [
         ///        {
         ///          &quot;id&quot;: 1,
@@ -271,7 +315,7 @@ namespace legallead.permissions.api.Properties {
         ///  &quot;dropDowns&quot;: [
         ///    {
         ///      &quot;id&quot;: 0,
-        ///      &quot;name&quot;: &quot;criminal courts&quot;,
+        ///      &quot;name&quot;: &quot;Search Type&quot;,
         ///      &quot;options&quot;: [
         ///        {
         ///          &quot;id&quot;: 0,
@@ -294,7 +338,8 @@ namespace legallead.permissions.api.Properties {
         ///          &quot;name&quot;: &quot;JP No. 2&quot;
         ///        },
         ///        {
-        ///          &quot;id&quot;: 5 [rest of string was truncated]&quot;;.
+        ///          &quot;id&quot;: 5,
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string tx_tarrant_drop_down {
             get {

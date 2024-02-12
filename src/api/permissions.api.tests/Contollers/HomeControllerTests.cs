@@ -1,4 +1,5 @@
 ﻿using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace permissions.api.tests.Contollers
@@ -8,7 +9,8 @@ namespace permissions.api.tests.Contollers
         [Fact]
         public void ControllerCanGetIndex()
         {
-            var controller = new HomeController();
+            var html = new Mock<IPaymentHtmlTranslator>();
+            var controller = new HomeController(html.Object);
             var indx = controller.Index();
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);

@@ -217,6 +217,43 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> IsValidExternalId(string externalId)
+        {
+            const string prc = "CALL USP_QUERY_IS_VALID_EXTERNAL_INDEX( ? );";
+            var parameters = new DynamicParameters();
+            parameters.Add("external_index", externalId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<IsValidExternalIndexDto>(connection, prc, parameters);
+            if (response == null) return false;
+            return response.IsFound.GetValueOrDefault();
+        }
+        public async Task<PurchaseSummaryDto?> GetPurchaseSummary(string externalId)
+        {
+            const string prc = "CALL USP_GET_PURCHASE_DETAIL_BY_EXTERNAL_ID( ? );";
+            var parameters = new DynamicParameters();
+            parameters.Add("external_index", externalId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<PurchaseSummaryDto>(connection, prc, parameters);
+            return response;
+        }
+
+        public async Task<bool> SetInvoicePurchaseDate(string externalId)
+        {
+            try
+            {
+                const string prc = "CALL USP_SET_INVOICE_PURCHASE_DATE( ? );";
+                var parameters = new DynamicParameters();
+                parameters.Add("external_index", externalId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static DynamicParameters GetParameters(SearchTargetTypes search, string? id, object data, string? keyname = null)
         {
 
