@@ -5,14 +5,18 @@
 	</h5>
 	<div class="row">
 		<h6 name="invoice-date" class="text-start">
-			<span name="invoice-date-label">Invoice Date: </span>
-			<span name="invoice-date" class="text-muted">{1}</span>
+			<span name="invoice-label" class="text-primary">Invoice: </span>
+			<span name="invoice" class="ml-2">{0}</span>
 		</h6>
 		<h6 class="text-start">
-			<span name="invoice-description-label">Description: </span>
-			<span name="invoice-description" class="text-muted">{2}</span>
+			<span name="invoice-date-label" class="text-primary">Invoice Date: </span>
+			<span name="invoice-date" class="ml-2">{1}</span>
 		</h6>
-		<ul name="invoice-line-items">
+		<h6 class="text-start">
+			<span name="invoice-description-label" class="text-primary">Description: </span>
+			<span name="invoice-description" class="ml-2">{2}</span>
+		</h6>
+		<ul name="invoice-line-items" class="list-group text-start w-75 m-2" style="background: transparent">
 			<!-- block: invoice-line-items -->
 		</ul>
 	</div>

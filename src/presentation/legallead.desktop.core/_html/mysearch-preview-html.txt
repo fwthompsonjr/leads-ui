@@ -82,7 +82,7 @@
         </div>
         <div class="modal-footer">
             <button id="my-search-preview-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-            <button id="my-search-preview-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
+            <button id="my-search-preview-bttn" type="button" class="btn btn-primary" onclick="jssearchpager.get_invoice()">Purchase</button>
         </div>
     </div>
   </div>

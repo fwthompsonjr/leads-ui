@@ -1,7 +1,13 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
+using HtmlAgilityPack;
+using legallead.desktop.entities;
+using legallead.desktop.utilities;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
+using System.Windows.Threading;
+using System.Windows;
 
 namespace legallead.desktop.handlers
 {
@@ -28,6 +34,33 @@ namespace legallead.desktop.handlers
                     web.ExecuteScriptAsync(s);
                 }
             });
+        }
+
+        public void Invoice()
+        {
+            var detail = JsonConvert.DeserializeObject<GenerateInvoiceResponse>(json);
+            var content = ContentProvider.LocalContentProvider.GetContent("invoice")?.Content;
+            var main = GetMain();
+            if (main == null) return;
+            content = TransformHtml(content, detail);
+            web?.SetHTML(main.Dispatcher, content);
+        }
+
+        private static string TransformHtml(string? html, GenerateInvoiceResponse? response)
+        {
+            if (response == null || string.IsNullOrEmpty(html)) return string.Empty;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var parentNode = doc.DocumentNode;
+            return parentNode.OuterHtml;
+        }
+
+        private static MainWindow? GetMain()
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            if (mainWindow is not MainWindow main) return null;
+            return main;
         }
         private static readonly List<string> scripts = new()
         {
