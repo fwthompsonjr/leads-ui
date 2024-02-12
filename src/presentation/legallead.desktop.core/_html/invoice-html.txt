@@ -10,6 +10,7 @@
 		<!-- block: common-headings -->
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
+		<script src="https://js.stripe.com/v3/"></script>
 		<style name="subcontent-css">
 
 			div.subcontent {
@@ -68,7 +69,7 @@
 
       <main role="main" class="inner cover">
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
-			<div id="dv-subcontent-invoice" name="subcontent-invoice"  class="subcontent card">
+			<div id="dv-subcontent-invoice" name="subcontent-invoice"  class="card">
 				<p>Invoice form</p>
             </div>
 		</div>
@@ -113,6 +114,13 @@
 		
 	/* js-include-common-reload */
 
+	</script>
+	<script name="checkout-stripe-js">
+		const stripe = Stripe("<!-- stripe public key -->");
+		const { clientSecret } = "<!-- stripe client secret -->";
+		const checkout = await stripe.initEmbeddedCheckout({ clientSecret, });
+		// Mount Checkout
+		checkout.mount('#checkout');
 	</script>
 	<!-- script: home-form-validation -->
 	<!-- script: common-client-include -->
