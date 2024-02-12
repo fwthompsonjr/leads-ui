@@ -16,5 +16,8 @@ namespace legallead.jdbc.interfaces
         Task<SearchRestrictionDto> GetSearchRestriction(string userId);
         Task<bool> CreateInvoice(string userId, string searchId);
         Task<IEnumerable<SearchInvoiceBo>> Invoices(string userId, string? searchId);
+        Task<PurchaseSummaryDto?> GetPurchaseSummary(string externalId);
+        Task<bool> SetInvoicePurchaseDate(string externalId);
+        Task<bool> IsValidExternalId(string externalId);
     }
 }

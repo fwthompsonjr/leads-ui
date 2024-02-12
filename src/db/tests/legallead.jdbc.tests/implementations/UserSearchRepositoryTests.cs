@@ -316,6 +316,98 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()
             ));
         }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoIsValidExternalId(bool? searchid)
+        {
+            IsValidExternalIndexDto? result =
+                searchid == null ? null :
+                new IsValidExternalIndexDto { IsFound = searchid };
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<IsValidExternalIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.IsValidExternalId(uid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<IsValidExternalIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Fact]
+        public async Task RepoGetPurchaseSummary()
+        {
+            var result = new PurchaseSummaryDto();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<PurchaseSummaryDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.GetPurchaseSummary(uid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<PurchaseSummaryDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Fact]
+        public async Task RepoSetInvoicePurchaseDateHappyPath()
+        {
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+            var response = await service.SetInvoicePurchaseDate(uid);
+            Assert.True(response);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Fact]
+        public async Task RepoSetInvoicePurchaseDateErrorPath()
+        {
+            var exception = faker.System.Exception();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).Throws(exception);
+            var response = await service.SetInvoicePurchaseDate(uid);
+            Assert.False(response);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+
         private sealed class RepoContainer
         {
             private readonly UserSearchRepository repo;
