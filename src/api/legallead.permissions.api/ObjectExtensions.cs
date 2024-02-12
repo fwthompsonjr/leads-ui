@@ -56,8 +56,8 @@ namespace legallead.permissions.api
             string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Test");
             var payment = MapOption(configuration);
             services.AddSingleton(payment);
-            services.AddSingleton<IStripeInfrastructure, StripeInfrastructure>();
-            services.AddSingleton<IPaymentHtmlTranslator, PaymentHtmlTranslator>();
+            services.AddScoped<IStripeInfrastructure, StripeInfrastructure>();
+            services.AddScoped<IPaymentHtmlTranslator, PaymentHtmlTranslator>();
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();

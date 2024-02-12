@@ -129,6 +129,10 @@ namespace legallead.desktop.implementations
             }
             var manager = Properties.Resources.ResourceManager;
             var resourceText = CommonReplacement(manager.GetString(item.Name));
+            if (string.IsNullOrEmpty(resourceText))
+            {
+                resourceText = CommonReplacement(manager.GetString(item.Name.Replace("-","_")));
+            }
             item.Content = resourceText;
         }
 

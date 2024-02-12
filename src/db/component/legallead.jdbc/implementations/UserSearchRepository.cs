@@ -61,12 +61,15 @@ namespace legallead.jdbc.implementations
 
         public async Task<bool> CreateInvoice(string userId, string searchId)
         {
-            const string prc = "CALL USP_APPEND_SEARCH_INVOICE_HEADER( ?, ? );";
+            var restriction = await GetSearchRestriction(userId);
+            var maxRecords = GetAdjustedRecordCount(restriction);
+            const string prc = "CALL USP_APPEND_SEARCH_INVOICE_HEADER( ?, ?, ? );";
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("uu_index", userId);
                 parameters.Add("search_index", searchId);
+                parameters.Add("max_records", maxRecords);
                 using var connection = _context.CreateConnection();
                 await _command.ExecuteAsync(connection, prc, parameters);
                 return true;
@@ -252,6 +255,14 @@ namespace legallead.jdbc.implementations
             {
                 return false;
             }
+        }
+        private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
+        {
+            const int count = 100000;
+            if (dto == null) return count;
+            var mxpermonth = dto.MaxPerMonth.GetValueOrDefault(count) - dto.ThisMonth.GetValueOrDefault();
+            var mxperyear = dto.MaxPerYear.GetValueOrDefault(count) - dto.ThisYear.GetValueOrDefault();
+            return Math.Min(mxpermonth, mxperyear);
         }
 
         private static DynamicParameters GetParameters(SearchTargetTypes search, string? id, object data, string? keyname = null)

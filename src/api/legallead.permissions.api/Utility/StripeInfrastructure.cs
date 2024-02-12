@@ -1,14 +1,19 @@
 ﻿using legallead.jdbc.entities;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Interfaces;
-using Stripe.Checkout;
-using Stripe;
-using System;
 using legallead.permissions.api.Models;
+using Stripe;
+using Stripe.Checkout;
 
 namespace legallead.permissions.api.Utility
 {
     public class StripeInfrastructure : IStripeInfrastructure
     {
+        private readonly IUserSearchRepository _repo;
+        public StripeInfrastructure(IUserSearchRepository repo)
+        {
+            _repo = repo;
+        }
         public async Task<object> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
@@ -18,6 +23,7 @@ namespace legallead.permissions.api.Utility
             if (amount <= minAmount)
             {
                 // close invoice as paid
+                await _repo.SetInvoicePurchaseDate(externalId);
                 var nocost = new
                 {
                     Id = Guid.Empty.ToString("D"),
@@ -74,8 +80,9 @@ namespace legallead.permissions.api.Utility
         {
             var sessionService = new SessionService();
             Session session = sessionService.Get(sessionId);
-            return new { 
-                status = session.RawJObject["status"], 
+            return new
+            {
+                status = session.RawJObject["status"],
                 customer_email = session.RawJObject["customer_details"]["email"]
             };
         }

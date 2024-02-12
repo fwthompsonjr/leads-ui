@@ -21,12 +21,13 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpGet("/payment-result")]
-        public IActionResult PaymentLanding([FromQuery] string? sts, [FromQuery] string? id)
+        public async Task<IActionResult> PaymentLanding([FromQuery] string? sts, [FromQuery] string? id)
         {
-            var isValid = paymentSvc.IsRequestValid(sts, id);
+            var isValid = await paymentSvc.IsRequestValid(sts, id);
             var content = 
                 isValid ? Properties.Resources.page_payment_completed
                 : Properties.Resources.page_payment_detail_invalid;
+            content = await paymentSvc.Transform(isValid, sts, id, content);
             return Content(content, "text/html");
         }
 

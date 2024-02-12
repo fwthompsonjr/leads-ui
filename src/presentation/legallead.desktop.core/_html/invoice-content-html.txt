@@ -3,17 +3,24 @@
 		<span name="invoice-label">Invoice: </span>
 		<span name="invoice" class="text-muted">{0}</span>
 	</h5>
-	<h6 name="invoice-date" class="text-start">
-		<span name="invoice-date-label">Invoice Date: </span>
-		<span name="invoice-date" class="text-muted">{1}</span>
-	</h6>
-	<h6 class="text-start">
-		<span name="invoice-description-label">Description: </span>
-		<span name="invoice-description" class="text-muted">{2}</span>
-	</h6>
-	<ul name="invoice-line-items">
-		<!-- block: invoice-line-items -->
-	</ul>
+	<div class="row">
+		<h6 name="invoice-date" class="text-start">
+			<span name="invoice-date-label">Invoice Date: </span>
+			<span name="invoice-date" class="text-muted">{1}</span>
+		</h6>
+		<h6 class="text-start">
+			<span name="invoice-description-label">Description: </span>
+			<span name="invoice-description" class="text-muted">{2}</span>
+		</h6>
+		<ul name="invoice-line-items">
+			<!-- block: invoice-line-items -->
+		</ul>
+	</div>
+	<div class="row">
+		<div id="checkout">
+			<!-- Checkout will insert the payment form here -->
+		</div>
+	</div>
 </div>
 <div class="card-footer">
 	<div id="frm-invoice-error-message" class="d-none">

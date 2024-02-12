@@ -98,24 +98,25 @@
 						<div name="payment-details-data" style="position: relative; left: -80px">
 							<div class="row" style="visibility:hidden"> - </div>
 							<div class="row">
-								<div class="col-5">Payment Date:</div>
-								<div name="payment-details-payment-date" class="col-6 ml-2 text-secondary"> -</div>
+								<div class="col-4">Payment Date:</div>
+								<div name="payment-details-payment-date" class="col-8 ml-2 text-secondary"> -</div>
 							</div>
 							<div class="row">
-								<div class="col-5">Product:</div>
-								<div name="payment-details-payment-product" class="col-6 ml-2 text-secondary"> - </div>
+								<div class="col-4">Product:</div>
+								<div name="payment-details-payment-product" class="col-8 ml-2 text-secondary"> - </div>
 							</div>
 							<div class="row">
-								<div class="col-5">Amount:</div>
-								<div name="payment-details-payment-amount" class="col-6 ml-2 text-secondary">- </div>
+								<div class="col-4">Amount:</div>
+								<div name="payment-details-payment-amount" class="col-8 ml-2 text-secondary">- </div>
 							</div>
 							<div class="row">
-								<div class="col-5">Reference Id:</div>
-								<div name="payment-details-reference-id" class="col-6 ml-2 text-secondary"> -</div>
+								<div class="col-4">Reference Id:</div>
+								<div name="payment-details-reference-id" class="col-8 ml-2 text-secondary"> -</div>
 							</div>
 							<div name="payment-details-reference-callout" style="visibility:hidden" class="row">
-								<div class="col-5">Reference Callout:</div>
-								<div class="col-6 ml-2 text-secondary"> Please keep this reference number for your records.</div>
+								<div class="text-secondary"> 
+									<small>Please keep this reference number for your records.</small>
+								</div>
 							</div>
 						</div>
 					</div>
