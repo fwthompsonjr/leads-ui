@@ -17,6 +17,7 @@ namespace legallead.permissions.api.Utility
         public async Task<object> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
+            var description = await _repo.InvoiceDescription(model.SearchId);
             var externalId = data[0].ExternalId ?? model.SearchId;
             var amount = data.Sum(x => x.Price.GetValueOrDefault(0));
             const decimal minAmount = 0.50m;
@@ -30,6 +31,7 @@ namespace legallead.permissions.api.Utility
                     PaymentIntentId = Guid.Empty.ToString("D"),
                     clientSecret = string.Empty,
                     externalId,
+                    description,
                     data
                 };
                 return nocost;
@@ -71,6 +73,7 @@ namespace legallead.permissions.api.Utility
                 PaymentIntentId = intent.Id,
                 clientSecret = intent.ClientSecret,
                 externalId = data[0].ExternalId ?? string.Empty,
+                description,
                 data
             };
             return response;
