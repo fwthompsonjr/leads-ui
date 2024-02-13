@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc.entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.jdbc.models
 {
@@ -23,6 +24,7 @@ namespace legallead.jdbc.models
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Test coverage through integration tests")]
         public static bool IsPasswordMatched(string password, User model)
         {
             try
