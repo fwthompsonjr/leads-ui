@@ -1,5 +1,4 @@
 ﻿using legallead.desktop.implementations;
-using System.Diagnostics;
 
 namespace legallead.desktop.tests.implementations
 {
@@ -113,7 +112,7 @@ namespace legallead.desktop.tests.implementations
             if (expected)
             {
                 Assert.NotNull(actual);
-                Assert.False(string.IsNullOrWhiteSpace(actual.Content));                
+                Assert.False(string.IsNullOrWhiteSpace(actual.Content));
             }
             else
                 Assert.Null(actual);

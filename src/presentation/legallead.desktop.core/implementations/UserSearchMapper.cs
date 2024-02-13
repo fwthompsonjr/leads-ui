@@ -138,7 +138,7 @@ namespace legallead.desktop.implementations
             td.InnerHtml = $"Records: {data.Count}";
             cbo.ChildNodes.Clear();
             var doc = table.OwnerDocument;
-            if(data.Count > 0 && tfoot.Attributes["class"] != null)
+            if (data.Count > 0 && tfoot.Attributes["class"] != null)
             {
                 var attr = tfoot.Attributes["class"];
                 attr.Value = attr.Value.Replace("d-none", "").Trim();

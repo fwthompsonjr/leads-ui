@@ -131,7 +131,7 @@ namespace legallead.desktop.implementations
             var resourceText = CommonReplacement(manager.GetString(item.Name));
             if (string.IsNullOrEmpty(resourceText))
             {
-                resourceText = CommonReplacement(manager.GetString(item.Name.Replace("-","_")));
+                resourceText = CommonReplacement(manager.GetString(item.Name.Replace("-", "_")));
             }
             item.Content = resourceText;
         }

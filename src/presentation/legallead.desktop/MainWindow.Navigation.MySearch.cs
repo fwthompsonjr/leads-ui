@@ -60,11 +60,12 @@ namespace legallead.desktop
             var user = provider.GetService<UserBo>();
             var api = provider.GetService<IPermissionApi>();
             var mapper = provider.GetService<IUserSearchMapper>();
-            if (user == null || 
-                !user.IsAuthenicated || 
+            if (user == null ||
+                !user.IsAuthenicated ||
                 api == null ||
                 mapper == null) return;
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 _ = Dispatcher.Invoke(async () =>
                 {
                     var container = contentMySearch.Content;

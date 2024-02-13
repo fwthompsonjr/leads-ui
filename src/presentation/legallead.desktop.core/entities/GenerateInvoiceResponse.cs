@@ -10,6 +10,9 @@ namespace legallead.desktop.entities
         [JsonProperty("paymentIntentId")]
         public string? PaymentIntentId { get; set; }
 
+        [JsonProperty("description")]
+        public string? Description { get; set; }
+
         [JsonProperty("clientSecret")]
         public string? ClientSecret { get; set; }
 
