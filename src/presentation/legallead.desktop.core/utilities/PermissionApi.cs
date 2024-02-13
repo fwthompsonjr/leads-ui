@@ -181,7 +181,8 @@ namespace legallead.desktop.utilities
             { "permissions-set-discount", "{0}/api/permissions/set-discount" },
             { "permissions-set-permission", "{0}/api/permissions/set-permission" },
             { "search-get-history", "{0}/api/search/my-searches" },
-            { "search-get-preview", "{0}/api/search/my-search-preview" }
+            { "search-get-preview", "{0}/api/search/my-search-preview" },
+            { "search-get-invoice", "{0}/api/payment/create-checkout-session" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)

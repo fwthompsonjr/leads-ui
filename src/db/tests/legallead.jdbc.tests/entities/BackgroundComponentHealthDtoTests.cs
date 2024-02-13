@@ -9,6 +9,7 @@ namespace legallead.jdbc.tests.entities
         private static readonly Faker<BackgroundComponentHealthDto> faker =
             new Faker<BackgroundComponentHealthDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LineNbr, y => y.Random.Int(5, 25055))
             .RuleFor(x => x.ComponentId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.HealthId, y => y.Random.Int(5, 25055))
             .RuleFor(x => x.Health, y => y.Hacker.Phrase())
@@ -54,8 +55,9 @@ namespace legallead.jdbc.tests.entities
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("ComponentId")]
         [InlineData("HealthId")]
+        [InlineData("ComponentId")]
+        [InlineData("LineNbr")]
         [InlineData("Health")]
         [InlineData("CreateDate")]
         public void BackgroundComponentHealthDtoHasExpectedFieldDefined(string name)
@@ -69,6 +71,7 @@ namespace legallead.jdbc.tests.entities
 
         [Theory]
         [InlineData("Id")]
+        [InlineData("LineNbr")]
         [InlineData("ComponentId")]
         [InlineData("HealthId")]
         [InlineData("Health")]

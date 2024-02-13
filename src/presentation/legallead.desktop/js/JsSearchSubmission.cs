@@ -51,7 +51,7 @@ namespace legallead.desktop.js
                 if (SearchForms[4] == formName)
                 {
                     var clspreview = new JsPreviewCompleted(web, response.Message);
-                    clspreview.Complete();
+                    clspreview.Invoice();
                     return;
                 }
                 SubmitCompleted();
@@ -97,7 +97,8 @@ namespace legallead.desktop.js
             { "frm-search", "profile-edit-contact-name" },
             { "frm-search-history", "profile-edit-contact-address" },
             { "frm-search-purchases", "profile-edit-contact-phone" },
-            { "frm-search-preview", "search-get-preview" }
+            { "frm-search-preview", "search-get-preview" },
+            { "frm-search-invoice", "search-get-invoice" }
         };
 
         private static readonly Dictionary<string, Type> PayloadMap = new()
@@ -105,7 +106,8 @@ namespace legallead.desktop.js
             { "frm-search", typeof(UserSearchBo) },
             { "frm-search-history", typeof(ContactAddress[]) },
             { "frm-search-purchases", typeof(ContactPhone[]) },
-            { "frm-search-preview", typeof(SearchPreviewModel) }
+            { "frm-search-preview", typeof(SearchPreviewModel) },
+            { "frm-search-invoice", typeof(GenerateInvoiceModel) }
         };
 
         private static readonly List<string> scriptNames = new()

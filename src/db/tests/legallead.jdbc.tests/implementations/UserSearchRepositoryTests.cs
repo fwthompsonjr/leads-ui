@@ -81,6 +81,27 @@ namespace legallead.jdbc.tests.implementations
         }
 
         [Fact]
+        public async Task RepoGetInvoiceDescriptionHappyPath()
+        {
+            var result = new InvoiceDescriptionDto();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<InvoiceDescriptionDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            await service.InvoiceDescription(uid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<InvoiceDescriptionDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Fact]
         public async Task RepoContentExceptionAreCaught()
         {
             var exception = faker.System.Exception;

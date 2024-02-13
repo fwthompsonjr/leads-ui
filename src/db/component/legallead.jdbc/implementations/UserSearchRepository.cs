@@ -21,7 +21,6 @@ namespace legallead.jdbc.implementations
             using var connection = _context.CreateConnection();
             var response = await _command.QuerySingleOrDefaultAsync<SearchRestrictionDto>(connection, command);
             return response ?? new();
-
         }
 
         public async Task<IEnumerable<SearchDtoHeader>> History(string userId)
@@ -51,11 +50,7 @@ namespace legallead.jdbc.implementations
             var command = string.Format(prc, searchId);
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<SearchPreviewDto>(connection, command);
-            var translation = response.Select(x =>
-            {
-                var tmp = JsonConvert.SerializeObject(x);
-                return JsonConvert.DeserializeObject<SearchPreviewBo>(tmp) ?? new();
-            });
+            var translation = response.Select(x => TranslateTo<SearchPreviewBo>(x));
             return translation;
         }
 
@@ -89,11 +84,7 @@ namespace legallead.jdbc.implementations
             parameters.Add("search_index", searchId);
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<SearchInvoiceDto>(connection, prc, parameters);
-            var translation = response.Select(x =>
-            {
-                var tmp = JsonConvert.SerializeObject(x);
-                return JsonConvert.DeserializeObject<SearchInvoiceBo>(tmp) ?? new();
-            });
+            var translation = response.Select(x => TranslateTo<SearchInvoiceBo>(x));
             return translation;
         }
 
@@ -256,6 +247,16 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
+
+        public async Task<InvoiceDescriptionDto> InvoiceDescription(string id)
+        {
+            const string prc = "CALL USP_GET_INVOICE_DESCRIPTION( '{0}' );";
+            var command = string.Format(prc, id);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<InvoiceDescriptionDto>(connection, command);
+            return response ?? new();
+        }
+
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
         {
             const int count = 100000;
@@ -285,6 +286,12 @@ namespace legallead.jdbc.implementations
             }
             return dapperParm;
         }
+        private static T TranslateTo<T>(object source) where T : class, new()
+        {
+
+            var tmp = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<T>(tmp) ?? new();
+        }
 
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
@@ -293,6 +300,7 @@ namespace legallead.jdbc.implementations
             { SearchTargetTypes.Status, "CALL USP_APPEND_USER_SEARCH_STATUS( ?, ? );" },
             { SearchTargetTypes.Staging, "CALL USP_APPEND_USER_SEARCH_STAGING( ?, ?, ?, ? );" },
             };
+
         private static readonly Dictionary<SearchTargetTypes, string> QueryProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_QUERY_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_QUERY_USER_SEARCH_REQUEST( ?, ? );" },

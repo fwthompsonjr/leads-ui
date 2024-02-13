@@ -16,6 +16,7 @@ namespace legallead.jdbc.helpers
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Test coverage through integration tests")]
         public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string sql, DynamicParameters? arg = null)
             where T : BaseDto, new()
         {
@@ -25,6 +26,7 @@ namespace legallead.jdbc.helpers
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Test coverage through integration tests")]
         public async Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection conn, string sql, DynamicParameters? arg = null)
             where T : BaseDto, new()
         {
@@ -96,6 +98,7 @@ namespace legallead.jdbc.helpers
             return cmmd;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private static testing from parent method.")]
         private static object GetFieldValue(IDataReader reader, int index)
         {
             var data = reader[index];
