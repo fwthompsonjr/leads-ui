@@ -307,6 +307,8 @@ let jssearchpager = {
 				case "Completed": return "text-success";
 				case "Processing": return "text-warning-emphasis";
 				case "Error": return "text-danger";
+				case "Purchased": return "text-info";
+				case "Downloaded": return "text-primary";
 				default: return null;
 			}
 			return null;
@@ -431,9 +433,12 @@ let jssearchpager = {
 		});
 		finder = "span[name='search-uuid']";
 		heading.find(finder).text(search_index);
-		if( details["search-status"] != "Completed" ){
+		if ( details["search-status"] != "Completed" ){
 			$("#frm-search-history-submit-button").click();
+			$("my-search-preview-bttn").attr("disabled", "disabled");
 			return;
+		} else {
+			$("my-search-preview-bttn").removeAttr("disabled");
 		}
 		let handler = window.jsHandler;
 		if( undefined === handler || null === handler || !(handler) ) { return; }
@@ -441,6 +446,12 @@ let jssearchpager = {
 		handler.submit( "frm-search-preview", obj);
         },
 		get_invoice: function() {
+			let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
+			let finder = "span[name='~0']".replace("~0", "search-status");
+			if ( $( finder ).text() != "Completed") {
+				$("#my-search-preview-bttn-close").click();
+				return;
+			}
 			let handler = window.jsHandler;
 			if( undefined === handler || null === handler || !(handler) ) { return; }
 			$("#my-search-preview-bttn").attr("disabled", "disabled");

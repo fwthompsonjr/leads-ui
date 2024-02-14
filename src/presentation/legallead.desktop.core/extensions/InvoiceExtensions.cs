@@ -16,7 +16,7 @@ namespace legallead.desktop.extensions
         
         */
 
-        public static string GetHtml(this GenerateInvoiceResponse? response, string html)
+        public static string GetHtml(this GenerateInvoiceResponse? response, string html, string paymentKey)
         {
             const string dash = " - ";
             if (response == null) return html;
@@ -33,13 +33,13 @@ namespace legallead.desktop.extensions
                 detailNode.AppendChild(li);
             });
             var createDate = response.Data[0].CreateDate.GetValueOrDefault().ToString("f");
-            var totalCost = response.Data.Sum(x => x.Price.GetValueOrDefault()).ToString("c");
+            var totalCost = response.Data.Sum(x => x.Price.GetValueOrDefault());
             var replacements = new Dictionary<string, string>()
             {
                 { "//span[@name='invoice']", response.ExternalId ?? dash },
                 { "//span[@name='invoice-date']", createDate },
                 { "//span[@name='invoice-description']", GetDescription(response.Description, dash) },
-                { "//span[@name='invoice-total']", totalCost ?? dash }
+                { "//span[@name='invoice-total']", totalCost.ToString("c") ?? dash }
             };
             var keys = replacements.Keys.ToList();
             keys.ForEach(key =>
@@ -47,9 +47,38 @@ namespace legallead.desktop.extensions
                 var span = parentNode.SelectSingleNode(key);
                 if (span != null) span.InnerHtml = replacements[key];
             });
-            return parentNode.OuterHtml;
+            if (totalCost < 0.50f)
+            {
+                RemoveCheckout(parentNode);
+                return parentNode.OuterHtml;
+            }
+            var outerHtml = parentNode.OuterHtml;
+            outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
+            outerHtml = outerHtml.Replace("<!-- stripe client secret -->", response.ClientSecret ?? dash);
+            doc = new HtmlDocument();
+            doc.LoadHtml(outerHtml);
+            return doc.DocumentNode.OuterHtml;
         }
 
+        private static void RemoveCheckout(HtmlNode parentNode)
+        {
+            var stripejs = "//script[@name='stripe-api']";
+            var chkoutjs = "//script[@name='checkout-stripe-js']";
+            var chkoutdv = "//*[@id='checkout']";
+            var elements = new[] {
+                chkoutdv,
+                stripejs
+            };
+            foreach (var elem in elements) 
+            { 
+                var node = parentNode.SelectSingleNode(elem);
+                if (node != null) {
+                    node.ParentNode.RemoveChild(node);
+                }
+            }
+            var script = parentNode.SelectSingleNode(chkoutjs);
+            if (script != null) { script.InnerHtml = string.Empty; }
+        }
 
         private static HtmlNode GetItem(this InvoiceResponseData data, HtmlDocument document)
         {

@@ -48,7 +48,10 @@ namespace legallead.desktop
             var targetWindow = GetBrowserTarget(parentView);
             if (targetWindow is not ChromiumWebBrowser web) return;
 
-            var jscript = string.Format(JsScriptTokenFormat, directions[1]);
+            var jscript = string.Concat(
+                "if ( typeof setDisplay == 'function' ) { ", 
+                string.Format(JsScriptTokenFormat, directions[1]),
+                "}");
             var replacements = new Dictionary<string, string>()
             {
                 { UserScriptActivationFalse, UserScriptActivationTrue },

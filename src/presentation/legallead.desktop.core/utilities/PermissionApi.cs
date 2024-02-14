@@ -89,6 +89,15 @@ namespace legallead.desktop.utilities
             return new KeyValuePair<bool, ApiResponse>(true, accepted);
         }
 
+
+        public virtual async Task<ApiResponse> Get(string name, Dictionary<string, string> parameters)
+        {
+            var resp = await Task.Run(() =>
+            {
+                return new ApiResponse { StatusCode = 500, Message = $"Invalid procedure call" };
+            });
+            return resp;
+        }
         public virtual async Task<ApiResponse> Get(string name, UserBo user)
         {
             if (!user.IsAuthenicated)
@@ -162,7 +171,8 @@ namespace legallead.desktop.utilities
             { "application-state-configuration", "{0}/api/application/state-configuration" },
             { "user-permissions-list", "{0}/api/lists/user-permissions" },
             { "user-us-county-list", "{0}/api/lists/us-county-list" },
-            { "user-us-state-list", "{0}/api/lists/us-state-list" }
+            { "user-us-state-list", "{0}/api/lists/us-state-list" },
+            { "user-zero-payment", "{0}/payment-result?sts=success&id=~0" }
         };
 
         protected static readonly Dictionary<string, string> PostAddresses = new()

@@ -618,17 +618,16 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to &lt;div class=&quot;card-body&quot;&gt;
         ///	&lt;h5 class=&quot;card-title text-start&quot;&gt;
         ///		&lt;span name=&quot;invoice-label&quot;&gt;Invoice: &lt;/span&gt;
-        ///		&lt;span name=&quot;invoice&quot; class=&quot;text-muted&quot;&gt;{0}&lt;/span&gt;
+        ///		&lt;span automationid=&apos;search-uuid&apos; name=&quot;invoice&quot; class=&quot;text-light&quot;&gt;{0}&lt;/span&gt;
         ///	&lt;/h5&gt;
-        ///	&lt;h6 name=&quot;invoice-date&quot; class=&quot;text-start&quot;&gt;
-        ///		&lt;span name=&quot;invoice-date-label&quot;&gt;Invoice Date: &lt;/span&gt;
-        ///		&lt;span name=&quot;invoice-date&quot; class=&quot;text-muted&quot;&gt;{1}&lt;/span&gt;
-        ///	&lt;/h6&gt;
-        ///	&lt;h6 class=&quot;text-start&quot;&gt;
-        ///		&lt;span name=&quot;invoice-description-label&quot;&gt;Description: &lt;/span&gt;
-        ///		&lt;span name=&quot;invoice-description&quot; class=&quot;text-muted&quot;&gt;{2}&lt;/span&gt;
-        ///	&lt;/h6&gt;
-        ///	&lt;ul nam [rest of string was truncated]&quot;;.
+        ///	&lt;div class=&quot;row&quot;&gt;
+        ///		&lt;h6 class=&quot;text-start&quot;&gt;
+        ///			&lt;span name=&quot;invoice-date-label&quot; class=&quot;text-primary&quot;&gt;Invoice Date: &lt;/span&gt;
+        ///			&lt;span name=&quot;invoice-date&quot; class=&quot;ml-2&quot;&gt;{1}&lt;/span&gt;
+        ///		&lt;/h6&gt;
+        ///		&lt;h6 class=&quot;text-start&quot;&gt;
+        ///			&lt;span name=&quot;invoice-description-label&quot; class=&quot;text-primary&quot;&gt;Description: &lt;/span&gt;
+        ///			&lt;span name [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string invoice_content_html {
             get {
@@ -649,16 +648,34 @@ namespace legallead.desktop.Properties {
         ///		&lt;!-- block: common-headings --&gt;
         ///		&lt;!-- common styles --&gt;	
         ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
-        ///		&lt;style name=&quot;subcontent-css&quot;&gt;
-        ///
-        ///			div.subcontent {
-        ///				width: 50%; 
-        ///				min-width: 400px;
-        ///			 [rest of string was truncated]&quot;;.
+        ///		&lt;script name=&quot;stripe-api&quot; src=&quot;https://js.stripe.com/v3/&quot;&gt;&lt;/script&gt;
+        ///		&lt;style name=&quot;subcontent-css [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string invoice_html {
             get {
                 return ResourceManager.GetString("invoice_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;invoice-form-js&quot;&gt;
+        ///
+        ///let jsinvoicing = { 
+        ///		close_invoice: function() {
+        ///			var dv_checkout = document.getElementById(&apos;checkout&apos;);
+        ///			if (undefined == dv_checkout || null == dv_checkout) {
+        ///				let handler = window.jsHandler;
+        ///				if( undefined === handler || null === handler || !(handler) ) { return; }
+        ///				finder = &quot;span[automationid=&apos;search-uuid&apos;]&quot;;
+        ///				var obj = JSON.stringify( { &quot;id&quot;: $( finder ).text() });
+        ///				handler.fetch( &quot;frm-search-make-payment&quot;, obj);
+        ///			}	
+        ///		},
+        ///		close_invo [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string invoice_submission_js {
+            get {
+                return ResourceManager.GetString("invoice_submission_js", resourceCulture);
             }
         }
         

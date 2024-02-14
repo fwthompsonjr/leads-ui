@@ -63,13 +63,15 @@ namespace legallead.desktop.implementations
         }
         private static string? GetStatusCss(string searchStatus)
         {
-            switch (searchStatus)
+            return searchStatus switch
             {
-                case "Completed": return "text-success";
-                case "Processing": return "text-warning-emphasis";
-                case "Error": return "text-danger";
-                default: return null;
-            }
+                "Completed" => "text-success",
+                "Processing" => "text-warning-emphasis",
+                "Error" => "text-danger",
+                "Purchased" => "text-info",
+                "Downloaded" => "text-primary",
+                _ => null,
+            };
         }
         private readonly Dictionary<string, MySearchSubstitutions> Substitutions =
             new()

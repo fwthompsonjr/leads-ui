@@ -289,6 +289,7 @@ namespace legallead.desktop.implementations
         private const string JsMyAccountPermissions = "/* inject: permissions-validation script */";
         private const string JsMySearchBehavior = "<!-- script: my-search-searching-behaviors -->";
         private const string JsVerifyAndPost = "<!-- script: verify-and-post -->";
+        private const string JsCloseInvoice = "<!-- script: invoice-submission-include -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -321,6 +322,7 @@ namespace legallead.desktop.implementations
             { JsMyAccountPermissions, Properties.Resources.myaccount_permissions_validation_js },
             { JsMySearchBehavior, Properties.Resources.mysearch_script_js },
             { JsVerifyAndPost, Properties.Resources.verifyandpost_js },
+            { JsCloseInvoice, Properties.Resources.invoice_submission_js },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

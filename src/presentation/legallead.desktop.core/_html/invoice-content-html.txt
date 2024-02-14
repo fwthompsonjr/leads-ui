@@ -1,7 +1,7 @@
 <div class="card-body">
 	<h5 class="card-title text-start">
 		<span name="invoice-label">Invoice: </span>
-		<span name="invoice" class="text-light">{0}</span>
+		<span automationid='search-uuid' name="invoice" class="text-light">{0}</span>
 	</h5>
 	<div class="row">
 		<h6 class="text-start">
@@ -30,7 +30,7 @@
 	<div id="frm-invoice-error-message" class="d-none">
 		<!-- Error messages -->
 	</div>
-	<button id="frm-invoice-submit-button" class="btn btn-primary">
+	<button id="frm-invoice-submit-button" class="btn btn-primary" onclick="jsinvoicing.close_invoice()">
 		<i id="form-invoice-icon" class="bi bi-pencil-square" ></i>
 		<i id="form-invoice-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
 	</button>

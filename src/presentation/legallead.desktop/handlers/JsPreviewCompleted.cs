@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
+using Microsoft.Extensions.Configuration;
 
 namespace legallead.desktop.handlers
 {
@@ -49,7 +50,8 @@ namespace legallead.desktop.handlers
         private static string TransformHtml(string? html, GenerateInvoiceResponse? response)
         {
             if (response == null || string.IsNullOrEmpty(html)) return string.Empty;
-            return response.GetHtml(html);
+            var config = AppBuilder.Configuration?.GetValue<string>("stripe:key") ?? string.Empty;
+            return response.GetHtml(html, config);
         }
 
         private static MainWindow? GetMain()
