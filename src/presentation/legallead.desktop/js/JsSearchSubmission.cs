@@ -94,7 +94,7 @@ namespace legallead.desktop.js
 
         private static readonly Dictionary<string, string> AddressMap = new()
         {
-            { "frm-search", "profile-edit-contact-name" },
+            { "frm-search", "search-begin" },
             { "frm-search-history", "profile-edit-contact-address" },
             { "frm-search-purchases", "profile-edit-contact-phone" },
             { "frm-search-preview", "search-get-preview" },

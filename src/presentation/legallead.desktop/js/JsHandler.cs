@@ -108,6 +108,7 @@ namespace legallead.desktop.js
             "permissions-discounts",
             "form-change-password"
         };
+
         protected static readonly List<string> SearchForms = new()
         {
             "frm-search",
