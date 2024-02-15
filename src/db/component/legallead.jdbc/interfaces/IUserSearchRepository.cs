@@ -20,5 +20,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> SetInvoicePurchaseDate(string externalId);
         Task<bool> IsValidExternalId(string externalId);
         Task<InvoiceDescriptionDto> InvoiceDescription(string id);
+        Task<bool> RequeueSearches();
     }
 }

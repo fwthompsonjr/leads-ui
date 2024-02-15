@@ -10,7 +10,7 @@
 		<!-- block: common-headings -->
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
-		<script src="https://js.stripe.com/v3/"></script>
+		<script name="stripe-api" src="https://js.stripe.com/v3/"></script>
 		<style name="subcontent-css">
 
 			div.subcontent {
@@ -124,7 +124,7 @@
 	</script>
 	<!-- script: home-form-validation -->
 	<!-- script: common-client-include -->
-	<!-- script: verify-and-post -->
+	<!-- script: invoice-submission-include -->
   </body>
 
 

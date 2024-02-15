@@ -3,11 +3,12 @@ using CefSharp.Wpf;
 using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.utilities;
+using legallead.desktop.extensions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
-using System.Windows.Threading;
 using System.Windows;
+using Microsoft.Extensions.Configuration;
 
 namespace legallead.desktop.handlers
 {
@@ -27,7 +28,7 @@ namespace legallead.desktop.handlers
                 if (s.Contains('{'))
                 {
                     web.ExecuteScriptAsync(string.Format(s, json));
-                }   
+                }
                 else
                 {
                     Thread.Sleep(500);
@@ -49,10 +50,8 @@ namespace legallead.desktop.handlers
         private static string TransformHtml(string? html, GenerateInvoiceResponse? response)
         {
             if (response == null || string.IsNullOrEmpty(html)) return string.Empty;
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            var parentNode = doc.DocumentNode;
-            return parentNode.OuterHtml;
+            var config = AppBuilder.Configuration?.GetValue<string>("stripe:key") ?? string.Empty;
+            return response.GetHtml(html, config);
         }
 
         private static MainWindow? GetMain()
@@ -62,6 +61,7 @@ namespace legallead.desktop.handlers
             if (mainWindow is not MainWindow main) return null;
             return main;
         }
+
         private static readonly List<string> scripts = new()
         {
             "jssearchpager.bind_preview( '{0}' );"

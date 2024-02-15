@@ -63,13 +63,15 @@ namespace legallead.desktop.implementations
         }
         private static string? GetStatusCss(string searchStatus)
         {
-            switch (searchStatus)
+            return searchStatus switch
             {
-                case "Completed": return "text-success";
-                case "Processing": return "text-warning-emphasis";
-                case "Error": return "text-danger";
-                default: return null;
-            }
+                "Completed" => "text-success",
+                "Processing" => "text-warning-emphasis",
+                "Error" => "text-danger",
+                "Purchased" => "text-info",
+                "Downloaded" => "text-primary",
+                _ => null,
+            };
         }
         private readonly Dictionary<string, MySearchSubstitutions> Substitutions =
             new()
@@ -138,7 +140,7 @@ namespace legallead.desktop.implementations
             td.InnerHtml = $"Records: {data.Count}";
             cbo.ChildNodes.Clear();
             var doc = table.OwnerDocument;
-            if(data.Count > 0 && tfoot.Attributes["class"] != null)
+            if (data.Count > 0 && tfoot.Attributes["class"] != null)
             {
                 var attr = tfoot.Attributes["class"];
                 attr.Value = attr.Value.Replace("d-none", "").Trim();

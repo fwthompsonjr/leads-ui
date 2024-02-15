@@ -22,7 +22,21 @@ namespace legallead.jdbc.implementations
             var response = await _command.QuerySingleOrDefaultAsync<SearchRestrictionDto>(connection, command);
             return response ?? new();
         }
+        public async Task<bool> RequeueSearches()
+        {
+            const string prc = "CALL USP_SEARCH_QUEUE_RETRY_FAILED_REQUEST( );";
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
 
+        }
         public async Task<IEnumerable<SearchDtoHeader>> History(string userId)
         {
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
@@ -72,7 +86,6 @@ namespace legallead.jdbc.implementations
             catch
             {
                 return false;
-                throw;
             }
         }
 
