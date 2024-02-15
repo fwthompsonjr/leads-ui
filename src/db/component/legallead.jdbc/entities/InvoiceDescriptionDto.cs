@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace legallead.jdbc.entities
+﻿namespace legallead.jdbc.entities
 {
     public class InvoiceDescriptionDto : BaseDto
     {
