@@ -29,7 +29,7 @@ namespace legallead.desktop
             }
         }
 
-        private void NavigateToMySearch()
+        internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
             if (user == null || !user.IsAuthenicated)

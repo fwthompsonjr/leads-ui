@@ -68,6 +68,26 @@ namespace legallead.jdbc.implementations
             return translation;
         }
 
+        public async Task<IEnumerable<SearchFinalBo>> GetFinal(string searchId)
+        {
+            const string prc = "CALL USP_GET_SEARCH_RECORD_FINAL_LIST( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<SearchFinalDto>(connection, command);
+            var translation = response.Select(x => TranslateTo<SearchFinalBo>(x));
+            return translation;
+        }
+
+        public async Task<ActiveSearchOverviewBo?> GetActiveSearches(string searchId)
+        {
+            const string prc = "CALL USP_GET_ACTIVE_SEARCH_OVERVIEW( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<ActiveSearchOverviewDto>(connection, command);
+            if (response == null) return null;
+            return ActiveSearchOverviewBo.FromDto(response);
+        }
+
         public async Task<bool> CreateInvoice(string userId, string searchId)
         {
             var restriction = await GetSearchRestriction(userId);

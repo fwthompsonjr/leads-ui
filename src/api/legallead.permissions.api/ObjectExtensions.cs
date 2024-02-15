@@ -185,6 +185,14 @@ namespace legallead.permissions.api
                 var lg = p.GetRequiredService<ILoggingService>();
                 return new LoggingInfrastructure(lg);
             });
+            services.AddHostedService(s =>
+            {
+                var logger = s.GetRequiredService<ILogger<QueueResetService>>();
+                var exec = new DapperExecutor();
+                var context = new DataContext(exec);
+                var db = new UserSearchRepository(context);
+                return new QueueResetService(db, logger);
+            });
         }
 
         public static void RegisterHealthChecks(this IServiceCollection services)

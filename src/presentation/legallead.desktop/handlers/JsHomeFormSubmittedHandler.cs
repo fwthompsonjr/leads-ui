@@ -6,6 +6,7 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,6 +43,8 @@ namespace legallead.desktop.handlers
                 var data = TryDeserialize<LoginFormModel>(json);
                 SetUserSession(data, Guid.NewGuid().ToString());
                 NavigateTo("MyAccount", objectData);
+                Thread.Sleep(500);
+                
             }
             catch (Exception ex)
             {
@@ -74,6 +77,7 @@ namespace legallead.desktop.handlers
             if (user == null) return;
             user.Token = ObjectExtensions.TryGet<AccessTokenBo>(objectData.Message);
             main.NavigateTo(destination);
+            main.NavigateToMySearch();
         }
 
         private static async Task<ApiResponse> ConvertTo(string formName, string json)

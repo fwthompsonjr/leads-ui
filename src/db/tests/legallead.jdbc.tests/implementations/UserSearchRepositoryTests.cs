@@ -12,6 +12,27 @@ namespace legallead.jdbc.tests.implementations
 {
     public class UserSearchRepositoryTests
     {
+        private static readonly Faker<SearchFinalDto> finalfaker =
+            new Faker<SearchFinalDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.SearchId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Name, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Zip, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Address1, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Address2, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Address3, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CaseNumber, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.DateFiled, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Court, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CaseType, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CaseStyle, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.FirstName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LastName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Plantiff, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Status, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.County, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CourtAddress, y => y.Random.Guid().ToString("D"));
+
         private static readonly Faker<SearchPreviewDto> previewfaker =
             new Faker<SearchPreviewDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
@@ -286,6 +307,56 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()
             ));
         }
+
+
+        [Fact]
+        public async Task RepoGetFinalNoResult()
+        {
+            SearchFinalDto[] result = Array.Empty<SearchFinalDto>();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QueryAsync<SearchFinalDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            await service.GetFinal(uid);
+            mock.Verify(m => m.QueryAsync<SearchFinalDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Fact]
+        public async Task RepoGetFinalMultipleResult()
+        {
+            SearchFinalDto[] result = finalfaker.Generate(6).ToArray();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QueryAsync<SearchFinalDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            var translated = (await service.GetFinal(uid)).ToList();
+            Assert.Equal(result[1].Court, translated[1].Court);
+            Assert.Equal(result[1].SearchId, translated[1].SearchId);
+            Assert.Equal(result[1].Name, translated[1].Name);
+            Assert.Equal(result[1].Address1, translated[1].Address1);
+            Assert.Equal(result[1].DateFiled, translated[1].DateFiled);
+            Assert.Equal(result[1].FirstName, translated[1].FirstName);
+            mock.Verify(m => m.QueryAsync<SearchFinalDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
 
         [Theory]
         [InlineData(SearchTargetTypes.Detail)]

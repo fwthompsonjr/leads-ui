@@ -21,5 +21,7 @@ namespace legallead.jdbc.interfaces
         Task<bool> IsValidExternalId(string externalId);
         Task<InvoiceDescriptionDto> InvoiceDescription(string id);
         Task<bool> RequeueSearches();
+        Task<IEnumerable<SearchFinalBo>> GetFinal(string searchId);
+        Task<ActiveSearchOverviewBo?> GetActiveSearches(string searchId);
     }
 }
