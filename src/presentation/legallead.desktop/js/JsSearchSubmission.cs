@@ -103,7 +103,7 @@ namespace legallead.desktop.js
 
         private static readonly Dictionary<string, Type> PayloadMap = new()
         {
-            { "frm-search", typeof(UserSearchBo) },
+            { "frm-search", typeof(BeginSearchModel) },
             { "frm-search-history", typeof(ContactAddress[]) },
             { "frm-search-purchases", typeof(ContactPhone[]) },
             { "frm-search-preview", typeof(SearchPreviewModel) },
