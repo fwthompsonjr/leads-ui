@@ -13,7 +13,8 @@ namespace legallead.permissions.api.Controllers
         private readonly IUserSearchValidator searchValidator;
         private readonly ISearchInfrastructure infrastructure;
 
-        public SearchController(IUserSearchValidator validator, ISearchInfrastructure infrastructure)
+        public SearchController(IUserSearchValidator validator, 
+            ISearchInfrastructure infrastructure)
         {
             searchValidator = validator;
             this.infrastructure = infrastructure;
@@ -45,6 +46,7 @@ namespace legallead.permissions.api.Controllers
             var searches = await infrastructure.GetHeader(Request, null);
             return Ok(searches);
         }
+
         [HttpPost]
         [Route("my-search-preview")]
         public async Task<IActionResult> Preview(ApplicationModel context)
@@ -54,6 +56,18 @@ namespace legallead.permissions.api.Controllers
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
             var searches = await infrastructure.GetPreview(Request, guid);
             if (searches == null) return UnprocessableEntity(guid);
+            return Ok(searches);
+        }
+
+
+        [HttpPost]
+        [Route("my-search-status")]
+        public async Task<IActionResult> SearchStatus(ApplicationModel context)
+        {
+            var user = await infrastructure.GetUser(Request);
+            var guid = context.Id;
+            if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var searches = await infrastructure.GetSearchProgress(guid);
             return Ok(searches);
         }
     }

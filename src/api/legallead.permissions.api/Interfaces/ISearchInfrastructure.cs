@@ -24,5 +24,6 @@ namespace legallead.permissions.api.Interfaces
         Task<IEnumerable<SearchPreviewBo>?> GetPreview(HttpRequest http, string searchId);
         Task<IEnumerable<SearchInvoiceBo>?> CreateInvoice(string userid, string searchid);
         Task<IEnumerable<SearchInvoiceBo>?> GetInvoices(string userid, string? searchid);
+        Task<ActiveSearchOverviewBo?> GetSearchProgress(string searchId);
     }
 }
