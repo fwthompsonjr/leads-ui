@@ -23,5 +23,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> RequeueSearches();
         Task<IEnumerable<SearchFinalBo>> GetFinal(string searchId);
         Task<ActiveSearchOverviewBo?> GetActiveSearches(string searchId);
+        Task<IEnumerable<ActiveSearchDetailBo>?> GetActiveSearchDetails(string userId);
     }
 }

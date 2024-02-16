@@ -144,6 +144,12 @@ namespace legallead.permissions.api.Utility
             return records;
         }
 
+        public async Task<ActiveSearchOverviewBo?> GetSearchProgress(string searchId)
+        {
+            var history = await _repo.GetActiveSearches(searchId);
+            return history;
+        }
+
         private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)
         {
             var user = await GetUser(http);
