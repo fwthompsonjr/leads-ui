@@ -69,10 +69,11 @@ namespace legallead.desktop.extensions
                 chkoutdv,
                 stripejs
             };
-            foreach (var elem in elements) 
-            { 
+            foreach (var elem in elements)
+            {
                 var node = parentNode.SelectSingleNode(elem);
-                if (node != null) {
+                if (node != null)
+                {
                     node.ParentNode.RemoveChild(node);
                 }
             }
@@ -106,7 +107,7 @@ namespace legallead.desktop.extensions
 
         private static string GetDescription(string? desciption, string fallback)
         {
-            if(string.IsNullOrWhiteSpace(desciption)) return fallback;
+            if (string.IsNullOrWhiteSpace(desciption)) return fallback;
             return desciption.Replace("Record Search :", "Search: "); // dash
         }
     }

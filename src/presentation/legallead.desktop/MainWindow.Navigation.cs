@@ -49,7 +49,7 @@ namespace legallead.desktop
             if (targetWindow is not ChromiumWebBrowser web) return;
 
             var jscript = string.Concat(
-                "if ( typeof setDisplay == 'function' ) { ", 
+                "if ( typeof setDisplay == 'function' ) { ",
                 string.Format(JsScriptTokenFormat, directions[1]),
                 "}");
             var replacements = new Dictionary<string, string>()

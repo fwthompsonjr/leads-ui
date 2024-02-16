@@ -34,13 +34,13 @@ namespace legallead.desktop.js
 
         public virtual void Fetch(string formName, string json)
         {
-            if(!"frm-search-make-payment".Equals(formName)) return;
+            if (!"frm-search-make-payment".Equals(formName)) return;
             var payload = JsonConvert.DeserializeObject<GenerateInvoiceModel>(json) ?? new();
             var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
             if (api == null || string.IsNullOrEmpty(payload.Id)) return;
             var response = api.Get(
-                "user-zero-payment", 
-                new Dictionary<string, string> (){ { "~0", payload.Id } }).Result;
+                "user-zero-payment",
+                new Dictionary<string, string>() { { "~0", payload.Id } }).Result;
             if (response == null || response.StatusCode != 200) return;
             var dispatcher = Application.Current.Dispatcher;
             web?.SetHTML(dispatcher, response.Message);
