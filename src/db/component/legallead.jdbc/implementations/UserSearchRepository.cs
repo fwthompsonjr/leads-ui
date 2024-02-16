@@ -88,6 +88,18 @@ namespace legallead.jdbc.implementations
             return ActiveSearchOverviewBo.FromDto(response);
         }
 
+
+        public async Task<IEnumerable<ActiveSearchDetailBo>?> GetActiveSearchDetails(string userId)
+        {
+            const string prc = "CALL USP_GET_ACTIVE_SEARCH_PARAMETER_DETAILS( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<ActiveSearchDetailDto>(connection, command);
+            if (response == null) return null;
+            var translation = response.Select(x => TranslateTo<ActiveSearchDetailBo>(x));
+            return translation;
+        }
+
         public async Task<bool> CreateInvoice(string userId, string searchId)
         {
             var restriction = await GetSearchRestriction(userId);
