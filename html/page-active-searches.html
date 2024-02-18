@@ -274,12 +274,37 @@ color: #0a58ca;
 		position: relative;
 		left: 10px;
 	}
-
+	#my-active-searches-row-01 div.col-5,
+	#my-active-searches-row-01 div.col-6 {
+		max-height: 300px;
+		overflow-y: auto;
+		padding-bottom: 10px;
+	}
 	#my-active-searches-row-01 ul,
 	#my-active-searches-row-01 ul li {
 		background-color: transparent;
 		border: 1px solid transparent;
 		color: #777;
+	}
+	#list-my-active-search-names div {
+		width: 95%;
+	}
+
+	li[name="component-template"],
+ 	tr[name="status-template"] {
+		display: none;
+	}
+	li[name='component-item'] {
+		border-bottom-color: #c0c0c0 !important;
+	}
+	span[name="stage-label"] {
+		display: block,
+		width: 60%
+	}
+	
+	span[name="stage-date"] {
+		display: block,
+		width: 30%
 	}
 </style>
 	</head>
@@ -328,42 +353,46 @@ color: #0a58ca;
       </header>
 
       <main role="main" class="inner cover">
+		
 		<div id="dv-main-content" name="main-content">
             <h4>Active Searches</h4>
-            <h5>No active searches in progress</h5>
+            <h5 id="heading-my-active-searches-no-content">No active searches in progress</h5>
             <hr/>
 			<div class="row" id="my-active-searches-row-00">
-				<select id="cbo-my-active-searches" class="form-control border-secondary">
+				<select id="cbo-my-active-searches" class="form-control border-secondary" onchange="active_search.combo_changed()" >
 				</select>
 			</div>
 			<div class="row p-2" id="my-active-searches-row-01">
 				<div class="col-5 border border-secondary rounded m-2">
 					<h5>Search</h5>
 					<ul class="list-group" id="list-my-active-search-names">
-						<li class="list-group-item text-start">Requested Date: <span name="requested-date"></span></li>
-						<li class="list-group-item text-start">Processing Start: <span name="start-date"></span></li>
-						<li class="list-group-item text-start">Estimated Records: <span name="estimated-records"></span></li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Requested Date:</span>
+								<span name="requested-date" class="text-end"> - </span>
+							</div>
+						</li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Processing Start:</span>
+								<span name="start-date" class="text-end"> - </span>
+							</div>
+						</li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Status:</span>
+								<span name="search-status" class="text-end"> - </span>
+							</div>
+						</li>
 					</ul>
 				</div>
 				<div class="col-6 border border-secondary rounded m-2">
 					<h5>Components</h5>
 					<ul class="list-group" id="list-my-active-search-stages">
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
-							</div>
-						</li>
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
-							</div>
-						</li>
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
+						<li name="component-template" class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span name="stage-label">:</span>
+								<span name="stage-date" class="text-end"> - </span>
 							</div>
 						</li>
 					</ul>
@@ -381,7 +410,7 @@ color: #0a58ca;
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<tr name="status-template">
 								<td><span name="line-nbr">1</span></td>
 								<td><span name="create-date">02-12-2025</span></td>
 								<td><span name="line-text">test</span></td>								
@@ -1793,6 +1822,7 @@ color: #0a58ca;
 				</textarea>
 			</div>
 		</div>
+      
       </main>
 
       
@@ -1831,6 +1861,118 @@ color: #0a58ca;
 	if (clientScriptActivated) {
 		setTimeout( () => { commonClientScript(); }, 250);
 	}
+</script>
+    <script name="active-searches-js">
+
+let active_search = {
+	"controls": {
+		"txjson" : "#text-my-active-searches-js",
+		"cbo" : "#cbo-my-active-searches",
+		"cbo_option" : "#cbo-my-active-searches option",
+		"heading_no_data": "#heading-my-active-searches-no-content",
+		"component_list": "#list-my-active-search-stages",
+		"component_list_template": "#list-my-active-search-stages li:first",
+		"component_last_item": "#list-my-active-search-stages li:last"
+	},
+	"jso": function(){
+		let js = $(active_search.controls.txjson).text();
+		return JSON.parse(js);
+	},
+	"component_template": function(isFirst) {
+		let openLi = isFirst ? 
+			"<li name='component-template' class='list-group-item text-start m-0 p-0'>" :
+			"<li name='component-item' class='list-group-item text-start m-0 p-0'>";
+		const closeLi = "</li>";
+		let item = $(active_search.controls.component_list_template).html();
+		return "".concat(openLi, item, closeLi);
+	},
+	combo_changed: function() {
+		active_search.bind.search();
+		active_search.bind.search_components();
+	},
+	bind: {
+		"all": function() {
+			active_search.bind.header();
+			active_search.bind.cbo();
+			active_search.bind.search();
+			active_search.bind.search_components();
+		},
+		"header": function() {
+			let src = active_search.jso();
+			let hdr = active_search.controls.heading_no_data;
+			let hasNoData = ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 );
+			if (hasNoData) {
+				$(hdr).show();
+			} else {
+				$(hdr).hide();
+			}
+		},
+		"cbo": function() {
+			let src = active_search.jso();
+			cbo = active_search.controls.cbo;
+			cboid = 0;
+			$( cbo ).html("");
+			if ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 ) {
+				return;
+			}
+			src.details.forEach(function(d) {
+				let hto = cboid == 0 ? "<option selected='selected' value='~0'>~1</option>" : "<option value='~0'>~1</option>";
+				let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]);
+				hto = hto.replace("~0", cboid);
+				hto = hto.replace("~1", txt);
+				html = $( cbo ).html() + hto;
+				$( cbo ).html(html);
+				cboid++;
+			});			
+		},
+		"search": function() {
+			let cbcount = $( active_search.controls.cbo_option ).length;
+			let data = [
+				{ "find": "#list-my-active-search-names span[name='requested-date']", "value": " - " },
+				{ "find": "#list-my-active-search-names span[name='start-date']", "value": " - " },
+				{ "find": "#list-my-active-search-names span[name='search-status']", "value": " - " },
+			];
+			data.forEach((d) => { $(d.find).text(d.value); });
+			if ( cbcount == 0 ) { return; }
+			let $cbo = $( active_search.controls.cbo );
+			let cboid = $cbo.val();
+			let jso = active_search.jso();
+			let src = jso.details[cboid];
+			let srcid = src.id
+			let jssearch = jso.history.searches.find(x => x.id == srcid);
+			let artmp = src.searchProgress.split(' ');
+			let sts = artmp[artmp.length - 1];
+			let tmpdt = src.createDate.split('T')
+			data[0].value = tmpdt.join(" ");
+			data[1].value = jssearch.startDate.split('.')[0];			
+			data[2].value = sts;
+			data.forEach((d) => { $(d.find).text(d.value); });
+		},
+		"search_components": function() {
+			let cbcount = $( active_search.controls.cbo_option ).length;
+			if ( cbcount == 0 ) { return; }
+			let $cbo = $( active_search.controls.cbo );
+			let cboid = $cbo.val();
+			let jso = active_search.jso();
+			let src = jso.details[cboid];
+			let srcid = src.id
+			let jssearch = jso.history.statuses.filter(x => x.searchId == srcid);
+			let blanktemplate = active_search.component_template(true);
+			let template = active_search.component_template(false);
+			let $list = $( active_search.controls.component_list );
+			$list.html(blanktemplate);
+			jssearch.forEach(function(s) {
+				let htnow = $list.html() + template;
+				$list.html(htnow);
+				let $li = $(active_search.controls.component_last_item);
+				$li.find("span[name='stage-label']").text(s.line);
+				$li.find("span[name='stage-date']").text(s.createDate.split('.')[0]);
+			});
+		}
+	}
+};
+
+active_search.bind.all();
 </script>
   </body>
 

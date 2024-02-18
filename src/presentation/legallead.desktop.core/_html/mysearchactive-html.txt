@@ -31,42 +31,46 @@
       </header>
 
       <main role="main" class="inner cover">
+		
 		<div id="dv-main-content" name="main-content">
             <h4>Active Searches</h4>
-            <h5>No active searches in progress</h5>
+            <h5 id="heading-my-active-searches-no-content">No active searches in progress</h5>
             <hr/>
 			<div class="row" id="my-active-searches-row-00">
-				<select id="cbo-my-active-searches" class="form-control border-secondary">
+				<select id="cbo-my-active-searches" class="form-control border-secondary" onchange="active_search.combo_changed()" >
 				</select>
 			</div>
 			<div class="row p-2" id="my-active-searches-row-01">
 				<div class="col-5 border border-secondary rounded m-2">
 					<h5>Search</h5>
 					<ul class="list-group" id="list-my-active-search-names">
-						<li class="list-group-item text-start">Requested Date: <span name="requested-date"></span></li>
-						<li class="list-group-item text-start">Processing Start: <span name="start-date"></span></li>
-						<li class="list-group-item text-start">Estimated Records: <span name="estimated-records"></span></li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Requested Date:</span>
+								<span name="requested-date" class="text-end"> - </span>
+							</div>
+						</li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Processing Start:</span>
+								<span name="start-date" class="text-end"> - </span>
+							</div>
+						</li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span>Status:</span>
+								<span name="search-status" class="text-end"> - </span>
+							</div>
+						</li>
 					</ul>
 				</div>
 				<div class="col-6 border border-secondary rounded m-2">
-					<h5>Components</h5>
+					<h5>Stages</h5>
 					<ul class="list-group" id="list-my-active-search-stages">
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
-							</div>
-						</li>
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
-							</div>
-						</li>
-						<li class="list-group-item text-start">
-							<div class="d-flex w-100 justify-content-between">
-							  <h5 class="mb-1">List group item heading</h5>
-							  <small>3 days ago</small>
+						<li name="component-template" class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span name="stage-label">:</span>
+								<span name="stage-date" class="text-end"> - </span>
 							</div>
 						</li>
 					</ul>
@@ -75,22 +79,14 @@
 			<div class="row" id="my-active-searches-row-02">
 				<div id="my-active-searches-row-02-01" class="col-11 border border-secondary rounded m-2">
 					<h5>Status</h5>
-					<table automationId="active-search-status-table" class="w-100 text-secondary">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Date</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><span name="line-nbr"></span></td>
-								<td><span name="create-date"></span></td>
-								<td><span name="line-text"></span></td>								
-							</tr>
-						</tbody>
-					</table>
+					<ul class="list-group" id="list-my-active-search-statuses">
+						<li name="component-template" class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<span name="status-label">:</span>
+								<span name="status-date" class="text-end"> - </span>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="row d-none" id="my-active-searches-row-03">
@@ -1486,6 +1482,7 @@
 				</textarea>
 			</div>
 		</div>
+      
       </main>
 
       <!-- block: common-footer -->
@@ -1499,6 +1496,7 @@
 		}
 	</script>
 	<!-- script: common-client-include -->
+    <!-- script: my-active-searches-js -->
   </body>
 
 

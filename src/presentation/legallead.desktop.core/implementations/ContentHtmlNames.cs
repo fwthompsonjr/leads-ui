@@ -292,6 +292,7 @@ namespace legallead.desktop.implementations
         private const string JsMySearchBehavior = "<!-- script: my-search-searching-behaviors -->";
         private const string JsVerifyAndPost = "<!-- script: verify-and-post -->";
         private const string JsCloseInvoice = "<!-- script: invoice-submission-include -->";
+        private const string JsMyActiveSearchScript = "<!-- script: my-active-searches-js -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -326,6 +327,7 @@ namespace legallead.desktop.implementations
             { JsMySearchBehavior, Properties.Resources.mysearch_script_js },
             { JsVerifyAndPost, Properties.Resources.verifyandpost_js },
             { JsCloseInvoice, Properties.Resources.invoice_submission_js },
+            { JsMyActiveSearchScript, Properties.Resources.mysearchactive_js },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

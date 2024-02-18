@@ -1059,8 +1059,6 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to &lt;style name=&quot;my-active-searches&quot;&gt;
         ///	#dv-main-content {
         ///		position: relative;
-        ///		top: -200px;
-        ///		left: -20px;
         ///	}
         ///	#cbo-my-active-searches {
         ///		width: 92%;
@@ -1071,14 +1069,16 @@ namespace legallead.desktop.Properties {
         ///		position: relative;
         ///		left: 10px;
         ///	}
-        ///
+        ///	#my-active-searches-row-01 div.col-5,
+        ///	#my-active-searches-row-01 div.col-6 {
+        ///		max-height: 300px;
+        ///		overflow-y: auto;
+        ///		padding-bottom: 10px;
+        ///	}
         ///	#my-active-searches-row-01 ul,
         ///	#my-active-searches-row-01 ul li {
         ///		background-color: transparent;
-        ///		border: 1px solid transparent;
-        ///		color: #777;
-        ///	}
-        ///&lt;/style&gt;.
+        ///		border: 1 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearchactive_css {
             get {
@@ -1106,6 +1106,28 @@ namespace legallead.desktop.Properties {
         internal static string mysearchactive_html {
             get {
                 return ResourceManager.GetString("mysearchactive_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;active-searches-js&quot;&gt;
+        ///
+        ///let active_search = {
+        ///	&quot;controls&quot;: {
+        ///		&quot;txjson&quot; : &quot;#text-my-active-searches-js&quot;,
+        ///		&quot;cbo&quot; : &quot;#cbo-my-active-searches&quot;,
+        ///		&quot;cbo_option&quot; : &quot;#cbo-my-active-searches option&quot;,
+        ///		&quot;heading_no_data&quot;: &quot;#heading-my-active-searches-no-content&quot;,
+        ///		&quot;component_list&quot;: &quot;#list-my-active-search-stages&quot;,
+        ///		&quot;component_list_template&quot;: &quot;#list-my-active-search-stages li:first&quot;,
+        ///		&quot;component_last_item&quot;: &quot;#list-my-active-search-stages li:last&quot;
+        ///	},
+        ///	&quot;jso&quot;: function(){
+        ///		let js = $(activ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchactive_js {
+            get {
+                return ResourceManager.GetString("mysearchactive_js", resourceCulture);
             }
         }
         

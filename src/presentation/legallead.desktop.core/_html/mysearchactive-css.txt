@@ -1,8 +1,6 @@
 <style name="my-active-searches">
 	#dv-main-content {
 		position: relative;
-		top: -200px;
-		left: -20px;
 	}
 	#cbo-my-active-searches {
 		width: 92%;
@@ -13,11 +11,36 @@
 		position: relative;
 		left: 10px;
 	}
-
+	#my-active-searches-row-01 div.col-5,
+	#my-active-searches-row-01 div.col-6 {
+		max-height: 300px;
+		overflow-y: auto;
+		padding-bottom: 10px;
+	}
 	#my-active-searches-row-01 ul,
 	#my-active-searches-row-01 ul li {
 		background-color: transparent;
 		border: 1px solid transparent;
 		color: #777;
+	}
+	#list-my-active-search-names div {
+		width: 95%;
+	}
+
+	li[name="component-template"],
+ 	tr[name="status-template"] {
+		display: none;
+	}
+	li[name='component-item'] {
+		border-bottom-color: #c0c0c0 !important;
+	}
+	span[name="stage-label"] {
+		display: block,
+		width: 60%
+	}
+	
+	span[name="stage-date"] {
+		display: block,
+		width: 30%
 	}
 </style>
