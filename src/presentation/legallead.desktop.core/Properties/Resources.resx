@@ -232,6 +232,12 @@
   <data name="mysearch-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\mysearch-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="mysearchactive_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mysearchactive-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="mysearchactive_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mysearchactive-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="mysearchtemplate_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\mysearchtemplate-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

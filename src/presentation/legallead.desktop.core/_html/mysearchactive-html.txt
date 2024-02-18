@@ -1,0 +1,1505 @@
+<html>
+
+	<head>
+		<!-- script: common-cef-handler -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: active searches</title>
+		<!-- block: common-headings -->
+		<!-- common styles -->	
+		<link rel="stylesheet" name="base" href="css/base.css" />
+		<!-- style: my-account-subcontent-css -->
+		<!-- style: my-active-searches-css -->
+	</head>
+
+	<body class="text-center">
+	<!-- component: my-account-logout -->
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header 
+		class="masthead mb-auto" 
+		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+		<div class="inner">
+			<!-- block: common-mast-heading -->
+			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+				<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:jssearchviews.setIndex(0)">Search</a>
+				<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:jssearchviews.setIndex(1)">History</a>
+				<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:jssearchviews.setIndex(2)">Purchases</a>
+			</nav>
+		</div>
+      </header>
+
+      <main role="main" class="inner cover">
+		<div id="dv-main-content" name="main-content">
+            <h4>Active Searches</h4>
+            <h5>No active searches in progress</h5>
+            <hr/>
+			<div class="row" id="my-active-searches-row-00">
+				<select id="cbo-my-active-searches" class="form-control border-secondary">
+				</select>
+			</div>
+			<div class="row p-2" id="my-active-searches-row-01">
+				<div class="col-5 border border-secondary rounded m-2">
+					<h5>Search</h5>
+					<ul class="list-group" id="list-my-active-search-names">
+						<li class="list-group-item text-start">Requested Date: <span name="requested-date"></span></li>
+						<li class="list-group-item text-start">Processing Start: <span name="start-date"></span></li>
+						<li class="list-group-item text-start">Estimated Records: <span name="estimated-records"></span></li>
+					</ul>
+				</div>
+				<div class="col-6 border border-secondary rounded m-2">
+					<h5>Components</h5>
+					<ul class="list-group" id="list-my-active-search-stages">
+						<li class="list-group-item text-start">
+							<div class="d-flex w-100 justify-content-between">
+							  <h5 class="mb-1">List group item heading</h5>
+							  <small>3 days ago</small>
+							</div>
+						</li>
+						<li class="list-group-item text-start">
+							<div class="d-flex w-100 justify-content-between">
+							  <h5 class="mb-1">List group item heading</h5>
+							  <small>3 days ago</small>
+							</div>
+						</li>
+						<li class="list-group-item text-start">
+							<div class="d-flex w-100 justify-content-between">
+							  <h5 class="mb-1">List group item heading</h5>
+							  <small>3 days ago</small>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="row" id="my-active-searches-row-02">
+				<div id="my-active-searches-row-02-01" class="col-11 border border-secondary rounded m-2">
+					<h5>Status</h5>
+					<table automationId="active-search-status-table" class="w-100 text-secondary">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Date</th>
+								<th>Description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span name="line-nbr"></span></td>
+								<td><span name="create-date"></span></td>
+								<td><span name="line-text"></span></td>								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row d-none" id="my-active-searches-row-03">
+				<textarea id="text-my-active-searches-js">
+				{
+    "details": [
+        {
+            "id": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-01-29T23:13:45",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "4890f996-befc-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-01-29T23:15:25",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-01-30T13:43:32",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-03T01:04:01",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-03T17:36:02",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-03T17:36:03",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-04T00:50:38",
+            "countyName": "DENTON",
+            "stateName": "TX",
+            "startDate": "10/1/2023 12:00:00 AM",
+            "endDate": "10/7/2023 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-15T14:45:47",
+            "countyName": "COLLIN",
+            "stateName": "TX",
+            "startDate": "2/5/2024 12:00:00 AM",
+            "endDate": "2/5/2024 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        },
+        {
+            "id": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+            "createDate": "2024-02-15T14:50:46",
+            "countyName": "TARRANT",
+            "stateName": "TX",
+            "startDate": "2/12/2024 12:00:00 AM",
+            "endDate": "2/13/2024 12:00:00 AM",
+            "searchProgress": "3 - Completed"
+        }
+    ],
+    "history": {
+        "searches": [
+            {
+                "id": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-03 19:37:53.000000",
+                "startDate": "2024-01-29 23:13:46.000000",
+                "createDate": "2024-01-29 23:13:45.000000",
+                "expectedRows": 249
+            },
+            {
+                "id": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-03 01:13:51.000000",
+                "startDate": "2024-02-03 01:04:01.000000",
+                "createDate": "2024-02-03 01:04:01.000000",
+                "expectedRows": 248
+            },
+            {
+                "id": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-01-29 23:39:30.000000",
+                "startDate": "2024-01-29 23:15:25.000000",
+                "createDate": "2024-01-29 23:15:25.000000",
+                "expectedRows": 249
+            },
+            {
+                "id": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-04 18:14:34.000000",
+                "startDate": "2024-02-04 00:50:38.000000",
+                "createDate": "2024-02-04 00:50:38.000000",
+                "expectedRows": 248
+            },
+            {
+                "id": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-03 19:37:53.000000",
+                "startDate": "2024-01-30 13:43:33.000000",
+                "createDate": "2024-01-30 13:43:32.000000",
+                "expectedRows": 249
+            },
+            {
+                "id": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-15 14:58:26.000000",
+                "startDate": "2024-02-15 14:49:45.000000",
+                "createDate": "2024-02-15 14:50:46.000000",
+                "expectedRows": 200
+            },
+            {
+                "id": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-03 17:37:10.000000",
+                "startDate": "2024-02-03 17:36:02.000000",
+                "createDate": "2024-02-03 17:36:02.000000",
+                "expectedRows": 248
+            },
+            {
+                "id": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-03 17:38:06.000000",
+                "startDate": "2024-02-03 17:36:04.000000",
+                "createDate": "2024-02-03 17:36:03.000000",
+                "expectedRows": 248
+            },
+            {
+                "id": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "endDate": "2024-02-15 16:25:04.000000",
+                "startDate": "2024-02-15 14:45:47.000000",
+                "createDate": "2024-02-15 14:45:47.000000",
+                "expectedRows": 50
+            }
+        ],
+        "statuses": [
+            {
+                "id": "0d3f3c2b-befc-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:13:45.000000"
+            },
+            {
+                "id": "67c3cbcf-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "67ccc76f-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 3,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "67cd96bd-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 4,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "67ce063f-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 5,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "67d47eae-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 6,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "67d53401-befc-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 7,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:16:17.000000"
+            },
+            {
+                "id": "1e0f7346-c230-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:04:01.000000"
+            },
+            {
+                "id": "6f760b04-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "6faef96a-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 3,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "6faef96c-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 3,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "6fafb01b-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 4,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "6fb9d5dc-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 5,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "6fba82df-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 6,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:13:27.000000"
+            },
+            {
+                "id": "9c2d1e54-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 7,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000"
+            },
+            {
+                "id": "9c2e0e21-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 8,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000"
+            },
+            {
+                "id": "9c4428b3-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 9,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000"
+            },
+            {
+                "id": "9c44e354-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 10,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000"
+            },
+            {
+                "id": "9c4e64bc-c231-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 11,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000"
+            },
+            {
+                "id": "4892907e-befc-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:15:25.000000"
+            },
+            {
+                "id": "59ffe787-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 2,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "5a00cd07-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 3,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "5a01673a-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 4,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "5a020ed0-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 5,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "5a02a9c0-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 6,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "5a087f32-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 7,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:37:23.000000"
+            },
+            {
+                "id": "bcc1ff0e-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 8,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000"
+            },
+            {
+                "id": "bcc2c4a0-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 9,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000"
+            },
+            {
+                "id": "bcdded76-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 10,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000"
+            },
+            {
+                "id": "bcdded79-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 10,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000"
+            },
+            {
+                "id": "c28373c4-beff-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 11,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:18.000000"
+            },
+            {
+                "id": "69dc2c70-c2f7-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 00:50:38.000000"
+            },
+            {
+                "id": "fcbd1088-c388-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:41.000000"
+            },
+            {
+                "id": "fcd0c71f-c388-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 3,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:41.000000"
+            },
+            {
+                "id": "fcd0c721-c388-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 3,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:41.000000"
+            },
+            {
+                "id": "038d0627-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 4,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:53.000000"
+            },
+            {
+                "id": "038d082b-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 4,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:53.000000"
+            },
+            {
+                "id": "03956127-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 5,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:12:53.000000"
+            },
+            {
+                "id": "3fc33a6b-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 6,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000"
+            },
+            {
+                "id": "3fc33a6e-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 6,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000"
+            },
+            {
+                "id": "3fd72a5e-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 7,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000"
+            },
+            {
+                "id": "3fd7ecea-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 8,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000"
+            },
+            {
+                "id": "3fe1ffe2-c389-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 9,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000"
+            },
+            {
+                "id": "8f3428c2-bf75-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-30 13:43:32.000000"
+            },
+            {
+                "id": "135aa681-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:03.000000"
+            },
+            {
+                "id": "14de17df-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 3,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:06.000000"
+            },
+            {
+                "id": "14df2d7f-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 4,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:06.000000"
+            },
+            {
+                "id": "14f5bcfe-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 5,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:06.000000"
+            },
+            {
+                "id": "14f67d69-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 6,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:06.000000"
+            },
+            {
+                "id": "14f67d6c-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 6,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:02:06.000000"
+            },
+            {
+                "id": "5092b494-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 7,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000"
+            },
+            {
+                "id": "5092b497-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 7,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000"
+            },
+            {
+                "id": "50a7903a-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 8,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000"
+            },
+            {
+                "id": "50a84ab6-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 9,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000"
+            },
+            {
+                "id": "50b0c6d3-c052-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 10,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000"
+            },
+            {
+                "id": "94be4886-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 11,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "94df78dc-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 12,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "94df78de-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 12,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "94e08fd8-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 13,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "94eb811e-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 14,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "94eb8120-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 14,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:36:52.000000"
+            },
+            {
+                "id": "b97b9e58-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 15,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000"
+            },
+            {
+                "id": "b97b9e5b-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 15,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000"
+            },
+            {
+                "id": "b994308e-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 16,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000"
+            },
+            {
+                "id": "b9943091-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 16,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000"
+            },
+            {
+                "id": "b99e30f2-c2cb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 17,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000"
+            },
+            {
+                "id": "9a108aae-cc11-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:50:46.000000"
+            },
+            {
+                "id": "91fa5b3f-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "91fba5dc-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 3,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "91fbab32-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: tarrant, Start: 2/12/2024, Ending: 2/13/2024",
+                "lineNbr": 3,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "921d2b6e-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 4,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "921e2ee0-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 5,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "921f07db-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 6,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000"
+            },
+            {
+                "id": "f2b10a87-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 7,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:24.000000"
+            },
+            {
+                "id": "f2b1af16-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 8,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:24.000000"
+            },
+            {
+                "id": "f2d05bf8-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 9,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:25.000000"
+            },
+            {
+                "id": "f2d145d9-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 10,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:25.000000"
+            },
+            {
+                "id": "f2de7aba-cc12-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 11,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:25.000000"
+            },
+            {
+                "id": "b3502d46-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:36:02.000000"
+            },
+            {
+                "id": "d6eb591f-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "d70ad30d-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 3,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "d70ad30f-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 3,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "d70bcf50-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 4,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "d7152c8c-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 5,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "d7167639-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 6,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:37:02.000000"
+            },
+            {
+                "id": "fa0d7049-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 7,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000"
+            },
+            {
+                "id": "fa0d704c-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 7,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000"
+            },
+            {
+                "id": "fa258615-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 8,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa2714d0-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 9,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa2fd5f3-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 10,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "b443fe8f-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:36:03.000000"
+            },
+            {
+                "id": "fa2fa55a-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa54709f-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 3,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa56439c-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
+                "lineNbr": 4,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa56eedb-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 5,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa570233-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 5,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "fa5799bb-c2ba-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 6,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000"
+            },
+            {
+                "id": "1bdf53b7-c2bb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 7,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000"
+            },
+            {
+                "id": "1bdf541d-c2bb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 7,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000"
+            },
+            {
+                "id": "1be30507-c2bb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 8,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000"
+            },
+            {
+                "id": "1be3baa5-c2bb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 9,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000"
+            },
+            {
+                "id": "1be6c1ad-c2bb-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 10,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000"
+            },
+            {
+                "id": "e7b682e0-cc10-11ee-be26-0af7a01f52e9",
+                "line": "INFO: Search request submitted.",
+                "lineNbr": 1,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:45:47.000000"
+            },
+            {
+                "id": "39ad41ea-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: begin",
+                "lineNbr": 2,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:04.000000"
+            },
+            {
+                "id": "39b81034-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search begin State: tx, County: collin, Start: 2/5/2024, Ending: 2/5/2024",
+                "lineNbr": 3,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:04.000000"
+            },
+            {
+                "id": "39b8124e-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter evaluation: complete",
+                "lineNbr": 3,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:04.000000"
+            },
+            {
+                "id": "39bf2c2a-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: begin",
+                "lineNbr": 4,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:05.000000"
+            },
+            {
+                "id": "3a36b571-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: parameter conversion to search request: complete",
+                "lineNbr": 5,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:05.000000"
+            },
+            {
+                "id": "3a36b573-cc11-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: begin",
+                "lineNbr": 5,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:05.000000"
+            },
+            {
+                "id": "c67c7e0b-cc1e-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: search request processing: complete",
+                "lineNbr": 6,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:04.000000"
+            },
+            {
+                "id": "c6833c2a-cc1e-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: begin",
+                "lineNbr": 7,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:04.000000"
+            },
+            {
+                "id": "c6c2fd3e-cc1e-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content conversion: complete",
+                "lineNbr": 8,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:05.000000"
+            },
+            {
+                "id": "c6c2fd41-cc1e-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: begin",
+                "lineNbr": 8,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:05.000000"
+            },
+            {
+                "id": "c6e0a453-cc1e-11ee-be26-0af7a01f52e9",
+                "line": "SearchGenerationService: excel content serialization: complete",
+                "lineNbr": 9,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:05.000000"
+            }
+        ],
+        "staged": [
+            {
+                "id": "ca5881ee-befc-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:19:03.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "ca9d3ae4-befc-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:19:03.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "cab1cdaf-befc-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:19:03.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "cacb8824-befc-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:19:03.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "9b1f5918-c231-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:40.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "9bd51a38-c231-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:41.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "9bf8f564-c231-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "9c1d4d1b-c231-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "9c57d403-c231-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 01:14:42.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "bc4eee94-beff-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "bc88599b-beff-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "bc98ef4e-beff-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "bcb1de98-beff-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:08.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "c074f9e6-beff-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-29 23:40:14.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "3f41cc0a-c389-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:33.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "3f812b55-c389-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:33.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "3f921f57-c389-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:33.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "3fac240b-c389-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "3fed6c1f-c389-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-04 18:14:34.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "501b29b5-c052-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:45.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "505835a0-c052-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "5069083d-c052-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "508288cf-c052-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "50bae618-c052-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-01-31 16:03:46.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "b8fba078-c2cb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 6,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:53.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "b93bcad4-c2cb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 7,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:53.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "b94b0629-c2cb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 8,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:53.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "b966ac18-c2cb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 9,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:53.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "b9a80b6c-c2cb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 10,
+                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 19:37:54.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "921ef941-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:57:42.000000",
+                "stagingType": "data-fetch-date"
+            },
+            {
+                "id": "abeb1e4f-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:26.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "ac0693dc-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:26.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "b3d689cd-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:39.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "b3f06e00-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:39.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "be9c4e5a-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 6,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:57.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "beb78ca9-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 7,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:58:57.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "c41a056f-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 8,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:06.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "c436cb84-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 9,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:06.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "c4463a6d-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 10,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:06.000000",
+                "stagingType": "data-fetch-date"
+            },
+            {
+                "id": "dc2a01f5-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 11,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:47.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "dc4fdab1-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 12,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:47.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "e370ecc1-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 13,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:59.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "e397c0fc-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 14,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:59:59.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "ed0618f2-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 15,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:15.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "ed242819-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 16,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:15.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "f27f94af-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 17,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:24.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "f2a1acce-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 18,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:24.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "f2f24afe-cc12-11ee-be26-0af7a01f52e9",
+                "lineNbr": 19,
+                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 15:00:25.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "f9987ff3-c2ba-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "f9d0e522-c2ba-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "f9e0e0d5-c2ba-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "f9fdb923-c2ba-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:00.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "fa393aba-c2ba-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:01.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "1b709a6b-c2bb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "1ba7ee52-c2bb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000",
+                "stagingType": "data-case-list-json"
+            },
+            {
+                "id": "1bb78aae-c2bb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000",
+                "stagingType": "data-output-file-name"
+            },
+            {
+                "id": "1bcf43a9-c2bb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "1be870f6-c2bb-11ee-be26-0af7a01f52e9",
+                "lineNbr": 5,
+                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-03 17:38:57.000000",
+                "stagingType": "data-excel-content-create"
+            },
+            {
+                "id": "3a433b55-cc11-11ee-be26-0af7a01f52e9",
+                "lineNbr": 1,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 14:48:05.000000",
+                "stagingType": "data-fetch-date"
+            },
+            {
+                "id": "c66065ed-cc1e-11ee-be26-0af7a01f52e9",
+                "lineNbr": 2,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:04.000000",
+                "stagingType": "data-output-person-addres"
+            },
+            {
+                "id": "c677fa69-cc1e-11ee-be26-0af7a01f52e9",
+                "lineNbr": 3,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:04.000000",
+                "stagingType": "data-record-count"
+            },
+            {
+                "id": "c6e22587-cc1e-11ee-be26-0af7a01f52e9",
+                "lineNbr": 4,
+                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
+                "createDate": "2024-02-15 16:25:05.000000",
+                "stagingType": "data-excel-content-create"
+            }
+        ]
+    }
+}
+				</textarea>
+			</div>
+		</div>
+      </main>
+
+      <!-- block: common-footer -->
+
+    </div>
+	<script>
+	
+		function showLogout() {
+			let bttn = "#btn-my-account-logout-show";
+			$( bttn ).click(); 
+		}
+	</script>
+	<!-- script: common-client-include -->
+  </body>
+
+
+</html>

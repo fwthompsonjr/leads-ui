@@ -1,0 +1,28 @@
+<script name="active-searches-js">
+
+/*
+	bind json object
+	
+*/
+active_search = {
+	"controls": {
+		"txjson" : "#text-my-active-searches-js",
+		"cbo" : "#cbo-my-active-searches"
+	}
+};
+js = $("#text-my-active-searches-js").text();
+src = JSON.parse(js); 
+cbo = active_search.controls.cbo;
+cboid = 0;
+$( cbo ).html("");
+src.details.forEach(function(d) {
+	let hto = "<option value='~0'>~1</option>";
+	let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]);
+	hto = hto.replace("~0", cboid);
+	hto = hto.replace("~1", txt);
+	html = $( cbo ).html() + hto;
+	$( cbo ).html(html);
+	cboid++;
+});
+
+</script>

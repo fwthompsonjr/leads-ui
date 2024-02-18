@@ -1,0 +1,23 @@
+<style name="my-active-searches">
+	#dv-main-content {
+		position: relative;
+		top: -200px;
+		left: -20px;
+	}
+	#cbo-my-active-searches {
+		width: 92%;
+		position: relative;
+		left: 15px;
+	}
+	#my-active-searches-row-02-01 {
+		position: relative;
+		left: 10px;
+	}
+
+	#my-active-searches-row-01 ul,
+	#my-active-searches-row-01 ul li {
+		background-color: transparent;
+		border: 1px solid transparent;
+		color: #777;
+	}
+</style>
