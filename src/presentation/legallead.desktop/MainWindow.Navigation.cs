@@ -38,7 +38,11 @@ namespace legallead.desktop
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             var sublanding = SubLandings.Find(x => x.Equals(destination, oic));
             if (sublanding == null) return;
-
+            if (sublanding.Equals("mysearch-actives"))
+            {
+                NavigateToMyActiveSearches();
+                return;
+            }
             var directions = sublanding.Split('-');
             var parentName = directions[0];
             var parentView = NavigateTo(parentName);
@@ -49,7 +53,7 @@ namespace legallead.desktop
             if (targetWindow is not ChromiumWebBrowser web) return;
 
             var jscript = string.Concat(
-                "if ( typeof setDisplay == 'function' ) { ", 
+                "if ( typeof setDisplay == 'function' ) { ",
                 string.Format(JsScriptTokenFormat, directions[1]),
                 "}");
             var replacements = new Dictionary<string, string>()
@@ -93,6 +97,7 @@ namespace legallead.desktop
             "mysearch-home",
             "mysearch-history",
             "mysearch-purchases",
+            "mysearch-actives",
         };
 
         private const string JsScriptTokenFormat = "setDisplay( '{0}' );";

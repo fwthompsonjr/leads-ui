@@ -249,6 +249,7 @@ namespace legallead.desktop.implementations
             new() { Index = 320, Name = "myaccountprofile-html"},
             new() { Index = 400, Name = "mysearch-html"},
             new() { Index = 405, Name = "mysearchtemplate-html"},
+            new() { Index = 410, Name = "mysearchactive-html"},
             new() { Index = 500, Name = "invoice-html"},
         };
 
@@ -263,6 +264,7 @@ namespace legallead.desktop.implementations
         private const string CssErrorBox = "<link rel=\"stylesheet\" name=\"errorbox\" href=\"css/error.css\">";
         private const string CssMyAccountInclude = "<!-- style: my-account-custom-css -->";
         private const string CssMyAccountSubContent = "<!-- style: my-account-subcontent-css -->";
+        private const string CssMyActiveSearchContent = "<!-- style: my-active-searches-css -->";
         private const string JsCommonCefHandler = "<!-- script: common-cef-handler -->";
         private const string HtmAccountHomeInclude = "<p>My Account</p>";
         private const string HtmAccountPasswordInclude = "<p>My Password</p>";
@@ -290,6 +292,7 @@ namespace legallead.desktop.implementations
         private const string JsMySearchBehavior = "<!-- script: my-search-searching-behaviors -->";
         private const string JsVerifyAndPost = "<!-- script: verify-and-post -->";
         private const string JsCloseInvoice = "<!-- script: invoice-submission-include -->";
+        private const string JsMyActiveSearchScript = "<!-- script: my-active-searches-js -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -297,6 +300,7 @@ namespace legallead.desktop.implementations
             { CssErrorBox, Properties.Resources.errorbox_css },
             { CssMyAccountInclude, Properties.Resources.myaccount_css },
             { CssMyAccountSubContent, Properties.Resources.subcontent_css },
+            { CssMyActiveSearchContent, Properties.Resources.mysearchactive_css },
             { HtmAccountHomeInclude, Properties.Resources.myaccounthome_html },
             { HtmAccountPasswordInclude, Properties.Resources.myaccount_password_html },
             { HtmAccountProfileInclude, Properties.Resources.myaccountprofile_html },
@@ -323,6 +327,7 @@ namespace legallead.desktop.implementations
             { JsMySearchBehavior, Properties.Resources.mysearch_script_js },
             { JsVerifyAndPost, Properties.Resources.verifyandpost_js },
             { JsCloseInvoice, Properties.Resources.invoice_submission_js },
+            { JsMyActiveSearchScript, Properties.Resources.mysearchactive_js },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

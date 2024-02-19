@@ -79,6 +79,14 @@ namespace legallead.desktop.utilities
             return string.Format(bs64address, base64EncodedHtml);
         }
 
+        internal static string GetAddressBase64(string content)
+        {
+            const string bs64address = "data:text/html;base64,{0}";
+            var html = parser.BeautfyHTML(content);
+            var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(html));
+            return string.Format(bs64address, base64EncodedHtml);
+        }
+
         private static JsHandler GetJsHandler(string name, ChromiumWebBrowser? browser)
         {
             if (!KnownHandlers.Exists(n => n.Equals(name, StringComparison.OrdinalIgnoreCase))) return new JsHandler(browser);

@@ -44,7 +44,7 @@ namespace legallead.desktop.handlers
                 SetUserSession(data, Guid.NewGuid().ToString());
                 NavigateTo("MyAccount", objectData);
                 Thread.Sleep(500);
-                
+
             }
             catch (Exception ex)
             {

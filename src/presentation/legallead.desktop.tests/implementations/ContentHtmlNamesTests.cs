@@ -105,6 +105,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("commondialogue", true)]
         [InlineData("commondialoguescript", true)]
         [InlineData("invoice", true)]
+        [InlineData("MySearchactive", true)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
             var sut = new ContentHtmlNames();

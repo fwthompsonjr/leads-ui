@@ -63,9 +63,9 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
-        ///  &quot;Permissions_API&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
+        ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
         ///  &quot;api.permissions&quot;: {
-        ///    &quot;destination&quot;: &quot;remote&quot;,
+        ///    &quot;destination&quot;: &quot;local&quot;,
         ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
         ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
         ///  },
@@ -76,7 +76,9 @@ namespace legallead.desktop.Properties {
         ///    &quot;session_timeout&quot;: 20
         ///  }
         ///  &quot;stripe&quot;:{
-        ///    &quot;key&quot;: &quot;sk_test_51LCZucDhgP60CL9xtS9RSEC5IhGsKkZwnNxwFwpHbDHLLBLvB87uICAJB5fVZNyqEHN [rest of string was truncated]&quot;;.
+        ///    &quot;key&quot;: &quot;sk_test_51LCZucDhgP60CL9xtS9RSEC5IhGsKkZwnNxwFwpHbDHLLBLvB87uICAJB5fVZNyqEHNpI9ZbLYwFFKXPNnbgucs200OOT3UvbK&quot;
+        ///  }
+        ///}.
         /// </summary>
         internal static string appsettings {
             get {
@@ -1050,6 +1052,82 @@ namespace legallead.desktop.Properties {
         internal static string mysearch_search_html {
             get {
                 return ResourceManager.GetString("mysearch_search_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;my-active-searches&quot;&gt;
+        ///	#dv-main-content {
+        ///		position: relative;
+        ///	}
+        ///	#cbo-my-active-searches {
+        ///		width: 92%;
+        ///		position: relative;
+        ///		left: 15px;
+        ///	}
+        ///	#my-active-searches-row-02-01 {
+        ///		position: relative;
+        ///		left: 10px;
+        ///	}
+        ///	#my-active-searches-row-01 div.col-5,
+        ///	#my-active-searches-row-01 div.col-6 {
+        ///		max-height: 300px;
+        ///		overflow-y: auto;
+        ///		padding-bottom: 10px;
+        ///	}
+        ///	#my-active-searches-row-01 ul,
+        ///	#my-active-searches-row-01 ul li {
+        ///		background-color: transparent;
+        ///		border: 1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchactive_css {
+            get {
+                return ResourceManager.GetString("mysearchactive_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///
+        ///	&lt;head&gt;
+        ///		&lt;!-- script: common-cef-handler --&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: active searches&lt;/title&gt;
+        ///		&lt;!-- block: common-headings --&gt;
+        ///		&lt;!-- common styles --&gt;	
+        ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
+        ///		&lt;!-- style: my-account-subcontent-css --&gt;
+        ///		&lt;!-- style: my-active-searches-css --&gt;
+        ///	&lt;/he [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchactive_html {
+            get {
+                return ResourceManager.GetString("mysearchactive_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;active-searches-js&quot;&gt;
+        ///
+        ///let active_search = {
+        ///	&quot;controls&quot;: {
+        ///		&quot;txjson&quot; : &quot;#text-my-active-searches-js&quot;,
+        ///		&quot;cbo&quot; : &quot;#cbo-my-active-searches&quot;,
+        ///		&quot;cbo_option&quot; : &quot;#cbo-my-active-searches option&quot;,
+        ///		&quot;heading_no_data&quot;: &quot;#heading-my-active-searches-no-content&quot;,
+        ///		&quot;component_list&quot;: &quot;#list-my-active-search-stages&quot;,
+        ///		&quot;component_list_template&quot;: &quot;#list-my-active-search-stages li:first&quot;,
+        ///		&quot;component_last_item&quot;: &quot;#list-my-active-search-stages li:last&quot;
+        ///	},
+        ///	&quot;jso&quot;: function(){
+        ///		let js = $(activ [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mysearchactive_js {
+            get {
+                return ResourceManager.GetString("mysearchactive_js", resourceCulture);
             }
         }
         

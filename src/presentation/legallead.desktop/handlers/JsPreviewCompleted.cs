@@ -1,14 +1,13 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
-using HtmlAgilityPack;
 using legallead.desktop.entities;
-using legallead.desktop.utilities;
 using legallead.desktop.extensions;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
-using Microsoft.Extensions.Configuration;
 
 namespace legallead.desktop.handlers
 {
