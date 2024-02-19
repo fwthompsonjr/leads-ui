@@ -193,7 +193,8 @@ namespace legallead.desktop.utilities
             { "search-begin", "{0}/api/search/search-begin" },
             { "search-get-history", "{0}/api/search/my-searches" },
             { "search-get-preview", "{0}/api/search/my-search-preview" },
-            { "search-get-invoice", "{0}/api/payment/create-checkout-session" }
+            { "search-get-invoice", "{0}/api/payment/create-checkout-session" },
+            { "search-get-actives", "{0}/api/search/my-active-searches" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)

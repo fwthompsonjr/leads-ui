@@ -13,6 +13,11 @@ let active_search = {
 		"status_list_template": "#list-my-active-search-statuses li:first",
 		"status_last_item": "#list-my-active-search-statuses li:last"
 	},
+	"change_view": function(viewName){
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { return; }
+		handler.reload(viewName);
+	},
 	"jso": function(){
 		let js = $(active_search.controls.txjson).text();
 		return JSON.parse(js);
@@ -27,22 +32,24 @@ let active_search = {
 	},
 	"status_template": function(isFirst) {
 		let openLi = isFirst ? 
-			"<li name='status-template' class='list-group-item text-start m-0 p-0'>" :
-			"<li name='status-item' class='list-group-item text-start m-0 p-0'>";
+			"<li name='component-template' class='list-group-item text-start m-0 p-0'>" :
+			"<li name='component-item' class='list-group-item text-start m-0 p-0'>";
 		const closeLi = "</li>";
 		let item = $(active_search.controls.status_list_template).html();
 		return "".concat(openLi, item, closeLi);
 	},
 	combo_changed: function() {
 		active_search.bind.search();
-		active_search.bind.search_components();
+		active_search.bind.staged_components();
+		active_search.bind.status_components();
 	},
 	bind: {
 		"all": function() {
 			active_search.bind.header();
 			active_search.bind.cbo();
 			active_search.bind.search();
-			active_search.bind.search_components();
+			active_search.bind.staged_components();
+			active_search.bind.status_components();
 		},
 		"header": function() {
 			let src = active_search.jso();
@@ -51,7 +58,9 @@ let active_search = {
 			if (hasNoData) {
 				$(hdr).show();
 			} else {
-				$(hdr).hide();
+				let txt = "Found ( ~0 ) searches in progress".replace("~0", src.details.length);
+				$(hdr).text(txt);
+				$(hdr).show();
 			}
 		},
 		"cbo": function() {
@@ -65,6 +74,10 @@ let active_search = {
 			src.details.forEach(function(d) {
 				let hto = cboid == 0 ? "<option selected='selected' value='~0'>~1</option>" : "<option value='~0'>~1</option>";
 				let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]);
+				let dstring = d.createDate.replace("T", " ");
+				let dte = new Date(Date.parse(dstring));
+				let dtxt = dte.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}).toUpperCase();
+				txt+= (" on " + dtxt);
 				hto = hto.replace("~0", cboid);
 				hto = hto.replace("~1", txt);
 				html = $( cbo ).html() + hto;
@@ -78,6 +91,14 @@ let active_search = {
 				{ "find": "#list-my-active-search-names span[name='requested-date']", "value": " - " },
 				{ "find": "#list-my-active-search-names span[name='start-date']", "value": " - " },
 				{ "find": "#list-my-active-search-names span[name='search-status']", "value": " - " },
+			];
+			let statuses = [
+				{ "name": "Submitted", "code": "text-white" },
+				{ "name": "Processing", "code": "text-warning" },
+				{ "name": "Completed", "code": "text-success" },
+				{ "name": "Purchased", "code": "text-info" },
+				{ "name": "Downloaded", "code": "text-primary" },
+				{ "name": "Error", "code": "text-danger" },
 			];
 			data.forEach((d) => { $(d.find).text(d.value); });
 			if ( cbcount == 0 ) { return; }
@@ -94,8 +115,14 @@ let active_search = {
 			data[1].value = jssearch.startDate.split('.')[0];			
 			data[2].value = sts;
 			data.forEach((d) => { $(d.find).text(d.value); });
+			var $statusSpan = $(data[2].find);
+			statuses.forEach((s) => $statusSpan.removeClass(s.code));
+			var selected = statuses.find(x => x.name == sts);
+			if (selected != null) {
+				$statusSpan.addClass(selected.code);
+			}
 		},
-		"search_components": function() {
+		"staged_components": function() {
 			let cbcount = $( active_search.controls.cbo_option ).length;
 			if ( cbcount == 0 ) { return; }
 			let $cbo = $( active_search.controls.cbo );
@@ -103,7 +130,7 @@ let active_search = {
 			let jso = active_search.jso();
 			let src = jso.details[cboid];
 			let srcid = src.id
-			let jssearch = jso.history.statuses.filter(x => x.searchId == srcid);
+			let jssearch = jso.history.staged.filter(x => x.searchId == srcid);
 			let blanktemplate = active_search.component_template(true);
 			let template = active_search.component_template(false);
 			let $list = $( active_search.controls.component_list );
@@ -112,8 +139,29 @@ let active_search = {
 				let htnow = $list.html() + template;
 				$list.html(htnow);
 				let $li = $(active_search.controls.component_last_item);
-				$li.find("span[name='stage-label']").text(s.line);
+				$li.find("span[name='stage-label']").text(s.stagingType);
 				$li.find("span[name='stage-date']").text(s.createDate.split('.')[0]);
+			});
+		},
+		"status_components": function() {
+			let cbcount = $( active_search.controls.cbo_option ).length;
+			if ( cbcount == 0 ) { return; }
+			let $cbo = $( active_search.controls.cbo );
+			let cboid = $cbo.val();
+			let jso = active_search.jso();
+			let src = jso.details[cboid];
+			let srcid = src.id
+			let jssearch = jso.history.statuses.filter(x => x.searchId == srcid);
+			let blanktemplate = active_search.status_template(true);
+			let template = active_search.status_template(false);
+			let $list = $( active_search.controls.status_list );
+			$list.html(blanktemplate);
+			jssearch.forEach(function(s) {
+				let htnow = $list.html() + template;
+				$list.html(htnow);
+				let $li = $(active_search.controls.status_last_item);
+				$li.find("span[name='status-label']").text(s.line);
+				$li.find("span[name='status-date']").text(s.createDate.split('.')[0]);
 			});
 		}
 	}

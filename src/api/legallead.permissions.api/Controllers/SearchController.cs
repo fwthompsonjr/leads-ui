@@ -3,6 +3,7 @@ using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Controllers
 {

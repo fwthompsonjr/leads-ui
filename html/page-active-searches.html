@@ -1,1980 +1,628 @@
-<html>
-
-	<head>
-		
-	<script type="text/javascript">
-		try {
-			CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-		} catch {}		
-	</script>
+<html><head>
+		<script type="text/javascript">
+                         try { 
+                         CefSharp.BindObjectAsync("jsHandler", "jsHandler"); 
+                              } catch {} 
 
 
+		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<meta name="description" content="">
 		<meta name="author" content="">
 		<title>legallead.ui: active searches</title>
 		
-
 		<!-- googleapis : fonts -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
 		
 		<!-- popper -->
 		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-
+		
 		<!-- bootstrap -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+		
 		<!-- font awesome -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+		
 		<!-- jquery -->
-		<script 
-			src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
-			integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
-			crossorigin="anonymous" 
-			referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+		
 		<!-- common styles -->
-		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css" />
+		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css">
 		
-
-
-		<!-- common styles -->	
+		<!-- common styles -->
 		<style name="base-css">
+                    /* 
+                    * Forms 
+                    */ 
+                         .form-control:focus { 
+                         background-color: #444; 
+                         color: rgb(240, 240, 240) 
+                         } 
+                         .form-control { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+                         .form-control.error { 
+                         border-color: red; 
+                         } 
+                         label.error { 
+                         color: red; 
+                         font-size: small; 
+                         } 
+                         div.help-text { 
+                         font-size: small; 
+                         } 
+                    /* 
+                    * Header 
+                    */ 
+                         div[name="header"] { 
+                         height: 50px; 
+                         border-bottom: #444 solid 1px; 
+                         margin-top: 5px; 
+                         } 
+                    /* 
+                    * Loader 
+                    */ 
+                         div[name="loader"] { 
+                         margin-top: 20px; 
+                         margin-bottom: 20px; 
+                         border: 16px solid #cdcdb1; /* Light grey */ 
+                         border-top: 16px solid #9c9c63; /* Brown-ish */ 
+                         border-radius: 50%; 
+                         width: 120px; 
+                         height: 120px; 
+                         animation: spin 3s linear infinite; 
+                         } 
+                         @keyframes spin { 
+                              0% { transform: rotate(0deg); } 
+                              100% { transform: rotate(360deg); } 
+                         } 
+                    /* 
+                    * Card 
+                    */ 
+                         .card { 
+                         background-color: transparent; 
+                         border-color: #444; 
+                         color: #fff; 
+                         } 
+                         .card .card-body .card-title { 
+                         border-bottom: #444 solid 1px; 
+                         padding-bottom: 5px; 
+                         } 
+                         .card .card-footer { 
+                         border-top: #555 solid 1px; 
+                         } 
+                         @media screen and (max-width: 500px) { 
+                              .card { 
+                              width: 300px; 
+                              margin-left: 40px; 
+                              } 
+                         } 
+                    /* 
+                    * Modal 
+                    */ 
+                         div.modal-content { 
+                         background-color: lightgray; 
+                         color: rgb(240, 240, 240); 
+                         } 
+                    /* 
+                    * Data Tables 
+                    */ 
+                    table[name='search-dt-table'], 
+                         table[automationId='search-preview-table'] { 
+                         font-size: 14px; 
+                         border: 1px solid #444; 
+                         width: 100%; 
+                         margin-left: 5px; 
+                         margin-right: 10px; 
+                         } 
+                    table[name='search-dt-table'] tbody, 
+                    table[name='search-dt-table'] td, 
+                    table[name='search-dt-table'] tfoot, 
+                    table[name='search-dt-table'] th, 
+                    table[name='search-dt-table'] thead, 
+                    table[name='search-dt-table'] tr, 
+                    table[automationId='search-preview-table'] tbody, 
+                    table[automationId='search-preview-table'] td, 
+                    table[automationId='search-preview-table'] tfoot, 
+                    table[automationId='search-preview-table'] th, 
+                    table[automationId='search-preview-table'] thead, 
+                         table[automationId='search-preview-table'] tr { 
+                         border: 1px solid #444; 
+                         } 
+                    table[name='search-dt-table'] td, 
+                         table[automationId='search-preview-table'] td { 
+                         padding-left: 4px; 
+                         padding-right: 4px; 
+                         } 
+                    table[name='search-dt-table'] thead tr, 
+                         table[automationId='search-preview-table'] thead tr { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                    table[name='search-dt-table'] tfoot tr td, 
+                         table[automationId='search-preview-table'] tfoot tr td { 
+                         border-top-style: double; 
+                         border-right-style: none; 
+                         border-bottom-style: none; 
+                         border-left-style: none; 
+                         } 
+                    table[name='search-dt-table'] tfoot, 
+                         table[automationId='search-preview-table'] tfoot { 
+                         margin-top: 10px; 
+                         } 
+                         tr[data-position] { 
+                         cursor: pointer; 
+                         } 
+                         tr[data-position]:hover { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                         tr[data-position='odd'] { 
+                         background-color: rgba(125, 125, 125, .25); 
+                         } 
+                         tr[data-position] a[name='link-show-details']:hover { 
+                         color: #0a58ca; 
+                         } 
+                         #cbo-subcontent-history-pager { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
 
-/*
-* Forms
-*/
-.form-control:focus {
-	background-color: #444;
-	color: rgb(240, 240, 240)
-}
 
-.form-control {
-    background-color: transparent;
-    border-color: #555;
-    color: ghostwhite;
-}
-
-.form-control.error {
-    border-color: red;
-}
-label.error {
-    color: red;
-    font-size: small;
-}
-div.help-text {
-    font-size: small;
-}
-
-/*
- * Header
- */
-div[name="header"] {
-    height: 50px; 
-    border-bottom: #444 solid 1px;
-    margin-top: 5px;
-}
-
-
-/*
- * Loader
- */
-div[name="loader"] {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 16px solid #cdcdb1; /* Light grey */
-  border-top: 16px solid #9c9c63; /* Brown-ish */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 3s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-
-/*
- * Card
- */
- .card {
-    background-color: transparent;
-    border-color: #444;
-    color: #fff;
- }
- .card .card-body .card-title {
-    border-bottom: #444 solid 1px;
-    padding-bottom: 5px;
- }
- .card .card-footer {
-    border-top: #555 solid 1px;
- }
-@media screen and (max-width: 500px) {
-  .card {
-    width: 300px;
-    margin-left: 40px;
- }
-}
-
-/*
- * Modal
- */
- div.modal-content {
-    background-color: lightgray;
-    color: rgb(240, 240, 240);
- }
-
-/*
- * Data Tables
- */
-table[name='search-dt-table'],
-table[automationId='search-preview-table'] {
-    font-size: 14px;
-    border: 1px solid #444;
-    width: 100%;
-    margin-left: 5px;
-    margin-right: 10px;
-}
-
-table[name='search-dt-table'] tbody, 
-table[name='search-dt-table'] td, 
-table[name='search-dt-table'] tfoot, 
-table[name='search-dt-table'] th, 
-table[name='search-dt-table'] thead, 
-table[name='search-dt-table'] tr,
-table[automationId='search-preview-table'] tbody, 
-table[automationId='search-preview-table'] td, 
-table[automationId='search-preview-table'] tfoot, 
-table[automationId='search-preview-table'] th, 
-table[automationId='search-preview-table'] thead, 
-table[automationId='search-preview-table'] tr {
-    border: 1px solid #444;
-}
-
-table[name='search-dt-table'] td,
-table[automationId='search-preview-table'] td {
-	padding-left: 4px;
-	padding-right: 4px;
-}
-
-table[name='search-dt-table'] thead tr,
-table[automationId='search-preview-table'] thead tr { 
-background-color: rgba(255, 255, 255, .25);
-} 
-table[name='search-dt-table'] tfoot tr td,
-table[automationId='search-preview-table'] tfoot tr td { 
-  border-top-style: double;
-  border-right-style: none;
-  border-bottom-style: none;
-  border-left-style: none;
-} 
-
-table[name='search-dt-table'] tfoot,
-table[automationId='search-preview-table'] tfoot { 
-    margin-top: 10px;
-}
-
-
-					 
-tr[data-position] {
-cursor: pointer;
-}
-						 
-tr[data-position]:hover {
-background-color: rgba(255, 255, 255, .25);
-}	 
-tr[data-position='odd'] {
-background-color: rgba(125, 125, 125, .25);
-}
-tr[data-position] a[name='link-show-details']:hover {
-color: #0a58ca;
-}
-#cbo-subcontent-history-pager {
-    background-color: transparent;
-    border-color: #555;
-    color: ghostwhite;
-}
-
-</style>
-
+		</style>
 		<style name="subcontent-css">
+                         div.subcontent { 
+                         width: 50%; 
+                         min-width: 400px; 
+                         max-width: 1200px; 
+                         margin-bottom: 20px; 
+                         display: none; 
+                         } 
+                         div.subcontent.active { 
+                         display: block; 
+                         } 
+                         div[name="subcontent-home-bullet-list"] { 
+                         width: 50%; 
+                         margin-left: 35%; 
+                         text-align: left; 
+                         justify-content: left; 
+                         } 
+                         div[name="main-content"] { 
+                         width: 70%; 
+                         min-width: 800px; 
+                         max-width: 1200px; 
+                         } 
+                         div[name="main-content"] div.card { 
+                         height: 95%; 
+                         min-height: 560px; 
+                         } 
+                    div[name="subcontent-home"], 
+                    div[name="subcontent-profile"], 
+                    div[name="subcontent-permissions"], 
+                         div[name="subcontent-password"] { 
+                         text-align: left; 
+                         justify-content: left; 
+                         margin-bottom: 20px; 
+                         margin-left: 20px; 
+                         } 
+                    div[name="subcontent-permissions"] .form-check-input, 
+                    div[name="subcontent-permissions"] .list-group, 
+                         div[name="subcontent-permissions"] .list-group-item { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+                         #dv-subcontent-permissions-container { 
+                         width: 85%; 
+                         margin-left: 25px; 
+                         } 
 
-			div.subcontent {
-				width: 50%; 
-				min-width: 400px;
-				max-width: 1200px;
-                margin-bottom: 20px;
-				display: none;
-			}
-			
-			div.subcontent.active {
-				display: block;
-			}
 
-			div[name="subcontent-home-bullet-list"] {
-				width: 50%; 
-				margin-left: 35%;
-				text-align: left;
-				justify-content: left;
-			}
-			
-
-			div[name="main-content"] {
-				width: 70%; 
-				min-width: 800px;
-				max-width: 1200px;
-			}		
-
-			div[name="main-content"] div.card {
-				height: 95%;
-				min-height: 560px;
-			}
-
-			div[name="subcontent-home"],
-			div[name="subcontent-profile"],
-			div[name="subcontent-permissions"],
-			div[name="subcontent-password"] {
-				text-align: left;
-				justify-content: left;
-				margin-bottom: 20px;
-				margin-left: 20px;
-			}
-
-			
-			div[name="subcontent-permissions"] .form-check-input, 
-			div[name="subcontent-permissions"] .list-group,
-			div[name="subcontent-permissions"] .list-group-item {
-				background-color: transparent;
-				border-color: #555;
-				color: ghostwhite;
-
-			}
-
-			#dv-subcontent-permissions-container {
-				width: 85%;
-				margin-left: 25px;
-			}
-
-</style>
+		</style>
 		<style name="my-active-searches">
-	#dv-main-content {
-		position: relative;
-	}
-	#cbo-my-active-searches {
-		width: 92%;
-		position: relative;
-		left: 15px;
-	}
-	#my-active-searches-row-02-01 {
-		position: relative;
-		left: 10px;
-	}
-	#my-active-searches-row-01 div.col-5,
-	#my-active-searches-row-01 div.col-6 {
-		max-height: 300px;
-		overflow-y: auto;
-		padding-bottom: 10px;
-	}
-	#my-active-searches-row-01 ul,
-	#my-active-searches-row-01 ul li {
-		background-color: transparent;
-		border: 1px solid transparent;
-		color: #777;
-	}
-	#list-my-active-search-names div {
-		width: 95%;
-	}
+                         #dv-main-content { 
+                         position: relative; 
+                         } 
+                         #cbo-my-active-searches { 
+                         width: 92%; 
+                         position: relative; 
+                         left: 15px; 
+                         } 
+                         #my-active-searches-row-02-01 { 
+                         position: relative; 
+                         left: 10px; 
+                         } 
+                    #my-active-searches-row-01 div.col-5, 
+                    #my-active-searches-row-01 div.col-6, 
+                         #my-active-searches-row-02-01 { 
+                         max-height: 300px; 
+                         overflow-y: auto; 
+                         padding-bottom: 10px; 
+                         } 
+                    #my-active-searches-row-01 ul, 
+                    #my-active-searches-row-02 ul, 
+                    #my-active-searches-row-01 ul li, 
+                         #my-active-searches-row-02 ul li { 
+                         background-color: transparent; 
+                         border: 1px solid transparent; 
+                         color: #777; 
+                         } 
+                         #list-my-active-search-names div { 
+                         width: 95%; 
+                         } 
+                    li[name="component-template"], 
+                         tr[name="status-template"] { 
+                         display: none; 
+                         } 
+                         li[name='component-item'] { 
+                         border-bottom-color: #777 !important; 
+                         } 
+                    span[name="stage-label"], 
+                         span[name="status-label"] { 
+                         display: block; 
+                         width: 60%; 
+                         margin-left: 5px; 
+                         } 
+                    span[name="stage-date"], 
+                         span[name="status-date"] { 
+                         display: block; 
+                         width: 35%; 
+                         border-left: 1px solid #777; 
+                         margin-right: 5px; 
+                         } 
 
-	li[name="component-template"],
- 	tr[name="status-template"] {
-		display: none;
-	}
-	li[name='component-item'] {
-		border-bottom-color: #c0c0c0 !important;
-	}
-	span[name="stage-label"] {
-		display: block,
-		width: 60%
-	}
-	
-	span[name="stage-date"] {
-		display: block,
-		width: 30%
-	}
-</style>
+
+		</style>
 	</head>
-
 	<body class="text-center">
-	<!-- Logout Modal -->
-<!-- Button trigger modal -->
-<button id="btn-my-account-logout-show" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#my-account-logout-modal">
-  Launch static backdrop modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="my-account-logout-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-account-logout-label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5 text-muted" id="my-account-logout-label">Logout</h1>
-            <button id="my-account-logout-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-dark">
-            Are you sure you want to log out?
-        </div>
-        <div class="modal-footer">
-            <button id="my-account-logout-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-            <button id="my-account-logout-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
-        </div>
-    </div>
-  </div>
-</div>
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header 
-		class="masthead mb-auto" 
-		style="border-bottom: #444 solid 1px; padding-bottom: 2px">
-		<div class="inner">
-			
-			<h3 class="masthead-brand">
-				<i class="bi bi-bank2"></i>
-				<span>Legal Lead UI</span>
-			</h3>
-			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
-				<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:jssearchviews.setIndex(0)">Search</a>
-				<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:jssearchviews.setIndex(1)">History</a>
-				<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:jssearchviews.setIndex(2)">Purchases</a>
-			</nav>
-		</div>
-      </header>
-
-      <main role="main" class="inner cover">
 		
-		<div id="dv-main-content" name="main-content">
-            <h4>Active Searches</h4>
-            <h5 id="heading-my-active-searches-no-content">No active searches in progress</h5>
-            <hr/>
-			<div class="row" id="my-active-searches-row-00">
-				<select id="cbo-my-active-searches" class="form-control border-secondary" onchange="active_search.combo_changed()" >
-				</select>
-			</div>
-			<div class="row p-2" id="my-active-searches-row-01">
-				<div class="col-5 border border-secondary rounded m-2">
-					<h5>Search</h5>
-					<ul class="list-group" id="list-my-active-search-names">
-						<li class="list-group-item text-start m-0 p-0">
-							<div class="d-flex justify-content-between">
-								<span>Requested Date:</span>
-								<span name="requested-date" class="text-end"> - </span>
-							</div>
-						</li>
-						<li class="list-group-item text-start m-0 p-0">
-							<div class="d-flex justify-content-between">
-								<span>Processing Start:</span>
-								<span name="start-date" class="text-end"> - </span>
-							</div>
-						</li>
-						<li class="list-group-item text-start m-0 p-0">
-							<div class="d-flex justify-content-between">
-								<span>Status:</span>
-								<span name="search-status" class="text-end"> - </span>
-							</div>
-						</li>
-					</ul>
+		<!-- Logout Modal -->  		 		 		 		 		 		 		 		 		 		 		 		 		
+		<!-- Button trigger modal -->
+		<button id="btn-my-account-logout-show" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#my-account-logout-modal">
+			Launch static backdrop modal
+		</button>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="my-account-logout-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="my-account-logout-label" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5 text-muted" id="my-account-logout-label">Logout</h1>
+						<button id="my-account-logout-x-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body text-dark">
+						Are you sure you want to log out?
+					</div>
+					<div class="modal-footer">
+						<button id="my-account-logout-bttn-close" type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+						<button id="my-account-logout-bttn" type="button" class="btn btn-primary" onclick="verifyAndPost( 'user', 'logout')">Confirm</button>
+					</div>
 				</div>
-				<div class="col-6 border border-secondary rounded m-2">
-					<h5>Components</h5>
-					<ul class="list-group" id="list-my-active-search-stages">
-						<li name="component-template" class="list-group-item text-start m-0 p-0">
-							<div class="d-flex justify-content-between">
-								<span name="stage-label">:</span>
-								<span name="stage-date" class="text-end"> - </span>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="row" id="my-active-searches-row-02">
-				<div id="my-active-searches-row-02-01" class="col-11 border border-secondary rounded m-2">
-					<h5>Status</h5>
-					<table automationId="active-search-status-table" class="w-100 text-secondary">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Date</th>
-								<th>Description</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr name="status-template">
-								<td><span name="line-nbr">1</span></td>
-								<td><span name="create-date">02-12-2025</span></td>
-								<td><span name="line-text">test</span></td>								
-							</tr>
-							<tr>
-								<td><span name="line-nbr">1</span></td>
-								<td><span name="create-date">02-12-2025</span></td>
-								<td><span name="line-text">test</span></td>								
-							</tr>
-							<tr>
-								<td><span name="line-nbr">1</span></td>
-								<td><span name="create-date">02-12-2025</span></td>
-								<td><span name="line-text">test</span></td>								
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="row d-none" id="my-active-searches-row-03">
-				<textarea id="text-my-active-searches-js">
-				{
-    "details": [
-        {
-            "id": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-01-29T23:13:45",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "4890f996-befc-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-01-29T23:15:25",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-01-30T13:43:32",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-03T01:04:01",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-03T17:36:02",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-03T17:36:03",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-04T00:50:38",
-            "countyName": "DENTON",
-            "stateName": "TX",
-            "startDate": "10/1/2023 12:00:00 AM",
-            "endDate": "10/7/2023 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-15T14:45:47",
-            "countyName": "COLLIN",
-            "stateName": "TX",
-            "startDate": "2/5/2024 12:00:00 AM",
-            "endDate": "2/5/2024 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        },
-        {
-            "id": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-            "createDate": "2024-02-15T14:50:46",
-            "countyName": "TARRANT",
-            "stateName": "TX",
-            "startDate": "2/12/2024 12:00:00 AM",
-            "endDate": "2/13/2024 12:00:00 AM",
-            "searchProgress": "3 - Completed"
-        }
-    ],
-    "history": {
-        "searches": [
-            {
-                "id": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-03 19:37:53.000000",
-                "startDate": "2024-01-29 23:13:46.000000",
-                "createDate": "2024-01-29 23:13:45.000000",
-                "expectedRows": 249
-            },
-            {
-                "id": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-03 01:13:51.000000",
-                "startDate": "2024-02-03 01:04:01.000000",
-                "createDate": "2024-02-03 01:04:01.000000",
-                "expectedRows": 248
-            },
-            {
-                "id": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-01-29 23:39:30.000000",
-                "startDate": "2024-01-29 23:15:25.000000",
-                "createDate": "2024-01-29 23:15:25.000000",
-                "expectedRows": 249
-            },
-            {
-                "id": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-04 18:14:34.000000",
-                "startDate": "2024-02-04 00:50:38.000000",
-                "createDate": "2024-02-04 00:50:38.000000",
-                "expectedRows": 248
-            },
-            {
-                "id": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-03 19:37:53.000000",
-                "startDate": "2024-01-30 13:43:33.000000",
-                "createDate": "2024-01-30 13:43:32.000000",
-                "expectedRows": 249
-            },
-            {
-                "id": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-15 14:58:26.000000",
-                "startDate": "2024-02-15 14:49:45.000000",
-                "createDate": "2024-02-15 14:50:46.000000",
-                "expectedRows": 200
-            },
-            {
-                "id": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-03 17:37:10.000000",
-                "startDate": "2024-02-03 17:36:02.000000",
-                "createDate": "2024-02-03 17:36:02.000000",
-                "expectedRows": 248
-            },
-            {
-                "id": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-03 17:38:06.000000",
-                "startDate": "2024-02-03 17:36:04.000000",
-                "createDate": "2024-02-03 17:36:03.000000",
-                "expectedRows": 248
-            },
-            {
-                "id": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "endDate": "2024-02-15 16:25:04.000000",
-                "startDate": "2024-02-15 14:45:47.000000",
-                "createDate": "2024-02-15 14:45:47.000000",
-                "expectedRows": 50
-            }
-        ],
-        "statuses": [
-            {
-                "id": "0d3f3c2b-befc-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:13:45.000000"
-            },
-            {
-                "id": "67c3cbcf-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "67ccc76f-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 3,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "67cd96bd-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 4,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "67ce063f-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 5,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "67d47eae-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 6,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "67d53401-befc-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 7,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:16:17.000000"
-            },
-            {
-                "id": "1e0f7346-c230-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:04:01.000000"
-            },
-            {
-                "id": "6f760b04-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "6faef96a-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 3,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "6faef96c-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 3,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "6fafb01b-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 4,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "6fb9d5dc-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 5,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "6fba82df-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 6,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:13:27.000000"
-            },
-            {
-                "id": "9c2d1e54-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 7,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000"
-            },
-            {
-                "id": "9c2e0e21-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 8,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000"
-            },
-            {
-                "id": "9c4428b3-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 9,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000"
-            },
-            {
-                "id": "9c44e354-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 10,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000"
-            },
-            {
-                "id": "9c4e64bc-c231-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 11,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000"
-            },
-            {
-                "id": "4892907e-befc-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:15:25.000000"
-            },
-            {
-                "id": "59ffe787-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 2,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "5a00cd07-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 3,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "5a01673a-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 4,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "5a020ed0-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 5,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "5a02a9c0-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 6,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "5a087f32-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 7,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:37:23.000000"
-            },
-            {
-                "id": "bcc1ff0e-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 8,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000"
-            },
-            {
-                "id": "bcc2c4a0-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 9,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000"
-            },
-            {
-                "id": "bcdded76-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 10,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000"
-            },
-            {
-                "id": "bcdded79-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 10,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000"
-            },
-            {
-                "id": "c28373c4-beff-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 11,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:18.000000"
-            },
-            {
-                "id": "69dc2c70-c2f7-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 00:50:38.000000"
-            },
-            {
-                "id": "fcbd1088-c388-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:41.000000"
-            },
-            {
-                "id": "fcd0c71f-c388-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 3,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:41.000000"
-            },
-            {
-                "id": "fcd0c721-c388-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 3,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:41.000000"
-            },
-            {
-                "id": "038d0627-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 4,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:53.000000"
-            },
-            {
-                "id": "038d082b-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 4,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:53.000000"
-            },
-            {
-                "id": "03956127-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 5,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:12:53.000000"
-            },
-            {
-                "id": "3fc33a6b-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 6,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000"
-            },
-            {
-                "id": "3fc33a6e-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 6,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000"
-            },
-            {
-                "id": "3fd72a5e-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 7,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000"
-            },
-            {
-                "id": "3fd7ecea-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 8,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000"
-            },
-            {
-                "id": "3fe1ffe2-c389-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 9,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000"
-            },
-            {
-                "id": "8f3428c2-bf75-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-30 13:43:32.000000"
-            },
-            {
-                "id": "135aa681-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:03.000000"
-            },
-            {
-                "id": "14de17df-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 3,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:06.000000"
-            },
-            {
-                "id": "14df2d7f-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 4,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:06.000000"
-            },
-            {
-                "id": "14f5bcfe-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 5,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:06.000000"
-            },
-            {
-                "id": "14f67d69-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 6,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:06.000000"
-            },
-            {
-                "id": "14f67d6c-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 6,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:02:06.000000"
-            },
-            {
-                "id": "5092b494-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 7,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000"
-            },
-            {
-                "id": "5092b497-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 7,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000"
-            },
-            {
-                "id": "50a7903a-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 8,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000"
-            },
-            {
-                "id": "50a84ab6-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 9,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000"
-            },
-            {
-                "id": "50b0c6d3-c052-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 10,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000"
-            },
-            {
-                "id": "94be4886-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 11,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "94df78dc-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 12,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "94df78de-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 12,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "94e08fd8-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 13,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "94eb811e-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 14,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "94eb8120-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 14,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:36:52.000000"
-            },
-            {
-                "id": "b97b9e58-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 15,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000"
-            },
-            {
-                "id": "b97b9e5b-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 15,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000"
-            },
-            {
-                "id": "b994308e-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 16,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000"
-            },
-            {
-                "id": "b9943091-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 16,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000"
-            },
-            {
-                "id": "b99e30f2-c2cb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 17,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000"
-            },
-            {
-                "id": "9a108aae-cc11-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:50:46.000000"
-            },
-            {
-                "id": "91fa5b3f-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "91fba5dc-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 3,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "91fbab32-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: tarrant, Start: 2/12/2024, Ending: 2/13/2024",
-                "lineNbr": 3,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "921d2b6e-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 4,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "921e2ee0-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 5,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "921f07db-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 6,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000"
-            },
-            {
-                "id": "f2b10a87-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 7,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:24.000000"
-            },
-            {
-                "id": "f2b1af16-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 8,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:24.000000"
-            },
-            {
-                "id": "f2d05bf8-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 9,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:25.000000"
-            },
-            {
-                "id": "f2d145d9-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 10,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:25.000000"
-            },
-            {
-                "id": "f2de7aba-cc12-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 11,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:25.000000"
-            },
-            {
-                "id": "b3502d46-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:36:02.000000"
-            },
-            {
-                "id": "d6eb591f-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "d70ad30d-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 3,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "d70ad30f-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 3,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "d70bcf50-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 4,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "d7152c8c-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 5,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "d7167639-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 6,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:37:02.000000"
-            },
-            {
-                "id": "fa0d7049-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 7,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000"
-            },
-            {
-                "id": "fa0d704c-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 7,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000"
-            },
-            {
-                "id": "fa258615-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 8,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa2714d0-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 9,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa2fd5f3-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 10,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "b443fe8f-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:36:03.000000"
-            },
-            {
-                "id": "fa2fa55a-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa54709f-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 3,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa56439c-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023",
-                "lineNbr": 4,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa56eedb-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 5,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa570233-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 5,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "fa5799bb-c2ba-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 6,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000"
-            },
-            {
-                "id": "1bdf53b7-c2bb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 7,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000"
-            },
-            {
-                "id": "1bdf541d-c2bb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 7,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000"
-            },
-            {
-                "id": "1be30507-c2bb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 8,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000"
-            },
-            {
-                "id": "1be3baa5-c2bb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 9,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000"
-            },
-            {
-                "id": "1be6c1ad-c2bb-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 10,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000"
-            },
-            {
-                "id": "e7b682e0-cc10-11ee-be26-0af7a01f52e9",
-                "line": "INFO: Search request submitted.",
-                "lineNbr": 1,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:45:47.000000"
-            },
-            {
-                "id": "39ad41ea-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: begin",
-                "lineNbr": 2,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:04.000000"
-            },
-            {
-                "id": "39b81034-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search begin State: tx, County: collin, Start: 2/5/2024, Ending: 2/5/2024",
-                "lineNbr": 3,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:04.000000"
-            },
-            {
-                "id": "39b8124e-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter evaluation: complete",
-                "lineNbr": 3,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:04.000000"
-            },
-            {
-                "id": "39bf2c2a-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: begin",
-                "lineNbr": 4,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:05.000000"
-            },
-            {
-                "id": "3a36b571-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: parameter conversion to search request: complete",
-                "lineNbr": 5,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:05.000000"
-            },
-            {
-                "id": "3a36b573-cc11-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: begin",
-                "lineNbr": 5,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:05.000000"
-            },
-            {
-                "id": "c67c7e0b-cc1e-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: search request processing: complete",
-                "lineNbr": 6,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:04.000000"
-            },
-            {
-                "id": "c6833c2a-cc1e-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: begin",
-                "lineNbr": 7,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:04.000000"
-            },
-            {
-                "id": "c6c2fd3e-cc1e-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content conversion: complete",
-                "lineNbr": 8,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:05.000000"
-            },
-            {
-                "id": "c6c2fd41-cc1e-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: begin",
-                "lineNbr": 8,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:05.000000"
-            },
-            {
-                "id": "c6e0a453-cc1e-11ee-be26-0af7a01f52e9",
-                "line": "SearchGenerationService: excel content serialization: complete",
-                "lineNbr": 9,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:05.000000"
-            }
-        ],
-        "staged": [
-            {
-                "id": "ca5881ee-befc-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:19:03.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "ca9d3ae4-befc-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:19:03.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "cab1cdaf-befc-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:19:03.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "cacb8824-befc-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "0d3b51b2-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:19:03.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "9b1f5918-c231-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:40.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "9bd51a38-c231-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:41.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "9bf8f564-c231-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "9c1d4d1b-c231-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "9c57d403-c231-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "1e0cabed-c230-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 01:14:42.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "bc4eee94-beff-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "bc88599b-beff-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "bc98ef4e-beff-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "bcb1de98-beff-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:08.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "c074f9e6-beff-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "4890f996-befc-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-29 23:40:14.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "3f41cc0a-c389-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:33.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "3f812b55-c389-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:33.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "3f921f57-c389-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:33.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "3fac240b-c389-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "3fed6c1f-c389-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "69d984ba-c2f7-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-04 18:14:34.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "501b29b5-c052-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:45.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "505835a0-c052-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "5069083d-c052-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "508288cf-c052-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "50bae618-c052-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-01-31 16:03:46.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "b8fba078-c2cb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 6,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:53.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "b93bcad4-c2cb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 7,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:53.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "b94b0629-c2cb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 8,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:53.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "b966ac18-c2cb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 9,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:53.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "b9a80b6c-c2cb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 10,
-                "searchId": "8f316534-bf75-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 19:37:54.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "921ef941-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:57:42.000000",
-                "stagingType": "data-fetch-date"
-            },
-            {
-                "id": "abeb1e4f-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:26.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "ac0693dc-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:26.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "b3d689cd-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:39.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "b3f06e00-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:39.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "be9c4e5a-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 6,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:57.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "beb78ca9-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 7,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:58:57.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "c41a056f-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 8,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:06.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "c436cb84-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 9,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:06.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "c4463a6d-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 10,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:06.000000",
-                "stagingType": "data-fetch-date"
-            },
-            {
-                "id": "dc2a01f5-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 11,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:47.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "dc4fdab1-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 12,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:47.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "e370ecc1-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 13,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:59.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "e397c0fc-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 14,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:59:59.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "ed0618f2-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 15,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:15.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "ed242819-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 16,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:15.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "f27f94af-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 17,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:24.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "f2a1acce-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 18,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:24.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "f2f24afe-cc12-11ee-be26-0af7a01f52e9",
-                "lineNbr": 19,
-                "searchId": "99f9d191-cc11-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 15:00:25.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "f9987ff3-c2ba-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "f9d0e522-c2ba-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "f9e0e0d5-c2ba-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "f9fdb923-c2ba-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:00.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "fa393aba-c2ba-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "b34d8a49-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:01.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "1b709a6b-c2bb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "1ba7ee52-c2bb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000",
-                "stagingType": "data-case-list-json"
-            },
-            {
-                "id": "1bb78aae-c2bb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000",
-                "stagingType": "data-output-file-name"
-            },
-            {
-                "id": "1bcf43a9-c2bb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "1be870f6-c2bb-11ee-be26-0af7a01f52e9",
-                "lineNbr": 5,
-                "searchId": "b442777f-c2ba-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-03 17:38:57.000000",
-                "stagingType": "data-excel-content-create"
-            },
-            {
-                "id": "3a433b55-cc11-11ee-be26-0af7a01f52e9",
-                "lineNbr": 1,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 14:48:05.000000",
-                "stagingType": "data-fetch-date"
-            },
-            {
-                "id": "c66065ed-cc1e-11ee-be26-0af7a01f52e9",
-                "lineNbr": 2,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:04.000000",
-                "stagingType": "data-output-person-addres"
-            },
-            {
-                "id": "c677fa69-cc1e-11ee-be26-0af7a01f52e9",
-                "lineNbr": 3,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:04.000000",
-                "stagingType": "data-record-count"
-            },
-            {
-                "id": "c6e22587-cc1e-11ee-be26-0af7a01f52e9",
-                "lineNbr": 4,
-                "searchId": "e7b3d118-cc10-11ee-be26-0af7a01f52e9",
-                "createDate": "2024-02-15 16:25:05.000000",
-                "stagingType": "data-excel-content-create"
-            }
-        ]
-    }
-}
-				</textarea>
 			</div>
 		</div>
-      
-      </main>
+		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+				<div class="inner">
+					<h3 class="masthead-brand">
+						<i class="bi bi-bank2"></i>
+						<span>Legal Lead UI</span>
+					</h3>
+					<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
+						<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link" href="javascript:active_search.change_view('mysearch-home')">Search</a>
+						<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:active_search.change_view('mysearch-actives')">Active</a>
+						<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:active_search.change_view('mysearch-history')">History</a>
+						<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:active_search.change_view('mysearch-purchases')">Purchases</a>
+					</nav>
+				</div>
+			</header>
+			<main role="main" class="inner cover">
+				<div id="dv-main-content" name="main-content">
+					<h4>Active Searches</h4>
+					<h5 id="heading-my-active-searches-no-content" style="display: none;">No active searches in progress</h5>
+					<hr>
+					<div class="row" id="my-active-searches-row-00">
+						<select id="cbo-my-active-searches" class="form-control border-secondary" onchange="active_search.combo_changed()"><option selected="selected" value="0">DENTON TX from 10/1/2023 to 10/7/2023 on MONDAY, JAN 29, 2024</option><option value="1">DENTON TX from 10/1/2023 to 10/7/2023 on MONDAY, JAN 29, 2024</option><option value="2">DENTON TX from 10/1/2023 to 10/7/2023 on TUESDAY, JAN 30, 2024</option><option value="3">DENTON TX from 10/1/2023 to 10/7/2023 on SATURDAY, FEB 3, 2024</option><option value="4">DENTON TX from 10/1/2023 to 10/7/2023 on SATURDAY, FEB 3, 2024</option><option value="5">DENTON TX from 10/1/2023 to 10/7/2023 on SATURDAY, FEB 3, 2024</option><option value="6">DENTON TX from 10/1/2023 to 10/7/2023 on SUNDAY, FEB 4, 2024</option><option value="7">COLLIN TX from 2/5/2024 to 2/5/2024 on THURSDAY, FEB 15, 2024</option><option value="8">TARRANT TX from 2/12/2024 to 2/13/2024 on THURSDAY, FEB 15, 2024</option></select>
+					</div>
+					<div class="row p-2" id="my-active-searches-row-01">
+						<div class="col-5 border border-secondary rounded m-2">
+							<h5>Search</h5>
+							<ul class="list-group" id="list-my-active-search-names">
+								<li class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span>Requested Date:</span>
+										<span name="requested-date" class="text-end">2024-01-29 23:13:45</span>
+									</div>
+								</li>
+								<li class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span>Processing Start:</span>
+										<span name="start-date" class="text-end">2024-01-29 23:13:46</span>
+									</div>
+								</li>
+								<li class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span>Status:</span>
+										<span name="search-status" class="text-end">Completed</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="col-6 border border-secondary rounded m-2">
+							<h5>Stages</h5>
+							<ul class="list-group" id="list-my-active-search-stages"><li name="component-template" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="stage-label">:</span>
+										<span name="stage-date" class="text-end">
+											-
+										</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="stage-label">Data Record Count</span>
+										<span name="stage-date" class="text-end">2024-01-29 23:19:03</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="stage-label">Data Case List Json</span>
+										<span name="stage-date" class="text-end">2024-01-29 23:19:03</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="stage-label">Data Output File Name</span>
+										<span name="stage-date" class="text-end">2024-01-29 23:19:03</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="stage-label">Data Output Person Address</span>
+										<span name="stage-date" class="text-end">2024-01-29 23:19:03</span>
+									</div>
+								</li></ul>
+						</div>
+					</div>
+					<div class="row" id="my-active-searches-row-02">
+						<div id="my-active-searches-row-02-01" class="col-11 border border-secondary rounded m-2">
+							<h5>Status</h5>
+							<ul class="list-group" id="list-my-active-search-statuses"><li name="component-template" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">:</span>
+										<span name="status-date" class="text-end">
+											-
+										</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">INFO: Search request submitted.</span>
+										<span name="status-date" class="text-end">2024-01-29 23:13:45</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: parameter evaluation: begin</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: parameter evaluation: complete</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: parameter conversion to search request: begin</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: parameter conversion to search request: complete</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li><li name="component-item" class="list-group-item text-start m-0 p-0">
+									<div class="d-flex justify-content-between">
+										<span name="status-label">SearchGenerationService: search request processing: begin</span>
+										<span name="status-date" class="text-end">2024-01-29 23:16:17</span>
+									</div>
+								</li></ul>
+						</div>
+					</div>
+					<div class="row d-none" id="my-active-searches-row-03">
+						<textarea id="text-my-active-searches-js">{"details":[{"id":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29T23:13:45","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29T23:15:25","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-30T13:43:32","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03T01:04:01","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03T17:36:02","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03T17:36:03","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04T00:50:38","countyName":"DENTON","stateName":"TX","startDate":"10/1/2023 12:00:00 AM","endDate":"10/7/2023 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15T14:45:47","countyName":"COLLIN","stateName":"TX","startDate":"2/5/2024 12:00:00 AM","endDate":"2/5/2024 12:00:00 AM","searchProgress":"3 - Completed"},{"id":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15T14:50:46","countyName":"TARRANT","stateName":"TX","startDate":"2/12/2024 12:00:00 AM","endDate":"2/13/2024 12:00:00 AM","searchProgress":"3 - Completed"}],"history":{"searches":[{"id":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","endDate":"2024-02-03 19:37:53.000000","startDate":"2024-01-29 23:13:46.000000","createDate":"2024-01-29 23:13:45.000000","expectedRows":249},{"id":"1e0cabed-c230-11ee-be26-0af7a01f52e9","endDate":"2024-02-03 01:13:51.000000","startDate":"2024-02-03 01:04:01.000000","createDate":"2024-02-03 01:04:01.000000","expectedRows":248},{"id":"4890f996-befc-11ee-be26-0af7a01f52e9","endDate":"2024-01-29 23:39:30.000000","startDate":"2024-01-29 23:15:25.000000","createDate":"2024-01-29 23:15:25.000000","expectedRows":249},{"id":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","endDate":"2024-02-04 18:14:34.000000","startDate":"2024-02-04 00:50:38.000000","createDate":"2024-02-04 00:50:38.000000","expectedRows":248},{"id":"8f316534-bf75-11ee-be26-0af7a01f52e9","endDate":"2024-02-03 19:37:53.000000","startDate":"2024-01-30 13:43:33.000000","createDate":"2024-01-30 13:43:32.000000","expectedRows":249},{"id":"99f9d191-cc11-11ee-be26-0af7a01f52e9","endDate":"2024-02-15 14:58:26.000000","startDate":"2024-02-15 14:49:45.000000","createDate":"2024-02-15 14:50:46.000000","expectedRows":200},{"id":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","endDate":"2024-02-03 17:37:10.000000","startDate":"2024-02-03 17:36:02.000000","createDate":"2024-02-03 17:36:02.000000","expectedRows":248},{"id":"b442777f-c2ba-11ee-be26-0af7a01f52e9","endDate":"2024-02-03 17:38:06.000000","startDate":"2024-02-03 17:36:04.000000","createDate":"2024-02-03 17:36:03.000000","expectedRows":248},{"id":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","endDate":"2024-02-15 16:25:04.000000","startDate":"2024-02-15 14:45:47.000000","createDate":"2024-02-15 14:45:47.000000","expectedRows":50}],"statuses":[{"id":"0d3f3c2b-befc-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:13:45.000000"},{"id":"67c3cbcf-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"67ccc76f-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":3,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"67cd96bd-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":4,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"67ce063f-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":5,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"67d47eae-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":6,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"67d53401-befc-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":7,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:16:17.000000"},{"id":"1e0f7346-c230-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:04:01.000000"},{"id":"6f760b04-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"6faef96a-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":3,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"6faef96c-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":3,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"6fafb01b-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":4,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"6fb9d5dc-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":5,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"6fba82df-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":6,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:13:27.000000"},{"id":"9c2d1e54-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":7,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000"},{"id":"9c2e0e21-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":8,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000"},{"id":"9c4428b3-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":9,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000"},{"id":"9c44e354-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":10,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000"},{"id":"9c4e64bc-c231-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":11,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000"},{"id":"4892907e-befc-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:15:25.000000"},{"id":"59ffe787-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":2,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"5a00cd07-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":3,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"5a01673a-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":4,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"5a020ed0-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":5,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"5a02a9c0-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":6,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"5a087f32-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":7,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:37:23.000000"},{"id":"bcc1ff0e-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":8,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000"},{"id":"bcc2c4a0-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":9,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000"},{"id":"bcdded76-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":10,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000"},{"id":"bcdded79-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":10,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000"},{"id":"c28373c4-beff-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":11,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:18.000000"},{"id":"69dc2c70-c2f7-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 00:50:38.000000"},{"id":"fcbd1088-c388-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:41.000000"},{"id":"fcd0c71f-c388-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":3,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:41.000000"},{"id":"fcd0c721-c388-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":3,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:41.000000"},{"id":"038d0627-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":4,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:53.000000"},{"id":"038d082b-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":4,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:53.000000"},{"id":"03956127-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":5,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:12:53.000000"},{"id":"3fc33a6b-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":6,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000"},{"id":"3fc33a6e-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":6,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000"},{"id":"3fd72a5e-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":7,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000"},{"id":"3fd7ecea-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":8,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000"},{"id":"3fe1ffe2-c389-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":9,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000"},{"id":"8f3428c2-bf75-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-30 13:43:32.000000"},{"id":"135aa681-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:03.000000"},{"id":"14de17df-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":3,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:06.000000"},{"id":"14df2d7f-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":4,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:06.000000"},{"id":"14f5bcfe-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":5,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:06.000000"},{"id":"14f67d69-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":6,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:06.000000"},{"id":"14f67d6c-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":6,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:02:06.000000"},{"id":"5092b494-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":7,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000"},{"id":"5092b497-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":7,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000"},{"id":"50a7903a-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":8,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000"},{"id":"50a84ab6-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":9,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000"},{"id":"50b0c6d3-c052-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":10,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000"},{"id":"94be4886-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":11,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"94df78dc-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":12,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"94df78de-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":12,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"94e08fd8-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":13,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"94eb811e-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":14,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"94eb8120-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":14,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:36:52.000000"},{"id":"b97b9e58-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":15,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000"},{"id":"b97b9e5b-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":15,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000"},{"id":"b994308e-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":16,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000"},{"id":"b9943091-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":16,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000"},{"id":"b99e30f2-c2cb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":17,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000"},{"id":"9a108aae-cc11-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:50:46.000000"},{"id":"91fa5b3f-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"91fba5dc-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":3,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"91fbab32-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: tarrant, Start: 2/12/2024, Ending: 2/13/2024","lineNbr":3,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"921d2b6e-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":4,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"921e2ee0-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":5,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"921f07db-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":6,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000"},{"id":"f2b10a87-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":7,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:24.000000"},{"id":"f2b1af16-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":8,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:24.000000"},{"id":"f2d05bf8-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":9,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:25.000000"},{"id":"f2d145d9-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":10,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:25.000000"},{"id":"f2de7aba-cc12-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":11,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:25.000000"},{"id":"b3502d46-c2ba-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:36:02.000000"},{"id":"d6eb591f-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"d70ad30d-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":3,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"d70ad30f-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":3,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"d70bcf50-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":4,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"d7152c8c-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":5,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"d7167639-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":6,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:37:02.000000"},{"id":"fa0d7049-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":7,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000"},{"id":"fa0d704c-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":7,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000"},{"id":"fa258615-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":8,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa2714d0-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":9,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa2fd5f3-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":10,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"b443fe8f-c2ba-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:36:03.000000"},{"id":"fa2fa55a-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa54709f-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":3,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa56439c-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: denton, Start: 10/1/2023, Ending: 10/7/2023","lineNbr":4,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa56eedb-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":5,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa570233-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":5,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"fa5799bb-c2ba-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":6,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000"},{"id":"1bdf53b7-c2bb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":7,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000"},{"id":"1bdf541d-c2bb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":7,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000"},{"id":"1be30507-c2bb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":8,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000"},{"id":"1be3baa5-c2bb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":9,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000"},{"id":"1be6c1ad-c2bb-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":10,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000"},{"id":"e7b682e0-cc10-11ee-be26-0af7a01f52e9","line":"INFO: Search request submitted.","lineNbr":1,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:45:47.000000"},{"id":"39ad41ea-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: begin","lineNbr":2,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:04.000000"},{"id":"39b81034-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search begin State: tx, County: collin, Start: 2/5/2024, Ending: 2/5/2024","lineNbr":3,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:04.000000"},{"id":"39b8124e-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter evaluation: complete","lineNbr":3,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:04.000000"},{"id":"39bf2c2a-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: begin","lineNbr":4,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:05.000000"},{"id":"3a36b571-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: parameter conversion to search request: complete","lineNbr":5,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:05.000000"},{"id":"3a36b573-cc11-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: begin","lineNbr":5,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:05.000000"},{"id":"c67c7e0b-cc1e-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: search request processing: complete","lineNbr":6,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:04.000000"},{"id":"c6833c2a-cc1e-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: begin","lineNbr":7,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:04.000000"},{"id":"c6c2fd3e-cc1e-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content conversion: complete","lineNbr":8,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:05.000000"},{"id":"c6c2fd41-cc1e-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: begin","lineNbr":8,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:05.000000"},{"id":"c6e0a453-cc1e-11ee-be26-0af7a01f52e9","line":"SearchGenerationService: excel content serialization: complete","lineNbr":9,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:05.000000"}],"staged":[{"id":"ca5881ee-befc-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:19:03.000000","stagingType":"Data Record Count"},{"id":"ca9d3ae4-befc-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:19:03.000000","stagingType":"Data Case List Json"},{"id":"cab1cdaf-befc-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:19:03.000000","stagingType":"Data Output File Name"},{"id":"cacb8824-befc-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"0d3b51b2-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:19:03.000000","stagingType":"Data Output Person Address"},{"id":"9b1f5918-c231-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:40.000000","stagingType":"Data Record Count"},{"id":"9bd51a38-c231-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:41.000000","stagingType":"Data Case List Json"},{"id":"9bf8f564-c231-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000","stagingType":"Data Output File Name"},{"id":"9c1d4d1b-c231-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000","stagingType":"Data Output Person Address"},{"id":"9c57d403-c231-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"1e0cabed-c230-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 01:14:42.000000","stagingType":"Data Excel Content Create"},{"id":"bc4eee94-beff-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000","stagingType":"Data Record Count"},{"id":"bc88599b-beff-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000","stagingType":"Data Case List Json"},{"id":"bc98ef4e-beff-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000","stagingType":"Data Output File Name"},{"id":"bcb1de98-beff-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:08.000000","stagingType":"Data Output Person Address"},{"id":"c074f9e6-beff-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"4890f996-befc-11ee-be26-0af7a01f52e9","createDate":"2024-01-29 23:40:14.000000","stagingType":"Data Excel Content Create"},{"id":"3f41cc0a-c389-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:33.000000","stagingType":"Data Record Count"},{"id":"3f812b55-c389-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:33.000000","stagingType":"Data Case List Json"},{"id":"3f921f57-c389-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:33.000000","stagingType":"Data Output File Name"},{"id":"3fac240b-c389-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000","stagingType":"Data Output Person Address"},{"id":"3fed6c1f-c389-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"69d984ba-c2f7-11ee-be26-0af7a01f52e9","createDate":"2024-02-04 18:14:34.000000","stagingType":"Data Excel Content Create"},{"id":"501b29b5-c052-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:45.000000","stagingType":"Data Record Count"},{"id":"505835a0-c052-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000","stagingType":"Data Case List Json"},{"id":"5069083d-c052-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000","stagingType":"Data Output File Name"},{"id":"508288cf-c052-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000","stagingType":"Data Output Person Address"},{"id":"50bae618-c052-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-01-31 16:03:46.000000","stagingType":"Data Excel Content Create"},{"id":"b8fba078-c2cb-11ee-be26-0af7a01f52e9","lineNbr":6,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:53.000000","stagingType":"Data Record Count"},{"id":"b93bcad4-c2cb-11ee-be26-0af7a01f52e9","lineNbr":7,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:53.000000","stagingType":"Data Case List Json"},{"id":"b94b0629-c2cb-11ee-be26-0af7a01f52e9","lineNbr":8,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:53.000000","stagingType":"Data Output File Name"},{"id":"b966ac18-c2cb-11ee-be26-0af7a01f52e9","lineNbr":9,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:53.000000","stagingType":"Data Output Person Address"},{"id":"b9a80b6c-c2cb-11ee-be26-0af7a01f52e9","lineNbr":10,"searchId":"8f316534-bf75-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 19:37:54.000000","stagingType":"Data Excel Content Create"},{"id":"921ef941-cc12-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:57:42.000000","stagingType":"Data Fetch Date"},{"id":"abeb1e4f-cc12-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:26.000000","stagingType":"Data Output Person Address"},{"id":"ac0693dc-cc12-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:26.000000","stagingType":"Data Record Count"},{"id":"b3d689cd-cc12-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:39.000000","stagingType":"Data Output Person Address"},{"id":"b3f06e00-cc12-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:39.000000","stagingType":"Data Record Count"},{"id":"be9c4e5a-cc12-11ee-be26-0af7a01f52e9","lineNbr":6,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:57.000000","stagingType":"Data Output Person Address"},{"id":"beb78ca9-cc12-11ee-be26-0af7a01f52e9","lineNbr":7,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:58:57.000000","stagingType":"Data Record Count"},{"id":"c41a056f-cc12-11ee-be26-0af7a01f52e9","lineNbr":8,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:06.000000","stagingType":"Data Output Person Address"},{"id":"c436cb84-cc12-11ee-be26-0af7a01f52e9","lineNbr":9,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:06.000000","stagingType":"Data Record Count"},{"id":"c4463a6d-cc12-11ee-be26-0af7a01f52e9","lineNbr":10,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:06.000000","stagingType":"Data Fetch Date"},{"id":"dc2a01f5-cc12-11ee-be26-0af7a01f52e9","lineNbr":11,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:47.000000","stagingType":"Data Output Person Address"},{"id":"dc4fdab1-cc12-11ee-be26-0af7a01f52e9","lineNbr":12,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:47.000000","stagingType":"Data Record Count"},{"id":"e370ecc1-cc12-11ee-be26-0af7a01f52e9","lineNbr":13,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:59.000000","stagingType":"Data Output Person Address"},{"id":"e397c0fc-cc12-11ee-be26-0af7a01f52e9","lineNbr":14,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:59:59.000000","stagingType":"Data Record Count"},{"id":"ed0618f2-cc12-11ee-be26-0af7a01f52e9","lineNbr":15,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:15.000000","stagingType":"Data Output Person Address"},{"id":"ed242819-cc12-11ee-be26-0af7a01f52e9","lineNbr":16,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:15.000000","stagingType":"Data Record Count"},{"id":"f27f94af-cc12-11ee-be26-0af7a01f52e9","lineNbr":17,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:24.000000","stagingType":"Data Output Person Address"},{"id":"f2a1acce-cc12-11ee-be26-0af7a01f52e9","lineNbr":18,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:24.000000","stagingType":"Data Record Count"},{"id":"f2f24afe-cc12-11ee-be26-0af7a01f52e9","lineNbr":19,"searchId":"99f9d191-cc11-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 15:00:25.000000","stagingType":"Data Excel Content Create"},{"id":"f9987ff3-c2ba-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000","stagingType":"Data Record Count"},{"id":"f9d0e522-c2ba-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000","stagingType":"Data Case List Json"},{"id":"f9e0e0d5-c2ba-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000","stagingType":"Data Output File Name"},{"id":"f9fdb923-c2ba-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:00.000000","stagingType":"Data Output Person Address"},{"id":"fa393aba-c2ba-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"b34d8a49-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:01.000000","stagingType":"Data Excel Content Create"},{"id":"1b709a6b-c2bb-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000","stagingType":"Data Record Count"},{"id":"1ba7ee52-c2bb-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000","stagingType":"Data Case List Json"},{"id":"1bb78aae-c2bb-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000","stagingType":"Data Output File Name"},{"id":"1bcf43a9-c2bb-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000","stagingType":"Data Output Person Address"},{"id":"1be870f6-c2bb-11ee-be26-0af7a01f52e9","lineNbr":5,"searchId":"b442777f-c2ba-11ee-be26-0af7a01f52e9","createDate":"2024-02-03 17:38:57.000000","stagingType":"Data Excel Content Create"},{"id":"3a433b55-cc11-11ee-be26-0af7a01f52e9","lineNbr":1,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 14:48:05.000000","stagingType":"Data Fetch Date"},{"id":"c66065ed-cc1e-11ee-be26-0af7a01f52e9","lineNbr":2,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:04.000000","stagingType":"Data Output Person Address"},{"id":"c677fa69-cc1e-11ee-be26-0af7a01f52e9","lineNbr":3,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:04.000000","stagingType":"Data Record Count"},{"id":"c6e22587-cc1e-11ee-be26-0af7a01f52e9","lineNbr":4,"searchId":"e7b3d118-cc10-11ee-be26-0af7a01f52e9","createDate":"2024-02-15 16:25:05.000000","stagingType":"Data Excel Content Create"}]}}</textarea>
+					</div>
+				</div>
+			</main>
+			<footer class="mastfoot mt-auto">
+				<div id="footer-copy" class="float-end">
+					<span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+				</div>
+				<div id="footer-reload" class="float-start" style="display:none">
+					<a id="footer-reload-link" href="javascript:reloadContent()" class="text-secondary text-decoration-none">Reload</a>
+				</div>
+			</footer>
+		</div>
+		<script>
+                         function showLogout() { 
+                         let bttn = "#btn-my-account-logout-show"; 
+                         $( bttn ).click(); 
+                         } 
 
-      
+
+		</script>
+		<script>
+                    let clientScriptActivated = false; 
+                         function commonClientScript() { 
+                              try { 
+                              /* user injected block */ 
+                                   } catch(err) { 
+                              console.debug(err); 
+                              } 
+                         } 
+                         if (clientScriptActivated) { 
+                              setTimeout( () => { commonClientScript(); }, 250); 
+                         } 
 
 
-      <footer class="mastfoot mt-auto">
-			<div id="footer-copy" class="float-end">
-				<span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
-			</div>
-			<div id="footer-reload" class="float-start" style="display:none">
-				<a id="footer-reload-link" href="javascript:reloadContent()" class="text-secondary text-decoration-none">Reload</a>
-			</div>
-      </footer>
+		</script>
+		<script name="active-searches-js">
+                         let active_search = { 
+                              "controls": { 
+                              "txjson" : "#text-my-active-searches-js", 
+                              "cbo" : "#cbo-my-active-searches", 
+                              "cbo_option" : "#cbo-my-active-searches option", 
+                              "heading_no_data": "#heading-my-active-searches-no-content", 
+                              "component_list": "#list-my-active-search-stages", 
+                              "component_list_template": "#list-my-active-search-stages li:first", 
+                              "component_last_item": "#list-my-active-search-stages li:last", 
+                              "status_list": "#list-my-active-search-statuses", 
+                              "status_list_template": "#list-my-active-search-statuses li:first", 
+                              "status_last_item": "#list-my-active-search-statuses li:last" 
+                              }, 
+                              "change_view": function(viewName){ 
+                              let handler = window.jsHandler; 
+                                   if( undefined === handler || null === handler || !(handler) ) { return; } 
+                              handler.reload(viewName); 
+                              }, 
+                              "jso": function(){ 
+                              let js = $(active_search.controls.txjson).text(); 
+                              return JSON.parse(js); 
+                              }, 
+                              "component_template": function(isFirst) { 
+                              let openLi = isFirst ? 
+                              "<li name='component-template' class='list-group-item text-start m-0 p-0'>" : 
+                              "<li name='component-item' class='list-group-item text-start m-0 p-0'>"; 
+                              const closeLi = "</li>"; 
+                              let item = $(active_search.controls.component_list_template).html(); 
+                              return "".concat(openLi, item, closeLi); 
+                              }, 
+                              "status_template": function(isFirst) { 
+                              let openLi = isFirst ? 
+                              "<li name='component-template' class='list-group-item text-start m-0 p-0'>" : 
+                              "<li name='component-item' class='list-group-item text-start m-0 p-0'>"; 
+                              const closeLi = "</li>"; 
+                              let item = $(active_search.controls.status_list_template).html(); 
+                              return "".concat(openLi, item, closeLi); 
+                              }, 
+                              combo_changed: function() { 
+                              active_search.bind.search(); 
+                              active_search.bind.staged_components(); 
+                              active_search.bind.status_components(); 
+                              }, 
+                              bind: { 
+                                   "all": function() { 
+                                   active_search.bind.header(); 
+                                   active_search.bind.cbo(); 
+                                   active_search.bind.search(); 
+                                   active_search.bind.staged_components(); 
+                                   active_search.bind.status_components(); 
+                                   }, 
+                                   "header": function() { 
+                                   let src = active_search.jso(); 
+                                   let hdr = active_search.controls.heading_no_data; 
+                                   let hasNoData = ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 ); 
+                                        if (hasNoData) { 
+                                        $(hdr).show(); 
+                                             } else { 
+                                        $(hdr).hide(); 
+                                        } 
+                                   }, 
+                                   "cbo": function() { 
+                                   let src = active_search.jso(); 
+                                   cbo = active_search.controls.cbo; 
+                                   cboid = 0; 
+                                   $( cbo ).html(""); 
+                                        if ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 ) { 
+                                        return; 
+                                        } 
+                                        src.details.forEach(function(d) { 
+                                        let hto = cboid == 0 ? "<option selected='selected' value='~0'>~1</option>" : "<option value='~0'>~1</option>"; 
+                                        let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]); 
+                                        let dstring = d.createDate.replace("T", " "); 
+                                        let dte = new Date(Date.parse(dstring)); 
+                                             let dtxt = dte.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}).toUpperCase(); 
+                                        txt+= (" on " + dtxt); 
+                                        hto = hto.replace("~0", cboid); 
+                                        hto = hto.replace("~1", txt); 
+                                        html = $( cbo ).html() + hto; 
+                                        $( cbo ).html(html); 
+                                        cboid++; 
+                                        }); 
+                                   }, 
+                                   "search": function() { 
+                                   let cbcount = $( active_search.controls.cbo_option ).length; 
+                                   let data = [ 
+                                        { "find": "#list-my-active-search-names span[name='requested-date']", "value": " - " }, 
+                                        { "find": "#list-my-active-search-names span[name='start-date']", "value": " - " }, 
+                                        { "find": "#list-my-active-search-names span[name='search-status']", "value": " - " }, 
+                                   ]; 
+                                        data.forEach((d) => { $(d.find).text(d.value); }); 
+                                        if ( cbcount == 0 ) { return; } 
+                                   let $cbo = $( active_search.controls.cbo ); 
+                                   let cboid = $cbo.val(); 
+                                   let jso = active_search.jso(); 
+                                   let src = jso.details[cboid]; 
+                                   let srcid = src.id 
+                                   let jssearch = jso.history.searches.find(x => x.id == srcid); 
+                                   let artmp = src.searchProgress.split(' '); 
+                                   let sts = artmp[artmp.length - 1]; 
+                                   let tmpdt = src.createDate.split('T') 
+                                   data[0].value = tmpdt.join(" "); 
+                                   data[1].value = jssearch.startDate.split('.')[0]; 
+                                   data[2].value = sts; 
+                                        data.forEach((d) => { $(d.find).text(d.value); }); 
+                                   }, 
+                                   "staged_components": function() { 
+                                   let cbcount = $( active_search.controls.cbo_option ).length; 
+                                        if ( cbcount == 0 ) { return; } 
+                                   let $cbo = $( active_search.controls.cbo ); 
+                                   let cboid = $cbo.val(); 
+                                   let jso = active_search.jso(); 
+                                   let src = jso.details[cboid]; 
+                                   let srcid = src.id 
+                                   let jssearch = jso.history.staged.filter(x => x.searchId == srcid); 
+                                   let blanktemplate = active_search.component_template(true); 
+                                   let template = active_search.component_template(false); 
+                                   let $list = $( active_search.controls.component_list ); 
+                                   $list.html(blanktemplate); 
+                                        jssearch.forEach(function(s) { 
+                                        let htnow = $list.html() + template; 
+                                        $list.html(htnow); 
+                                        let $li = $(active_search.controls.component_last_item); 
+                                        $li.find("span[name='stage-label']").text(s.stagingType); 
+                                        $li.find("span[name='stage-date']").text(s.createDate.split('.')[0]); 
+                                        }); 
+                                   }, 
+                                   "status_components": function() { 
+                                   let cbcount = $( active_search.controls.cbo_option ).length; 
+                                        if ( cbcount == 0 ) { return; } 
+                                   let $cbo = $( active_search.controls.cbo ); 
+                                   let cboid = $cbo.val(); 
+                                   let jso = active_search.jso(); 
+                                   let src = jso.details[cboid]; 
+                                   let srcid = src.id 
+                                   let jssearch = jso.history.statuses.filter(x => x.searchId == srcid); 
+                                   let blanktemplate = active_search.status_template(true); 
+                                   let template = active_search.status_template(false); 
+                                   let $list = $( active_search.controls.status_list ); 
+                                   $list.html(blanktemplate); 
+                                        jssearch.forEach(function(s) { 
+                                        let htnow = $list.html() + template; 
+                                        $list.html(htnow); 
+                                        let $li = $(active_search.controls.status_last_item); 
+                                        $li.find("span[name='status-label']").text(s.line); 
+                                        $li.find("span[name='status-date']").text(s.createDate.split('.')[0]); 
+                                        }); 
+                                   } 
+                              } 
+                         }; 
+                    active_search.bind.all(); 
 
 
-
-    </div>
-	<script>
+		</script>
 	
-		function showLogout() {
-			let bttn = "#btn-my-account-logout-show";
-			$( bttn ).click(); 
-		}
-	</script>
-	<script>
-	
-	let clientScriptActivated = false;
-
-	function commonClientScript() {
-		try {
-			/* user injected block */
-		} catch(err) {
-			console.debug(err);
-		}
-	}
-	if (clientScriptActivated) {
-		setTimeout( () => { commonClientScript(); }, 250);
-	}
-</script>
-    <script name="active-searches-js">
-
-let active_search = {
-	"controls": {
-		"txjson" : "#text-my-active-searches-js",
-		"cbo" : "#cbo-my-active-searches",
-		"cbo_option" : "#cbo-my-active-searches option",
-		"heading_no_data": "#heading-my-active-searches-no-content",
-		"component_list": "#list-my-active-search-stages",
-		"component_list_template": "#list-my-active-search-stages li:first",
-		"component_last_item": "#list-my-active-search-stages li:last"
-	},
-	"jso": function(){
-		let js = $(active_search.controls.txjson).text();
-		return JSON.parse(js);
-	},
-	"component_template": function(isFirst) {
-		let openLi = isFirst ? 
-			"<li name='component-template' class='list-group-item text-start m-0 p-0'>" :
-			"<li name='component-item' class='list-group-item text-start m-0 p-0'>";
-		const closeLi = "</li>";
-		let item = $(active_search.controls.component_list_template).html();
-		return "".concat(openLi, item, closeLi);
-	},
-	combo_changed: function() {
-		active_search.bind.search();
-		active_search.bind.search_components();
-	},
-	bind: {
-		"all": function() {
-			active_search.bind.header();
-			active_search.bind.cbo();
-			active_search.bind.search();
-			active_search.bind.search_components();
-		},
-		"header": function() {
-			let src = active_search.jso();
-			let hdr = active_search.controls.heading_no_data;
-			let hasNoData = ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 );
-			if (hasNoData) {
-				$(hdr).show();
-			} else {
-				$(hdr).hide();
-			}
-		},
-		"cbo": function() {
-			let src = active_search.jso();
-			cbo = active_search.controls.cbo;
-			cboid = 0;
-			$( cbo ).html("");
-			if ( undefined == src || null == src || undefined == src.details || null == src.details || src.details.length == 0 ) {
-				return;
-			}
-			src.details.forEach(function(d) {
-				let hto = cboid == 0 ? "<option selected='selected' value='~0'>~1</option>" : "<option value='~0'>~1</option>";
-				let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]);
-				hto = hto.replace("~0", cboid);
-				hto = hto.replace("~1", txt);
-				html = $( cbo ).html() + hto;
-				$( cbo ).html(html);
-				cboid++;
-			});			
-		},
-		"search": function() {
-			let cbcount = $( active_search.controls.cbo_option ).length;
-			let data = [
-				{ "find": "#list-my-active-search-names span[name='requested-date']", "value": " - " },
-				{ "find": "#list-my-active-search-names span[name='start-date']", "value": " - " },
-				{ "find": "#list-my-active-search-names span[name='search-status']", "value": " - " },
-			];
-			data.forEach((d) => { $(d.find).text(d.value); });
-			if ( cbcount == 0 ) { return; }
-			let $cbo = $( active_search.controls.cbo );
-			let cboid = $cbo.val();
-			let jso = active_search.jso();
-			let src = jso.details[cboid];
-			let srcid = src.id
-			let jssearch = jso.history.searches.find(x => x.id == srcid);
-			let artmp = src.searchProgress.split(' ');
-			let sts = artmp[artmp.length - 1];
-			let tmpdt = src.createDate.split('T')
-			data[0].value = tmpdt.join(" ");
-			data[1].value = jssearch.startDate.split('.')[0];			
-			data[2].value = sts;
-			data.forEach((d) => { $(d.find).text(d.value); });
-		},
-		"search_components": function() {
-			let cbcount = $( active_search.controls.cbo_option ).length;
-			if ( cbcount == 0 ) { return; }
-			let $cbo = $( active_search.controls.cbo );
-			let cboid = $cbo.val();
-			let jso = active_search.jso();
-			let src = jso.details[cboid];
-			let srcid = src.id
-			let jssearch = jso.history.statuses.filter(x => x.searchId == srcid);
-			let blanktemplate = active_search.component_template(true);
-			let template = active_search.component_template(false);
-			let $list = $( active_search.controls.component_list );
-			$list.html(blanktemplate);
-			jssearch.forEach(function(s) {
-				let htnow = $list.html() + template;
-				$list.html(htnow);
-				let $li = $(active_search.controls.component_last_item);
-				$li.find("span[name='stage-label']").text(s.line);
-				$li.find("span[name='stage-date']").text(s.createDate.split('.')[0]);
-			});
-		}
-	}
-};
-
-active_search.bind.all();
-</script>
-  </body>
-
-
-</html>
+</body></html>
