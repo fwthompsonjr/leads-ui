@@ -98,6 +98,7 @@ namespace legallead.desktop.utilities
             });
             return resp;
         }
+
         public virtual async Task<ApiResponse> Get(string name, UserBo user)
         {
             if (!user.IsAuthenicated)

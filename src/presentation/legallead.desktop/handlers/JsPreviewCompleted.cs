@@ -49,7 +49,7 @@ namespace legallead.desktop.handlers
         private static string TransformHtml(string? html, GenerateInvoiceResponse? response)
         {
             if (response == null || string.IsNullOrEmpty(html)) return string.Empty;
-            var config = AppBuilder.Configuration?.GetValue<string>("stripe:key") ?? string.Empty;
+            var config = AppBuilder.PaymentSessionKey ?? string.Empty;
             return response.GetHtml(html, config);
         }
 
