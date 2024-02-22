@@ -64,6 +64,7 @@ namespace legallead.permissions.api.Utility
         {
             var user = await GetUser(http);
             if (user == null) return null;
+            _ = await _repo.UpdateSearchRowCount();
             var histories = await _repo.History(user.Id);
             if (histories == null || !histories.Any()) return Enumerable.Empty<UserSearchQueryModel>();
             if (!string.IsNullOrEmpty(id))
