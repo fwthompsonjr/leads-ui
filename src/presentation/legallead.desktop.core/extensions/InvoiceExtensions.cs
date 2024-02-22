@@ -27,16 +27,18 @@ namespace legallead.desktop.extensions
             if (detailNode == null) return html;
             detailNode.InnerHtml = string.Empty;
             if (response.Data == null || !response.Data.Any()) return html;
+
             response.Data.ForEach(d =>
             {
                 var li = d.GetItem(doc);
                 detailNode.AppendChild(li);
             });
             var createDate = response.Data[0].CreateDate.GetValueOrDefault().ToString("f");
+            var externalId = response.ExternalId ?? dash;
             var totalCost = response.Data.Sum(x => x.Price.GetValueOrDefault());
             var replacements = new Dictionary<string, string>()
             {
-                { "//span[@name='invoice']", response.ExternalId ?? dash },
+                { "//span[@name='invoice']", externalId },
                 { "//span[@name='invoice-date']", createDate },
                 { "//span[@name='invoice-description']", GetDescription(response.Description, dash) },
                 { "//span[@name='invoice-total']", totalCost.ToString("c") ?? dash }
@@ -55,6 +57,7 @@ namespace legallead.desktop.extensions
             var outerHtml = parentNode.OuterHtml;
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- stripe client secret -->", response.ClientSecret ?? dash);
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", response.ClientSecret ?? dash);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);
             return doc.DocumentNode.OuterHtml;
@@ -64,18 +67,19 @@ namespace legallead.desktop.extensions
         {
             var stripejs = "//script[@name='stripe-api']";
             var chkoutjs = "//script[@name='checkout-stripe-js']";
+            var paymentcss = "//style[@name='custom-payment-css']";
             var chkoutdv = "//*[@id='checkout']";
+            var paymentform = "//*[@id='payment-form']";
             var elements = new[] {
                 chkoutdv,
-                stripejs
+                stripejs,
+                paymentcss,
+                paymentform
             };
             foreach (var elem in elements)
             {
                 var node = parentNode.SelectSingleNode(elem);
-                if (node != null)
-                {
-                    node.ParentNode.RemoveChild(node);
-                }
+                node?.ParentNode.RemoveChild(node);
             }
             var script = parentNode.SelectSingleNode(chkoutjs);
             if (script != null) { script.InnerHtml = string.Empty; }

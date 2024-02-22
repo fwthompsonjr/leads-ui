@@ -453,9 +453,9 @@ let jssearchpager = {
 		handler.submit( "frm-search-preview", obj);
         },
 		get_invoice: function() {
-			let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
-			let finder = "span[name='~0']".replace("~0", "search-status");
-			if ( $( finder ).text() != "Completed") {
+			let customfind = "table[automationid='search-preview-table'] > thead > tr > td > span[name='search-status']";
+			let txt = $( customfind ).text();
+			if ( txt != "Completed") {
 				$("#my-search-preview-bttn-close").click();
 				return;
 			}

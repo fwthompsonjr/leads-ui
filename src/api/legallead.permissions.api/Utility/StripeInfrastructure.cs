@@ -74,6 +74,7 @@ namespace legallead.permissions.api.Utility
                 clientSecret = intent.ClientSecret,
                 externalId = data[0].ExternalId ?? string.Empty,
                 description,
+                SuccessUrl = successPg,
                 data
             };
             return response;

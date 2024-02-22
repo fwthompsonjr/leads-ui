@@ -216,6 +216,43 @@ namespace legallead.jdbc.tests.implementations
         }
 
         [Fact]
+        public async Task RepoUpdateSearchRowCountHappyPath()
+        {
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+            var result = await service.UpdateSearchRowCount();
+            Assert.True(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Fact]
+        public async Task RepoUpdateSearchRowCountExceptionPath()
+        {
+            var exception = faker.System.Exception;
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).Throws(exception);
+            var result = await service.UpdateSearchRowCount();
+            Assert.False(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Fact]
         public async Task RepoHistoryNoResult()
         {
             SearchQueryDto[] result = Array.Empty<SearchQueryDto>();

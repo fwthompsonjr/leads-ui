@@ -16,6 +16,7 @@ namespace legallead.desktop.utilities
 
         public static IConfiguration? Configuration { get; private set; }
 
+        public static string? PaymentSessionKey { get; private set; }
         public static string? PermissionApiBase { get; private set; }
         public static string? InitialViewName { get; private set; }
 
@@ -35,6 +36,10 @@ namespace legallead.desktop.utilities
             if (string.IsNullOrEmpty(PermissionApiBase))
             {
                 PermissionApiBase = GetPermissionApi(Configuration);
+            }
+            if (string.IsNullOrEmpty(PaymentSessionKey))
+            {
+                PaymentSessionKey = GetPaymentKey(Configuration);
             }
             if (string.IsNullOrEmpty(InitialViewName))
             {
@@ -63,6 +68,22 @@ namespace legallead.desktop.utilities
             }
             if (string.IsNullOrEmpty(keyvalues[1])) return keyvalues[0];
             return keyvalues[1] == "local" ? keyvalues[3] : keyvalues[2];
+        }
+
+        private static string GetPaymentKey(IConfiguration configuration)
+        {
+            var keys = new[] {
+              "stripe.payment:key",
+              "stripe.payment:names:test",
+              "stripe.payment:names:prod", }.ToList();
+            var keyvalues = new List<string> { };
+            foreach (var item in keys)
+            {
+                var value = configuration[item] ?? string.Empty;
+                keyvalues.Add(value);
+            }
+            if (string.IsNullOrEmpty(keyvalues[0])) return string.Empty;
+            return keyvalues[0] == "test" ? keyvalues[1] : keyvalues[2];
         }
 
         private static void ConfigureServices(IServiceCollection services)

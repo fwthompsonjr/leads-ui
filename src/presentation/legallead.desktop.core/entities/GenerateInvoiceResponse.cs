@@ -19,6 +19,8 @@ namespace legallead.desktop.entities
         [JsonProperty("externalId")]
         public string? ExternalId { get; set; }
 
+        public string? SuccessUrl { get; set; }
+
         [JsonProperty("data")]
         public List<InvoiceResponseData>? Data { get; set; }
     }

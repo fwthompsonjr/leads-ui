@@ -302,6 +302,22 @@ namespace legallead.jdbc.implementations
             return response ?? new();
         }
 
+
+        public async Task<bool> UpdateSearchRowCount()
+        {
+            const string prc = "CALL USP_SEARCH_SET_FINAL_ROW_COUNT( );";
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
         {
             const int count = 100000;
