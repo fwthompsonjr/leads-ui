@@ -4,7 +4,11 @@
     when a seach has been completed
     row_number() over(order by hire_date)
 */
+
+
+
 SET SQL_SAFE_UPDATES = 0;
+CALL USP_SEARCH_SET_FINAL_ROW_COUNT();
 
 SET @user_index = (SELECT Id
   FROM USERS
@@ -20,7 +24,7 @@ CREATE TEMPORARY TABLE tmp_user_searches
     FROM SEARCH
     WHERE UserId = @user_index
     ORDER BY CreateDate;
-SET @nbr = 1;    
+SET @nbr = 24;    
 SET @search_index = (SELECT Id
   FROM tmp_user_searches
   WHERE Nbr = @nbr);
