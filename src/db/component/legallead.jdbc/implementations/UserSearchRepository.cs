@@ -318,6 +318,41 @@ namespace legallead.jdbc.implementations
             }
         }
 
+
+        public async Task<bool> AppendPaymentSession(PaymentSessionDto dto)
+        {
+            const string prc = "CALL USP_INSERT_PAYMENT_SESSION( ?, ?, ?, ?, ?, ?, ?);";
+            try
+            {
+                using var connection = _context.CreateConnection();
+                var parameters = new DynamicParameters();
+                parameters.Add("idx", dto.Id);
+                parameters.Add("user_id", dto.UserId);
+                parameters.Add("session_type", dto.SessionType);
+                parameters.Add("session_id", dto.SessionId);
+                parameters.Add("intent_id", dto.IntentId);
+                parameters.Add("client_id", dto.ClientId);
+                parameters.Add("external_id", dto.ExternalId);
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<PaymentSessionDto?> GetPaymentSession(string externalId)
+        {
+            const string prc = "CALL USP_GET_PAYMENT_SESSION( ? );";
+            using var connection = _context.CreateConnection();
+            var parameters = new DynamicParameters();
+            parameters.Add("external_id", externalId);
+            var response = await _command.QuerySingleOrDefaultAsync<PaymentSessionDto>(connection, prc, parameters);
+            return response;
+        }
+
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
         {
             const int count = 100000;

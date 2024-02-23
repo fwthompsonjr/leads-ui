@@ -7,6 +7,7 @@ using legallead.logging.helpers;
 using legallead.logging.implementations;
 using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Entities;
 using legallead.permissions.api.Health;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
@@ -55,7 +56,9 @@ namespace legallead.permissions.api
         {
             string environ = GetConfigOrDefault(configuration, "DataEnvironment", "Test");
             var payment = MapOption(configuration);
+            var stripeConfig = MapStripeKey(configuration);
             services.AddSingleton(payment);
+            services.AddSingleton(stripeConfig);
             services.AddScoped<IStripeInfrastructure, StripeInfrastructure>();
             services.AddScoped<IPaymentHtmlTranslator, PaymentHtmlTranslator>();
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
@@ -347,6 +350,7 @@ namespace legallead.permissions.api
         }
 
 
+        private static StripeKeyEntity? _stripeKeyEntity;
         private static PaymentStripeOption? _paymentOption;
 
         private static PaymentStripeOption MapOption(IConfiguration configuration)
@@ -366,6 +370,19 @@ namespace legallead.permissions.api
             return _paymentOption;
         }
 
+        private static StripeKeyEntity MapStripeKey(IConfiguration configuration)
+        {
+            if (_stripeKeyEntity != null) { return _stripeKeyEntity; }
+            var keytype = configuration.GetValue<string>("Payment:keys:active");
+            var test = configuration.GetValue<string>("Payment:keys:values:test");
+            var prd = configuration.GetValue<string>("Payment:keys:values:prod");
+            var items = new List<StripeKeyItem> { 
+                new() { Name="test", Value= test },
+                new() { Name="prod", Value= prd }
+            };
+            _stripeKeyEntity = new StripeKeyEntity { ActiveName = keytype, Items = items };
+            return _stripeKeyEntity;
+        }
 
 
         [ExcludeFromCodeCoverage]

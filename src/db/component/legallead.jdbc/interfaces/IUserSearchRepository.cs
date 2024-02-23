@@ -25,5 +25,7 @@ namespace legallead.jdbc.interfaces
         Task<ActiveSearchOverviewBo?> GetActiveSearches(string searchId);
         Task<IEnumerable<ActiveSearchDetailBo>?> GetActiveSearchDetails(string userId);
         Task<bool> UpdateSearchRowCount();
+        Task<PaymentSessionDto?> GetPaymentSession(string externalId);
+        Task<bool> AppendPaymentSession(PaymentSessionDto dto);
     }
 }

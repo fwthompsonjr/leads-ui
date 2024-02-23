@@ -1,18 +1,22 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Stripe;
 using Stripe.Checkout;
+using static Dapper.SqlMapper;
 
 namespace legallead.permissions.api.Utility
 {
     public class StripeInfrastructure : IStripeInfrastructure
     {
         private readonly IUserSearchRepository _repo;
-        public StripeInfrastructure(IUserSearchRepository repo)
+        private StripeKeyEntity keyEntity;
+        public StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity)
         {
             _repo = repo;
+            keyEntity = entity;
         }
         public async Task<object> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
@@ -76,6 +80,16 @@ namespace legallead.permissions.api.Utility
                 description,
                 SuccessUrl = successPg,
                 data
+            };
+            var payment = new PaymentSession
+            {
+                Id = Guid.NewGuid().ToString("D"),
+                UserId = user.Id,
+                SessionId = session.Id,
+                SessionType = keyEntity.ActiveName,
+                IntentId = intent.Id,
+                ClientId = intent.ClientSecret,
+                ExternalId = response.externalId,
             };
             return response;
         }

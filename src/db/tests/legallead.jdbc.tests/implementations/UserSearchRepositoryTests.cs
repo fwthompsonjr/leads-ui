@@ -122,6 +122,28 @@ namespace legallead.jdbc.tests.implementations
             ));
         }
 
+
+        [Fact]
+        public async Task RepoGetPaymentSessionHappyPath()
+        {
+            var result = new PaymentSessionDto();
+            var uid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<PaymentSessionDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            await service.GetPaymentSession(uid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<PaymentSessionDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
         [Fact]
         public async Task RepoContentExceptionAreCaught()
         {
@@ -460,6 +482,43 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()));
         }
 
+
+        [Fact]
+        public async Task RepoAppendPaymentSessionHappyPath()
+        {
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+            var result = await service.AppendPaymentSession(new());
+            Assert.True(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Fact]
+        public async Task RepoAppendPaymentSessionExceptionPath()
+        {
+            var exception = faker.System.Exception;
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).Throws(exception);
+            var result = await service.AppendPaymentSession(new());
+            Assert.False(result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
         [Theory]
         [InlineData(null)]
         [InlineData("abc")]

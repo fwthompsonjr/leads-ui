@@ -74,8 +74,10 @@ let active_search = {
 			src.details.forEach(function(d) {
 				let hto = cboid == 0 ? "<option selected='selected' value='~0'>~1</option>" : "<option value='~0'>~1</option>";
 				let txt = "".concat( d.countyName, " ", d.stateName, " from " , d.startDate.split(' ')[0], " to " , d.endDate.split(' ')[0]);
-				let dstring = d.createDate.replace("T", " ");
-				let dte = new Date(Date.parse(dstring));
+				// note: all dates from server are utc, 
+				// try appending 'Z' into dt logic
+				let dstring = "".concat(d.createDate, "Z");
+				let dte =  new Date(dstring); // new Date(Date.parse(dstring)); 
 				let dtxt = dte.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"}).toUpperCase();
 				txt+= (" on " + dtxt);
 				hto = hto.replace("~0", cboid);

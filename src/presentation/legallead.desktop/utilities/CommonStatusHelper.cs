@@ -33,6 +33,17 @@ namespace legallead.desktop.utilities
                 var appmessage = main.sbComment;
                 var appconnection = main.sbConnectionStatusText;
                 if (icon == null || appstatus == null) return;
+                var connection = index switch
+                {
+                    1 => "Unknown",
+                    10 => "Connected",
+                    20 => "Offline/Error",
+                    30 => "Submitting",
+                    40 => "Disconnected",
+                    50 => "Connected",
+                    _ => appconnection.Text
+                };
+                appconnection.Text = connection;
                 var color = GetColorFromString(status.Color);
                 icon.Fill = color;
                 appstatus.Text = status.Name;
@@ -44,14 +55,7 @@ namespace legallead.desktop.utilities
                 }
                 appmessage.Visibility = Visibility.Collapsed;
                 appmessage.Text = status.Message;
-                appmessage.Visibility = Visibility.Visible;
-                var connection = index switch
-                {
-                    1 => "Unknown",
-                    10 => "Connected",
-                    _ => appconnection.Text
-                };
-                appconnection.Text = connection;
+                appmessage.Visibility = Visibility.Visible;                
             });
         }
 
