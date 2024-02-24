@@ -321,7 +321,7 @@ namespace legallead.jdbc.implementations
 
         public async Task<bool> AppendPaymentSession(PaymentSessionDto dto)
         {
-            const string prc = "CALL USP_INSERT_PAYMENT_SESSION( ?, ?, ?, ?, ?, ?, ?);";
+            const string prc = "CALL USP_INSERT_PAYMENT_SESSION( ?, ?, ?, ?, ?, ?, ?, ? );";
             try
             {
                 using var connection = _context.CreateConnection();
@@ -333,6 +333,7 @@ namespace legallead.jdbc.implementations
                 parameters.Add("intent_id", dto.IntentId);
                 parameters.Add("client_id", dto.ClientId);
                 parameters.Add("external_id", dto.ExternalId);
+                parameters.Add("js_text", dto.JsText);
                 await _command.ExecuteAsync(connection, prc, parameters);
                 return true;
             }
