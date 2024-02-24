@@ -81,7 +81,7 @@ namespace legallead.permissions.api.Utility
                 SuccessUrl = successPg,
                 data
             };
-            var payment = new PaymentSession
+            var payment = new PaymentSessionDto
             {
                 Id = Guid.NewGuid().ToString("D"),
                 UserId = user.Id,
@@ -91,6 +91,7 @@ namespace legallead.permissions.api.Utility
                 ClientId = intent.ClientSecret,
                 ExternalId = response.externalId,
             };
+            await _repo.AppendPaymentSession(payment);
             return response;
         }
 

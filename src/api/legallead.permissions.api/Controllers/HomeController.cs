@@ -1,4 +1,5 @@
 ﻿using legallead.permissions.api.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -28,6 +29,19 @@ namespace legallead.permissions.api.Controllers
                 isValid ? Properties.Resources.page_payment_completed
                 : Properties.Resources.page_payment_detail_invalid;
             content = await paymentSvc.Transform(isValid, sts, id, content);
+            return Content(content, "text/html");
+        }
+
+        [HttpGet("/payment-checkout")]
+        public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
+        {
+            var session = await paymentSvc.IsSessionValid(id);
+            if (session == null)
+            {
+                var nodata = Properties.Resources.page_payment_detail_invalid;
+                return Content(nodata, "text/html");
+            }
+            var content = Properties.Resources.page_invoice_html;
             return Content(content, "text/html");
         }
 
