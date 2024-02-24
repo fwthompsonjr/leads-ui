@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace legallead.jdbc.entities
+﻿namespace legallead.jdbc.entities
 {
     [TargetTable(TableName = "PAYMENTSESSION")]
     public class PaymentSessionDto : BaseDto
@@ -16,6 +10,7 @@ namespace legallead.jdbc.entities
         public string? IntentId { get; set; }
         public string? ClientId { get; set; }
         public string? ExternalId { get; set; }
+        public string? JsText { get; set; }
         public DateTime? CreateDate { get; set; }
 
         public override object? this[string field]
@@ -33,6 +28,7 @@ namespace legallead.jdbc.entities
                 if (fieldName.Equals("IntentId", Comparison)) return IntentId;
                 if (fieldName.Equals("ClientId", Comparison)) return ClientId;
                 if (fieldName.Equals("ExternalId", Comparison)) return ExternalId;
+                if (fieldName.Equals("JsText", Comparison)) return JsText;
                 if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
                 return null;
             }
@@ -53,6 +49,7 @@ namespace legallead.jdbc.entities
                 if (fieldName.Equals("IntentId", Comparison)) { IntentId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("ClientId", Comparison)) { ClientId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("ExternalId", Comparison)) { ExternalId = ChangeType<string>(value); return; }
+                if (fieldName.Equals("JsText", Comparison)) { JsText = ChangeType<string>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) { CreateDate = ChangeType<DateTime?>(value); }
             }
         }

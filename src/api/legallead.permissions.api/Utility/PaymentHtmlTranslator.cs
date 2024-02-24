@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Interfaces;
 using System.Globalization;
@@ -19,6 +20,13 @@ namespace legallead.permissions.api.Utility
             if (!requestNames.Contains(status)) return false;
             var isValid = await _repo.IsValidExternalId(id);
             return isValid;
+        }
+
+        public async Task<PaymentSessionDto?> IsSessionValid(string? id)
+        {
+            if (string.IsNullOrWhiteSpace(id)) return null;
+            var session = await _repo.GetPaymentSession(id);
+            return session;
         }
 
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
