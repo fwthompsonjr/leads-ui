@@ -94,6 +94,9 @@ namespace legallead.permissions.api.Extensions
 
         private static HtmlNode GetItem(this SearchInvoiceBo data, HtmlDocument document)
         {
+            const string headerformat = "<span>{0}</span><br/>{1}";
+            const string unitformat = "<span style='margin-left: 10px'>{0}</span><br/>{1}";
+            const string totalformat = "<span style='margin-left: 10px'>{0:c}</span><br/>";
             var nwl = Environment.NewLine;
             var hasLine = int.TryParse(data.LineId, out var lineId);
             if (!hasLine) { lineId = -1; }
@@ -107,9 +110,9 @@ namespace legallead.permissions.api.Extensions
             var attr1 = document.CreateAttribute("class", "list-group-item text-white");
             var sb = new StringBuilder();
             sb.AppendLine();
-            sb.AppendFormat("{0}<br/>{1}", data.ItemType, nwl);
-            sb.AppendFormat("{0}<br/>{1}", line, nwl);
-            sb.AppendLine(data.Price.GetValueOrDefault().ToString("c"));
+            sb.AppendFormat(headerformat, data.ItemType, nwl);
+            if (lineId != 1000) sb.AppendFormat(unitformat, line, nwl);
+            sb.AppendLine(string.Format(totalformat, data.Price.GetValueOrDefault()));
             node.Attributes.Add(attr);
             node.Attributes.Add(attr1);
             node.InnerHtml = sb.ToString();

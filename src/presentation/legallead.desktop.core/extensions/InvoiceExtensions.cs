@@ -101,7 +101,7 @@ namespace legallead.desktop.extensions
             var sb = new StringBuilder();
             sb.AppendLine();
             sb.AppendFormat("{0}<br/>{1}", data.ItemType, nwl);
-            sb.AppendFormat("{0}<br/>{1}", line, nwl);
+            if (lineId != 1000) sb.AppendFormat("{0}<br/>{1}", line, nwl);
             sb.AppendLine(data.Price.GetValueOrDefault().ToString("c"));
             node.Attributes.Add(attr);
             node.Attributes.Add(attr1);

@@ -20,7 +20,7 @@ namespace legallead.permissions.api.Utility
             _repo = repo;
             keyEntity = entity;
         }
-        public async Task<object> CreatePaymentAsync(
+        public async Task<object?> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
             var description = (await _repo.InvoiceDescription(model.SearchId)).ItemDescription;
@@ -92,7 +92,8 @@ namespace legallead.permissions.api.Utility
                 ExternalId = response.ExternalId,
                 JsText = js
             };
-            await _repo.AppendPaymentSession(payment);
+            var isadded = await _repo.AppendPaymentSession(payment);
+            if (!isadded) return null;
             return response;
         }
 
