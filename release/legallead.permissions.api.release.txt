@@ -32,3 +32,5 @@ Release information - legallead.permissions.api
 01/10/2024 17:03:00 PM added method begin-search to api
 01/14/2024 21:16:00 PM promote new database operations for search
 02/21/2024 18:45:00 PM set proper record count prior to fetching record preview
+02/24/2024 16:00:00 PM complete 1st round of payment processing workflow
+-- do to -- prevent customer from re-purchasing the same item
