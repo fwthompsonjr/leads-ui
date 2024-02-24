@@ -17,11 +17,23 @@ namespace legallead.permissions.api.Extensions
         background: transparent; border-color: #444
         
         */
-
+        public static long CalculatePaymentAmount(this PaymentSessionDto? response)
+        {
+            if (response == null) return 0;
+            var js = response.JsText;
+            var dto = string.IsNullOrWhiteSpace(js) ?
+                new() :
+                JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
+            var data = dto.Data;
+            if (data == null || !data.Any()) return 0;
+            var totalCost = data.Sum(x => x.Price.GetValueOrDefault()) * 100;
+            return Convert.ToInt64(totalCost);
+        }
         public static string GetHtml(this PaymentSessionDto? response, string html, string paymentKey)
         {
             const string dash = " - ";
             if (response == null) return html;
+            html = html.Replace(InvoiceScriptTag, InvoiceScript());
             var js = response.JsText;
             var dto = string.IsNullOrWhiteSpace(js) ?
                 new() :
@@ -64,6 +76,7 @@ namespace legallead.permissions.api.Extensions
             var outerHtml = parentNode.OuterHtml;
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- stripe client secret -->", response.ClientId ?? dash);
+            outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
             outerHtml = outerHtml.Replace("<!-- payment completed url -->", dto.SuccessUrl ?? dash);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);
@@ -124,5 +137,13 @@ namespace legallead.permissions.api.Extensions
             if (string.IsNullOrWhiteSpace(desciption)) return fallback;
             return desciption.Replace("Record Search :", "Search: "); // dash
         }
+        private static string? _invoiceScript;
+        private static string InvoiceScript()
+        {
+            if(!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
+            _invoiceScript = Properties.Resources.page_invoice_js;
+            return _invoiceScript;
+        }
+        private const string InvoiceScriptTag = "<!-- stripe payment script -->";
     }
 }

@@ -8,7 +8,7 @@
         public string GetActiveName()
         {
             var item = Items.Find(x => x.Name == ActiveName);
-            return item?.Name ?? string.Empty;
+            return item?.Value ?? string.Empty;
         }
     }
 }
