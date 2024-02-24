@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.permissions.api.Entities;
+using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using System.Globalization;
 
@@ -9,9 +11,11 @@ namespace legallead.permissions.api.Utility
     public class PaymentHtmlTranslator : IPaymentHtmlTranslator
     {
         private readonly IUserSearchRepository _repo;
-        public PaymentHtmlTranslator(IUserSearchRepository db)
+        private readonly string _paymentKey;
+        public PaymentHtmlTranslator(IUserSearchRepository db, StripeKeyEntity key)
         { 
             _repo = db;
+            _paymentKey = key.GetActiveName();
         }
         public async Task<bool> IsRequestValid(string? status, string? id)
         {
@@ -28,7 +32,11 @@ namespace legallead.permissions.api.Utility
             var session = await _repo.GetPaymentSession(id);
             return session;
         }
-
+        public string Transform(PaymentSessionDto? session, string html)
+        {
+            var converted = session.GetHtml(html, _paymentKey);
+            return converted;
+        }
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
             const string dash = " - ";

@@ -42,6 +42,7 @@ namespace legallead.permissions.api.Controllers
                 return Content(nodata, "text/html");
             }
             var content = Properties.Resources.page_invoice_html;
+            content = paymentSvc.Transform(session, content);
             return Content(content, "text/html");
         }
 
