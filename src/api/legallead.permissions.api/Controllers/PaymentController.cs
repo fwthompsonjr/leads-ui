@@ -47,6 +47,7 @@ namespace legallead.permissions.api.Controllers
             var data = invoice.ToList();
             var model = new PaymentCreateModel(Request, user, guid, request.ProductType);
             var response = await stripeService.CreatePaymentAsync(model, data);
+            if (response == null) return UnprocessableEntity(guid);
             return Ok(response);
         }
     }

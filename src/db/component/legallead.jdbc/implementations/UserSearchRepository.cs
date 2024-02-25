@@ -3,6 +3,7 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
+using MySqlConnector;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -42,6 +43,7 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
             var command = string.Format(prc, userId);
             using var connection = _context.CreateConnection();
+            await _command.ExecuteAsync(connection, sprc);
             var response = await _command.QueryAsync<SearchQueryDto>(connection, command);
             var translation = response.Select(x => new SearchDtoHeader
             {
@@ -63,6 +65,7 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_GET_SEARCH_RECORD_PREVIEW( '{0}' );";
             var command = string.Format(prc, searchId);
             using var connection = _context.CreateConnection();
+            await _command.ExecuteAsync(connection, sprc);
             var response = await _command.QueryAsync<SearchPreviewDto>(connection, command);
             var translation = response.Select(x => TranslateTo<SearchPreviewBo>(x));
             return translation;
@@ -88,7 +91,49 @@ namespace legallead.jdbc.implementations
             return ActiveSearchOverviewBo.FromDto(response);
         }
 
+        public async Task<bool?> IsSearchPurchased(string searchId)
+        {
+            const string prc = "CALL USP_QUERY_INVOICE_IS_PAID( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<SearchIsPaidDto>(connection, command);
+            if (response == null) return null;
+            return response.IsPaid;
+        }
 
+        public async Task<bool?> IsSearchDownloaded(string searchId)
+        {
+            const string prc = "CALL USP_QUERY_INVOICE_IS_DOWNLOADED( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<SearchIsPaidDto>(connection, command);
+            if (response == null) return null;
+            return response.IsDownloaded;
+        }
+        public async Task<SearchIsPaidDto?> IsSearchPaidAndDownloaded(string searchId)
+        {
+            const string prc = "CALL USP_QUERY_INVOICE_IS_PAID_AND_DOWNLOADED( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<SearchIsPaidDto>(connection, command);
+            return response;
+        }
+
+        public async Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId)
+        {
+            try
+            {
+                const string prc = "CALL USP_GENERATE_DOWNLOAD_HISTORY_BY_SEARCH_INDEX( '{0}' );";
+                var command = string.Format(prc, searchId);
+                using (var connection = _context.CreateConnection())
+                    await _command.ExecuteAsync(connection, command);
+                return new KeyValuePair<bool, string>(true, "Command executed succesfully");
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, ex.Message);
+            }
+        }
         public async Task<IEnumerable<ActiveSearchDetailBo>?> GetActiveSearchDetails(string userId)
         {
             const string prc = "CALL USP_GET_ACTIVE_SEARCH_PARAMETER_DETAILS( '{0}' );";
@@ -281,10 +326,20 @@ namespace legallead.jdbc.implementations
             try
             {
                 const string prc = "CALL USP_SET_INVOICE_PURCHASE_DATE( ? );";
+                var procs = new[] { sprc, prc };
                 var parameters = new DynamicParameters();
                 parameters.Add("external_index", externalId);
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc, parameters);
+                for ( var i = 0; i < procs.Length; i++)
+                {
+                    var current = procs[i];
+                    if (i == 0)
+                    {
+                        await _command.ExecuteAsync(connection, current);
+                        continue;
+                    }
+                    await _command.ExecuteAsync(connection, current, parameters);
+                }
                 return true;
             }
             catch
@@ -390,6 +445,7 @@ namespace legallead.jdbc.implementations
             return JsonConvert.DeserializeObject<T>(tmp) ?? new();
         }
 
+        private const string sprc = "CALL USP_INVOICE_SET_EXTERNALID_AND_PAYMENT_DATE()";
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_APPEND_USER_SEARCH_REQUEST( ?, ? );" },

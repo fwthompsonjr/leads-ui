@@ -1,6 +1,9 @@
-﻿using legallead.permissions.api.Interfaces;
+﻿using legallead.permissions.api.Extensions;
+using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -42,7 +45,20 @@ namespace legallead.permissions.api.Controllers
                 return Content(nodata, "text/html");
             }
             var content = Properties.Resources.page_invoice_html;
+            content = paymentSvc.Transform(session, content);
             return Content(content, "text/html");
+        }
+
+        [HttpPost("/payment-fetch-intent")]
+        public async Task<IActionResult> FetchIntent([FromBody] FetchIntentRequest request)
+        {
+            var session = await paymentSvc.IsSessionValid(request.Id);
+            if (session == null || string.IsNullOrEmpty(session.ClientId))
+            {
+                var nodata = Properties.Resources.page_payment_detail_invalid;
+                return Content(nodata, "text/html");
+            }
+            return Json(new { clientSecret = session.ClientId });
         }
 
         private static string? _index;

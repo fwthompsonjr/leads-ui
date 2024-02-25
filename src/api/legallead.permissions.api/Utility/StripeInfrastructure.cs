@@ -3,8 +3,10 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
+using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
+using System.Drawing.Drawing2D;
 using static Dapper.SqlMapper;
 
 namespace legallead.permissions.api.Utility
@@ -18,7 +20,7 @@ namespace legallead.permissions.api.Utility
             _repo = repo;
             keyEntity = entity;
         }
-        public async Task<object> CreatePaymentAsync(
+        public async Task<object?> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
             var description = (await _repo.InvoiceDescription(model.SearchId)).ItemDescription;
@@ -71,16 +73,14 @@ namespace legallead.permissions.api.Utility
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
             session.PaymentIntent = intent;
-            var response = new
+            var response = new PaymentSessionJs
             {
-                session.Id,
-                PaymentIntentId = intent.Id,
-                clientSecret = intent.ClientSecret,
-                externalId = data[0].ExternalId ?? string.Empty,
-                description,
+                ExternalId = data[0].ExternalId ?? string.Empty,
+                Description = description,
                 SuccessUrl = successPg,
-                data
+                Data = data
             };
+            var js = JsonConvert.SerializeObject(response);
             var payment = new PaymentSessionDto
             {
                 Id = Guid.NewGuid().ToString("D"),
@@ -89,9 +89,11 @@ namespace legallead.permissions.api.Utility
                 SessionType = keyEntity.ActiveName,
                 IntentId = intent.Id,
                 ClientId = intent.ClientSecret,
-                ExternalId = response.externalId,
+                ExternalId = response.ExternalId,
+                JsText = js
             };
-            await _repo.AppendPaymentSession(payment);
+            var isadded = await _repo.AppendPaymentSession(payment);
+            if (!isadded) return null;
             return response;
         }
 

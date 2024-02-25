@@ -29,7 +29,9 @@
 		<!-- jquery -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
-		
+		<!-- stripe -->
+        <script src="https://js.stripe.com/v3/"></script>
+
 		<!-- common styles -->
 		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css">
 		
@@ -207,6 +209,128 @@
 
 
 		</style>
+		<style name="stripe-checkout-css">
+		 
+            div[name="payment-place-holder"] form {
+              width: 30vw;
+              min-width: 500px;
+              align-self: center;
+              box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
+                0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+              border-radius: 7px;
+              padding: 40px;
+            }
+            
+            /* Buttons and links */
+            div[name="payment-place-holder"] button {
+              background: #5469d4;
+              font-family: Arial, sans-serif;
+              color: #ffffff;
+              border-radius: 4px;
+              border: 0;
+              padding: 12px 16px;
+              font-size: 16px;
+              font-weight: 600;
+              cursor: pointer;
+              display: block;
+              transition: all 0.2s ease;
+              box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+              width: 100%;
+            }
+            div[name="payment-place-holder"] button:hover {
+              filter: contrast(115%);
+            }
+
+            div[name="payment-place-holder"] button:disabled {
+              opacity: 0.5;
+              cursor: default;
+            }
+            .hidden {
+              display: none;
+            }
+            
+            #payment-message {
+              color: rgb(105, 115, 134);
+              font-size: 16px;
+              line-height: 20px;
+              padding-top: 12px;
+              text-align: center;
+            }
+
+            #payment-element {
+              margin-bottom: 24px;
+            }
+            
+            /* spinner/processing state, errors */
+            .spinner,
+            .spinner:before,
+            .spinner:after {
+              border-radius: 50%;
+            }
+            .spinner {
+              color: #ffffff;
+              font-size: 22px;
+              text-indent: -99999px;
+              margin: 0px auto;
+              position: relative;
+              width: 20px;
+              height: 20px;
+              box-shadow: inset 0 0 0 2px;
+              -webkit-transform: translateZ(0);
+              -ms-transform: translateZ(0);
+              transform: translateZ(0);
+            }
+            .spinner:before,
+            .spinner:after {
+              position: absolute;
+              content: "";
+            }
+            .spinner:before {
+              width: 10.4px;
+              height: 20.4px;
+              background: #5469d4;
+              border-radius: 20.4px 0 0 20.4px;
+              top: -0.2px;
+              left: -0.2px;
+              -webkit-transform-origin: 10.4px 10.2px;
+              transform-origin: 10.4px 10.2px;
+              -webkit-animation: loading 2s infinite ease 1.5s;
+              animation: loading 2s infinite ease 1.5s;
+            }
+            .spinner:after {
+              width: 10.4px;
+              height: 10.2px;
+              background: #5469d4;
+              border-radius: 0 10.2px 10.2px 0;
+              top: -0.1px;
+              left: 10.2px;
+              -webkit-transform-origin: 0px 10.2px;
+              transform-origin: 0px 10.2px;
+              -webkit-animation: loading 2s infinite ease;
+              animation: loading 2s infinite ease;
+            }
+            
+            @-webkit-keyframes loading {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+            @keyframes loading {
+              0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+              }
+              100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              }
+            }
+		</style>
 	</head>
 	<body class="text-center">
 		
@@ -273,36 +397,25 @@
 									</span>
 									<span name="invoice-total" class="ml-2">$0.00</span>
 								</h6>
-								<ul name="invoice-line-items" class="list-group text-start w-75 m-2" style="background: transparent">
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
-										Search - Level: Guest<br>
-										15 records<br>
-										$0.00
-									</li>
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
-										County Discount<br>
-										10.00 %<br>
-										$0.00
-									</li>
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
-										State Discount<br>
-										15.00 %<br>
-										$0.00
-									</li>
-								</ul>
 							</div>
-							<div class="row">
+							<div name="payment-place-holder" class="row">
+                                <!-- Display a payment form -->
+                                <form id="payment-form">
+                                  <div id="payment-element">
+                                    <!--Stripe.js injects the Payment Element-->
+                                  </div>
+                                  <button id="submit">
+                                    <div class="spinner hidden" id="spinner"></div>
+                                    <span id="button-text">Pay now</span>
+                                  </button>
+                                  <div id="payment-message" class="hidden"></div>
+                                </form>
 							</div>
-						</div>
-						<div class="card-footer">
-							<div id="frm-invoice-error-message" class="d-none">
-								
-								<!-- Error messages -->
-							</div>
-							<button id="frm-invoice-submit-button" class="btn btn-primary" onclick="jssearchpager.close_invoice()">
-								<i id="form-invoice-icon" class="bi bi-pencil-square"></i>
-								<i id="form-invoice-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Save
-							</button>
+                            <div class="row">
+                                <hr />
+                                <h5>Payment Details</h5>
+                                <ul name="invoice-line-items" class="list-group text-start w-75 m-2" style="background: transparent"></ul> 
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -316,32 +429,7 @@
 				</div>
 			</footer>
 		</div>
-		<script name="checkout-stripe-js"></script>
-		<script name="invoice-form-js">
-                         let jsinvoicing = { 
-                              close_invoice: function() { 
-                              var dv_checkout = document.getElementById('checkout'); 
-                                   if (undefined == dv_checkout || null == dv_checkout) { 
-                                   let handler = window.jsHandler; 
-                                        if( undefined === handler || null === handler || !(handler) ) { return; } 
-                                   finder = "span[automationid='search-uuid']"; 
-                                        var obj = JSON.stringify( { "id": $( finder ).text() }); 
-                                   handler.fetch( "frm-search-make-payment", obj); 
-                                   } 
-                              }, 
-                              close_invoice_on_load: function() { 
-                              var dv_checkout = document.getElementById('checkout'); 
-                                   if (undefined == dv_checkout || null == dv_checkout) { 
-                                   setTimeout( jssearchpager.close_invoice(), 15000); 
-                                        } else { 
-                                   $("#frm-invoice-submit-button").hide(); 
-                                   } 
-                              } 
-                         } 
-                    jsinvoicing.close_invoice_on_load(); 
-
-
-		</script>
-	
+		
+	<!-- stripe payment script -->
 </body>
 </html>
