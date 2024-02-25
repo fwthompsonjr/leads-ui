@@ -4,6 +4,8 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
+using Newtonsoft.Json;
 using System.Globalization;
 
 namespace legallead.permissions.api.Utility
@@ -31,6 +33,17 @@ namespace legallead.permissions.api.Utility
             if (string.IsNullOrWhiteSpace(id)) return null;
             var session = await _repo.GetPaymentSession(id);
             return session;
+        }
+
+        public async Task<bool> IsRequestPaid(PaymentSessionDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.JsText)) return false;
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            if (obj.Data == null || !obj.Data.Any()) return false;
+            var dat = obj.Data[0];
+            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
+            return ispaid.GetValueOrDefault();
         }
         public string Transform(PaymentSessionDto? session, string html)
         {

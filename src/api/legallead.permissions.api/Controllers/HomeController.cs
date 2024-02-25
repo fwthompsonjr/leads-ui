@@ -44,6 +44,11 @@ namespace legallead.permissions.api.Controllers
                 var nodata = Properties.Resources.page_payment_detail_invalid;
                 return Content(nodata, "text/html");
             }
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            if (ispaid)
+            {
+                return await PaymentLanding("success", id);
+            }
             var content = Properties.Resources.page_invoice_html;
             content = paymentSvc.Transform(session, content);
             return Content(content, "text/html");
