@@ -27,5 +27,9 @@ namespace legallead.jdbc.interfaces
         Task<bool> UpdateSearchRowCount();
         Task<PaymentSessionDto?> GetPaymentSession(string externalId);
         Task<bool> AppendPaymentSession(PaymentSessionDto dto);
+        Task<bool?> IsSearchPurchased(string searchId);
+        Task<bool?> IsSearchDownloaded(string searchId);
+        Task<SearchIsPaidDto?> IsSearchPaidAndDownloaded(string searchId);
+        Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId);
     }
 }

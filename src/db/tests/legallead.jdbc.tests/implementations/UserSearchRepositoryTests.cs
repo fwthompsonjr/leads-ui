@@ -684,6 +684,118 @@ namespace legallead.jdbc.tests.implementations
         }
 
 
+        [Theory]
+        [InlineData("000")]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoGetIsSearchPurchasedHappyPath(string searchid)
+        {
+            var result = searchid == "000" ?
+                null :
+                new SearchIsPaidDto { IsPaid = true };
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.IsSearchPurchased(searchid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Theory]
+        [InlineData("000")]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoGetIsSearchDownloadedHappyPath(string searchid)
+        {
+            var result = searchid == "000" ?
+                null :
+                new SearchIsPaidDto { IsDownloaded = true };
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.IsSearchDownloaded(searchid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+        [Theory]
+        [InlineData("000")]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoGetIsSearchPaidAndDownloadedHappyPath(string searchid)
+        {
+            var result = searchid == "000" ?
+                null :
+                new SearchIsPaidDto { IsPaid = true, IsDownloaded = true };
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.IsSearchPaidAndDownloaded(searchid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<SearchIsPaidDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+
+        [Fact]
+        public async Task RepoCreateOrUpdateDownloadRecordHappyPath()
+        {
+            var searchid = faker.Random.Guid().ToString();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+            var result = await service.CreateOrUpdateDownloadRecord(searchid);
+            Assert.True(result.Key);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Fact]
+        public async Task RepoCreateOrUpdateDownloadRecordExceptionPath()
+        {
+            var exception = faker.System.Exception;
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).Throws(exception);
+            var result = await service.CreateOrUpdateDownloadRecord(faker.Random.Guid().ToString());
+            Assert.False(result.Key);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
         private sealed class RepoContainer
         {
             private readonly UserSearchRepository repo;
