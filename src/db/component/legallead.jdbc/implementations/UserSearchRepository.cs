@@ -3,6 +3,7 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
+using MySqlConnector;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -42,6 +43,7 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
             var command = string.Format(prc, userId);
             using var connection = _context.CreateConnection();
+            await _command.ExecuteAsync(connection, sprc);
             var response = await _command.QueryAsync<SearchQueryDto>(connection, command);
             var translation = response.Select(x => new SearchDtoHeader
             {
@@ -63,6 +65,7 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_GET_SEARCH_RECORD_PREVIEW( '{0}' );";
             var command = string.Format(prc, searchId);
             using var connection = _context.CreateConnection();
+            await _command.ExecuteAsync(connection, sprc);
             var response = await _command.QueryAsync<SearchPreviewDto>(connection, command);
             var translation = response.Select(x => TranslateTo<SearchPreviewBo>(x));
             return translation;
@@ -281,10 +284,20 @@ namespace legallead.jdbc.implementations
             try
             {
                 const string prc = "CALL USP_SET_INVOICE_PURCHASE_DATE( ? );";
+                var procs = new[] { sprc, prc };
                 var parameters = new DynamicParameters();
                 parameters.Add("external_index", externalId);
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc, parameters);
+                for ( var i = 0; i < procs.Length; i++)
+                {
+                    var current = procs[i];
+                    if (i == 0)
+                    {
+                        await _command.ExecuteAsync(connection, current);
+                        continue;
+                    }
+                    await _command.ExecuteAsync(connection, current, parameters);
+                }
                 return true;
             }
             catch
@@ -390,6 +403,7 @@ namespace legallead.jdbc.implementations
             return JsonConvert.DeserializeObject<T>(tmp) ?? new();
         }
 
+        private const string sprc = "CALL USP_INVOICE_SET_EXTERNALID_AND_PAYMENT_DATE()";
         private static readonly Dictionary<SearchTargetTypes, string> AppendProcs = new(){
             { SearchTargetTypes.Detail, "CALL USP_APPEND_USER_SEARCH_DETAIL( ?, ? );" },
             { SearchTargetTypes.Request, "CALL USP_APPEND_USER_SEARCH_REQUEST( ?, ? );" },

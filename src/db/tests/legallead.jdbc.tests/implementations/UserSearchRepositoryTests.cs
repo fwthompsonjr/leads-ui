@@ -544,6 +544,56 @@ namespace legallead.jdbc.tests.implementations
         }
 
         [Theory]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoGetActiveSearchesHappyPath(string searchid)
+        {
+            var result = new ActiveSearchOverviewDto();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<ActiveSearchOverviewDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.GetActiveSearches(searchid);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<ActiveSearchOverviewDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Theory]
+        [InlineData("000")]
+        [InlineData("abc")]
+        [InlineData("123")]
+        public async Task RepoGetActiveSearchDetailsHappyPath(string searchid)
+        {
+            var result = searchid == "000" ?
+                Array.Empty<ActiveSearchDetailDto>() :
+                new[] {
+                    new ActiveSearchDetailDto(),
+                    new ActiveSearchDetailDto(),
+                    };
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QueryAsync<ActiveSearchDetailDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.GetActiveSearchDetails(searchid);
+            mock.Verify(m => m.QueryAsync<ActiveSearchDetailDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
+
+        [Theory]
         [InlineData(null)]
         [InlineData(true)]
         [InlineData(false)]
