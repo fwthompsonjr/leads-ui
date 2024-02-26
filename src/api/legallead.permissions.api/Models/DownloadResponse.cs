@@ -6,5 +6,6 @@
         public string? Description { get; set; }
         public byte[]? Content { get; set; }
         public string? Error { get; set; }
+        public string? CreateDate { get; set; }
     }
 }

@@ -77,6 +77,9 @@
       </header>
 
       <main role="main" class="inner cover">
+        <div name="navigation-alert-message" class="alert alert-primary d-none" role="alert">
+            Unable to complete navigation.
+        </div>
 		<div name='main-content' class="card">
 			<div class="card-body">
 				<h5 class="card-title text-danger">Error - Invalid Request</h5>	
@@ -111,10 +114,11 @@
 			</div>
 			<div class="card-footer">
 				<div id="dv-row-return-search" name="row-return-search">
-					<button disabled="disabled"
+					<button 
 						id="bttn-row-return-search" 
 						name="row-return-search" 
-						class="btn btn-primary">
+						class="btn btn-primary"
+						onclick="changeViewHandler('mysearch-home')">
 						Return
 					</button>
 				</div>
@@ -124,7 +128,7 @@
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p name="product-copy-footer">(c) 2023 - Legal Lead UI</p>
+          <p name="product-copy-footer">(c) 2023, 2024 - Legal Lead UI</p>
         </div>
       </footer>
     </div>

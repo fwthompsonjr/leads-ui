@@ -411,6 +411,18 @@ namespace legallead.jdbc.implementations
             return response;
         }
 
+        public async Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId)
+        {
+            // note: you need unit test coverage for this method
+            const string prc = "CALL USP_QUERY_USER_PURCHASE_HISTORY( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<PurchasedSearchDto>(connection, command);
+            if (response == null) return null;
+            var translation = response.Select(x => TranslateTo<PurchasedSearchBo>(x));
+            return translation;
+        }
+
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
         {
             const int count = 100000;

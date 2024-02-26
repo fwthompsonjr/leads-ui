@@ -77,7 +77,8 @@ namespace legallead.permissions.api.Utility
                 if (response.Content != null)
                 {
                     var conversion = Convert.ToBase64String(response.Content);
-                    _ = await _repo.CreateOrUpdateDownloadRecord(searchId);
+                    _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
+                    response.CreateDate = DateTime.UtcNow.ToString("s");
                 } else
                 {
                     response.Error = "Unable to generate excel ouput";

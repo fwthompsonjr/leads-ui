@@ -1,9 +1,23 @@
 <html>
 	<head>
 		<script type="text/javascript">
-			try {
-				CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-			} catch {}		
+            try { 
+            CefSharp.BindObjectAsync("jsHandler", "jsHandler"); 
+                } catch {} 
+            function changeViewHandler(viewName){
+		            const nn = "d-none";
+		            const dvnav = "div[name='navigation-alert-message']";
+		            if( $(dvnav).hasClass(nn) ) {
+			            $(dvnav).removeClass(nn);
+			            $(dvnav).hide();
+		            }
+		            let handler = window.jsHandler;
+		            if( undefined === handler || null === handler || !(handler) ) { 
+			            $(dvnav).fadeIn(500);
+			            return;
+		            }
+		            handler.reload(viewName);
+	            }		
 		</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -77,6 +91,9 @@
       </header>
 
       <main role="main" class="inner cover">
+        <div name="navigation-alert-message" class="alert alert-primary d-none" role="alert">
+            Unable to complete navigation.
+        </div>
 		<div name='main-content' class="card">
 			<div class="card-body">
 				<h5 class="card-title text-success">Payment Received - Thank You</h5>	
@@ -124,7 +141,7 @@
 			</div>
 			<div class="card-footer">
 				<div id="dv-row-return-search" name="row-return-search">
-					<button id="bttn-row-return-search" name="row-return-search" class="btn btn-primary">
+					<button id="bttn-row-return-search" name="row-return-search" class="btn btn-primary" onclick="changeViewHandler('mysearch-home')">
 						Return
 					</button>
 				</div>

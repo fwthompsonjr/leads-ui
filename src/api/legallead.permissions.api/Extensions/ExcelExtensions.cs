@@ -2,6 +2,7 @@
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using OfficeOpenXml.DataValidation;
 using OfficeOpenXml.Style;
 using System.Drawing;
 
