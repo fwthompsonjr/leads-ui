@@ -1,9 +1,7 @@
 ﻿using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
-using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -15,7 +13,7 @@ namespace legallead.permissions.api.Controllers
         private readonly IUserSearchValidator searchValidator;
         private readonly ISearchInfrastructure infrastructure;
 
-        public SearchController(IUserSearchValidator validator, 
+        public SearchController(IUserSearchValidator validator,
             ISearchInfrastructure infrastructure)
         {
             searchValidator = validator;

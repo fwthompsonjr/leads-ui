@@ -177,7 +177,8 @@ namespace legallead.permissions.api.Utility
             var misaddressed = staged.Where(w => (w.StagingType ?? string.Empty).Equals(find)).ToList();
             misaddressed.ForEach(m => m.StagingType = replace);
             var data = staged.Where(w => (w.StagingType ?? string.Empty).StartsWith(beginWith)).ToList();
-            data.ForEach(m => {
+            data.ForEach(m =>
+            {
                 var words = (m.StagingType ?? string.Empty).Split('-');
                 var phrase = string.Join(" ", words).ToLower();
                 m.StagingType = textInfo.ToTitleCase(phrase);

@@ -759,10 +759,13 @@ namespace legallead.jdbc.tests.implementations
         }
 
 
-        [Fact]
-        public async Task RepoCreateOrUpdateDownloadRecordHappyPath()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCreateOrUpdateDownloadRecordHappyPath(bool hasContent)
         {
             var searchid = faker.Random.Guid().ToString();
+            var content = hasContent ? faker.Hacker.Phrase() : null;
             var container = new RepoContainer();
             var service = container.Repo;
             var mock = container.CommandMock;
@@ -770,7 +773,7 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
-            var result = await service.CreateOrUpdateDownloadRecord(searchid);
+            var result = await service.CreateOrUpdateDownloadRecord(searchid, content);
             Assert.True(result.Key);
             mock.Verify(m => m.ExecuteAsync(
                 It.IsAny<IDbConnection>(),

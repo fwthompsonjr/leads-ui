@@ -354,7 +354,8 @@ namespace legallead.permissions.api
         {
             { 0, "First" },
             { 1, "Last" },
-            { 2, "Company" }
+            { 2, "Company" },
+            { 3, "Time" }
         };
     }
 }

@@ -1,9 +1,6 @@
-﻿using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Interfaces;
+﻿using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -28,7 +25,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> PaymentLanding([FromQuery] string? sts, [FromQuery] string? id)
         {
             var isValid = await paymentSvc.IsRequestValid(sts, id);
-            var content = 
+            var content =
                 isValid ? Properties.Resources.page_payment_completed
                 : Properties.Resources.page_payment_detail_invalid;
             content = await paymentSvc.Transform(isValid, sts, id, content);
@@ -43,6 +40,11 @@ namespace legallead.permissions.api.Controllers
             {
                 var nodata = Properties.Resources.page_payment_detail_invalid;
                 return Content(nodata, "text/html");
+            }
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            if (ispaid)
+            {
+                return await PaymentLanding("success", id);
             }
             var content = Properties.Resources.page_invoice_html;
             content = paymentSvc.Transform(session, content);
@@ -61,6 +63,21 @@ namespace legallead.permissions.api.Controllers
             return Json(new { clientSecret = session.ClientId });
         }
 
+
+        [HttpPost("/payment-fetch-search")]
+        public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
+        {
+            var nodata = Properties.Resources.page_payment_detail_invalid;
+            var session = await paymentSvc.IsSessionValid(request.Id);
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            var isdownload = await paymentSvc.IsRequestDownloadedAndPaid(session);
+            if (!ispaid || isdownload || session == null || string.IsNullOrEmpty(session.JsText))
+            {
+                return StatusCode(400, nodata);
+            }
+            var dwnload = await paymentSvc.GetDownload(session);
+            return Ok(dwnload);
+        }
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
 

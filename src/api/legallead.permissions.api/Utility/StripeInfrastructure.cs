@@ -6,23 +6,24 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
-using System.Drawing.Drawing2D;
-using static Dapper.SqlMapper;
 
 namespace legallead.permissions.api.Utility
 {
     public class StripeInfrastructure : IStripeInfrastructure
     {
         private readonly IUserSearchRepository _repo;
-        private StripeKeyEntity keyEntity;
+        private readonly StripeKeyEntity keyEntity;
         public StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity)
         {
             _repo = repo;
             keyEntity = entity;
         }
+
         public async Task<object?> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
+            var existing = await GetPaymentSession(model);
+            if (existing != null) return existing;
             var description = (await _repo.InvoiceDescription(model.SearchId)).ItemDescription;
             var externalId = data[0].ExternalId ?? model.SearchId;
             var amount = data.Sum(x => x.Price.GetValueOrDefault(0));
@@ -108,6 +109,18 @@ namespace legallead.permissions.api.Utility
             };
         }
 
+        private async Task<object?> GetPaymentSession(PaymentCreateModel model)
+        {
+            var isPaid = await _repo.IsSearchPurchased(model.SearchId);
+            if (!isPaid.GetValueOrDefault()) { return null; }
+            var search = await _repo.Invoices(model.CurrentUser.Id, model.SearchId);
+            if (search == null || !search.Any() || string.IsNullOrEmpty(search.First().ExternalId)) return null;
+            var externalId = search.First().ExternalId ?? string.Empty;
+            var session = await _repo.GetPaymentSession(externalId);
+            if (session == null || string.IsNullOrEmpty(session.JsText)) return null;
+            var response = JsonConvert.DeserializeObject<PaymentSessionJs>(session.JsText) ?? new();
+            return response;
+        }
 
         private static PaymentIntent CreatePaymentIntent(decimal amount)
         {
