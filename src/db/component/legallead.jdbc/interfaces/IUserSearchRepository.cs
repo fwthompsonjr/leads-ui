@@ -31,5 +31,6 @@ namespace legallead.jdbc.interfaces
         Task<bool?> IsSearchDownloaded(string searchId);
         Task<SearchIsPaidDto?> IsSearchPaidAndDownloaded(string searchId);
         Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId, string? content = null);
+        Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId);
     }
 }
