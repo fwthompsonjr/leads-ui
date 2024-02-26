@@ -15,7 +15,7 @@ namespace legallead.permissions.api.Utility
         private readonly IUserSearchRepository _repo;
         private readonly string _paymentKey;
         public PaymentHtmlTranslator(IUserSearchRepository db, StripeKeyEntity key)
-        { 
+        {
             _repo = db;
             _paymentKey = key.GetActiveName();
         }
@@ -35,9 +35,9 @@ namespace legallead.permissions.api.Utility
             return session;
         }
 
-        public async Task<bool> IsRequestPaid(PaymentSessionDto dto)
+        public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
         {
-            if (string.IsNullOrWhiteSpace(dto.JsText)) return false;
+            if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
             if (obj.Data == null || !obj.Data.Any()) return false;
             var dat = obj.Data[0];
@@ -45,6 +45,52 @@ namespace legallead.permissions.api.Utility
             var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
             return ispaid.GetValueOrDefault();
         }
+        public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            if (obj.Data == null || !obj.Data.Any()) return false;
+            var dat = obj.Data[0];
+            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            var paid = await _repo.IsSearchPaidAndDownloaded(dat.ReferenceId);
+            if (paid == null) return false;
+            if (paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault()) return true;
+            return false;
+        }
+
+        public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            if (obj.Data == null || !obj.Data.Any()) return new() { Error = "No search records found for associated request." };
+            var searchId = obj.Data[0].ReferenceId ?? Guid.NewGuid().ToString();
+            var records = (await _repo.GetFinal(searchId))?.ToList();
+            if (records == null) return new() { Error = "Invalid session parameter." };
+            var response = new DownloadResponse()
+            {
+                ExternalId = dto.ExternalId,
+                Description = obj.Description,
+            };
+            try
+            {
+                response.Content = ExcelExtensions.WriteExcel(dto, records);
+                if (response.Content != null)
+                {
+                    var conversion = Convert.ToBase64String(response.Content);
+                    _ = await _repo.CreateOrUpdateDownloadRecord(searchId);
+                } else
+                {
+                    response.Error = "Unable to generate excel ouput";
+                }                
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Error = ex.Message;
+                return response;
+            }
+        }
+
         public string Transform(PaymentSessionDto? session, string html)
         {
             var converted = session.GetHtml(html, _paymentKey);
@@ -57,7 +103,7 @@ namespace legallead.permissions.api.Utility
             var issuccess = status == requestNames[0];
             if (issuccess) await _repo.SetInvoicePurchaseDate(id);
             var summary = await _repo.GetPurchaseSummary(id) ?? new();
-            
+
             var title = issuccess ? "Payment Received - Thank You" : "Payment Request Failed";
             var replacements = new Dictionary<string, string>()
             {
@@ -72,7 +118,7 @@ namespace legallead.permissions.api.Utility
             var keynames = replacements.Keys.ToList();
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
-            for ( var i = 0; i < replacements.Count; i++ )
+            for (var i = 0; i < replacements.Count; i++)
             {
                 var key = keynames[i];
                 var value = replacements[key];

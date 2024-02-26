@@ -149,8 +149,9 @@ namespace legallead.permissions.api
             services.AddSingleton<LoggingDbServiceProvider>();
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
-            services.AddScoped(p => {
-                return new PaymentController(payment, 
+            services.AddScoped(p =>
+            {
+                return new PaymentController(payment,
                     p.GetRequiredService<ISearchInfrastructure>(),
                     p.GetRequiredService<IStripeInfrastructure>());
             });
@@ -376,7 +377,7 @@ namespace legallead.permissions.api
             var keytype = configuration.GetValue<string>("Payment:keys:active");
             var test = configuration.GetValue<string>("Payment:keys:values:test");
             var prd = configuration.GetValue<string>("Payment:keys:values:prod");
-            var items = new List<StripeKeyItem> { 
+            var items = new List<StripeKeyItem> {
                 new() { Name="test", Value= test },
                 new() { Name="prod", Value= prd }
             };

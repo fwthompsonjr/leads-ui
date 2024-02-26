@@ -140,7 +140,7 @@ namespace legallead.permissions.api.Extensions
         private static string? _invoiceScript;
         private static string InvoiceScript()
         {
-            if(!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
+            if (!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
             _invoiceScript = Properties.Resources.page_invoice_js;
             return _invoiceScript;
         }

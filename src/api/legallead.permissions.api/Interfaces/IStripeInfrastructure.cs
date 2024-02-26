@@ -7,7 +7,7 @@ namespace legallead.permissions.api.Interfaces
     {
         object SessionStatus(string sessionId);
         Task<object?> CreatePaymentAsync(
-            PaymentCreateModel model, 
+            PaymentCreateModel model,
             List<SearchInvoiceBo> data);
     }
 }

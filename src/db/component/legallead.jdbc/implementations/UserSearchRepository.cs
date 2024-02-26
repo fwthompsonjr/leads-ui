@@ -119,14 +119,16 @@ namespace legallead.jdbc.implementations
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId)
+        public async Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId, string? content = null)
         {
             try
             {
-                const string prc = "CALL USP_GENERATE_DOWNLOAD_HISTORY_BY_SEARCH_INDEX( '{0}' );";
-                var command = string.Format(prc, searchId);
+                const string prc = "CALL USP_GENERATE_DOWNLOAD_HISTORY_BY_SEARCH_INDEX( ?, ? );";
+                var parms = new DynamicParameters();
+                parms.Add("search_index", searchId);
+                parms.Add("excel_content", content);
                 using (var connection = _context.CreateConnection())
-                    await _command.ExecuteAsync(connection, command);
+                    await _command.ExecuteAsync(connection, prc, parms);
                 return new KeyValuePair<bool, string>(true, "Command executed succesfully");
             }
             catch (Exception ex)

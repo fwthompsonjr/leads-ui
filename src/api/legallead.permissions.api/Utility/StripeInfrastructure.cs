@@ -6,8 +6,6 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
-using System.Drawing.Drawing2D;
-using static Dapper.SqlMapper;
 
 namespace legallead.permissions.api.Utility
 {
