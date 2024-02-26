@@ -1,0 +1,5 @@
+Private Sub Worksheet_BeforeRightClick(ByVal Target As Range, Cancel As Boolean)
+    Cancel = True
+    MsgBox ("Sorry Right Click is Disbaled for this Worksheet"), _
+    vbInformation, "Legal Lead Administration"
+End Sub

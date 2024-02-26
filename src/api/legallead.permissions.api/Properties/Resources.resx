@@ -157,4 +157,10 @@
   <data name="tx_tarrant_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_counties\tx-tarrant-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="workbook_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\workbook_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="worksheet_address_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\worksheet_address_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
 </root>

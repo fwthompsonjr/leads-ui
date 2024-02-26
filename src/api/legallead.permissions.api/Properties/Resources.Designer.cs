@@ -189,20 +189,18 @@ namespace legallead.permissions.api.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;
-        ///                         try { 
-        ///                         CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
-        ///                              } catch {} 
-        ///
-        ///
-        ///		&lt;/script&gt;
-        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///		&lt;title&gt;legallead.ui: invoice&lt;/title&gt;
-        ///		
-        ///		&lt;!-- googleapis : fonts --&gt;
-        ///		&lt;link href=&quot;https://fon [rest of string was truncated]&quot;;.
+        ///            try { 
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                } catch {} 
+        ///            function changeViewHandler(viewName){
+        ///		            const nn = &quot;d-none&quot;;
+        ///		            const dvnav = &quot;div[name=&apos;navigation-alert-message&apos;]&quot;;
+        ///		            if( $(dvnav).hasClass(nn) ) {
+        ///			            $(dvnav).removeClass(nn);
+        ///			            $(dvnav).hide();
+        ///		            }
+        ///		            let handler = window.jsHandler;
+        ///		       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string page_invoice_html {
             get {
@@ -212,6 +210,7 @@ namespace legallead.permissions.api.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;script name=&quot;checkout-stripe-js&quot;&gt;
+        ///
         ///// This is your test publishable API key.
         ///const stripe = Stripe(&quot;&lt;!-- stripe public key --&gt;&quot;);
         ///
@@ -229,9 +228,8 @@ namespace legallead.permissions.api.Properties {
         ///
         ///// Fetches a payment intent and captures the client secret
         ///async function initialize() {
-        ///  const { clientSecret } = await getClientSecret();
-        ///
-        ///  const  [rest of string was truncated]&quot;;.
+        ///  let obj = { id: &quot;&lt;!-- payment external id --&gt;&quot; }
+        ///  const r [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string page_invoice_js {
             get {
@@ -243,17 +241,18 @@ namespace legallead.permissions.api.Properties {
         ///   Looks up a localized string similar to &lt;html&gt;
         ///	&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;
-        ///			try {
-        ///				CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
-        ///			} catch {}		
-        ///		&lt;/script&gt;
-        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
-        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
-        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
-        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
-        ///		&lt;title&gt;legallead.ui&lt;/title&gt;
-        ///		&lt;!-- googleapis : fonts --&gt;
-        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&quot; rel=&quot;styleshe [rest of string was truncated]&quot;;.
+        ///            try { 
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                } catch {} 
+        ///            function changeViewHandler(viewName){
+        ///		            const nn = &quot;d-none&quot;;
+        ///		            const dvnav = &quot;div[name=&apos;navigation-alert-message&apos;]&quot;;
+        ///		            if( $(dvnav).hasClass(nn) ) {
+        ///			            $(dvnav).removeClass(nn);
+        ///			            $(dvnav).hide();
+        ///		            }
+        ///		            let handler = window.jsHandler;
+        ///		    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string page_payment_completed {
             get {
@@ -397,6 +396,47 @@ namespace legallead.permissions.api.Properties {
         internal static string tx_tarrant_drop_down {
             get {
                 return ResourceManager.GetString("tx_tarrant_drop_down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private Sub Workbook_Activate()
+        ///Application.CutCopyMode = False
+        ///Application.OnKey &quot;^c&quot;, &quot;&quot;
+        ///Application.CellDragAndDrop = False
+        ///End Sub
+        ///
+        ///Private Sub Workbook_Deactivate()
+        ///Application.CellDragAndDrop = True
+        ///Application.OnKey &quot;^c&quot;
+        ///Application.CutCopyMode = False
+        ///End Sub
+        ///
+        ///Private Sub Workbook_WindowActivate(ByVal Wn As Window)
+        ///Application.CutCopyMode = False
+        ///Application.OnKey &quot;^c&quot;, &quot;&quot;
+        ///Application.CellDragAndDrop = False
+        ///End Sub
+        ///
+        ///Private Sub Workbook_WindowDeactivate(ByVal Wn As Window)
+        ///Applic [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string workbook_functions {
+            get {
+                return ResourceManager.GetString("workbook_functions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private Sub Worksheet_BeforeRightClick(ByVal Target As Range, Cancel As Boolean)
+        ///    Cancel = True
+        ///    MsgBox (&quot;Sorry Right Click is Disbaled for this Worksheet&quot;), _
+        ///    vbInformation, &quot;Legal Lead Administration&quot;
+        ///End Sub.
+        /// </summary>
+        internal static string worksheet_address_functions {
+            get {
+                return ResourceManager.GetString("worksheet_address_functions", resourceCulture);
             }
         }
     }
