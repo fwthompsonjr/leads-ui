@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -76,6 +77,109 @@ namespace legallead.desktop.js
             if (string.IsNullOrWhiteSpace(json)) return;
             web.ExecuteScriptAsync("jsPurchases.bind_purchase", json);
         }
+
+        public virtual async void MakeDownload(string json)
+        {
+            var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
+            var dispatcher = Application.Current.Dispatcher;
+            var main = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            var window = (MainWindow)main;
+            if (user == null 
+                || api == null 
+                || web == null 
+                || window == null
+                || string.IsNullOrWhiteSpace(json))
+            {
+                var mssg = "Status code: 401<br/>"
+                    + Environment.NewLine +
+                    "Bad request<br/>"
+                    + Environment.NewLine +
+                    "One or more expected dependancies are missing or invalid.";
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            var payload = DownloadJson.FromJson(json);
+            var dirName = dispatcher.Invoke(() =>
+            {
+                return window.ShowFolderBrowserDialog();
+            });
+            if (payload != null) { payload.Name = dirName; }
+            if (payload == null || !payload.IsValid)
+            {
+                var mssg = "Status code: 422<br/>"
+                    + Environment.NewLine +
+                    "Unprocessable Entity<br/>"
+                    + Environment.NewLine +
+                    "One or more expected form values are incorrect.";
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            var response = await api.Post("make-search-purchase", payload, user);
+            if (response == null)
+            {
+                var mssg = "Status code: 500<br/>"
+                    + Environment.NewLine +
+                    "Unexpected Error<br/>"
+                    + Environment.NewLine +
+                    "An error occurred processing your request";
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            if (response.StatusCode != 200)
+            {
+                var mssg = $"Status code: {response.StatusCode}<br/>"
+                    + Environment.NewLine +
+                    response.Message;
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            var deserialized = TryDeserialize<DownloadJsResponse>(response.Message);
+            if (deserialized == null ||
+                !string.IsNullOrEmpty(deserialized.Error) ||
+                string.IsNullOrEmpty(deserialized.Content))
+            {
+                var explained = deserialized?.Error ?? "An error occurred processing your request";
+                var mssg = "Status code: 500<br/>"
+                    + Environment.NewLine +
+                    "Unexpected Error<br/>"
+                    + Environment.NewLine +
+                    explained;
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            var content = GetBytes(deserialized.Content);
+            if (content == null)
+            {
+                var mssg = "Status code: 500<br/>"
+                    + Environment.NewLine +
+                    "Unexpected Error<br/>"
+                    + Environment.NewLine +
+                    "Unable to retrieve file content from server.";
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+
+            var adjustedName = payload.CalculateFileName();
+            var isCreated = TryCreateFile(content, adjustedName);
+
+            if (!isCreated)
+            {
+                var mssg = "Status code: 500<br/>"
+                    + Environment.NewLine +
+                    "File access error<br/>"
+                    + Environment.NewLine +
+                    "Unable to write file content to your desktop location.";
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            var msg = "Status code: 200<br/>"
+                    + Environment.NewLine +
+                    "File created successfully<br/>"
+                    + Environment.NewLine +
+                    $"Please open file at : {adjustedName}";
+            web.ExecuteScriptAsync("jsPurchases.show_submission_success", msg);
+        }
         public virtual Action<object?>? OnInitCompleted { get; set; }
 
         protected static void Init()
@@ -138,7 +242,90 @@ namespace legallead.desktop.js
             if (response == null) return string.Empty;
             if (response.StatusCode != 200) return string.Empty;
             return response.Message ?? string.Empty;
-            
+
+        }
+
+        private static byte[]? GetBytes(string source)
+        {
+            try
+            {
+                return Convert.FromBase64String(source);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static bool TryCreateFile(byte[] data, string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName)) { File.Delete(fileName); }
+                File.WriteAllBytes(fileName, data);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private sealed class DownloadJson
+        {
+            public string Id { get; set; } = string.Empty;
+            public string Name { get; set; } = string.Empty;
+
+            public bool IsValid
+            {
+                get
+                {
+                    if (string.IsNullOrWhiteSpace(Id)) return false;
+                    if (string.IsNullOrWhiteSpace(Name)) return false;
+                    if (!Guid.TryParse(Id, out var _)) return false;
+                    var directory = Path.GetDirectoryName(Name);
+                    if (directory == null) return false;
+                    if (!Directory.Exists(directory)) return false;
+                    return true;
+                }
+            }
+            public string CalculateFileName()
+            {
+                const string tmp_name = "record-download-{0}.xlsx";
+                var directory = Path.GetDirectoryName(Name);
+                if (string.IsNullOrEmpty(directory) ||
+                    !Directory.Exists(directory)) return string.Empty;
+                var shortName = string.Format(tmp_name, DateTime.Now.ToString("yyyyMMdd"));
+                var adjustedName = Path.Combine(directory, shortName);
+                var indx = 1;
+                while(File.Exists(adjustedName))
+                {
+                    var tmp = $"{Path.GetFileNameWithoutExtension(adjustedName)}-{indx:D4}.xlsx";
+                    adjustedName = Path.Combine(directory, tmp);
+                }
+                return adjustedName;
+            }
+            public static DownloadJson? FromJson(string json)
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<DownloadJson>(json);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+
+        private sealed class DownloadJsResponse
+        {
+            public string? ExternalId { get; set; }
+            public string? Description { get; set; }
+            public string? Content { get; set; }
+            public string? Error { get; set; }
+            public string? CreateDate { get; set; }
         }
     }
 }

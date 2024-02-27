@@ -1,16 +1,10 @@
 using CefSharp.Wpf;
-using legallead.desktop.entities;
-using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
-using Microsoft.Extensions.DependencyInjection;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Navigation;
 
 namespace legallead.desktop
 {
@@ -19,6 +13,27 @@ namespace legallead.desktop
     /// </summary>
     public partial class MainWindow
     {
+
+        internal string ShowFolderBrowserDialog()
+        {
+            var dialog = new VistaFolderBrowserDialog
+            {
+                Description = "Please select a folder for file download.",
+                UseDescriptionForTitle = true // This applies to the Vista style dialog only, not the old dialog.
+            };
+
+            if (!VistaFolderBrowserDialog.IsVistaFolderDialogSupported)
+            {
+                return string.Empty;
+            }
+            var isselected = dialog.ShowDialog(this);
+            if (isselected.GetValueOrDefault())
+            {
+                return dialog.SelectedPath;
+            }
+            return string.Empty;
+        }
+
         private object? GetBrowserTarget(string name)
         {
             if (string.IsNullOrEmpty(name)) return null;

@@ -5,9 +5,10 @@
 							<div id="purchases-history-00" name="dv-purchases-history" class="row d-none">
 								<form name="purchase-download-form">
 									<input type="hidden" id="static-search-uuid" value=" - ">
-									<div class="mb-3 row">
+									<div class="mb-3 row d-none">
 										<label for="formFile" class="form-label" id="labelFormFile">Select file save location for download</label>
-										<input class="form-control" type="file" id="formFile">
+										<input class="form-control" type="file" id="formFile" 
+											 accept=".xls,.xlsx" />
 									</div>
 									<div class="mb-3 row">
 										<label for="static-item-name" class="col-sm-4 col-form-label" id="labelItemDescription">Search</label>
@@ -36,7 +37,7 @@
 											<i id="frm-purchase-history-cancel-icon" class="bi bi-backspace"></i>
 											<span class="ml-2">Cancel</span>
 										</button>									
-										<button id="frm-purchase-history-download-button" class="btn btn-primary" disabled="disabled" onclick="jsPurchases.make_purchase()">
+										<button id="frm-purchase-history-download-button" class="btn btn-primary" disabled="disabled" onclick="jsPurchases.make_download()">
 											<i id="frm-purchase-history-download-icon" class="bi bi-download"></i>
 											<i id="frm-purchase-history-download-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
 											<span class="ml-2">Download</span>
@@ -45,7 +46,7 @@
 								</form>
 							</div>
 							<div id="purchases-history-00-a" name="dv-purchases-history" class="row">
-								<div id="purchases-history-00-error" class="text-danger col-sm-8">
+								<div id="purchases-history-00-error" class="border rounded text-start col-sm-10 m-3 p-2 text-danger">
 								</div>
 							</div>
 							<div id="purchases-history-01" name="dv-purchases-history" class="row">

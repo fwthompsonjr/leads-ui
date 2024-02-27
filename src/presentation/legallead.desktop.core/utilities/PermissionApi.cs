@@ -205,7 +205,8 @@ namespace legallead.desktop.utilities
             { "search-get-preview", "{0}/api/search/my-search-preview" },
             { "search-get-invoice", "{0}/api/payment/create-checkout-session" },
             { "search-get-actives", "{0}/api/search/my-active-searches" },
-            { "search-get-purchases", "{0}/api/search/my-purchases" }
+            { "search-get-purchases", "{0}/api/search/my-purchases" },
+            { "make-search-purchase", "{0}/payment-fetch-search" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)
