@@ -1,4 +1,5 @@
-﻿using CefSharp.Wpf;
+﻿using CefSharp;
+using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace legallead.desktop.js
@@ -65,7 +67,15 @@ namespace legallead.desktop.js
                 handler.Submit(formName, json);
             }
         }
-
+        public virtual async void GetPurchases()
+        {
+            var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
+            if (user == null || api == null || web == null) return;
+            var json = await GetPurchasesAsync(user, api);
+            if (string.IsNullOrWhiteSpace(json)) return;
+            web.ExecuteScriptAsync("jsPurchases.bind_purchase", json);
+        }
         public virtual Action<object?>? OnInitCompleted { get; set; }
 
         protected static void Init()
@@ -117,5 +127,18 @@ namespace legallead.desktop.js
             "frm-search-preview",
             "frm-search-invoice"
         };
+
+        private static async Task<string> GetPurchasesAsync(UserBo user, IPermissionApi api)
+        {
+            var parms = new Dictionary<string, string>
+            {
+                { "~0", user.UserName }
+            };
+            var response = await api.Get("user-purchase-history", user, parms);
+            if (response == null) return string.Empty;
+            if (response.StatusCode != 200) return string.Empty;
+            return response.Message ?? string.Empty;
+            
+        }
     }
 }

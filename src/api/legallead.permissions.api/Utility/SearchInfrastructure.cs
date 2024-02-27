@@ -168,7 +168,7 @@ namespace legallead.permissions.api.Utility
             };
         }
 
-        public async Task<IEnumerable<object>?> GetPurchases(string userId)
+        public async Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId)
         {
             var searches = await _repo.GetPurchases(userId);
             return searches;

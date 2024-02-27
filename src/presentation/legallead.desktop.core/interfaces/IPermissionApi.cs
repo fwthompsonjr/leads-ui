@@ -15,5 +15,6 @@ namespace legallead.desktop.interfaces
         Task<ApiResponse> Get(string name, UserBo user);
         Task<ApiResponse> Get(string name);
         Task<ApiResponse> Get(string name, Dictionary<string, string> parameters);
+        Task<ApiResponse> Get(string name, UserBo user, Dictionary<string, string> parameters);
     }
 }

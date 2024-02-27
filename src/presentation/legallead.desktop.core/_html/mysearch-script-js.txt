@@ -471,6 +471,147 @@ let jssearchpager = {
 		}
     } 
 
-jsSearchForm.initialize(); 
+	let jsPurchases = {
+		"initialize": async function() {
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			await handler.getPurchases();
+		},
+		show_submission_error: function( html ) {			
+			$("#purchases-history-00-error").html(html);
+			$("#purchases-history-00-a").fadeIn(500);
+		}
+		make_purchase: async function() {
+			let submission = {
+				"id": $("#static-search-uuid").val(),
+				"name": $("#formFile").val()
+			};
+			if (null === submission.id || submission.id.length == 0) {
+				jsPurchases.show_submission_error( "Invoice Id is missing or invalid.");
+				return;
+			}
+			if (null === submission.name || submission.name.length == 0) {
+				jsPurchases.show_submission_error( "Target file name is missing or invalid.");
+				return;
+			}
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			await handler.makePurchase(JSON.stringify(submission));
+		}
+		cancel_request: function() {	
+			const dlb = "disabled";		
+			$("#purchases-history-00").hide();
+			$("#purchases-history-00-a").hide();
+			$("#purchases-history-00-error").html("");
+			$("#purchases-history-01").show();
+			$("#dv-subcontent-purchases div.card-footer").show();
+			$("#frm-purchase-history-download-button").setAttr(dlb, dlb);
+			$("#formFile").val('');
+			$("#static-item-name").text(" - ");
+		},
+		bind_purchase: function( jscontent ) {
+			const tableRowCount = 5;
+			const temp_mapping = [
+				"search-uuid|referenceId",
+				"purchase-date|purchaseDate",
+				"item-name|itemType",
+				"item-quantity|itemCount",
+				"total-price|price",
+				"purchase-status|statusText",
+				"external-uuid|externalId"
+				];
+			const template = "".concat(
+				"<tr name='injected-content' data-row-number='0' data-page-number='0' data-position='even'>",
+				$("#tr-subcontent-purchases-data-template").html(),
+				"</tr>");
+			tempjs = JSON.parse(jscontent);
+			if( tempjs.length === 0 ) {
+				// show no data and exit
+				return;
+			}
+			t_body = $ ( jssearchpager.pagers[1] ).closest( 'table' ).find( 'tbody' );
+			t_foot = $ ( jssearchpager.pagers[1] ).closest( 'table' ).find( 'tfoot' );
+			t_foot.removeClass("d-none");
+			$("#cbo-subcontent-purchases-pager").html("");
+			tempjs.forEach(function(j) {
+				t_body.append(template);
+			});			
+			i_pos = 0;
+			$( "#tr-subcontent-purchases-no-data" ).hide();
+			$( "#td-subcontent-purchases-record-count" ).text("".concat("Records: ", tempjs.length));
+			t_body.find("tr[name='injected-content']").each(function() {
+				rw = $( this );
+				pgnbr = Math.floor(i_pos / tableRowCount);
+				rw.attr( "data-row-number", i_pos );
+				rw.attr( "data-page-number", pgnbr);
+				rw.attr( "data-position", i_pos % 2 == 0 ? "even" : "odd");
+				temp_mapping.forEach(function(m) {
+					let src = tempjs[i_pos];
+					finder = "span[name='~0']".replace("~0",m.split('|')[0]);
+					fld = m.split('|')[1];
+					rw.find( finder ).text( src[fld] );
+					if(fld == "statusText") {
+						let clsStatus = jssearchpager.get_status_class( src[fld] );
+						if (clsStatus != null) {
+							rw.find( finder ).addClass(clsStatus);
+						}
+					}
+				});
+				if( pgnbr > 0 ) { rw.hide(); }
+				i_pos++;
+			});
+			mxCount = tempjs.length;
+			for (var i = 0; i < mxCount; i += tableRowCount){
+				pgnbr = Math.floor(i / tableRowCount);
+				mx = Math.min(i + tableRowCount, mxCount);
+				lbl = "".concat("Records: ", i + 1, " to ", mx);
+				var child = "<option value='~0'>~1</option>".replace("~0", pgnbr).replace("~1", lbl);
+				$("#cbo-subcontent-purchases-pager").append(child);
+			}
+			$("#cbo-subcontent-purchases-pager").val(0);
+			if($("#purchases-history-00").hasClass("d-none")){
+				$("#purchases-history-00").removeClass("d-none");
+				$("#purchases-history-00").hide();
+			}
+			t_body.find("tr[name='injected-content']").click(function() {
+				const dlb = "disabled";
+				let displays = [ "#static-item-name", "#static-item-from-to", "#static-item-invoice-id", "#static-search-uuid" ];
+				displays.forEach(function(d) { $(d).val(" - ");})
+				$("#purchases-history-00").hide();
+				$("#purchases-history-00-a").hide();
+				$("#purchases-history-00-error").html("");
+				let $rwi = $( this );
+				let txt = $rwi.find("span[name='item-name']").text();
+				let sts = $rwi.find("span[name='purchase-status']").text();
+				if (sts != 'Purchased') {
+					$("#frm-purchase-history-download-button").setAttr(dlb, dlb);
+					$("#purchases-history-01").fadeIn(500);
+					$("#dv-subcontent-purchases div.card-footer").show();
+					return;
+				}
+				$("#purchases-history-01").hide();
+				$("#frm-purchase-history-download-button").removeAttr(dlb);
+				$("#formFile").val('');
+				aa = txt.indexOf("from"); 
+				aname = txt.substr(0, aa).trim().split(':')[1].trim();
+				afrom = txt.substr(aa).trim();
+				inbr = $rwi.find("span[name='external-uuid']").text();
+				let nwvales = [
+					aname,
+					afrom,
+					inbr,
+					$rwi.find("span[name='search-uuid']").text()
+				];
+				for (var ii = 0; ii < nwvales.length; ii++) {
+					fnd = displays[ii];
+					$(fnd).val(nwvales[ii]);
+				}
+				$("#dv-subcontent-purchases div.card-footer").hide();
+				$("#purchases-history-00").fadeIn(500);
+			});
+		},
+	}
 
+jsSearchForm.initialize(); 
+jsPurchases.initialize();
 </script>

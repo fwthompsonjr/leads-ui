@@ -1,9 +1,16 @@
 using CefSharp.Wpf;
+using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Navigation;
 
 namespace legallead.desktop
 {
@@ -72,8 +79,8 @@ namespace legallead.desktop
         {
             if (directions.Length == 0) return html;
             if (!directions[0].Equals("mysearch")) return html;
-            return SearchPageContentHelper.Transform(html, directions[1]);
-
+            var searched = SearchPageContentHelper.Transform(html, directions[1]);
+            return searched;
         }
 
         private static readonly List<string> Landings = new()

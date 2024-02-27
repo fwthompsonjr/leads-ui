@@ -48,8 +48,10 @@ namespace legallead.desktop
                 InitializeMySearchContent();
                 Task.Run(async () =>
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(250);
                     await MapMySearchDetails();
+                    Thread.Sleep(250);
+                    await MapMySearchPurchases();
                 });
                 tabMySearch.IsSelected = true;
             });
@@ -104,6 +106,29 @@ namespace legallead.desktop
                     return html;
                 });
             });
+        }
+
+        private async Task MapMySearchPurchases()
+        {
+            var provider = AppBuilder.ServiceProvider;
+            if (provider == null) return;
+            var user = provider.GetService<UserBo>();
+            var api = provider.GetService<IPermissionApi>();
+            if (user == null ||
+                !user.IsAuthenicated ||
+                api == null) return;
+            await Task.Run(() =>
+            {
+                _ = Dispatcher.Invoke(() =>
+                {
+                    var container = contentMySearch.Content;
+                    if (container is not ChromiumWebBrowser web) return string.Empty;
+                    var html = web.GetHTML(Dispatcher);
+                    web.SetHTML(Dispatcher, html);
+                    return html;
+                });
+            });
+
         }
 
         private static string RemoveJson(ContentHtml? html)

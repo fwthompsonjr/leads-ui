@@ -26,6 +26,6 @@ namespace legallead.permissions.api.Interfaces
         Task<IEnumerable<SearchInvoiceBo>?> GetInvoices(string userid, string? searchid);
         Task<ActiveSearchOverviewBo?> GetSearchProgress(string searchId);
         Task<object?> GetSearchDetails(string userId);
-        Task<IEnumerable<object>?> GetPurchases(string userId);
+        Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId);
     }
 }
