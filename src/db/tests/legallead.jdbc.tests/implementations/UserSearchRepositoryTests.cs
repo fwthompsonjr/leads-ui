@@ -372,6 +372,11 @@ namespace legallead.jdbc.tests.implementations
         public async Task RepoGetFinalNoResult()
         {
             SearchFinalDto[] result = Array.Empty<SearchFinalDto>();
+            var userindx = new UserIndexDto { UserId = faker.Random.Guid().ToString() };
+            var invoices = new[]
+            {
+                new SearchInvoiceDto { ItemCount = 2 }
+            };
             var uid = faker.Random.Guid().ToString();
             var container = new RepoContainer();
             var service = container.Repo;
@@ -381,6 +386,20 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()
             )).ReturnsAsync(result);
+
+
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<UserIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(userindx);
+
+            mock.Setup(m => m.QueryAsync<SearchInvoiceDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(invoices);
+
             await service.GetFinal(uid);
             mock.Verify(m => m.QueryAsync<SearchFinalDto>(
                 It.IsAny<IDbConnection>(),
@@ -393,6 +412,11 @@ namespace legallead.jdbc.tests.implementations
         public async Task RepoGetFinalMultipleResult()
         {
             SearchFinalDto[] result = finalfaker.Generate(6).ToArray();
+            var userindx = new UserIndexDto { UserId = faker.Random.Guid().ToString() };
+            var invoices = new[]
+            {
+                new SearchInvoiceDto { ItemCount = 2 }
+            };
             var uid = faker.Random.Guid().ToString();
             var container = new RepoContainer();
             var service = container.Repo;
@@ -402,6 +426,19 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()
             )).ReturnsAsync(result);
+
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<UserIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(userindx);
+
+            mock.Setup(m => m.QueryAsync<SearchInvoiceDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(invoices);
+
             var translated = (await service.GetFinal(uid)).ToList();
             Assert.Equal(result[1].Court, translated[1].Court);
             Assert.Equal(result[1].SearchId, translated[1].SearchId);

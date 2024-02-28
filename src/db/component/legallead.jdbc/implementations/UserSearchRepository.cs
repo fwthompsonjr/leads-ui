@@ -73,12 +73,29 @@ namespace legallead.jdbc.implementations
 
         public async Task<IEnumerable<SearchFinalBo>> GetFinal(string searchId)
         {
+            var nodata = Array.Empty<SearchFinalBo>();
             const string prc = "CALL USP_GET_SEARCH_RECORD_FINAL_LIST( '{0}' );";
+            var uuid = await GetUserIndex(searchId);
+            if (string.IsNullOrEmpty(uuid)) return nodata;
+            var invoice = await Invoices(uuid, searchId);
+            if (invoice == null || !invoice.Any()) return nodata;
+            var mxCount = invoice.First().ItemCount.GetValueOrDefault();
             var command = string.Format(prc, searchId);
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<SearchFinalDto>(connection, command);
+            if (response.Count() > mxCount)
+                response = response.Take(mxCount);
             var translation = response.Select(x => TranslateTo<SearchFinalBo>(x));
             return translation;
+        }
+
+        private async Task<string?> GetUserIndex(string searchId)
+        {
+            const string prc = "CALL USP_GET_SEARCH_USER_INDEX( '{0}' );";
+            var command = string.Format(prc, searchId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<UserIndexDto>(connection, command);
+            return (response ?? new()).UserId;
         }
 
         public async Task<ActiveSearchOverviewBo?> GetActiveSearches(string searchId)
