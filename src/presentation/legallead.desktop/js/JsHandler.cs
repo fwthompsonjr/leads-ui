@@ -282,7 +282,6 @@ namespace legallead.desktop.js
                 {
                     if (string.IsNullOrWhiteSpace(Id)) return false;
                     if (string.IsNullOrWhiteSpace(Name)) return false;
-                    if (!Guid.TryParse(Id, out var _)) return false;
                     var directory = Path.GetDirectoryName(Name);
                     if (directory == null) return false;
                     if (!Directory.Exists(directory)) return false;

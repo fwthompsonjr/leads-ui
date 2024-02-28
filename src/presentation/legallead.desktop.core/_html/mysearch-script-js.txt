@@ -604,7 +604,7 @@ let jssearchpager = {
 					aname,
 					afrom,
 					inbr,
-					$rwi.find("span[name='search-uuid']").text()
+					$rwi.find("span[name='external-uuid']").text()
 				];
 				for (var ii = 0; ii < nwvales.length; ii++) {
 					fnd = displays[ii];
