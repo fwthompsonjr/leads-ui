@@ -38,7 +38,7 @@ namespace legallead.permissions.api.Utility
         public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
-            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
             if (obj.Data == null || !obj.Data.Any()) return false;
             var dat = obj.Data[0];
             if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
@@ -48,7 +48,7 @@ namespace legallead.permissions.api.Utility
         public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
-            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
             if (obj.Data == null || !obj.Data.Any()) return false;
             var dat = obj.Data[0];
             if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
@@ -61,11 +61,15 @@ namespace legallead.permissions.api.Utility
         public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
-            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+            var js = FormatSessionJson(dto.JsText);
+            dto.JsText = js;
+            var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
             if (obj.Data == null || !obj.Data.Any()) return new() { Error = "No search records found for associated request." };
-            var searchId = obj.Data[0].ReferenceId ?? Guid.NewGuid().ToString();
+            var search = obj.Data[0];
+            var searchId = search.ReferenceId ?? Guid.NewGuid().ToString();
             var records = (await _repo.GetFinal(searchId))?.ToList();
             if (records == null) return new() { Error = "Invalid session parameter." };
+            if (records.Count > search.ItemCount) records = records.Take(records.Count).ToList();
             var response = new DownloadResponse()
             {
                 ExternalId = dto.ExternalId,
@@ -151,7 +155,18 @@ namespace legallead.permissions.api.Utility
             if (!amount.HasValue) return fallback;
             return amount.Value.ToString("C", CultureInfo.CurrentCulture);
         }
-
+        private static string FormatSessionJson(string? original)
+        {
+            const string slash = @"\";
+            const string openBraceQt = "\"[";
+            const string openBrace = "[";
+            const string closeBraceQt = "]\"";
+            const string closeBrace = "]";
+            if (string.IsNullOrEmpty(original)) return string.Empty;
+            if (original.Contains(openBraceQt)) original = original.Replace(openBraceQt, openBrace);
+            if (original.Contains(closeBraceQt)) original = original.Replace(closeBraceQt, closeBrace);
+            return original.Replace(slash.ToString(), string.Empty);
+        }
         private static readonly string[] requestNames = new[] { "success", "cancel" };
     }
 }

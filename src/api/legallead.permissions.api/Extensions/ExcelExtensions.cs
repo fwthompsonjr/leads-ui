@@ -2,7 +2,6 @@
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml;
-using OfficeOpenXml.DataValidation;
 using OfficeOpenXml.Style;
 using System.Drawing;
 
@@ -59,7 +58,7 @@ namespace legallead.permissions.api.Extensions
                 { "Created", DateTime.UtcNow.ToString("o") },
                 { "Comments", dto.Description ?? "Legal Lead Record Search" }
             };
-            
+
             var keys = CommonProperties.Keys.ToList();
             keys.ForEach(x =>
             {

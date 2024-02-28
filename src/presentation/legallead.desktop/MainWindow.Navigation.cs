@@ -1,5 +1,6 @@
 using CefSharp.Wpf;
 using legallead.desktop.utilities;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,27 @@ namespace legallead.desktop
     /// </summary>
     public partial class MainWindow
     {
+
+        internal string ShowFolderBrowserDialog()
+        {
+            var dialog = new VistaFolderBrowserDialog
+            {
+                Description = "Please select a folder for file download.",
+                UseDescriptionForTitle = true // This applies to the Vista style dialog only, not the old dialog.
+            };
+
+            if (!VistaFolderBrowserDialog.IsVistaFolderDialogSupported)
+            {
+                return string.Empty;
+            }
+            var isselected = dialog.ShowDialog(this);
+            if (isselected.GetValueOrDefault())
+            {
+                return dialog.SelectedPath;
+            }
+            return string.Empty;
+        }
+
         private object? GetBrowserTarget(string name)
         {
             if (string.IsNullOrEmpty(name)) return null;
@@ -72,8 +94,8 @@ namespace legallead.desktop
         {
             if (directions.Length == 0) return html;
             if (!directions[0].Equals("mysearch")) return html;
-            return SearchPageContentHelper.Transform(html, directions[1]);
-
+            var searched = SearchPageContentHelper.Transform(html, directions[1]);
+            return searched;
         }
 
         private static readonly List<string> Landings = new()

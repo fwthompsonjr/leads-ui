@@ -33,7 +33,7 @@ namespace legallead.desktop.implementations
             try
             {
                 _httpClient ??= client;
-                _httpClient.Timeout = TimeSpan.FromSeconds(15);
+                _httpClient.Timeout = TimeSpan.FromSeconds(60);
                 var response = await _httpClient.PostAsJsonAsync(
                     requestUri,
                     value,

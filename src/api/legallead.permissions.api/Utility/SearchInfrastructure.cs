@@ -168,6 +168,12 @@ namespace legallead.permissions.api.Utility
             };
         }
 
+        public async Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId)
+        {
+            var searches = await _repo.GetPurchases(userId);
+            return searches;
+        }
+
         private static IEnumerable<SearchStagingSummaryBo> FormatWeb(IEnumerable<SearchStagingSummaryBo> staged)
         {
             const string beginWith = "data-";

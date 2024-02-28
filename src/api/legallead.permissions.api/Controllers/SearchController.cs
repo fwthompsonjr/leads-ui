@@ -81,5 +81,27 @@ namespace legallead.permissions.api.Controllers
             var searches = await infrastructure.GetSearchProgress(guid);
             return Ok(searches);
         }
+
+        [HttpPost]
+        [Route("my-purchases")]
+        public async Task<IActionResult> MyPurchases(ApplicationModel context)
+        {
+            var user = await infrastructure.GetUser(Request);
+            var guid = context.Id;
+            if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var searches = await infrastructure.GetPurchases(user.Id);
+            return Ok(searches);
+        }
+
+        [HttpGet]
+        [Route("list-my-purchases")]
+        public async Task<IActionResult> ListMyPurchases([FromQuery] string userName)
+        {
+            var user = await infrastructure.GetUser(Request);
+            var isvalid = userName.Equals(user?.UserName ?? "");
+            if (string.IsNullOrEmpty(userName) || !isvalid || user == null) { return Unauthorized(); }
+            var searches = await infrastructure.GetPurchases(user.Id);
+            return Ok(searches);
+        }
     }
 }

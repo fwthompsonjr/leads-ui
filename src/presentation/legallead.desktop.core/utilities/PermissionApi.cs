@@ -131,6 +131,14 @@ namespace legallead.desktop.utilities
             }
         }
 
+        public virtual async Task<ApiResponse> Get(string name, UserBo user, Dictionary<string, string> parameters)
+        {
+            var resp = await Task.Run(() =>
+            {
+                return new ApiResponse { StatusCode = 500, Message = $"Invalid procedure call" };
+            });
+            return resp;
+        }
         public virtual async Task<ApiResponse> Post(string name, object payload, UserBo user)
         {
             try
@@ -173,7 +181,8 @@ namespace legallead.desktop.utilities
             { "user-permissions-list", "{0}/api/lists/user-permissions" },
             { "user-us-county-list", "{0}/api/lists/us-county-list" },
             { "user-us-state-list", "{0}/api/lists/us-state-list" },
-            { "user-zero-payment", "{0}/payment-result?sts=success&id=~0" }
+            { "user-zero-payment", "{0}/payment-result?sts=success&id=~0" },
+            { "user-purchase-history", "{0}/api/search/list-my-purchases?userName=~0" }
         };
 
         protected static readonly Dictionary<string, string> PostAddresses = new()
@@ -195,7 +204,9 @@ namespace legallead.desktop.utilities
             { "search-get-history", "{0}/api/search/my-searches" },
             { "search-get-preview", "{0}/api/search/my-search-preview" },
             { "search-get-invoice", "{0}/api/payment/create-checkout-session" },
-            { "search-get-actives", "{0}/api/search/my-active-searches" }
+            { "search-get-actives", "{0}/api/search/my-active-searches" },
+            { "search-get-purchases", "{0}/api/search/my-purchases" },
+            { "make-search-purchase", "{0}/payment-fetch-search" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)

@@ -11,6 +11,23 @@
 		<!-- common styles -->	
 		<link rel="stylesheet" name="base" href="css/base.css" />
 		<!-- style: my-account-subcontent-css -->
+		<style name="mysearch-purchase-css">						 
+			#formFile { 
+				width: 85%; 
+				margin-left: 25px; 
+			} 
+			#labelItemDescription {
+				position: relative;
+				left: -10px;
+			}
+			#frm-purchase-history-download-button,
+			#frm-purchase-history-cancel-button {
+				width: 140px;
+				position: relative;
+				left: 20px;
+				margin-right: 10px;
+			}
+		</style>
 	</head>
 
 	<body class="text-center">
