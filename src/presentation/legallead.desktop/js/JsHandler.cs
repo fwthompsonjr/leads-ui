@@ -91,11 +91,7 @@ namespace legallead.desktop.js
                 || window == null
                 || string.IsNullOrWhiteSpace(json))
             {
-                var mssg = "Status code: 401<br/>"
-                    + Environment.NewLine +
-                    "Bad request<br/>"
-                    + Environment.NewLine +
-                    "One or more expected dependancies are missing or invalid.";
+                var mssg = DownloadStatusMessaging.GetMessage(400, "One or more expected dependencies are missing or invalid.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
@@ -107,30 +103,20 @@ namespace legallead.desktop.js
             if (payload != null) { payload.Name = dirName; }
             if (payload == null || !payload.IsValid)
             {
-                var mssg = "Status code: 422<br/>"
-                    + Environment.NewLine +
-                    "Unprocessable Entity<br/>"
-                    + Environment.NewLine +
-                    "One or more expected form values are incorrect.";
+                var mssg = DownloadStatusMessaging.GetMessage(422, "One or more expected form values are incorrect.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
             var response = await api.Post("make-search-purchase", payload, user);
             if (response == null)
             {
-                var mssg = "Status code: 500<br/>"
-                    + Environment.NewLine +
-                    "Unexpected Error<br/>"
-                    + Environment.NewLine +
-                    "An error occurred processing your request";
+                var mssg = DownloadStatusMessaging.GetMessage(500, "An error occurred processing your request.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
             if (response.StatusCode != 200)
             {
-                var mssg = $"Status code: {response.StatusCode}<br/>"
-                    + Environment.NewLine +
-                    response.Message;
+                var mssg = DownloadStatusMessaging.GetMessage(response.StatusCode, response.Message);
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
@@ -140,22 +126,14 @@ namespace legallead.desktop.js
                 string.IsNullOrEmpty(deserialized.Content))
             {
                 var explained = deserialized?.Error ?? "An error occurred processing your request";
-                var mssg = "Status code: 500<br/>"
-                    + Environment.NewLine +
-                    "Unexpected Error<br/>"
-                    + Environment.NewLine +
-                    explained;
+                var mssg = DownloadStatusMessaging.GetMessage(500, explained);
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
             var content = GetBytes(deserialized.Content);
             if (content == null)
             {
-                var mssg = "Status code: 500<br/>"
-                    + Environment.NewLine +
-                    "Unexpected Error<br/>"
-                    + Environment.NewLine +
-                    "Unable to retrieve file content from server.";
+                var mssg = DownloadStatusMessaging.GetMessage(500, "Unable to retrieve file content from server.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
@@ -165,11 +143,7 @@ namespace legallead.desktop.js
 
             if (!isCreated)
             {
-                var mssg = "Status code: 500<br/>"
-                    + Environment.NewLine +
-                    "File access error<br/>"
-                    + Environment.NewLine +
-                    "Unable to write file content to your desktop location.";
+                var mssg = DownloadStatusMessaging.GetMessage(206, "Unable to write file content to your desktop location.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
@@ -291,16 +265,14 @@ namespace legallead.desktop.js
             public string CalculateFileName()
             {
                 const string tmp_name = "record-download-{0}.xlsx";
-                var directory = Path.GetDirectoryName(Name);
-                if (string.IsNullOrEmpty(directory) ||
-                    !Directory.Exists(directory)) return string.Empty;
+                if (!IsValid) return tmp_name;
                 var shortName = string.Format(tmp_name, DateTime.Now.ToString("yyyyMMdd"));
-                var adjustedName = Path.Combine(directory, shortName);
+                var adjustedName = Path.Combine(Name, shortName);
                 var indx = 1;
                 while(File.Exists(adjustedName))
                 {
                     var tmp = $"{Path.GetFileNameWithoutExtension(adjustedName)}-{indx:D4}.xlsx";
-                    adjustedName = Path.Combine(directory, tmp);
+                    adjustedName = Path.Combine(Name, tmp);
                 }
                 return adjustedName;
             }
