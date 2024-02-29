@@ -140,11 +140,13 @@ namespace legallead.jdbc.implementations
             try
             {
                 const string prc = "CALL USP_GENERATE_DOWNLOAD_HISTORY_BY_SEARCH_INDEX( ?, ? );";
+                const string prc_b = "CALL USP_SEARCH_DOWNLOAD_ROLLBACK_COMPLETED()";
                 var parms = new DynamicParameters();
                 parms.Add("search_index", searchId);
                 parms.Add("excel_content", content);
-                using (var connection = _context.CreateConnection())
-                    await _command.ExecuteAsync(connection, prc, parms);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                await _command.ExecuteAsync(connection, prc_b);
                 return new KeyValuePair<bool, string>(true, "Command executed succesfully");
             }
             catch (Exception ex)

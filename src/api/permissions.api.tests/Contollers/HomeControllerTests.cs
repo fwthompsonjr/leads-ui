@@ -10,7 +10,8 @@ namespace permissions.api.tests.Contollers
         public void ControllerCanGetIndex()
         {
             var html = new Mock<IPaymentHtmlTranslator>();
-            var controller = new HomeController(html.Object);
+            var infrastructure = new Mock<ISearchInfrastructure>();
+            var controller = new HomeController(html.Object, infrastructure.Object);
             var indx = controller.Index();
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);

@@ -83,10 +83,11 @@ namespace legallead.permissions.api.Utility
                     var conversion = Convert.ToBase64String(response.Content);
                     _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
                     response.CreateDate = DateTime.UtcNow.ToString("s");
-                } else
+                }
+                else
                 {
                     response.Error = "Unable to generate excel ouput";
-                }                
+                }
                 return response;
             }
             catch (Exception ex)
@@ -143,6 +144,16 @@ namespace legallead.permissions.api.Utility
             var item = doc.DocumentNode.SelectSingleNode(callout);
             item.Attributes.Remove("style");
             return doc.DocumentNode.OuterHtml;
+        }
+
+        public async Task<object?> ResetDownload(DownloadResetRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.UserId) || string.IsNullOrWhiteSpace(request.ExternalId))
+            {
+                return null;
+            }
+            var response = await _repo.AllowDownloadRollback(request.UserId, request.ExternalId);
+            return response;
         }
 
         private static string ToDateString(DateTime? date, string fallback)

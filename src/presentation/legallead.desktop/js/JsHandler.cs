@@ -145,6 +145,8 @@ namespace legallead.desktop.js
             {
                 var mssg = DownloadStatusMessaging.GetMessage(206, "Unable to write file content to your desktop location.");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                var resetObj = new { UserId = user.UserName, ExternalId = payload.Id };
+                await api.Post("reset-download", resetObj, user);
                 return;
             }
             var msg = "Status code: 200<br/>"
@@ -268,11 +270,13 @@ namespace legallead.desktop.js
                 if (!IsValid) return tmp_name;
                 var shortName = string.Format(tmp_name, DateTime.Now.ToString("yyyyMMdd"));
                 var adjustedName = Path.Combine(Name, shortName);
+                shortName = Path.GetFileNameWithoutExtension(shortName);
                 var indx = 1;
                 while (File.Exists(adjustedName))
                 {
-                    var tmp = $"{Path.GetFileNameWithoutExtension(adjustedName)}-{indx:D4}.xlsx";
+                    var tmp = $"{shortName}-{indx:D4}.xlsx";
                     adjustedName = Path.Combine(Name, tmp);
+                    indx++;
                 }
                 return adjustedName;
             }
