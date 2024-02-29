@@ -107,6 +107,12 @@ namespace legallead.desktop.js
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
                 return;
             }
+            var adjustedName = payload.CalculateFileName();
+            if (!TestCreationForTmp(adjustedName))
+            {
+                var mssg = DownloadStatusMessaging.GetMessage(206, "Unable to write file content to your desktop location.");
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+            }
             var response = await api.Post("make-search-purchase", payload, user);
             if (response == null)
             {
@@ -138,7 +144,6 @@ namespace legallead.desktop.js
                 return;
             }
 
-            var adjustedName = payload.CalculateFileName();
             var isCreated = TryCreateFile(content, adjustedName);
 
             if (!isCreated)
@@ -153,7 +158,7 @@ namespace legallead.desktop.js
                     + Environment.NewLine +
                     "File created successfully<br/>"
                     + Environment.NewLine +
-                    $"Please open file at : {adjustedName}";
+                    $"Please open file at : <br/><span id='user-download-file-name' style='cursor:pointer' class='text-white'>{adjustedName}</span>";
             web.ExecuteScriptAsync("jsPurchases.show_submission_success", msg);
         }
         public virtual Action<object?>? OnInitCompleted { get; set; }
@@ -237,6 +242,7 @@ namespace legallead.desktop.js
         {
             try
             {
+                if (!TestCreationForTmp(fileName)) return false;
                 if (File.Exists(fileName)) { File.Delete(fileName); }
                 File.WriteAllBytes(fileName, data);
                 return true;
@@ -244,6 +250,25 @@ namespace legallead.desktop.js
             catch
             {
                 return false;
+            }
+        }
+        /// <summary>
+        /// Attempts to create a small text file in target folder to confirm write access.
+        /// </summary>
+        private static bool TestCreationForTmp(string fileName)
+        {
+            var tmpfile = Path.ChangeExtension(fileName, "txt");
+            try
+            {
+                if (File.Exists(tmpfile)) { File.Delete(tmpfile); }
+                File.WriteAllText(tmpfile, "testfile");
+                return true;
+            }
+            catch
+            {
+                return false;
+            } finally {
+                if (File.Exists(tmpfile)) { File.Delete(tmpfile); }
             }
         }
 
