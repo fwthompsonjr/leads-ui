@@ -55,7 +55,7 @@ namespace legallead.desktop.utilities
                 }
                 appmessage.Visibility = Visibility.Collapsed;
                 appmessage.Text = status.Message;
-                appmessage.Visibility = Visibility.Visible;                
+                appmessage.Visibility = Visibility.Visible;
             });
         }
 

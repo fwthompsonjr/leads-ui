@@ -3,7 +3,6 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
-using MySqlConnector;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -349,7 +348,7 @@ namespace legallead.jdbc.implementations
                 var parameters = new DynamicParameters();
                 parameters.Add("external_index", externalId);
                 using var connection = _context.CreateConnection();
-                for ( var i = 0; i < procs.Length; i++)
+                for (var i = 0; i < procs.Length; i++)
                 {
                     var current = procs[i];
                     if (i == 0)
@@ -438,6 +437,17 @@ namespace legallead.jdbc.implementations
             if (response == null) return null;
             var translation = response.Select(x => TranslateTo<PurchasedSearchBo>(x));
             return translation;
+        }
+
+        public async Task<DownloadHistoryDto?> AllowDownloadRollback(string userId, string searchId)
+        {
+            const string prc = "CALL USP_SEARCH_DOWNLOAD_ROLLBACK( ?, ? );";
+            using var connection = _context.CreateConnection();
+            var parameters = new DynamicParameters();
+            parameters.Add("search_index", searchId);
+            parameters.Add("user_index", userId);
+            var response = await _command.QuerySingleOrDefaultAsync<DownloadHistoryDto>(connection, prc, parameters);
+            return response;
         }
 
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)

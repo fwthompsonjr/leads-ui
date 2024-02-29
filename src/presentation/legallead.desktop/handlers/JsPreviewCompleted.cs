@@ -3,7 +3,6 @@ using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.extensions;
 using legallead.desktop.utilities;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

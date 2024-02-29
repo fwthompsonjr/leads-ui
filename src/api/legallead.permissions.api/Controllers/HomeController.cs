@@ -1,5 +1,6 @@
 ﻿using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 
@@ -63,17 +64,24 @@ namespace legallead.permissions.api.Controllers
             return Json(new { clientSecret = session.ClientId });
         }
 
-
+        [Authorize]
         [HttpPost("/payment-fetch-search")]
         public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
         {
-            var nodata = Properties.Resources.page_payment_detail_invalid;
             var session = await paymentSvc.IsSessionValid(request.Id);
             var ispaid = await paymentSvc.IsRequestPaid(session);
-            var isdownload = await paymentSvc.IsRequestDownloadedAndPaid(session);
-            if (!ispaid || isdownload || session == null || string.IsNullOrEmpty(session.JsText))
+            if (!ispaid)
             {
-                return StatusCode(400, nodata);
+                return StatusCode(400, "Unable to find payment for associated download request.");
+            }
+            if (session == null || string.IsNullOrEmpty(session.JsText))
+            {
+                return StatusCode(400, "Unable to process request. One or more result artifacts are missing.");
+            }
+            var isdownload = await paymentSvc.IsRequestDownloadedAndPaid(session);
+            if (isdownload)
+            {
+                return StatusCode(400, "Associated download result has already been delivered.");
             }
             var dwnload = await paymentSvc.GetDownload(session);
             return Ok(dwnload);

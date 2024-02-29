@@ -85,9 +85,9 @@ namespace legallead.desktop.js
             var dispatcher = Application.Current.Dispatcher;
             var main = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
             var window = (MainWindow)main;
-            if (user == null 
-                || api == null 
-                || web == null 
+            if (user == null
+                || api == null
+                || web == null
                 || window == null
                 || string.IsNullOrWhiteSpace(json))
             {
@@ -269,7 +269,7 @@ namespace legallead.desktop.js
                 var shortName = string.Format(tmp_name, DateTime.Now.ToString("yyyyMMdd"));
                 var adjustedName = Path.Combine(Name, shortName);
                 var indx = 1;
-                while(File.Exists(adjustedName))
+                while (File.Exists(adjustedName))
                 {
                     var tmp = $"{Path.GetFileNameWithoutExtension(adjustedName)}-{indx:D4}.xlsx";
                     adjustedName = Path.Combine(Name, tmp);
