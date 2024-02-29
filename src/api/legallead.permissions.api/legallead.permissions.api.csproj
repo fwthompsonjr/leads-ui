@@ -28,7 +28,7 @@
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
 		<PackageReference Include="EPPlus" Version="4.5.3.2" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
-		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
+		<PackageReference Include="legallead.jdbc" Version="3.2.238" />
 		<PackageReference Include="legallead.logging" Version="3.2.*" />
 		<PackageReference Include="legallead.models" Version="3.2.179" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />

@@ -10,9 +10,11 @@ namespace legallead.permissions.api.Controllers
     public class HomeController : Controller
     {
         private readonly IPaymentHtmlTranslator paymentSvc;
-        public HomeController(IPaymentHtmlTranslator service)
+        private readonly ISearchInfrastructure infrastructure;
+        public HomeController(IPaymentHtmlTranslator service, ISearchInfrastructure search)
         {
             paymentSvc = service;
+            infrastructure = search;
         }
         [HttpGet]
         [Route("/")]
@@ -84,6 +86,35 @@ namespace legallead.permissions.api.Controllers
                 return StatusCode(400, "Associated download result has already been delivered.");
             }
             var dwnload = await paymentSvc.GetDownload(session);
+            return Ok(dwnload);
+        }
+
+        [Authorize]
+        [HttpPost("/rollback-download")]
+        public async Task<IActionResult> RollbackDownload([FromBody] DownloadResetRequest request)
+        {
+            var user = await infrastructure.GetUser(Request);
+            if (user == null || !user.UserName.Equals(request.UserId, StringComparison.OrdinalIgnoreCase))
+                return Unauthorized();
+            var session = await paymentSvc.IsSessionValid(request.ExternalId);
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            if (!ispaid)
+            {
+                return StatusCode(400, "Unable to find payment for associated download request.");
+            }
+            if (session == null || string.IsNullOrEmpty(session.JsText))
+            {
+                return StatusCode(400, "Unable to process request. One or more result artifacts are missing.");
+            }
+            var isdownload = await paymentSvc.IsRequestDownloadedAndPaid(session);
+            if (!isdownload)
+            {
+                return StatusCode(400, "Associated download result has not been downloaded.");
+            }
+            request.UserId = user.Id;
+            request.ExternalId = session.InvoiceId;
+            var dwnload = await paymentSvc.ResetDownload(request);
+            if (dwnload == null) return UnprocessableEntity("Unable to perform reset. Process rejected by server.");
             return Ok(dwnload);
         }
         private static string? _index;
