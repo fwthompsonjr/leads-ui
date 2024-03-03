@@ -65,6 +65,7 @@ let active_search = {
 		},
 		"cbo": function() {
 			let src = active_search.jso();
+			let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']";
 			cbo = active_search.controls.cbo;
 			cboid = 0;
 			$( cbo ).html("");
@@ -85,10 +86,12 @@ let active_search = {
 				html = $( cbo ).html() + hto;
 				$( cbo ).html(html);
 				cboid++;
-			});			
+			});
+			$( bttn ).attr('onclick', 'active_search.get_download_invoice()');
 		},
 		"search": function() {
 			let cbcount = $( active_search.controls.cbo_option ).length;
+			let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']";
 			let data = [
 				{ "find": "#list-my-active-search-names span[name='requested-date']", "value": " - " },
 				{ "find": "#list-my-active-search-names span[name='start-date']", "value": " - " },
@@ -102,6 +105,7 @@ let active_search = {
 				{ "name": "Downloaded", "code": "text-primary" },
 				{ "name": "Error", "code": "text-danger" },
 			];
+			$( bttn ).attr( 'disabled', 'disabled' );
 			data.forEach((d) => { $(d.find).text(d.value); });
 			if ( cbcount == 0 ) { return; }
 			let $cbo = $( active_search.controls.cbo );
@@ -122,6 +126,9 @@ let active_search = {
 			var selected = statuses.find(x => x.name == sts);
 			if (selected != null) {
 				$statusSpan.addClass(selected.code);
+			}
+			if (selected != null && selected.name == 'Completed') {
+				$( bttn ).removeAttr( 'disabled' );
 			}
 		},
 		"staged_components": function() {
@@ -165,6 +172,22 @@ let active_search = {
 				$li.find("span[name='status-label']").text(s.line);
 				$li.find("span[name='status-date']").text(s.createDate.split('.')[0]);
 			});
+		},
+		"get_download_invoice": function() {
+			const dbd = "disabled";
+			let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']";
+			let $cbo = $( active_search.controls.cbo );
+			let cboid = $cbo.val();
+			let jso = active_search.jso();
+			let src = jso.details[cboid];
+			let srcid = src.id
+
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			$cbo.attr(dbd, dbd);
+			$( bttn ).attr( dbd, dbd );
+			var obj = JSON.stringify( { "id": srcid });
+			handler.submit( "frm-search-invoice", obj);
 		}
 	}
 };

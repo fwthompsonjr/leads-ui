@@ -296,6 +296,8 @@ let jssearchviews = {
 
 let jssearchpager = { 
     "pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager", "#cbo-subcontent-preview-pager" ], 
+		"history_row_select": "table[automationid='search-history-table'] tr[data-row-number]",
+		"history_current_row": "table[automationid='search-history-table'] tr[data-row-number='~0']",
 		"preview_name": "table[automationid='search-preview-table']",
 		"preview_content": null,
 		"preview_reset": function() {
@@ -407,50 +409,50 @@ let jssearchpager = {
 		}
 		},
         "show_preview": function( row_index ) { 
-		jssearchpager.preview_reset();
-        let indx = parseInt( row_index ); 
-            if (isNaN(indx)) { return; } 
-        let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
-        let historyName = jssearchpager.pagers[0]; 
-        let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
-		let $rw = $rows[indx];
-        let search_index = $rw.getAttribute('search-uuid'); 
-		if (undefined == search_index || null == search_index) { return; } 
-		let details = jssearchpager.get_preview_details( $rw );
-        let keyname = jssearchpager.pagers[2]; 
-        let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
-		let searchStatus = details["search-status"];
-		const headings = [ 
-		"requested-date", 
-		"state-abbr", 
-		"county-name", 
-		"begin-date", 
-		"ending-date", 
-		"search-status" ];
-        // populate table headings 
-        headings.forEach(function(h){ 
-			let finder = "span[name='~0']".replace("~0", h);
-			heading.find(finder).text(details[h]);
-			if(h == "search-status") {
-				let clsStatus = jssearchpager.get_status_class( searchStatus );
-				if (clsStatus != null) {
-					heading.find(finder).addClass(clsStatus);
-				}
-			}			
-		});
-		finder = "span[name='search-uuid']";
-		heading.find(finder).text(search_index);
-		if ( details["search-status"] != "Completed" ){
-			$("#frm-search-history-submit-button").click();
-			$("my-search-preview-bttn").attr("disabled", "disabled");
-			return;
-		} else {
-			$("my-search-preview-bttn").removeAttr("disabled");
-		}
-		let handler = window.jsHandler;
-		if( undefined === handler || null === handler || !(handler) ) { return; }
-		var obj = JSON.stringify( { "id": search_index });
-		handler.submit( "frm-search-preview", obj);
+			jssearchpager.preview_reset();
+			let indx = parseInt( row_index ); 
+				if (isNaN(indx)) { return; } 
+			let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
+			let historyName = jssearchpager.pagers[0]; 
+			let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+			let $rw = $rows[indx];
+			let search_index = $rw.getAttribute('search-uuid'); 
+			if (undefined == search_index || null == search_index) { return; } 
+			let details = jssearchpager.get_preview_details( $rw );
+			let keyname = jssearchpager.pagers[2]; 
+			let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
+			let searchStatus = details["search-status"];
+			const headings = [ 
+			"requested-date", 
+			"state-abbr", 
+			"county-name", 
+			"begin-date", 
+			"ending-date", 
+			"search-status" ];
+			// populate table headings 
+			headings.forEach(function(h){ 
+				let finder = "span[name='~0']".replace("~0", h);
+				heading.find(finder).text(details[h]);
+				if(h == "search-status") {
+					let clsStatus = jssearchpager.get_status_class( searchStatus );
+					if (clsStatus != null) {
+						heading.find(finder).addClass(clsStatus);
+					}
+				}			
+			});
+			finder = "span[name='search-uuid']";
+			heading.find(finder).text(search_index);
+			if ( details["search-status"] != "Completed" ){
+				$("#frm-search-history-submit-button").click();
+				$("my-search-preview-bttn").attr("disabled", "disabled");
+				return;
+			} else {
+				$("my-search-preview-bttn").removeAttr("disabled");
+			}
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			var obj = JSON.stringify( { "id": search_index });
+			handler.submit( "frm-search-preview", obj);
         },
 		get_invoice: function() {
 			let customfind = "table[automationid='search-preview-table'] > thead > tr > td > span[name='search-status']";

@@ -63,6 +63,13 @@
 								<span name="search-status" class="text-end"> - </span>
 							</div>
 						</li>
+						<li class="list-group-item text-start m-0 p-0">
+							<div class="d-flex justify-content-between">
+								<button name='bttn-get-my-active-download' class='btn btn-primary' disabled='disabled'>
+									<span>Purchase</span>
+								</button>
+							</div>
+						</li>
 					</ul>
 				</div>
 				<div class="col-6 border border-secondary rounded m-2">
