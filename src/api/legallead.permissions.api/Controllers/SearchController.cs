@@ -1,4 +1,5 @@
-﻿using legallead.permissions.api.Interfaces;
+﻿using legallead.jdbc.entities;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -101,7 +102,10 @@ namespace legallead.permissions.api.Controllers
             var isvalid = userName.Equals(user?.UserName ?? "");
             if (string.IsNullOrEmpty(userName) || !isvalid || user == null) { return Unauthorized(); }
             var searches = await infrastructure.GetPurchases(user.Id);
-            return Ok(searches);
+            if (searches == null || !searches.Any()) { return Ok(Array.Empty<PurchasedSearchBo>()); }
+            var list = searches.ToList();
+            list.Sort((a, b) => b.PurchaseDate.GetValueOrDefault().CompareTo(a.PurchaseDate.GetValueOrDefault()));
+            return Ok(list);
         }
     }
 }

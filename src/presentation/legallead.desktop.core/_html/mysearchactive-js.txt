@@ -22,6 +22,29 @@ let active_search = {
 		let js = $(active_search.controls.txjson).text();
 		return JSON.parse(js);
 	},
+	"get_download_invoice": function() {
+		const dbd = "disabled";
+		mssagesid= "#dv-active-searches-messages";
+		$(mssagesid).html("Purchase active search is clicked.")
+		let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']";
+		let $cbo = $( active_search.controls.cbo );
+		let cboid = $cbo.val();
+		$(mssagesid).html("Purchase active search looking for item: ~0.".replace('~0', cbo.id));
+		let jso = active_search.jso();
+		let src = jso.details[cboid];
+		let srcid = src.id
+		$(mssagesid).html("Purchase active search item id: ~0.".replace('~0', srcid));
+
+		let handler = window.jsHandler;
+		if( undefined === handler || null === handler || !(handler) ) { 
+			$(mssagesid).html("unable to find js handler");
+			return; 
+		}
+		$cbo.attr(dbd, dbd);
+		$( bttn ).attr( dbd, dbd );
+		var obj = JSON.stringify( { "id": srcid });
+		handler.submit( "frm-search-invoice", obj);
+	},
 	"component_template": function(isFirst) {
 		let openLi = isFirst ? 
 			"<li name='component-template' class='list-group-item text-start m-0 p-0'>" :
@@ -172,22 +195,6 @@ let active_search = {
 				$li.find("span[name='status-label']").text(s.line);
 				$li.find("span[name='status-date']").text(s.createDate.split('.')[0]);
 			});
-		},
-		"get_download_invoice": function() {
-			const dbd = "disabled";
-			let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']";
-			let $cbo = $( active_search.controls.cbo );
-			let cboid = $cbo.val();
-			let jso = active_search.jso();
-			let src = jso.details[cboid];
-			let srcid = src.id
-
-			let handler = window.jsHandler;
-			if( undefined === handler || null === handler || !(handler) ) { return; }
-			$cbo.attr(dbd, dbd);
-			$( bttn ).attr( dbd, dbd );
-			var obj = JSON.stringify( { "id": srcid });
-			handler.submit( "frm-search-invoice", obj);
 		}
 	}
 };

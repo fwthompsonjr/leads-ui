@@ -310,6 +310,46 @@ let jssearchpager = {
 			let previewName = jssearchpager.preview_name;
 			jssearchpager.preview_content = $( previewName ).html();
 		},
+		toggle_filter: function() {
+			const rwname = "#dv-search-history-filter";
+			const dn = "d-none";
+			let cbx = "#cbo-search-history-filter";
+			let counter = "#span-search-history-filter-count";
+			jssearchpager.set_page(0);
+			if ($(rwname).hasClass(dn)) {
+				$(cbx).val('');
+				$(counter).text('');
+				$(rwname).removeClass(dn);
+			}
+			else {
+				$(rwname).addClass(dn);
+			}
+		},
+		apply_history_filter: function() {
+			let cbx = "#cbo-search-history-filter";
+			let counter = "#span-search-history-filter-count";
+			let stats = $(cbx).val();
+			$(counter).text('');
+			if (stats.length == 0) { 
+				jssearchpager.set_page(0);
+				return; 
+			}
+			t_body = $ ( '#cbo-subcontent-history-pager' ).closest( 'table' ).find( 'tbody' );
+			i_pos = 0;
+			historyrows = t_body.find("tr[search-uuid]");
+			historyrows.each(function() {
+				let rw = $( this );
+				let currentStatus = rw.find('span[name="search-status"]').text().trim();
+				if (currentStatus == stats) {
+					rw.show();
+					i_pos++;
+				}
+				else {
+					rw.hide();
+				}
+			});
+			$(counter).text(i_pos);
+		},
 		get_status_class: function( searchStatus ) {
 			if ( undefined == searchStatus || null == searchStatus ) { return null; }
 			switch ( searchStatus ) {
@@ -475,6 +515,7 @@ let jssearchpager = {
 
 	let jsPurchases = {
 		"initialize": async function() {
+			$("#purchases-history-00-a").hide();
 			let handler = window.jsHandler;
 			if( undefined === handler || null === handler || !(handler) ) { return; }
 			await handler.getPurchases();

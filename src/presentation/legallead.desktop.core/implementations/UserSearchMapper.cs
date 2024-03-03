@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using AngleSharp.Dom;
+using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
@@ -14,12 +15,26 @@ namespace legallead.desktop.implementations
             switch (key)
             {
                 case "history":
+                    if (IsHistoryMapped(source)) { return source; }
                     var content = await MapHistory(api, user, source);
                     return content;
             }
             return source;
         }
 
+        private static bool IsHistoryMapped(string source)
+        {
+            const string tbl = "//table[@automationid=\"search-history-table\"]";
+            var document = ToDocument(source);
+            var node = document.DocumentNode;
+            var table = node.SelectSingleNode(tbl);
+            if (table == null) { return false; }
+            var tbody = table.ChildNodes.ToList().Find(x => x.Name.Equals("tbody", StringComparison.OrdinalIgnoreCase));
+            if (tbody == null) { return false; }
+            var rows = tbody.SelectNodes("//tr");
+            if (rows == null ||  rows.Count <= 2) {  return false; }
+            return true;
+        }
 
         private async Task<string> MapHistory(IPermissionApi api, UserBo user, string source)
         {
@@ -30,6 +45,7 @@ namespace legallead.desktop.implementations
             var json = response.Message;
             var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
             if (items == null || items.Count == 0) return source;
+            
             var document = ToDocument(source);
             var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
             var styled = ApplyHistoryStatus(ToDocument(transform), template);

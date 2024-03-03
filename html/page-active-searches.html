@@ -324,6 +324,7 @@
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content">
 					<h4>Active Searches</h4>
+					<div class="row" id="dv-active-searches-messages"></div>
 					<h5 id="heading-my-active-searches-no-content">Found ( 9 ) searches in progress</h5>
 					<hr>
 					<div class="row" id="my-active-searches-row-00">
@@ -653,14 +654,21 @@
                                    }, 
                                    "get_download_invoice": function() { 
                                    const dbd = "disabled"; 
+                                   mssagesid= "#dv-active-searches-messages"; 
+                                   $(mssagesid).html("Purchase active search is clicked.") 
                                    let bttn = "#list-my-active-search-names button[name='bttn-get-my-active-download']"; 
                                    let $cbo = $( active_search.controls.cbo ); 
                                    let cboid = $cbo.val(); 
+                                   $(mssagesid).html("Purchase active search looking for item: ~0.".replace('~0', cbo.id)); 
                                    let jso = active_search.jso(); 
                                    let src = jso.details[cboid]; 
                                    let srcid = src.id 
+                                   $(mssagesid).html("Purchase active search item id: ~0.".replace('~0', srcid)); 
                                    let handler = window.jsHandler; 
-                                        if( undefined === handler || null === handler || !(handler) ) { return; } 
+                                        if( undefined === handler || null === handler || !(handler) ) { 
+                                        $(mssagesid).html("unable to find js handler"); 
+                                        return; 
+                                        } 
                                    $cbo.attr(dbd, dbd); 
                                    $( bttn ).attr( dbd, dbd ); 
                                         var obj = JSON.stringify( { "id": srcid }); 

@@ -34,7 +34,8 @@
       <main role="main" class="inner cover">
 		
 		<div id="dv-main-content" name="main-content">
-            <h4>Active Searches</h4>
+            <h4Active Searches</h4>
+			<div class="row" id="dv-active-searches-messages"></div>
             <h5 id="heading-my-active-searches-no-content">No active searches in progress</h5>
             <hr/>
 			<div class="row" id="my-active-searches-row-00">
@@ -65,9 +66,11 @@
 						</li>
 						<li class="list-group-item text-start m-0 p-0">
 							<div class="d-flex justify-content-between">
-								<button name='bttn-get-my-active-download' class='btn btn-primary' disabled='disabled'>
-									<span>Purchase</span>
-								</button>
+								<center style="width: 100%">
+									<button name="bttn-get-my-active-download" class="btn btn-primary w-75 m-2" onclick="active_search.get_download_invoice()">
+										<span>Purchase</span>
+									</button>
+								</center>
 							</div>
 						</li>
 					</ul>
