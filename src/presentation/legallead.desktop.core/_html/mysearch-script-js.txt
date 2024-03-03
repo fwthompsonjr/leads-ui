@@ -296,6 +296,8 @@ let jssearchviews = {
 
 let jssearchpager = { 
     "pagers": [ "#cbo-subcontent-history-pager", "#cbo-subcontent-purchases-pager", "#cbo-subcontent-preview-pager" ], 
+		"history_row_select": "table[automationid='search-history-table'] tr[data-row-number]",
+		"history_current_row": "table[automationid='search-history-table'] tr[data-row-number='~0']",
 		"preview_name": "table[automationid='search-preview-table']",
 		"preview_content": null,
 		"preview_reset": function() {
@@ -307,6 +309,46 @@ let jssearchpager = {
 			if( null != jssearchpager.preview_content ) { return; }
 			let previewName = jssearchpager.preview_name;
 			jssearchpager.preview_content = $( previewName ).html();
+		},
+		toggle_filter: function() {
+			const rwname = "#dv-search-history-filter";
+			const dn = "d-none";
+			let cbx = "#cbo-search-history-filter";
+			let counter = "#span-search-history-filter-count";
+			jssearchpager.set_page(0);
+			if ($(rwname).hasClass(dn)) {
+				$(cbx).val('');
+				$(counter).text('');
+				$(rwname).removeClass(dn);
+			}
+			else {
+				$(rwname).addClass(dn);
+			}
+		},
+		apply_history_filter: function() {
+			let cbx = "#cbo-search-history-filter";
+			let counter = "#span-search-history-filter-count";
+			let stats = $(cbx).val();
+			$(counter).text('');
+			if (stats.length == 0) { 
+				jssearchpager.set_page(0);
+				return; 
+			}
+			t_body = $ ( '#cbo-subcontent-history-pager' ).closest( 'table' ).find( 'tbody' );
+			i_pos = 0;
+			historyrows = t_body.find("tr[search-uuid]");
+			historyrows.each(function() {
+				let rw = $( this );
+				let currentStatus = rw.find('span[name="search-status"]').text().trim();
+				if (currentStatus == stats) {
+					rw.show();
+					i_pos++;
+				}
+				else {
+					rw.hide();
+				}
+			});
+			$(counter).text(i_pos);
 		},
 		get_status_class: function( searchStatus ) {
 			if ( undefined == searchStatus || null == searchStatus ) { return null; }
@@ -407,50 +449,50 @@ let jssearchpager = {
 		}
 		},
         "show_preview": function( row_index ) { 
-		jssearchpager.preview_reset();
-        let indx = parseInt( row_index ); 
-            if (isNaN(indx)) { return; } 
-        let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
-        let historyName = jssearchpager.pagers[0]; 
-        let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
-		let $rw = $rows[indx];
-        let search_index = $rw.getAttribute('search-uuid'); 
-		if (undefined == search_index || null == search_index) { return; } 
-		let details = jssearchpager.get_preview_details( $rw );
-        let keyname = jssearchpager.pagers[2]; 
-        let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
-		let searchStatus = details["search-status"];
-		const headings = [ 
-		"requested-date", 
-		"state-abbr", 
-		"county-name", 
-		"begin-date", 
-		"ending-date", 
-		"search-status" ];
-        // populate table headings 
-        headings.forEach(function(h){ 
-			let finder = "span[name='~0']".replace("~0", h);
-			heading.find(finder).text(details[h]);
-			if(h == "search-status") {
-				let clsStatus = jssearchpager.get_status_class( searchStatus );
-				if (clsStatus != null) {
-					heading.find(finder).addClass(clsStatus);
-				}
-			}			
-		});
-		finder = "span[name='search-uuid']";
-		heading.find(finder).text(search_index);
-		if ( details["search-status"] != "Completed" ){
-			$("#frm-search-history-submit-button").click();
-			$("my-search-preview-bttn").attr("disabled", "disabled");
-			return;
-		} else {
-			$("my-search-preview-bttn").removeAttr("disabled");
-		}
-		let handler = window.jsHandler;
-		if( undefined === handler || null === handler || !(handler) ) { return; }
-		var obj = JSON.stringify( { "id": search_index });
-		handler.submit( "frm-search-preview", obj);
+			jssearchpager.preview_reset();
+			let indx = parseInt( row_index ); 
+				if (isNaN(indx)) { return; } 
+			let search = "".concat( "tr[data-row-number='", row_index, "']" ); 
+			let historyName = jssearchpager.pagers[0]; 
+			let $rows = $( historyName ).closest( 'table' ).find( 'tbody' ).find( 'tr[data-page-number]' ); 
+			let $rw = $rows[indx];
+			let search_index = $rw.getAttribute('search-uuid'); 
+			if (undefined == search_index || null == search_index) { return; } 
+			let details = jssearchpager.get_preview_details( $rw );
+			let keyname = jssearchpager.pagers[2]; 
+			let heading = $ ( jssearchpager.pagers[2] ).closest( 'table' ).find( 'thead' );
+			let searchStatus = details["search-status"];
+			const headings = [ 
+			"requested-date", 
+			"state-abbr", 
+			"county-name", 
+			"begin-date", 
+			"ending-date", 
+			"search-status" ];
+			// populate table headings 
+			headings.forEach(function(h){ 
+				let finder = "span[name='~0']".replace("~0", h);
+				heading.find(finder).text(details[h]);
+				if(h == "search-status") {
+					let clsStatus = jssearchpager.get_status_class( searchStatus );
+					if (clsStatus != null) {
+						heading.find(finder).addClass(clsStatus);
+					}
+				}			
+			});
+			finder = "span[name='search-uuid']";
+			heading.find(finder).text(search_index);
+			if ( details["search-status"] != "Completed" ){
+				$("#frm-search-history-submit-button").click();
+				$("my-search-preview-bttn").attr("disabled", "disabled");
+				return;
+			} else {
+				$("my-search-preview-bttn").removeAttr("disabled");
+			}
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			var obj = JSON.stringify( { "id": search_index });
+			handler.submit( "frm-search-preview", obj);
         },
 		get_invoice: function() {
 			let customfind = "table[automationid='search-preview-table'] > thead > tr > td > span[name='search-status']";
@@ -473,6 +515,7 @@ let jssearchpager = {
 
 	let jsPurchases = {
 		"initialize": async function() {
+			$("#purchases-history-00-a").hide();
 			let handler = window.jsHandler;
 			if( undefined === handler || null === handler || !(handler) ) { return; }
 			await handler.getPurchases();
