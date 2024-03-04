@@ -1,7 +1,36 @@
 
 					<div id="dv-subcontent-purchases" name="subcontent-purchases" class="subcontent card d-none w-75">
 						<div class="card-body">
-							<h5 class="card-title">Purchase History</h5>
+							<h5 class="row d-flex justify-content-between">
+								<div class="col-9">Purchase History</div>
+								<div class="col-2">
+									<button id="bttn-purchases-history-filter" 
+									title="Filter By Status"
+									onclick="jsPurchases.toggle_filter()"
+									name="purchases-history-filter" class="btn btn-outline-primary">
+										<i class="bi bi-filter-circle"></i>
+									</button>
+								</div>
+							</h5>
+
+							<div id="dv-purchases-history-filter" class="row d-flex justify-content-between d-none">
+								<div class="col-3">
+									<h5 class="p-2 text-start">
+										<span style="position: relative; top: 5px;" >Filter:</span>
+										<span id="span-purchases-history-filter-count" style="position: relative; top: 5px; color: #555"></span>
+									</h5>
+								</div>
+								<div class="col-8 p-2">
+									<select id="cbo-purchases-history-filter" 
+										onchange="jsPurchases.apply_filter()"
+										class="form-control text-secondary">
+										<option value="" selected='selected'>- All -</option>
+										<option value="Purchased">Purchased</option>
+										<option value="Downloaded">Downloaded</option>
+									</select>
+								</div>
+							</div>
+
 							<div id="purchases-history-00" name="dv-purchases-history" class="row d-none">
 								<form name="purchase-download-form">
 									<input type="hidden" id="static-search-uuid" value=" - ">
@@ -100,7 +129,7 @@
 							<div id="frm-purchase-history-error-message" class="d-none">
 								<!-- Error messages -->
 							</div>
-							<button id="frm-purchase-history-submit-button" class="btn btn-primary">
+							<button id="frm-purchase-history-submit-button" class="btn btn-primary" onclick="jsPurchases.reload()">
 								<i id="frm-purchase-history-icon" class="bi bi-clock-history" ></i>
 								<i id="frm-purchase-history-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Reload
 							</button>

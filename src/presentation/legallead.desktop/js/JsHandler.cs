@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -80,6 +81,7 @@ namespace legallead.desktop.js
 
         public virtual async void MakeDownload(string json)
         {
+            const string openFileSpan = "<span onclick='jsPurchases.open_file()' id='user-download-file-name' style='cursor:pointer' class='text-white'>";
             var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
             var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
             var dispatcher = Application.Current.Dispatcher;
@@ -158,9 +160,40 @@ namespace legallead.desktop.js
                     + Environment.NewLine +
                     "File created successfully<br/>"
                     + Environment.NewLine +
-                    $"Please open file at : <br/><span id='user-download-file-name' style='cursor:pointer' class='text-white'>{adjustedName}</span>";
+                    $"Please open file at : <br/>{openFileSpan}{adjustedName}</span>";
             web.ExecuteScriptAsync("jsPurchases.show_submission_success", msg);
         }
+
+
+
+        public virtual void TryOpenExcel(string sourceFile)
+        {
+            if(string.IsNullOrEmpty(sourceFile))
+            {
+                var mssg = DownloadStatusMessaging.GetMessage(400, "File name is invalid");
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            if (!File.Exists(sourceFile))
+            {
+                var mssg = DownloadStatusMessaging.GetMessage(400, $"File name = {Path.GetFileName(sourceFile)} not found");
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+                return;
+            }
+            try
+            {
+                Process excel = new();
+                excel.StartInfo.FileName = @"C:\Test.xlsx";
+                excel.Start();
+            } 
+            catch (Exception ex)
+            {
+
+                var mssg = DownloadStatusMessaging.GetMessage(400, ex.Message);
+                web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
+            }
+        }
+
         public virtual Action<object?>? OnInitCompleted { get; set; }
 
         protected static void Init()

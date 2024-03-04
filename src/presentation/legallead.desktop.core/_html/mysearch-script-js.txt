@@ -520,6 +520,59 @@ let jssearchpager = {
 			if( undefined === handler || null === handler || !(handler) ) { return; }
 			await handler.getPurchases();
 		},
+		"reload": function() {
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			handler.reload('mysearch-purchases');
+		},
+		open_file: function() {
+			var itm = document.getElementById('user-download-file-name');
+			if (undefined === itm || null === item) { return; }
+			let handler = window.jsHandler;
+			if( undefined === handler || null === handler || !(handler) ) { return; }
+			let txt = itm.innerText;
+			handler.tryOpenExcel(txt);
+		},
+		toggle_filter: function() {
+			const rwname = "#dv-purchases-history-filter";
+			const dn = "d-none";
+			let cbx = "#cbo-purchases-history-filter";
+			let counter = "#span-purchases-history-filter-count";
+			jssearchpager.set_page(1);
+			if ($(rwname).hasClass(dn)) {
+				$(cbx).val('');
+				$(counter).text('');
+				$(rwname).removeClass(dn);
+			}
+			else {
+				$(rwname).addClass(dn);
+			}
+		},
+		apply_filter: function() {
+			let cbx = "#cbo-purchases-history-filter";
+			let counter = "#span-purchases-history-filter-count";
+			let stats = $(cbx).val();
+			$(counter).text('');
+			if (stats.length == 0) { 
+				jssearchpager.set_page(1);
+				return; 
+			}
+			t_body = $ ( '#cbo-subcontent-purchases-pager' ).closest( 'table' ).find( 'tbody' );
+			i_pos = 0;
+			historyrows = t_body.find("tr[data-row-number]");
+			historyrows.each(function() {
+				let rw = $( this );
+				let currentStatus = rw.find('span[name="purchase-status"]').text().trim();
+				if (currentStatus == stats) {
+					rw.show();
+					i_pos++;
+				}
+				else {
+					rw.hide();
+				}
+			});
+			$(counter).text(i_pos);
+		},
 		show_submission_error: function( html ) {
 			$("#purchases-history-00-error").removeClass("text-success");
 			$("#purchases-history-00-error").addClass("text-danger");
@@ -557,6 +610,10 @@ let jssearchpager = {
 			$("#static-item-name").text(" - ");
 		},
 		bind_purchase: function( jscontent ) {
+			let USDollar = new Intl.NumberFormat('en-US', {
+				style: 'currency',
+				currency: 'USD',
+			});
 			const tableRowCount = 5;
 			const temp_mapping = [
 				"search-uuid|referenceId",
@@ -597,7 +654,15 @@ let jssearchpager = {
 					finder = "span[name='~0']".replace("~0",m.split('|')[0]);
 					fld = m.split('|')[1];
 					rw.find( finder ).text( src[fld] );
-					if(fld == "statusText") {
+					if (fld == "price"){
+						usprice = USDollar.format(src[fld]);
+						rw.find( finder ).text( usprice );
+					}
+					if (fld == 'purchaseDate') {
+						nwdate = src[fld].replace('T', '<br/>');
+						rw.find( finder ).html( nwdate );
+					}
+					if (fld == "statusText") {
 						let clsStatus = jssearchpager.get_status_class( src[fld] );
 						if (clsStatus != null) {
 							rw.find( finder ).addClass(clsStatus);
@@ -622,6 +687,11 @@ let jssearchpager = {
 			}
 			t_body.find("tr[name='injected-content']").click(function() {
 				const dlb = "disabled";
+				const dn = "d-none";
+				const rwname = "#dv-purchases-history-filter";
+				if (!($(rwname).hasClass(dn))) {
+					jsPurchases.toggle_filter();
+				}
 				let displays = [ "#static-item-name", "#static-item-from-to", "#static-item-invoice-id", "#static-search-uuid" ];
 				displays.forEach(function(d) { $(d).val(" - ");})
 				$("#purchases-history-00").hide();
