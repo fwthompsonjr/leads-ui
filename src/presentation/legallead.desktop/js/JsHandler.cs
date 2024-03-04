@@ -165,7 +165,11 @@ namespace legallead.desktop.js
         }
 
 
-
+        /// <summary>
+        /// This callback function is not working, possibly due to injected content.
+        /// Will revist after other application function have been completed
+        /// </summary>
+        /// <param name="sourceFile"></param>
         public virtual void TryOpenExcel(string sourceFile)
         {
             if(string.IsNullOrEmpty(sourceFile))
