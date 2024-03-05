@@ -1,4 +1,5 @@
-﻿using legallead.jdbc.entities;
+﻿using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using Newtonsoft.Json;
@@ -29,6 +30,26 @@ namespace legallead.jdbc.implementations
                 if (response == null) return null;
                 var json = JsonConvert.SerializeObject(response);
                 var bo = JsonConvert.DeserializeObject<PaymentCustomerBo>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<UnMappedCustomerBo>?> GetUnMappedCustomers(PaymentCustomerQuery query)
+        {
+            const string prc = "CALL USP_QUERY_USER_WITHOUT_CUSTOMER_ACCOUNT( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("", query.AccountType);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<CustomerDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<List<UnMappedCustomerBo>>(json);
                 return bo;
             }
             catch (Exception)
