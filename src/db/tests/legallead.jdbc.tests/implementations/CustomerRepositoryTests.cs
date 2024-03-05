@@ -11,6 +11,12 @@ namespace legallead.jdbc.tests.implementations
 {
     public class CustomerRepositoryTests
     {
+        private static readonly Faker<CustomerDto> faker =
+            new Faker<CustomerDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserName, y => y.Hacker.Phrase())
+            .RuleFor(x => x.Email, y => y.Person.Email);
+
         [Fact]
         public void RepoCanBeConstructed()
         {
@@ -71,6 +77,36 @@ namespace legallead.jdbc.tests.implementations
             Assert.NotNull(response);
         }
 
+
+
+        [Fact]
+        public async Task RepoCanGetUnMappedCustomersHappyPath()
+        {
+            List<CustomerDto>? completion = faker.Generate(6);
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<CustomerDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetUnMappedCustomers(new());
+            Assert.NotNull(response);
+        }
+
+#pragma warning disable CS8604 // Possible null reference argument.
+        [Fact]
+        public async Task RepoCanGetUnMappedCustomersNoResponse()
+        {
+            List<CustomerDto>? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<CustomerDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetUnMappedCustomers(new());
+            Assert.Null(response);
+        }
+#pragma warning restore CS8604 // Possible null reference argument.
+
         [Fact]
         public async Task RepoCanGetCustomerNoResponse()
         {
@@ -121,6 +157,19 @@ namespace legallead.jdbc.tests.implementations
                 .ThrowsAsync(completion);
             var response = await service.AddCustomer(new());
             Assert.False(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanGetUnMappedCustomersExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<CustomerDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetUnMappedCustomers(new());
+            Assert.Null(response);
         }
 
         private sealed class CustomerRepoContainer
