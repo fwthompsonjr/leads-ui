@@ -69,6 +69,9 @@ namespace permissions.api.tests
         [InlineData(typeof(HomeController))]
         [InlineData(typeof(SearchController))]
         [InlineData(typeof(PaymentController))]
+        [InlineData(typeof(ICustomerInfrastructure))]
+        [InlineData(typeof(QueueResetService))]
+        [InlineData(typeof(IUserSearchValidator))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
@@ -77,6 +80,15 @@ namespace permissions.api.tests
                 _serviceProvider.GetService(type);
             });
             Assert.Null(exception);
+        }
+
+        [Fact]
+        public void ProviderCanGetStartupTasks()
+        {
+            const int expected = 2;
+            var startupTasks = _serviceProvider?.GetServices<IStartupTask>();
+            Assert.NotNull(startupTasks);
+            Assert.Equal(expected, startupTasks.Count());
         }
 
         [Fact]

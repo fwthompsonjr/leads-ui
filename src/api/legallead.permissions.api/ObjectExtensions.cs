@@ -15,6 +15,7 @@ using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
@@ -64,6 +65,8 @@ namespace legallead.permissions.api
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
             services.AddSingleton<IRefreshTokenValidator, RefreshTokenValidator>();
             services.AddSingleton<IDataInitializer, DataInitializer>();
+            services.AddScoped<ICustomerInfrastructure, CustomerInfrastructure>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
@@ -85,6 +88,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
+            
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -196,6 +200,16 @@ namespace legallead.permissions.api
                 var context = new DataContext(exec);
                 var db = new UserSearchRepository(context);
                 return new QueueResetService(db, logger);
+            });
+            services.AddHostedService(s =>
+            {
+                var exec = new DapperExecutor();
+                var context = new DataContext(exec);
+                var userDb = new UserRepository(context);                
+                var custDb = new CustomerRepository(context);
+                var custInfra = new CustomerInfrastructure(s.GetRequiredService<StripeKeyEntity>(), userDb, custDb);
+                var logging = s.GetRequiredService<ILogger<PaymentAccountCreationService>>();
+                return new PaymentAccountCreationService(logging, custInfra);
             });
         }
 
