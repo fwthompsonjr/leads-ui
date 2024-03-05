@@ -5,7 +5,7 @@ using legallead.permissions.api.Interfaces;
 
 namespace legallead.permissions.api.Utility
 {
-    public class SubscriptionInfrastructure : ISubscriptionInfrastructure
+    public partial class SubscriptionInfrastructure : ISubscriptionInfrastructure
     {
         protected readonly IDataProvider _db;
 

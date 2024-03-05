@@ -388,6 +388,7 @@ namespace legallead.permissions.api
         private static StripeKeyEntity MapStripeKey(IConfiguration configuration)
         {
             if (_stripeKeyEntity != null) { return _stripeKeyEntity; }
+            var webid = configuration.GetValue<string>("Payment:keys:webhook");
             var keytype = configuration.GetValue<string>("Payment:keys:active");
             var test = configuration.GetValue<string>("Payment:keys:values:test");
             var prd = configuration.GetValue<string>("Payment:keys:values:prod");
@@ -395,7 +396,11 @@ namespace legallead.permissions.api
                 new() { Name="test", Value= test },
                 new() { Name="prod", Value= prd }
             };
-            _stripeKeyEntity = new StripeKeyEntity { ActiveName = keytype, Items = items };
+            _stripeKeyEntity = new StripeKeyEntity { 
+                WebhookId = webid,
+                ActiveName = keytype, 
+                Items = items 
+            };
             return _stripeKeyEntity;
         }
 

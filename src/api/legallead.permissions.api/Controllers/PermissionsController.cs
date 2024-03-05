@@ -64,6 +64,14 @@ namespace legallead.permissions.api.Controllers
             {
                 return Unauthorized(permissionLevel);
             }
+            var session = await _db.GenerateSession(Request, user, permissionLevel.Level);
+            if (session != null)
+            {
+                // return this item as non-success
+                // so that client can handle response successfully
+                var webrep = new KeyValuePair<bool, string>(false, session);
+                return Ok(webrep);
+            }
             var response = await _db.SetPermissionGroup(user, permissionLevel.Level);
 
             if (response.Key)
