@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
+using Newtonsoft.Json;
 using Stripe.Checkout;
 using System.Security.Cryptography;
 
@@ -68,6 +69,15 @@ namespace legallead.permissions.api.Utility
             if (nonbillingcodes.Contains(level, StringComparer.OrdinalIgnoreCase))
             {
                 Console.WriteLine("Creating level request as completed.");
+                var request = new LevelChangeRequest
+                {
+                    ExternalId = externalId,
+                    InvoiceUri = "NONE",
+                    LevelName = level.ToLower(),
+                    SessionId = "NONE",
+                    UserId = user.Id
+                };
+                _ = JsonConvert.SerializeObject(request);
                 return false;
             }
             Console.WriteLine("{0} - {1} - {2}", user.Id, level, externalId);
