@@ -2,14 +2,23 @@
 using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
 
 namespace legallead.permissions.api.Utility
 {
     public partial class SubscriptionInfrastructure : ISubscriptionInfrastructure
     {
         protected readonly IDataProvider _db;
+        protected readonly ICustomerInfrastructure? _customer;
+        protected readonly PaymentStripeOption? _payment;
 
-        public SubscriptionInfrastructure(IDataProvider db)
+        public SubscriptionInfrastructure(IDataProvider db, ICustomerInfrastructure customer, PaymentStripeOption payment)
+        {
+            _db = db;
+            _customer = customer;
+            _payment = payment;
+        }
+        internal SubscriptionInfrastructure(IDataProvider db)
         {
             _db = db;
         }

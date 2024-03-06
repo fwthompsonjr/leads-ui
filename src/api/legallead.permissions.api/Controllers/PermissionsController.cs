@@ -64,7 +64,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return Unauthorized(permissionLevel);
             }
-            var session = await _db.GenerateSession(Request, user, permissionLevel.Level);
+            var session = await _db.GeneratePermissionSession(Request, user, permissionLevel.Level);
             if (session != null)
             {
                 // return this item as non-success

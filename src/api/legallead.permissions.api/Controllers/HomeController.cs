@@ -35,6 +35,17 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+        [HttpGet("/subscription-result")]
+        public async Task<IActionResult> UserLevelLanding([FromQuery] string? sts, [FromQuery] string? id)
+        {
+            var isValid = await paymentSvc.IsChangeUserLevel(sts, id);
+            var content =
+                isValid ? Properties.Resources.page_payment_completed
+                : Properties.Resources.page_level_request_completed;
+            content = await paymentSvc.TransformForPermissions(isValid, sts, id, content);
+            return Content(content, "text/html");
+        }
+
         [HttpGet("/payment-checkout")]
         public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
         {

@@ -22,6 +22,6 @@ namespace legallead.permissions.api.Interfaces
         Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode);
 
         Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName);
-        Task<string?> GenerateSession(HttpRequest request, User user, string level, string externalId = "");
+        Task<string?> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "");
     }
 }

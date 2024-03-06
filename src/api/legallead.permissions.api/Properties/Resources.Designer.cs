@@ -254,6 +254,29 @@ namespace legallead.permissions.api.Properties {
         ///		            let handler = window.jsHandler;
         ///		    [rest of string was truncated]&quot;;.
         /// </summary>
+        internal static string page_level_request_completed {
+            get {
+                return ResourceManager.GetString("page_level_request_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///            try { 
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                } catch {} 
+        ///            function changeViewHandler(viewName){
+        ///		            const nn = &quot;d-none&quot;;
+        ///		            const dvnav = &quot;div[name=&apos;navigation-alert-message&apos;]&quot;;
+        ///		            if( $(dvnav).hasClass(nn) ) {
+        ///			            $(dvnav).removeClass(nn);
+        ///			            $(dvnav).hide();
+        ///		            }
+        ///		            let handler = window.jsHandler;
+        ///		    [rest of string was truncated]&quot;;.
+        /// </summary>
         internal static string page_payment_completed {
             get {
                 return ResourceManager.GetString("page_payment_completed", resourceCulture);
