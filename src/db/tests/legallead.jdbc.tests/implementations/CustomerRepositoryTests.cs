@@ -17,6 +17,20 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.UserName, y => y.Hacker.Phrase())
             .RuleFor(x => x.Email, y => y.Person.Email);
 
+        private static readonly Faker<LevelRequestDto> rqfaker =
+            new Faker<LevelRequestDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
+            .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
+            .RuleFor(x => x.SessionId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.IsPaymentSuccess, y => y.Random.Bool())
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
+#pragma warning disable CS8604 // Possible null reference argument.
+
         [Fact]
         public void RepoCanBeConstructed()
         {
@@ -92,7 +106,7 @@ namespace legallead.jdbc.tests.implementations
             Assert.NotNull(response);
         }
 
-#pragma warning disable CS8604 // Possible null reference argument.
+
         [Fact]
         public async Task RepoCanGetUnMappedCustomersNoResponse()
         {
@@ -105,7 +119,6 @@ namespace legallead.jdbc.tests.implementations
             var response = await service.GetUnMappedCustomers(new());
             Assert.Null(response);
         }
-#pragma warning restore CS8604 // Possible null reference argument.
 
         [Fact]
         public async Task RepoCanGetCustomerNoResponse()
@@ -171,6 +184,139 @@ namespace legallead.jdbc.tests.implementations
             var response = await service.GetUnMappedCustomers(new());
             Assert.Null(response);
         }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestHistoryHappyPath()
+        {
+            List<LevelRequestDto>? completion = rqfaker.Generate(6);
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestHistory("");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestHistoryNoResponse()
+        {
+            List<LevelRequestDto>? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestHistory("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestHistoryExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetLevelRequestHistory("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanAddLevelChangeRequestHappyPath()
+        {
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.AddLevelChangeRequest("");
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanAddLevelChangeRequestExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.AddLevelChangeRequest("");
+            Assert.False(response.Key);
+        }
+
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestByIdHappyPath()
+        {
+            var completion = rqfaker.Generate();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestById("");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestByIdNoResponse()
+        {
+            LevelRequestDto? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestById("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestByIdExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetLevelRequestById("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateLevelChangeRequestHappyPath()
+        {
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.UpdateLevelChangeRequest("");
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateLevelChangeRequestExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.UpdateLevelChangeRequest("");
+            Assert.False(response.Key);
+        }
+
+#pragma warning restore CS8604 // Possible null reference argument.
 
         private sealed class CustomerRepoContainer
         {
