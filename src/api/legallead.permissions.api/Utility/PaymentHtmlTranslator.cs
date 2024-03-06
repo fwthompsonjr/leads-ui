@@ -156,6 +156,25 @@ namespace legallead.permissions.api.Utility
             return response;
         }
 
+
+        public Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> IsChangeUserLevel(string? status, string? id)
+        {
+            var statuses = new[] { "success", "cancel" };
+            if (!statuses.Contains(status)) return false;
+            if (!string.IsNullOrEmpty(id)) return false;
+            await Task.Run(() =>
+            {
+                // make db call to fetch by external-id
+                // 
+            });
+            return true;
+        }
+
         private static string ToDateString(DateTime? date, string fallback)
         {
             if (!date.HasValue) return fallback;
@@ -178,6 +197,7 @@ namespace legallead.permissions.api.Utility
             if (original.Contains(closeBraceQt)) original = original.Replace(closeBraceQt, closeBrace);
             return original.Replace(slash.ToString(), string.Empty);
         }
+
         private static readonly string[] requestNames = new[] { "success", "cancel" };
     }
 }

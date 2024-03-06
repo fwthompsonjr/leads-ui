@@ -13,5 +13,7 @@ namespace legallead.permissions.api.Interfaces
         Task<object?> ResetDownload(DownloadResetRequest request);
         Task<string> Transform(bool isvalid, string? status, string? id, string html);
         string Transform(PaymentSessionDto? session, string html);
+        Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html);
+        Task<bool> IsChangeUserLevel(string? status, string? id);
     }
 }

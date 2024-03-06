@@ -73,5 +73,78 @@ namespace legallead.jdbc.implementations
                 return new(false, ex.Message);
             }
         }
+
+        public async Task<KeyValuePair<bool, string>> AddLevelChangeRequest(string jsonRequest)
+        {
+            const string prc = "CALL USP_CREATE_LEVELREQUEST( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("pay_load", jsonRequest);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
+
+        public async Task<List<LevelRequestBo>?> GetLevelRequestHistory(string userId)
+        {
+            const string prc = "CALL USP_FIND_LEVELREQUEST_BY_USER_ID( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("user_index", userId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<LevelRequestDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<List<LevelRequestBo>>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<LevelRequestBo?> GetLevelRequestById(string externalId)
+        {
+            const string prc = "CALL USP_FIND_LEVELREQUEST_BY_EXTERNAL_INDEX( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("external_id", externalId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<LevelRequestDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<LevelRequestBo>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<KeyValuePair<bool, string>> UpdateLevelChangeRequest(string jsonRequest)
+        {
+            const string prc = "CALL USP_UPDATE_LEVELREQUEST( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("pay_load", jsonRequest);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
     }
 }
