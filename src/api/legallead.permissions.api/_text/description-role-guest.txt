@@ -3,7 +3,7 @@
 <h5>Guest</h5>
 <div>
     <p class="lead">
-        You have a Guest Account. 
+        Guest Account. <br/>
         As a Guest you have the following search restrictions.
     </p>
     <ol>

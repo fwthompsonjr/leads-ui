@@ -3,7 +3,7 @@
 <h5>Gold</h5>
 <div>
     <p class="lead">
-        You have a Gold Account. 
+        Gold Account. <br/>
         With a Gold you have the following search restrictions.
     </p>
     <ol>
@@ -30,7 +30,7 @@
         Discounts:
     </p>
     <p>
-        On top pf your current pricing, you are eligible to purchase State and/or County level subscriptions
+        On top of your current pricing, you are eligible to purchase State and/or County level subscriptions
     </p>
     <ul>
         <li>State Discount - 15% discount applied to eligible records</li>

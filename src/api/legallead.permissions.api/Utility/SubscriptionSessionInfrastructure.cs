@@ -8,12 +8,13 @@ namespace legallead.permissions.api.Utility
 {
     public partial class SubscriptionInfrastructure
     {
-        public async Task<string?> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "")
+        public async Task<LevelRequestBo> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "")
         {
-            if (!IsPermissionSessionNeeded(user, level, externalId)) return null;
-            if (_customer == null || _payment == null) return null;
+            var findSession = await IsPermissionSessionNeeded(user, level, externalId);
+            if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
+            if (_customer == null || _payment == null) return new();
             var cust = await _customer.GetOrCreateCustomer(user.Id);
-            if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return string.Empty;
+            if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return new();
             var successUrl = $"{request.Scheme}://{request.Host}/subscription-result?session_id=~1&sts=success&id=~0"
                 .Replace("~1", "{CHECKOUT_SESSION_ID}");
             var cancelUrl = successUrl.Replace("sts=success", "sts=cancel");
@@ -40,7 +41,16 @@ namespace legallead.permissions.api.Utility
             }; 
             var service = new SessionService();
             var session = await service.CreateAsync(options);
-            return session.Url;
+            var changeRq = new LevelChangeRequest
+            {
+                ExternalId = externalId,
+                InvoiceUri = session.Url,
+                LevelName = level,
+                SessionId = session.Id,
+                UserId = user.Id
+            };
+            var bo = (await _customer.AddLevelChangeRequest(changeRq)) ?? new();
+            return bo;
         }
 
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
@@ -57,16 +67,18 @@ namespace legallead.permissions.api.Utility
             return code;
         }
 
-        private bool IsPermissionSessionNeeded(User user, string level, string externalId = "")
+        private async Task<LevelRequestBo?> IsPermissionSessionNeeded(User user, string level, string externalId = "")
         {
             string[] nonbillingcodes = new [] { "admin", "guest" };
-            if (string.IsNullOrEmpty(level)) { return false; }
+            if (string.IsNullOrEmpty(level)) { return null; }
             var code = _payment == null ? string.Empty : GetPermissionCode(level, _payment);
-            if (string.IsNullOrEmpty(code)) return false;
+            if (string.IsNullOrEmpty(code)) return null;
             if (string.IsNullOrEmpty(externalId)) externalId = PermissionsKey();
-            if (string.IsNullOrEmpty(user.Id)) { return false; }
-            // is level = guest or admin then write level request and return false
-            if (nonbillingcodes.Contains(level, StringComparer.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(user.Id)) { return null; }
+            // try to get payment session by external id
+
+            // if level = guest or admin then write level request and return false
+            if (nonbillingcodes.Contains(level, StringComparer.OrdinalIgnoreCase) && _customer != null)
             {
                 Console.WriteLine("Creating level request as completed.");
                 var request = new LevelChangeRequest
@@ -77,11 +89,10 @@ namespace legallead.permissions.api.Utility
                     SessionId = "NONE",
                     UserId = user.Id
                 };
-                _ = JsonConvert.SerializeObject(request);
-                return false;
+                var session = await _customer.AddLevelChangeRequest(request);
+                return session;
             }
-            Console.WriteLine("{0} - {1} - {2}", user.Id, level, externalId);
-            return true;
+            return new LevelRequestBo { ExternalId = externalId };
         }
 
         private static string PermissionsKey()

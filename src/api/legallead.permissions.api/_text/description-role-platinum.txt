@@ -3,7 +3,7 @@
 <h5>Platinum</h5>
 <div>
     <p class="lead">
-        You have a Platinum Account. 
+        Platinum Account. 
     </p>
     <ol>
         <li>

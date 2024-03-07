@@ -96,7 +96,8 @@
         </div>
 		<div name='main-content' class="card">
 			<div class="card-body">
-				<h5 id=class="card-title text-success">Payment Received - Thank You</h5>	
+				<h5 id="heading-level-completion-payment-status" class="card-title text-success">Payment Received - Thank You</h5>	
+				<h6 id="heading-level-completion-provisioning-error" class="card-title text-danger d-none">Provisioning Failed. Please contact support</h5>	
 				<div class="row">
 					<div class="col-3 text-start">User Name:</div>
 					<div id="account-user-name" class="col-8 text-secondary text-start">
