@@ -5,6 +5,7 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
+using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using System.Globalization;
 
@@ -13,10 +14,22 @@ namespace legallead.permissions.api.Utility
     public class PaymentHtmlTranslator : IPaymentHtmlTranslator
     {
         private readonly IUserSearchRepository _repo;
+        private readonly ISubscriptionInfrastructure _subscriptionDb;
+        private readonly ICustomerInfrastructure _custDb;
+        private readonly IUserRepository _userDb;
         private readonly string _paymentKey;
-        public PaymentHtmlTranslator(IUserSearchRepository db, StripeKeyEntity key)
+
+        public PaymentHtmlTranslator(
+            IUserSearchRepository db,
+            IUserRepository userdb,
+            ICustomerInfrastructure customer,
+            ISubscriptionInfrastructure subscription,
+            StripeKeyEntity key)
         {
             _repo = db;
+            _custDb = customer;
+            _userDb = userdb;
+            _subscriptionDb = subscription;
             _paymentKey = key.GetActiveName();
         }
         public async Task<bool> IsRequestValid(string? status, string? id)
@@ -157,22 +170,36 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        public Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
+        public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
-            throw new NotImplementedException();
+            bool? isPermissionSet = default;
+            var bo = (await _custDb.GetLevelRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var user = await _userDb.GetById(bo.UserId ?? string.Empty);
+            bo = await _custDb.CompleteLevelRequest(bo);
+            if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
+            {
+                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+            }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
+            UserLevelHtmlMapper.SetUserDetail(doc, user);
+            UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
+            UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
+            var tranformed = doc.DocumentNode.OuterHtml;
+            return tranformed;
         }
+
+
 
         public async Task<bool> IsChangeUserLevel(string? status, string? id)
         {
-            var statuses = new[] { "success", "cancel" };
-            if (!statuses.Contains(status)) return false;
-            if (!string.IsNullOrEmpty(id)) return false;
-            await Task.Run(() =>
-            {
-                // make db call to fetch by external-id
-                // 
-            });
-            return true;
+            var mapped = requestNames.First(s => s.Equals(status));
+            if (string.IsNullOrEmpty(mapped)) return false;
+            if (!string.IsNullOrEmpty(id)) return false;            
+            if (mapped.Equals(requestNames[1])) return false;
+            var bo = await _custDb.GetLevelRequestById(id ?? string.Empty);
+            return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
         private static string ToDateString(DateTime? date, string fallback)
@@ -199,5 +226,66 @@ namespace legallead.permissions.api.Utility
         }
 
         private static readonly string[] requestNames = new[] { "success", "cancel" };
+
+        private static class UserLevelHtmlMapper
+        {
+            public static void SetPageHeading(HtmlDocument document, bool isvalid)
+            {
+                const string nodeSelector = "//*[@id='heading-level-completion-payment-status']";
+                var message = isvalid ? "Payment Recieved - Thank You" : "Payment Failed - Please retry";
+                var node = document.DocumentNode.SelectSingleNode(nodeSelector);
+                if (node == null) return;
+                node.InnerHtml = message;
+                if (isvalid) return;
+
+                node.RemoveClass("text-success");
+                node.AddClass("text-danger");
+            }
+
+            public static void SetUserDetail(HtmlDocument document, User? user)
+            {
+                if (user == null) return;
+                var lookup = new Dictionary<string, string>()
+                {
+                    { "//span[name='account-user-name']", user.UserName ?? " - " },
+                    { "//span[name='account-user-email']", user.Email ?? " - " },
+                };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var message = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = message; }
+                });
+            }
+
+            public static void SetProductDescription(HtmlDocument document, string? level)
+            {
+                const string nodeSelector = "//*[@id='payment-details-description']";
+                if (string.IsNullOrEmpty(level)) return;
+                if (!Descriptions.TryGetValue(level, out var message)) return;
+                var node = document.DocumentNode.SelectSingleNode(nodeSelector);
+                if (node == null) return;
+                node.InnerHtml = message;
+            }
+
+            public static void SetPermissionsErrorFlag(HtmlDocument document, bool? isSuccess)
+            {
+                const string nodeSelector = "//*[@id='heading-level-completion-provisioning-error']";
+                if (isSuccess == null || isSuccess.Value) return;
+                var node = document.DocumentNode.SelectSingleNode(nodeSelector);
+                node?.RemoveClass("d-none");
+            }
+
+            private static readonly Dictionary<string, string> Descriptions = new()
+            {
+                { "admin", Properties.Resources.description_role_admin },
+                { "gold", Properties.Resources.description_role_gold },
+                { "guest", Properties.Resources.description_role_guest },
+                { "platinum", Properties.Resources.description_role_platinum },
+                { "silver", Properties.Resources.description_role_silver }
+            };
+        }
+
     }
 }

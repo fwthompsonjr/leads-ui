@@ -3,6 +3,8 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
+using Newtonsoft.Json;
 using Stripe;
 
 namespace legallead.permissions.api.Utility
@@ -79,6 +81,28 @@ namespace legallead.permissions.api.Utility
             {
                 return false;
             }
+        }
+
+        public async Task<LevelRequestBo?> AddLevelChangeRequest(LevelChangeRequest request)
+        {
+            _ = await _repo.AddLevelChangeRequest(JsonConvert.SerializeObject(request));
+            var item = await _repo.GetLevelRequestById(request.ExternalId ?? string.Empty);
+            return item;
+        }
+
+        public async Task<LevelRequestBo?> GetLevelRequestById(string externalId)
+        {
+            var item = await _repo.GetLevelRequestById(externalId);
+            return item;
+        }
+
+        public async Task<LevelRequestBo?> CompleteLevelRequest(LevelRequestBo request)
+        {
+            if (string.IsNullOrEmpty(request.ExternalId)) return null;
+            var detail = new { request.ExternalId, IsPaymentSuccess = request.IsPaymentSuccess.GetValueOrDefault() };
+            _ = await _repo.UpdateLevelChangeRequest(JsonConvert.SerializeObject(detail));
+            var item = await _repo.GetLevelRequestById(request.ExternalId);
+            return item;
         }
 
         private static CustomerCreateOptions GenerateCreateOption(string email)

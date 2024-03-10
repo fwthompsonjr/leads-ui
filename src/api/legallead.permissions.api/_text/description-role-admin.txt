@@ -3,8 +3,7 @@
 <h5>Admin</h5>
 <div>
     <p class="lead">
-        You have a Administrator Account. 
-        As a Guest you have the following search restrictions.
+        Administrator Account.
     </p>
     <ol>
         <li>Searches: There are no limits to the number of records returned from a search.</li>

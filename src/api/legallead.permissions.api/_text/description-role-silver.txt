@@ -3,7 +3,7 @@
 <h5>Silver</h5>
 <div>
     <p class="lead">
-        You have a Silver Account. 
+        Silver Account. 
     </p>
     <ol>
         <li>

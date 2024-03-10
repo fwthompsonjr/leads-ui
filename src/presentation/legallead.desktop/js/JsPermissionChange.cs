@@ -3,6 +3,7 @@ using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.handlers;
 using legallead.desktop.interfaces;
+using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -38,9 +39,23 @@ namespace legallead.desktop.js
             var js = MapPayload(submission);
             var response = permissionApi?.Post(AddressMap[submission.SubmissionName], js, user).Result;
             var htm = JsCompletedHandler.ConvertHTML(response);
-            SetMessage(htm);
-            if (response == null || response.StatusCode != 200) return;
+            if (response == null || response.StatusCode != 200)
+            {
+                SetMessage(htm);
+                return;
+            }
             SubmitCompleted();
+            if ("Subscription".Equals(submission.SubmissionName))
+            {
+                var levelChange = ObjectExtensions.TryGet<SubscriptionChangeResponse>(response.Message);
+                var navigateTo = levelChange?.InvoiceUri ?? "NONE";
+                if (navigateTo.Equals("NONE"))
+                {
+                    Reload("myaccount-home");
+                    return;
+                }
+                web?.LoadUrl(navigateTo);
+            }
         }
 
         /// <summary>
