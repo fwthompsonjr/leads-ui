@@ -15,7 +15,6 @@ using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
@@ -88,7 +87,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
-            
+
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();
@@ -205,7 +204,7 @@ namespace legallead.permissions.api
             {
                 var exec = new DapperExecutor();
                 var context = new DataContext(exec);
-                var userDb = new UserRepository(context);                
+                var userDb = new UserRepository(context);
                 var custDb = new CustomerRepository(context);
                 var custInfra = new CustomerInfrastructure(s.GetRequiredService<StripeKeyEntity>(), userDb, custDb);
                 var logging = s.GetRequiredService<ILogger<PaymentAccountCreationService>>();
@@ -396,10 +395,11 @@ namespace legallead.permissions.api
                 new() { Name="test", Value= test },
                 new() { Name="prod", Value= prd }
             };
-            _stripeKeyEntity = new StripeKeyEntity { 
+            _stripeKeyEntity = new StripeKeyEntity
+            {
                 WebhookId = webid,
-                ActiveName = keytype, 
-                Items = items 
+                ActiveName = keytype,
+                Items = items
             };
             return _stripeKeyEntity;
         }

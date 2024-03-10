@@ -5,7 +5,6 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
-using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using System.Globalization;
 
@@ -196,7 +195,7 @@ namespace legallead.permissions.api.Utility
         {
             var mapped = requestNames.First(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
-            if (!string.IsNullOrEmpty(id)) return false;            
+            if (!string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
             var bo = await _custDb.GetLevelRequestById(id ?? string.Empty);
             return bo != null && !string.IsNullOrEmpty(bo.Id);
