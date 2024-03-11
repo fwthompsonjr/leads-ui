@@ -42,7 +42,7 @@ namespace legallead.permissions.api.Controllers
                         Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
                         break;
                 }
-                
+
                 return Ok();
             }
             catch (StripeException e)

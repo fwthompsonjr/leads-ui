@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
-using Newtonsoft.Json;
 using Stripe.Checkout;
 using System.Security.Cryptography;
 
@@ -72,7 +71,8 @@ namespace legallead.permissions.api.Utility
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
         {
             var lower = level.ToLower().Trim();
-            var code = lower switch {
+            var code = lower switch
+            {
                 "admin" => payment.Codes.Admin,
                 "platinum" => payment.Codes.Platinum,
                 "gold" => payment.Codes.Gold,
@@ -85,7 +85,7 @@ namespace legallead.permissions.api.Utility
 
         private async Task<LevelRequestBo?> IsPermissionSessionNeeded(User user, string level, string externalId = "")
         {
-            string[] nonbillingcodes = new [] { "admin", "guest" };
+            string[] nonbillingcodes = new[] { "admin", "guest" };
             if (string.IsNullOrEmpty(level)) { return null; }
             var code = _payment == null ? string.Empty : GetPermissionCode(level, _payment);
             if (string.IsNullOrEmpty(code)) return null;

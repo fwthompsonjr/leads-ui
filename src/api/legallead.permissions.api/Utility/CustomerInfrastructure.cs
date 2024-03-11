@@ -1,5 +1,4 @@
 ﻿using legallead.jdbc.entities;
-using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
@@ -72,7 +71,7 @@ namespace legallead.permissions.api.Utility
                     {
                         if (!string.IsNullOrEmpty(customer.Id))
                         {
-                            _ = await GetOrCreateCustomer(customer.Id); 
+                            _ = await GetOrCreateCustomer(customer.Id);
                         }
                     });
                 return true;
@@ -107,9 +106,11 @@ namespace legallead.permissions.api.Utility
 
         private static CustomerCreateOptions GenerateCreateOption(string email)
         {
-            return new CustomerCreateOptions { 
-                Description = "Legal Lead Customer", 
-                Email = email };
+            return new CustomerCreateOptions
+            {
+                Description = "Legal Lead Customer",
+                Email = email
+            };
         }
     }
 }
