@@ -30,5 +30,6 @@ namespace legallead.jdbc.interfaces
         /// sets the active pricing model record using input parameters
         /// </summary>
         Task<PricingCodeBo?> SetActivePricingTemplate(string templateId, ProductPricingModel model);
+        Task<PricingCodeBo?> SetActivePricingTemplate(string templateId, string modeljs);
     }
 }

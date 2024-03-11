@@ -90,6 +90,29 @@ namespace legallead.jdbc.tests.implementations
         }
 
         [Fact]
+        public async Task SetActivePricingTemplateJsonHappyPath()
+        {
+            var completion = faker.Generate();
+            var modeljs = JsonConvert.SerializeObject(ProductGenerator.GetModel());
+            var provider = new PricingRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.PricingRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<PricingCodeDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.SetActivePricingTemplate(completion.Id, modeljs);
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task SetActivePricingTemplateJsonNoDataPath()
+        {
+            var provider = new PricingRepoContainer();
+            var service = provider.PricingRepo;
+            var response = await service.SetActivePricingTemplate("", "abcdefg");
+            Assert.Null(response);
+        }
+
+        [Fact]
         public async Task SetActivePricingTemplateNoResponse()
         {
             PricingCodeDto? completion = default;

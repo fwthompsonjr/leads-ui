@@ -100,5 +100,14 @@ namespace legallead.jdbc.implementations
                 return null;
             }
         }
+
+
+        public async Task<PricingCodeBo?> SetActivePricingTemplate(string templateId, string modeljs)
+        {
+            var model = JsonConvert.DeserializeObject<ProductPricingModel>(modeljs);
+            if (model == null) return null;
+            var response = await SetActivePricingTemplate(templateId, model);
+            return response;
+        }
     }
 }
