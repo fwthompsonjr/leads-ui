@@ -1,6 +1,8 @@
 ﻿using legallead.jdbc.entities;
+using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
+using Newtonsoft.Json;
 using Stripe;
 
 namespace legallead.permissions.api
@@ -32,13 +34,19 @@ namespace legallead.permissions.api
 
             await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
             var items = await _pricingInfrastructure.GetPricingTemplates();
-            await SynchronizePricing(items, stoppingToken);
+            var svc = new ProductService();
+            var existing = svc.List(new ProductListOptions
+            {
+                Active = true,
+            });
+            await SynchronizePricing(existing, items, stoppingToken);
         }
 
-        private async Task SynchronizePricing(List<PricingCodeBo> items, CancellationToken stoppingToken)
+        private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
             var names = items.Select(x => x.KeyName).Distinct().ToList();
             if (!names.Any()) { return; }
+            
             await Task.Run(() =>
             {
                 names.ForEach(async x =>
@@ -48,10 +56,49 @@ namespace legallead.permissions.api
                     if (!dataset.Exists(a => a.IsActive.GetValueOrDefault()))
                     {
                         var item = dataset.Find(x => !x.IsActive.GetValueOrDefault());
-                        await CreatePricing(item);
+                        var pname = GetProductName(item);
+                        var current = existing.FirstOrDefault(c => c.Name.Equals(pname));
+                        if (current != null && item != null)
+                        {
+                            // create price db record
+                            await CreateProductEntry(current, item);
+                        }
+                        else
+                        {
+                            await CreatePricing(item);
+                        }
+                        
                     }
                 });
             }, stoppingToken);
+        }
+
+        private async Task CreateProductEntry(Product current, PricingCodeBo item)
+        {
+            var dtojs = JsonConvert.SerializeObject(item);
+            var dto = JsonConvert.DeserializeObject<PricingCodeDto>(dtojs);
+            if (dto == null) return;
+            if (_pricingInfrastructure is not BaseRepository<PricingCodeDto> coderepo) return;
+            var pricing = new PriceService();
+            var prices = pricing.List(new PriceListOptions { Active = true, Product = current.Id });
+            dto.Id = Guid.NewGuid().ToString();
+            dto.ProductCode = current.Id;
+            dto.PriceCodeMonthly = prices.First(x => x.Nickname.Contains("Month"))?.Id ?? item.PriceCodeMonthly;
+            dto.PriceCodeAnnual = prices.First(x => x.Nickname.Contains("Annual"))?.Id ?? item.PriceCodeAnnual;
+            dto.KeyJs = UpdateJson(dto);
+            dto.CreateDate = DateTime.UtcNow;
+            dto.IsActive = true;
+            await coderepo.Create(dto);
+            var related = (await coderepo.GetAll()).ToList().FindAll(x => 
+                x.PermissionGroupId == item.PermissionGroupId && 
+                x.Id != dto.Id && 
+                x.IsActive.GetValueOrDefault());
+            related.ForEach(async r =>
+            {
+                r.IsActive = false;
+                await coderepo.Update(r);
+            });
+
         }
 
         private async Task<bool> CreatePricing(PricingCodeBo? item)
@@ -145,6 +192,29 @@ namespace legallead.permissions.api
                 Description = item.Product.Description,
                 Name = item.Product.Name
             };
+        }
+
+        private static string GetProductName(PricingCodeBo? codeBo)
+        {
+            var model = codeBo?.GetModel();
+            if (model == null) return string.Empty;
+            return model.Product.Name;
+
+        }
+
+        private static string UpdateJson(PricingCodeDto dto)
+        {
+            var js = dto.KeyJs;
+            if (string.IsNullOrEmpty(js)) { return string.Empty; }
+            var model = JsonConvert.DeserializeObject<ProductPricingModel>(js);
+            if (model == null ||
+                dto.ProductCode == null || 
+                dto.PriceCodeAnnual == null ||
+                dto.PriceCodeMonthly == null) return js;
+            model.Product.Code = dto.ProductCode;
+            model.PriceCode.Annual = dto.PriceCodeAnnual;
+            model.PriceCode.Monthly = dto.PriceCodeMonthly;
+            return JsonConvert.SerializeObject(model);
         }
     }
 }
