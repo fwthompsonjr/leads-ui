@@ -71,6 +71,8 @@ namespace legallead.permissions.api.Utility
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
         {
             var lower = level.ToLower().Trim();
+            var pricing = PricingLookupService.PricingCodes.Find(x => (x.KeyName ?? "").Contains(level, StringComparison.OrdinalIgnoreCase));
+            if (pricing != null && !string.IsNullOrEmpty(pricing.PriceCodeMonthly)) return pricing.PriceCodeMonthly;
             var code = lower switch
             {
                 "admin" => payment.Codes.Admin,
