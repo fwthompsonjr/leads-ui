@@ -17,8 +17,11 @@ namespace legallead.jdbc.models
 
     public class BillingProductModel
     {
+        [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
+        [JsonProperty("description")]
         public string Description { get; set; } = string.Empty;
+        [JsonProperty("code")]
         public string Code { get; set; } = string.Empty;
     }
     public class BillingPriceCodeModel
