@@ -1,5 +1,6 @@
 ﻿namespace legallead.jdbc.entities
 {
+    [TargetTable(TableName = "PERMISSIONGROUPCODES")]
     public class PricingCodeDto : BaseDto
     {
         public string? PermissionGroupId { get; set; }
