@@ -66,6 +66,7 @@ namespace legallead.permissions.api
             services.AddSingleton<IDataInitializer, DataInitializer>();
             services.AddScoped<ICustomerInfrastructure, CustomerInfrastructure>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IPricingRepository, PricingRepository>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
@@ -209,6 +210,14 @@ namespace legallead.permissions.api
                 var custInfra = new CustomerInfrastructure(s.GetRequiredService<StripeKeyEntity>(), userDb, custDb);
                 var logging = s.GetRequiredService<ILogger<PaymentAccountCreationService>>();
                 return new PaymentAccountCreationService(logging, custInfra);
+            });
+            services.AddHostedService(s =>
+            {
+                var exec = new DapperExecutor();
+                var context = new DataContext(exec);
+                var repo = new PricingRepository(context);
+                var logging = s.GetRequiredService<ILogger<PricingSyncService>>();
+                return new PricingSyncService(logging, repo);
             });
         }
 
