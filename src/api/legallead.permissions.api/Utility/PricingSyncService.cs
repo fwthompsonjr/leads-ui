@@ -2,6 +2,7 @@
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
+using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
 using Stripe;
 
@@ -15,7 +16,7 @@ namespace legallead.permissions.api
         public PricingSyncService(
             ILogger<PricingSyncService> log, 
             IPricingRepository infrastructure,
-            bool isTestMode = true)
+            bool isTestMode = false)
         {
             _pricingInfrastructure = infrastructure;
             logger = log;
@@ -32,14 +33,21 @@ namespace legallead.permissions.api
         {
             if (stoppingToken.IsCancellationRequested) return;
 
-            await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
-            var items = await _pricingInfrastructure.GetPricingTemplates();
-            var svc = new ProductService();
-            var existing = svc.List(new ProductListOptions
+            while (!stoppingToken.IsCancellationRequested)
             {
-                Active = true,
-            });
-            await SynchronizePricing(existing, items, stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                var items = await _pricingInfrastructure.GetPricingTemplates();
+                var svc = new ProductService();
+                var existing = svc.List(new ProductListOptions
+                {
+                    Active = true,
+                });
+                await SynchronizePricing(existing, items, stoppingToken);
+                items = (await _pricingInfrastructure.GetPricingTemplates()).FindAll(x => x.IsActive.GetValueOrDefault());
+                PricingLookupService.Append(items);
+                if (_testMode) await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                else await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
+            }
         }
 
         private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
@@ -81,7 +89,7 @@ namespace legallead.permissions.api
             if (_pricingInfrastructure is not BaseRepository<PricingCodeDto> coderepo) return;
             var pricing = new PriceService();
             var prices = pricing.List(new PriceListOptions { Active = true, Product = current.Id });
-            dto.Id = Guid.NewGuid().ToString();
+            dto.Id = Guid.NewGuid().ToString("D");
             dto.ProductCode = current.Id;
             dto.PriceCodeMonthly = prices.First(x => x.Nickname.Contains("Month"))?.Id ?? item.PriceCodeMonthly;
             dto.PriceCodeAnnual = prices.First(x => x.Nickname.Contains("Annual"))?.Id ?? item.PriceCodeAnnual;
@@ -90,7 +98,7 @@ namespace legallead.permissions.api
             dto.IsActive = true;
             await coderepo.Create(dto);
             var related = (await coderepo.GetAll()).ToList().FindAll(x => 
-                x.PermissionGroupId == item.PermissionGroupId && 
+                x.KeyName == item.KeyName && 
                 x.Id != dto.Id && 
                 x.IsActive.GetValueOrDefault());
             related.ForEach(async r =>
@@ -106,19 +114,10 @@ namespace legallead.permissions.api
             if (item == null || string.IsNullOrEmpty(item.Id) || string.IsNullOrEmpty(item.KeyName)) return false;
             var model = item.GetModel();
             if (model == null) return false;
-            if (_testMode)
-            {
-                model.Product.Code = item.Id;
-                model.PriceCode.Annual = item.Id;
-                model.PriceCode.Monthly = item.Id;
-            } 
-            else
-            {
-                var service = new ProductService();
-                var pricing = new PriceService();
-                var iscreated = TryCreateProduct(item.KeyName, service, pricing, model);
-                if (!iscreated) return false;
-            }
+            var service = new ProductService();
+            var pricing = new PriceService();
+            var iscreated = TryCreateProduct(item.KeyName, service, pricing, model);
+            if (!iscreated) return false;
             try
             {
                 var businessObj = await _pricingInfrastructure.SetActivePricingTemplate(item.Id, model);

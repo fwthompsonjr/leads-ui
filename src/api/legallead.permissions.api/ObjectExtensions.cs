@@ -217,7 +217,7 @@ namespace legallead.permissions.api
                 var context = new DataContext(exec);
                 var repo = new PricingRepository(context);
                 var logging = s.GetRequiredService<ILogger<PricingSyncService>>();
-                return new PricingSyncService(logging, repo, false);
+                return new PricingSyncService(logging, repo);
             });
         }
 
