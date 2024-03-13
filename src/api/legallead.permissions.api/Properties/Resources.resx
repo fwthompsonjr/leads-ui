@@ -139,6 +139,9 @@
   <data name="page_invoice_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_text\page-invoice-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="page_invoice_subscription_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\page-invoice-subscription-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="page_level_request_completed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_text\page-level-request-completed.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

@@ -23,5 +23,6 @@ namespace legallead.permissions.api.Interfaces
 
         Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName);
         Task<LevelRequestBo> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "");
+        Task<LevelRequestBo?> GetLevelRequestById(string? id, string? sessionid);
     }
 }

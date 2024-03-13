@@ -1,6 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
-using Stripe.Checkout;
+using Stripe;
 using System.Security.Cryptography;
 
 namespace legallead.permissions.api.Utility
@@ -21,6 +21,19 @@ namespace legallead.permissions.api.Utility
             return bo;
         }
 
+        public async Task<LevelRequestBo?> GetLevelRequestById(string? id, string? sessionid)
+        {
+            if (string.IsNullOrWhiteSpace(id)) return null;
+            if (string.IsNullOrWhiteSpace(sessionid)) return null;
+            if (_customer == null) return null;
+            var bo = await _customer.GetLevelRequestById(id);
+            if (bo == null || string.IsNullOrEmpty(bo.SessionId)) return null;
+            if (bo.SessionId != sessionid) return null;
+            return bo;
+        }
+
+
+
         private async Task<LevelChangeRequest> GetPaymentSession(User user, string level, string externalId, PaymentCustomerBo cust, string successUrl)
         {
             if (_customer == null || _payment == null) return new();
@@ -28,29 +41,7 @@ namespace legallead.permissions.api.Utility
             {
                 var cancelUrl = successUrl.Replace("sts=success", "sts=cancel");
                 var priceId = GetPermissionCode(level, _payment);
-                var options = new SessionCreateOptions
-                {
-                    // See https://stripe.com/docs/api/checkout/sessions/create
-                    // for additional parameters to pass.
-                    // {CHECKOUT_SESSION_ID} is a string literal; do not change it!
-                    // the actual Session ID is returned in the query parameter when your customer
-                    // is redirected to the success page.
-                    SuccessUrl = successUrl,
-                    CancelUrl = cancelUrl,
-                    Mode = "subscription",
-                    Customer = cust.CustomerId,
-                    LineItems = new List<SessionLineItemOptions>
-                  {
-                    new() {
-
-                      Price = priceId,
-                      // For metered billing, do not pass quantity
-                      Quantity = 1,
-                    },
-                  },
-                };
-                var service = new SessionService();
-                var session = await service.CreateAsync(options);
+                var session = await CreatePaymentSession(cust, successUrl, cancelUrl, externalId, priceId);
                 var changeRq = new LevelChangeRequest
                 {
                     ExternalId = externalId,
@@ -59,6 +50,7 @@ namespace legallead.permissions.api.Utility
                     SessionId = session.Id,
                     UserId = user.Id
                 };
+
                 return changeRq;
             }
             catch (Exception ex)
@@ -66,6 +58,65 @@ namespace legallead.permissions.api.Utility
                 Console.WriteLine(ex.ToString());
                 return new();
             }
+        }
+
+        private static async Task<SubscriptionCreatedModel> CreatePaymentSession(
+            PaymentCustomerBo cust,
+            string successUrl,
+            string cancelUrl,
+            string externalId,
+            string priceId)
+        {
+            var response = new SubscriptionCreatedModel();
+            // Automatically save the payment method to the subscription
+            // when the first payment is successful.
+            var paymentSettings = new SubscriptionPaymentSettingsOptions
+            {
+                SaveDefaultPaymentMethod = "on_subscription",
+            };
+            // Create the subscription. Note we're expanding the Subscription's
+            // latest invoice and that invoice's payment_intent
+            // so we can pass it to the front end to confirm the payment
+            var options = new SubscriptionCreateOptions
+            {
+                Customer = cust.CustomerId,
+                Items = new List<SubscriptionItemOptions>
+                {
+                    new() {
+                        Price = priceId,
+                    },
+                },
+                PaymentSettings = paymentSettings,
+                PaymentBehavior = "default_incomplete",
+                Metadata = new() {
+                    { "SuccessUrl", successUrl },
+                    { "CancelUrl", cancelUrl },
+                    { "ExternalId", externalId },
+                }
+            };
+            options.AddExpand("latest_invoice.payment_intent");
+            var service = new SubscriptionService();
+            try
+            {
+                var session = await service.CreateAsync(options);
+                var returnUri = GetSubscriptionPaymentUrl(successUrl);
+                response.Id = session.Id;
+                returnUri = returnUri.Replace("~0", externalId).Replace("~1", session.Id);
+                response.Url = returnUri;
+                return response;
+            }
+            catch (StripeException e)
+            {
+                Console.WriteLine($"Failed to create subscription.{e}");
+                return response;
+            }
+        }
+
+        private static string GetSubscriptionPaymentUrl(string landing)
+        {
+            if (!Uri.TryCreate(landing, UriKind.RelativeOrAbsolute, out var url)) return landing;
+            var constructedUrl = $"{url.Scheme}://{url.Host}/subscription-checkout?sessionid=~1&id=~0";
+            return constructedUrl;
         }
 
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
