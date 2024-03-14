@@ -263,6 +263,35 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;checkout-stripe-js&quot;&gt;
+        ///
+        ///// This is your test publishable API key.
+        ///const stripe = Stripe(&quot;&lt;!-- stripe public key --&gt;&quot;);
+        ///
+        ///// The items the customer wants to buy
+        ///const items = [{ id: &quot;xl-tshirt&quot; }];
+        ///
+        ///let elements;
+        ///
+        ///initialize();
+        ///checkStatus();
+        ///
+        ///document
+        ///  .querySelector(&quot;#payment-form&quot;)
+        ///  .addEventListener(&quot;submit&quot;, handleSubmit);
+        ///
+        ///// Fetches a payment intent and captures the client secret
+        ///async function initialize() {
+        ///  let obj = { id: &quot;&lt;!-- payment external id --&gt;&quot; }
+        ///  const r [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_invoice_subscription_js {
+            get {
+                return ResourceManager.GetString("page_invoice_subscription_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///	&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;

@@ -2,7 +2,10 @@
 using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using Stripe;
 using System.Text;
+using System.Xml.Linq;
 
 namespace legallead.permissions.api.Extensions
 {
@@ -83,6 +86,48 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
+
+        public static string GetHtml(this LevelRequestBo response, string html, string paymentKey)
+        {
+            const string dash = " - ";
+            if (string.IsNullOrEmpty(response.SessionId)) return html;
+            html = html.Replace(InvoiceScriptTag, InvoiceSubscriptionScript());
+
+            var service = new SubscriptionService();
+            var subscription = service.Get(response.SessionId);
+            if (subscription == null) return html;
+            _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
+            successUrl ??= dash;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var parentNode = doc.DocumentNode;
+            var detailNode = parentNode.SelectSingleNode("//ul[@name='invoice-line-items']");
+            if (detailNode != null) detailNode.InnerHtml = string.Empty;
+            var createDate = DateTime.UtcNow.ToString("f");
+            var externalId = response.ExternalId ?? dash;            
+            var replacements = new Dictionary<string, string>()
+            {
+                { "//span[@name='invoice']", externalId },
+                { "//span[@name='invoice-date']", createDate },
+                { "//span[@name='invoice-description']", dash },
+                { "//span[@name='invoice-total']", dash }
+            };
+            var keys = replacements.Keys.ToList();
+            keys.ForEach(key =>
+            {
+                var span = parentNode.SelectSingleNode(key);
+                if (span != null) span.InnerHtml = replacements[key];
+            });
+            var outerHtml = parentNode.OuterHtml;
+            outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
+            outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
+            doc = new HtmlDocument();
+            doc.LoadHtml(outerHtml);
+            return doc.DocumentNode.OuterHtml;
+        }
+
+
         private static void RemoveCheckout(HtmlNode parentNode)
         {
             var stripejs = "//script[@name='stripe-api']";
@@ -138,12 +183,21 @@ namespace legallead.permissions.api.Extensions
             return desciption.Replace("Record Search :", "Search: "); // dash
         }
         private static string? _invoiceScript;
+        private static string? _invoiceSubscriptionScript;
         private static string InvoiceScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
             _invoiceScript = Properties.Resources.page_invoice_js;
             return _invoiceScript;
         }
+
+        private static string InvoiceSubscriptionScript()
+        {
+            if (!string.IsNullOrWhiteSpace(_invoiceSubscriptionScript)) return _invoiceSubscriptionScript;
+            _invoiceSubscriptionScript = Properties.Resources.page_invoice_js;
+            return _invoiceSubscriptionScript;
+        }
+
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";
     }
 }

@@ -2,6 +2,7 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -11,10 +12,15 @@ namespace legallead.permissions.api.Controllers
     {
         private readonly IPaymentHtmlTranslator paymentSvc;
         private readonly ISearchInfrastructure infrastructure;
-        public HomeController(IPaymentHtmlTranslator service, ISearchInfrastructure search)
+        private readonly ISubscriptionInfrastructure subscriptionSvc;
+        public HomeController(
+            IPaymentHtmlTranslator service, 
+            ISearchInfrastructure search,
+            ISubscriptionInfrastructure subscriptionSvc)
         {
             paymentSvc = service;
             infrastructure = search;
+            this.subscriptionSvc = subscriptionSvc;
         }
         [HttpGet]
         [Route("/")]
@@ -77,7 +83,7 @@ namespace legallead.permissions.api.Controllers
             var ispaid = await paymentSvc.IsRequestPaid(session);
             if (ispaid)
             {
-                return await PaymentLanding("success", id);
+                return await UserLevelLanding("success", id);
             }
             var content = Properties.Resources.page_invoice_subscription_html;
             content = paymentSvc.Transform(session, content);
@@ -94,6 +100,24 @@ namespace legallead.permissions.api.Controllers
                 return Content(nodata, "text/html");
             }
             return Json(new { clientSecret = session.ClientId });
+        }
+
+
+        [HttpPost("/subscription-fetch-intent")]
+        public async Task<IActionResult> FetchSubscriptionIntent([FromBody] FetchIntentRequest request)
+        {
+            var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });
+            var session = await subscriptionSvc.GetLevelRequestById(request.Id, null);
+            if (session == null || string.IsNullOrEmpty(session.SessionId))
+            {
+                return nodata;
+            }
+
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId);
+            if (subscription == null) return nodata;
+            var clientSecret = subscription.LatestInvoice.PaymentIntent.ClientSecret;
+            return Json(new { clientSecret });
         }
 
         [Authorize]
@@ -147,6 +171,7 @@ namespace legallead.permissions.api.Controllers
             if (dwnload == null) return UnprocessableEntity("Unable to perform reset. Process rejected by server.");
             return Ok(dwnload);
         }
+
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
 

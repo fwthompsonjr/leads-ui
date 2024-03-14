@@ -12,10 +12,14 @@ namespace legallead.permissions.api.Utility
             var findSession = await IsPermissionSessionNeeded(user, level, externalId);
             if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
             if (_customer == null || _payment == null) return new();
+            if (string.IsNullOrEmpty(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
+            { 
+                externalId = findSession.ExternalId;
+            }
             var cust = await _customer.GetOrCreateCustomer(user.Id);
             if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return new();
-            var successUrl = $"{request.Scheme}://{request.Host}/subscription-result?session_id=~1&sts=success&id=~0"
-                .Replace("~1", "{CHECKOUT_SESSION_ID}");
+            
+            var successUrl = $"{request.Scheme}://{request.Host}/subscription-result?session_id=~1&sts=success&id=~0";
             LevelChangeRequest changeRq = await GetPaymentSession(user, level, externalId, cust, successUrl);
             var bo = (await _customer.AddLevelChangeRequest(changeRq)) ?? new();
             return bo;
@@ -24,11 +28,10 @@ namespace legallead.permissions.api.Utility
         public async Task<LevelRequestBo?> GetLevelRequestById(string? id, string? sessionid)
         {
             if (string.IsNullOrWhiteSpace(id)) return null;
-            if (string.IsNullOrWhiteSpace(sessionid)) return null;
             if (_customer == null) return null;
             var bo = await _customer.GetLevelRequestById(id);
             if (bo == null || string.IsNullOrEmpty(bo.SessionId)) return null;
-            if (bo.SessionId != sessionid) return null;
+            if (!string.IsNullOrEmpty(sessionid) &&  bo.SessionId != sessionid) return null;
             return bo;
         }
 
@@ -98,10 +101,11 @@ namespace legallead.permissions.api.Utility
             var service = new SubscriptionService();
             try
             {
-                var session = await service.CreateAsync(options);
                 var returnUri = GetSubscriptionPaymentUrl(successUrl);
+                returnUri = returnUri.Replace("~0", externalId);
+                var session = await service.CreateAsync(options);
+                returnUri = returnUri.Replace("~1", session.Id);
                 response.Id = session.Id;
-                returnUri = returnUri.Replace("~0", externalId).Replace("~1", session.Id);
                 response.Url = returnUri;
                 return response;
             }
@@ -114,8 +118,14 @@ namespace legallead.permissions.api.Utility
 
         private static string GetSubscriptionPaymentUrl(string landing)
         {
-            if (!Uri.TryCreate(landing, UriKind.RelativeOrAbsolute, out var url)) return landing;
-            var constructedUrl = $"{url.Scheme}://{url.Host}/subscription-checkout?sessionid=~1&id=~0";
+            if (!Uri.TryCreate(landing, UriKind.Absolute, out var url)) return landing;
+            var host = (url.Scheme) switch
+            {
+                "https" => url.Port == 443 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                "http" => url.Port == 80 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                _ => url.Host,
+            };
+            var constructedUrl = $"{url.Scheme}://{host}/subscription-checkout?sessionid=~1&id=~0";
             return constructedUrl;
         }
 

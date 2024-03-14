@@ -187,7 +187,9 @@ namespace legallead.permissions.api.Utility
 
         public string Transform(LevelRequestBo session, string content)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(session.SessionId)) return content;
+            content = session.GetHtml(content, _paymentKey);
+            return content;
         }
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
