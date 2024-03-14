@@ -15,5 +15,8 @@ namespace legallead.permissions.api.Interfaces
         string Transform(PaymentSessionDto? session, string html);
         Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html);
         Task<bool> IsChangeUserLevel(string? status, string? id);
+        Task<LevelRequestBo?> IsSubscriptionValid(string? id, string? sessionid);
+        Task<bool> IsRequestPaid(LevelRequestBo session);
+        string Transform(LevelRequestBo session, string content);
     }
 }

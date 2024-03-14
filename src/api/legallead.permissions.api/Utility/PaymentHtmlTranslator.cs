@@ -6,6 +6,7 @@ using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
+using Stripe;
 using System.Globalization;
 
 namespace legallead.permissions.api.Utility
@@ -47,6 +48,17 @@ namespace legallead.permissions.api.Utility
             return session;
         }
 
+        public async Task<LevelRequestBo?> IsSubscriptionValid(string? id, string? sessionid)
+        {
+            var bo = await _subscriptionDb.GetLevelRequestById(id, sessionid);
+            if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
+            if (bo.InvoiceUri == "NONE") return bo;
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(bo.SessionId ?? "");
+            if (subscription == null) return null;
+            return bo;
+        }
+
         public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -57,6 +69,21 @@ namespace legallead.permissions.api.Utility
             var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
             return ispaid.GetValueOrDefault();
         }
+
+        public async Task<bool> IsRequestPaid(LevelRequestBo session)
+        {
+            var isSuccess = session.IsPaymentSuccess.GetValueOrDefault(); 
+            if (session.InvoiceUri == "NONE") return isSuccess;
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId ?? "");
+            if (subscription == null) return false;
+            // check subscription status to see if invoice has been paid
+            var unpaid = new[] { "incomplete", "incomplete_expired", "canceled" };
+            var status = !unpaid.Contains(subscription.Status);
+            isSuccess &= status;
+            return isSuccess;
+        }
+
         public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -158,16 +185,10 @@ namespace legallead.permissions.api.Utility
             return doc.DocumentNode.OuterHtml;
         }
 
-        public async Task<object?> ResetDownload(DownloadResetRequest request)
+        public string Transform(LevelRequestBo session, string content)
         {
-            if (string.IsNullOrWhiteSpace(request.UserId) || string.IsNullOrWhiteSpace(request.ExternalId))
-            {
-                return null;
-            }
-            var response = await _repo.AllowDownloadRollback(request.UserId, request.ExternalId);
-            return response;
+            throw new NotImplementedException();
         }
-
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
@@ -187,6 +208,16 @@ namespace legallead.permissions.api.Utility
             UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
+        }
+
+        public async Task<object?> ResetDownload(DownloadResetRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.UserId) || string.IsNullOrWhiteSpace(request.ExternalId))
+            {
+                return null;
+            }
+            var response = await _repo.AllowDownloadRollback(request.UserId, request.ExternalId);
+            return response;
         }
 
 

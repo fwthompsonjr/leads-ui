@@ -65,6 +65,25 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+        [HttpGet("/subscription-checkout")]
+        public async Task<IActionResult> SubscriptionCheckout([FromQuery] string? id, string? sessionid)
+        {
+            var session = await paymentSvc.IsSubscriptionValid(id, sessionid);
+            if (session == null)
+            {
+                var nodata = Properties.Resources.page_payment_detail_invalid;
+                return Content(nodata, "text/html");
+            }
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            if (ispaid)
+            {
+                return await PaymentLanding("success", id);
+            }
+            var content = Properties.Resources.page_invoice_subscription_html;
+            content = paymentSvc.Transform(session, content);
+            return Content(content, "text/html");
+        }
+
         [HttpPost("/payment-fetch-intent")]
         public async Task<IActionResult> FetchIntent([FromBody] FetchIntentRequest request)
         {
