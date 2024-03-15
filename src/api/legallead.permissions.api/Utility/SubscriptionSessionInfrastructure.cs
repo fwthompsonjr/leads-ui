@@ -80,6 +80,11 @@ namespace legallead.permissions.api.Utility
             // Create the subscription. Note we're expanding the Subscription's
             // latest invoice and that invoice's payment_intent
             // so we can pass it to the front end to confirm the payment
+            var dat = new Dictionary<string, string>(){
+                    { "SuccessUrl", successUrl },
+                    { "CancelUrl", cancelUrl },
+                    { "ExternalId", externalId },
+                };
             var options = new SubscriptionCreateOptions
             {
                 Customer = cust.CustomerId,
@@ -87,15 +92,13 @@ namespace legallead.permissions.api.Utility
                 {
                     new() {
                         Price = priceId,
+                        Quantity = 1,
                     },
                 },
+                InvoiceSettings = new() { Issuer = new() { Type = "self"} },
                 PaymentSettings = paymentSettings,
                 PaymentBehavior = "default_incomplete",
-                Metadata = new() {
-                    { "SuccessUrl", successUrl },
-                    { "CancelUrl", cancelUrl },
-                    { "ExternalId", externalId },
-                }
+                Metadata = dat
             };
             options.AddExpand("latest_invoice.payment_intent");
             var service = new SubscriptionService();
@@ -105,6 +108,10 @@ namespace legallead.permissions.api.Utility
                 returnUri = returnUri.Replace("~0", externalId);
                 var session = await service.CreateAsync(options);
                 returnUri = returnUri.Replace("~1", session.Id);
+                dat["SuccessUrl"] = successUrl.Replace("~0", externalId).Replace("~1", session.Id);
+                dat["CancelUrl"] = cancelUrl.Replace("~0", externalId).Replace("~1", session.Id);
+                dat.Add("InitializeUrl", returnUri);
+                service.Update(session.Id, new() { Metadata = dat });
                 response.Id = session.Id;
                 response.Url = returnUri;
                 return response;

@@ -116,7 +116,14 @@ namespace legallead.permissions.api.Controllers
             var service = new SubscriptionService();
             var subscription = await service.GetAsync(session.SessionId);
             if (subscription == null) return nodata;
-            var clientSecret = subscription.LatestInvoice.PaymentIntent.ClientSecret;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = await invoiceSvc.GetAsync(invoiceId);
+            if (invoice == null) return nodata;
+            var intentSvc = new PaymentIntentService();
+            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
+            
+            var clientSecret = intent.ClientSecret;
             return Json(new { clientSecret });
         }
 

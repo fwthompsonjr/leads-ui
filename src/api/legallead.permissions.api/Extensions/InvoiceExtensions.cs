@@ -96,6 +96,10 @@ namespace legallead.permissions.api.Extensions
             var service = new SubscriptionService();
             var subscription = service.Get(response.SessionId);
             if (subscription == null) return html;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = invoiceSvc.Get(invoiceId);
+            if (invoice == null) return html;
             _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
             successUrl ??= dash;
             var doc = new HtmlDocument();
@@ -104,13 +108,21 @@ namespace legallead.permissions.api.Extensions
             var detailNode = parentNode.SelectSingleNode("//ul[@name='invoice-line-items']");
             if (detailNode != null) detailNode.InnerHtml = string.Empty;
             var createDate = DateTime.UtcNow.ToString("f");
-            var externalId = response.ExternalId ?? dash;            
+            var externalId = response.ExternalId ?? dash;
+            var heading = "Legal Lead Subcription";
+            var description = response.LevelName switch
+            {
+                "" => "Setup monthly payment",
+                null => dash,
+                _ => response.LevelName,
+            };
+            var amount = (invoice.AmountDue * 0.01d).ToString("c");
             var replacements = new Dictionary<string, string>()
             {
-                { "//span[@name='invoice']", externalId },
+                { "//span[@name='invoice']", heading },
                 { "//span[@name='invoice-date']", createDate },
-                { "//span[@name='invoice-description']", dash },
-                { "//span[@name='invoice-total']", dash }
+                { "//span[@name='invoice-description']", description },
+                { "//span[@name='invoice-total']", amount }
             };
             var keys = replacements.Keys.ToList();
             keys.ForEach(key =>
@@ -194,7 +206,7 @@ namespace legallead.permissions.api.Extensions
         private static string InvoiceSubscriptionScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceSubscriptionScript)) return _invoiceSubscriptionScript;
-            _invoiceSubscriptionScript = Properties.Resources.page_invoice_js;
+            _invoiceSubscriptionScript = Properties.Resources.page_invoice_subscription_js;
             return _invoiceSubscriptionScript;
         }
 
