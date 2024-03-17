@@ -13,5 +13,7 @@ namespace legallead.permissions.api.Interfaces
         Task<LevelRequestBo?> AddLevelChangeRequest(LevelChangeRequest request);
         Task<LevelRequestBo?> GetLevelRequestById(string externalId);
         Task<LevelRequestBo?> CompleteLevelRequest(LevelRequestBo request);
+        Task<LevelRequestBo?> AddDiscountChangeRequest(LevelChangeRequest request);
+        Task<LevelRequestBo?> GetDiscountRequestById(string externalId);
     }
 }

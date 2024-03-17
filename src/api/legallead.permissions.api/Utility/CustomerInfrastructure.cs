@@ -104,6 +104,21 @@ namespace legallead.permissions.api.Utility
             return item;
         }
 
+
+        public async Task<LevelRequestBo?> AddDiscountChangeRequest(LevelChangeRequest request)
+        {
+            _ = await _repo.AddDiscountChangeRequest(JsonConvert.SerializeObject(request));
+            var item = await _repo.GetDiscountRequestById(request.ExternalId ?? string.Empty);
+            return item;
+        }
+
+
+        public async Task<LevelRequestBo?> GetDiscountRequestById(string externalId)
+        {
+            var item = await _repo.GetDiscountRequestById(externalId);
+            return item;
+        }
+
         private static CustomerCreateOptions GenerateCreateOption(string email)
         {
             return new CustomerCreateOptions
