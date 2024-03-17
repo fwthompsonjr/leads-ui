@@ -146,5 +146,79 @@ namespace legallead.jdbc.implementations
                 return new(false, ex.Message);
             }
         }
+
+
+
+        public async Task<KeyValuePair<bool, string>> AddDiscountChangeRequest(string jsonRequest)
+        {
+            const string prc = "CALL USP_CREATE_DISCOUNTREQUEST( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("pay_load", jsonRequest);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
+        public async Task<List<LevelRequestBo>?> GetDiscountRequestHistory(string userId)
+        {
+            const string prc = "CALL USP_FIND_DISCOUNTREQUEST_BY_USER_ID( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("user_index", userId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<LevelRequestDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<List<LevelRequestBo>>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<LevelRequestBo?> GetDiscountRequestById(string externalId)
+        {
+            const string prc = "CALL USP_FIND_DISCOUNTREQUEST_BY_EXTERNAL_INDEX( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("external_id", externalId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<LevelRequestDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<LevelRequestBo>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<KeyValuePair<bool, string>> UpdateDiscountChangeRequest(string jsonRequest)
+        {
+            const string prc = "CALL USP_UPDATE_DISCOUNTREQUEST( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("pay_load", jsonRequest);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
     }
 }
