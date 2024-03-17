@@ -59,6 +59,17 @@ namespace legallead.permissions.api.Utility
             return bo;
         }
 
+        public async Task<LevelRequestBo?> IsDiscountValid(string? id, string? sessionid)
+        {
+            var bo = await _subscriptionDb.GetDiscountRequestById(id, sessionid);
+            if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
+            if (bo.InvoiceUri == "NONE") return bo;
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(bo.SessionId ?? "");
+            if (subscription == null) return null;
+            return bo;
+        }
+
         public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -84,6 +95,11 @@ namespace legallead.permissions.api.Utility
             return isSuccess;
         }
 
+        public async Task<bool> IsDiscountPaid(LevelRequestBo session)
+        {
+            var response = await IsRequestPaid(session);
+            return response;
+        }
         public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -234,6 +250,17 @@ namespace legallead.permissions.api.Utility
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
+        public async Task<bool> IsDiscountLevel(string? status, string? id)
+        {
+            var mapped = requestNames.First(s => s.Equals(status));
+            if (string.IsNullOrEmpty(mapped)) return false;
+            if (string.IsNullOrEmpty(id)) return false;
+            if (mapped.Equals(requestNames[1])) return false;
+            var bo = await _custDb.GetDiscountRequestById(id);
+            return bo != null && !string.IsNullOrEmpty(bo.Id);
+        }
+
+
         private static string ToDateString(DateTime? date, string fallback)
         {
             if (!date.HasValue) return fallback;
@@ -256,6 +283,7 @@ namespace legallead.permissions.api.Utility
             if (original.Contains(closeBraceQt)) original = original.Replace(closeBraceQt, closeBrace);
             return original.Replace(slash.ToString(), string.Empty);
         }
+
 
         private static readonly string[] requestNames = new[] { "success", "cancel" };
 

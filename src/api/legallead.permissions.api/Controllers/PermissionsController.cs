@@ -4,6 +4,7 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -31,6 +32,14 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
+            var isAdmin = await _db.IsAdminUser(Request);
+            var jsrequest = JsonConvert.SerializeObject(request);
+            var session = await _db.GenerateDiscountSession(Request, user, jsrequest, isAdmin, "");
+            if (!session.IsPaymentSuccess.GetValueOrDefault())
+            {
+                return Ok(session);
+            }
+
             var statelist = ModelMapper.Mapper.Map<List<KeyValuePair<bool, UsState>>>(request);
 
             List<IActionResult> list = ProcessStateDiscounts(user, statelist);
