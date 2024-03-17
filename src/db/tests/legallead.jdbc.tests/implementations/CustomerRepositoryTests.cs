@@ -316,6 +316,137 @@ namespace legallead.jdbc.tests.implementations
             Assert.False(response.Key);
         }
 
+        [Fact]
+        public async Task RepoCanAddDiscountChangeRequestHappyPath()
+        {
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.AddDiscountChangeRequest("");
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanAddDiscountChangeRequestExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.AddDiscountChangeRequest("");
+            Assert.False(response.Key);
+        }
+
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestHistoryHappyPath()
+        {
+            List<LevelRequestDto>? completion = rqfaker.Generate(6);
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetDiscountRequestHistory("");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestHistoryNoResponse()
+        {
+            List<LevelRequestDto>? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetDiscountRequestHistory("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestHistoryExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetDiscountRequestHistory("");
+            Assert.Null(response);
+        }
+
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestByIdHappyPath()
+        {
+            var completion = rqfaker.Generate();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetDiscountRequestById("");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestByIdNoResponse()
+        {
+            LevelRequestDto? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetDiscountRequestById("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetDiscountRequestByIdExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetDiscountRequestById("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateDiscountChangeRequestHappyPath()
+        {
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.UpdateDiscountChangeRequest("");
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateDiscountChangeRequestExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.UpdateDiscountChangeRequest("");
+            Assert.False(response.Key);
+        }
 #pragma warning restore CS8604 // Possible null reference argument.
 
         private sealed class CustomerRepoContainer

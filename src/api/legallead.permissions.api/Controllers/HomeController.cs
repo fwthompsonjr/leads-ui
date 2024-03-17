@@ -2,6 +2,7 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -11,10 +12,15 @@ namespace legallead.permissions.api.Controllers
     {
         private readonly IPaymentHtmlTranslator paymentSvc;
         private readonly ISearchInfrastructure infrastructure;
-        public HomeController(IPaymentHtmlTranslator service, ISearchInfrastructure search)
+        private readonly ISubscriptionInfrastructure subscriptionSvc;
+        public HomeController(
+            IPaymentHtmlTranslator service, 
+            ISearchInfrastructure search,
+            ISubscriptionInfrastructure subscriptionSvc)
         {
             paymentSvc = service;
             infrastructure = search;
+            this.subscriptionSvc = subscriptionSvc;
         }
         [HttpGet]
         [Route("/")]
@@ -65,6 +71,25 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+        [HttpGet("/subscription-checkout")]
+        public async Task<IActionResult> SubscriptionCheckout([FromQuery] string? id, string? sessionid)
+        {
+            var session = await paymentSvc.IsSubscriptionValid(id, sessionid);
+            if (session == null)
+            {
+                var nodata = Properties.Resources.page_payment_detail_invalid;
+                return Content(nodata, "text/html");
+            }
+            var ispaid = await paymentSvc.IsRequestPaid(session);
+            if (ispaid)
+            {
+                return await UserLevelLanding("success", id);
+            }
+            var content = Properties.Resources.page_invoice_subscription_html;
+            content = paymentSvc.Transform(session, content);
+            return Content(content, "text/html");
+        }
+
         [HttpPost("/payment-fetch-intent")]
         public async Task<IActionResult> FetchIntent([FromBody] FetchIntentRequest request)
         {
@@ -75,6 +100,31 @@ namespace legallead.permissions.api.Controllers
                 return Content(nodata, "text/html");
             }
             return Json(new { clientSecret = session.ClientId });
+        }
+
+
+        [HttpPost("/subscription-fetch-intent")]
+        public async Task<IActionResult> FetchSubscriptionIntent([FromBody] FetchIntentRequest request)
+        {
+            var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });
+            var session = await subscriptionSvc.GetLevelRequestById(request.Id, null);
+            if (session == null || string.IsNullOrEmpty(session.SessionId))
+            {
+                return nodata;
+            }
+
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId);
+            if (subscription == null) return nodata;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = await invoiceSvc.GetAsync(invoiceId);
+            if (invoice == null) return nodata;
+            var intentSvc = new PaymentIntentService();
+            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
+            
+            var clientSecret = intent.ClientSecret;
+            return Json(new { clientSecret });
         }
 
         [Authorize]
@@ -128,6 +178,7 @@ namespace legallead.permissions.api.Controllers
             if (dwnload == null) return UnprocessableEntity("Unable to perform reset. Process rejected by server.");
             return Ok(dwnload);
         }
+
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
 

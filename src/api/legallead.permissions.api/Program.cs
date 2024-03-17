@@ -9,13 +9,21 @@ using System.Diagnostics.CodeAnalysis;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var environmentName = builder.Environment.EnvironmentName;
-var config =
-    new ConfigurationBuilder()
+var isDevelopment = environmentName.Equals("development", StringComparison.OrdinalIgnoreCase);
+var config = isDevelopment switch
+{
+    true => new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json")
         .AddJsonFile($"appsettings.{environmentName}.json", true)
         .AddEnvironmentVariables()
-        .Build();
+        .Build(),
+    _ => new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .AddEnvironmentVariables()
+        .Build()
+};
 var services = builder.Services;
 services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
@@ -65,6 +73,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
 // Resolve the StartupTasks from the ServiceProvider
 var startupTasks = app.Services.GetServices<IStartupTask>();
 

@@ -66,8 +66,7 @@ namespace legallead.permissions.api.Properties {
         ///&lt;h5&gt;Admin&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Administrator Account. 
-        ///        As a Guest you have the following search restrictions.
+        ///        Administrator Account.
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
         ///        &lt;li&gt;Searches: There are no limits to the number of records returned from a search.&lt;/li&gt;
@@ -76,7 +75,10 @@ namespace legallead.permissions.api.Properties {
         ///    &lt;/ol&gt;
         ///    &lt;p class=&quot;text-primary&quot;&gt;
         ///        Pricing: 
-        ///    &lt;/p&gt;        /// [rest of string was truncated]&quot;;.
+        ///    &lt;/p&gt;
+        ///    &lt;ul&gt;
+        ///        &lt;li&gt;The cost per lead is free.&lt;/li&gt;
+        ///        &lt;li&gt;Admin ac [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_admin {
             get {
@@ -90,7 +92,7 @@ namespace legallead.permissions.api.Properties {
         ///&lt;h5&gt;Gold&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Gold Account. 
+        ///        Gold Account. &lt;br/&gt;
         ///        With a Gold you have the following search restrictions.
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
@@ -101,7 +103,7 @@ namespace legallead.permissions.api.Properties {
         ///        &lt;/li&gt;
         ///        &lt;li&gt;
         ///            Monthly Limit: 
-        ///            Your account is limited to receive 1500 leads  [rest of string was truncated]&quot;;.
+        ///            Your account is limited to receive 1500 leads in a c [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_gold {
             get {
@@ -115,7 +117,7 @@ namespace legallead.permissions.api.Properties {
         ///&lt;h5&gt;Guest&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Guest Account. 
+        ///        Guest Account. &lt;br/&gt;
         ///        As a Guest you have the following search restrictions.
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
@@ -125,7 +127,7 @@ namespace legallead.permissions.api.Properties {
         ///    &lt;/ol&gt;
         ///    &lt;p&gt;
         ///        Data restriction: 
-        ///    [rest of string was truncated]&quot;;.
+        ///        A [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_guest {
             get {
@@ -139,7 +141,7 @@ namespace legallead.permissions.api.Properties {
         ///&lt;h5&gt;Platinum&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Platinum Account. 
+        ///        Platinum Account. 
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
         ///        &lt;li&gt;
@@ -151,7 +153,7 @@ namespace legallead.permissions.api.Properties {
         ///            Monthly Limit: 
         ///            Your account is limited to receive 10,000 leads in a calendar month.&lt;/li&gt;
         ///        &lt;li&gt;
-        ///             [rest of string was truncated]&quot;;.
+        ///            Annual Limi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_platinum {
             get {
@@ -165,7 +167,7 @@ namespace legallead.permissions.api.Properties {
         ///&lt;h5&gt;Silver&lt;/h5&gt;
         ///&lt;div&gt;
         ///    &lt;p class=&quot;lead&quot;&gt;
-        ///        You have a Silver Account. 
+        ///        Silver Account. 
         ///    &lt;/p&gt;
         ///    &lt;ol&gt;
         ///        &lt;li&gt;
@@ -178,7 +180,8 @@ namespace legallead.permissions.api.Properties {
         ///        &lt;li&gt;
         ///            Annual Limit: 
         ///            Your account is limited to receive 1500 leads in a calendar year.&lt;/li&gt;
-        ///    &lt;/ol&gt; [rest of string was truncated]&quot;;.
+        ///    &lt;/ol&gt;
+        ///    &lt;p cl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string description_role_silver {
             get {
@@ -234,6 +237,57 @@ namespace legallead.permissions.api.Properties {
         internal static string page_invoice_js {
             get {
                 return ResourceManager.GetString("page_invoice_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///            try { 
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                } catch {} 
+        ///            function changeViewHandler(viewName){
+        ///		            const nn = &quot;d-none&quot;;
+        ///		            const dvnav = &quot;div[name=&apos;navigation-alert-message&apos;]&quot;;
+        ///		            if( $(dvnav).hasClass(nn) ) {
+        ///			            $(dvnav).removeClass(nn);
+        ///			            $(dvnav).hide();
+        ///		            }
+        ///		            let handler = window.jsHandler;
+        ///		       [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_invoice_subscription_html {
+            get {
+                return ResourceManager.GetString("page_invoice_subscription_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;checkout-stripe-js&quot;&gt;
+        ///
+        ///// This is your test publishable API key.
+        ///const stripe = Stripe(&quot;&lt;!-- stripe public key --&gt;&quot;);
+        ///
+        ///// The items the customer wants to buy
+        ///const items = [{ id: &quot;xl-tshirt&quot; }];
+        ///
+        ///let elements;
+        ///
+        ///initialize();
+        ///checkStatus();
+        ///
+        ///document
+        ///  .querySelector(&quot;#payment-form&quot;)
+        ///  .addEventListener(&quot;submit&quot;, handleSubmit);
+        ///
+        ///// Fetches a payment intent and captures the client secret
+        ///async function initialize() {
+        ///  let obj = { id: &quot;&lt;!-- payment external id --&gt;&quot; }
+        ///  const r [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_invoice_subscription_js {
+            get {
+                return ResourceManager.GetString("page_invoice_subscription_js", resourceCulture);
             }
         }
         

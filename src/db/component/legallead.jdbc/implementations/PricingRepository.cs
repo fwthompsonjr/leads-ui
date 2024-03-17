@@ -25,7 +25,7 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QuerySingleOrDefaultAsync<PricingCodeDto>(connection, prc);
                 if (response == null) return null;
                 var js = JsonConvert.SerializeObject(response);
-                var bo = JsonConvert.DeserializeObject<PricingCodeBo>(js);
+                var bo = TryDeserialize<PricingCodeBo>(js);
                 return bo;
             }
             catch (Exception)
@@ -43,7 +43,7 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QueryAsync<PricingCodeDto>(connection, prc);
                 if (response == null) return new();
                 var json = JsonConvert.SerializeObject(response);
-                var bo = JsonConvert.DeserializeObject<List<PricingCodeBo>>(json) ?? new();
+                var bo = TryDeserialize<List<PricingCodeBo>>(json) ?? new();
                 return bo;
             }
             catch (Exception)
@@ -61,7 +61,7 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QueryAsync<PricingCodeDto>(connection, prc);
                 if (response == null) return new();
                 var json = JsonConvert.SerializeObject(response);
-                var bo = JsonConvert.DeserializeObject<List<PricingCodeBo>>(json) ?? new();
+                var bo = TryDeserialize<List<PricingCodeBo>>(json) ?? new();
                 return bo;
             }
             catch (Exception)
@@ -92,7 +92,7 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QuerySingleOrDefaultAsync<PricingCodeDto>(connection, prc);
                 if (response == null) return null;
                 var js = JsonConvert.SerializeObject(response);
-                var bo = JsonConvert.DeserializeObject<PricingCodeBo>(js);
+                var bo = TryDeserialize<PricingCodeBo>(js);
                 return bo;
             }
             catch (Exception)
@@ -104,10 +104,22 @@ namespace legallead.jdbc.implementations
 
         public async Task<PricingCodeBo?> SetActivePricingTemplate(string templateId, string modeljs)
         {
-            var model = JsonConvert.DeserializeObject<ProductPricingModel>(modeljs);
+            var model = TryDeserialize<ProductPricingModel>(modeljs);
             if (model == null) return null;
             var response = await SetActivePricingTemplate(templateId, model);
             return response;
+        }
+
+        private static T? TryDeserialize<T>(string json)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }
