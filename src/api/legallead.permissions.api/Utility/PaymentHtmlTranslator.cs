@@ -228,9 +228,9 @@ namespace legallead.permissions.api.Utility
         {
             var mapped = requestNames.First(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
-            if (!string.IsNullOrEmpty(id)) return false;
+            if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
-            var bo = await _custDb.GetLevelRequestById(id ?? string.Empty);
+            var bo = await _custDb.GetLevelRequestById(id);
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
