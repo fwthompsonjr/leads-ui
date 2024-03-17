@@ -205,6 +205,57 @@ namespace legallead.permissions.api.Properties {
         ///		            let handler = window.jsHandler;
         ///		       [rest of string was truncated]&quot;;.
         /// </summary>
+        internal static string page_invoice_discount_html {
+            get {
+                return ResourceManager.GetString("page_invoice_discount_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;checkout-stripe-js&quot;&gt;
+        ///
+        ///// This is your test publishable API key.
+        ///const stripe = Stripe(&quot;&lt;!-- stripe public key --&gt;&quot;);
+        ///
+        ///// The items the customer wants to buy
+        ///const items = [{ id: &quot;xl-tshirt&quot; }];
+        ///
+        ///let elements;
+        ///
+        ///initialize();
+        ///checkStatus();
+        ///
+        ///document
+        ///  .querySelector(&quot;#payment-form&quot;)
+        ///  .addEventListener(&quot;submit&quot;, handleSubmit);
+        ///
+        ///// Fetches a payment intent and captures the client secret
+        ///async function initialize() {
+        ///  let obj = { id: &quot;&lt;!-- payment external id --&gt;&quot; }
+        ///  const r [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string page_invoice_discount_js {
+            get {
+                return ResourceManager.GetString("page_invoice_discount_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///            try { 
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                } catch {} 
+        ///            function changeViewHandler(viewName){
+        ///		            const nn = &quot;d-none&quot;;
+        ///		            const dvnav = &quot;div[name=&apos;navigation-alert-message&apos;]&quot;;
+        ///		            if( $(dvnav).hasClass(nn) ) {
+        ///			            $(dvnav).removeClass(nn);
+        ///			            $(dvnav).hide();
+        ///		            }
+        ///		            let handler = window.jsHandler;
+        ///		       [rest of string was truncated]&quot;;.
+        /// </summary>
         internal static string page_invoice_html {
             get {
                 return ResourceManager.GetString("page_invoice_html", resourceCulture);
