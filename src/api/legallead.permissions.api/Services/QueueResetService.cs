@@ -1,6 +1,6 @@
 ﻿using legallead.jdbc.interfaces;
 
-namespace legallead.permissions.api.Utility
+namespace legallead.permissions.api.Services
 {
     public class QueueResetService : BackgroundService
     {
