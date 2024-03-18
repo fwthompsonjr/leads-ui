@@ -72,7 +72,7 @@ namespace legallead.permissions.api.Utility
             if (_customer == null || _payment == null || !CanMapDiscountJson(json)) return new();
             var payloadObj = MapDiscountJson(json);
             if (payloadObj == null) return new();
-            if (payloadObj.Choices.Any(x => x.IsSelected && string.IsNullOrEmpty(x.AnnualBillingCode))) return new();
+            if (payloadObj.Choices.Any(x => x.IsSelected && !string.IsNullOrEmpty(x.AnnualBillingCode))) return new();
             try
             {
                 var payload = JsonConvert.SerializeObject(payloadObj);
@@ -121,6 +121,7 @@ namespace legallead.permissions.api.Utility
                     { "ExternalId", externalId },
                 };
             var selections = changeRequest.Choices.Where(x => x.IsSelected && string.IsNullOrEmpty(x.AnnualBillingCode));
+
             var items = selections.Select(x => new SubscriptionItemOptions
             {
                 Price = x.MonthlyBillingCode,
@@ -190,7 +191,13 @@ namespace legallead.permissions.api.Utility
             if (test == null) return null;
             return ModelMapper.Mapper.Map<DiscountChangeParent>(test);
         }
-
+        /// <summary>
+        /// Looks up pricing from price list and maps codes into discount object
+        /// </summary>
+        /// <param name="discounts"></param>
+        /// <remarks>
+        /// This method should actually return a value to
+        /// </remarks>
         private static void MapPricingCodes(DiscountChangeParent discounts)
         {
             const string level = ".Discount.";
