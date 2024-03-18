@@ -139,6 +139,57 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
+        public static string GetHtml(this DiscountRequestBo response, string html, string paymentKey)
+        {
+            const string dash = " - ";
+            if (string.IsNullOrEmpty(response.SessionId)) return html;
+            html = html.Replace(InvoiceScriptTag, InvoiceDiscountScript());
+
+            var service = new SubscriptionService();
+            var subscription = service.Get(response.SessionId);
+            if (subscription == null) return html;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = invoiceSvc.Get(invoiceId);
+            if (invoice == null) return html;
+            _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
+            successUrl ??= dash;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var parentNode = doc.DocumentNode;
+            var detailNode = parentNode.SelectSingleNode("//ul[@name='invoice-line-items']");
+            if (detailNode != null) detailNode.InnerHtml = string.Empty;
+            var createDate = DateTime.UtcNow.ToString("f");
+            var externalId = response.ExternalId ?? dash;
+            var heading = "Legal Lead Discounts";
+            var description = response.LevelName switch
+            {
+                "" => "Setup monthly payment",
+                null => dash,
+                _ => GetDiscountDescription(response.LevelName),
+            };
+            var amount = (invoice.AmountDue * 0.01d).ToString("c");
+            var replacements = new Dictionary<string, string>()
+            {
+                { "//span[@name='invoice']", heading },
+                { "//span[@name='invoice-date']", createDate },
+                { "//span[@name='invoice-description']", description },
+                { "//span[@name='invoice-total']", amount }
+            };
+            var keys = replacements.Keys.ToList();
+            keys.ForEach(key =>
+            {
+                var span = parentNode.SelectSingleNode(key);
+                if (span != null) span.InnerHtml = replacements[key];
+            });
+            var outerHtml = parentNode.OuterHtml;
+            outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
+            outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
+            doc = new HtmlDocument();
+            doc.LoadHtml(outerHtml);
+            return doc.DocumentNode.OuterHtml;
+        }
 
         private static void RemoveCheckout(HtmlNode parentNode)
         {
@@ -196,6 +247,7 @@ namespace legallead.permissions.api.Extensions
         }
         private static string? _invoiceScript;
         private static string? _invoiceSubscriptionScript;
+        private static string? _invoiceDiscountScript;
         private static string InvoiceScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
@@ -210,6 +262,38 @@ namespace legallead.permissions.api.Extensions
             return _invoiceSubscriptionScript;
         }
 
+        private static string InvoiceDiscountScript()
+        {
+            if (!string.IsNullOrWhiteSpace(_invoiceDiscountScript)) return _invoiceDiscountScript;
+            _invoiceDiscountScript = Properties.Resources.page_invoice_discount_js;
+            return _invoiceDiscountScript;
+        }
+
+        private static string GetDiscountDescription(string jstext)
+        {
+            const string fallback = "n/a";
+            try
+            {
+                var source = JsonConvert.DeserializeObject<DiscountChangeParent>(jstext);
+                if (source == null) return fallback;
+                if (!source.Choices.Any(a => a.IsSelected)) return "No Discounts Selected";
+                var counties = source.Choices.Where(w => w.IsSelected && !string.IsNullOrWhiteSpace(w.CountyName)); 
+                var countyNames = string.Join(", ", counties.Select(x => x.CountyName));
+                var states = source.Choices.Where(w => w.IsSelected && string.IsNullOrWhiteSpace(w.CountyName)); 
+                var stateNames = string.Join(", ", states.Select(x => x.StateName));
+                var items = new[]
+                {
+                    $"Counties: {countyNames}<br/>",
+                    $"States: {stateNames}",
+                };
+                return string.Join(Environment.NewLine, items);
+            }
+            catch (Exception)
+            {
+                return fallback;
+            }
+
+        }
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";
     }
 }

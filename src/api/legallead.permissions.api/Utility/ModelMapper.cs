@@ -101,6 +101,10 @@ namespace legallead.permissions.api
 
                 c.CreateMap<DiscountChangeParent, ChangeDiscountRequest>()
                     .ConvertUsing(ConvertTo);
+
+                c.CreateMap<LevelRequestBo, DiscountRequestBo>();
+
+                c.CreateMap<DiscountRequestBo, LevelRequestBo>();
             });
         }
 

@@ -15,7 +15,7 @@ namespace legallead.permissions.api.Utility
             var findSession = await IsDiscountSessionNeeded(user, json, isAdmin, externalId);
             if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
             if (_customer == null || _payment == null) return new();
-            if (string.IsNullOrEmpty(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
+            if (string.IsNullOrWhiteSpace(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
             {
                 externalId = findSession.ExternalId;
             }
@@ -45,7 +45,7 @@ namespace legallead.permissions.api.Utility
             var payloadObj = MapDiscountJson(json);
             if (payloadObj == null) return null;
             MapPricingCodes(payloadObj);
-            if (payloadObj.Choices.Any(x => x.IsSelected && string.IsNullOrEmpty(x.AnnualBillingCode))) return null;
+            if (payloadObj.Choices.Any(x => x.IsSelected && !string.IsNullOrEmpty(x.AnnualBillingCode))) return null;
             var payload = JsonConvert.SerializeObject(payloadObj);
             if (string.IsNullOrEmpty(externalId)) externalId = PermissionsKey();
             if (string.IsNullOrEmpty(user.Id)) { return null; }

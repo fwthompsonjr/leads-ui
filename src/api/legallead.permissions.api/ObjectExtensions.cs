@@ -245,7 +245,8 @@ namespace legallead.permissions.api
                 .AddCheck<DataHealthCheck>("Data")
                 .AddCheck<DbConnectionHealthCheck>("DBConnection")
                 .AddCheck<InfrastructureHealthCheck>("Infrastructure")
-                .AddCheck<RepositoryHealthCheck>("Repository");
+                .AddCheck<RepositoryHealthCheck>("Repository")
+                .AddCheck<PricingHealthCheck>("Pricing");
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class

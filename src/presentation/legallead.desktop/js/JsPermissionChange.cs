@@ -1,4 +1,5 @@
-﻿using CefSharp;
+﻿using AngleSharp.Text;
+using CefSharp;
 using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.handlers;
@@ -45,7 +46,8 @@ namespace legallead.desktop.js
                 return;
             }
             SubmitCompleted();
-            if ("Subscription".Equals(submission.SubmissionName))
+            var paymentLandings = new[] { "Discounts", "Subscription" };
+            if (paymentLandings.Contains(submission.SubmissionName, StringComparison.OrdinalIgnoreCase))
             {
                 var levelChange = ObjectExtensions.TryGet<SubscriptionChangeResponse>(response.Message);
                 var navigateTo = levelChange?.InvoiceUri ?? "NONE";

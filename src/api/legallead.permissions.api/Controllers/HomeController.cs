@@ -118,8 +118,9 @@ namespace legallead.permissions.api.Controllers
                 // incorrect mapping need new landing for discount
                 return await DiscountLanding("success", id);
             }
-            var content = Properties.Resources.page_invoice_subscription_html;
-            content = paymentSvc.Transform(session, content);
+            var content = Properties.Resources.page_invoice_discount_html;
+            var discountRequest = ModelMapper.Mapper.Map<DiscountRequestBo>(session);
+            content = paymentSvc.Transform(discountRequest, content);
             return Content(content, "text/html");
         }
 

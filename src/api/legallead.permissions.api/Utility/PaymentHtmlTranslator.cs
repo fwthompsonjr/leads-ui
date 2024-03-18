@@ -207,6 +207,13 @@ namespace legallead.permissions.api.Utility
             content = session.GetHtml(content, _paymentKey);
             return content;
         }
+        public string Transform(DiscountRequestBo discountRequest, string content)
+        {
+            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
+            content = discountRequest.GetHtml(content, _paymentKey);
+            return content;
+        }
+    
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
