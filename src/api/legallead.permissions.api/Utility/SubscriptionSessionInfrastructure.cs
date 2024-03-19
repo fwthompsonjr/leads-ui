@@ -82,6 +82,7 @@ namespace legallead.permissions.api.Utility
             // latest invoice and that invoice's payment_intent
             // so we can pass it to the front end to confirm the payment
             var dat = new Dictionary<string, string>(){
+                    { "SubscriptionType", "account-permissions" },
                     { "SuccessUrl", successUrl },
                     { "CancelUrl", cancelUrl },
                     { "ExternalId", externalId },

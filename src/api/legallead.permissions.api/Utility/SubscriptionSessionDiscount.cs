@@ -44,7 +44,7 @@ namespace legallead.permissions.api.Utility
             if (string.IsNullOrEmpty(json) || !CanMapDiscountJson(json)) { return null; }
             var payloadObj = MapDiscountJson(json);
             if (payloadObj == null) return null;
-            MapPricingCodes(payloadObj);
+            payloadObj = MapPricingCodes(payloadObj);
             if (payloadObj.Choices.Any(x => x.IsSelected && !string.IsNullOrEmpty(x.AnnualBillingCode))) return null;
             var payload = JsonConvert.SerializeObject(payloadObj);
             if (string.IsNullOrEmpty(externalId)) externalId = PermissionsKey();
@@ -72,7 +72,8 @@ namespace legallead.permissions.api.Utility
             if (_customer == null || _payment == null || !CanMapDiscountJson(json)) return new();
             var payloadObj = MapDiscountJson(json);
             if (payloadObj == null) return new();
-            if (payloadObj.Choices.Any(x => x.IsSelected && !string.IsNullOrEmpty(x.AnnualBillingCode))) return new();
+            payloadObj = MapPricingCodes(payloadObj);
+            if (!payloadObj.Choices.Any(x => x.IsSelected)) return new();
             try
             {
                 var payload = JsonConvert.SerializeObject(payloadObj);
@@ -120,7 +121,8 @@ namespace legallead.permissions.api.Utility
                     { "CancelUrl", cancelUrl },
                     { "ExternalId", externalId },
                 };
-            var selections = changeRequest.Choices.Where(x => x.IsSelected && string.IsNullOrEmpty(x.AnnualBillingCode));
+            changeRequest = MapPricingCodes(changeRequest);
+            var selections = changeRequest.Choices.Where(x => x.IsSelected);
 
             var items = selections.Select(x => new SubscriptionItemOptions
             {
@@ -198,14 +200,14 @@ namespace legallead.permissions.api.Utility
         /// <remarks>
         /// This method should actually return a value to
         /// </remarks>
-        private static void MapPricingCodes(DiscountChangeParent discounts)
+        private static DiscountChangeParent MapPricingCodes(DiscountChangeParent discounts)
         {
             const string level = ".Discount.";
-            if (!discounts.Choices.Any(a => a.IsSelected)) { return; }
+            if (!discounts.Choices.Any(a => a.IsSelected)) { return discounts; }
             var pricing = PricingLookupService.PricingCodes.FindAll(x => 
                 (x.KeyName ?? "").Contains(level, StringComparison.OrdinalIgnoreCase) && 
                 x.IsActive.GetValueOrDefault());
-            if (pricing == null || !pricing.Any()) { return; }
+            if (pricing == null || !pricing.Any()) { return discounts; }
             var choices = discounts.Choices.Where(w => w.IsSelected).ToList();
             choices.ForEach(c =>
             {
@@ -219,6 +221,7 @@ namespace legallead.permissions.api.Utility
                     c.MonthlyBillingCode = price.PriceCodeMonthly;
                 }
             });
+            return discounts;
         }
     }
 }
