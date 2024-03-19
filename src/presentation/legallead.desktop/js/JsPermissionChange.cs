@@ -53,7 +53,7 @@ namespace legallead.desktop.js
                 var navigateTo = levelChange?.InvoiceUri ?? "NONE";
                 if (navigateTo.Equals("NONE"))
                 {
-                    Reload("myaccount-home");
+                    Reload("myaccount-permissions");
                     return;
                 }
                 web?.LoadUrl(navigateTo);

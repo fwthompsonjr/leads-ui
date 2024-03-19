@@ -45,7 +45,7 @@ namespace legallead.permissions.api.Utility
             var payloadObj = MapDiscountJson(json);
             if (payloadObj == null) return null;
             payloadObj = MapPricingCodes(payloadObj);
-            if (payloadObj.Choices.Any(x => x.IsSelected && !string.IsNullOrEmpty(x.AnnualBillingCode))) return null;
+            if (!payloadObj.Choices.Any(x => x.IsSelected)) return null;
             var payload = JsonConvert.SerializeObject(payloadObj);
             if (string.IsNullOrEmpty(externalId)) externalId = PermissionsKey();
             if (string.IsNullOrEmpty(user.Id)) { return null; }
