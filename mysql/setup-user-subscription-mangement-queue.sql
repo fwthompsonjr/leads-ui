@@ -7,9 +7,14 @@
 */
 
 SELECT 
-	FALSE IsSubscriptionVerified,
-	uq.Id, uq.UserId, uq.ExternalId, uq.InvoiceUri, 
-	uq.LevelName, uq.SessionId, uq.IsPaymentSuccess, uq.CompletionDate, uq.CreateDate
+	uq.Id, 
+    uq.UserId, 
+    uq.`SubscriptionType`,
+	uq.LevelName `SubscriptionDetail`, 
+    FALSE IsSubscriptionVerified,
+    CASE WHEN 1 = 2 THEN utc_timestamp() ELSE NULL END VerificationDate,
+    uq.CompletionDate, 
+    uq.CreateDate
 FROM (
 SELECT 
 	'account-permissions' SubscriptionType,
@@ -40,3 +45,22 @@ AND dr.CompletionDate = drmax.CompletionDate
 ) uq
 ORDER BY UserId, SubscriptionType
 ;
+
+/*
+
+CREATE TABLE `USERSUBSCRIPTION` (
+  `Id` char(36) NOT NULL DEFAULT (cast(uuid() as char(36) charset utf8mb4)),
+  `UserId` char(36) DEFAULT NULL,
+  `SubscriptionType` varchar(25) DEFAULT NULL,
+  `SubscriptionDetail` mediumtext DEFAULT NULL,
+  `IsSubscriptionVerified` bit(1) DEFAULT b'0',
+  `VerificationDate` datetime DEFAULT NULL,
+  `CompletionDate` datetime DEFAULT NULL,
+  `CreateDate` datetime NOT NULL DEFAULT (utc_timestamp()),
+  PRIMARY KEY (`Id`),
+  KEY `UserId` (`UserId`),
+  CONSTRAINT `fk_usersubscription_users_userid` FOREIGN KEY (`UserId`) REFERENCES `USERS` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+*/

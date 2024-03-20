@@ -243,10 +243,11 @@ namespace legallead.permissions.api.Utility
             }
             var bo = (await _custDb.GetDiscountRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
+            bo.IsPaymentSuccess = isvalid;
             bo = await _custDb.CompleteDiscountRequest(bo);
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
-                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+                isPermissionSet = true;
             }
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
