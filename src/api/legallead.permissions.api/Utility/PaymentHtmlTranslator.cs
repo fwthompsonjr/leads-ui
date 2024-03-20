@@ -83,7 +83,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsRequestPaid(LevelRequestBo session)
         {
-            var isSuccess = session.IsPaymentSuccess.GetValueOrDefault(); 
+            var isSuccess = session.IsPaymentSuccess.GetValueOrDefault();
             if (session.InvoiceUri == "NONE") return isSuccess;
             var service = new SubscriptionService();
             var subscription = await service.GetAsync(session.SessionId ?? "");
@@ -213,7 +213,7 @@ namespace legallead.permissions.api.Utility
             content = discountRequest.GetHtml(content, _paymentKey);
             return content;
         }
-    
+
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {

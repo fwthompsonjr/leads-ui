@@ -9,8 +9,6 @@ using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 namespace permissions.api.tests
 {

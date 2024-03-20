@@ -2,10 +2,8 @@
 using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using Stripe;
 using System.Text;
-using System.Xml.Linq;
 
 namespace legallead.permissions.api.Extensions
 {
@@ -277,9 +275,9 @@ namespace legallead.permissions.api.Extensions
                 var source = JsonConvert.DeserializeObject<DiscountChangeParent>(jstext);
                 if (source == null) return fallback;
                 if (!source.Choices.Any(a => a.IsSelected)) return "No Discounts Selected";
-                var counties = source.Choices.Where(w => w.IsSelected && !string.IsNullOrWhiteSpace(w.CountyName)); 
+                var counties = source.Choices.Where(w => w.IsSelected && !string.IsNullOrWhiteSpace(w.CountyName));
                 var countyNames = string.Join(", ", counties.Select(x => x.CountyName));
-                var states = source.Choices.Where(w => w.IsSelected && string.IsNullOrWhiteSpace(w.CountyName)); 
+                var states = source.Choices.Where(w => w.IsSelected && string.IsNullOrWhiteSpace(w.CountyName));
                 var stateNames = string.Join(", ", states.Select(x => x.StateName));
                 var items = new[]
                 {

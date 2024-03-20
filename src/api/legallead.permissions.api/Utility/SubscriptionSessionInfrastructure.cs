@@ -14,12 +14,12 @@ namespace legallead.permissions.api.Utility
             if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
             if (_customer == null || _payment == null) return new();
             if (string.IsNullOrEmpty(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
-            { 
+            {
                 externalId = findSession.ExternalId;
             }
             var cust = await _customer.GetOrCreateCustomer(user.Id);
             if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return new();
-            
+
             var successUrl = $"{request.Scheme}://{request.Host}/subscription-result?session_id=~1&sts=success&id=~0";
             LevelChangeRequest changeRq = await GetPaymentSession(user, level, externalId, cust, successUrl);
             var bo = (await _customer.AddLevelChangeRequest(changeRq)) ?? new();
@@ -32,7 +32,7 @@ namespace legallead.permissions.api.Utility
             if (_customer == null) return null;
             var bo = await _customer.GetLevelRequestById(id);
             if (bo == null || string.IsNullOrEmpty(bo.SessionId)) return null;
-            if (!string.IsNullOrEmpty(sessionid) &&  bo.SessionId != sessionid) return null;
+            if (!string.IsNullOrEmpty(sessionid) && bo.SessionId != sessionid) return null;
             return bo;
         }
 
@@ -97,7 +97,7 @@ namespace legallead.permissions.api.Utility
                         Quantity = 1,
                     },
                 },
-                InvoiceSettings = new() { Issuer = new() { Type = "self"} },
+                InvoiceSettings = new() { Issuer = new() { Type = "self" } },
                 PaymentSettings = paymentSettings,
                 PaymentBehavior = "default_incomplete",
                 Metadata = dat

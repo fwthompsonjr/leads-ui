@@ -204,8 +204,8 @@ namespace legallead.permissions.api.Utility
         {
             const string level = ".Discount.";
             if (!discounts.Choices.Any(a => a.IsSelected)) { return discounts; }
-            var pricing = PricingLookupService.PricingCodes.FindAll(x => 
-                (x.KeyName ?? "").Contains(level, StringComparison.OrdinalIgnoreCase) && 
+            var pricing = PricingLookupService.PricingCodes.FindAll(x =>
+                (x.KeyName ?? "").Contains(level, StringComparison.OrdinalIgnoreCase) &&
                 x.IsActive.GetValueOrDefault());
             if (pricing == null || !pricing.Any()) { return discounts; }
             var choices = discounts.Choices.Where(w => w.IsSelected).ToList();

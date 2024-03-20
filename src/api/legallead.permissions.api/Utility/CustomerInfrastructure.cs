@@ -1,13 +1,10 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
-using legallead.json.db.entity;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
-using System.Collections.Generic;
 
 namespace legallead.permissions.api.Utility
 {
@@ -20,7 +17,7 @@ namespace legallead.permissions.api.Utility
         private ISubscriptionInfrastructure? _subscriptiondb;
         public CustomerInfrastructure(
             StripeKeyEntity stripeKey,
-            IUserRepository db, 
+            IUserRepository db,
             ICustomerRepository repository)
         {
             _customerService = new();
