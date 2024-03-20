@@ -21,7 +21,7 @@ namespace legallead.jdbc.entities
             try
             {
                 return JsonConvert.DeserializeObject<ProductPricingModel>(KeyJs);
-            } 
+            }
             catch
             {
                 return null;

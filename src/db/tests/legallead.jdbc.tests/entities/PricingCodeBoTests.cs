@@ -124,7 +124,8 @@ namespace legallead.jdbc.tests.entities
         public void PricingCodeBoCanDeSerialize()
         {
             var data = faker.Generate();
-            var exception = Record.Exception(() => { 
+            var exception = Record.Exception(() =>
+            {
                 var test = data.GetModel();
                 Assert.NotNull(test);
             });
