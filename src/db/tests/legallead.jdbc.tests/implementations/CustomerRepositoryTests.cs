@@ -29,6 +29,23 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
+        private static readonly Faker<SubscriptionDetailDto> detailfaker =
+            new Faker<SubscriptionDetailDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Email, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.SubscriptionType, y => y.Hacker.Phrase())
+            .RuleFor(x => x.SubscriptionDetail, y => y.Hacker.Phrase())
+            .RuleFor(x => x.PermissionLevel, y => y.Hacker.Phrase())
+            .RuleFor(x => x.CountySubscriptions, y => y.Hacker.Phrase())
+            .RuleFor(x => x.StateSubscriptions, y => y.Hacker.Phrase())
+            .RuleFor(x => x.IsSubscriptionVerified, y => y.Random.Bool())
+            .RuleFor(x => x.VerificationDate, y => y.Date.Recent())
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
 #pragma warning disable CS8604 // Possible null reference argument.
 
         [Fact]
@@ -445,6 +462,105 @@ namespace legallead.jdbc.tests.implementations
             mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
                 .ThrowsAsync(completion);
             var response = await service.UpdateDiscountChangeRequest("");
+            Assert.False(response.Key);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanGetUserSubscriptionsHappyPath(bool isVerification)
+        {
+            List<SubscriptionDetailDto>? completion = detailfaker.Generate(6);
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<SubscriptionDetailDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetUserSubscriptions(isVerification);
+            Assert.NotNull(response);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanGetUserSubscriptionsNoResponse(bool isVerification)
+        {
+            List<SubscriptionDetailDto>? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<SubscriptionDetailDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetUserSubscriptions(isVerification);
+            Assert.Null(response);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanGetUserSubscriptionsExceptionPath(bool isVerification)
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<SubscriptionDetailDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetUserSubscriptions(isVerification);
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanSynchronizeUserSubscriptionsHappyPath()
+        {
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.SynchronizeUserSubscriptions();
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanSynchronizeUserSubscriptionsExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.SynchronizeUserSubscriptions();
+            Assert.False(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateSubscriptionVerificationHappyPath()
+        {
+            var data = detailfaker.Generate();
+            var completion = Task.CompletedTask;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .Returns(completion);
+            var response = await service.UpdateSubscriptionVerification(data);
+            Assert.True(response.Key);
+        }
+
+        [Fact]
+        public async Task RepoCanUpdateSubscriptionVerificationExceptionPath()
+        {
+            var data = detailfaker.Generate();
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.UpdateSubscriptionVerification(data);
             Assert.False(response.Key);
         }
 #pragma warning restore CS8604 // Possible null reference argument.

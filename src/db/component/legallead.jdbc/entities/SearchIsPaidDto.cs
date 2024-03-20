@@ -33,23 +33,3 @@
         }
     }
 }
-/*
-
-namespace legallead.jdbc.entities
-{
-    public class ActiveSearchDetailDto : BaseDto
-    {
-        public DateTime? CreateDate { get; set; }
-        public string? CountyName { get; set; }
-        public string? StateName { get; set; }
-        public string? StartDate { get; set; }
-        public string? EndDate { get; set; }
-        public string? SearchProgress { get; set; }
-
-
-        
-
-    }
-}
-
-*/

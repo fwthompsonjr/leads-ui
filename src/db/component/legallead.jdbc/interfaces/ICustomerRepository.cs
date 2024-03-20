@@ -16,5 +16,8 @@ namespace legallead.jdbc.interfaces
         Task<List<LevelRequestBo>?> GetDiscountRequestHistory(string userId);
         Task<LevelRequestBo?> GetDiscountRequestById(string externalId);
         Task<KeyValuePair<bool, string>> UpdateDiscountChangeRequest(string jsonRequest);
+        Task<List<SubscriptionDetailBo>?> GetUserSubscriptions(bool forVerification);
+        Task<KeyValuePair<bool, string>> SynchronizeUserSubscriptions();
+        Task<KeyValuePair<bool, string>> UpdateSubscriptionVerification(ISubscriptionDetail source);
     }
 }
