@@ -234,6 +234,29 @@ namespace legallead.permissions.api.Utility
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
         }
+        public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
+        {
+            bool? isPermissionSet = default;
+            if (_custDb is CustomerInfrastructure cdb)
+            {
+                cdb.SubscriptionInfrastructure(infra);
+            }
+            var bo = (await _custDb.GetDiscountRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var user = await _userDb.GetById(bo.UserId ?? string.Empty);
+            bo = await _custDb.CompleteDiscountRequest(bo);
+            if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
+            {
+                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+            }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
+            UserLevelHtmlMapper.SetUserDetail(doc, user);
+            UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
+            UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
+            var tranformed = doc.DocumentNode.OuterHtml;
+            return tranformed;
+        }
 
         public async Task<object?> ResetDownload(DownloadResetRequest request)
         {

@@ -16,6 +16,7 @@ using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
@@ -104,6 +105,7 @@ namespace legallead.permissions.api
                 var users = d.GetRequiredService<IUserRepository>();
                 var permissionHistoryDb = d.GetRequiredService<IUserPermissionHistoryRepository>();
                 var profileHistoryDb = d.GetRequiredService<IUserProfileHistoryRepository>();
+
                 return new DataProvider(
                     components,
                     permissionDb,
@@ -430,7 +432,6 @@ namespace legallead.permissions.api
             };
             return _stripeKeyEntity;
         }
-
 
         [ExcludeFromCodeCoverage]
         private static string GetConfigOrDefault(IConfiguration? configuration, string key, string backup)

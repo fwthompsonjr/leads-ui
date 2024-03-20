@@ -59,7 +59,7 @@ namespace legallead.permissions.api.Controllers
             var content =
                 isValid ? Properties.Resources.page_payment_completed
                 : Properties.Resources.page_level_request_completed;
-            content = await paymentSvc.TransformForPermissions(isValid, sts, id, content);
+            content = await paymentSvc.TransformForDiscounts(subscriptionSvc, isValid, id, content);
             return Content(content, "text/html");
         }
 

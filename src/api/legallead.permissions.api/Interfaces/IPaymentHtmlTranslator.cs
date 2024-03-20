@@ -22,5 +22,6 @@ namespace legallead.permissions.api.Interfaces
         Task<LevelRequestBo?> IsDiscountValid(string? id, string? sessionid);
         Task<bool> IsDiscountPaid(LevelRequestBo session);
         Task<bool> IsDiscountLevel(string? status, string? id);
+        Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html);
     }
 }
