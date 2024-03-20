@@ -12,9 +12,11 @@ using legallead.permissions.api.Health;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
+using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
@@ -103,6 +105,7 @@ namespace legallead.permissions.api
                 var users = d.GetRequiredService<IUserRepository>();
                 var permissionHistoryDb = d.GetRequiredService<IUserPermissionHistoryRepository>();
                 var profileHistoryDb = d.GetRequiredService<IUserProfileHistoryRepository>();
+
                 return new DataProvider(
                     components,
                     permissionDb,
@@ -179,6 +182,8 @@ namespace legallead.permissions.api
                 var logprovider = p.GetRequiredService<LoggingDbServiceProvider>().Provider;
                 return logprovider.GetRequiredService<ILogConfiguration>();
             });
+
+            services.AddScoped<EventsController>();
             // logging service
             services.AddScoped<ILoggingService>(p =>
             {
@@ -193,7 +198,17 @@ namespace legallead.permissions.api
                 var lg = p.GetRequiredService<ILoggingService>();
                 return new LoggingInfrastructure(lg);
             });
-            services.AddHostedService(s =>
+
+            var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddConsole());
+            var queueLogger = loggerFactory.CreateLogger<QueueResetService>();
+            var priceLogger = loggerFactory.CreateLogger<PricingSyncService>();
+            var acctLogger = loggerFactory.CreateLogger<PaymentAccountCreationService>();
+            services.AddSingleton(s => queueLogger);
+            services.AddSingleton(s => priceLogger);
+            services.AddSingleton(s => acctLogger);
+            services.AddSingleton(s =>
             {
                 var logger = s.GetRequiredService<ILogger<QueueResetService>>();
                 var exec = new DapperExecutor();
@@ -201,7 +216,7 @@ namespace legallead.permissions.api
                 var db = new UserSearchRepository(context);
                 return new QueueResetService(db, logger);
             });
-            services.AddHostedService(s =>
+            services.AddSingleton(s =>
             {
                 var exec = new DapperExecutor();
                 var context = new DataContext(exec);
@@ -211,7 +226,7 @@ namespace legallead.permissions.api
                 var logging = s.GetRequiredService<ILogger<PaymentAccountCreationService>>();
                 return new PaymentAccountCreationService(logging, custInfra);
             });
-            services.AddHostedService(s =>
+            services.AddSingleton(s =>
             {
                 var exec = new DapperExecutor();
                 var context = new DataContext(exec);
@@ -219,6 +234,10 @@ namespace legallead.permissions.api
                 var logging = s.GetRequiredService<ILogger<PricingSyncService>>();
                 return new PricingSyncService(logging, repo);
             });
+            services.AddHostedService(s => s.GetRequiredService<QueueResetService>());
+            services.AddHostedService(s => s.GetRequiredService<PaymentAccountCreationService>());
+            services.AddHostedService(s => s.GetRequiredService<PricingSyncService>());
+            loggerFactory.Dispose();
         }
 
         public static void RegisterHealthChecks(this IServiceCollection services)
@@ -228,7 +247,8 @@ namespace legallead.permissions.api
                 .AddCheck<DataHealthCheck>("Data")
                 .AddCheck<DbConnectionHealthCheck>("DBConnection")
                 .AddCheck<InfrastructureHealthCheck>("Infrastructure")
-                .AddCheck<RepositoryHealthCheck>("Repository");
+                .AddCheck<RepositoryHealthCheck>("Repository")
+                .AddCheck<PricingHealthCheck>("Pricing");
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class
@@ -412,7 +432,6 @@ namespace legallead.permissions.api
             };
             return _stripeKeyEntity;
         }
-
 
         [ExcludeFromCodeCoverage]
         private static string GetConfigOrDefault(IConfiguration? configuration, string key, string backup)

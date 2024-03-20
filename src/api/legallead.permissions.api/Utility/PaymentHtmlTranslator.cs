@@ -59,6 +59,17 @@ namespace legallead.permissions.api.Utility
             return bo;
         }
 
+        public async Task<LevelRequestBo?> IsDiscountValid(string? id, string? sessionid)
+        {
+            var bo = await _subscriptionDb.GetDiscountRequestById(id, sessionid);
+            if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
+            if (bo.InvoiceUri == "NONE") return bo;
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(bo.SessionId ?? "");
+            if (subscription == null) return null;
+            return bo;
+        }
+
         public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -84,6 +95,11 @@ namespace legallead.permissions.api.Utility
             return isSuccess;
         }
 
+        public async Task<bool> IsDiscountPaid(LevelRequestBo session)
+        {
+            var response = await IsRequestPaid(session);
+            return response;
+        }
         public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
@@ -191,6 +207,13 @@ namespace legallead.permissions.api.Utility
             content = session.GetHtml(content, _paymentKey);
             return content;
         }
+        public string Transform(DiscountRequestBo discountRequest, string content)
+        {
+            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
+            content = discountRequest.GetHtml(content, _paymentKey);
+            return content;
+        }
+    
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
@@ -198,6 +221,29 @@ namespace legallead.permissions.api.Utility
             var bo = (await _custDb.GetLevelRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
             bo = await _custDb.CompleteLevelRequest(bo);
+            if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
+            {
+                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+            }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
+            UserLevelHtmlMapper.SetUserDetail(doc, user);
+            UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
+            UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
+            var tranformed = doc.DocumentNode.OuterHtml;
+            return tranformed;
+        }
+        public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
+        {
+            bool? isPermissionSet = default;
+            if (_custDb is CustomerInfrastructure cdb)
+            {
+                cdb.SubscriptionInfrastructure(infra);
+            }
+            var bo = (await _custDb.GetDiscountRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var user = await _userDb.GetById(bo.UserId ?? string.Empty);
+            bo = await _custDb.CompleteDiscountRequest(bo);
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
                 isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
@@ -234,6 +280,17 @@ namespace legallead.permissions.api.Utility
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
+        public async Task<bool> IsDiscountLevel(string? status, string? id)
+        {
+            var mapped = requestNames.First(s => s.Equals(status));
+            if (string.IsNullOrEmpty(mapped)) return false;
+            if (string.IsNullOrEmpty(id)) return false;
+            if (mapped.Equals(requestNames[1])) return false;
+            var bo = await _custDb.GetDiscountRequestById(id);
+            return bo != null && !string.IsNullOrEmpty(bo.Id);
+        }
+
+
         private static string ToDateString(DateTime? date, string fallback)
         {
             if (!date.HasValue) return fallback;
@@ -256,6 +313,7 @@ namespace legallead.permissions.api.Utility
             if (original.Contains(closeBraceQt)) original = original.Replace(closeBraceQt, closeBrace);
             return original.Replace(slash.ToString(), string.Empty);
         }
+
 
         private static readonly string[] requestNames = new[] { "success", "cancel" };
 

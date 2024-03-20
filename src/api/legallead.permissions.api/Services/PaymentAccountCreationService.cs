@@ -1,6 +1,6 @@
 ﻿using legallead.permissions.api.Interfaces;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Services
 {
     public class PaymentAccountCreationService : BackgroundService
     {

@@ -2,11 +2,10 @@
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
-using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
 using Stripe;
 
-namespace legallead.permissions.api
+namespace legallead.permissions.api.Services
 {
     public class PricingSyncService : BackgroundService
     {
@@ -14,7 +13,7 @@ namespace legallead.permissions.api
         private readonly ILogger<PricingSyncService> logger;
         private readonly bool _testMode;
         public PricingSyncService(
-            ILogger<PricingSyncService> log, 
+            ILogger<PricingSyncService> log,
             IPricingRepository infrastructure,
             bool isTestMode = false)
         {
@@ -54,7 +53,7 @@ namespace legallead.permissions.api
         {
             var names = items.Select(x => x.KeyName).Distinct().ToList();
             if (!names.Any()) { return; }
-            
+
             await Task.Run(() =>
             {
                 names.ForEach(async x =>
@@ -75,7 +74,7 @@ namespace legallead.permissions.api
                         {
                             await CreatePricing(item);
                         }
-                        
+
                     }
                 });
             }, stoppingToken);
@@ -97,9 +96,9 @@ namespace legallead.permissions.api
             dto.CreateDate = DateTime.UtcNow;
             dto.IsActive = true;
             await coderepo.Create(dto);
-            var related = (await coderepo.GetAll()).ToList().FindAll(x => 
-                x.KeyName == item.KeyName && 
-                x.Id != dto.Id && 
+            var related = (await coderepo.GetAll()).ToList().FindAll(x =>
+                x.KeyName == item.KeyName &&
+                x.Id != dto.Id &&
                 x.IsActive.GetValueOrDefault());
             related.ForEach(async r =>
             {
@@ -132,8 +131,8 @@ namespace legallead.permissions.api
 
         private bool TryCreateProduct(
             string productName,
-            ProductService service, 
-            PriceService pricing, 
+            ProductService service,
+            PriceService pricing,
             ProductPricingModel model)
         {
             try
@@ -168,7 +167,7 @@ namespace legallead.permissions.api
                 UnitAmount = (i == 0 ? model.PriceAmount.Monthly : model.PriceAmount.Annual) * 100,
                 Recurring = new()
                 {
-                    Interval = (i == 0 ? "month" : "year")
+                    Interval = i == 0 ? "month" : "year"
                 },
                 Nickname = priceName,
                 Metadata = new()
@@ -207,7 +206,7 @@ namespace legallead.permissions.api
             if (string.IsNullOrEmpty(js)) { return string.Empty; }
             var model = JsonConvert.DeserializeObject<ProductPricingModel>(js);
             if (model == null ||
-                dto.ProductCode == null || 
+                dto.ProductCode == null ||
                 dto.PriceCodeAnnual == null ||
                 dto.PriceCodeMonthly == null) return js;
             model.Product.Code = dto.ProductCode;

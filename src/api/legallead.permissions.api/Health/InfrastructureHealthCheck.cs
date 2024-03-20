@@ -30,11 +30,17 @@ namespace legallead.permissions.api.Health
 
         private static readonly List<Type> types = new()
         {
-            typeof(ISubscriptionInfrastructure),
-            typeof(IProfileInfrastructure),
+            typeof(ICustomerInfrastructure),
+            typeof(IJwtManagerRepository),
             typeof(ILoggingInfrastructure),
+            typeof(IPaymentHtmlTranslator),
+            typeof(IProfileInfrastructure),
+            typeof(IRequestedUser),
+            typeof(ISearchInfrastructure),
             typeof(IStateSearchProvider),
-            typeof(ISearchInfrastructure)
+            typeof(IStripeInfrastructure),
+            typeof(ISubscriptionInfrastructure),
+            typeof(IUserSearchValidator)
         };
     }
 }

@@ -165,7 +165,8 @@ namespace legallead.jdbc.tests.implementations
             var service = provider.PricingRepo;
             mock.Setup(m => m.QuerySingleOrDefaultAsync<PricingCodeDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
                 .ReturnsAsync(completion);
-            var exception = await Record.ExceptionAsync(async () => {
+            var exception = await Record.ExceptionAsync(async () =>
+            {
                 await service.SetActivePricingTemplate("", model);
             });
             Assert.NotNull(exception);

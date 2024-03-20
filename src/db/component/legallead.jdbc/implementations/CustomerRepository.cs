@@ -139,6 +139,7 @@ namespace legallead.jdbc.implementations
                 parms.Add("pay_load", jsonRequest);
                 using var connection = _context.CreateConnection();
                 await _command.ExecuteAsync(connection, prc, parms);
+                await SynchronizeUserSubscriptions();
                 return new(true, "Created successfully");
             }
             catch (Exception ex)
@@ -213,6 +214,7 @@ namespace legallead.jdbc.implementations
                 parms.Add("pay_load", jsonRequest);
                 using var connection = _context.CreateConnection();
                 await _command.ExecuteAsync(connection, prc, parms);
+                await SynchronizeUserSubscriptions();
                 return new(true, "Created successfully");
             }
             catch (Exception ex)
@@ -220,5 +222,59 @@ namespace legallead.jdbc.implementations
                 return new(false, ex.Message);
             }
         }
+        public async Task<List<SubscriptionDetailBo>?> GetUserSubscriptions(bool forVerification)
+        {
+            const string prc_all = "CALL USP_GET_USER_SUBSCRIPTIONS();";
+            const string prc_verify = "CALL USP_GET_USER_SUBSCRIPTIONS_NEEDING_VERIFICATION();";
+            var prc = forVerification ? prc_verify : prc_all;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<SubscriptionDetailDto>(connection, prc);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<List<SubscriptionDetailBo>>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<KeyValuePair<bool, string>> SynchronizeUserSubscriptions()
+        {
+            const string prc = "CALL USP_INSERT_USERSUBSCRIPTION();";
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
+
+        public async Task<KeyValuePair<bool, string>> UpdateSubscriptionVerification(ISubscriptionDetail source)
+        {
+            const string prc = "CALL USP_UPDATE_USER_SUBSCRIPTIONS_VERIFICATION( ? );";
+            try
+            {
+                var obj = new { source.Id, source.IsSubscriptionVerified, source.VerificationDate };
+                var jsonRequest = JsonConvert.SerializeObject(obj);
+                var parms = new DynamicParameters();
+                parms.Add("pay_load", jsonRequest);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return new(true, "Created successfully");
+            }
+            catch (Exception ex)
+            {
+                return new(false, ex.Message);
+            }
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using legallead.jdbc.entities;
 using legallead.json.db.entity;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 
 namespace legallead.permissions.api
@@ -84,6 +85,26 @@ namespace legallead.permissions.api
 
                 c.CreateMap<ChangeDiscountRequest, List<KeyValuePair<bool, UsStateCounty>>>()
                     .ConvertUsing(ConvertTo);
+
+                c.CreateMap<DiscountChoice, DiscountChangeRequest>()
+                    .ForMember(a => a.StateName, opt => opt.MapFrom(b => b.StateName))
+                    .ForMember(a => a.CountyName, opt => opt.MapFrom(b => b.CountyName))
+                    .ForMember(a => a.IsSelected, opt => opt.MapFrom(b => b.IsSelected));
+
+                c.CreateMap<DiscountChangeRequest, DiscountChoice>()
+                    .ForMember(a => a.StateName, opt => opt.MapFrom(b => b.StateName))
+                    .ForMember(a => a.CountyName, opt => opt.MapFrom(b => b.CountyName))
+                    .ForMember(a => a.IsSelected, opt => opt.MapFrom(b => b.IsSelected));
+
+                c.CreateMap<ChangeDiscountRequest, DiscountChangeParent>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<DiscountChangeParent, ChangeDiscountRequest>()
+                    .ConvertUsing(ConvertTo);
+
+                c.CreateMap<LevelRequestBo, DiscountRequestBo>();
+
+                c.CreateMap<DiscountRequestBo, LevelRequestBo>();
             });
         }
 
@@ -344,6 +365,33 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        private static DiscountChangeParent ConvertTo(ChangeDiscountRequest source, DiscountChangeParent dest)
+        {
+            dest ??= new();
+            var choices = new List<DiscountChangeRequest>();
+            foreach (var request in source.Choices)
+            {
+                var item = Mapper.Map<DiscountChoice, DiscountChangeRequest>(request);
+                if (item == null) continue;
+                choices.Add(item);
+            }
+            dest.Choices = choices;
+            return dest;
+        }
+
+        private static ChangeDiscountRequest ConvertTo(DiscountChangeParent source, ChangeDiscountRequest dest)
+        {
+            dest ??= new();
+            var choices = new List<DiscountChoice>();
+            foreach (var request in source.Choices)
+            {
+                var item = Mapper.Map<DiscountChangeRequest, DiscountChoice>(request);
+                if (item == null) continue;
+                choices.Add(item);
+            }
+            dest.Choices = choices;
+            return dest;
+        }
         private static readonly Dictionary<int, string> AddressPrefixes = new()
         {
             { 1, "Address 1 -" },

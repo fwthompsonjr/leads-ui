@@ -4,9 +4,13 @@ using legallead.logging.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
+using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 
 namespace permissions.api.tests
 {
@@ -82,6 +86,29 @@ namespace permissions.api.tests
             Assert.Null(exception);
         }
 
+        [Theory]
+        [InlineData(typeof(ApplicationController))]
+        [InlineData(typeof(EventsController))]
+        [InlineData(typeof(HomeController))]
+        [InlineData(typeof(ListsController))]
+        [InlineData(typeof(PaymentController))]
+        [InlineData(typeof(PermissionsController))]
+        [InlineData(typeof(ProfilesController))]
+        [InlineData(typeof(SearchController))]
+        [InlineData(typeof(SignonController))]
+        public void ProviderCanConstructControllers(Type type)
+        {
+            var exception = Record.Exception(() =>
+            {
+                Assert.NotNull(_serviceProvider);
+                var instance = _serviceProvider.GetService(type);
+                Assert.NotNull(instance);
+            });
+            Assert.Null(exception);
+        }
+
+
+
         [Fact]
         public void ProviderCanGetStartupTasks()
         {
@@ -89,6 +116,21 @@ namespace permissions.api.tests
             var startupTasks = _serviceProvider?.GetServices<IStartupTask>();
             Assert.NotNull(startupTasks);
             Assert.Equal(expected, startupTasks.Count());
+        }
+
+        [Theory]
+        [InlineData(typeof(QueueResetService))]
+        [InlineData(typeof(PaymentAccountCreationService))]
+        [InlineData(typeof(PricingSyncService))]
+        public void ProviderCanConstructBackground(Type type)
+        {
+            Assert.NotNull(_serviceProvider);
+            var exception = Record.Exception(() =>
+            {
+                var instance = _serviceProvider.GetService(type);
+                Assert.NotNull(instance);
+            });
+            Assert.Null(exception);
         }
 
         [Fact]

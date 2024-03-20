@@ -32,14 +32,15 @@ namespace legallead.permissions.api.Health
 
         private static readonly List<Type> types = new()
         {
-            typeof(HomeController),
             typeof(ApplicationController),
+            typeof(EventsController),
+            typeof(HomeController),
             typeof(ListsController),
+            typeof(PaymentController),
             typeof(PermissionsController),
             typeof(ProfilesController),
-            typeof(SignonController),
             typeof(SearchController),
-            typeof(PaymentController)
+            typeof(SignonController),
         };
     }
 }

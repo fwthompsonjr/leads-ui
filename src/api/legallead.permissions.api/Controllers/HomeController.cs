@@ -52,6 +52,17 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+        [HttpGet("/discount-result")]
+        public async Task<IActionResult> DiscountLanding([FromQuery] string? sts, [FromQuery] string? id)
+        {
+            var isValid = await paymentSvc.IsDiscountLevel(sts, id);
+            var content =
+                isValid ? Properties.Resources.page_payment_completed
+                : Properties.Resources.page_level_request_completed;
+            content = await paymentSvc.TransformForDiscounts(subscriptionSvc, isValid, id, content);
+            return Content(content, "text/html");
+        }
+
         [HttpGet("/payment-checkout")]
         public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
         {
@@ -90,6 +101,29 @@ namespace legallead.permissions.api.Controllers
             return Content(content, "text/html");
         }
 
+
+
+        [HttpGet("/discount-checkout")]
+        public async Task<IActionResult> DiscountCheckout([FromQuery] string? id, string? sessionid)
+        {
+            var session = await paymentSvc.IsDiscountValid(id, sessionid);
+            if (session == null)
+            {
+                var nodata = Properties.Resources.page_payment_detail_invalid;
+                return Content(nodata, "text/html");
+            }
+            var ispaid = await paymentSvc.IsDiscountPaid(session);
+            if (ispaid)
+            {
+                // incorrect mapping need new landing for discount
+                return await DiscountLanding("success", id);
+            }
+            var content = Properties.Resources.page_invoice_discount_html;
+            var discountRequest = ModelMapper.Mapper.Map<DiscountRequestBo>(session);
+            content = paymentSvc.Transform(discountRequest, content);
+            return Content(content, "text/html");
+        }
+
         [HttpPost("/payment-fetch-intent")]
         public async Task<IActionResult> FetchIntent([FromBody] FetchIntentRequest request)
         {
@@ -123,6 +157,30 @@ namespace legallead.permissions.api.Controllers
             var intentSvc = new PaymentIntentService();
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
             
+            var clientSecret = intent.ClientSecret;
+            return Json(new { clientSecret });
+        }
+
+        [HttpPost("/discount-fetch-intent")]
+        public async Task<IActionResult> FetchDiscountIntent([FromBody] FetchIntentRequest request)
+        {
+            var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });
+            var session = await subscriptionSvc.GetDiscountRequestById(request.Id, null);
+            if (session == null || string.IsNullOrEmpty(session.SessionId))
+            {
+                return nodata;
+            }
+
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId);
+            if (subscription == null) return nodata;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = await invoiceSvc.GetAsync(invoiceId);
+            if (invoice == null) return nodata;
+            var intentSvc = new PaymentIntentService();
+            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
+
             var clientSecret = intent.ClientSecret;
             return Json(new { clientSecret });
         }
