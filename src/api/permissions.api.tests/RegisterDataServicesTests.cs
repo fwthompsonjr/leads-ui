@@ -120,6 +120,7 @@ namespace permissions.api.tests
         [InlineData(typeof(QueueResetService))]
         [InlineData(typeof(PaymentAccountCreationService))]
         [InlineData(typeof(PricingSyncService))]
+        [InlineData(typeof(SubscriptionSyncService))]
         public void ProviderCanConstructBackground(Type type)
         {
             Assert.NotNull(_serviceProvider);
