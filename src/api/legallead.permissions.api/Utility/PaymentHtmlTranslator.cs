@@ -83,7 +83,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsRequestPaid(LevelRequestBo session)
         {
-            var isSuccess = session.IsPaymentSuccess.GetValueOrDefault(); 
+            var isSuccess = session.IsPaymentSuccess.GetValueOrDefault();
             if (session.InvoiceUri == "NONE") return isSuccess;
             var service = new SubscriptionService();
             var subscription = await service.GetAsync(session.SessionId ?? "");
@@ -213,7 +213,7 @@ namespace legallead.permissions.api.Utility
             content = discountRequest.GetHtml(content, _paymentKey);
             return content;
         }
-    
+
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
@@ -243,10 +243,11 @@ namespace legallead.permissions.api.Utility
             }
             var bo = (await _custDb.GetDiscountRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
+            bo.IsPaymentSuccess = isvalid;
             bo = await _custDb.CompleteDiscountRequest(bo);
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
-                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+                isPermissionSet = true;
             }
             var doc = new HtmlDocument();
             doc.LoadHtml(html);

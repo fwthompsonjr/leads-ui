@@ -14,7 +14,7 @@ namespace legallead.permissions.api.Controllers
         private readonly ISearchInfrastructure infrastructure;
         private readonly ISubscriptionInfrastructure subscriptionSvc;
         public HomeController(
-            IPaymentHtmlTranslator service, 
+            IPaymentHtmlTranslator service,
             ISearchInfrastructure search,
             ISubscriptionInfrastructure subscriptionSvc)
         {
@@ -156,7 +156,7 @@ namespace legallead.permissions.api.Controllers
             if (invoice == null) return nodata;
             var intentSvc = new PaymentIntentService();
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-            
+
             var clientSecret = intent.ClientSecret;
             return Json(new { clientSecret });
         }

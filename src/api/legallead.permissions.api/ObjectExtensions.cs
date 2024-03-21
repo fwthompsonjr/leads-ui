@@ -16,7 +16,6 @@ using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
@@ -205,9 +204,11 @@ namespace legallead.permissions.api
             var queueLogger = loggerFactory.CreateLogger<QueueResetService>();
             var priceLogger = loggerFactory.CreateLogger<PricingSyncService>();
             var acctLogger = loggerFactory.CreateLogger<PaymentAccountCreationService>();
+            var syncLogger = loggerFactory.CreateLogger<SubscriptionSyncService>();
             services.AddSingleton(s => queueLogger);
             services.AddSingleton(s => priceLogger);
             services.AddSingleton(s => acctLogger);
+            services.AddSingleton(s => syncLogger);
             services.AddSingleton(s =>
             {
                 var logger = s.GetRequiredService<ILogger<QueueResetService>>();
@@ -234,9 +235,18 @@ namespace legallead.permissions.api
                 var logging = s.GetRequiredService<ILogger<PricingSyncService>>();
                 return new PricingSyncService(logging, repo);
             });
+            services.AddSingleton(s =>
+            {
+                var exec = new DapperExecutor();
+                var context = new DataContext(exec);
+                var repo = new CustomerRepository(context);
+                var logging = s.GetRequiredService<ILogger<SubscriptionSyncService>>();
+                return new SubscriptionSyncService(logging, repo);
+            });
             services.AddHostedService(s => s.GetRequiredService<QueueResetService>());
             services.AddHostedService(s => s.GetRequiredService<PaymentAccountCreationService>());
             services.AddHostedService(s => s.GetRequiredService<PricingSyncService>());
+            services.AddHostedService(s => s.GetRequiredService<SubscriptionSyncService>());
             loggerFactory.Dispose();
         }
 

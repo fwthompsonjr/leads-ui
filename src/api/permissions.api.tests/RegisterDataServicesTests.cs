@@ -9,8 +9,6 @@ using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 namespace permissions.api.tests
 {
@@ -122,6 +120,7 @@ namespace permissions.api.tests
         [InlineData(typeof(QueueResetService))]
         [InlineData(typeof(PaymentAccountCreationService))]
         [InlineData(typeof(PricingSyncService))]
+        [InlineData(typeof(SubscriptionSyncService))]
         public void ProviderCanConstructBackground(Type type)
         {
             Assert.NotNull(_serviceProvider);
