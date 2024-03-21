@@ -114,7 +114,7 @@ namespace legallead.permissions.api.Extensions
                 null => dash,
                 _ => response.LevelName,
             };
-            var amount = (invoice.AmountDue * 0.01d).ToString("c");
+            var amount = (invoice.Total * 0.01d).ToString("c");
             var replacements = new Dictionary<string, string>()
             {
                 { "//span[@name='invoice']", heading },
@@ -166,7 +166,7 @@ namespace legallead.permissions.api.Extensions
                 null => dash,
                 _ => GetDiscountDescription(response.LevelName),
             };
-            var amount = (invoice.AmountDue * 0.01d).ToString("c");
+            var amount = (invoice.Total * 0.01d).ToString("c");
             var replacements = new Dictionary<string, string>()
             {
                 { "//span[@name='invoice']", heading },
