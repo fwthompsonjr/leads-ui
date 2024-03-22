@@ -4,10 +4,9 @@
 name: CI .NET Framework
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    types: [ "closed" ]
 
 jobs:
   build:
@@ -38,19 +37,28 @@ jobs:
       run: echo ${{ env.BUILD_VERSION }}
 
     - name: Restore Packages
+      if: github.event.pull_request.merged == true
       timeout-minutes: 10
       shell: pwsh
       run: |
         & ./pipeline-restore-packages.ps1
 
     - name: Build solution
+      if: github.event.pull_request.merged == true
       timeout-minutes: 5
       shell: pwsh
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
+    - name: Build Presentation solution
+      if: github.event.pull_request.merged == true
+      timeout-minutes: 5
+      shell: pwsh
+      run: |
+        & ./pipeline-build-presentation.ps1 -version "${{ env.BUILD_VERSION }}"
+
     - name: Publish MyGet Packages
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
       shell: pwsh
       run: |
         & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
