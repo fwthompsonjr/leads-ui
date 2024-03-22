@@ -3,10 +3,12 @@
 
 name: 'CI : Build and Deploy : Windows UI'
 on:
+  pull_request:
+    branches: [ "releases" ]
+    types: [ "closed" ]
   push:
     branches:  
-      - '**/presentation**'        # matches every branch
-      - 'main'   # excludes master
+      - '**/presentation**'        # matches presentation branch name
     paths:
       - 'src/presentation/legallead.desktop/**'
 env:
@@ -32,7 +34,7 @@ jobs:
         & ./pipeline-build-presentation.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Publish MyGet Packages
-      if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
+      if: github.event.pull_request.merged == true
       shell: pwsh
       run: |
         & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
