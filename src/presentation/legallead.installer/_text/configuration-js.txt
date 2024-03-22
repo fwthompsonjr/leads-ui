@@ -1,0 +1,7 @@
+{
+	"repository": "MyGet",
+	"url": "https://www.myget.org/F/fwthompsonjr/api/v3/query",
+	"packages": [
+		"legallead.desktop"
+	]
+}
