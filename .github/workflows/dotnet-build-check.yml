@@ -16,21 +16,12 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Get current version number
-      id: versionid
-      shell: bash
-      run: echo "vrsn_number=3.1" >> "$GITHUB_OUTPUT"
 
-    - uses: actions/checkout@v4
-    - name: Get current date
-      id: date
-      shell: bash
-      run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
-  
+    - uses: actions/checkout@v4  
     - name: Set Release Version
       shell: bash
       run: |
-          echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{1}', vars.LEGALLEAD_VERSION_PREFIX, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Build Presentation solution
       timeout-minutes: 5
