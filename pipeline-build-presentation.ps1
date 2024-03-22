@@ -3,15 +3,6 @@ param(
     $version = "1.0.0"
 )
 
-function hasEnumerator( $obj ) {
-    try {
-        $x = $obj.GetEnumerator();
-        return $true;
-    } catch {
-        return $false;
-    }
-}
-
 function generateBuildCommand( $solution ) {
     $arr = @();
     $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solutionFile );
@@ -79,19 +70,9 @@ $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where
 }
 
 $commands = @();
-$isSingleton = (hasEnumerator -obj $found);
-if( $isSingleton -eq $true ) {
-    $solutionFile = $found.FullName
-    $cmmd = generateBuildCommand -solution $solutionFile
-    $commands += $cmmd
-}
-else {
-    $found.GetEnumerator() | ForEach-Object {
-        $solutionFile = ([system.io.fileinfo]$_).FullName
-        $cmmd = generateBuildCommand -solution $solutionFile
-        $commands += $cmmd
-    }
-}
+$solutionFile = $found.FullName
+$cmmd = generateBuildCommand -solution $solutionFile
+$commands += $cmmd
 
 # Start the (thread) jobs.
 # and make the script run considerably longer.
