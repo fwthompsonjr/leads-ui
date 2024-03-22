@@ -1,0 +1,43 @@
+# This workflow will build a .NET framework project(s)
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Test Presentation Build
+on:
+  push:
+    branches:  
+      - '**'        # matches every branch
+      - '!main'   # excludes master
+env:
+    FAILED_TEST_COUNT: "0"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get current version number
+      id: versionid
+      run: echo "vrsn_number=3.1" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/checkout@v4
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y%m%d')" >> "$GITHUB_OUTPUT"
+  
+    - name: Set Release Version
+      run: |
+          echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
+          
+    - name: Restore Packages
+      if: github.event_name != 'pull_request'
+      timeout-minutes: 10
+      shell: pwsh
+      run: |
+        & ./pipeline-restore-packages.ps1
+
+    - name: Build Presentation solution
+      timeout-minutes: 5
+      shell: pwsh
+      run: |
+        & ./pipeline-build-presentation.ps1 -version "${{ env.BUILD_VERSION }}"
