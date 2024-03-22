@@ -31,13 +31,6 @@ jobs:
       shell: bash
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', steps.versionid.outputs.vrsn_number, github.run_number)}}" >> $GITHUB_ENV
-          
-    - name: Restore Packages
-      if: github.event_name != 'pull_request'
-      timeout-minutes: 10
-      shell: pwsh
-      run: |
-        & ./pipeline-restore-packages.ps1
 
     - name: Build Presentation solution
       timeout-minutes: 5
