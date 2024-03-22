@@ -79,8 +79,8 @@ $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where
 }
 
 $commands = @();
-var isSingleton = (hasEnumerator -obj $found);
-if( isSingleton -eq $true ) {
+$isSingleton = (hasEnumerator -obj $found);
+if( $isSingleton -eq $true ) {
     $solutionFile = $found.FullName
     $cmmd = generateBuildCommand -solution $solutionFile
     $commands += $cmmd
