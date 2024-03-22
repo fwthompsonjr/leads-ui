@@ -172,7 +172,7 @@ namespace legallead.desktop.js
         /// <param name="sourceFile"></param>
         public virtual void TryOpenExcel(string sourceFile)
         {
-            if(string.IsNullOrEmpty(sourceFile))
+            if (string.IsNullOrEmpty(sourceFile))
             {
                 var mssg = DownloadStatusMessaging.GetMessage(400, "File name is invalid");
                 web.ExecuteScriptAsync("jsPurchases.show_submission_error", mssg);
@@ -189,7 +189,7 @@ namespace legallead.desktop.js
                 Process excel = new();
                 excel.StartInfo.FileName = @"C:\Test.xlsx";
                 excel.Start();
-            } 
+            }
             catch (Exception ex)
             {
 
@@ -304,7 +304,9 @@ namespace legallead.desktop.js
             catch
             {
                 return false;
-            } finally {
+            }
+            finally
+            {
                 if (File.Exists(tmpfile)) { File.Delete(tmpfile); }
             }
         }

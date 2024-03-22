@@ -1,5 +1,4 @@
-﻿using AngleSharp.Dom;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
@@ -30,7 +29,7 @@ namespace legallead.desktop.implementations
             var json = response.Message;
             var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
             if (items == null || items.Count == 0) return source;
-            
+
             var document = ToDocument(source);
             var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
             var styled = ApplyHistoryStatus(ToDocument(transform), template);
