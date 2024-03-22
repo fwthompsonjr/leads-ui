@@ -26,7 +26,4 @@
     <ProjectReference Include="..\..\..\..\logging\legallead.logging\legallead.logging.csproj" />
     <ProjectReference Include="..\records.search\legallead.records.search.csproj" />
   </ItemGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File x-set-version.ps1" />
-  </Target>
 </Project>
