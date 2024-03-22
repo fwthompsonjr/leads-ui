@@ -29,13 +29,13 @@ function generateBuildCommand( $solution ) {
         }
 }
 
-function isSolutionIncluded( $name ) {
+function isSolutionNotExcluded( $name ) {
     
-    $exclusions = @('presentation');
+    $exclusions = @('integration', 'presentation');
     foreach($item in $exclusions){
-        if($name.IndexOf( $item ) -ge 0 ) { return $true; }
+        if($name.IndexOf( $item ) -ge 0 ) { return $false; }
     }
-    return  $false;
+    return  $true;
 }
 
 function deleteNuPkgFiles( $homedir ) {
@@ -66,10 +66,10 @@ $errorsFile = [System.IO.Path]::Combine( $currentDir, "build-error-file.txt" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
 $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object {  
         $nme = $_.Name
-        $isIncluded = ( isSolutionIncluded -name $nme ) 
-        return $isIncluded;
+        $isNotExcluded = ( isSolutionNotExcluded -name $nme ) 
+        return $isNotExcluded;
 }
-
+$prjfound = $di.GetFiles('*.legallead.desktop.core.csproj', [System.IO.SearchOption]::AllDirectories);
 $commands = @();
 
 if( $found.Count -eq $null ) {
@@ -84,7 +84,19 @@ else {
         $commands += $cmmd
     }
 }
-
+	
+if( $prjfound.Count -eq $null ) {
+    $solutionFile = $prjfound.FullName
+    $cmmd = generateBuildCommand -solution $solutionFile
+    $commands += $cmmd
+}
+else {
+    $prjfound.GetEnumerator() | ForEach-Object {
+        $solutionFile = ([system.io.fileinfo]$_).FullName
+        $cmmd = generateBuildCommand -solution $solutionFile
+        $commands += $cmmd
+    }
+}
 # Start the (thread) jobs.
 # and make the script run considerably longer.
 $jobs = $commands | Foreach-Object { Start-Job -ScriptBlock $_["obj"] -ArgumentList $_["args"] }

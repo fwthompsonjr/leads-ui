@@ -3,6 +3,14 @@ param(
     $version = "1.0.0"
 )
 
+function hasEnumerator( $obj ) {
+    try {
+        $x = $obj.GetEnumerator();
+        return $true;
+    } catch {
+        return $false;
+    }
+}
 
 function generateBuildCommand( $solution ) {
     $arr = @();
@@ -29,13 +37,13 @@ function generateBuildCommand( $solution ) {
         }
 }
 
-function isSolutionNotExcluded( $name ) {
+function isSolutionIncluded( $name ) {
     
-    $exclusions = @('integration', 'presentation');
+    $exclusions = @('presentation');
     foreach($item in $exclusions){
-        if($name.IndexOf( $item ) -ge 0 ) { return $false; }
+        if($name.IndexOf( $item ) -ge 0 ) { return $true; }
     }
-    return  $true;
+    return  $false;
 }
 
 function deleteNuPkgFiles( $homedir ) {
@@ -66,13 +74,13 @@ $errorsFile = [System.IO.Path]::Combine( $currentDir, "build-error-file.txt" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
 $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object {  
         $nme = $_.Name
-        $isNotExcluded = ( isSolutionNotExcluded -name $nme ) 
-        return $isNotExcluded;
+        $isIncluded = ( isSolutionIncluded -name $nme ) 
+        return $isIncluded;
 }
-$prjfound = $di.GetFiles('*.legallead.desktop.core.csproj', [System.IO.SearchOption]::AllDirectories);
-$commands = @();
 
-if( $found.Count -eq $null ) {
+$commands = @();
+var isSingleton = (hasEnumerator -obj $found);
+if( isSingleton -eq $true ) {
     $solutionFile = $found.FullName
     $cmmd = generateBuildCommand -solution $solutionFile
     $commands += $cmmd
@@ -84,19 +92,7 @@ else {
         $commands += $cmmd
     }
 }
-	
-if( $prjfound.Count -eq $null ) {
-    $solutionFile = $prjfound.FullName
-    $cmmd = generateBuildCommand -solution $solutionFile
-    $commands += $cmmd
-}
-else {
-    $prjfound.GetEnumerator() | ForEach-Object {
-        $solutionFile = ([system.io.fileinfo]$_).FullName
-        $cmmd = generateBuildCommand -solution $solutionFile
-        $commands += $cmmd
-    }
-}
+
 # Start the (thread) jobs.
 # and make the script run considerably longer.
 $jobs = $commands | Foreach-Object { Start-Job -ScriptBlock $_["obj"] -ArgumentList $_["args"] }
