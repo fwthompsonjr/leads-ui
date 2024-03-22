@@ -47,14 +47,12 @@ jobs:
         & ./pipeline-restore-packages.ps1
 
     - name: Build solution
-      if: github.event_name != 'pull_request'
       timeout-minutes: 5
       shell: pwsh
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Build Presentation solution
-      if: github.event_name != 'pull_request'
       timeout-minutes: 5
       shell: pwsh
       run: |
@@ -62,7 +60,6 @@ jobs:
 
     - name: Test with dotnet
       uses: nick-fields/retry@v2
-      if: github.event_name != 'pull_request'
       with:
         timeout_minutes: 10
         max_attempts: 3
@@ -71,13 +68,11 @@ jobs:
           & ./pipeline-test-solutions.ps1
 
     - name: Summarize Test Results
-      if: github.event_name != 'pull_request'
       shell: pwsh
       run: |
         & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
 
     - name: Upload dotnet test results
-      if: github.event_name != 'pull_request'
       uses: actions/upload-artifact@v3
       with:
         name: test-results
