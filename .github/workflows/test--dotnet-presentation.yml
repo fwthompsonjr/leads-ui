@@ -52,7 +52,7 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       name: Upload Release Notes
-      id: artifact-upload-step
+      id: artifact-readme-step
       with:
         name: legallead-release-notes
         path: ${{ github.workspace }}/README.md
