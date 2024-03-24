@@ -4,7 +4,8 @@
 name: 'Temp : Update ReadMe : Windows UI'
 on:
   workflow_run:
-    workflows:   ["Temp : Build and Deploy : Windows UI"]
+    workflows:
+      - "Temp : Build and Deploy : Windows UI"
     types:
       - completed
 
