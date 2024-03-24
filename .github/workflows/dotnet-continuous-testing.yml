@@ -73,6 +73,14 @@ jobs:
         name: test-results
         path: ~/**/*.trx
 
+    - name: Calculate Release Title
+      shell: pwsh
+      run: |
+        & ./x-pipeline-desktop-release-title.ps1
+
+    - name: Echo Release Title
+      run: echo ${{ env.RELEASE_TITLE }}
+
     - name: Evaluate Test Failure Status
       if: env.FAILED_TEST_COUNT != '0'
       uses: actions/github-script@v3

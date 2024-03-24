@@ -1,8 +1,12 @@
 # legallead.desktop   
 Desktop version of lead sourcing application   
 
-# Versions   
+# Versions  
 ## vX.Y.Z - ReleaseDate
+ - Update application to support :
+     - Session management ( timeout, lock account )   
+
+## v3.2.3 ( 2024-03-24 20:03:00 )
  - Initial application release delivering behaviors as listed below:
      - Account management functions
      - Account profile functions
