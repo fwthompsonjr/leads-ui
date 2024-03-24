@@ -5,6 +5,8 @@ name: 'Temp : Update ReadMe : Windows UI'
 on:
   workflow_run:
     workflows:   ["Temp : Build and Deploy : Windows UI"]
+    types:
+      - completed
 
 env:
     BUILD_VERSION: ${{ github.event.workflow_run.outputs.build_version }}
