@@ -12,16 +12,24 @@ env:
 
 jobs:
   build:
-
     runs-on: windows-latest
+    outputs:
+      build_version: ${{ env.BUILD_VERSION }}
+      release_version: ${{ env.RELEASE_VERSION }}
+      artifact_url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
 
     steps:
 
     - uses: actions/checkout@v4  
-    - name: Set Release Version
+    - name: Set Build Version
       shell: bash
       run: |
           echo "BUILD_VERSION=${{format('{0}.{1}', vars.LEGALLEAD_VERSION_PREFIX, github.run_number)}}" >> $GITHUB_ENV
+
+    - name: Set Release Version
+      shell: bash
+      run: |
+          echo "RELEASE_VERSION=${{format('v{0}.{1}', vars.LEGALLEAD_VERSION_PREFIX, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Build Presentation solution
       timeout-minutes: 5
@@ -34,5 +42,5 @@ jobs:
       name: Upload Presentation Package
       id: artifact-upload-step
       with:
-        name: presentation-windows-artifact
+        name: legallead-windows-ui
         path: ${{ github.workspace }}/_legallead_desktop_windows/*
