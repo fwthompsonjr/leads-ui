@@ -10,7 +10,7 @@ on:
 env:
     PROJECT_NAME: "legallead.desktop-windows"
 jobs:
-  build:
+  release:
 
     runs-on: windows-latest
     
