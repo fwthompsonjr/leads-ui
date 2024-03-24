@@ -31,6 +31,7 @@
 	</head>
 
 	<body class="text-center">
+	<!-- component: account-re-authenticate -->
 	<!-- component: my-account-logout -->
 	<!-- component: my-search-preview -->
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">

@@ -33,10 +33,10 @@ namespace legallead.desktop.entities
         public bool IsSessionTimeout()
         {
             var sessionid = GetSessionId();
-            if (!sessionid.Contains('-')) return false;
+            if (sessionid.Equals(unset)) return false;
             if (Token == null || !Token.Expires.HasValue) return false;
             var difference = Token.Expires.Value - DateTime.UtcNow;
-            return difference.TotalMinutes < -4;
+            return Math.Abs(difference.TotalMinutes) < 4;
         }
 
 
