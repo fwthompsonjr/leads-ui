@@ -11,12 +11,6 @@
 		<FileVersion>3.2.200</FileVersion>
 		<Title>LegalLead UI Application</Title>
 		<Description>Windows desktop application for legal leads process</Description>
-		<PackageReleaseNotes>
-			3.2.2 - 20240315 : Beta release
-		</PackageReleaseNotes>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageVersion>$(PackageVersion)</PackageVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="DawnCache\**" />
@@ -63,14 +57,5 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\legallead.desktop.core\legallead.desktop.core.csproj" />
-	</ItemGroup>
-
-
-
-	<ItemGroup>
-		<None Update="README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
 	</ItemGroup>
 </Project>
