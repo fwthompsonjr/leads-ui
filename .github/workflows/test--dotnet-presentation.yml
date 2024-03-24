@@ -31,6 +31,11 @@ jobs:
       run: |
           echo "RELEASE_VERSION=${{format('v{0}.{1}', vars.LEGALLEAD_VERSION_PREFIX, github.run_number)}}" >> $GITHUB_ENV
 
+    - name: Update README
+      shell: pwsh
+      run: |
+        & ./x-pipeline-update-release-notes.ps1 -version "${{ env.BUILD_VERSION }}"
+
     - name: Build Presentation solution
       timeout-minutes: 5
       id: buildComponent
@@ -44,3 +49,10 @@ jobs:
       with:
         name: legallead-windows-ui
         path: ${{ github.workspace }}/_legallead_desktop_windows/*
+
+    - uses: actions/upload-artifact@v4
+      name: Upload Release Notes
+      id: artifact-upload-step
+      with:
+        name: legallead-release-notes
+        path: ${{ github.workspace }}/README.md
