@@ -5,8 +5,9 @@ name: 'CQ : Build and Test : Core Components'
 on:
   push:
     branches:  
-      - '**'        # matches every branch
-      - '!main'   # excludes master
+      - '**'            # matches every branch
+      - '!main'         # excludes master
+      - '!releases'     # excludes releases
     paths:
       - 'src/**'
 env:
