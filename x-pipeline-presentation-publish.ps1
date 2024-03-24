@@ -25,7 +25,7 @@ if( [System.IO.Directory]::Exists( $binfolder ) -eq $false ) {
     [System.IO.Directory]::CreateDirectory( $binfolder ) | Out-Null;
 }
 Write-Output "Publishing project: ' $project ' to temp directory"
-dotnet publish $projectFile -o $binfolder --sc $true --version-suffix $version
+dotnet publish $projectFile -o $binfolder --sc $true --version-suffix $version -c Release
 
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Publish $project failed."
@@ -44,5 +44,5 @@ if ($LASTEXITCODE -ne 0) {
     [Environment]::ExitCode = 1000;
     return 1000;
 }
-echo ::set-output name=projectZipFileName::$($zipFileName)
+
 return 0;

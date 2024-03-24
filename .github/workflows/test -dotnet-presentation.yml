@@ -35,4 +35,4 @@ jobs:
       id: artifact-upload-step
       with:
         name: presentation-windows-artifact
-        path: ${{ steps.buildComponent.outputs.projectZipFileName }}
+        path: ${{ github.workspace }}/legallead.desktop*.zip
