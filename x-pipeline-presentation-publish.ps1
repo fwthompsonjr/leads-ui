@@ -7,7 +7,7 @@ $startedAt = [datetime]::UtcNow
 $workfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $binfolder = [System.IO.Path]::Combine( $workfolder, "_legallead_desktop_windows" );
 $project = "legallead.desktop"
-$zipFileName = [string]::Concat($project, "-", $version, ".zip");
+$zipFileName = [string]::Concat($project, "-windows-", $version, ".zip");
 $zipFileName = [System.IO.Path]::Combine( $workfolder, $zipFileName );
 $errorsFile = [System.IO.Path]::Combine( $workfolder, [string]::Concat( $project.Replace(".", "-"), "-error-file.txt" ));
 $projectFolder = "src\presentation\$project"
@@ -33,4 +33,15 @@ if ($LASTEXITCODE -ne 0) {
     return 1000;
 }
 
-return 0;
+if( [system.io.file]::Exists( $zipFileName ) -eq $true ) {
+    [System.IO.File]::Delete( $zipFileName ) | Out-Null
+}
+Write-Output "Creating compressed file: ' $project '"
+
+Compress-Archive -Path $binfolder -DestinationPath $zipFileName -Force
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Output "Compress $project to zip has failed."
+    [Environment]::ExitCode = 1000;
+    return 1000;
+}
