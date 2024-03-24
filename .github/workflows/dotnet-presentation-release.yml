@@ -45,6 +45,13 @@ jobs:
       run: |
         & ./x-pipeline-presentation-publish.ps1 -version "${{ env.BUILD_VERSION }}"
 
+    - name: Create release
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+      run: |
+          gh release create ${{ env.BUILD_VERSION }} -F README.md
+
     - name: Package windows x64
       shell: bash
       env:
