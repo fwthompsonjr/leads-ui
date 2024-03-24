@@ -5,7 +5,7 @@
 
 $startedAt = [datetime]::UtcNow
 $workfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
-$binfolder = [System.IO.Path]::Combine( $workfolder, "_bin" );
+$binfolder = [System.IO.Path]::Combine( $workfolder, "_legallead_desktop_windows" );
 $project = "legallead.desktop"
 $zipFileName = [string]::Concat($project, "-", $version, ".zip");
 $zipFileName = [System.IO.Path]::Combine( $workfolder, $zipFileName );
@@ -29,18 +29,6 @@ dotnet publish $projectFile -o $binfolder --sc $true --version-suffix $version -
 
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Publish $project failed."
-    [Environment]::ExitCode = 1000;
-    return 1000;
-}
-if( [system.io.file]::Exists( $zipFileName ) -eq $true ) {
-    [System.IO.File]::Delete( $zipFileName ) | Out-Null
-}
-Write-Output "Creating compressed file: ' $project '"
-
-Compress-Archive -Path $binfolder -DestinationPath $zipFileName -Force
-
-if ($LASTEXITCODE -ne 0) {
-    Write-Output "Compress $project to zip has failed."
     [Environment]::ExitCode = 1000;
     return 1000;
 }

@@ -406,4 +406,5 @@ FodyWeavers.xsd
 
 # Release Output
 /_bin
+/_legallead_desktop_windows
 *.zip
