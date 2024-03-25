@@ -4,7 +4,11 @@ Desktop version of lead sourcing application
 # Versions  
 ## vX.Y.Z - ReleaseDate
  - Update application to support :
-     - Session management ( timeout, lock account )   
+     - Session management ( timeout )   
+        - Verify session state prior to making api calls   
+        - Verify session state prior to performing menu navigation   
+        - Display re-authentication modal when session is expiring   
+        - Redirect to login page when session has expired   
 
 ## v3.2.3 ( 2024-03-24 20:03:00 )
  - Initial application release delivering behaviors as listed below:
@@ -22,6 +26,7 @@ Desktop version of lead sourcing application
  - Allow creation of new users
  - Allow user to change password
  - Allow user to unlock account
+ - Protect user session identity
 
 ## Account profile functions
  - Setup user name and business name
