@@ -2,8 +2,10 @@
 using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace legallead.desktop.js
 {
@@ -34,6 +37,52 @@ namespace legallead.desktop.js
             Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
             if (mainWindow is not MainWindow main) return;
             main.NavigateChild(pageName);
+        }
+
+        public virtual void CheckSession()
+        {
+            var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (bo == null || bo.IsSessionExpired())
+            {
+                Reload("home-login");
+            }
+        }
+
+        public virtual async void Reauthenticate(string payload)
+        {
+            var data = TryDeserialize<LoginFormModel>(payload);
+            var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
+            var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (data == null || api == null || bo == null)
+            {
+                Reload("home-login");
+                return;
+            }
+            var obj = new { data.UserName, data.Password };
+            var response = await api.Post("form-login", obj, bo);
+            if (response == null || response.StatusCode != 200)
+            {
+                Reload("home-login");
+                return;
+            }
+            // update access token 
+            bo.Token = ObjectExtensions.TryGet<AccessTokenBo>(response.Message);
+            if (bo.Token == null)
+            {
+                Reload("home-login");
+                return;
+            }
+            // dismiss the dialog and clear its values
+            var scripts = new[]
+            {
+                "try {",
+                "document.getElementById('account-authorize-x-close').click();",
+                "document.getElementById('form-re-authorize-username').value = '';",
+                "document.getElementById('form-re-authorize-password').value = '';",
+                "} catch { }"
+            };
+            var script = string.Join(Environment.NewLine, scripts);
+            web.ExecuteScriptAsync(script);
         }
 
         public virtual void Fetch(string formName, string json)

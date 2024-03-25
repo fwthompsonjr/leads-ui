@@ -136,6 +136,7 @@
 	<!-- script: home-form-validation -->
 	<!-- script: common-client-include -->
 	<!-- script: verify-and-post -->
+	<!-- script: account-re-authenticate -->
   </body>
 
 

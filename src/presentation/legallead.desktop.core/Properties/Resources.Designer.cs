@@ -208,6 +208,27 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;re-authenticate-js&quot;&gt;
+        ///
+        ///if (typeof isValidEmail != &apos;function&apos;) {
+        ///	window.isValidEmail = function(email){
+        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        ///	return res.test(email.toLowerCase());};
+        ///}
+        ///let authformvalidators = [
+        ///	{
+        ///		&quot;name&quot;: &quot;isEmailOrUser&quot;,
+        ///		&quot;action&quot;: function (value, element, params) {
+        ///			if (!value) { return false; }
+        ///			if (value == null) { return fal [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string common_authenticate_js {
+            get {
+                return ResourceManager.GetString("common_authenticate_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!-- Reauthorize Modal --&gt;
         ///&lt;!-- Reauthorize: trigger modal --&gt;
         ///&lt;button id=&quot;btn-account-authorize-show&quot; type=&quot;button&quot; class=&quot;btn btn-primary d-none&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#account-authorize-modal&quot;&gt;

@@ -70,6 +70,7 @@
 		}
 	</script>
 	<!-- script: common-client-include -->
+	<!-- script: account-re-authenticate -->
 	<!-- script: my-search-searching-behaviors -->
 	<!-- script: verify-and-post -->
   </body>
