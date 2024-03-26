@@ -1,5 +1,7 @@
 using CefSharp.Wpf;
+using legallead.desktop.entities;
 using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
@@ -57,9 +59,15 @@ namespace legallead.desktop
 
         internal void NavigateChild(string destination)
         {
+            const string homepages = "home-";
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             var sublanding = SubLandings.Find(x => x.Equals(destination, oic));
             if (sublanding == null) return;
+            if (!sublanding.StartsWith(homepages) && IsSessionTimeOut())
+            {
+                NavigateChild("home-login");
+                return;
+            }
             if (sublanding.Equals("mysearch-actives"))
             {
                 NavigateToMyActiveSearches();
@@ -88,6 +96,13 @@ namespace legallead.desktop
             lookup.ForEach(x => { html.Replace(x, replacements[x]); });
             var substitute = MySearchSubstitute(directions, html.ToString());
             web.SetHTML(Dispatcher, substitute);
+        }
+
+        private static bool IsSessionTimeOut()
+        {
+            var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (user == null) return false;
+            return user.IsSessionTimeout();
         }
 
         private static string MySearchSubstitute(string[] directions, string html)

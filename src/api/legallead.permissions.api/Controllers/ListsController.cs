@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using legallead.json.db;
 using legallead.json.db.entity;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,12 @@ namespace legallead.permissions.api.Controllers
     {
         private readonly DataProvider _db;
         private readonly IMapper _mapper;
+        private readonly ICustomerLockInfrastructure _lockingDb;
 
-        public ListsController(DataProvider db)
+        public ListsController(DataProvider db, ICustomerLockInfrastructure lockingDb)
         {
             _db = db;
+            _lockingDb = lockingDb;
             UsState.Initialize();
             UsStateCounty.Initialize();
             _mapper = ModelMapper.Mapper;
@@ -73,6 +76,11 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await Request.GetUser(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             await _db.InitializeProfile(user);
             var profiles = await _db.UserProfileVw.GetAll(user);
             var models = profiles.Select(s => _mapper.Map<UserProfileModel>(s)).ToList();
@@ -87,6 +95,11 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await Request.GetUser(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             await _db.InitializePermission(user);
             var profiles = await _db.UserPermissionVw.GetAll(user);
             var models = profiles.Select(s => _mapper.Map<UserProfileModel>(s)).ToList();

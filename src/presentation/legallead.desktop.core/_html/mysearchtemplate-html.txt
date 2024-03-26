@@ -163,6 +163,7 @@
 		</style>
 	</head>
 	<body class="text-center">
+	<!-- component: account-re-authenticate -->
 	<!-- component: my-account-logout -->
 		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
 			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
@@ -646,5 +647,5 @@
 					}
 		</script>
 	<!-- script: verify-and-post -->
-	
+	<!-- script: account-re-authenticate -->
 </body></html>

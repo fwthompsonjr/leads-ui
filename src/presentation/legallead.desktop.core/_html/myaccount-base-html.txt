@@ -14,6 +14,7 @@
 	</head>
 
 	<body class="text-center">
+	<!-- component: account-re-authenticate -->
 	<!-- component: my-account-logout -->
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header 
@@ -81,6 +82,7 @@
 	<!-- script: my-account-navigation -->
 	<!-- script: my-account-form-validation -->
 	<!-- script: my-account-profile-valid -->
+	<!-- script: account-re-authenticate -->
 	<!-- script: common-client-include -->
 	<!-- script: verify-and-post -->
   </body>

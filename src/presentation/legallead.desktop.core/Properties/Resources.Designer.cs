@@ -201,6 +201,46 @@ namespace legallead.desktop.Properties {
         ///        aria-labelledby=&quot;account-authorize-label&quot; aria-hidden=&quot;true&quot;&gt;
         ///  &lt;div class= [rest of string was truncated]&quot;;.
         /// </summary>
+        internal static string common_authenticate {
+            get {
+                return ResourceManager.GetString("common_authenticate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;re-authenticate-js&quot;&gt;
+        ///
+        ///if (typeof isValidEmail != &apos;function&apos;) {
+        ///	window.isValidEmail = function(email){
+        ///	const res = /^(([^&lt;&gt;()\[\]\\.,;:\s@&quot;]+(\.[^&lt;&gt;()\[\]\\.,;:\s@&quot;]+)*)|(&quot;.+&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        ///	return res.test(email.toLowerCase());};
+        ///}
+        ///let authformvalidators = [
+        ///	{
+        ///		&quot;name&quot;: &quot;isEmailOrUser&quot;,
+        ///		&quot;action&quot;: function (value, element, params) {
+        ///			if (!value) { return false; }
+        ///			if (value == null) { return fal [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string common_authenticate_js {
+            get {
+                return ResourceManager.GetString("common_authenticate_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!-- Reauthorize Modal --&gt;
+        ///&lt;!-- Reauthorize: trigger modal --&gt;
+        ///&lt;button id=&quot;btn-account-authorize-show&quot; type=&quot;button&quot; class=&quot;btn btn-primary d-none&quot; data-bs-toggle=&quot;modal&quot; data-bs-target=&quot;#account-authorize-modal&quot;&gt;
+        ///  Launch static backdrop modal
+        ///&lt;/button&gt;
+        ///
+        ///&lt;!-- Reauthorize: Modal Content --&gt;
+        ///&lt;div class=&quot;modal fade&quot; id=&quot;account-authorize-modal&quot; data-bs-backdrop=&quot;static&quot;
+        ///        data-bs-keyboard=&quot;false&quot; tabindex=&quot;-1&quot; 
+        ///        aria-labelledby=&quot;account-authorize-label&quot; aria-hidden=&quot;true&quot;&gt;
+        ///  &lt;div class= [rest of string was truncated]&quot;;.
+        /// </summary>
         internal static string common_dialogue {
             get {
                 return ResourceManager.GetString("common_dialogue", resourceCulture);
@@ -913,14 +953,15 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to 
         ///					&lt;div id=&quot;dv-subcontent-history&quot; name=&quot;subcontent-history&quot; class=&quot;subcontent card d-none w-75&quot;&gt;
         ///						&lt;div class=&quot;card-body&quot;&gt;
-        ///							&lt;h5 class=&quot;card-title&quot;&gt;Search History&lt;/h5&gt;	
-        ///							&lt;table automationId=&quot;search-history-table&quot; name=&quot;search-dt-table&quot;&gt;
-        ///								&lt;colgroup&gt;
-        ///									&lt;col name=&quot;requested-date&quot; /&gt;
-        ///									&lt;col name=&quot;state-abbr&quot; style=&quot;width: 50px&quot; /&gt;
-        ///									&lt;col name=&quot;county-name&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;col name=&quot;begin-date&quot; style=&quot;width: 75px&quot; /&gt;
-        ///									&lt;col name=&quot;e [rest of string was truncated]&quot;;.
+        ///							
+        ///							&lt;h5 class=&quot;row d-flex justify-content-between&quot;&gt;
+        ///								&lt;div class=&quot;col-9&quot;&gt;Search History&lt;/div&gt;
+        ///								&lt;div class=&quot;col-2&quot;&gt;
+        ///									&lt;button id=&quot;bttn-active-searches-filter&quot; 
+        ///									title=&quot;Filter By Status&quot;
+        ///									onclick=&quot;jssearchpager.toggle_filter()&quot;
+        ///									name=&quot;search-history-filter&quot; class=&quot;btn btn-outline-primary&quot;&gt;
+        ///										&lt;i class=&quot;bi bi- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_history_html {
             get {
@@ -942,10 +983,8 @@ namespace legallead.desktop.Properties {
         ///		&lt;!-- common styles --&gt;	
         ///		&lt;link rel=&quot;stylesheet&quot; name=&quot;base&quot; href=&quot;css/base.css&quot; /&gt;
         ///		&lt;!-- style: my-account-subcontent-css --&gt;
-        ///	&lt;/head&gt;
-        ///
-        ///	&lt;body class=&quot;text-center&quot;&gt;
-        ///	&lt;!-- component [rest of string was truncated]&quot;;.
+        ///		&lt;style name=&quot;mysearch-purchase-css&quot;&gt;						 
+        ///			#formF [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_html {
             get {
@@ -973,14 +1012,14 @@ namespace legallead.desktop.Properties {
         ///   Looks up a localized string similar to 
         ///					&lt;div id=&quot;dv-subcontent-purchases&quot; name=&quot;subcontent-purchases&quot; class=&quot;subcontent card d-none w-75&quot;&gt;
         ///						&lt;div class=&quot;card-body&quot;&gt;
-        ///							&lt;h5 class=&quot;card-title&quot;&gt;Purchase History&lt;/h5&gt;	
-        ///							&lt;table automationId=&quot;search-purchases-table&quot; name=&quot;search-dt-table&quot;&gt;
-        ///								&lt;colgroup&gt;
-        ///									&lt;col name=&quot;purchase-date&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;col name=&quot;item-name&quot; /&gt;
-        ///									&lt;col name=&quot;item-quantity&quot; style=&quot;width: 50px&quot; /&gt;
-        ///									&lt;col name=&quot;unit-price&quot; style=&quot;width: 100px&quot; /&gt;
-        ///									&lt;co [rest of string was truncated]&quot;;.
+        ///							&lt;h5 class=&quot;row d-flex justify-content-between&quot;&gt;
+        ///								&lt;div class=&quot;col-9&quot;&gt;Purchase History&lt;/div&gt;
+        ///								&lt;div class=&quot;col-2&quot;&gt;
+        ///									&lt;button id=&quot;bttn-purchases-history-filter&quot; 
+        ///									title=&quot;Filter By Status&quot;
+        ///									onclick=&quot;jsPurchases.toggle_filter()&quot;
+        ///									name=&quot;purchases-history-filter&quot; class=&quot;btn btn-outline-primary&quot;&gt;
+        ///										&lt;i class=&quot;bi bi- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearch_purchases_html {
             get {
@@ -1064,21 +1103,21 @@ namespace legallead.desktop.Properties {
         ///		width: 92%;
         ///		position: relative;
         ///		left: 15px;
+        ///		background-color: #444 !important;
         ///	}
         ///	#my-active-searches-row-02-01 {
         ///		position: relative;
         ///		left: 10px;
         ///	}
         ///	#my-active-searches-row-01 div.col-5,
-        ///	#my-active-searches-row-01 div.col-6 {
+        ///	#my-active-searches-row-01 div.col-6,
+        ///	#my-active-searches-row-02-01 {
         ///		max-height: 300px;
         ///		overflow-y: auto;
         ///		padding-bottom: 10px;
         ///	}
         ///	#my-active-searches-row-01 ul,
-        ///	#my-active-searches-row-01 ul li {
-        ///		background-color: transparent;
-        ///		border: 1 [rest of string was truncated]&quot;;.
+        ///	#my-active [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearchactive_css {
             get {
@@ -1120,10 +1159,8 @@ namespace legallead.desktop.Properties {
         ///		&quot;heading_no_data&quot;: &quot;#heading-my-active-searches-no-content&quot;,
         ///		&quot;component_list&quot;: &quot;#list-my-active-search-stages&quot;,
         ///		&quot;component_list_template&quot;: &quot;#list-my-active-search-stages li:first&quot;,
-        ///		&quot;component_last_item&quot;: &quot;#list-my-active-search-stages li:last&quot;
-        ///	},
-        ///	&quot;jso&quot;: function(){
-        ///		let js = $(activ [rest of string was truncated]&quot;;.
+        ///		&quot;component_last_item&quot;: &quot;#list-my-active-search-stages li:last&quot;,
+        ///		&quot;status_list&quot;: &quot;#list-my-active-search-st [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mysearchactive_js {
             get {

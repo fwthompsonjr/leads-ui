@@ -39,7 +39,6 @@ namespace legallead.desktop.handlers
                 handler.SetMessage(htm);
                 if (objectData.StatusCode != 200) return;
                 handler.LoginCompleted(formName);
-                handler.SetMessage("Login completed");
                 var data = TryDeserialize<LoginFormModel>(json);
                 SetUserSession(data, Guid.NewGuid().ToString());
                 NavigateTo("MyAccount", objectData);

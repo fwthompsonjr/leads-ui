@@ -140,7 +140,8 @@ namespace permissions.api.tests.Contollers
                 var jwt = a.GetRequiredService<IJwtManagerRepository>();
                 var refresh = a.GetRequiredService<IRefreshTokenValidator>();
                 var log = a.GetRequiredService<ILoggingInfrastructure>();
-                return new SignonController(db, jwt, refresh, log)
+                var clock = new Mock<ICustomerLockInfrastructure>();
+                return new SignonController(db, jwt, refresh, clock.Object, log)
                 {
                     ControllerContext = controllerContext
                 };
@@ -148,7 +149,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(a =>
             {
                 var db = a.GetRequiredService<DataProvider>();
-                return new ListsController(db)
+                var clock = new Mock<ICustomerLockInfrastructure>();
+                return new ListsController(db, clock.Object)
                 {
                     ControllerContext = controllerContext
                 };
