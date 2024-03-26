@@ -9,6 +9,10 @@ Desktop version of lead sourcing application
         - Verify session state prior to performing menu navigation   
         - Display re-authentication modal when session is expiring   
         - Redirect to login page when session has expired   
+     - Session management ( lock, unlock )   
+        - Verify account lock status during login    
+        - Setup 3 failed attempts prior to lock   
+        - Setup 15 minute auto-unlock   
 
 ## v3.2.3 ( 2024-03-24 20:03:00 )
  - Initial application release delivering behaviors as listed below:

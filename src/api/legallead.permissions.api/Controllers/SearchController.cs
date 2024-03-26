@@ -13,12 +13,15 @@ namespace legallead.permissions.api.Controllers
     {
         private readonly IUserSearchValidator searchValidator;
         private readonly ISearchInfrastructure infrastructure;
+        private readonly ICustomerLockInfrastructure _lockingDb;
 
         public SearchController(IUserSearchValidator validator,
-            ISearchInfrastructure infrastructure)
+            ISearchInfrastructure infrastructure,
+            ICustomerLockInfrastructure lockingDb)
         {
             searchValidator = validator;
             this.infrastructure = infrastructure;
+            _lockingDb = lockingDb;
         }
 
         [HttpPost]
@@ -27,6 +30,11 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await infrastructure.GetUser(Request);
             if (user == null) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var isValid = searchValidator.IsValid(request);
             if (!isValid.Key)
             {
@@ -44,6 +52,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var searches = await infrastructure.GetHeader(Request, null);
             return Ok(searches);
         }
@@ -55,6 +68,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var detail = await infrastructure.GetSearchDetails(user.Id);
             return Ok(detail);
         }
@@ -66,6 +84,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var searches = await infrastructure.GetPreview(Request, guid);
             if (searches == null) return UnprocessableEntity(guid);
             return Ok(searches);
@@ -79,6 +102,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var searches = await infrastructure.GetSearchProgress(guid);
             return Ok(searches);
         }
@@ -90,6 +118,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var searches = await infrastructure.GetPurchases(user.Id);
             return Ok(searches);
         }
@@ -101,6 +134,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             var isvalid = userName.Equals(user?.UserName ?? "");
             if (string.IsNullOrEmpty(userName) || !isvalid || user == null) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var searches = await infrastructure.GetPurchases(user.Id);
             if (searches == null || !searches.Any()) { return Ok(Array.Empty<PurchasedSearchBo>()); }
             var list = searches.ToList();

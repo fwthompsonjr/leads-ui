@@ -13,14 +13,17 @@ namespace legallead.permissions.api.Controllers
         private readonly IPaymentHtmlTranslator paymentSvc;
         private readonly ISearchInfrastructure infrastructure;
         private readonly ISubscriptionInfrastructure subscriptionSvc;
+        private readonly ICustomerLockInfrastructure _lockingDb;
         public HomeController(
             IPaymentHtmlTranslator service,
             ISearchInfrastructure search,
-            ISubscriptionInfrastructure subscriptionSvc)
+            ISubscriptionInfrastructure subscriptionSvc,
+            ICustomerLockInfrastructure lockingDb)
         {
             paymentSvc = service;
             infrastructure = search;
             this.subscriptionSvc = subscriptionSvc;
+            _lockingDb = lockingDb;
         }
         [HttpGet]
         [Route("/")]
@@ -189,6 +192,13 @@ namespace legallead.permissions.api.Controllers
         [HttpPost("/payment-fetch-search")]
         public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
         {
+            var user = await infrastructure.GetUser(Request);
+            if (user == null || string.IsNullOrEmpty (user.Id)) return Unauthorized();
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var session = await paymentSvc.IsSessionValid(request.Id);
             var ispaid = await paymentSvc.IsRequestPaid(session);
             if (!ispaid)
@@ -215,6 +225,11 @@ namespace legallead.permissions.api.Controllers
             var user = await infrastructure.GetUser(Request);
             if (user == null || !user.UserName.Equals(request.UserId, StringComparison.OrdinalIgnoreCase))
                 return Unauthorized();
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var session = await paymentSvc.IsSessionValid(request.ExternalId);
             var ispaid = await paymentSvc.IsRequestPaid(session);
             if (!ispaid)

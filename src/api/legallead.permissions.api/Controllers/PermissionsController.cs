@@ -15,10 +15,12 @@ namespace legallead.permissions.api.Controllers
     {
         private static readonly object locker = new();
         private readonly ISubscriptionInfrastructure _db;
+        private readonly ICustomerLockInfrastructure _lockingDb;
 
-        public PermissionsController(ISubscriptionInfrastructure db)
+        public PermissionsController(ISubscriptionInfrastructure db, ICustomerLockInfrastructure lockingDb)
         {
             _db = db;
+            _lockingDb = lockingDb;
             lock (locker)
             {
                 UsState.Initialize();
@@ -32,6 +34,11 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var isAdmin = await _db.IsAdminUser(Request);
             var jsrequest = JsonConvert.SerializeObject(request);
             var session = await _db.GenerateDiscountSession(Request, user, jsrequest, isAdmin, "");
@@ -62,6 +69,11 @@ namespace legallead.permissions.api.Controllers
         {
             var user = await _db.GetUser(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
             var validation = permissionLevel.Validate(out var isValid);
             if (!isValid && validation != null)
             {
