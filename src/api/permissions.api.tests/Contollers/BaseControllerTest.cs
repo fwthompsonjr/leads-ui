@@ -68,6 +68,7 @@ namespace permissions.api.tests.Contollers
             var stateMock = new Mock<IStateSearchProvider>();
             var userSearchValidator = new Mock<IUserSearchValidator>();
             var searchInfrastructure = new Mock<ISearchInfrastructure>();
+            var lockInfrastructure = new Mock<ICustomerLockInfrastructure>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
             collection.AddScoped(s => userMk);
@@ -85,6 +86,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => permissionHistoryDb);
             collection.AddScoped(s => userSearchValidator);
             collection.AddScoped(s => searchInfrastructure);
+            collection.AddScoped(s => lockInfrastructure);
             collection.AddScoped(s => userMk.Object);
             collection.AddScoped(s => permissionMk.Object);
             collection.AddScoped(s => profileMk.Object);
@@ -104,6 +106,7 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => stateMock.Object);
             collection.AddScoped(s => userSearchValidator.Object);
             collection.AddScoped(s => searchInfrastructure.Object);
+            collection.AddScoped(s => lockInfrastructure.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
