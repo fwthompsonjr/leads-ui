@@ -15,16 +15,19 @@ namespace legallead.permissions.api.Controllers
         private readonly IJwtManagerRepository _jWTManager;
         private readonly IRefreshTokenValidator _tokenValidator;
         private readonly ILoggingInfrastructure _logSvc;
+        private readonly ICustomerLockInfrastructure _lockingDb;
 
         public SignonController(
             DataProvider db,
             IJwtManagerRepository jWTManager,
             IRefreshTokenValidator tokenValidator,
+            ICustomerLockInfrastructure lockingDb,
             ILoggingInfrastructure logService)
         {
             _db = db;
             _jWTManager = jWTManager;
             _tokenValidator = tokenValidator;
+            _lockingDb = lockingDb;
             _logSvc = logService;
         }
 
@@ -47,10 +50,19 @@ namespace legallead.permissions.api.Controllers
                 var user = validUser.Value;
                 if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
                 {
+                    if (!string.IsNullOrEmpty(user?.Id))
+                    {
+                        await _lockingDb.AddIncident(user.Id);
+                    }
                     await _logSvc.LogWarning("Failed : Validate User Credential. Returning 401 - Unauthorized");
                     return Unauthorized("Invalid username or password...");
                 }
-
+                var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+                if (isLocked)
+                {
+                    await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
+                    return Forbid("Account is locked. Contact system administrator to unlock.");
+                }
                 var token = _jWTManager.GenerateToken(user);
 
                 if (token == null)
@@ -94,6 +106,12 @@ namespace legallead.permissions.api.Controllers
             if (user == null || string.IsNullOrEmpty(user.Id))
             {
                 return BadRequest("User data is null or empty.");
+            }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
+                return Forbid("Account is locked. Contact system administrator to unlock.");
             }
             var found = await _db.UserTokenDb.Find(user.Id, token.RefreshToken);
             var savedRefreshToken = _tokenValidator.Verify(found);
@@ -149,6 +167,12 @@ namespace legallead.permissions.api.Controllers
             if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
             {
                 return Unauthorized("Invalid username or password...");
+            }
+            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            if (isLocked)
+            {
+                await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
+                return Forbid("Account is locked. Contact system administrator to unlock.");
             }
             User update = MapFromChangePassword(usersdata, model, user);
             update.CreateDate = user.CreateDate.GetValueOrDefault(DateTime.UtcNow);

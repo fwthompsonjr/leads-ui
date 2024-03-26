@@ -2,6 +2,7 @@
 using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -36,6 +37,52 @@ namespace legallead.desktop.js
             main.NavigateChild(pageName);
         }
 
+        public virtual void CheckSession()
+        {
+            var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (bo == null || bo.IsSessionExpired())
+            {
+                Reload("home-login");
+            }
+        }
+
+        public virtual async void Reauthenticate(string payload)
+        {
+            var data = TryDeserialize<LoginFormModel>(payload);
+            var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
+            var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (data == null || api == null || bo == null)
+            {
+                Reload("home-login");
+                return;
+            }
+            var obj = new { data.UserName, data.Password };
+            var response = await api.Post("form-login", obj, bo);
+            if (response == null || response.StatusCode != 200)
+            {
+                Reload("home-login");
+                return;
+            }
+            // update access token 
+            bo.Token = ObjectExtensions.TryGet<AccessTokenBo>(response.Message);
+            if (bo.Token == null)
+            {
+                Reload("home-login");
+                return;
+            }
+            // dismiss the dialog and clear its values
+            var scripts = new[]
+            {
+                "try {",
+                "document.getElementById('account-authorize-x-close').click();",
+                "document.getElementById('form-re-authorize-username').value = '';",
+                "document.getElementById('form-re-authorize-password').value = '';",
+                "} catch { }"
+            };
+            var script = string.Join(Environment.NewLine, scripts);
+            web.ExecuteScriptAsync(script);
+        }
+
         public virtual void Fetch(string formName, string json)
         {
             if (!"frm-search-make-payment".Equals(formName)) return;
@@ -53,17 +100,32 @@ namespace legallead.desktop.js
         public virtual void Submit(string formName, string json)
         {
             const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
-            if (ProfileForms.Exists(f => f.Equals(formName, comparison)))
+            var isProfileForm = ProfileForms.Exists(f => f.Equals(formName, comparison));
+            var isPermissionForm = PermissionForms.Exists(f => f.Equals(formName, comparison));
+            var isSearchForm = SearchForms.Exists(f => f.Equals(formName, comparison));
+            var isSessionCheckNeeded = isProfileForm || isPermissionForm || isSearchForm;
+            if (isSessionCheckNeeded && IsSessionTimeout(web))
+            {
+                const string script1 = "document.getElementById('form-re-authorize-username').value = '~0'";
+                const string script2 = "document.getElementById('btn-account-authorize-show').click();";
+                var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+                var userId = user?.UserName ?? string.Empty;
+                var arr = new[] { script1.Replace("~0", userId), script2 };
+                var script = string.Join(Environment.NewLine, arr);
+                web?.ExecuteScriptAsync(script);
+                return;
+            }
+            if (isProfileForm)
             {
                 var handler = new JsProfileChange(web);
                 handler.Submit(formName, json);
             }
-            if (PermissionForms.Exists(f => f.Equals(formName, comparison)))
+            if (isPermissionForm)
             {
                 var handler = new JsPermissionChange(web);
                 handler.Submit(formName, json);
             }
-            if (SearchForms.Exists(f => f.Equals(formName, comparison)))
+            if (isSearchForm)
             {
                 var handler = new JsSearchSubmission(web);
                 handler.Submit(formName, json);
@@ -212,6 +274,14 @@ namespace legallead.desktop.js
             if (list == null || list.StatusCode != 200 || string.IsNullOrEmpty(list.Message)) return;
             var applications = TryDeserialize<ApiContext[]>(list.Message);
             user.Applications = applications;
+        }
+
+        protected static bool IsSessionTimeout(ChromiumWebBrowser? web)
+        {
+            if (web == null) return false;
+            var user = AppBuilder.ServiceProvider?.GetService<UserBo>();
+            if (user == null) return false;
+            return user.IsSessionTimeout();
         }
 
         protected static T? TryDeserialize<T>(string json)

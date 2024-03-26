@@ -12,7 +12,8 @@ namespace permissions.api.tests.Contollers
             var html = new Mock<IPaymentHtmlTranslator>();
             var infrastructure = new Mock<ISearchInfrastructure>();
             var subscription = new Mock<ISubscriptionInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object);
+            var lockdb = new Mock<ICustomerLockInfrastructure>();
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object);
             var indx = controller.Index();
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);

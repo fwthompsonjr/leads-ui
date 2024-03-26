@@ -48,7 +48,8 @@ namespace legallead.permissions.api
             {
                 var db = s.GetRequiredService<ISearchInfrastructure>();
                 var validator = s.GetRequiredService<UserSearchValidator>();
-                return new SearchController(validator, db);
+                var lockdb = s.GetRequiredService<ICustomerLockInfrastructure>();
+                return new SearchController(validator, db, lockdb);
             });
             services.SetupJwt(configuration);
         }
@@ -68,6 +69,7 @@ namespace legallead.permissions.api
             services.AddScoped<ICustomerInfrastructure, CustomerInfrastructure>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPricingRepository, PricingRepository>();
+            services.AddScoped<IUserLockStatusRepository, UserLockStatusRepository>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
@@ -89,6 +91,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
+            services.AddScoped<ICustomerLockInfrastructure, CustomerLockInfrastructure>();
 
             services.AddScoped(d =>
             {
@@ -146,7 +149,8 @@ namespace legallead.permissions.api
             services.AddScoped(p =>
             {
                 var data = p.GetRequiredService<DataProvider>();
-                return new ListsController(data);
+                var locking = p.GetRequiredService<ICustomerLockInfrastructure>();
+                return new ListsController(data, locking);
             });
             services.AddScoped<IStateSearchProvider, StateSearchProvider>();
             services.AddScoped<PermissionsController>();
