@@ -69,6 +69,7 @@ namespace legallead.permissions.api
             services.AddScoped<ICustomerInfrastructure, CustomerInfrastructure>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPricingRepository, PricingRepository>();
+            services.AddScoped<IUserLockStatusRepository, UserLockStatusRepository>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
