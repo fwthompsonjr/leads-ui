@@ -47,7 +47,7 @@ namespace legallead.installer.Classes
             return repo;
         }
 
-        private static string? _accessToken = "--injected--";
+        private static string? _accessToken = string.Empty;
         private static string AccessToken
         {
             get
