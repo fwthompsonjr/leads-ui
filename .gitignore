@@ -408,3 +408,4 @@ FodyWeavers.xsd
 /_bin
 /_legallead_desktop_windows
 *.zip
+/src/presentation/legallead.installer/_text/configuration-js.txt

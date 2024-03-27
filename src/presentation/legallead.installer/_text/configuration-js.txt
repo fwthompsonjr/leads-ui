@@ -1,7 +1,0 @@
-{
-    "key":  "-- acess key --",
-    "packages":  [
-                     "legallead.desktop-windows",
-                     "legallead.installer"
-                 ]
-}
