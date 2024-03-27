@@ -1,5 +1,6 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Classes
 {
@@ -11,6 +12,7 @@ namespace legallead.installer.Classes
             var releases = await GitClientProvider.GetReleases();
             return releases;
         }
+        [ExcludeFromCodeCoverage(Justification = "Method is tested from static class")]
         public async Task<object?> GetAsset(ReleaseAssetModel model)
         {
             var data = await GitClientProvider.GetAsset(model);

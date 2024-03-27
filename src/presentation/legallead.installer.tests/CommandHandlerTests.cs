@@ -9,7 +9,7 @@ namespace legallead.installer.tests
 {
     public class CommandHandlerTests
     {
-        private static Faker<ReleaseModel> modelFaker =
+        private static readonly Faker<ReleaseModel> modelFaker =
             new Faker<ReleaseModel>()
             .RuleFor(x => x.Name, y => y.System.Version().ToString())
             .RuleFor(x => x.Id, y => y.Random.Long(1, 1000))

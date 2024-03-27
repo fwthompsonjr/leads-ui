@@ -47,15 +47,17 @@ $jsfolder = [System.IO.Path]::Combine( $workfolder, "_text" );
 $jsfile = [System.IO.Path]::Combine( $jsfolder, "configuration-js.txt" );
 if ( [System.IO.File]::Exists( $jsfile ) -eq $false ) { 
     Write-Output "Source file is not found."
-    return; 
+    [System.Environment]::ExitCode = 1;
+    return 1; 
 }
 $evkey = getEnvironmentSetting -name $evname
 if ( [string]::IsNullOrEmpty( $evkey ) -eq $true ) { 
     Write-Output "Environment key $evname is not found."
     [System.Environment]::ExitCode = 1;
-    return; 
+    return 1; 
 }
 $jcontent = [System.IO.File]::ReadAllText( $jsfile ) | ConvertFrom-Json
+if ($jcontent.key -eq $evkey) { return; }
 $jcontent.key = $evkey
 $transform = ($jcontent | ConvertTo-Json)
 [System.IO.File]::WriteAllText( $jsfile, $transform );

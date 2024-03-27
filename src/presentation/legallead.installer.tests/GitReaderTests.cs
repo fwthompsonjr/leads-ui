@@ -12,18 +12,5 @@ namespace legallead.installer.tests
             Assert.NotNull(releases);
             Assert.NotEmpty(releases);
         }
-
-        [Fact]
-        public async Task ClientCanGetAsset()
-        {
-            var client = new GitReader();
-            var releases = await client.GetReleases();
-            Assert.NotNull(releases);
-            Assert.NotEmpty(releases);
-            var release = releases[0];
-            Assert.NotEmpty(release.Assets);
-            var content = await client.GetAsset(release.Assets[0]);
-            Assert.NotNull(content);
-        }
     }
 }
