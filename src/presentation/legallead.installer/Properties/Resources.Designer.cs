@@ -62,25 +62,16 @@ namespace legallead.installer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {
-        ///	&quot;repository&quot;: &quot;MyGet&quot;,
-        ///	&quot;url&quot;: &quot;https://www.myget.org/F/fwthompsonjr/api/v3/query&quot;,
+        ///	&quot;key&quot;: &quot;&lt;!-- application key --&gt;&quot;,
         ///	&quot;packages&quot;: [
-        ///		&quot;legallead.desktop&quot;
+        ///		&quot;legallead.desktop-windows&quot;,
+        ///		&quot;legallead.installer&quot;
         ///	]
         ///}.
         /// </summary>
         internal static string configuration_js {
             get {
                 return ResourceManager.GetString("configuration-js", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string installation_ps {
-            get {
-                return ResourceManager.GetString("installation-ps", resourceCulture);
             }
         }
     }
