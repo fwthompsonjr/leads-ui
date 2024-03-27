@@ -35,7 +35,8 @@ namespace legallead.installer.tests
             Assert.NotNull(releases);
             Assert.NotEmpty(releases);
             var release = releases[0];
-            var content = await GitClientProvider.GetAsset(release);
+            Assert.NotEmpty(release.Assets);
+            var content = await GitClientProvider.GetAsset(release.Assets[0]);
             Assert.NotNull(content);
         }
 

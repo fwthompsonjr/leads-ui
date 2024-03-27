@@ -46,11 +46,15 @@ $workfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path )
 $jsfolder = [System.IO.Path]::Combine( $workfolder, "_text" );
 $jsfile = [System.IO.Path]::Combine( $jsfolder, "configuration-js.txt" );
 if ( [System.IO.File]::Exists( $jsfile ) -eq $false ) { 
-    Write-Host "Source file is not found."
+    Write-Output "Source file is not found."
     return; 
 }
 $evkey = getEnvironmentSetting -name $evname
-if ( [string]::IsNullOrEmpty( $evkey ) -eq $true ) { return; }
+if ( [string]::IsNullOrEmpty( $evkey ) -eq $true ) { 
+    Write-Output "Environment key $evname is not found."
+    [System.Environment]::ExitCode = 1;
+    return; 
+}
 $jcontent = [System.IO.File]::ReadAllText( $jsfile ) | ConvertFrom-Json
 $jcontent.key = $evkey
 $transform = ($jcontent | ConvertTo-Json)

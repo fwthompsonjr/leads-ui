@@ -1,6 +1,5 @@
 ﻿using legallead.installer.Models;
 using Octokit;
-using System.Net;
 
 namespace legallead.installer.Classes
 {
@@ -15,11 +14,11 @@ namespace legallead.installer.Classes
             };
             return client;
         }
-        public static async Task<object?> GetAsset(Release release)
+        public static async Task<object?> GetAsset(ReleaseAssetModel model)
         {
-            if (!RepositoryId.HasValue) { await GetRepository(); }
             var client = GetClient();
-            var asset = await client.Repository.Release.GetAsset(RepositoryId.GetValueOrDefault(), release.Assets[0].Id);
+            var asset = await client.Repository.Release.GetAsset(
+                model.RepositoryId, model.AssetId);
             string downloadUrl = asset.BrowserDownloadUrl;
 
             // Download with WebClient
@@ -30,24 +29,62 @@ namespace legallead.installer.Classes
             var content = await wb.GetByteArrayAsync(downloadUrl);
             return content;
         }
-        public static async Task<IReadOnlyList<Release>?> GetReleases()
+        public static async Task<List<ReleaseModel>?> GetReleases()
         {
             var repo = await GetRepository();
             if (repo == null) { return null; }
             var repositoryId = repo.Id;
             var releases = await GetClient().Repository.Release.GetAll(repositoryId);
-            return releases;
+            if (releases == null) { return null; }
+            return TranslateFrom(repositoryId, releases);
         }
         private static long? RepositoryId;
         private static async Task<Repository?> GetRepository()
         {
             var client = GetClient();
             var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals("leads-ui"));
-            if(!RepositoryId.HasValue && repo != null) { RepositoryId = repo.Id; }
+            if (!RepositoryId.HasValue && repo != null) { RepositoryId = repo.Id; }
             return repo;
         }
 
+        private static List<ReleaseModel> TranslateFrom(long repositoryId, IEnumerable<Release> releases)
+        {
+            var results = new List<ReleaseModel>();
+            foreach (var release in releases)
+            {
+                var releaseModel = new ReleaseModel
+                {
+                    Id = release.Id,
+                    Name = release.TagName,
+                    RepositoryId = repositoryId,
+                    PublishDate = release.PublishedAt.GetValueOrDefault().Date
+                };
+                var assets = release.Assets.Where(w =>
+                {
+                    return IsPackageNameMatched(w.Name);
+                });
+                if (!assets.Any()) { continue; }
+                releaseModel.Assets = TranslateFrom(repositoryId, assets);
+                results.Add(releaseModel);
+            }
+            return results;
+        }
+
+        private static List<ReleaseAssetModel> TranslateFrom(long repositoryId, IEnumerable<ReleaseAsset> assets)
+        {
+            var results = assets.Select(a => new ReleaseAssetModel
+            {
+                RepositoryId = repositoryId,
+                Name = a.Name,
+                AssetId = a.Id,
+                DownloadUrl = a.BrowserDownloadUrl
+            }).ToList();
+            return results;
+        }
+
+        private static List<string>? _packages = default;
         private static string? _accessToken = string.Empty;
+
         private static string AccessToken
         {
             get
@@ -55,8 +92,26 @@ namespace legallead.installer.Classes
                 if (!string.IsNullOrEmpty(_accessToken)) return _accessToken;
                 var setting = SettingProvider.Common();
                 _accessToken = setting.Key;
+                _packages ??= setting.Packages;
                 return _accessToken;
             }
+        }
+
+        private static List<string> PackageNames
+        {
+            get
+            {
+                if (_packages != null) return _packages;
+                var setting = SettingProvider.Common();
+                _packages ??= setting.Packages;
+                return _packages;
+            }
+        }
+
+        private static bool IsPackageNameMatched(string packageName)
+        {
+            var items = PackageNames.Select(x => packageName.StartsWith(x)).ToList();
+            return items.Exists(x => x);
         }
     }
 }

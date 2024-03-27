@@ -12,6 +12,7 @@ on:
       - 'src/**'
 env:
     FAILED_TEST_COUNT: "0"
+    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
 
 jobs:
   build:
