@@ -11,5 +11,10 @@ namespace legallead.installer.Classes
             var releases = await GitClientProvider.GetReleases();
             return releases;
         }
+        public async Task<object?> GetAsset(ReleaseAssetModel model)
+        {
+            var data = await GitClientProvider.GetAsset(model);
+            return data;
+        }
     }
 }
