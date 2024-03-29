@@ -35,4 +35,9 @@
 		<Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File pre-build.ps1" />
 	</Target>
 
+	
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File post-build.ps1" />
+	</Target>
+
 </Project>

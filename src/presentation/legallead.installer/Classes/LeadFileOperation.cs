@@ -1,4 +1,5 @@
 ﻿using legallead.installer.Interfaces;
+using System;
 using System.IO.Compression;
 
 namespace legallead.installer.Classes
@@ -7,11 +8,13 @@ namespace legallead.installer.Classes
     {
         public void CreateDirectory(string path)
         {
+            if (DirectoryExists(path)) { return; }
             Directory.CreateDirectory(path);
         }
 
         public void DeleteDirectory(string path, bool recursive)
         {
+            if (!DirectoryExists(path)) { return; }
             Directory.Delete(path, recursive);
         }
 
@@ -20,11 +23,28 @@ namespace legallead.installer.Classes
             return Directory.Exists(path);
         }
 
-        public void Extract(string path, byte[] content)
+        public bool Extract(string path, byte[] content)
         {
-            using var ms = new MemoryStream(content);
-            using var archive = new ZipArchive(ms);
-            archive.ExtractToDirectory(path, true);
+            try
+            {
+                DeleteDirectory(path, true);
+                var progress = new Progress<ZipProgress>();
+                progress.ProgressChanged += Report;
+                using var ms = new MemoryStream(content);
+                using var archive = new ZipArchive(ms);
+                archive.ExtractToDirectory(path, progress);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        private void Report(object? sender, ZipProgress zipProgress)
+        {
+            zipProgress.Echo();
         }
     }
 }

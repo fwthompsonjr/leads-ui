@@ -1,6 +1,5 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
-using System.IO.Compression;
 
 namespace legallead.installer.Classes
 {
@@ -16,7 +15,7 @@ namespace legallead.installer.Classes
             _applicationsDir = Path.Combine(_homeDir, _subDir);
             _fileManager = fileManager;
         }
-
+        public virtual ILeadFileOperation FileManager => _fileManager;
         public virtual string ParentFolder => _homeDir;
 
         public virtual string SubFolder => _applicationsDir;
@@ -24,18 +23,21 @@ namespace legallead.installer.Classes
         public string? Install(ReleaseAssetModel model, object? data)
         {
             if (data is not byte[] content) return null;
+            if (string.IsNullOrWhiteSpace(model.Name)) return null;
+            if (string.IsNullOrWhiteSpace(model.Version)) return null;
             try
             {
+                if (!FileManager.DirectoryExists(SubFolder)) FileManager.CreateDirectory(SubFolder);
                 var targetDir = Path.Combine(SubFolder, model.Name);
-                if (!_fileManager.DirectoryExists(targetDir)) _fileManager.CreateDirectory(targetDir);
+                if (!FileManager.DirectoryExists(targetDir)) FileManager.CreateDirectory(targetDir);
                 var installDir = Path.Combine(targetDir, model.Version);
-                if (_fileManager.DirectoryExists(installDir))
+                if (FileManager.DirectoryExists(installDir))
                 {
                     // if this version already exists, delete all
-                    _fileManager.DeleteDirectory(installDir, true);
+                    FileManager.DeleteDirectory(installDir, true);
                 }
-                _fileManager.Extract(installDir, content);
-                if (!_fileManager.DirectoryExists(installDir)) return string.Empty;
+                FileManager.Extract(installDir, content);
+                if (!FileManager.DirectoryExists(installDir)) return string.Empty;
                 return installDir;
             }
             catch (Exception ex)

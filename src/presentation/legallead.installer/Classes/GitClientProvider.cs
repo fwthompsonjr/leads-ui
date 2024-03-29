@@ -5,10 +5,17 @@ namespace legallead.installer.Classes
 {
     public static class GitClientProvider
     {
+        static GitClientProvider()
+        {
+            _ = ProductName;
+            _ = AccessToken;
+            _ = RepositoryName;
+            _ = PackageNames;
+        }
         public static GitHubClient GetClient()
         {
             var credentials = new Credentials(AccessToken);
-            var client = new GitHubClient(new ProductHeaderValue("legallead.installer"))
+            var client = new GitHubClient(new ProductHeaderValue(ProductName))
             {
                 Credentials = credentials
             };
@@ -18,10 +25,11 @@ namespace legallead.installer.Classes
         public static async Task<object?> GetAsset(ReleaseAssetModel model)
         {
             var key = $"{model.RepositoryId}-{model.AssetId}";
-            if (AssetContents.ContainsKey(key)) { return AssetContents[key]; }
+            if (AssetContents.TryGetValue(key, out object? value)) { return value; }
             var client = GetClient();
             var asset = await client.Repository.Release.GetAsset(
                 model.RepositoryId, model.AssetId);
+            if (asset == null) { return null; }
             string downloadUrl = asset.BrowserDownloadUrl;
 
             // Download with WebClient
@@ -53,7 +61,7 @@ namespace legallead.installer.Classes
         {
             if (CurrentRepository != null) return CurrentRepository;
             var client = GetClient();
-            var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals("leads-ui"));
+            var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals(RepositoryName));
             if (!RepositoryId.HasValue && repo != null) { RepositoryId = repo.Id; }
             CurrentRepository = repo;
             return CurrentRepository;
@@ -66,8 +74,29 @@ namespace legallead.installer.Classes
                 if (!string.IsNullOrEmpty(_accessToken)) return _accessToken;
                 var setting = SettingProvider.Common();
                 _accessToken = setting.Key;
-                _packages ??= setting.Packages;
                 return _accessToken;
+            }
+        }
+
+        private static string ProductName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_productName)) return _productName;
+                var setting = SettingProvider.Common();
+                _productName = setting.Product;
+                return _productName;
+            }
+        }
+
+        private static string RepositoryName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_repositoryName)) return _repositoryName;
+                var setting = SettingProvider.Common();
+                _repositoryName = setting.Repository;
+                return _repositoryName;
             }
         }
 
@@ -77,7 +106,7 @@ namespace legallead.installer.Classes
             {
                 if (_packages != null) return _packages;
                 var setting = SettingProvider.Common();
-                _packages ??= setting.Packages;
+                _packages = setting.Packages;
                 return _packages;
             }
         }
@@ -137,6 +166,8 @@ namespace legallead.installer.Classes
 
         private static List<string>? _packages = default;
         private static string? _accessToken = string.Empty;
+        private static string? _productName = string.Empty;
+        private static string? _repositoryName = string.Empty;
         private static readonly Dictionary<string, object?> AssetContents = new();
     }
 }

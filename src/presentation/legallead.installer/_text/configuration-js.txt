@@ -1,0 +1,9 @@
+{
+    "key":  "-- no data --",
+    "product":  "legallead.installer",
+    "repository":  "leads-ui",
+    "packages":  [
+                     "legallead.desktop-windows",
+                     "legallead.installer"
+                 ]
+}

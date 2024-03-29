@@ -2,10 +2,12 @@
 
 namespace legallead.installer.Interfaces
 {
-    internal interface ILeadAppInstaller
+    public interface ILeadAppInstaller
     {
         string ParentFolder { get; }
         string SubFolder { get; }
+        ILeadFileOperation FileManager { get; }
+
         string? Install(ReleaseAssetModel model, object? data);
     }
 }

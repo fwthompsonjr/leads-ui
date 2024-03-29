@@ -9,9 +9,13 @@ namespace legallead.installer.Commands
         private const string appName = "legallead.installer";
         private const string nodata = "0.0.0";
         private readonly IGitReader _reader;
+        private readonly ILeadAppInstaller _applocator;
+        private readonly ILeadFileOperation _fileService;
         private readonly string versionNumber;
         private readonly List<string> _packageNames;
-        public CommandHandler(IGitReader reader)
+        public CommandHandler(IGitReader reader, 
+            ILeadAppInstaller applocator,
+            ILeadFileOperation fileService)
         {
             _reader = reader;
             _packageNames = GitClientProvider.PackageNames;
@@ -19,6 +23,8 @@ namespace legallead.installer.Commands
                 ?.GetCustomAttribute<AssemblyFileVersionAttribute>()
                 ?.Version;
             versionNumber = version ?? nodata;
+            _applocator = applocator;
+            _fileService = fileService;
         }
 
         [RootCommand]
@@ -74,7 +80,7 @@ namespace legallead.installer.Commands
                 Console.WriteLine("Execute list command to display available versions");
                 return;
             }
-            if (!_packageNames.Contains(app, StringComparer.OrdinalIgnoreCase))
+            if (!_reader.VerifyPackageName(app))
             {
                 Console.WriteLine("Application name is invalid.");
                 Console.WriteLine("Available names are: ");
@@ -87,9 +93,7 @@ namespace legallead.installer.Commands
                 Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
                 return;
             }
-            var list = models.SelectMany(x => x.Assets).ToList();
-            var item = list.Find(x => x.Name.Equals(app) && x.Version.Equals(version));
-
+            var item = _reader.FindAsset(models, version, app);
             if (item == null)
             {
                 Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
@@ -97,10 +101,19 @@ namespace legallead.installer.Commands
             }
             Console.WriteLine("Downloading application: {0} version: {1}.", app, version);
             var data = await _reader.GetAsset(item);
-            if (data == null)
+            if (data is not byte[] contents)
             {
                 Console.WriteLine("Failed to download application: {0} version: {1}.", app, version);
+                return;
             }
+            var installPath = Path.Combine(_applocator.SubFolder, app);
+            _fileService.CreateDirectory(installPath);
+            installPath = Path.Combine(installPath, version);
+            _fileService.CreateDirectory(installPath);
+            var completion = _fileService.Extract(installPath, contents);
+            if (!completion) return;
+            Console.WriteLine("Completed download application: {0} version: {1}.", app, version);
+            Console.WriteLine(" - {0}", installPath);
         }
     }
 }

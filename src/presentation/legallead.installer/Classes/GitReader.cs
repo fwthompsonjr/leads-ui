@@ -12,6 +12,23 @@ namespace legallead.installer.Classes
             var releases = await GitClientProvider.GetReleases();
             return releases;
         }
+
+        public ReleaseAssetModel? FindAsset(List<ReleaseModel> models, string version, string app)
+        {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+
+            if (string.IsNullOrWhiteSpace(version)) return null;
+            if (string.IsNullOrWhiteSpace(app)) return null;
+            var list = models.SelectMany(x => x.Assets).ToList();
+            var item = list.Find(x => x.Name.Equals(app, oic) && x.Version.Equals(version, oic));
+            return item;
+        }
+        public bool VerifyPackageName(string packageName)
+        {
+            if (string.IsNullOrWhiteSpace(packageName)) return false;
+            packageName = packageName.Trim();
+            return GitClientProvider.PackageNames.Contains(packageName, StringComparer.OrdinalIgnoreCase);
+        }
         [ExcludeFromCodeCoverage(Justification = "Method is tested from static class")]
         public async Task<object?> GetAsset(ReleaseAssetModel model)
         {

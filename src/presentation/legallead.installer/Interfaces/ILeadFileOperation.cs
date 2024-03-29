@@ -32,6 +32,6 @@
         /// </summary>
         /// <param name="path">Path to extract files to</param>
         /// <param name="content">Binary content as byte-array</param>
-        void Extract(string path, byte[] content);
+        bool Extract(string path, byte[] content);
     }
 }

@@ -6,5 +6,7 @@ namespace legallead.installer.Interfaces
     {
         Task<List<ReleaseModel>?> GetReleases();
         Task<object?> GetAsset(ReleaseAssetModel model);
+        ReleaseAssetModel? FindAsset(List<ReleaseModel> models, string version, string app);
+        bool VerifyPackageName(string packageName);
     }
 }
