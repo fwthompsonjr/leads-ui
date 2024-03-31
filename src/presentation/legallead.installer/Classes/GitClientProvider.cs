@@ -56,7 +56,18 @@ namespace legallead.installer.Classes
             ReleaseList = TranslateFrom(repositoryId, releases);
             return ReleaseList;
         }
-        
+
+        public static bool AllowShortcuts
+        {
+            get
+            {
+                if (_createShortcut != null) return _createShortcut.Value;
+                var setting = SettingProvider.Common();
+                _createShortcut = setting.CreateShortcut;
+                return _createShortcut.GetValueOrDefault();
+            }
+        }
+
         private static async Task<Repository?> GetRepository()
         {
             if (CurrentRepository != null) return CurrentRepository;
@@ -148,7 +159,7 @@ namespace legallead.installer.Classes
             {
                 var cleanedName = Path.GetFileNameWithoutExtension(a.Name);
                 var pos = cleanedName.LastIndexOf('-');
-                if (pos != -1) { cleanedName = cleanedName.Substring(0, pos); }
+                if (pos != -1) { cleanedName = cleanedName[..pos]; }
                 return new ReleaseAssetModel
                 {
                     RepositoryId = repositoryId,
@@ -168,6 +179,7 @@ namespace legallead.installer.Classes
         private static string? _accessToken = string.Empty;
         private static string? _productName = string.Empty;
         private static string? _repositoryName = string.Empty;
-        private static readonly Dictionary<string, object?> AssetContents = new();
+        private static bool? _createShortcut;
+        private static readonly Dictionary<string, object?> AssetContents = [];
     }
 }

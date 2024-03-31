@@ -6,11 +6,19 @@ namespace legallead.installer.Classes
 {
     public class GitReader : IGitReader
     {
+        public bool AllowShortcuts => GitClientProvider.AllowShortcuts;
 
         public async Task<List<ReleaseModel>?> GetReleases()
         {
             var releases = await GitClientProvider.GetReleases();
             return releases;
+        }
+
+        public async Task<List<ReleaseAssetModel>?> GetAssets()
+        {
+            var releases = await GitClientProvider.GetReleases();
+            if (releases == null) return null;
+            return releases.SelectMany(s => s.Assets).ToList();
         }
 
         public ReleaseAssetModel? FindAsset(List<ReleaseModel> models, string version, string app)

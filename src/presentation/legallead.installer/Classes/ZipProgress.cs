@@ -22,8 +22,12 @@ namespace legallead.installer.Classes
             {
                 var min = 0.00000000001d;
                 var percentage = Math.Round(Convert.ToDouble(Processed) / (min + Convert.ToDouble(Total)), 4) * 100d;
-                var message = $"Processed {Processed} of {Total} : {percentage:F2}% completed.";
-                Console.WriteLine(message);
+                var percentageId = Convert.ToInt32(Math.Floor(percentage));
+                if (percentageId % 5 == 0)
+                {
+                    var message = $"Processed {Processed:D3} of {Total:D3} : {percentage:F2}% completed.";
+                    Console.WriteLine(message);
+                }
             }
             catch (Exception)
             {

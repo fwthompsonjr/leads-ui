@@ -1,5 +1,6 @@
 ﻿using legallead.installer.Classes;
 using legallead.installer.Interfaces;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace legallead.installer.Commands
@@ -51,23 +52,49 @@ namespace legallead.installer.Commands
         [Command("list", "Display release details for legallead applications")]
         public async Task List()
         {
+            Console.WriteLine("Listing available versions for legallead applications.");
             var models = await _reader.GetReleases();
             if (models == null || models.Count == 0)
             {
-                Console.WriteLine("No items found.");
+                Console.WriteLine(" - No items found.");
                 return;
             }
             foreach (var model in models)
             {
-                Console.WriteLine("{0}: {1:f}", model.Name, model.PublishDate);
+                Console.WriteLine(" - {0}: {1:D}", model.Name, model.PublishDate);
+                if (model.Assets.Count == 0) continue;
+                var details = model.Assets.Select(x =>
+                {
+                    return $"     -- {x.AssetId}: {x.Name} {x.Version}";
+                });
+                Console.WriteLine(string.Join(Environment.NewLine, details));
             }
         }
 
         [Command("install", "Install legallead application")]
         public async Task Install(
-            [Option("v", "version number")] string version,
-            [Option("n", "application name")] string app)
+            [Option("v", "version number", DefaultValue = "")] string version = "",
+            [Option("n", "application name", DefaultValue = "")] string app = "",
+            [Option("i", "application id", DefaultValue = "")] string id = "")
         {
+            if (!string.IsNullOrEmpty(id))
+            {
+                if (!int.TryParse(id, out var assetId))
+                {
+                    Console.WriteLine("Assert Id is invalid.");
+                    return;
+                }
+                var assets = await _reader.GetAssets();
+                var find = assets?.Find(a => a.AssetId == assetId);
+                if (find == null)
+                {
+                    Console.WriteLine("Assert Id is invalid.");
+                    Console.WriteLine("Execute list command to display available versions");
+                    return;
+                }
+                version = find.Version;
+                app = find.Name;
+            }
             if (string.IsNullOrWhiteSpace(version))
             {
                 Console.WriteLine("Version is missing.");
@@ -114,6 +141,12 @@ namespace legallead.installer.Commands
             if (!completion) return;
             Console.WriteLine("Completed download application: {0} version: {1}.", app, version);
             Console.WriteLine(" - {0}", installPath);
+            if (!_reader.AllowShortcuts) return;
+            Console.WriteLine("Creating application shortcut: {0} version: {1}.", app, version);
+            ShortcutBuilder.CreateShortCut(item, installPath);
+
+            Console.WriteLine("Creating desktop shortcut: {0} version: {1}.", app, version);
+            ShortcutBuilder.CreateShortCut(item, installPath, true);
         }
     }
 }

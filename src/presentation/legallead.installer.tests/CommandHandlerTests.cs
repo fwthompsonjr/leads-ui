@@ -121,7 +121,46 @@ namespace legallead.installer.tests
                     It.IsAny<string>())).Returns(asset);
                 mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
                 var handler = GetCommandHandler(mock);
-                await handler.Install(versionName, appName);
+                await handler.Install(versionName, appName, string.Empty);
+            });
+            Assert.Null(exception);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("temp")]
+        [InlineData("alpha")]
+        [InlineData("5000")]
+        public async Task HandlerCanExecuteInstallByIndex(string? appId)
+        {
+            List<string> custom = ["temp", "missing"];
+            const string appName = "temp";
+            var records = modelFaker.Generate(15);
+            var recordset = appName.Equals("empty") ? [] : records;
+            recordset = appName.Equals("none") ? null : recordset;
+            var list = records.SelectMany(x => x.Assets).ToList();
+            var indx = new Faker().PickRandom(list);
+            if (!string.IsNullOrEmpty(appId) && appId.Equals("temp")) appId = indx.AssetId.ToString();
+            
+            var asset = appName.Equals("temp") | appName.Equals("no-data") ? indx : null;
+            var assetData = appName.Equals("temp") ? new Faker().System.Random.Bytes(1000) : null;
+            var exception = await Record.ExceptionAsync(async () =>
+            {
+                var mock = GetMock();
+                mock.SetupGet(x => x.AllowShortcuts).Returns(true);
+                mock.Setup(m => m.GetReleases()).ReturnsAsync(recordset);
+                mock.Setup(m => m.GetAssets()).ReturnsAsync(list);
+                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => !custom.Contains(s)))).Returns(true);
+                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "temp"))).Returns(true);
+                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "missing"))).Returns(false);
+                mock.Setup(m => m.FindAsset(
+                    It.IsAny<List<ReleaseModel>>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())).Returns(asset);
+                mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
+                var handler = GetCommandHandler(mock, false);
+                await handler.Install("", "", appId ?? "");
             });
             Assert.Null(exception);
         }
@@ -130,14 +169,14 @@ namespace legallead.installer.tests
             return new Mock<IGitReader>();
         }
 
-        private static CommandHandler GetCommandHandler(Mock<IGitReader> mock)
+        private static CommandHandler GetCommandHandler(Mock<IGitReader> mock, bool extractResult = true)
         {
             var locator = new Mock<ILeadAppInstaller>();
             var fileservice = new Mock<ILeadFileOperation>();
             var appFolder = Path.Combine(CurrentDir, "command_handler_test");
             if(!Directory.Exists(appFolder)) { Directory.CreateDirectory(appFolder); }
             locator.SetupGet(s => s.SubFolder).Returns(appFolder);
-            fileservice.Setup(s => s.Extract(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(true);
+            fileservice.Setup(s => s.Extract(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(extractResult);
             return new CommandHandler(mock.Object, locator.Object, fileservice.Object);
         }
 

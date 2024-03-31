@@ -2,6 +2,7 @@
     "key":  "-- no data --",
     "product":  "legallead.installer",
     "repository":  "leads-ui",
+    "createShortcut":  false,
     "packages":  [
                      "legallead.desktop-windows",
                      "legallead.installer"

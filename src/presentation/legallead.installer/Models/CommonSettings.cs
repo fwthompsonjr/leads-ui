@@ -6,6 +6,8 @@ namespace legallead.installer.Models
     {
         [JsonProperty("key")]
         public string Key { get; set; } = string.Empty;
+        [JsonProperty("createShortcut")]
+        public bool CreateShortcut { get; set; }
         [JsonProperty("product")]
         public string Product { get; set; } = string.Empty;
         [JsonProperty("repository")]

@@ -36,6 +36,15 @@ namespace legallead.installer.tests
             Assert.NotEmpty(releases);
         }
 
+        [Fact]
+        public async Task ClientCanGetAssets()
+        {
+            var client = new GitReader();
+            var assets = await client.GetAssets();
+            Assert.NotNull(assets);
+            Assert.NotEmpty(assets);
+        }
+
         [Theory]
         [InlineData(false, false, false)]
         [InlineData(false, false, true)]
