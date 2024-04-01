@@ -8,16 +8,16 @@ function generateBuildCommand( $solution ) {
     $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solutionFile );
     $sln = [string]::Concat( '"', $solution, '"' );
     $arr += [string]::Concat("Write-Output ", "Building Solution: $shortName $version", "; ");
-    $arr += "dotnet build $sln -t:rebuild --property:Configuration=Release";
-    $arr += "dotnet test $sln -t:rebuild --property:Configuration=Release";
+    $arr += "dotnet build $sln --property:Configuration=Release";
+    $arr += "dotnet test $sln --property:Configuration=Release";
     $command = {
         $version = $args[0]
         $shortName = $args[1]
         $sln = $args[2]
         $errorsFile = $args[3]
         Write-Output "Building Solution: $shortName $version"; 
-        dotnet build $sln -t:rebuild --property:Configuration=Release
-        dotnet test $sln -t:rebuild --property:Configuration=Release
+        dotnet build $sln --property:Configuration=Release
+        dotnet test $sln --property:Configuration=Release
         
         if ($LASTEXITCODE -ne 0) {
             ("Build $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -89,6 +89,7 @@ deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
+    echo "FAILED_TEST_COUNT=1000" >> $env:GITHUB_ENV
     return 1000;
 }
 

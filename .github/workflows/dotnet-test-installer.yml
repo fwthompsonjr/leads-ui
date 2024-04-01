@@ -28,3 +28,9 @@ jobs:
       shell: pwsh
       run: |
         & ./pipeline-build-installer.ps1
+
+    - name: Evaluate Test Failure Status
+      if: env.FAILED_TEST_COUNT != '0'
+      uses: actions/github-script@v3
+      with:
+        script: core.setFailed('One or more test failed')
