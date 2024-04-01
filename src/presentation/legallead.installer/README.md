@@ -4,7 +4,7 @@
 ## Releases
 | Id | Date | Description |  
 | --- | --- | --- |
-| x.y.z | {{release-date}} | {{release-description}} |
+| x.y.z | {{ date }} | {{ description }} |
 
 ## Commands:   
 | Command | Description |

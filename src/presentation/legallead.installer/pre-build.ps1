@@ -1,3 +1,12 @@
+$evname = "LEGALLEAD_INSTALLATION_KEY";
+$workfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
+$projectFile = [System.IO.Path]::Combine( $workfolder, "legallead.installer.csproj" );
+$jsfolder = [System.IO.Path]::Combine( $workfolder, "_text" );
+$jsfile = [System.IO.Path]::Combine( $jsfolder, "configuration-js.txt" );
+$readMe = [System.IO.Path]::Combine( $workfolder, "README.md" );
+$jsonReadMe = [System.IO.Path]::Combine( $workfolder, "x-installer-version.json" );
+$backupReadMe = [System.IO.Path]::Combine( $workfolder, "README.backup.md" );
+$versionLine = '| x.y.z | {{ date }} | {{ description }} |'
 function getEnvironment($name) {
     try {
         return [System.Environment]::GetEnvironmentVariable($name);
@@ -41,23 +50,92 @@ function getEnvironmentSetting($name) {
     return $setting;
 }
 
-$evname = "LEGALLEAD_INSTALLATION_KEY";
-$workfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
-$jsfolder = [System.IO.Path]::Combine( $workfolder, "_text" );
-$jsfile = [System.IO.Path]::Combine( $jsfolder, "configuration-js.txt" );
-if ( [System.IO.File]::Exists( $jsfile ) -eq $false ) { 
-    Write-Output "Source file is not found."
-    [System.Environment]::ExitCode = 1;
-    return 1; 
+function updateInstallationKey() {
+    if ( [System.IO.File]::Exists( $jsfile ) -eq $false ) { 
+        Write-Output "Source file is not found."
+        [System.Environment]::ExitCode = 1;
+        return 1; 
+    }
+    $evkey = getEnvironmentSetting -name $evname
+    if ( [string]::IsNullOrEmpty( $evkey ) -eq $true ) { 
+        Write-Output "Environment key $evname is not found."
+        [System.Environment]::ExitCode = 1;
+        return 1; 
+    }
+    $jcontent = [System.IO.File]::ReadAllText( $jsfile ) | ConvertFrom-Json
+    if ($jcontent.key -eq $evkey) { return; }
+    $jcontent.key = $evkey
+    $transform = ($jcontent | ConvertTo-Json)
+    [System.IO.File]::WriteAllText( $jsfile, $transform );
 }
-$evkey = getEnvironmentSetting -name $evname
-if ( [string]::IsNullOrEmpty( $evkey ) -eq $true ) { 
-    Write-Output "Environment key $evname is not found."
-    [System.Environment]::ExitCode = 1;
-    return 1; 
+
+function getVersionNumber {
+    if ( [System.IO.File]::Exists( $jsonReadMe ) -eq $false ) { 
+        return "1.0.0"; 
+    }
+    $jscontent = [System.IO.File]::ReadAllText( $jsonReadMe ) | ConvertFrom-Json
+    return $jscontent.Item(0).id
+    
 }
-$jcontent = [System.IO.File]::ReadAllText( $jsfile ) | ConvertFrom-Json
-if ($jcontent.key -eq $evkey) { return; }
-$jcontent.key = $evkey
-$transform = ($jcontent | ConvertTo-Json)
-[System.IO.File]::WriteAllText( $jsfile, $transform );
+
+function updateReadMe() {
+    if ( [System.IO.File]::Exists( $readMe ) -eq $false ) { 
+        Write-Output "Source file is not found."
+        [System.Environment]::ExitCode = 1;
+        return 1; 
+    }
+    if ( [System.IO.File]::Exists( $jsonReadMe ) -eq $false ) { 
+        Write-Output "JSON file is not found."
+        [System.Environment]::ExitCode = 1;
+        return 1; 
+    }
+    [System.IO.File]::Copy( $readMe, $backupReadMe, $true ) 
+    $details = @();
+    $jscontent = [System.IO.File]::ReadAllText( $jsonReadMe ) | ConvertFrom-Json
+    $jscontent.GetEnumerator() | ForEach-Object {
+        $item = $_;
+        $index = $item.id;
+        $description = $item.description;
+        $dte = $item.date;
+        $details += ("| $index | $dte | $description |   ")
+    }
+    if ($details.Length -eq 0 ) { return; }
+
+    $rmtransform = [string]::Join( [Environment]::NewLine, $details );
+    $rmcontent = [System.IO.File]::ReadAllText( $readMe )
+    $rmcontent = $rmcontent.Replace( $versionLine, $rmtransform )
+    [System.IO.File]::Delete( $readMe ) 
+    [System.IO.File]::WriteAllText( $readMe, $rmcontent );
+    
+}
+
+function updateVersionNumbers() {
+
+    if ( [System.IO.File]::Exists( $projectFile ) -eq $false ) { 
+        Write-Output "Source file is not found."
+        [System.Environment]::ExitCode = 1;
+        return 1; 
+    }
+    $hasXmlChange = $false;
+    $nodeNames = @( 'AssemblyVersion', 'FileVersion', 'Version' );
+    $versionStamp = getVersionNumber
+    [xml]$prj = [System.IO.File]::ReadAllText( $projectFile );
+    $nde = $prj.DocumentElement.SelectSingleNode('PropertyGroup')
+    if ( $nde -eq $null ) { return; }
+    $nde.ChildNodes | ForEach-Object {
+        [System.Xml.XmlNode]$child = $_;
+        $nodeName = $child.Name;
+        $nodeValue = $child.InnerText;
+        if ( $nodeNames.Contains( $nodeName ) -eq $true -and $nodeValue.Equals($versionStamp) -eq $false ) {
+            $hasXmlChange = $true;
+            $child.InnerText = $versionStamp;
+        }
+    }
+    if ($hasXmlChange -eq $true ) {
+        $prj.Save( $projectFile );
+    }
+}
+
+updateVersionNumbers
+updateInstallationKey
+updateReadMe
