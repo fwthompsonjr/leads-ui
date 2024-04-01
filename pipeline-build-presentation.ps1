@@ -90,7 +90,7 @@ deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
-    return 1000;
+    throw "One or more errors occured during build process."
 }
 
 return 0;
