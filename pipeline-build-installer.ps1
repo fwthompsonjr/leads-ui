@@ -8,14 +8,16 @@ function generateBuildCommand( $solution ) {
     $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solutionFile );
     $sln = [string]::Concat( '"', $solution, '"' );
     $arr += [string]::Concat("Write-Output ", "Building Solution: $shortName $version", "; ");
-    $arr += "dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version -t:rebuild --property:Configuration=Release";
+    $arr += "dotnet build $sln --property:Configuration=Release";
+    $arr += "dotnet test $sln --property:Configuration=Release";
     $command = {
         $version = $args[0]
         $shortName = $args[1]
         $sln = $args[2]
         $errorsFile = $args[3]
         Write-Output "Building Solution: $shortName $version"; 
-        dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version -t:rebuild --property:Configuration=Release
+        dotnet build $sln --property:Configuration=Release
+        dotnet test $sln --property:Configuration=Release
         
         if ($LASTEXITCODE -ne 0) {
             ("Build $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -43,15 +45,12 @@ function deleteNuPkgFiles( $homedir ) {
         $packages = $dii.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories)
         if ( $packages.Count -eq $null ) {
             $pname = $packages.FullName;
-            if ( $pname.IndexOf("1.0.0") -lt 0 ) { return; }
+            if ( $pname.IndexOf("legallead.installer") -ge 0 ) { return; }
             [System.IO.File]::Delete( $pname ) | Out-Null
         } else {
             $packages.GetEnumerator() | ForEach-Object {
                 $pname = ([system.io.fileinfo]$_).FullName
-                if ( $pname.IndexOf("1.0.0") -ge 0 ) {
-                    [System.IO.File]::Delete( $pname ) | Out-Null
-                }
-                if ( $pname.IndexOf("legallead.installer") -ge 0 ) {
+                if ( $pname.IndexOf("legallead.installer") -lt 0 ) {
                     [System.IO.File]::Delete( $pname ) | Out-Null
                 }
             }
@@ -90,7 +89,8 @@ deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
-    throw "One or more errors occured during build process."
+    echo "FAILED_TEST_COUNT=1000" >> $env:GITHUB_ENV
+    return 1000;
 }
 
 return 0;

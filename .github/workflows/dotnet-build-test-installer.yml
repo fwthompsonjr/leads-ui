@@ -1,0 +1,36 @@
+# This workflow will build a .NET framework project(s)
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# this build runs for every push where a change to src directory is included
+name: 'CQ : Build and Test : Installer'
+on:
+  push:
+    branches:  
+      - '**'            # matches every branch
+      - '!main'         # excludes master
+      - '!releases'     # excludes releases
+    paths:
+      - 'src/presentation/legallead.installer/**'
+      - 'src/presentation/legallead.installer.tests/**'
+
+env:
+    FAILED_TEST_COUNT: "0"
+    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build and Test Solution
+      timeout-minutes: 5
+      shell: pwsh
+      run: |
+        & ./pipeline-build-installer.ps1
+
+    - name: Evaluate Test Failure Status
+      if: env.FAILED_TEST_COUNT != '0'
+      uses: actions/github-script@v3
+      with:
+        script: core.setFailed('One or more test failed')

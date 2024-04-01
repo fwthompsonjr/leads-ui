@@ -10,8 +10,11 @@ on:
       - '!releases'     # excludes releases
     paths:
       - 'src/**'
+      - '!src/presentation/legallead.installer/**'
+      - '!src/presentation/legallead.installer.tests/**'
 env:
     FAILED_TEST_COUNT: "0"
+    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
 
 jobs:
   build:

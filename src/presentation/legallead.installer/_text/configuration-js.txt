@@ -1,7 +1,10 @@
 {
-	"repository": "MyGet",
-	"url": "https://www.myget.org/F/fwthompsonjr/api/v3/query",
-	"packages": [
-		"legallead.desktop"
-	]
+    "key":  "-- no data --",
+    "product":  "legallead.installer",
+    "repository":  "leads-ui",
+    "createShortcut":  false,
+    "packages":  [
+                     "legallead.desktop-windows",
+                     "legallead.installer"
+                 ]
 }
