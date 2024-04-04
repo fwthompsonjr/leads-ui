@@ -1,4 +1,6 @@
-﻿namespace legallead.installer.Interfaces
+﻿using legallead.installer.Models;
+
+namespace legallead.installer.Interfaces
 {
     public interface ILeadFileOperation
     {
@@ -33,5 +35,11 @@
         /// <param name="path">Path to extract files to</param>
         /// <param name="content">Binary content as byte-array</param>
         bool Extract(string path, byte[] content);
+        /// <summary>
+        /// Searches the specified path and finds top-level child directory information
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        DirectoryInfoModel[] GetDirectories(string path);
     }
 }

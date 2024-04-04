@@ -1,7 +1,9 @@
 ﻿using legallead.installer.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Classes
 {
+    [ExcludeFromCodeCoverage(Justification = "This behavior is not in use. To be deleted.")]
     internal static class ShortcutBuilder
     {
         public static void CreateShortCut(ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
