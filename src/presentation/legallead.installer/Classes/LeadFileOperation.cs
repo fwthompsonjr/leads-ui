@@ -1,6 +1,6 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
-using System;
+using System.Diagnostics;
 using System.IO.Compression;
 
 namespace legallead.installer.Classes
@@ -22,6 +22,10 @@ namespace legallead.installer.Classes
         public bool DirectoryExists(string path)
         {
             return Directory.Exists(path);
+        }
+        public virtual bool FileExists(string path)
+        {
+            return File.Exists(path);
         }
 
         public bool Extract(string path, byte[] content)
@@ -55,6 +59,37 @@ namespace legallead.installer.Classes
                 CreateDate = s.CreationTime
             });
             return models.ToArray();
+        }
+
+        public virtual IEnumerable<string> FindFiles(string path, string pattern)
+        {
+            if (!Directory.Exists(path)) { return Enumerable.Empty<string>(); }
+            var di = new DirectoryInfo(path);
+            return di.GetFiles(pattern, SearchOption.AllDirectories).Select(f => f.FullName);
+        }
+        public string? FindExecutable(string path)
+        {
+            if (!DirectoryExists(path)) { return null; }
+            return FindFiles(path, "*.exe").FirstOrDefault();
+        }
+
+        public bool LaunchExecutable(string path)
+        {
+            try
+            {
+                if (!FileExists(path)) { return false; }
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo(path) { WindowStyle = ProcessWindowStyle.Normal },
+                };
+                process.Start();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         private void Report(object? sender, ZipProgress zipProgress)

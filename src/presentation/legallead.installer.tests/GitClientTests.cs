@@ -59,14 +59,14 @@ namespace legallead.installer.tests
             lock (locker)
             {
                 try
-                {   
+                {
                     manager.Extract(extractDir, data);
                     Assert.True(Directory.Exists(extractDir));
                 }
                 finally
                 {
                     if (Directory.Exists(extractDir)) Directory.Delete(extractDir, true);
-                } 
+                }
             }
         }
         private static async Task<Repository?> GetRepository()

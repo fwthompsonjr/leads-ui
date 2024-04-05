@@ -34,7 +34,7 @@ namespace legallead.installer.tests
                 for (int i = 0; i < 3; i++)
                 {
                     sut.CreateDirectory(subDirName);
-                    Assert.True(Directory.Exists(subDirName)); 
+                    Assert.True(Directory.Exists(subDirName));
                 }
             }
             finally
@@ -87,7 +87,7 @@ namespace legallead.installer.tests
                 finally
                 {
                     if (Directory.Exists(extractDir)) Directory.Delete(extractDir, true);
-                } 
+                }
             }
 
         }
@@ -108,7 +108,7 @@ namespace legallead.installer.tests
                     if (File.Exists(zipPath)) return zipPath;
                     ZipFile.CreateFromDirectory(sampleFolder, zipPath);
                     if (File.Exists(zipPath)) return zipPath;
-                    return null; 
+                    return null;
                 }
             }
             catch (Exception)

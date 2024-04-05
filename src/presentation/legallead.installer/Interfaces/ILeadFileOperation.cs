@@ -41,5 +41,9 @@ namespace legallead.installer.Interfaces
         /// <param name="path"></param>
         /// <returns></returns>
         DirectoryInfoModel[] GetDirectories(string path);
+        bool FileExists(string path);
+        string? FindExecutable(string path);
+        IEnumerable<string> FindFiles(string path, string pattern);
+        bool LaunchExecutable(string path);
     }
 }

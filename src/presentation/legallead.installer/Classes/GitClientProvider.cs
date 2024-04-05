@@ -49,9 +49,10 @@ namespace legallead.installer.Classes
             if (repo == null) { return null; }
             var repositoryId = repo.Id;
             var releases = await GetClient().Repository.Release.GetAll(repositoryId);
-            if (releases == null) { 
+            if (releases == null)
+            {
                 ReleaseList = [];
-                return ReleaseList; 
+                return ReleaseList;
             }
             ReleaseList = TranslateFrom(repositoryId, releases);
             return ReleaseList;

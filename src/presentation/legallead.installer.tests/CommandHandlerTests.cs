@@ -24,7 +24,7 @@ namespace legallead.installer.tests
             .RuleFor(x => x.Id, y => y.Random.Long(1, 1000))
             .RuleFor(x => x.RepositoryId, y => y.Random.Long(1, 1000))
             .RuleFor(x => x.PublishDate, y => y.Date.Recent())
-            .FinishWith((x,m) =>
+            .FinishWith((x, m) =>
             {
                 var nbr = x.Random.Int(1, 5);
                 m.Assets = assetFaker.Generate(nbr);
@@ -142,7 +142,7 @@ namespace legallead.installer.tests
             var list = records.SelectMany(x => x.Assets).ToList();
             var indx = new Faker().PickRandom(list);
             if (!string.IsNullOrEmpty(appId) && appId.Equals("temp")) appId = indx.AssetId.ToString();
-            
+
             var asset = appName.Equals("temp") | appName.Equals("no-data") ? indx : null;
             var assetData = appName.Equals("temp") ? new Faker().System.Random.Bytes(1000) : null;
             var exception = await Record.ExceptionAsync(async () =>
@@ -174,7 +174,7 @@ namespace legallead.installer.tests
             var locator = new Mock<ILeadAppInstaller>();
             var fileservice = new Mock<ILeadFileOperation>();
             var appFolder = Path.Combine(CurrentDir, "command_handler_test");
-            if(!Directory.Exists(appFolder)) { Directory.CreateDirectory(appFolder); }
+            if (!Directory.Exists(appFolder)) { Directory.CreateDirectory(appFolder); }
             locator.SetupGet(s => s.SubFolder).Returns(appFolder);
             fileservice.Setup(s => s.Extract(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(extractResult);
             return new CommandHandler(mock.Object, locator.Object, fileservice.Object);

@@ -1,0 +1,86 @@
+﻿using legallead.installer.Classes;
+
+namespace legallead.installer.Commands
+{
+    public partial class CommandHandler
+    {
+        [Command("install", "Install legallead application")]
+        public async Task Install(
+            [Option("v", "version number", DefaultValue = "")] string version = "",
+            [Option("n", "application name", DefaultValue = "")] string app = "",
+            [Option("i", "application id", DefaultValue = "")] string id = "")
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                if (!int.TryParse(id, out var assetId))
+                {
+                    Console.WriteLine("Assert Id is invalid.");
+                    return;
+                }
+                var assets = await _reader.GetAssets();
+                var find = assets?.Find(a => a.AssetId == assetId);
+                if (find == null)
+                {
+                    Console.WriteLine("Assert Id is invalid.");
+                    Console.WriteLine("Execute list command to display available versions");
+                    return;
+                }
+                version = find.Version;
+                app = find.Name;
+            }
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                Console.WriteLine("Version is missing.");
+                Console.WriteLine("Execute list command to display available versions");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(app))
+            {
+                Console.WriteLine("Application name is missing.");
+                Console.WriteLine("Execute list command to display available versions");
+                return;
+            }
+            if (!_reader.VerifyPackageName(app))
+            {
+                Console.WriteLine("Application name is invalid.");
+                Console.WriteLine("Available names are: ");
+                Console.WriteLine(string.Join(", ", _packageNames));
+                return;
+            }
+            var models = await _reader.GetReleases();
+            if (models == null || models.Count == 0)
+            {
+                Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
+                return;
+            }
+            var item = _reader.FindAsset(models, version, app);
+            if (item == null)
+            {
+                Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
+                return;
+            }
+            Console.WriteLine("Downloading application: {0} version: {1}.", app, version);
+            var data = await _reader.GetAsset(item);
+            if (data is not byte[] contents)
+            {
+                Console.WriteLine("Failed to download application: {0} version: {1}.", app, version);
+                return;
+            }
+            var installPath = Path.Combine(_applocator.SubFolder, app);
+            _fileService.CreateDirectory(installPath);
+            installPath = Path.Combine(installPath, version);
+            _fileService.CreateDirectory(installPath);
+            var completion = _fileService.Extract(installPath, contents);
+            if (!completion) return;
+            Console.WriteLine("Completed download application: {0} version: {1}.", app, version);
+            Console.WriteLine(" - {0}", installPath);
+            if (!_reader.AllowShortcuts) return;
+            Console.WriteLine("Creating application shortcut: {0} version: {1}.", app, version);
+            ShortcutBuilder.CreateShortCut(item, installPath);
+
+            Console.WriteLine("Creating desktop shortcut: {0} version: {1}.", app, version);
+            ShortcutBuilder.CreateShortCut(item, installPath, true);
+        }
+
+    }
+}
