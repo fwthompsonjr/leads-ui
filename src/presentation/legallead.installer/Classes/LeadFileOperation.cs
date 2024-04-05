@@ -13,7 +13,7 @@ namespace legallead.installer.Classes
             Directory.CreateDirectory(path);
         }
 
-        public void DeleteDirectory(string path, bool recursive)
+        public virtual void DeleteDirectory(string path, bool recursive)
         {
             if (!DirectoryExists(path)) { return; }
             Directory.Delete(path, recursive);
@@ -80,7 +80,9 @@ namespace legallead.installer.Classes
                 if (!FileExists(path)) { return false; }
                 var process = new Process
                 {
-                    StartInfo = new ProcessStartInfo(path) { WindowStyle = ProcessWindowStyle.Normal },
+                    StartInfo = new ProcessStartInfo(path) { 
+                        WindowStyle = ProcessWindowStyle.Normal, 
+                        CreateNoWindow = false },
                 };
                 process.Start();
                 return true;

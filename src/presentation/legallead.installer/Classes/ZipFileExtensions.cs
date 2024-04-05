@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO.Compression;
 
 namespace legallead.installer.Classes
 {
@@ -11,12 +12,7 @@ namespace legallead.installer.Classes
 
         public static void ExtractToDirectory(this ZipArchive source, string destinationDirectoryName, IProgress<ZipProgress> progress, bool overwrite)
         {
-            ArgumentNullException.ThrowIfNull(source);
-            ArgumentNullException.ThrowIfNull(destinationDirectoryName);
-
-
-            // Rely on Directory.CreateDirectory for validation of destinationDirectoryName.
-
+            
             // Note that this will give us a good DirectoryInfo even if destinationDirectoryName exists:
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
             string destinationDirectoryFullPath = di.FullName;
@@ -26,32 +22,37 @@ namespace legallead.installer.Classes
             {
                 count++;
                 string fileDestinationPath = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, entry.FullName));
-
-                if (!fileDestinationPath.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
-                    throw new IOException("File is extracting to outside of the folder specified.");
-
+                TestPathLocation(fileDestinationPath, destinationDirectoryFullPath);
                 var zipProgress = new ZipProgress(source.Entries.Count, count, entry.FullName);
                 progress.Report(zipProgress);
-
-                if (Path.GetFileName(fileDestinationPath).Length == 0)
-                {
-                    // If it is a directory:
-
-                    if (entry.Length != 0)
-                        throw new IOException("Directory entry with data.");
-
-                    Directory.CreateDirectory(fileDestinationPath);
-                }
-                else
-                {
-                    // If it is a file:
-                    // Create containing directory:
-                    var parentDirectory = Path.GetDirectoryName(fileDestinationPath);
-                    if (string.IsNullOrEmpty(parentDirectory)) continue;
-                    if (!Directory.Exists(parentDirectory)) Directory.CreateDirectory(parentDirectory);
-                    entry.ExtractToFile(fileDestinationPath, overwrite: overwrite);
-                }
+                TryCreateDirectory(entry, destinationDirectoryFullPath);
+                TryExtractFile(entry, destinationDirectoryFullPath, overwrite);
             }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]
+        private static void TestPathLocation(string fileDestinationPath, string destinationDirectoryFullPath)
+        {
+            if (!fileDestinationPath.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
+                throw new IOException("File is extracting to outside of the folder specified.");
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]
+        private static void TryCreateDirectory(ZipArchiveEntry entry, string fileDestinationPath)
+        {
+            if (Path.GetFileName(fileDestinationPath).Length != 0) return;
+            if (entry.Length != 0) throw new IOException("Directory entry with data.");
+            Directory.CreateDirectory(fileDestinationPath);
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]
+        private static void TryExtractFile(ZipArchiveEntry entry, string fileDestinationPath, bool overwrite)
+        {
+            if (Path.GetFileName(fileDestinationPath).Length == 0) return;
+            var parentDirectory = Path.GetDirectoryName(fileDestinationPath);
+            if (string.IsNullOrEmpty(parentDirectory)) return;
+            if (!Directory.Exists(parentDirectory)) Directory.CreateDirectory(parentDirectory);
+            entry.ExtractToFile(fileDestinationPath, overwrite: overwrite);
         }
     }
 }

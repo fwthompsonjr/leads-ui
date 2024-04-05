@@ -11,6 +11,8 @@ namespace legallead.installer.Commands
         )
         {
             Console.WriteLine("Opening installed application :");
+            Console.WriteLine($" name : {name}");
+            if(!string.IsNullOrWhiteSpace(version)) { Console.WriteLine($" version : {version}"); }
             if (string.IsNullOrWhiteSpace(name))
             {
                 Console.WriteLine("Application name is missing.");
