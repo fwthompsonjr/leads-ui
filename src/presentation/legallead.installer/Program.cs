@@ -12,6 +12,7 @@ var app = ConsoleApp.CreateBuilder(args)
         s.AddSingleton<IGitReader, GitReader>();
         s.AddSingleton<ILeadFileOperation, LeadFileOperation>();
         s.AddSingleton<ILeadAppInstaller, LeadAppInstaller>();
+        s.AddSingleton<IShortcutCreator, ShortcutCreator>();
     })
     .Build();
 app.AddCommands<CommandHandler>();

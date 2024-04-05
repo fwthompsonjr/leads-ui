@@ -174,10 +174,11 @@ namespace legallead.installer.tests
             var locator = new Mock<ILeadAppInstaller>();
             var fileservice = new Mock<ILeadFileOperation>();
             var appFolder = Path.Combine(CurrentDir, "command_handler_test");
+            var linkservice = new Mock<IShortcutCreator>();
             if (!Directory.Exists(appFolder)) { Directory.CreateDirectory(appFolder); }
             locator.SetupGet(s => s.SubFolder).Returns(appFolder);
             fileservice.Setup(s => s.Extract(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(extractResult);
-            return new CommandHandler(mock.Object, locator.Object, fileservice.Object);
+            return new CommandHandler(mock.Object, locator.Object, fileservice.Object, linkservice.Object);
         }
 
 

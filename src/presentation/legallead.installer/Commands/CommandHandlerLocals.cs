@@ -14,7 +14,7 @@
             }
             foreach (var model in models)
             {
-                Console.WriteLine(" - {0}: {1:D}", model.Name, model.PublishDate);
+                Console.WriteLine(" - {0}", model.Name);
                 if (model.Versions.Count == 0) continue;
                 var details = model.Versions.Select(x =>
                 {

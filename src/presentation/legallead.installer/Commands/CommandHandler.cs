@@ -11,11 +11,14 @@ namespace legallead.installer.Commands
         private readonly IGitReader _reader;
         private readonly ILeadAppInstaller _applocator;
         private readonly ILeadFileOperation _fileService;
+        private readonly IShortcutCreator _linkService;
         private readonly string versionNumber;
         private readonly List<string> _packageNames;
-        public CommandHandler(IGitReader reader,
+        public CommandHandler(
+            IGitReader reader,
             ILeadAppInstaller applocator,
-            ILeadFileOperation fileService)
+            ILeadFileOperation fileService,
+            IShortcutCreator linkService)
         {
             _reader = reader;
             _packageNames = GitClientProvider.PackageNames;
@@ -25,6 +28,7 @@ namespace legallead.installer.Commands
             versionNumber = version ?? nodata;
             _applocator = applocator;
             _fileService = fileService;
+            _linkService = linkService;
         }
 
         [RootCommand]

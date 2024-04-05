@@ -12,22 +12,29 @@ namespace legallead.installer.Classes
 
         public static void ExtractToDirectory(this ZipArchive source, string destinationDirectoryName, IProgress<ZipProgress> progress, bool overwrite)
         {
-            
+
             // Note that this will give us a good DirectoryInfo even if destinationDirectoryName exists:
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
             string destinationDirectoryFullPath = di.FullName;
 
             int count = 0;
-            foreach (ZipArchiveEntry entry in source.Entries)
+            var entries = source.Entries.ToList();
+            entries.ForEach(entry =>
             {
-                count++;
-                string fileDestinationPath = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, entry.FullName));
-                TestPathLocation(fileDestinationPath, destinationDirectoryFullPath);
+                count = entries.IndexOf(entry) + 1;
                 var zipProgress = new ZipProgress(source.Entries.Count, count, entry.FullName);
                 progress.Report(zipProgress);
-                TryCreateDirectory(entry, destinationDirectoryFullPath);
-                TryExtractFile(entry, destinationDirectoryFullPath, overwrite);
-            }
+                string fileDestinationPath = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, entry.FullName));
+                TestPathLocation(fileDestinationPath, destinationDirectoryFullPath);
+                if (Path.GetFileName(fileDestinationPath).Length == 0)
+                {
+                    TryCreateDirectory(entry, fileDestinationPath);
+                }
+                else
+                {
+                    TryExtractFile(entry, fileDestinationPath, overwrite);
+                }
+            });
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]

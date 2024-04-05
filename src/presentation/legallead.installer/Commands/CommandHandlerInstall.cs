@@ -7,7 +7,7 @@ namespace legallead.installer.Commands
         [Command("install", "Install legallead application")]
         public async Task Install(
             [Option("v", "version number", DefaultValue = "")] string version = "",
-            [Option("n", "application name", DefaultValue = "")] string app = "",
+            [Option("n", "application name", DefaultValue = "")] string name = "",
             [Option("i", "application id", DefaultValue = "")] string id = "")
         {
             if (!string.IsNullOrEmpty(id))
@@ -26,7 +26,7 @@ namespace legallead.installer.Commands
                     return;
                 }
                 version = find.Version;
-                app = find.Name;
+                name = find.Name;
             }
             if (string.IsNullOrWhiteSpace(version))
             {
@@ -34,13 +34,13 @@ namespace legallead.installer.Commands
                 Console.WriteLine("Execute list command to display available versions");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(app))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 Console.WriteLine("Application name is missing.");
                 Console.WriteLine("Execute list command to display available versions");
                 return;
             }
-            if (!_reader.VerifyPackageName(app))
+            if (!_reader.VerifyPackageName(name))
             {
                 Console.WriteLine("Application name is invalid.");
                 Console.WriteLine("Available names are: ");
@@ -50,36 +50,38 @@ namespace legallead.installer.Commands
             var models = await _reader.GetReleases();
             if (models == null || models.Count == 0)
             {
-                Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
+                Console.WriteLine("Unable to locate application: {0} version: {1}.", name, version);
                 return;
             }
-            var item = _reader.FindAsset(models, version, app);
+            var item = _reader.FindAsset(models, version, name);
             if (item == null)
             {
-                Console.WriteLine("Unable to locate application: {0} version: {1}.", app, version);
+                Console.WriteLine("Unable to locate application: {0} version: {1}.", name, version);
                 return;
             }
-            Console.WriteLine("Downloading application: {0} version: {1}.", app, version);
+            Console.WriteLine("Downloading application: {0} version: {1}.", name, version);
             var data = await _reader.GetAsset(item);
             if (data is not byte[] contents)
             {
-                Console.WriteLine("Failed to download application: {0} version: {1}.", app, version);
+                Console.WriteLine("Failed to download application: {0} version: {1}.", name, version);
                 return;
             }
-            var installPath = Path.Combine(_applocator.SubFolder, app);
+            var installPath = Path.Combine(_applocator.SubFolder, name);
             _fileService.CreateDirectory(installPath);
             installPath = Path.Combine(installPath, version);
             _fileService.CreateDirectory(installPath);
             var completion = _fileService.Extract(installPath, contents);
             if (!completion) return;
-            Console.WriteLine("Completed download application: {0} version: {1}.", app, version);
+            Console.WriteLine("Completed download application: {0} version: {1}.", name, version);
             Console.WriteLine(" - {0}", installPath);
             if (!_reader.AllowShortcuts) return;
-            Console.WriteLine("Creating application shortcut: {0} version: {1}.", app, version);
-            ShortcutBuilder.CreateShortCut(item, installPath);
-
-            Console.WriteLine("Creating desktop shortcut: {0} version: {1}.", app, version);
-            ShortcutBuilder.CreateShortCut(item, installPath, true);
+            for (var sc = 0; sc < 2; sc++)
+            {
+                var messagetype = sc == 0 ? "application" : "desktop";
+                var message = $"Creating {messagetype} shortcut: {name} version: {version}.";
+                Console.WriteLine(message);
+                _linkService.Create(item, installPath, sc == 1);
+            }
         }
 
     }

@@ -1,5 +1,7 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
+using Octokit;
+using System.Collections.Immutable;
 
 namespace legallead.installer.Classes
 {
@@ -64,10 +66,12 @@ namespace legallead.installer.Classes
                     Version = x.Name,
                     FullPath = x.FullName,
                     PublishDate = x.CreateDate
-                });
-                model.Versions = versions.ToList();
+                }).ToList();
+                versions.Sort((b,a) => a.Version.CompareTo(b.Version));
+                model.Versions = versions;
                 return model;
             }).ToList();
+            apps.Sort((a,b) => a.Name.CompareTo(b.Name));
             return apps;
         }
     }

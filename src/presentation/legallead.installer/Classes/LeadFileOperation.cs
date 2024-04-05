@@ -50,8 +50,8 @@ namespace legallead.installer.Classes
         public DirectoryInfoModel[] GetDirectories(string path)
         {
             if (!Directory.Exists(path)) { return []; }
-            var found = new DirectoryInfo(path).GetDirectories();
-            if (found == null || found.Length == 0) { return []; }
+            var found = new DirectoryInfo(path).GetDirectories().Where(d => !d.FullName.EndsWith("backup"));
+            if (!found.Any()) { return []; }
             var models = found.Select(s => new DirectoryInfoModel
             {
                 Name = s.Name,
@@ -70,7 +70,17 @@ namespace legallead.installer.Classes
         public string? FindExecutable(string path)
         {
             if (!DirectoryExists(path)) { return null; }
-            return FindFiles(path, "*.exe").FirstOrDefault();
+            var packages = SettingProvider.Common().Packages;
+            var files = FindFiles(path, "*.exe").Where(w => IsPackage(w, packages));
+            return files.FirstOrDefault();
+        }
+
+        public virtual bool IsPackage(string w, List<string> packages)
+        {
+            const char dash = '-';
+            var name = Path.GetFileNameWithoutExtension(w);
+            if (name.Contains(dash)) name = name.Split('-')[0];
+            return packages.Any(p => p.StartsWith(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool LaunchExecutable(string path)
@@ -78,13 +88,13 @@ namespace legallead.installer.Classes
             try
             {
                 if (!FileExists(path)) { return false; }
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo(path) { 
-                        WindowStyle = ProcessWindowStyle.Normal, 
-                        CreateNoWindow = false },
-                };
-                process.Start();
+                Process myProcess = new();
+                var info = myProcess.StartInfo;
+                info.WorkingDirectory = Path.GetDirectoryName(path);
+                info.WindowStyle = ProcessWindowStyle.Normal;
+                info.FileName = path;
+                info.CreateNoWindow = false;
+                myProcess.Start();
                 return true;
             }
             catch (Exception ex)

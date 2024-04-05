@@ -44,7 +44,7 @@ namespace legallead.installer.Commands
                 Console.WriteLine($" - Unable to find application: {name}, version: {version}.");
                 return;
             }
-            TryToExecute(filtered[0]);
+            TryToExecute(selection);
         }
 
         private void TryToExecute(LocalVersionModel model)
