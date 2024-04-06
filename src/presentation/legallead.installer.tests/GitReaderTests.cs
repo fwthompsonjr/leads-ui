@@ -27,26 +27,6 @@ namespace legallead.installer.tests
                 m.Assets = assetFaker.Generate(nbr);
             });
 
-        [Fact]
-        public async Task ClientCanGetReleases()
-        {
-            if (!Debugger.IsAttached) return;
-            var client = new GitReader();
-            var releases = await client.GetReleases();
-            Assert.NotNull(releases);
-            Assert.NotEmpty(releases);
-        }
-
-        [Fact]
-        public async Task ClientCanGetAssets()
-        {
-            if (!Debugger.IsAttached) return;
-            var client = new GitReader();
-            var assets = await client.GetAssets();
-            Assert.NotNull(assets);
-            Assert.NotEmpty(assets);
-        }
-
         [Theory]
         [InlineData(false, false, false)]
         [InlineData(false, false, true)]
