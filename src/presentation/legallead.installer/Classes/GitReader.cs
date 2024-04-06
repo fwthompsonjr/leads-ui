@@ -18,7 +18,14 @@ namespace legallead.installer.Classes
         {
             var releases = await GitClientProvider.GetReleases();
             if (releases == null) return null;
-            return releases.SelectMany(s => s.Assets).ToList();
+            var assets = releases.SelectMany(s => s.Assets).ToList();
+            assets.Sort((a, b) =>
+            {
+                var aa = a.Name.CompareTo(b.Name);
+                if (aa != 0) return aa;
+                return b.Version.CompareTo(a.Version);
+            });
+            return assets;
         }
 
         public ReleaseAssetModel? FindAsset(List<ReleaseModel> models, string version, string app)
@@ -27,7 +34,8 @@ namespace legallead.installer.Classes
 
             if (string.IsNullOrWhiteSpace(version)) return null;
             if (string.IsNullOrWhiteSpace(app)) return null;
-            var list = models.SelectMany(x => x.Assets).ToList();
+            var list = models.SelectMany(x => x.Assets).ToList().FindAll(x => x.Name.StartsWith(app, oic));
+            if (list.Count == 1 && string.IsNullOrEmpty(version)) return list[0];
             var item = list.Find(x => x.Name.Equals(app, oic) && x.Version.Equals(version, oic));
             return item;
         }
@@ -35,7 +43,8 @@ namespace legallead.installer.Classes
         {
             if (string.IsNullOrWhiteSpace(packageName)) return false;
             packageName = packageName.Trim();
-            return GitClientProvider.PackageNames.Contains(packageName, StringComparer.OrdinalIgnoreCase);
+            var found = GitClientProvider.PackageNames.Find(x => x.StartsWith(packageName, StringComparison.OrdinalIgnoreCase));
+            return found != null;
         }
         [ExcludeFromCodeCoverage(Justification = "Method is tested from static class")]
         public async Task<object?> GetAsset(ReleaseAssetModel model)

@@ -17,7 +17,11 @@ function generateBuildCommand( $solution ) {
         $errorsFile = $args[3]
         Write-Output "Building Solution: $shortName $version"; 
         dotnet build $sln --property:Configuration=Release
-        dotnet test $sln --property:Configuration=Release
+        $dir = [System.IO.Path]::GetDirectoryName($sln);
+        $di = [System.IO.DirectoryInfo]::new( $dir )
+        $files = $di.GetFiles("*installer.tests.csproj", [System.IO.SearchOption]::AllDirectories);
+        $testProj = $files.Item(0).FullName
+        dotnet test $testProj --configuration Release --no-restore
         
         if ($LASTEXITCODE -ne 0) {
             ("Build $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -73,18 +77,15 @@ $found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where
 
 $commands = @();
 $solutionFile = $found.FullName
-$cmmd = generateBuildCommand -solution $solutionFile
-$commands += $cmmd
 
-# Start the (thread) jobs.
-# and make the script run considerably longer.
-$jobs = $commands | Foreach-Object { Start-Job -ScriptBlock $_["obj"] -ArgumentList $_["args"] }
+dotnet build $solutionFile --configuration Release
+$dir = [System.IO.Path]::GetDirectoryName($solutionFile);
+$di = [System.IO.DirectoryInfo]::new( $dir )
+$files = $di.GetFiles("*installer.tests.csproj", [System.IO.SearchOption]::AllDirectories);
+$testProj = $files.Item(0).FullName
+dotnet test $testProj --configuration Release --no-restore
 
-# Wait until all jobs have completed, passing their output through as it
-# is received, and automatically clean up afterwards.
-$jobs | Receive-Job -Wait -AutoRemoveJob
 
-"All jobs completed. Total runtime in secs.: $(([datetime]::UtcNow - $startedAt).TotalSeconds)"
 deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )

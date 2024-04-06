@@ -1,5 +1,7 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
+using Octokit;
+using System.Collections.Immutable;
 
 namespace legallead.installer.Classes
 {
@@ -45,6 +47,32 @@ namespace legallead.installer.Classes
                 Console.WriteLine(ex.Message);
                 return string.Empty;
             }
+        }
+
+        public List<LocalAppModel> GetInstalledApplications()
+        {
+            if (!_fileManager.DirectoryExists(SubFolder)) return [];
+            var directories = _fileManager.GetDirectories(SubFolder);
+            var apps = directories.Select(s =>
+            {
+                var model = new LocalAppModel
+                {
+                    Name = s.Name,
+                    PublishDate = s.CreateDate
+                };
+                var versions = _fileManager.GetDirectories(s.FullName).Select(x => new LocalVersionModel
+                {
+                    Name = model.Name,
+                    Version = x.Name,
+                    FullPath = x.FullName,
+                    PublishDate = x.CreateDate
+                }).ToList();
+                versions.Sort((b,a) => a.Version.CompareTo(b.Version));
+                model.Versions = versions;
+                return model;
+            }).ToList();
+            apps.Sort((a,b) => a.Name.CompareTo(b.Name));
+            return apps;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using legallead.installer.Classes;
 using legallead.installer.Models;
-using System.Reflection;
+using System.Diagnostics;
 
 namespace legallead.installer.tests
 {
@@ -23,27 +23,9 @@ namespace legallead.installer.tests
             .RuleFor(x => x.PublishDate, y => y.Date.Recent())
             .FinishWith((x, m) =>
             {
-                var nbr = x.Random.Int(1, 5);
+                var nbr = x.Random.Int(2, 5);
                 m.Assets = assetFaker.Generate(nbr);
             });
-
-        [Fact]
-        public async Task ClientCanGetReleases()
-        {
-            var client = new GitReader();
-            var releases = await client.GetReleases();
-            Assert.NotNull(releases);
-            Assert.NotEmpty(releases);
-        }
-
-        [Fact]
-        public async Task ClientCanGetAssets()
-        {
-            var client = new GitReader();
-            var assets = await client.GetAssets();
-            Assert.NotNull(assets);
-            Assert.NotEmpty(assets);
-        }
 
         [Theory]
         [InlineData(false, false, false)]

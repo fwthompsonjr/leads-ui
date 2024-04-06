@@ -3,13 +3,6 @@ using legallead.installer.Classes;
 using legallead.installer.Interfaces;
 using legallead.installer.Models;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.IO.Compression;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.installer.tests
 {
@@ -227,7 +220,7 @@ namespace legallead.installer.tests
             private readonly string parentFolder;
             private readonly string _applicationsDir;
 
-            public InstallerInstance(ILeadFileOperation fileOperation) : base(fileOperation) 
+            public InstallerInstance(ILeadFileOperation fileOperation) : base(fileOperation)
             {
                 fileServiceMq = new Mock<ILeadFileOperation>();
                 fileService = fileServiceMq.Object;

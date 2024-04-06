@@ -8,6 +8,7 @@ namespace legallead.installer.Interfaces
         string SubFolder { get; }
         ILeadFileOperation FileManager { get; }
 
+        List<LocalAppModel> GetInstalledApplications();
         string? Install(ReleaseAssetModel model, object? data);
     }
 }
