@@ -76,14 +76,11 @@ namespace legallead.installer.tests
                 _ => modelFaker.Generate(recordCount.GetValueOrDefault())
             };
 
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var mock = GetMock();
-                mock.Setup(m => m.GetReleases()).ReturnsAsync(records);
-                var handler = GetCommandHandler(mock);
-                await handler.List();
-            });
-            Assert.Null(exception);
+            var mock = GetMock();
+            mock.Setup(m => m.GetReleases()).ReturnsAsync(records);
+            var handler = GetCommandHandler(mock);
+            await handler.List();
+            Assert.True(true);
         }
 
 
@@ -108,22 +105,19 @@ namespace legallead.installer.tests
             var indx = new Faker().PickRandom(list);
             var asset = appName.Equals("temp") | appName.Equals("no-data") ? indx : null;
             var assetData = appName.Equals("temp") ? new Faker().System.Random.Bytes(1000) : null;
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var mock = GetMock();
-                mock.Setup(m => m.GetReleases()).ReturnsAsync(recordset);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => !custom.Contains(s)))).Returns(true);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "temp"))).Returns(true);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "missing"))).Returns(false);
-                mock.Setup(m => m.FindAsset(
-                    It.IsAny<List<ReleaseModel>>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>())).Returns(asset);
-                mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
-                var handler = GetCommandHandler(mock);
-                await handler.Install(versionName, appName, string.Empty);
-            });
-            Assert.Null(exception);
+            var mock = GetMock();
+            mock.Setup(m => m.GetReleases()).ReturnsAsync(recordset);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => !custom.Contains(s)))).Returns(true);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "temp"))).Returns(true);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "missing"))).Returns(false);
+            mock.Setup(m => m.FindAsset(
+                It.IsAny<List<ReleaseModel>>(),
+                It.IsAny<string>(),
+                It.IsAny<string>())).Returns(asset);
+            mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
+            var handler = GetCommandHandler(mock);
+            await handler.Install(versionName, appName, string.Empty);
+            Assert.NotNull(handler);
         }
 
         [Theory]
@@ -145,24 +139,21 @@ namespace legallead.installer.tests
 
             var asset = appName.Equals("temp") | appName.Equals("no-data") ? indx : null;
             var assetData = appName.Equals("temp") ? new Faker().System.Random.Bytes(1000) : null;
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var mock = GetMock();
-                mock.SetupGet(x => x.AllowShortcuts).Returns(true);
-                mock.Setup(m => m.GetReleases()).ReturnsAsync(recordset);
-                mock.Setup(m => m.GetAssets()).ReturnsAsync(list);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => !custom.Contains(s)))).Returns(true);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "temp"))).Returns(true);
-                mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "missing"))).Returns(false);
-                mock.Setup(m => m.FindAsset(
-                    It.IsAny<List<ReleaseModel>>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>())).Returns(asset);
-                mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
-                var handler = GetCommandHandler(mock, false);
-                await handler.Install("", "", appId ?? "");
-            });
-            Assert.Null(exception);
+            var mock = GetMock();
+            mock.SetupGet(x => x.AllowShortcuts).Returns(true);
+            mock.Setup(m => m.GetReleases()).ReturnsAsync(recordset);
+            mock.Setup(m => m.GetAssets()).ReturnsAsync(list);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => !custom.Contains(s)))).Returns(true);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "temp"))).Returns(true);
+            mock.Setup(m => m.VerifyPackageName(It.Is<string>(s => s == "missing"))).Returns(false);
+            mock.Setup(m => m.FindAsset(
+                It.IsAny<List<ReleaseModel>>(),
+                It.IsAny<string>(),
+                It.IsAny<string>())).Returns(asset);
+            mock.Setup(m => m.GetAsset(It.IsAny<ReleaseAssetModel>())).ReturnsAsync(assetData);
+            var handler = GetCommandHandler(mock, false);
+            await handler.Install("", "", appId ?? "");
+            Assert.NotNull(handler);
         }
         private static Mock<IGitReader> GetMock()
         {

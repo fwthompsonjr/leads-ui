@@ -11,12 +11,9 @@ namespace legallead.installer.tests
         public async Task SutCanInstall()
         {
             if (!System.Diagnostics.Debugger.IsAttached) { return; }
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var service = GetProvider().GetRequiredService<CommandHandler>();
-                await service.Install("3.2.4", "legallead.desktop-windows");
-            });
-            Assert.Null(exception);
+            var service = GetProvider().GetRequiredService<CommandHandler>();
+            await service.Install("3.2.4", "legallead.desktop-windows");
+            Assert.True(true);
         }
 
         private static ServiceProvider GetProvider()
