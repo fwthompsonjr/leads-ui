@@ -108,6 +108,26 @@ function updateReadMe() {
     [System.IO.File]::WriteAllText( $readMe, $rmcontent );
     
 }
+function getReleaseNotes() {
+    try {
+        $tb = "     ";
+        $dashes = "$tb - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - "
+        $txt = [System.IO.File]::ReadAllText( $jsonReadMe ) | ConvertFrom-Json
+        $dat = @("", "$tb legallead.installer", $dashes);
+        $txt.GetEnumerator() | ForEach-Object {
+            $nde = $_;
+            $ln = "$tb : $($nde.id) - $($nde.date) - $($nde.description)"
+            $dat += $ln
+        }
+        $dat += $dashes
+        $dat += ""
+        $detail = [string]::Join( [Environment]::NewLine, $dat)
+        $detail += "    "
+        return $detail
+    } catch {
+        return $null
+    }
+}
 
 function updateVersionNumbers() {
 
@@ -129,6 +149,13 @@ function updateVersionNumbers() {
         if ( $nodeNames.Contains( $nodeName ) -eq $true -and $nodeValue.Equals($versionStamp) -eq $false ) {
             $hasXmlChange = $true;
             $child.InnerText = $versionStamp;
+        }
+        if ('PackageReleaseNotes' -eq $nodeName ) {
+            $expected = getReleaseNotes
+            if ($expected -ne $null -and $expected.Equals($nodeValue) -eq $false ) {
+                $hasXmlChange = $true;
+                $child.InnerText = $expected;
+            }
         }
     }
     if ($hasXmlChange -eq $true ) {

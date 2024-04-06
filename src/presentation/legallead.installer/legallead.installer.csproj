@@ -12,10 +12,16 @@
     <AssemblyVersion>3.2.1</AssemblyVersion>
     <FileVersion>3.2.1</FileVersion>
     <Version>3.2.1</Version>
-	<Description>Windows tool used to install legal leads components.</Description>
-	<PackageReleaseNotes>3.2.1 - 2024-04-05 - Add ability to uninstall application from cli
-3.2.1 - 2024-04-05 - Add ability to run application from cli
-3.2.0 - 2024-03-31 - Initial Installer Release With Base Commands</PackageReleaseNotes>
+    <Description>Windows tool used to install legal leads components.</Description>
+    <PackageReleaseNotes>
+      legallead.installer
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.1 - 2024-04-05 - Add ability to uninstall application from cli
+      : 3.2.1 - 2024-04-05 - Add ability to run application from cli
+      : 3.2.1 - 2024-04-05 - Add command to list installed applications
+      : 3.2.0 - 2024-03-31 - Initial Installer Release With Base Commands
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    </PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ConsoleAppFramework" Version="4.2.4" />
