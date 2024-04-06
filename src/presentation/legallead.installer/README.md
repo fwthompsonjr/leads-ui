@@ -77,3 +77,5 @@ Usage: version
 
 Display version details for legallead installer
 ```   
+
+Please contact administrator for additional details.
