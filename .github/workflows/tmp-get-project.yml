@@ -3,6 +3,7 @@ name: dotnet-build-test-installer
 on: [push]
 env:
   NET_VERSION: '8.0.x'
+  LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
   SOLUTION_NAME: ${{ github.workspace }}/src/presentation/legallead.presentation.sln
   PROJECT_NAME: ${{ github.workspace }}/src/presentation/legallead.installer.tests/legallead.installer.tests.csproj
 jobs:
