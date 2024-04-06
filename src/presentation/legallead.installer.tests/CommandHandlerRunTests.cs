@@ -23,16 +23,10 @@ namespace legallead.installer.tests
             .RuleFor(x => x.PublishDate, y => y.Date.Recent())
             .FinishWith((x, m) =>
             {
-                var nbr = x.Random.Int(1, 5);
+                var nbr = x.Random.Int(2, 5);
                 m.Versions = versionFaker.Generate(nbr);
                 m.Versions.ForEach(x => x.Name = m.Name);
             });
-
-        private static readonly Faker<DirectoryInfoModel> dirFaker =
-            new Faker<DirectoryInfoModel>()
-            .RuleFor(x => x.Name, y => y.Random.AlphaNumeric(10))
-            .RuleFor(x => x.FullName, y => y.System.DirectoryPath())
-            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
         [Fact]
         public void SutCanBuildService()
@@ -99,15 +93,17 @@ namespace legallead.installer.tests
             var mqReader = new Mock<IGitReader>();
             var mqInstaller = new Mock<ILeadAppInstaller>();
             var mqFileService = new Mock<ILeadFileOperation>();
-
+            var mqLinkService = new Mock<IShortcutCreator>();
             // add mocks
             collection.AddSingleton(mqReader);
             collection.AddSingleton(mqInstaller);
             collection.AddSingleton(mqFileService);
+            collection.AddSingleton(mqLinkService);
             // add implementations
             collection.AddSingleton(mqReader.Object);
             collection.AddSingleton(mqInstaller.Object);
             collection.AddSingleton(mqFileService.Object);
+            collection.AddSingleton(mqLinkService.Object);
             collection.AddSingleton<CommandHandler>();
             collection.AddSingleton<LeadAppInstaller>(x =>
             {
@@ -117,13 +113,10 @@ namespace legallead.installer.tests
             return collection.BuildServiceProvider();
         }
 
-        private sealed class MockAppInstaller : LeadAppInstaller
+        private sealed class MockAppInstaller(ILeadFileOperation fileManager, string subfolder) : LeadAppInstaller(fileManager)
         {
-            private readonly string aliasLocation;
-            public MockAppInstaller(ILeadFileOperation fileManager, string subfolder) : base(fileManager)
-            {
-                aliasLocation = subfolder;
-            }
+            private readonly string aliasLocation = subfolder;
+
             public override string SubFolder => aliasLocation;
         }
     }

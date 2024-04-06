@@ -35,6 +35,12 @@
     <None Update="sample\a\content-02.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="sample\a\subfolder\children\child1\content-01.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="sample\a\subfolder\content-01.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="sample\b\content-01.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

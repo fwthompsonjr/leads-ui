@@ -1,11 +1,10 @@
-﻿using IWshRuntimeLibrary;
-using legallead.installer.Interfaces;
+﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Classes
 {
-    [ExcludeFromCodeCoverage(Justification = "This behavior is not in use. To be deleted.")]
+    [ExcludeFromCodeCoverage(Justification = "This behavior uses interop services. Tested by integration only")]
     internal static class ShortcutBuilder
     {
 
@@ -18,29 +17,6 @@ namespace legallead.installer.Classes
             builder.Build(model, targetDir, matched);
         }
 
-        public static void CreateShortCut(ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
-        {
-            try
-            {
-                var response = GetTargetDirectory(model, shortcutPath, forDesktop);
-                if (!response.Item1 || response.Item3 == null) return;
-                var targetDir = response.Item2 ?? string.Empty;
-                var matched = response.Item3;
-                var linkFile = $"{model.Name}-{model.Version}.lnk";
-                WshShell shell = new();
-                string shortcutAddress = Path.Combine(targetDir, linkFile);
-                if (System.IO.File.Exists(shortcutAddress)) { System.IO.File.Delete(shortcutAddress); }
-                IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutAddress);
-                shortcut.Description = $"Shortcut Legal Lead : {model.Name}-{model.Version}";
-                shortcut.TargetPath = matched.FullName;
-                shortcut.WorkingDirectory = Path.GetDirectoryName(matched.FullName);
-                shortcut.Save();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
         private static Tuple<bool, string?, FileInfo?> GetTargetDirectory(ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
         {
             var invalid = new Tuple<bool, string?, FileInfo?>(false, null, null);

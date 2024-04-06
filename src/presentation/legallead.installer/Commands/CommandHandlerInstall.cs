@@ -28,12 +28,6 @@ namespace legallead.installer.Commands
                 version = find.Version;
                 name = find.Name;
             }
-            if (string.IsNullOrWhiteSpace(version))
-            {
-                Console.WriteLine("Version is missing.");
-                Console.WriteLine("Execute list command to display available versions");
-                return;
-            }
             if (string.IsNullOrWhiteSpace(name))
             {
                 Console.WriteLine("Application name is missing.");
@@ -59,6 +53,8 @@ namespace legallead.installer.Commands
                 Console.WriteLine("Unable to locate application: {0} version: {1}.", name, version);
                 return;
             }
+            name = item.Name;
+            version = item.Version;
             Console.WriteLine("Downloading application: {0} version: {1}.", name, version);
             var data = await _reader.GetAsset(item);
             if (data is not byte[] contents)
@@ -75,13 +71,8 @@ namespace legallead.installer.Commands
             Console.WriteLine("Completed download application: {0} version: {1}.", name, version);
             Console.WriteLine(" - {0}", installPath);
             if (!_reader.AllowShortcuts) return;
-            for (var sc = 0; sc < 2; sc++)
-            {
-                var messagetype = sc == 0 ? "application" : "desktop";
-                var message = $"Creating {messagetype} shortcut: {name} version: {version}.";
-                Console.WriteLine(message);
-                _linkService.Create(item, installPath, sc == 1);
-            }
+            _linkService.Install(_linkService, item, installPath, name, version);
+            Execute(name, version);
         }
 
     }

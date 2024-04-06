@@ -26,15 +26,21 @@ namespace legallead.installer.Classes
                 progress.Report(zipProgress);
                 string fileDestinationPath = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, entry.FullName));
                 TestPathLocation(fileDestinationPath, destinationDirectoryFullPath);
-                if (Path.GetFileName(fileDestinationPath).Length == 0)
-                {
-                    TryCreateDirectory(entry, fileDestinationPath);
-                }
-                else
-                {
-                    TryExtractFile(entry, fileDestinationPath, overwrite);
-                }
+                Extract(entry, fileDestinationPath, overwrite);
             });
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]
+        private static void Extract(ZipArchiveEntry entry, string fileDestinationPath, bool overwrite)
+        {
+            if (Path.GetFileName(fileDestinationPath).Length == 0)
+            {
+                TryCreateDirectory(entry, fileDestinationPath);
+            }
+            else
+            {
+                TryExtractFile(entry, fileDestinationPath, overwrite);
+            }
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method tested thru publicly exposed member")]

@@ -1,8 +1,11 @@
 ﻿using legallead.installer.Models;
 using Octokit;
+using System.Diagnostics.CodeAnalysis;
+using System.Security;
 
 namespace legallead.installer.Classes
 {
+    [ExcludeFromCodeCoverage(Justification = "Interacts with remote resource. Tested in integration only")]
     public static class GitClientProvider
     {
         static GitClientProvider()
@@ -12,6 +15,7 @@ namespace legallead.installer.Classes
             _ = RepositoryName;
             _ = PackageNames;
         }
+
         public static GitHubClient GetClient()
         {
             var credentials = new Credentials(AccessToken);
@@ -173,8 +177,41 @@ namespace legallead.installer.Classes
         }
 
         private static long? RepositoryId;
-        private static Repository? CurrentRepository;
-        private static List<ReleaseModel>? ReleaseList;
+        private static Repository? CurrentRepository
+        {
+            get
+            {
+                var search = new RepositoryStorage();
+                return search.Find()?.FirstOrDefault();
+            }
+            set
+            {
+                if (value == null) { return; }
+                var storage = new RepositoryStorage
+                {
+                    Detail = [value]
+                };
+                storage.Save();
+            }
+        }
+
+        private static List<ReleaseModel>? ReleaseList
+        {
+            get
+            {
+                var search = new ReleaseModelStorage();
+                return search.Find();
+            }
+            set
+            {
+                if (value == null) { return; }
+                var storage = new ReleaseModelStorage
+                {
+                    Detail = value
+                };
+                storage.Save();
+            }
+        }
 
         private static List<string>? _packages = default;
         private static string? _accessToken = string.Empty;

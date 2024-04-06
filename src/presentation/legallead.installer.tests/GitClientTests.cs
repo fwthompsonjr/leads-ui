@@ -1,5 +1,6 @@
 using legallead.installer.Classes;
 using Octokit;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace legallead.installer.tests
@@ -34,6 +35,7 @@ namespace legallead.installer.tests
         [Fact]
         public async Task ClientCanGetAsset()
         {
+            if (!Debugger.IsAttached) return;
             var releases = await GitClientProvider.GetReleases();
             Assert.NotNull(releases);
             Assert.NotEmpty(releases);
@@ -46,6 +48,7 @@ namespace legallead.installer.tests
         [Fact]
         public async Task ClientCanGetAssetIntegration()
         {
+            if (!Debugger.IsAttached) return;
             var releases = await GitClientProvider.GetReleases();
             Assert.NotNull(releases);
             Assert.NotEmpty(releases);

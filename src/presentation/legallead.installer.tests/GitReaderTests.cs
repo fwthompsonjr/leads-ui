@@ -22,7 +22,7 @@ namespace legallead.installer.tests
             .RuleFor(x => x.PublishDate, y => y.Date.Recent())
             .FinishWith((x, m) =>
             {
-                var nbr = x.Random.Int(1, 5);
+                var nbr = x.Random.Int(2, 5);
                 m.Assets = assetFaker.Generate(nbr);
             });
 

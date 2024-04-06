@@ -32,6 +32,49 @@ namespace legallead.installer.tests
                 m.Versions.ForEach(x => x.Name = m.Name);
             });
 
+        [Fact]
+        public void SutCanUnInstallWithoutVersion()
+        {
+            var provider = GetProvider();
+            var appSvc = provider.GetRequiredService<Mock<ILeadAppInstaller>>();
+            var fileSvc = provider.GetRequiredService<Mock<ILeadFileOperation>>();
+            var apps = appFaker.Generate(10);
+            appSvc.Setup(s => s.GetInstalledApplications()).Returns(apps);
+            fileSvc.SetupSequence(s => s.DirectoryExists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(false);
+            var selected = apps[2];
+            selected.Versions = [selected.Versions[0]];
+            string name = selected.Versions[0].Name;
+            var exception = Record.Exception(() =>
+            {
+                var service = provider.GetRequiredService<CommandHandler>();
+                service.Uninstall(name);
+            });
+            Assert.Null(exception);
+        }
+
+        [Theory]
+        [InlineData("", "1.2.3")]
+        [InlineData("non-app", "")]
+        public void SutCanUnInstallVersion(string name, string version)
+        {
+            var provider = GetProvider();
+            var appSvc = provider.GetRequiredService<Mock<ILeadAppInstaller>>();
+            var fileSvc = provider.GetRequiredService<Mock<ILeadFileOperation>>();
+            var apps = appFaker.Generate(10);
+            appSvc.Setup(s => s.GetInstalledApplications()).Returns(apps);
+            fileSvc.SetupSequence(s => s.DirectoryExists(It.IsAny<string>()))
+                .Returns(true)
+                .Returns(false);
+            var exception = Record.Exception(() =>
+            {
+                var service = provider.GetRequiredService<CommandHandler>();
+                service.Uninstall(name, version);
+            });
+            Assert.Null(exception);
+        }
+
         [Theory]
         [InlineData(true, false, 0)]
         [InlineData(false, false, 1)]
