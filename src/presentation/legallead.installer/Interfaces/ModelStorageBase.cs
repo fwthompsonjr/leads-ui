@@ -21,6 +21,7 @@ namespace legallead.installer.Interfaces
         }
         public void Save()
         {
+            var targets = new[] { EnvironmentVariableTarget.User, EnvironmentVariableTarget.Process }.ToList();
             var isKeyDefined = EnvironmentStorageKey.StorageKeys.TryGetValue(Name, out var storageKey);
             if (!isKeyDefined || string.IsNullOrEmpty(storageKey))
                 throw new InvalidOperationException("Unable to save object. Invalid key provided.");
@@ -28,7 +29,8 @@ namespace legallead.installer.Interfaces
             {
                 CreationDate = DateTime.UtcNow.AddHours(4);
                 var js = JsonConvert.SerializeObject(this);
-                Environment.SetEnvironmentVariable(storageKey, js, EnvironmentVariableTarget.User);
+                SetValue(storageKey, js, null);
+                targets.ForEach(t => SetValue(storageKey, js, t));
             }
             catch (Exception ex)
             {
@@ -37,12 +39,21 @@ namespace legallead.installer.Interfaces
         }
         public List<T>? Find()
         {
+            var targets = new[] { EnvironmentVariableTarget.User, EnvironmentVariableTarget.Process }.ToList();
             var isKeyDefined = EnvironmentStorageKey.StorageKeys.TryGetValue(Name, out var storageKey);
             if (!isKeyDefined || string.IsNullOrEmpty(storageKey))
                 return null;
             try
             {
-                var js = Environment.GetEnvironmentVariable(storageKey, EnvironmentVariableTarget.User);
+                var js = GetValue(storageKey, null);
+                while (string.IsNullOrEmpty(js))
+                {
+                    foreach (var t in targets)
+                    {
+                        js = GetValue(storageKey, t);
+                        if(!string.IsNullOrEmpty(js)) break;
+                    }
+                }
                 if (string.IsNullOrEmpty(js)) return null;
                 var model = JsonConvert.DeserializeObject(js, GetType());
                 if (model is not IModelStorage<T> storage) return null;
@@ -52,6 +63,38 @@ namespace legallead.installer.Interfaces
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        private static void SetValue(string keyName, string keyValue, EnvironmentVariableTarget? target)
+        {
+            try
+            {
+                var location = target ?? EnvironmentVariableTarget.Process;
+                if (target == null)
+                    Environment.SetEnvironmentVariable(keyName, keyValue);
+                else
+                    Environment.SetEnvironmentVariable(keyName, keyValue, location);
+            } 
+            catch 
+            {
+                // no action is needed
+            }            
+        }
+
+        private static string? GetValue(string keyName, EnvironmentVariableTarget? target)
+        {
+            try
+            {
+                var location = target ?? EnvironmentVariableTarget.Process;
+                if (target == null)
+                    return Environment.GetEnvironmentVariable(keyName);
+                else
+                    return Environment.GetEnvironmentVariable(keyName, location);
+            }
+            catch
+            {
                 return null;
             }
         }
