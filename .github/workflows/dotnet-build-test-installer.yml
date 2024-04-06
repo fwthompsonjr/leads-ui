@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build and Test Solution
-      timeout-minutes: 5
+      timeout-minutes: 15
       shell: pwsh
       run: |
         & ./pipeline-build-installer.ps1

@@ -80,7 +80,7 @@ namespace legallead.installer.Classes
             const char dash = '-';
             var name = Path.GetFileNameWithoutExtension(w);
             if (name.Contains(dash)) name = name.Split('-')[0];
-            return packages.Any(p => p.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            return packages.Exists(p => p.StartsWith(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool LaunchExecutable(string path)

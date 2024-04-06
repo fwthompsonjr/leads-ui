@@ -196,6 +196,7 @@ namespace legallead.installer.tests
                 try
                 {
                     var filePath = CreateTempExtract();
+                    Assert.NotNull(filePath);
                     var content = File.ReadAllBytes(filePath);
                     var response = sut.Extract(extractDir, content);
                     Assert.False(response);

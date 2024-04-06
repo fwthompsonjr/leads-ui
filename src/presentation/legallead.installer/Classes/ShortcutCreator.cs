@@ -8,8 +8,12 @@ namespace legallead.installer.Classes
     [ExcludeFromCodeCoverage(Justification = "Process creates file resources, integration testing only")]
     public class ShortcutCreator : IShortcutCreator
     {
-        private static readonly Type m_type = Type.GetTypeFromProgID("WScript.Shell");
-        private static readonly object m_shell = Activator.CreateInstance(m_type);
+#pragma warning disable CS8602 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+        [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        private static readonly Type? m_type = Type.GetTypeFromProgID("WScript.Shell");
+        private static readonly object? m_shell = Activator.CreateInstance(m_type);
 
         public void Install(IShortcutCreator service, ReleaseAssetModel item, string installPath, string name, string version)
         {
@@ -34,6 +38,7 @@ namespace legallead.installer.Classes
                 if (string.IsNullOrEmpty(workingDirectory)) return;
                 if (File.Exists(shortcutAddress)) { File.Delete(shortcutAddress); }
                 IWshShortcut shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, m_shell, new object[] { shortcutAddress });
+
                 if (shortcut == null) return;
                 shortcut.Description = $"Shortcut Legal Lead : {model.Name}-{model.Version}";
                 shortcut.TargetPath = executableFile.FullName;
@@ -60,6 +65,7 @@ namespace legallead.installer.Classes
             [DispId(0x3eb)]
             string IconLocation { [return: MarshalAs(UnmanagedType.BStr)][DispId(0x3eb)] get; [param: In, MarshalAs(UnmanagedType.BStr)][DispId(0x3eb)] set; }
             [DispId(0x3ec)]
+            [SuppressMessage("Code Smell", "S2376:Write-only properties should not be used", Justification = "Following pattern for COM interface")]
             string RelativePath { [param: In, MarshalAs(UnmanagedType.BStr)][DispId(0x3ec)] set; }
             [DispId(0x3ed)]
             string TargetPath { [return: MarshalAs(UnmanagedType.BStr)][DispId(0x3ed)] get; [param: In, MarshalAs(UnmanagedType.BStr)][DispId(0x3ed)] set; }
@@ -72,5 +78,10 @@ namespace legallead.installer.Classes
             [DispId(0x7d1)]
             void Save();
         }
+
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8602 // Possible null reference argument.
+#pragma warning restore CS8604 // Possible null reference argument.
+
     }
 }
