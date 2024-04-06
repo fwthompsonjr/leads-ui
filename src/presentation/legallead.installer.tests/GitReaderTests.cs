@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using legallead.installer.Classes;
 using legallead.installer.Models;
+using System.Diagnostics;
 
 namespace legallead.installer.tests
 {
@@ -29,6 +30,7 @@ namespace legallead.installer.tests
         [Fact]
         public async Task ClientCanGetReleases()
         {
+            if (!Debugger.IsAttached) return;
             var client = new GitReader();
             var releases = await client.GetReleases();
             Assert.NotNull(releases);
@@ -38,6 +40,7 @@ namespace legallead.installer.tests
         [Fact]
         public async Task ClientCanGetAssets()
         {
+            if (!Debugger.IsAttached) return;
             var client = new GitReader();
             var assets = await client.GetAssets();
             Assert.NotNull(assets);

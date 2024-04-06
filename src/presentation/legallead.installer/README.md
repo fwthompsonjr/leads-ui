@@ -79,3 +79,4 @@ Display version details for legallead installer
 ```   
 
 Please contact administrator for additional details.
+Confirm unit tests passing prior to release.
