@@ -19,4 +19,17 @@
 	dotnet tool install -g $name --add-source $feed
 	```
 3. Execute install command from leadcli installed in step 2
-- Documentation
+- Confirm that cli has been installed   
+
+	```powershell
+	leadcli version
+	```   
+
+	Expected output:
+	```
+	3.2.0 - legallead.installer
+    ```
+- Install legallead-desktop application
+	```powershell
+	leadcli install legallead-desktop
+	```   

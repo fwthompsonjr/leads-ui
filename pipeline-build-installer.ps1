@@ -17,7 +17,11 @@ function generateBuildCommand( $solution ) {
         $errorsFile = $args[3]
         Write-Output "Building Solution: $shortName $version"; 
         dotnet build $sln --property:Configuration=Release
-        dotnet test $sln --property:Configuration=Release
+        $dir = [System.IO.Path]::GetDirectoryName($sln);
+        $di = [System.IO.DirectoryInfo]::new( $dir )
+        $files = $di.GetFiles("*installer.tests.csproj", [System.IO.SearchOption]::AllDirectories);
+        $testProj = $files.Item(0).FullName
+        dotnet test $testProj --configuration Release --no-restore
         
         if ($LASTEXITCODE -ne 0) {
             ("Build $shortName failed." + [Environment]::NewLine) >> $errorsFile
