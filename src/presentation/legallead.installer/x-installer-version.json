@@ -1,6 +1,11 @@
 [
   {
     "id": "3.2.1",
+    "description": "Add ability to uninstall application from cli",
+    "date": "2024-04-05"
+  },
+  {
+    "id": "3.2.1",
     "description": "Add ability to run application from cli",
     "date": "2024-04-05"
   },
