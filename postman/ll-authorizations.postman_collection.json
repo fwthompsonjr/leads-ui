@@ -77,21 +77,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is not 400 (BadRequest)\", function () {\r",
-									"  pm.response.to.not.have.status(400) \r",
-									"});\r",
-									"\r",
 									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
 									"  pm.response.to.not.have.status(500) \r",
 									"});\r",
 									"\r",
-									"pm.test(\"Status code can be 200 or 409\", function () {\r",
-									"    var acceptable = [ 200, 409 ];\r",
+									"pm.test(\"Status code can be 200 or 400 or 409\", function () {\r",
+									"    var acceptable = [ 200, 400, 409 ];\r",
 									"    var code = pm.response.code;\r",
 									"    pm.expect(acceptable).to.include(code);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],

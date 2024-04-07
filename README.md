@@ -4,6 +4,13 @@ Desktop version of lead sourcing application
 # Versions  
 ## vX.Y.Z - ReleaseDate
  - Update application to support :
+     - Session record limits
+        - Display friendly message when monthly limit is exceeded   
+        - Display friendly message when annual limit is exceeded   
+        - Clear alert when limits are within range   
+
+## v3.2.4 ( 2024-03-26 15:50:56 )
+ - Update application to support :
      - Session management ( timeout )   
         - Verify session state prior to making api calls   
         - Verify session state prior to performing menu navigation   
