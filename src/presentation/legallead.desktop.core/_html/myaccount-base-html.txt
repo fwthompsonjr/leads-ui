@@ -64,6 +64,10 @@
       </header>
 
       <main role="main" class="inner cover">
+		<div id="dv-restriction-alert" class="alert alert-primary p-2 m-2 d-none" role="alert">
+			<i class="bi bi-exclamation-diamond"></i>
+			<span id="span-restriction-alert-message">message</span>
+		</div>
 		<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
 			<p>My Account</p>
 			

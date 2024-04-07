@@ -24,6 +24,14 @@ jobs:
       with:
         dotnet-version: ${{ env.NET_VERSION }}
 
+    - name: Setup npm
+      uses: actions/setup-node@v4
+      with:
+        node-version: 'latest'
+
+    - name: Install newman
+      run: npm install -g newman
+
     - name: Install dependencies
       run: dotnet restore ${{ env.SOLUTION_NAME }}
 
@@ -31,10 +39,7 @@ jobs:
       run: dotnet test ${{ env.PROJECT_NAME }} --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
       
     - name: Postman Testing
-      uses: matt-ball/newman-action@master
-      with: 
-        collection: ${{ github.workspace }}/postman/ll-authorizations.postman_collection.json
-        environment: ${{ github.workspace }}/postman/LL-AWS.postman_environment.json
+      run: newman run ${{ github.workspace }}/postman/ll-authorizations.postman_collection.json --environment ${{ github.workspace }}/postman/LL-AWS.postman_environment.json
 
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v4

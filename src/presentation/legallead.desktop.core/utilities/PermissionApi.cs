@@ -206,6 +206,7 @@ namespace legallead.desktop.utilities
             { "search-get-invoice", "{0}/api/payment/create-checkout-session" },
             { "search-get-actives", "{0}/api/search/my-active-searches" },
             { "search-get-purchases", "{0}/api/search/my-purchases" },
+            { "search-get-restriction", "{0}/api/search/my-restriction-status" },
             { "make-search-purchase", "{0}/payment-fetch-search" },
             { "reset-download", "{0}/rollback-download" }
         };

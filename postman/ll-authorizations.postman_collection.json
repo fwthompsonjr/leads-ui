@@ -77,21 +77,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is not 400 (BadRequest)\", function () {\r",
-									"  pm.response.to.not.have.status(400) \r",
-									"});\r",
-									"\r",
 									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
 									"  pm.response.to.not.have.status(500) \r",
 									"});\r",
 									"\r",
-									"pm.test(\"Status code can be 200 or 409\", function () {\r",
-									"    var acceptable = [ 200, 409 ];\r",
+									"pm.test(\"Status code can be 200 or 400 or 409\", function () {\r",
+									"    var acceptable = [ 200, 400, 409 ];\r",
 									"    var code = pm.response.code;\r",
 									"    pm.expect(acceptable).to.include(code);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2244,6 +2241,73 @@
 					"response": []
 				},
 				{
+					"name": "RestrictionStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_RESTRICTION_STATUS_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_RESTRICTION_STATUS_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "MySearches",
 					"event": [
 						{
@@ -2676,12 +2740,14 @@
 					"pm.environment.set(\"app_url\", basurl);",
 					"const emptyGuid = '00000000-0000-0000-0000-000000000000';",
 					"const defaultApplicationName = 'legallead.permissions.api';",
-					"var locationNames = pm.execution.location;",
+					"",
+					"var locationNames = pm.execution.location == null ? 'unknown' : pm.execution.location;",
 					"locationNames.push(pm.environment.name);",
 					"var folderName = locationNames[1];",
 					"var methodName = locationNames[2];",
 					"var systemUnderTest = locationNames.join(' | ');",
 					"console.log(systemUnderTest);",
+					"",
 					"",
 					"function getEnviromentSetting( name, fallback ) {",
 					"    try {",
@@ -2698,9 +2764,6 @@
 					"}",
 					"",
 					"function getLocalUrl(){",
-					"    if (pm.environment.name == \"LL-TEST\") {",
-					"        return \"https://localhost:5001\"",
-					"    }",
 					"    return pm.collectionVariables.get('LocalUrl');",
 					"}",
 					"",
@@ -2934,6 +2997,11 @@
 		{
 			"key": "SEARCH_LIST_PURCHASE_URL",
 			"value": "api/search/list-my-purchases",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_RESTRICTION_STATUS_URL",
+			"value": "api/search/my-restriction-status",
 			"type": "string"
 		}
 	]

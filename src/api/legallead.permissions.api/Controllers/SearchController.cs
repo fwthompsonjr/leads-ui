@@ -45,6 +45,7 @@ namespace legallead.permissions.api.Controllers
             if (string.IsNullOrWhiteSpace(result.RequestId)) return UnprocessableEntity(result);
             return Ok(result);
         }
+
         [HttpPost]
         [Route("my-searches")]
         public async Task<IActionResult> MySearches(ApplicationModel context)
@@ -94,6 +95,16 @@ namespace legallead.permissions.api.Controllers
             return Ok(searches);
         }
 
+        [HttpPost]
+        [Route("my-restriction-status")]
+        public async Task<IActionResult> RestrictionStatus(ApplicationModel context)
+        {
+            var user = await infrastructure.GetUser(Request);
+            var guid = context.Id;
+            if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var status = await infrastructure.GetRestrictionStatus(Request);
+            return Ok(status);
+        }
 
         [HttpPost]
         [Route("my-search-status")]
