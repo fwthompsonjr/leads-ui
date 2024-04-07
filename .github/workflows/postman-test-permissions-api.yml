@@ -35,24 +35,12 @@ jobs:
 
     - name: Unit Test with dotnet
       run: dotnet test ${{ env.PROJECT_NAME }} --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
-
-    - name: Launch API Instance
-      timeout-minutes: 10
-      shell: pwsh
-      run: |
-        & ./x-test-api-integration.ps1
       
     - name: Postman Testing
       uses: matt-ball/newman-action@master
       with: 
         collection: ${{ github.workspace }}/postman/ll-authorizations.postman_collection.json
-        environment: ${{ github.workspace }}/postman/LL-LOCAL.postman_environment.json
-
-    - name: Stop API Instance
-      shell: pwsh
-      if: ${{ always() }}
-      run: |
-        [System.Diagnostics.Process]::GetProcessesByName('legallead.permissions.api') | ForEach-Object { $_.Kill() }
+        environment: ${{ github.workspace }}/postman/LL-AWS.postman_environment.json
 
     - name: Upload dotnet test results
       uses: actions/upload-artifact@v4
