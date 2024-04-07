@@ -36,11 +36,11 @@
 		<PackageReference Include="EPPlus" Version="4.5.3.2" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.59" />
 		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
+		<PackageReference Include="legallead.json.db" Version="3.2.283" />
 		<PackageReference Include="legallead.logging" Version="3.2.*" />
 		<!-- 
 			legallead.models is fixed at 3.2.179 and should not get latest			
 		-->
-		<PackageReference Include="legallead.models" Version="3.2.179" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />

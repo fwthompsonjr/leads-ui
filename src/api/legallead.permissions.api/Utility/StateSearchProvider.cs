@@ -1,9 +1,12 @@
 ﻿using legallead.json.db;
 using legallead.json.db.entity;
+using legallead.models;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using UsState = legallead.json.db.entity.UsState;
+using UsStateCounty = legallead.json.db.entity.UsStateCounty;
 
 namespace legallead.permissions.api.Utility
 {

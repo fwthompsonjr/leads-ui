@@ -1,8 +1,13 @@
-﻿using legallead.json.db.entity;
+﻿using Bogus.Bson;
+using legallead.json.db.entity;
+using legallead.models;
+using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Model;
 
 namespace permissions.api.tests.Models
 {
+    using UsState = legallead.json.db.entity.UsState;
+    using UsStateCounty = legallead.json.db.entity.UsStateCounty;
     public class ChangeDiscountRequestTests
     {
         private static readonly object locker = new();
