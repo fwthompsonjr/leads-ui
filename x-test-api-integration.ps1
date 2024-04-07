@@ -20,7 +20,10 @@ $exes.GetEnumerator() | ForEach-Object {
         $exeFile = $execinfo.FullName
     }
 }
-if ($null -eq $exeFile ) { return }
+if ($null -eq $exeFile ) { 
+    Write-Warning "Unable to find $project executable"
+    return 
+}
 ## if ($null -ne $exeFile ) { Write-Output $exeFile; }
 $myProcess = [System.Diagnostics.Process]::new();
 $info = $myProcess.StartInfo;

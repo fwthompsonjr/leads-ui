@@ -21,7 +21,7 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -34,7 +34,6 @@ jobs:
       run: dotnet restore ${{ env.SOLUTION_NAME }}
 
     - name: Unit Test with dotnet
-      id: unitTesting
       run: dotnet test ${{ env.PROJECT_NAME }} --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
 
     - name: Launch API Instance
@@ -43,12 +42,21 @@ jobs:
       run: |
         & ./x-test-api-integration.ps1
       
-    - uses: matt-ball/newman-action@master
+    - name: Postman Testing
+      uses: matt-ball/newman-action@master
       with: 
         collection: ${{ github.workspace }}/postman/ll-authorizations.postman_collection.json
         environment: ${{ github.workspace }}/postman/LL-LOCAL.postman_environment.json
 
     - name: Stop API Instance
       shell: pwsh
+      if: ${{ always() }}
       run: |
         [System.Diagnostics.Process]::GetProcessesByName('legallead.permissions.api') | ForEach-Object { $_.Kill() }
+
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v4
+      if: ${{ always() }}
+      with: 
+        name: dotnet-results-permissions-api-${{ env.NET_VERSION }}
+        path: TestResults-${{ env.NET_VERSION }}

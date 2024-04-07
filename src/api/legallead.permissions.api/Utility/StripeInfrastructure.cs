@@ -105,7 +105,7 @@ namespace legallead.permissions.api.Utility
             return new
             {
                 status = session.RawJObject["status"],
-                customer_email = session.RawJObject["customer_details"]["email"]
+                customer_email = session.RawJObject["customer_details"]?["email"]
             };
         }
 
