@@ -1,5 +1,9 @@
 [
   {
+    "id": 2,
+    "description": "User Restriction: Display Monthly, Annual Limits"
+  },
+  {
     "id": 1,
     "description": "Session management: Timeout, Lock Account"
   },
