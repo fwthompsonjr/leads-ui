@@ -13,8 +13,10 @@ on:
       - 'src/api/permissions.api.tests/**'
 
 env:
-    FAILED_TEST_COUNT: "0"
-    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+  NET_VERSION: '6.0.x'
+  LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+  SOLUTION_NAME: ${{ github.workspace }}/src/api/legallead.api.sln
+  PROJECT_NAME: ${{ github.workspace }}/src/api/permissions.api.tests/permissions.api.tests.csproj
 
 jobs:
   build:
@@ -23,15 +25,30 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build and Test Solution
-      if: false
-      timeout-minutes: 15
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.NET_VERSION }}
+
+    - name: Install dependencies
+      run: dotnet restore ${{ env.SOLUTION_NAME }}
+
+    - name: Unit Test with dotnet
+      id: unitTesting
+      run: dotnet test ${{ env.PROJECT_NAME }} --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
+
+    - name: Launch API Instance
+      timeout-minutes: 10
       shell: pwsh
       run: |
-        & ./pipeline-build-installer.ps1
+        & ./x-test-api-integration.ps1
+      
+    - uses: matt-ball/newman-action@master
+      with: 
+        collection: ${{ github.workspace }}/postman/ll-authorizations.postman_collection.json
+        environment: ${{ github.workspace }}/postman/LL-LOCAL.postman_environment.json
 
-    - name: Evaluate Test Failure Status
-      if: false
-      uses: actions/github-script@v3
-      with:
-        script: core.setFailed('One or more test failed')
+    - name: Stop API Instance
+      shell: pwsh
+      run: |
+        [System.Diagnostics.Process]::GetProcessesByName('legallead.permissions.api') | ForEach-Object { $_.Kill() }
