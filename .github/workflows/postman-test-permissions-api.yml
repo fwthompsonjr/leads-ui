@@ -3,14 +3,8 @@
 # this build runs for every push where a change to src directory is included
 name: 'CQ : Build and Test : Permissions API'
 on:
-  push:
-    branches:  
-      - '**'            # matches every branch
-      - '!main'         # excludes master
-      - '!releases'     # excludes releases
-    paths:
-      - 'src/api/legallead.permissions.api/**'
-      - 'src/api/permissions.api.tests/**'
+  workflow_dispatch:
+  
 
 env:
   NET_VERSION: '6.0.x'
