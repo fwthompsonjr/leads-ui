@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.desktop
 {
@@ -77,6 +78,7 @@ namespace legallead.desktop
                 Task.Run(async () =>
                 {
                     var text = await InjectJson(api, content, user);
+                    text = await InjectRestrictionAlert(text);
                     web.SetHTML(Dispatcher, text);
                     tabMySearch.IsSelected = true;
                 });
@@ -102,6 +104,7 @@ namespace legallead.desktop
                     if (container is not ChromiumWebBrowser web) return string.Empty;
                     var html = web.GetHTML(Dispatcher);
                     html = await mapper.Map(api, user, html, "history");
+                    // html = await InjectRestrictionAlert(html);
                     web.SetHTML(Dispatcher, html);
                     return html;
                 });
@@ -119,11 +122,12 @@ namespace legallead.desktop
                 api == null) return;
             await Task.Run(() =>
             {
-                _ = Dispatcher.Invoke(() =>
+                _ = Dispatcher.Invoke(async () =>
                 {
                     var container = contentMySearch.Content;
                     if (container is not ChromiumWebBrowser web) return string.Empty;
                     var html = web.GetHTML(Dispatcher);
+                    html = await InjectRestrictionAlert(html);
                     web.SetHTML(Dispatcher, html);
                     return html;
                 });
@@ -152,6 +156,21 @@ namespace legallead.desktop
             var node = doc.DocumentNode.SelectSingleNode("//*[@id='text-my-active-searches-js']");
             if (node != null) node.InnerHtml = message;
             return doc.DocumentNode.OuterHtml;
+        }
+
+        private static async Task<string> InjectRestrictionAlert(string html)
+        {
+            var provider = AppBuilder.ServiceProvider;
+            if (provider == null) return html;
+            var user = provider.GetService<UserBo>();
+            var api = provider.GetService<IPermissionApi>();
+            var mapper = provider.GetService<IUserRestrictionMapper>(); 
+            if (user == null ||
+                !user.IsAuthenicated ||
+                api == null ||
+                mapper == null) return html;
+            html = await mapper.Map(api, user, html);
+            return html;
         }
     }
 }

@@ -1,0 +1,3008 @@
+{
+	"info": {
+		"_postman_id": "b0cc1d79-546d-4190-ba0e-ee8646b9e169",
+		"name": "ll-authorizations",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21414270",
+		"_collection_link": "https://winter-star-764782.postman.co/workspace/TDS-Queue-API~eb03d2bf-7058-49a7-87a6-d7aa710d9602/collection/21414270-b0cc1d79-546d-4190-ba0e-ee8646b9e169?action=share&source=collection_link&creator=21414270"
+	},
+	"item": [
+		{
+			"name": "application",
+			"item": [
+				{
+					"name": "ReadMe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/{{APP_README_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{APP_README_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/{{APP_LIST_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{APP_LIST_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200 or 400 or 409\", function () {\r",
+									"    var acceptable = [ 200, 400, 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{DefaultUserName}}\",\r\n  \"password\": \"{{DefaultPassword}}\",\r\n  \"email\": \"{{DefaultEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{APP_REGISTER_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{APP_REGISTER_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "State Configuration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 400 (BadRequest)\", function () {\r",
+									"  pm.response.to.not.have.status(400) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"  pm.response.to.have.status(200) \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{APP_CONFIGURATION_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{APP_CONFIGURATION_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "lists",
+			"item": [
+				{
+					"name": "GetStateDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect 1 active state response\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    pm.expect(jstring.length).to.equal(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect TX as active state code\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.find(x => x[\"shortName\"] == 'TX');\r",
+									"    pm.expect(found).not.eq(undefined);\r",
+									"    pm.expect(found).not.eq(null);\r",
+									"    pm.expect(found[\"isActive\"]).eq(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect Texas as active state name\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.find(x => x[\"name\"] == 'Texas');\r",
+									"    pm.expect(found).not.eq(undefined);\r",
+									"    pm.expect(found).not.eq(null);\r",
+									"    pm.expect(found[\"isActive\"]).eq(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/api/Lists/us-state-list",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Lists",
+								"us-state-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCountyDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect 3 active counties response\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    pm.expect(jstring.length).to.equal(3);\r",
+									"});\r",
+									"pm.test(\"Expect TX as active state code\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.filter(x => x[\"stateCode\"] == 'TX');    \r",
+									"    pm.expect(found.length).to.equal(3);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect Collin as active county name\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.find(x => x[\"name\"] == 'Collin' && x[\"stateCode\"] == 'TX');\r",
+									"    pm.expect(found).not.eq(undefined);\r",
+									"    pm.expect(found).not.eq(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect Denton as active county name\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.find(x => x[\"name\"] == 'Denton' && x[\"stateCode\"] == 'TX');\r",
+									"    pm.expect(found).not.eq(undefined);\r",
+									"    pm.expect(found).not.eq(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect Tarrant as active county name\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    var found = jstring.find(x => x[\"name\"] == 'Tarrant' && x[\"stateCode\"] == 'TX');\r",
+									"    pm.expect(found).not.eq(undefined);\r",
+									"    pm.expect(found).not.eq(null);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/api/Lists/us-county-list",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Lists",
+								"us-county-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPermissionGroups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect 5 active permissions response\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    pm.expect(jstring.length).to.equal(5);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/api/Lists/permission-groups",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Lists",
+								"permission-groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect 17 or more active permissions\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    pm.expect(jstring.length>=17);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/api/Lists/user-profile",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Lists",
+								"user-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserPermissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Expect 16 active permissions response\", function () {\r",
+									"    var jstring = pm.response.json();\r",
+									"    pm.expect(jstring.length>=16);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Expect 'Setting.MaxRecords.Per.Month' to be in collection.\", function () {\r",
+									"    const find = 'Setting.MaxRecords.Per.Month';\r",
+									"    var exists = findPermission(find);\r",
+									"    pm.expect(exists).to.be.true;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"function findPermission( name ) {    \r",
+									"    var js = pm.response.json();\r",
+									"    var item = js.filter(x => x[\"keyName\"] == name )\r",
+									"    return item != null;\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/api/Lists/user-permissions",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Lists",
+								"user-permissions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "permissions",
+			"item": [
+				{
+					"name": "SetPermissionLevel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Level\": \"Guest\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/Permissions/set-permission",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Permissions",
+								"set-permission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SetDiscount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Choices\": [\r\n        { \"StateName\": \"TX\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Tarrant\", \"IsSelected\": false },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Denton\", \"IsSelected\": true },\r\n        { \"StateName\": \"TX\", \"CountyName\": \"Collin\", \"IsSelected\": true }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/Permissions/set-discount",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"Permissions",
+								"set-discount"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "home",
+			"item": [
+				{
+					"name": "Index",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.text();\r",
+									"    pm.expect(expected).to.equal(actual);\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "HealthDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Health response is Healthy\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    pm.expect(expected).to.equal(actual[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has results.\",() =>{\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"];\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Contollers result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Contollers;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Data result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Data;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has DBConnection result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].DBConnection;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Infrastructure result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Infrastructure;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Health response has Repository result.\",() =>{\r",
+									"    var expected = \"Healthy\";\r",
+									"    var actual = pm.response.json();\r",
+									"    var results = actual[\"results\"].Repository;\r",
+									"    var hasresult = undefined != results && null != results;\r",
+									"    pm.expect(hasresult).to.equal(true);\r",
+									"    pm.expect(expected).to.equal(results[\"status\"]);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/health-details",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"health-details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDownload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {  \r",
+									"    var acceptable = [ 400, 401, 402, 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"bad-request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/payment-fetch-search",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"payment-fetch-search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDownload-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an expected value\", function () { \r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"32CBC942AAED-IXRP-2B4A8291\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/payment-fetch-search",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"payment-fetch-search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "signon",
+			"item": [
+				{
+					"name": "Login By UserName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"UserName\": \"{{DefaultUserName}}\",\r\n  \"Password\": \"{{DefaultPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_LOGIN_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_LOGIN_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login By Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{DefaultEmail}}\",\r\n  \"password\": \"{{DefaultPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_LOGIN_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_LOGIN_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh By Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accessToken\": \"{{access_token}}\",\r\n  \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_REFRESH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_REFRESH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh By UserName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accessToken\": \"{{access_token}}\",\r\n  \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_REFRESH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_REFRESH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify By Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accessToken\": \"{{access_token}}\",\r\n  \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_VERIFY_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_VERIFY_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify By UserName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"accessToken\": \"{{access_token}}\",\r\n  \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_VERIFY_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_VERIFY_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{DefaultUserName}}\",\r\n  \"oldPassword\": \"{{DefaultPassword}}\",\r\n  \"newPassword\": \"{{DefaultPassword}}\",\r\n  \"confirmPassword\": \"{{DefaultPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_CHANGE_PASSWORD_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_CHANGE_PASSWORD_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "profile",
+			"item": [
+				{
+					"name": "ContactDetail",
+					"item": [
+						{
+							"name": "GetContactIdentity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_IDENTITY_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_IDENTITY_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_All",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 4 members\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(4);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Name\", function () {\r",
+											"    const key = \"Name\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Address\", function () {\r",
+											"    const key = \"Address\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Email\", function () {\r",
+											"    const key = \"Email\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain Phone\", function () {\r",
+											"    const key = \"Phone\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Address",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Address\", function () {\r",
+											"    const key = \"Address\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Address\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Email\", function () {\r",
+											"    const key = \"Email\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Email\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Name\", function () {\r",
+											"    const key = \"Name\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Name\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetContactDetail_Phone",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response will contain 1 member\", function () {\r",
+											"    const body = pm.response.json();    \r",
+											"    const actual = body.length;\r",
+											"    pm.expect(actual).to.equal(1);\r",
+											"});\r",
+											"pm.test(\"Response will contain Phone\", function () {\r",
+											"    const key = \"Phone\";\r",
+											"    const body = pm.response.json();    \r",
+											"    const found = body.find(x => x[\"responseType\"] == key);\r",
+											"    pm.expect(found).to.not.be.null;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"RequestType\": \"Phone\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_DETAIL_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_DETAIL_URL}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "EditContactDetail_Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"AddressType\": \"Mailing\",\r\n        \"Address\": \"{{$randomStreetAddress}} {{$randomCity}}, {{$randomCountry}} {{$randomInt}}\"\r\n    },    \r\n    {\r\n        \"AddressType\": \"Billing\",\r\n        \"Address\": \"{{$randomStreetAddress}} {{$randomCity}}, {{$randomCountry}} {{$randomInt}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_ADDRESS_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_ADDRESS_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"EmailType\": \"Personal\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    },    \r\n    {\r\n        \"EmailType\": \"Business\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    },    \r\n    {\r\n        \"EmailType\": \"Other\",\r\n        \"Email\": \"{{$randomEmail}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_EMAIL_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_EMAIL_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Phone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"PhoneType\": \"Personal\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    },\r\n    {\r\n        \"PhoneType\": \"Business\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    },    \r\n    {\r\n        \"PhoneType\": \"Other\",\r\n        \"Phone\": \"{{$randomPhoneNumber}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_PHONE_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_PHONE_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EditContactDetail_Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response key matches expected\", function() {\r",
+									"    let expected = true;\r",
+									"    let actual = tryGetJsonField(\"key\");\r",
+									"    pm.expect(actual).to.equal(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"NameType\": \"First\",\r\n        \"Name\": \"{{$randomFirstName}}\"\r\n    },\r\n    {\r\n        \"NameType\": \"Last\",\r\n        \"Name\": \"{{$randomLastName}}\"\r\n    },    \r\n    {\r\n        \"NameType\": \"Company\",\r\n        \"Name\": \"{{$randomCompanyName}}\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PROFILES_EDIT_CONTACT_NAME_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PROFILES_EDIT_CONTACT_NAME_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "search",
+			"item": [
+				{
+					"name": "BeginSearch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"denton\",\r\n\t\t\"value\": 26730\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Court Type\",\r\n\t\t\t\"text\": \"All County Courts\",\r\n\t\t\t\"value\": \"9\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"name\": \"Case Type\",\r\n\t\t\t\"text\": \"JP And County Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": 1696118400000,\r\n\t\"end\": 1696636800000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_BEGIN_SEARCH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_BEGIN_SEARCH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RestrictionStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_RESTRICTION_STATUS_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_RESTRICTION_STATUS_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MySearches",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SIGNON_MYSEARCHES_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SIGNON_MYSEARCHES_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyPurchases",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_MY_PURCHASES_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_MY_PURCHASES_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyPurchases-Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_LIST_PURCHASE_URL}}?userName={{DefaultUserName}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_LIST_PURCHASE_URL}}"
+							],
+							"query": [
+								{
+									"key": "userName",
+									"value": "{{DefaultUserName}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MySearchesActive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"eb78b8cf-84de-4eb6-baa5-86e592a897dc\",\r\n    \"name\": \"legallead.permissions.api\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_MY_ACTIVE_SEARCHES_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_MY_ACTIVE_SEARCHES_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MySearchPreview",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2b4a8291-c5d5-11ee-be26-0af7a01f52e9\",\r\n    \"name\": \"legallead.preview.request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_PREVIEW_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_PREVIEW_URL}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payment",
+			"item": [
+				{
+					"name": "CreateCheckoutSession",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2b4a8291-c5d5-11ee-be26-0af7a01f52e9\",\r\n    \"name\": \"legallead.invoice.request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{PAYMENT_CREATE_SESSION}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{PAYMENT_CREATE_SESSION}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var useLocal = getEnviromentSetting( \"UseLocalInstance\", pm.collectionVariables.get('UseLocal'));",
+					"var isLocal = useLocal == 'True';",
+					"var basurl = isLocal ? getLocalUrl() : pm.collectionVariables.get('BaseUrl');",
+					"pm.environment.set(\"app_url\", basurl);",
+					"const emptyGuid = '00000000-0000-0000-0000-000000000000';",
+					"const defaultApplicationName = 'legallead.permissions.api';",
+					"",
+					"var locationNames = pm.execution.location == null ? 'unknown' : pm.execution.location;",
+					"locationNames.push(pm.environment.name);",
+					"var folderName = locationNames[1];",
+					"var methodName = locationNames[2];",
+					"var systemUnderTest = locationNames.join(' | ');",
+					"console.log(systemUnderTest);",
+					"",
+					"",
+					"function getEnviromentSetting( name, fallback ) {",
+					"    try {",
+					"        var envalue = pm.environment.get(name);",
+					"        if (undefined === envalue || null === envalue || String(envalue).length === 0) { ",
+					"            console.log(\"Environment: \" + name +  \" := \");",
+					"            return fallback; ",
+					"        }",
+					"        console.log(\"Environment: \" + name +  \" := \" + envalue);",
+					"        return String(envalue);",
+					"    } catch {",
+					"        return fallback;",
+					"    }",
+					"}",
+					"",
+					"function getLocalUrl(){",
+					"    return pm.collectionVariables.get('LocalUrl');",
+					"}",
+					"",
+					"function getAppId() {",
+					"    try {            ",
+					"        var target = \"\".concat(basurl, \"/api/application/apps\");",
+					"        pm.sendRequest({",
+					"        url: target,",
+					"        method: 'GET',",
+					"        header: { ",
+					"            \"Content-Type\": \"application/json\"",
+					"            }",
+					"        },",
+					"        function (err, response) {  ",
+					"            var jstring = response.json();",
+					"            var jsfirst = jstring[0];",
+					"            var indx = jsfirst[\"id\"];",
+					"            var name = jsfirst[\"name\"];",
+					"            var payload = JSON.stringify({ \"id\": indx, \"name\": name });",
+					"            pm.environment.set(\"app_identity\", payload);",
+					"            });",
+					"    } catch {",
+					"        var dfpayload = JSON.stringify({ \"id\": emptyGuid, \"name\": defaultApplicationName });",
+					"        pm.environment.set(\"app_identity\", dfpayload);",
+					"    }",
+					"}",
+					"",
+					"",
+					"function doLogin() {",
+					"    try {",
+					"        var target = \"\".concat(basurl, \"/api/signon/login\");",
+					"        var uid = pm.collectionVariables.get('DefaultUserName');",
+					"        var pwd = pm.collectionVariables.get('DefaultPassword');",
+					"        var appid = pm.environment.get(\"app_identity\");",
+					"        var payload = JSON.stringify({ \"UserName\": uid, \"Password\": pwd });",
+					"            ",
+					"        pm.sendRequest({",
+					"        url: target,",
+					"        method: 'POST',",
+					"        header: { ",
+					"            \"Content-Type\": \"application/json\",",
+					"            \"APP_IDENTITY\": appid},",
+					"        body: { ",
+					"            mode: 'raw',",
+					"            raw: payload",
+					"            }",
+					"        },",
+					"        function (err, response) {  ",
+					"            var jstring = response.json();",
+					"            var atoken = jstring[\"accessToken\"];",
+					"            var rtoken = jstring[\"refreshToken\"];",
+					"            pm.environment.set(\"access_token\", atoken);",
+					"            pm.environment.set(\"refresh_token\", rtoken);",
+					"            });",
+					"    } catch (error) {",
+					"        console.debug(error);",
+					"    }",
+					"}",
+					"",
+					"function execPreRequest() {",
+					"    try {",
+					"        if (folderName == \"search\" && methodName.indexOf(\"RemoteSearch\") >= 0) { return; }",
+					"        if (folderName == \"application\") { return; }",
+					"        if (folderName == \"home\") { return; }",
+					"        getAppId();",
+					"        ",
+					"        if (folderName == \"signon\" && methodName.indexOf(\"Login\") >= 0) { return; }",
+					"        doLogin();",
+					"    } catch {",
+					"",
+					"    }",
+					"}",
+					"",
+					"execPreRequest();"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseUrl",
+			"value": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com",
+			"type": "string"
+		},
+		{
+			"key": "UseLocal",
+			"value": "True",
+			"type": "string"
+		},
+		{
+			"key": "LocalUrl",
+			"value": "https://localhost:44360",
+			"type": "string"
+		},
+		{
+			"key": "DefaultPassword",
+			"value": "1234-AbcD4321",
+			"type": "string"
+		},
+		{
+			"key": "DefaultUserName",
+			"value": "test.account",
+			"type": "string"
+		},
+		{
+			"key": "DefaultEmail",
+			"value": "user@example.com",
+			"type": "string"
+		},
+		{
+			"key": "LocalAppHeader",
+			"value": "{ \"id\": \"eb642eb3-6cdf-4e95-b329-a1c760c4eb54\",  \"name\": \"legallead.permissions.api\" }",
+			"type": "string"
+		},
+		{
+			"key": "SIGNON_LOGIN_URL",
+			"value": "signon/login",
+			"type": "string"
+		},
+		{
+			"key": "SIGNON_REFRESH_URL",
+			"value": "signon/refresh-token",
+			"type": "string"
+		},
+		{
+			"key": "SIGNON_VERIFY_URL",
+			"value": "signon/verify-token",
+			"type": "string"
+		},
+		{
+			"key": "SIGNON_CHANGE_PASSWORD_URL",
+			"value": "signon/change-password",
+			"type": "string"
+		},
+		{
+			"key": "APP_README_URL",
+			"value": "api/application/read-me"
+		},
+		{
+			"key": "APP_LIST_URL",
+			"value": "api/application/apps"
+		},
+		{
+			"key": "APP_REGISTER_URL",
+			"value": "api/application/register"
+		},
+		{
+			"key": "PROFILES_CONTACT_DETAIL_URL",
+			"value": "api/profiles/get-contact-detail",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_ADDRESS_URL",
+			"value": "api/profiles/edit-contact-address",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_EMAIL_URL",
+			"value": "api/profiles/edit-contact-email",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_NAME_URL",
+			"value": "api/profiles/edit-contact-name",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_EDIT_CONTACT_PHONE_URL",
+			"value": "api/profiles/edit-contact-phone",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_CONTACT_IDENTITY_URL",
+			"value": "api/profiles/get-contact-identity",
+			"type": "string"
+		},
+		{
+			"key": "APP_CONFIGURATION_URL",
+			"value": "api/application/state-configuration",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_BEGIN_SEARCH_URL",
+			"value": "api/search/search-begin",
+			"type": "string"
+		},
+		{
+			"key": "search_api",
+			"value": "https://localhost:44305",
+			"type": "string"
+		},
+		{
+			"key": "REMOTE_SEARCH_URL",
+			"value": "api/begin",
+			"type": "string"
+		},
+		{
+			"key": "SIGNON_MYSEARCHES_URL",
+			"value": "api/search/my-searches",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_PREVIEW_URL",
+			"value": "api/search/my-search-preview",
+			"type": "string"
+		},
+		{
+			"key": "PAYMENT_CREATE_SESSION",
+			"value": "api/payment/create-checkout-session",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_MY_ACTIVE_SEARCHES_URL",
+			"value": "api/search/my-active-searches",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_MY_PURCHASES_URL",
+			"value": "api/search/my-purchases",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_LIST_PURCHASE_URL",
+			"value": "api/search/list-my-purchases",
+			"type": "string"
+		},
+		{
+			"key": "SEARCH_RESTRICTION_STATUS_URL",
+			"value": "api/search/my-restriction-status",
+			"type": "string"
+		}
+	]
+}

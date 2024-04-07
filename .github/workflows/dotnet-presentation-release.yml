@@ -9,6 +9,7 @@ on:
 
 env:
     PROJECT_NAME: "legallead.desktop-windows"
+    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
 jobs:
   release:
     permissions: write-all
@@ -55,7 +56,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.TOKEN }}
       run: |
-          gh release create ${{ env.BUILD_VERSION }} -F README.md
+          gh release create ${{ env.BUILD_VERSION }} -F README.md -t ${{ env.RELEASE_TITLE }}
 
     - name: Package windows x64
       shell: bash

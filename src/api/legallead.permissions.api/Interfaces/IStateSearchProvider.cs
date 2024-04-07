@@ -1,4 +1,5 @@
-﻿using legallead.permissions.api.Model;
+﻿using legallead.models;
+using legallead.permissions.api.Model;
 
 namespace legallead.permissions.api.Interfaces
 {
