@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
@@ -19,6 +20,14 @@ namespace legallead.permissions.api.Utility
             _db = db;
             _repo = repo;
             _usrDb = usr;
+        }
+
+        public async Task<SearchRestrictionModel?> GetRestrictionStatus(HttpRequest http)
+        {
+            var user = await GetUser(http);
+            if (user == null) return null;
+            var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
+            return restrictions.ToModel();
         }
 
         public async Task<UserSearchBeginResponse?> Begin(HttpRequest http, UserSearchRequest request)
