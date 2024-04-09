@@ -45,7 +45,9 @@ namespace legallead.desktop.entities
             if (sessionid.Equals(unset)) return false;
             if (Token == null || !Token.Expires.HasValue) return false;
             var difference = Token.Expires.Value - DateTime.UtcNow;
-            return Math.Abs(difference.TotalMinutes) < 1;
+            var isExpired = Math.Abs(difference.TotalMinutes) < 1;
+            if (isExpired) Token = null;
+            return isExpired;
         }
 
         public Action? AuthenicatedChanged { get; internal set; }
