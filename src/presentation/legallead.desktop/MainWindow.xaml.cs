@@ -1,4 +1,6 @@
-﻿using legallead.desktop.utilities;
+﻿using legallead.desktop.entities;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,9 +60,17 @@ namespace legallead.desktop
 
         private void MnuDefault_Click(object sender, RoutedEventArgs e)
         {
+            const string logoutCommand = "myaccount-logout";
             if (sender is not MenuItem mnu) return;
             if (mnu.Tag is not string mnuCommand) return;
             if (string.IsNullOrEmpty(mnuCommand)) return;
+            if (mnuCommand.Equals(logoutCommand))
+            {
+                var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+                if (user == null) return;
+                user.Token = null;
+                return;
+            }
             NavigateChild(mnuCommand);
         }
 

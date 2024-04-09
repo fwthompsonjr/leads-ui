@@ -226,6 +226,12 @@ namespace legallead.desktop.js
             web.ExecuteScriptAsync("jsPurchases.show_submission_success", msg);
         }
 
+        public virtual void LogoutUser()
+        {
+            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            if (user == null) return;
+            user.Token = null;
+        }
 
         /// <summary>
         /// This callback function is not working, possibly due to injected content.

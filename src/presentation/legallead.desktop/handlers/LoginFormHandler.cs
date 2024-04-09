@@ -41,7 +41,12 @@ namespace legallead.desktop.handlers
                 }
             });
         }
-
+        internal void ClearPassword()
+        {
+            if (!HasWebBrowser.GetValueOrDefault()) return;
+            const string clearPassword = "$('#login-password').val('')";
+            _web.ExecuteScriptAsync(clearPassword);
+        }
         internal void SetMessage(string htm)
         {
             if (!HasWebBrowser.GetValueOrDefault()) return;

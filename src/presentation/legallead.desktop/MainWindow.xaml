@@ -20,7 +20,7 @@
                 <MenuItem x:Name="mnuMyAccountProfile" Header="_Profile" Click="MnuDefault_Click" Tag="myaccount-profile" />
                 <MenuItem x:Name="mnuMyAccountPermissions" Header="Pe_rmissions" Click="MnuDefault_Click" Tag="myaccount-permissions" />
                 <Separator />
-                <MenuItem x:Name="mnuMyAccountLogout" Header="_Logout" Click="MnuDefault_Click" />
+                <MenuItem x:Name="mnuMyAccountLogout" Header="_Logout" Click="MnuDefault_Click" Tag="myaccount-logout"/>
             </MenuItem>
             <MenuItem x:Name="mnuMySearch" Header="_Search" Visibility="Hidden">
                 <MenuItem x:Name="mnuMySearchHome" Header="_Search" Click="MnuDefault_Click" Tag="mysearch-home" />
