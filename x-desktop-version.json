@@ -1,5 +1,9 @@
 [
   {
+    "id": 3,
+    "description": "Allow Logout from desktop application."
+  },
+  {
     "id": 2,
     "description": "User Restriction: Display Monthly, Annual Limits"
   },

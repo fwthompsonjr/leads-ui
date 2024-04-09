@@ -38,6 +38,8 @@ namespace legallead.desktop.handlers
                 var htm = ConvertHTML(objectData);
                 handler.SetMessage(htm);
                 if (objectData.StatusCode != 200) return;
+                handler.SetMessage("");
+                handler.ClearPassword();
                 handler.LoginCompleted(formName);
                 var data = TryDeserialize<LoginFormModel>(json);
                 SetUserSession(data, Guid.NewGuid().ToString());

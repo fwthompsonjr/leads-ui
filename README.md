@@ -3,6 +3,11 @@ Desktop version of lead sourcing application
 
 # Versions  
 ## vX.Y.Z - ReleaseDate
+ - Complete user logout behavior :
+     - User can logout of application from account page
+     - User can logout of application from context menu
+
+## v3.2.6 ( 2024-04-07 19:09:34 )
  - Update application to support :
      - Session record limits
         - Display friendly message when monthly limit is exceeded   

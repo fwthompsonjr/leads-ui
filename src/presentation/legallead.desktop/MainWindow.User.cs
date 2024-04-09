@@ -29,6 +29,8 @@ namespace legallead.desktop
                 {
                     Dispatcher.Invoke(() =>
                     {
+                        // navigate to home
+                        NavigateChild("home-login");
                         menus.ForEach(m => { m.Visibility = Visibility.Hidden; });
                     });
                 }
