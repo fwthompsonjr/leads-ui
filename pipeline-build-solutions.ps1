@@ -110,6 +110,7 @@ deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
+    echo "FAILED_TEST_COUNT=1000" >> $env:GITHUB_ENV
     return 1000;
 }
 
