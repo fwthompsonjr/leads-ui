@@ -1,5 +1,4 @@
 ﻿using legallead.json.db;
-using legallead.json.db.entity;
 using legallead.models;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using legallead.jdbc.entities;
-using legallead.json.db.entity;
 using legallead.models;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Extensions;

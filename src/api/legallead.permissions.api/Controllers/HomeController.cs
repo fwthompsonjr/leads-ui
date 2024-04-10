@@ -193,7 +193,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
         {
             var user = await infrastructure.GetUser(Request);
-            if (user == null || string.IsNullOrEmpty (user.Id)) return Unauthorized();
+            if (user == null || string.IsNullOrEmpty(user.Id)) return Unauthorized();
             var isLocked = await _lockingDb.IsAccountLocked(user.Id);
             if (isLocked)
             {

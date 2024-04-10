@@ -37,7 +37,8 @@ namespace legallead.permissions.api.Utility
         }
         public async Task<bool> LockAccount(string userId)
         {
-            var isLocked = await Task.Run(() => {
+            var isLocked = await Task.Run(() =>
+            {
                 Console.WriteLine(userId);
                 return true;
             });
