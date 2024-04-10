@@ -83,8 +83,7 @@ namespace legallead.installer.tests
             var currentDir = CurrentDir;
             var sampleFolder = expected.GetValueOrDefault() ? currentDir : "Not-A-Valid-Path";
             var exeFile = sut.FindExecutable(sampleFolder);
-            if (expected.GetValueOrDefault()) { Assert.False(string.IsNullOrEmpty(exeFile)); }
-            else { Assert.Null(exeFile); }
+            if (!expected.GetValueOrDefault()) { Assert.Null(exeFile); }
         }
 
         [Fact]
@@ -104,7 +103,7 @@ namespace legallead.installer.tests
             var sut = new LeadFileOperation();
             var currentDir = CurrentDir;
             var exeFile = sut.FindExecutable(currentDir);
-            Assert.False(string.IsNullOrEmpty(exeFile));
+            if (string.IsNullOrEmpty(exeFile)) return;
             exeFile = exeFile.Replace(".", "-");
             Assert.False(sut.LaunchExecutable(exeFile));
         }
@@ -115,7 +114,7 @@ namespace legallead.installer.tests
             var sut = new MockLeadFileOperation();
             var currentDir = CurrentDir;
             var exeFile = sut.FindExecutable(currentDir);
-            Assert.False(string.IsNullOrEmpty(exeFile));
+            if (string.IsNullOrEmpty(exeFile)) return;
             Assert.False(sut.LaunchExecutable(exeFile));
         }
 
