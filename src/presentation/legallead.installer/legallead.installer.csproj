@@ -9,13 +9,14 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>3.2.1</AssemblyVersion>
-    <FileVersion>3.2.1</FileVersion>
-    <Version>3.2.1</Version>
+    <AssemblyVersion>3.2.2</AssemblyVersion>
+    <FileVersion>3.2.2</FileVersion>
+    <Version>3.2.2</Version>
     <Description>Windows tool used to install legal leads components.</Description>
     <PackageReleaseNotes>
       legallead.installer
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.2 - 2024-04-05 - Change implementation to launch application
       : 3.2.1 - 2024-04-05 - Add ability to uninstall application from cli
       : 3.2.1 - 2024-04-05 - Add ability to run application from cli
       : 3.2.1 - 2024-04-05 - Add command to list installed applications
@@ -48,9 +49,9 @@
     </None>
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File pre-build.ps1" />
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File pre-build.ps1" ContinueOnError="true" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File post-build.ps1" />
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File post-build.ps1" ContinueOnError="true" />
   </Target>
 </Project>

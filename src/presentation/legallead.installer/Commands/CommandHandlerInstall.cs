@@ -72,7 +72,6 @@ namespace legallead.installer.Commands
             Console.WriteLine(" - {0}", installPath);
             if (!_reader.AllowShortcuts) return;
             _linkService.Install(_linkService, item, installPath, name, version);
-            Execute(name, version);
         }
 
     }
