@@ -45,11 +45,13 @@ jobs:
       run: |
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
-    - name: Evaluate Test Failure Status
-      if: env.FAILED_TEST_COUNT != '0'
-      uses: actions/github-script@v3
-      with:
-        script: core.setFailed('One or more test failed')
+    # testing in not required as all assemblies where tested in the CQ pipeline
+    # the build task is still required to generate nuget packages with correct version stamp
+    # - name: Evaluate Test Failure Status
+    #   if: env.FAILED_TEST_COUNT != '0'
+    #   uses: actions/github-script@v3
+    #   with:
+    #     script: core.setFailed('One or more test failed')
 
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
