@@ -87,6 +87,16 @@ namespace permissions.api.tests.Contollers
             Assert.NotNull(actual);
             Assert.NotEmpty(actual);
         }
+
+        [Fact]
+        public void ControllerCanListStates()
+        {
+            var provider = GetProvider();
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var actual = sut.StateList();
+            Assert.NotNull(actual);
+        }
+
         [Fact]
         public async Task ControllerRegistrationRequiresEmail()
         {

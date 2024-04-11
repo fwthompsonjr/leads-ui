@@ -71,11 +71,8 @@ namespace legallead.permissions.api.Controllers
                 response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var registration = await RegisterUser(Request, model, response);
-            if (registration is IActionResult action) return action;
-            if (registration is not User user) return UnprocessableEntity();
-            var accountResult = await RegisterUserAccount(user, response);
-            return accountResult;
+            var registration = await Register(Request, model, response);
+            return registration;
         }
 
         [HttpGet]
@@ -85,6 +82,17 @@ namespace legallead.permissions.api.Controllers
             var data = _searchProvider.GetStates();
             return Ok(data);
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
+        private async Task<IActionResult> Register(HttpRequest request, RegisterAccountModel model, string response)
+        {
+            var registration = await RegisterUser(request, model, response);
+            if (registration is IActionResult action) return action;
+            if (registration is not User user) return UnprocessableEntity();
+            var accountResult = await RegisterUserAccount(user, response);
+            return accountResult;
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
         private async Task<object> RegisterUser(HttpRequest request, RegisterAccountModel model, string response)
         {
