@@ -9,5 +9,6 @@ namespace legallead.permissions.api.Interfaces
         Task<object?> CreatePaymentAsync(
             PaymentCreateModel model,
             List<SearchInvoiceBo> data);
+        Task<object> FetchClientSecret(LevelRequestBo session);
     }
 }

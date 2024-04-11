@@ -6,6 +6,7 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {
@@ -108,6 +109,25 @@ namespace legallead.permissions.api.Utility
                 customer_email = session.RawJObject["customer_details"]?["email"]
             };
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public async Task<object> FetchClientSecret(LevelRequestBo session)
+        {
+            var nodata = new { clientSecret = Guid.Empty.ToString("D") };
+
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId);
+            if (subscription == null) return nodata;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = await invoiceSvc.GetAsync(invoiceId);
+            if (invoice == null) return nodata;
+            var intentSvc = new PaymentIntentService();
+            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
+            var clientSecret = intent.ClientSecret;
+            return new { clientSecret };
+        }
+
 
         private async Task<object?> GetPaymentSession(PaymentCreateModel model)
         {
