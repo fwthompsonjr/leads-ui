@@ -4,7 +4,6 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -157,7 +156,7 @@ namespace permissions.api.tests.Contollers
             html.Setup(m => m.IsSessionValid(It.IsAny<string>())).ReturnsAsync(dto);
             var indx = await controller.FetchIntent(new());
             Assert.NotNull(indx);
-            if (dto == null || string.IsNullOrEmpty(dto.ClientId)) 
+            if (dto == null || string.IsNullOrEmpty(dto.ClientId))
                 Assert.IsType<ContentResult>(indx);
             else
                 Assert.IsType<JsonResult>(indx);
@@ -306,7 +305,7 @@ namespace permissions.api.tests.Contollers
             html.Setup(m => m.IsRequestDownloadedAndPaid(It.IsAny<PaymentSessionDto>())).ReturnsAsync(isRequestDownloadedAndPaid);
             html.Setup(m => m.ResetDownload(It.IsAny<DownloadResetRequest>())).ReturnsAsync(down);
 
-            var indx = await controller.RollbackDownload(new() { UserId = user?.UserName ?? "other", ExternalId = "abc-123"});
+            var indx = await controller.RollbackDownload(new() { UserId = user?.UserName ?? "other", ExternalId = "abc-123" });
             Assert.NotNull(indx);
         }
     }

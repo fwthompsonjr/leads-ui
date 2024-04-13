@@ -2,7 +2,6 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -13,7 +12,7 @@ namespace legallead.permissions.api.Controllers
         private readonly IPaymentHtmlTranslator paymentSvc;
         private readonly ISearchInfrastructure infrastructure;
         private readonly ISubscriptionInfrastructure subscriptionSvc;
-        private readonly ICustomerLockInfrastructure _lockingDb; 
+        private readonly ICustomerLockInfrastructure _lockingDb;
         private readonly IStripeInfrastructure stripeSvc;
         public HomeController(
             IPaymentHtmlTranslator service,
