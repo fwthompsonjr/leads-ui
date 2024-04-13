@@ -1,19 +1,10 @@
 ﻿using legallead.jdbc.entities;
-using legallead.json.db.entity;
 using legallead.models;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Contollers
 {
@@ -34,7 +25,7 @@ namespace permissions.api.tests.Contollers
         private static readonly Faker<DiscountChoice> dchoicefaker =
             new Faker<DiscountChoice>()
                 .RuleFor(x => x.IsSelected, y => y.Random.Bool())
-            .FinishWith((a,b) =>
+            .FinishWith((a, b) =>
             {
                 var item = a.PickRandom(Counties);
                 b.StateName = item.StateCode ?? string.Empty;
@@ -43,7 +34,8 @@ namespace permissions.api.tests.Contollers
 
         private static readonly Faker<ChangeDiscountRequest> drequestfaker =
             new Faker<ChangeDiscountRequest>()
-                .RuleFor(x => x.Choices, y => {
+                .RuleFor(x => x.Choices, y =>
+                {
                     var n = y.Random.Int(1, 5);
                     return dchoicefaker.Generate(n);
                 });
@@ -111,7 +103,7 @@ namespace permissions.api.tests.Contollers
             var infra = provider.GetRequiredService<Mock<ISubscriptionInfrastructure>>();
             var lockDb = provider.GetRequiredService<Mock<ICustomerLockInfrastructure>>();
             var controller = provider.GetRequiredService<PermissionsController>();
-            
+
             discount.IsPaymentSuccess = isPaid;
             User? user = hasUser ? userfaker.Generate() : null;
             infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
@@ -138,9 +130,9 @@ namespace permissions.api.tests.Contollers
         [InlineData(true, false, true, false, "admin")]
         [InlineData(true, false, false, false, "invalid-level")]
         public async Task ContollerCanSetPermissionLevel(
-            bool hasUser, 
-            bool isLocked, 
-            bool isAdmin, 
+            bool hasUser,
+            bool isLocked,
+            bool isAdmin,
             bool isPaid,
             string permissionReqeuested = "")
         {
