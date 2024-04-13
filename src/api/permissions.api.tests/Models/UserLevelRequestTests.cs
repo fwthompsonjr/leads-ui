@@ -1,4 +1,5 @@
 ﻿using legallead.models;
+using legallead.permissions.api;
 
 namespace permissions.api.tests.Models
 {
@@ -12,6 +13,15 @@ namespace permissions.api.tests.Models
         {
             var model = faker.Generate();
             Assert.False(string.IsNullOrEmpty(model.Level));
+        }
+
+        [Fact]
+        public void ModelCanBeValidated()
+        {
+            var model = faker.Generate();
+            var validation = model.Validate(out var isvalid);
+            Assert.False(isvalid);
+            Assert.NotNull(validation);
         }
     }
 }
