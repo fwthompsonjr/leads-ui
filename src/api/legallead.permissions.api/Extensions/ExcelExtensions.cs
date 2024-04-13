@@ -3,6 +3,7 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace legallead.permissions.api.Extensions
@@ -42,7 +43,7 @@ namespace legallead.permissions.api.Extensions
                 return null;
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static void WriteContent(int ridx, SearchFinalBo source, ExcelWorksheet wsDt)
         {
             ColumnNames.ForEach(x =>
@@ -51,7 +52,7 @@ namespace legallead.permissions.api.Extensions
                 wsDt.Cells[ridx, cidx].Value = GetColumn(x, source);
             });
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static void WriteProperties(PaymentSessionJs dto, ExcelWorkbook wb, string rwcount, string password)
         {
             var props = new Dictionary<string, string>() {
@@ -90,7 +91,7 @@ namespace legallead.permissions.api.Extensions
             wb.Protection.LockStructure = true;
             wb.Protection.SetPassword(password);
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string GetWbSubject(string? description, string rowcount)
         {
             const string fallbak = "Data inquiry";
@@ -101,7 +102,7 @@ namespace legallead.permissions.api.Extensions
             var countyName = collection[0].Split(':')[1].Trim();
             return $"{countyName}, Records: {rowcount}";
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static void ApplyGridFormatting(int rcount, ExcelWorksheet wsDt)
         {
             int ccount = ColumnNames.Count;
@@ -127,6 +128,31 @@ namespace legallead.permissions.api.Extensions
             rngCells.Style.WrapText = true;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
+        private static string GetColumn(string name, SearchFinalBo source)
+        {
+            var response = name switch
+            {
+                "Name" => source.Name,
+                "Zip" => source.Zip,
+                "Address1" => source.Address1,
+                "Address2" => source.Address2,
+                "Address3" => source.Address3,
+                "CaseNumber" => source.CaseNumber,
+                "DateFiled" => source.DateFiled,
+                "Court" => source.Court,
+                "CaseType" => source.CaseType,
+                "CaseStyle" => source.CaseStyle,
+                "FirstName" => source.FirstName,
+                "LastName" => source.LastName,
+                "Plantiff" => source.Plantiff,
+                "County" => source.County,
+                "CourtAddress" => source.CourtAddress,
+                _ => string.Empty
+            };
+            return response;
+        }
+
         private static readonly List<string> ColumnNames = new() {
         "Name",
         "FirstName",
@@ -144,7 +170,6 @@ namespace legallead.permissions.api.Extensions
         "County",
         "CourtAddress",
         };
-
 
         private static readonly Dictionary<string, int> ColumnIndexes = new() {
         { "Name", 30 },
@@ -171,30 +196,6 @@ namespace legallead.permissions.api.Extensions
         { "Comments", "" },
         { "Company", "LegalLead, LLC" },
         };
-
-        private static string GetColumn(string name, SearchFinalBo source)
-        {
-            var response = name switch
-            {
-                "Name" => source.Name,
-                "Zip" => source.Zip,
-                "Address1" => source.Address1,
-                "Address2" => source.Address2,
-                "Address3" => source.Address3,
-                "CaseNumber" => source.CaseNumber,
-                "DateFiled" => source.DateFiled,
-                "Court" => source.Court,
-                "CaseType" => source.CaseType,
-                "CaseStyle" => source.CaseStyle,
-                "FirstName" => source.FirstName,
-                "LastName" => source.LastName,
-                "Plantiff" => source.Plantiff,
-                "County" => source.County,
-                "CourtAddress" => source.CourtAddress,
-                _ => string.Empty
-            };
-            return response;
-        }
 
     }
 }
