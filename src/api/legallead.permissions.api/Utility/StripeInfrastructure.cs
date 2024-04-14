@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Policy;
 
 namespace legallead.permissions.api.Utility
 {
@@ -126,6 +127,30 @@ namespace legallead.permissions.api.Utility
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
             var clientSecret = intent.ClientSecret;
             return new { clientSecret };
+        }
+        
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public Tuple<bool, string, Invoice> VerifySubscription(string sessionId)
+        {
+            const string dash = " - ";
+            var failure = new Tuple<bool, string, Invoice>(true, dash, new() { Total = 0 });
+            try
+            {
+                var service = new SubscriptionService();
+                var subscription = service.Get(sessionId);
+                if (subscription == null) return failure;
+                var invoiceId = subscription.LatestInvoiceId;
+                var invoiceSvc = new InvoiceService();
+                var invoice = invoiceSvc.Get(invoiceId);
+                if (invoice == null) return failure;
+                _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
+                successUrl ??= dash;
+                return new Tuple<bool, string, Invoice>(true, successUrl, invoice);
+            }
+            catch 
+            {
+                return failure;
+            }
         }
 
 

@@ -24,6 +24,7 @@ namespace legallead.permissions.api.Utility
             IUserRepository userdb,
             ICustomerInfrastructure customer,
             ISubscriptionInfrastructure subscription,
+            IStripeInfrastructure stripeService,
             StripeKeyEntity key)
         {
             _repo = db;
@@ -31,6 +32,7 @@ namespace legallead.permissions.api.Utility
             _userDb = userdb;
             _subscriptionDb = subscription;
             _paymentKey = key.GetActiveName();
+            InvoiceExtensions.GetInfrastructure ??= stripeService;
         }
         public async Task<bool> IsRequestValid(string? status, string? id)
         {
@@ -209,6 +211,7 @@ namespace legallead.permissions.api.Utility
         }
         public string Transform(DiscountRequestBo discountRequest, string content)
         {
+
             if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
             content = discountRequest.GetHtml(content, _paymentKey);
             return content;
