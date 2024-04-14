@@ -2,6 +2,7 @@
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -80,19 +81,14 @@ namespace legallead.permissions.api
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-                if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-                    !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return null;
-                }
-
-                return principal;
+                return GetPrincipal(principal, securityToken);
             }
             catch (Exception)
             {
                 return null;
             }
         }
+
 
         public bool ValidateToken(string token)
         {
@@ -110,6 +106,7 @@ namespace legallead.permissions.api
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method")]
         private TokenValidationParameters GetValidationParameters()
         {
             var keyconfig = _iconfiguration["JWT:Key"] ?? string.Empty;
@@ -123,6 +120,18 @@ namespace legallead.permissions.api
                 IssuerSigningKey = new SymmetricSecurityKey(Key),
                 ClockSkew = TimeSpan.Zero
             };
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method")]
+        private static ClaimsPrincipal? GetPrincipal(ClaimsPrincipal principal, SecurityToken securityToken)
+        {
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return null;
+            }
+
+            return principal;
         }
     }
 }
