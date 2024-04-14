@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
+    [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
     public class QueueResetService : BackgroundService
     {
         private readonly ILogger<QueueResetService> _logger;
@@ -16,14 +17,12 @@ namespace legallead.permissions.api.Services
 
         protected IUserSearchRepository QueueDb { get; }
 
-        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Queued Hosted Service is running.");
             await BackgroundProcessing(stoppingToken);
         }
 
-        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -39,7 +38,6 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Queued Hosted Service is stopping.");
@@ -47,7 +45,6 @@ namespace legallead.permissions.api.Services
             await base.StopAsync(cancellationToken);
         }
 
-        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task ResetItems(CancellationToken stoppingToken)
         {
             _ = await Task.Run(async () =>
