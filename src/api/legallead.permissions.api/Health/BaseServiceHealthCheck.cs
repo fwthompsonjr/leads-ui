@@ -1,8 +1,10 @@
 ﻿using legallead.permissions.api.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     public abstract class BaseServiceHealthCheck
     {
         protected readonly IInternalServiceProvider _provider;

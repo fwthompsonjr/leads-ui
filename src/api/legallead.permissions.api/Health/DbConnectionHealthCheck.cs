@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     public class DbConnectionHealthCheck : IHealthCheck
     {
         private readonly IInternalServiceProvider _provider;

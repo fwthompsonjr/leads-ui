@@ -1,8 +1,10 @@
 ﻿using HtmlAgilityPack;
 using legallead.jdbc.entities;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.permissions.api.Extensions
@@ -18,6 +20,8 @@ namespace legallead.permissions.api.Extensions
         background: transparent; border-color: #444
         
         */
+
+        internal static IStripeInfrastructure? GetInfrastructure { get; set; }
         public static long CalculatePaymentAmount(this PaymentSessionDto? response)
         {
             if (response == null) return 0;
@@ -30,6 +34,7 @@ namespace legallead.permissions.api.Extensions
             var totalCost = data.Sum(x => x.Price.GetValueOrDefault()) * 100;
             return Convert.ToInt64(totalCost);
         }
+
         public static string GetHtml(this PaymentSessionDto? response, string html, string paymentKey)
         {
             const string dash = " - ";
@@ -90,16 +95,10 @@ namespace legallead.permissions.api.Extensions
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceSubscriptionScript());
-
-            var service = new SubscriptionService();
-            var subscription = service.Get(response.SessionId);
-            if (subscription == null) return html;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = invoiceSvc.Get(invoiceId);
-            if (invoice == null) return html;
-            _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
-            successUrl ??= dash;
+            var verification = VerifySubscription(response.SessionId, dash);
+            if (!verification.Item1) return html;
+            var successUrl = verification.Item2;
+            var invoice = verification.Item3;
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             var parentNode = doc.DocumentNode;
@@ -142,16 +141,10 @@ namespace legallead.permissions.api.Extensions
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceDiscountScript());
-
-            var service = new SubscriptionService();
-            var subscription = service.Get(response.SessionId);
-            if (subscription == null) return html;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = invoiceSvc.Get(invoiceId);
-            if (invoice == null) return html;
-            _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
-            successUrl ??= dash;
+            var verification = VerifySubscription(response.SessionId, dash);
+            if (!verification.Item1) return html;
+            var successUrl = verification.Item2;
+            var invoice = verification.Item3;
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             var parentNode = doc.DocumentNode;
@@ -189,6 +182,18 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        private static Tuple<bool, string, Invoice> VerifySubscription(string sessionId, string returnId)
+        {
+            var failure = new Tuple<bool, string, Invoice>(true, returnId, new() { Total = 0 });
+            if (GetInfrastructure != null)
+            {
+                return GetInfrastructure.VerifySubscription(sessionId);
+            }
+            return failure;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static void RemoveCheckout(HtmlNode parentNode)
         {
             var stripejs = "//script[@name='stripe-api']";
@@ -210,7 +215,7 @@ namespace legallead.permissions.api.Extensions
             var script = parentNode.SelectSingleNode(chkoutjs);
             if (script != null) { script.InnerHtml = string.Empty; }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static HtmlNode GetItem(this SearchInvoiceBo data, HtmlDocument document)
         {
             const string headerformat = "<span>{0}</span><br/>{1}";
@@ -237,36 +242,34 @@ namespace legallead.permissions.api.Extensions
             node.InnerHtml = sb.ToString();
             return node;
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string GetDescription(string? desciption, string fallback)
         {
             if (string.IsNullOrWhiteSpace(desciption)) return fallback;
             return desciption.Replace("Record Search :", "Search: "); // dash
         }
-        private static string? _invoiceScript;
-        private static string? _invoiceSubscriptionScript;
-        private static string? _invoiceDiscountScript;
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string InvoiceScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceScript)) return _invoiceScript;
             _invoiceScript = Properties.Resources.page_invoice_js;
             return _invoiceScript;
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string InvoiceSubscriptionScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceSubscriptionScript)) return _invoiceSubscriptionScript;
             _invoiceSubscriptionScript = Properties.Resources.page_invoice_subscription_js;
             return _invoiceSubscriptionScript;
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string InvoiceDiscountScript()
         {
             if (!string.IsNullOrWhiteSpace(_invoiceDiscountScript)) return _invoiceDiscountScript;
             _invoiceDiscountScript = Properties.Resources.page_invoice_discount_js;
             return _invoiceDiscountScript;
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string GetDiscountDescription(string jstext)
         {
             const string fallback = "n/a";
@@ -292,6 +295,10 @@ namespace legallead.permissions.api.Extensions
             }
 
         }
+
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";
+        private static string? _invoiceScript;
+        private static string? _invoiceSubscriptionScript;
+        private static string? _invoiceDiscountScript;
     }
 }

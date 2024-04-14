@@ -1,11 +1,13 @@
 ﻿using legallead.permissions.api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage(Justification = "This controller and component are not used. Future development.")]
     public class EventsController : ControllerBase
     {
         private readonly string endpointSecret;

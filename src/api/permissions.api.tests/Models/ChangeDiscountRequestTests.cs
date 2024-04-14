@@ -1,8 +1,5 @@
-﻿using Bogus.Bson;
-using legallead.json.db.entity;
-using legallead.models;
+﻿using legallead.models;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Model;
 
 namespace permissions.api.tests.Models
 {

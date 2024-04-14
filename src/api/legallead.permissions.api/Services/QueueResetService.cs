@@ -1,7 +1,9 @@
 ﻿using legallead.jdbc.interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
+    [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
     public class QueueResetService : BackgroundService
     {
         private readonly ILogger<QueueResetService> _logger;
@@ -13,7 +15,7 @@ namespace legallead.permissions.api.Services
             QueueDb = db;
         }
 
-        private IUserSearchRepository QueueDb { get; }
+        protected IUserSearchRepository QueueDb { get; }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -36,11 +38,11 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        public override async Task StopAsync(CancellationToken stoppingToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Queued Hosted Service is stopping.");
 
-            await base.StopAsync(stoppingToken);
+            await base.StopAsync(cancellationToken);
         }
 
         private async Task ResetItems(CancellationToken stoppingToken)

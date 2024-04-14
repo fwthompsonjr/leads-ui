@@ -2,7 +2,6 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
@@ -14,16 +13,19 @@ namespace legallead.permissions.api.Controllers
         private readonly ISearchInfrastructure infrastructure;
         private readonly ISubscriptionInfrastructure subscriptionSvc;
         private readonly ICustomerLockInfrastructure _lockingDb;
+        private readonly IStripeInfrastructure stripeSvc;
         public HomeController(
             IPaymentHtmlTranslator service,
             ISearchInfrastructure search,
             ISubscriptionInfrastructure subscriptionSvc,
-            ICustomerLockInfrastructure lockingDb)
+            ICustomerLockInfrastructure lockingDb,
+            IStripeInfrastructure stripe)
         {
             paymentSvc = service;
             infrastructure = search;
             this.subscriptionSvc = subscriptionSvc;
             _lockingDb = lockingDb;
+            stripeSvc = stripe;
         }
         [HttpGet]
         [Route("/")]
@@ -149,18 +151,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-
-            var clientSecret = intent.ClientSecret;
+            var clientSecret = await stripeSvc.FetchClientSecret(session);
             return Json(new { clientSecret });
         }
 
@@ -173,18 +164,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-
-            var clientSecret = intent.ClientSecret;
+            var clientSecret = await stripeSvc.FetchClientSecret(session);
             return Json(new { clientSecret });
         }
 
@@ -193,7 +173,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
         {
             var user = await infrastructure.GetUser(Request);
-            if (user == null || string.IsNullOrEmpty (user.Id)) return Unauthorized();
+            if (user == null || string.IsNullOrEmpty(user.Id)) return Unauthorized();
             var isLocked = await _lockingDb.IsAccountLocked(user.Id);
             if (isLocked)
             {

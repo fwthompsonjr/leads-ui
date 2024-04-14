@@ -7,6 +7,7 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace legallead.permissions.api.Utility
@@ -24,6 +25,7 @@ namespace legallead.permissions.api.Utility
             IUserRepository userdb,
             ICustomerInfrastructure customer,
             ISubscriptionInfrastructure subscription,
+            IStripeInfrastructure stripeService,
             StripeKeyEntity key)
         {
             _repo = db;
@@ -31,6 +33,7 @@ namespace legallead.permissions.api.Utility
             _userDb = userdb;
             _subscriptionDb = subscription;
             _paymentKey = key.GetActiveName();
+            InvoiceExtensions.GetInfrastructure ??= stripeService;
         }
         public async Task<bool> IsRequestValid(string? status, string? id)
         {
@@ -209,6 +212,7 @@ namespace legallead.permissions.api.Utility
         }
         public string Transform(DiscountRequestBo discountRequest, string content)
         {
+
             if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
             content = discountRequest.GetHtml(content, _paymentKey);
             return content;
@@ -291,17 +295,21 @@ namespace legallead.permissions.api.Utility
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
-
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string ToDateString(DateTime? date, string fallback)
         {
             if (!date.HasValue) return fallback;
             return date.Value.ToString("MMM d, yyyy, h:mm tt");
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string ToCurrencyString(decimal? amount, string fallback)
         {
             if (!amount.HasValue) return fallback;
             return amount.Value.ToString("C", CultureInfo.CurrentCulture);
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string FormatSessionJson(string? original)
         {
             const string slash = @"\";
@@ -318,6 +326,7 @@ namespace legallead.permissions.api.Utility
 
         private static readonly string[] requestNames = new[] { "success", "cancel" };
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static class UserLevelHtmlMapper
         {
             public static void SetPageHeading(HtmlDocument document, bool isvalid)

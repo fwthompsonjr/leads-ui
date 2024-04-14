@@ -29,15 +29,14 @@
                 const string dfmt1 = "Mmm d, YYYY h:mm tt";
                 const string dfmt2 = "M/d/YYYY";
                 const string dash = " - ";
-                if (index < 0 || index > 7) return string.Empty;
+                if (index < 0 || index > 6) return string.Empty;
                 if (index == 0) return Id ?? string.Empty;
                 if (index == 1) return CreateDate.HasValue ? CreateDate.Value.ToString(dfmt1) : dash;
                 if (index == 2) return StateCode ?? dash;
                 if (index == 3) return CountyName ?? dash;
                 if (index == 4) return StartDate.HasValue ? StartDate.Value.ToString(dfmt2) : dash;
                 if (index == 5) return EndDate.HasValue ? EndDate.Value.ToString(dfmt2) : dash;
-                if (index == 6) return SearchProgress ?? dash;
-                return string.Empty;
+                return SearchProgress ?? dash;
             }
         }
 

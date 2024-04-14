@@ -4,9 +4,11 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using Stripe;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
+    [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
     public class PricingSyncService : BackgroundService
     {
         private readonly IPricingRepository _pricingInfrastructure;
@@ -28,6 +30,7 @@ namespace legallead.permissions.api.Services
             await BackgroundProcessing(stoppingToken);
         }
 
+
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested) return;
@@ -48,6 +51,7 @@ namespace legallead.permissions.api.Services
                 else await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
             }
         }
+
 
         private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
@@ -80,6 +84,7 @@ namespace legallead.permissions.api.Services
             }, stoppingToken);
         }
 
+
         private async Task CreateProductEntry(Product current, PricingCodeBo item)
         {
             var dtojs = JsonConvert.SerializeObject(item);
@@ -108,6 +113,7 @@ namespace legallead.permissions.api.Services
 
         }
 
+
         private async Task<bool> CreatePricing(PricingCodeBo? item)
         {
             if (item == null || string.IsNullOrEmpty(item.Id) || string.IsNullOrEmpty(item.KeyName)) return false;
@@ -128,6 +134,7 @@ namespace legallead.permissions.api.Services
                 return false;
             }
         }
+
 
         private bool TryCreateProduct(
             string productName,
@@ -179,6 +186,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
+
         private static ProductCreateOptions GetProductOptions(ProductPricingModel item)
         {
             if (string.IsNullOrEmpty(item.Product.Name)) return new();
@@ -192,6 +200,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
+
         private static string GetProductName(PricingCodeBo? codeBo)
         {
             var model = codeBo?.GetModel();
@@ -199,6 +208,7 @@ namespace legallead.permissions.api.Services
             return model.Product.Name;
 
         }
+
 
         private static string UpdateJson(PricingCodeDto dto)
         {

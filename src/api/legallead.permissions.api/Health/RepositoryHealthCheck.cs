@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     public class RepositoryHealthCheck : BaseServiceHealthCheck, IHealthCheck
     {
         private const string ClassContextName = "Create Repository Context";
