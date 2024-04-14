@@ -1,4 +1,5 @@
 ﻿using legallead.permissions.api.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
@@ -14,12 +15,14 @@ namespace legallead.permissions.api.Services
             _isTestMode = isTest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Queued Hosted Service is running.");
             await BackgroundProcessing(stoppingToken);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
 

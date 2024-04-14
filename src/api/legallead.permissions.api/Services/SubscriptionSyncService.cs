@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using Stripe;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
@@ -19,12 +20,14 @@ namespace legallead.permissions.api.Services
             _testMode = isTestMode;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Subscription Sync Service is running.");
             await BackgroundProcessing(stoppingToken);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested) return;
@@ -44,6 +47,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task ProcessSubscriptions(List<SubscriptionDetailBo>? items, CancellationToken stoppingToken)
         {
             if (items == null || !items.Any()) return;
@@ -71,6 +75,7 @@ namespace legallead.permissions.api.Services
             }, stoppingToken);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task ProcessCustomer(CustomerRef c, SubscriptionService service, CancellationToken stoppingToken)
         {
             if (!c.IsValid() || stoppingToken.IsCancellationRequested) return;
@@ -104,6 +109,8 @@ namespace legallead.permissions.api.Services
                 }
             }
         }
+
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private async Task CompleteVerification(List<SubscriptionDetailBo> subscriptions)
         {
             foreach (var subscription in subscriptions)
@@ -113,6 +120,8 @@ namespace legallead.permissions.api.Services
                 await _custDb.UpdateSubscriptionVerification(subscription);
             }
         }
+
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private static bool CancelItem(SubscriptionService service, string subscriptionId, SubscriptionCancelOptions options)
         {
             try
@@ -126,6 +135,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private static List<SubscriptionRef> Find(StripeList<Subscription> subscriptions, string subscriptionType)
         {
             const string subType = "SubscriptionType";
@@ -150,6 +160,7 @@ namespace legallead.permissions.api.Services
             return found;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private sealed class CustomerRef
         {
             public string CustomerId { get; set; } = string.Empty;
@@ -165,6 +176,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private sealed class SubscriptionRef
         {
             public string Id { get; set; } = string.Empty;

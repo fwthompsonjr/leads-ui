@@ -1,11 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Others
 {
@@ -30,7 +25,7 @@ namespace permissions.api.tests.Others
             {
                 var validator = GetValidator();
                 UserRefreshToken? token = condition == 0 ? null : tokenFaker.Generate();
-                if(condition == 1 && token != null) { token.CreateDate = null; }
+                if (condition == 1 && token != null) { token.CreateDate = null; }
                 validator.Verify(token);
             });
             Assert.Null(exception);
