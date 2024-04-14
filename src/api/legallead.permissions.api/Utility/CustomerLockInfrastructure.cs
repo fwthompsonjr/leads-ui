@@ -39,7 +39,7 @@ namespace legallead.permissions.api.Utility
         {
             var isLocked = await Task.Run(async () =>
             {
-                for (var x=0; x < 10; x++) await AddIncident(userId);
+                for (var x = 0; x < 10; x++) await AddIncident(userId);
                 return true;
             });
             return isLocked;

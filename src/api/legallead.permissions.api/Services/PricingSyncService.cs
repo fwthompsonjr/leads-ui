@@ -23,14 +23,14 @@ namespace legallead.permissions.api.Services
             logger = log;
             _testMode = isTestMode;
         }
-        
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Pricing Sync Service is running.");
             await BackgroundProcessing(stoppingToken);
         }
 
-        
+
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested) return;
@@ -52,7 +52,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        
+
         private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
             var names = items.Select(x => x.KeyName).Distinct().ToList();
@@ -84,7 +84,7 @@ namespace legallead.permissions.api.Services
             }, stoppingToken);
         }
 
-        
+
         private async Task CreateProductEntry(Product current, PricingCodeBo item)
         {
             var dtojs = JsonConvert.SerializeObject(item);
@@ -113,7 +113,7 @@ namespace legallead.permissions.api.Services
 
         }
 
-        
+
         private async Task<bool> CreatePricing(PricingCodeBo? item)
         {
             if (item == null || string.IsNullOrEmpty(item.Id) || string.IsNullOrEmpty(item.KeyName)) return false;
@@ -135,7 +135,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        
+
         private bool TryCreateProduct(
             string productName,
             ProductService service,
@@ -164,7 +164,7 @@ namespace legallead.permissions.api.Services
                 return false;
             }
         }
-        
+
         private static PriceCreateOptions GetPricingOption(ProductPricingModel model, Product product, int i, string priceName)
         {
             return new PriceCreateOptions
@@ -186,7 +186,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
-        
+
         private static ProductCreateOptions GetProductOptions(ProductPricingModel item)
         {
             if (string.IsNullOrEmpty(item.Product.Name)) return new();
@@ -200,7 +200,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
-        
+
         private static string GetProductName(PricingCodeBo? codeBo)
         {
             var model = codeBo?.GetModel();
@@ -209,7 +209,7 @@ namespace legallead.permissions.api.Services
 
         }
 
-        
+
         private static string UpdateJson(PricingCodeDto dto)
         {
             var js = dto.KeyJs;

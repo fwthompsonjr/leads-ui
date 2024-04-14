@@ -1,14 +1,8 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
-using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Utility;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Infrastructure
 {
@@ -75,7 +69,7 @@ namespace permissions.api.tests.Infrastructure
         {
             var services = new ServiceCollection();
             var lockDb = new Mock<IUserLockStatusRepository>();
-            
+
             // add mocks
             services.AddSingleton(lockDb);
             services.AddSingleton(lockDb.Object);
