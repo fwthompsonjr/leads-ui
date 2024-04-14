@@ -2,9 +2,11 @@
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     public class PricingHealthCheck : BaseServiceHealthCheck, IHealthCheck
     {
         private const string ClassContextName = "Pricing Synchronization Service";

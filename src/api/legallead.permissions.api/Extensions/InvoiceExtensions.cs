@@ -5,7 +5,6 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Policy;
 using System.Text;
 
 namespace legallead.permissions.api.Extensions
@@ -182,7 +181,7 @@ namespace legallead.permissions.api.Extensions
             doc.LoadHtml(outerHtml);
             return doc.DocumentNode.OuterHtml;
         }
-        
+
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         private static Tuple<bool, string, Invoice> VerifySubscription(string sessionId, string returnId)
         {

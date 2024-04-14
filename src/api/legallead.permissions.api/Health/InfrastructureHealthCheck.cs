@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     public class InfrastructureHealthCheck : BaseServiceHealthCheck, IHealthCheck
     {
         private const string ClassContextName = "Create Infrastructure Context";

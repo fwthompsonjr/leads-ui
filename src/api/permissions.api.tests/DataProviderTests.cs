@@ -41,7 +41,7 @@ namespace permissions.api.tests
             .RuleFor(x => x.IsActive, y => true)
             .RuleFor(x => x.IsVisible, y => true)
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
-        
+
 
 
         [Fact]

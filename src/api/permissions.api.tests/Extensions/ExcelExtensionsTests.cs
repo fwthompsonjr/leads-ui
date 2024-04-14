@@ -2,11 +2,6 @@
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests
 {
@@ -28,7 +23,7 @@ namespace permissions.api.tests
             .RuleFor(x => x.Description, y => y.Person.UserName)
             .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString())
             .RuleFor(x => x.SuccessUrl, y => y.Random.Guid().ToString())
-            .FinishWith((a,b) =>
+            .FinishWith((a, b) =>
             {
                 var invoice = invoiceFaker.Generate(a.Random.Int(1, 4));
                 b.Data = invoice;
@@ -38,7 +33,7 @@ namespace permissions.api.tests
             .RuleFor(x => x.CreateDate, y => y.Date.Recent())
             .RuleFor(x => x.ClientId, y => y.Random.Guid().ToString())
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-            .FinishWith((a,b) =>
+            .FinishWith((a, b) =>
             {
                 var data = paymentfaker.Generate();
                 b.JsText = JsonConvert.SerializeObject(data);
@@ -52,7 +47,7 @@ namespace permissions.api.tests
             .RuleFor(x => x.Address2, y =>
             {
                 var isEmpty = y.Random.Bool();
-                if(isEmpty) return string.Empty;
+                if (isEmpty) return string.Empty;
                 return y.Person.Address.Suite;
             })
             .RuleFor(x => x.Address3, y =>

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 
 namespace legallead.permissions.api.Health
 {
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     internal static class WriteHealthResponse
     {
         public static Task WriteResponse(HttpContext context, HealthReport healthReport)
