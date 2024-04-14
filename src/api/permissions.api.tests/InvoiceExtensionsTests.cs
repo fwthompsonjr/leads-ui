@@ -15,7 +15,8 @@ namespace permissions.api.tests
     public class InvoiceExtensionsTests
     {
         private static readonly string InvoiceContent = HtmlTemplates.page_invoice_html;
-        private static readonly string SubsriptionContent = HtmlTemplates.page_invoice_subscription_html;
+        private static readonly string SubscriptionContent = HtmlTemplates.page_invoice_subscription_html;
+        private static readonly string DiscountContent = HtmlTemplates.page_invoice_discount_html;
 
         private static readonly Faker<LevelRequestBo> levelBofaker =
             new Faker<LevelRequestBo>()
@@ -66,6 +67,17 @@ namespace permissions.api.tests
                 b.JsText = JsonConvert.SerializeObject(data);
             });
 
+        private static readonly Faker<DiscountRequestBo> discountBofaker =
+            new Faker<DiscountRequestBo>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
+            .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
+            .RuleFor(x => x.SessionId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.IsPaymentSuccess, y => y.Random.Bool())
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
@@ -108,7 +120,14 @@ namespace permissions.api.tests
         public void SubscriptionCanMap()
         {
             var session = levelBofaker.Generate();
-            var html = session.GetHtml(SubsriptionContent, "123-456-789");
+            var html = session.GetHtml(SubscriptionContent, "123-456-789");
+            Assert.False(string.IsNullOrEmpty(html));
+        }
+        [Fact]
+        public void DiscountCanMap()
+        {
+            var session = discountBofaker.Generate();
+            var html = session.GetHtml(DiscountContent, "123-456-789");
             Assert.False(string.IsNullOrEmpty(html));
         }
     }
