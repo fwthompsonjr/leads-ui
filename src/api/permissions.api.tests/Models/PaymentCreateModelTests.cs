@@ -1,11 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Models
 {
@@ -41,9 +36,9 @@ namespace permissions.api.tests.Models
         {
             var faker = new Faker();
             return new PaymentCreateModel(
-                GetRequest(), 
-                userfaker.Generate(), 
-                faker.Random.AlphaNumeric(10), 
+                GetRequest(),
+                userfaker.Generate(),
+                faker.Random.AlphaNumeric(10),
                 faker.Random.AlphaNumeric(5));
         }
 

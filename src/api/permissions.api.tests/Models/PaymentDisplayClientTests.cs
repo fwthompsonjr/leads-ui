@@ -1,5 +1,4 @@
-﻿using legallead.permissions.api.Model;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 
 namespace permissions.api.tests.Models
 {

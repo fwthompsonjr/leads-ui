@@ -11,7 +11,8 @@ namespace permissions.api.tests.Models
             .RuleFor(x => x.Description, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Error, y => y.Hacker.Phrase())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent().ToString("s"))
-            .FinishWith((a, b) => {
+            .FinishWith((a, b) =>
+            {
                 b.Content = Encoding.UTF8.GetBytes(b.Error ?? string.Empty);
             });
 
