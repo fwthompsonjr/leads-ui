@@ -51,7 +51,7 @@ namespace legallead.installer.Interfaces
                     foreach (var t in targets)
                     {
                         js = GetValue(storageKey, t);
-                        if(!string.IsNullOrEmpty(js)) break;
+                        if (!string.IsNullOrEmpty(js)) break;
                     }
                 }
                 if (string.IsNullOrEmpty(js)) return null;
@@ -76,11 +76,11 @@ namespace legallead.installer.Interfaces
                     Environment.SetEnvironmentVariable(keyName, keyValue);
                 else
                     Environment.SetEnvironmentVariable(keyName, keyValue, location);
-            } 
-            catch 
+            }
+            catch
             {
                 // no action is needed
-            }            
+            }
         }
 
         private static string? GetValue(string keyName, EnvironmentVariableTarget? target)

@@ -1,6 +1,4 @@
-﻿using legallead.installer.Classes;
-
-namespace legallead.installer.Commands
+﻿namespace legallead.installer.Commands
 {
     public partial class CommandHandler
     {

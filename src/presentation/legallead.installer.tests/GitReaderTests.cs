@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using legallead.installer.Classes;
 using legallead.installer.Models;
-using System.Diagnostics;
 
 namespace legallead.installer.tests
 {
