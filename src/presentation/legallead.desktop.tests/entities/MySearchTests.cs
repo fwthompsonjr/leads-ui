@@ -41,11 +41,13 @@ namespace legallead.desktop.tests.entities
 
         private static readonly Faker<MySearch> faker
             = new Faker<MySearch>()
-            .RuleFor(x => x.Details, y => {
+            .RuleFor(x => x.Details, y =>
+            {
                 var n = y.Random.Int(2, 5);
                 return dfaker.Generate(n);
             })
-            .RuleFor(x => x.History, y => {
+            .RuleFor(x => x.History, y =>
+            {
                 var n = y.Random.Int(2, 5);
                 var nn = y.Random.Int(3, 7);
                 var nnn = y.Random.Int(1, 3);

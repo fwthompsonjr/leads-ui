@@ -92,7 +92,7 @@ namespace legallead.desktop.tests.entities
         [InlineData(true, false, false, false)]
         [InlineData(true, true, true, true)]
         public void UserCanGetSessionTimeout(
-            bool hasToken, 
+            bool hasToken,
             bool hasExpirationDate,
             bool isExpired,
             bool expected)
@@ -100,13 +100,36 @@ namespace legallead.desktop.tests.entities
             var user = userfaker.Generate();
             if (!hasToken) { user.Token = null; }
             if (user.Token != null && !hasExpirationDate) { user.Token.Expires = null; }
-            if (user.Token != null && isExpired) 
-            { 
+            if (user.Token != null && isExpired)
+            {
                 var token = tokenfaker.Generate();
                 token.Expires = DateTime.UtcNow.AddMinutes(2);
                 user.Token = token;
             }
             var isTimeout = user.IsSessionTimeout();
+            Assert.Equal(expected, isTimeout);
+        }
+
+
+        [Theory]
+        [InlineData(true, true, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(true, true, true, true)]
+        public void UserCanGetSessionExpiration(
+            bool hasToken,
+            bool hasExpirationDate,
+            bool isExpired,
+            bool expected)
+        {
+            var user = userfaker.Generate();
+            if (!hasToken) { user.Token = null; }
+            if (user.Token != null && !hasExpirationDate) { user.Token.Expires = null; }
+            if (user.Token != null && isExpired)
+            {
+                user.Token.Expires = DateTime.UtcNow.AddSeconds(30);
+            }
+            var isTimeout = user.IsSessionExpired();
             Assert.Equal(expected, isTimeout);
         }
 

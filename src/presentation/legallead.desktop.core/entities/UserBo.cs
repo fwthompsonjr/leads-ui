@@ -68,12 +68,11 @@ namespace legallead.desktop.entities
 
         internal virtual string GetSessionId()
         {
-            if (!IsAuthenicated)
-            {
-                SessionId = unset;
-            }
+            if (Token == null || !Token.Expires.HasValue) SessionId = unset;
+            if (Token != null && Token.Expires.HasValue && IsExpired(Token.Expires.Value)) SessionId = expiring;
             return SessionId;
         }
         private const string unset = "-unset-";
+        private const string expiring = "-expiring-";
     }
 }
