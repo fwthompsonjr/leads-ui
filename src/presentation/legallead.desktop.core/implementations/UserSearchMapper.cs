@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.implementations
 {
@@ -20,6 +21,7 @@ namespace legallead.desktop.implementations
             return source;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private async Task<string> MapHistory(IPermissionApi api, UserBo user, string source)
         {
             var payload = new { Id = Guid.NewGuid().ToString(), Name = "legallead.permissions.api" };
@@ -36,6 +38,7 @@ namespace legallead.desktop.implementations
             return styled;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string ApplyHistoryStatus(HtmlDocument document, MySearchSubstitutions substitutions)
         {
             var node = document.DocumentNode;
@@ -61,6 +64,7 @@ namespace legallead.desktop.implementations
             });
             return node.OuterHtml;
         }
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string? GetStatusCss(string searchStatus)
         {
             return searchStatus switch
@@ -84,6 +88,7 @@ namespace legallead.desktop.implementations
             " \"nodatatemplate\": \"//tr[@id='tr-subcontent-history-no-data']\", " + Environment.NewLine +
              " \"targets\": 6 " + Environment.NewLine + " }";
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static HtmlDocument ToDocument(string content)
         {
             var document = new HtmlDocument();
@@ -91,6 +96,7 @@ namespace legallead.desktop.implementations
             return document;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string TransformRows(HtmlDocument document, List<ISearchIndexable> data, MySearchSubstitutions substitutions)
         {
             var node = document.DocumentNode;
@@ -130,6 +136,7 @@ namespace legallead.desktop.implementations
             return node.OuterHtml;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void TransformPaging(HtmlNode table, List<ISearchIndexable> data)
         {
             var tfoot = table.SelectSingleNode("tfoot");

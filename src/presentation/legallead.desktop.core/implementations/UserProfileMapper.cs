@@ -55,6 +55,7 @@ namespace legallead.desktop.implementations
             return document.DocumentNode.OuterHtml;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<ContactIdentity> GetIdentity(IPermissionApi api, UserBo user)
         {
             const string landing = "get-contact-identity";
@@ -73,6 +74,7 @@ namespace legallead.desktop.implementations
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<List<ContactProfileItem>?> GetProfile(IPermissionApi api, UserBo user)
         {
             const string landing = "get-contact-detail";
