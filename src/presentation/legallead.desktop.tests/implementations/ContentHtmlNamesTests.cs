@@ -1,4 +1,7 @@
-﻿using legallead.desktop.implementations;
+﻿using legallead.desktop.entities;
+using legallead.desktop.implementations;
+using legallead.desktop.interfaces;
+using Moq;
 
 namespace legallead.desktop.tests.implementations
 {
@@ -7,7 +10,7 @@ namespace legallead.desktop.tests.implementations
         [Fact]
         public void ContentHtmlNamesCanBeCreated()
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             Assert.NotNull(sut);
         }
 
@@ -52,7 +55,7 @@ namespace legallead.desktop.tests.implementations
         [Fact]
         public void ContentHtmlNamesContainsNames()
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             Assert.NotNull(sut.Names);
             Assert.NotEmpty(sut.Names);
         }
@@ -60,9 +63,19 @@ namespace legallead.desktop.tests.implementations
         [Fact]
         public void ContentHtmlNamesContainsContentNames()
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             Assert.NotNull(sut.ContentNames);
             Assert.NotEmpty(sut.ContentNames);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ContentHtmlNamesContainsSearchUi(bool isDefault)
+        {
+            var sut = isDefault ? new ContentHtmlNames() : GetInstance();
+            if (isDefault) Assert.Null(sut.SearchUi);
+            else Assert.NotNull(sut.SearchUi);
         }
 
         [Theory]
@@ -77,7 +90,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("MySearch", true)]
         public void ContentHtmlNamesIsValid(string test, bool expected)
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             var actual = sut.IsValid(test);
             Assert.Equal(expected, actual);
         }
@@ -108,7 +121,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("MySearchactive", true)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             var actual = sut.GetContent(test);
             if (expected)
             {
@@ -131,11 +144,36 @@ namespace legallead.desktop.tests.implementations
         [InlineData("test", false)]
         public void ContentHtmlNamesCanGetContentStream(string test, bool expected)
         {
-            var sut = new ContentHtmlNames();
+            var sut = GetInstance();
             using var reader = new StreamReader(sut.GetContentStream(test));
             var content = reader.ReadToEnd();
             var actual = !string.IsNullOrEmpty(content);
             Assert.Equal(expected, actual);
+        }
+
+
+        private static ContentHtmlNames GetInstance()
+        {
+            var mock = new MockSearchBuilder();
+            return new ContentHtmlNames
+            {
+                SearchUi = mock
+            };
+        }
+
+        private static readonly string SearchContent = Properties.Resources.state_config_response;
+
+        private class MockSearchBuilder : ISearchBuilder
+        {
+            public StateSearchConfiguration[]? GetConfiguration()
+            {
+                return Array.Empty<StateSearchConfiguration>();
+            }
+
+            public string GetHtml()
+            {
+                return SearchContent;
+            }
         }
     }
 }

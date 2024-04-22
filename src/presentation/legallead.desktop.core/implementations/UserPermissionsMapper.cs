@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.implementations
 {
@@ -26,6 +27,7 @@ namespace legallead.desktop.implementations
             return document.DocumentNode.OuterHtml;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void MapCountySelections(List<ContactPermissionResponse> permissions, List<ContactUsStateCountyResponse> counties, HtmlDocument document)
         {
             var index = GetPermissionValue("Setting.State.County.Subscriptions", permissions);
@@ -42,6 +44,7 @@ namespace legallead.desktop.implementations
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void MapStateSelections(List<ContactPermissionResponse> permissions, List<ContactUsStateResponse> states, HtmlDocument document)
         {
             var index = GetPermissionValue("Setting.State.Subscriptions", permissions);
@@ -59,6 +62,7 @@ namespace legallead.desktop.implementations
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void DeselectCheckBoxes(HtmlDocument document)
         {
             const string xpath = "//*[@id=\"dv-subcontent-permissions-row-03\"]//input[@type=\"checkbox\"]";
@@ -73,6 +77,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void DeselectRadioButtons(HtmlDocument document)
         {
             const string xpath = "//*[@id=\"permissions-subscription-group\"]//input[@type=\"radio\"]";
@@ -87,6 +92,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void SelectRadioButton(HtmlDocument document, string groupName)
         {
             const string fmt = "permissions-subscription-{0}-radio";
@@ -97,6 +103,7 @@ namespace legallead.desktop.implementations
             element.SetAttributeValue(chkd, chkd);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static bool GetPermissionStatus(string find, List<ContactPermissionResponse> permissions)
         {
             var value = GetPermissionValue(find, permissions);
@@ -104,6 +111,7 @@ namespace legallead.desktop.implementations
             return value.Equals("True");
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string GetUserLevel(List<ContactPermissionResponse> permissions)
         {
             const string accountLevel = "Account.Permission.Level";
@@ -113,6 +121,7 @@ namespace legallead.desktop.implementations
             return value;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string GetPermissionValue(string find, List<ContactPermissionResponse> permissions)
         {
             var item = permissions.Find(x => x.KeyName.Equals(find));
@@ -120,6 +129,7 @@ namespace legallead.desktop.implementations
             return item.KeyValue;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<List<ContactPermissionResponse>?> GetPermissions(IPermissionApi api, UserBo user)
         {
             const string landing = "user-permissions-list";
@@ -128,6 +138,7 @@ namespace legallead.desktop.implementations
             return ObjectExtensions.TryGet<List<ContactPermissionResponse>>(response.Message);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<List<ContactUsStateCountyResponse>?> GetCounties(IPermissionApi api, UserBo user)
         {
             const string landing = "user-us-county-list";
@@ -136,6 +147,7 @@ namespace legallead.desktop.implementations
             return ObjectExtensions.TryGet<List<ContactUsStateCountyResponse>>(response.Message);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<List<ContactUsStateResponse>?> GetStates(IPermissionApi api, UserBo user)
         {
             const string landing = "user-us-state-list";
@@ -145,6 +157,7 @@ namespace legallead.desktop.implementations
             return ObjectExtensions.TryGet<List<ContactUsStateResponse>>(response.Message);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private sealed class UiItemMap
         {
             public string NodeType { get; set; } = "input";

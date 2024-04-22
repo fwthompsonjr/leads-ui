@@ -1,15 +1,9 @@
 ﻿using Bogus;
-using legallead.installer.Classes;
 using legallead.installer.Commands;
 using legallead.installer.Interfaces;
 using legallead.installer.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.installer.tests
 {
@@ -90,7 +84,7 @@ namespace legallead.installer.tests
             var provider = GetProvider();
             var appSvc = provider.GetRequiredService<Mock<ILeadAppInstaller>>();
             var fileSvc = provider.GetRequiredService<Mock<ILeadFileOperation>>();
-            var apps = testId == 6 ? appFaker.Generate(1): appFaker.Generate(10);
+            var apps = testId == 6 ? appFaker.Generate(1) : appFaker.Generate(10);
             if (testId == 7) apps = [];
             var versions = testId == 7 ? [] : apps.SelectMany(s => s.Versions);
             var selection = testId == 7 ? null : faker.PickRandom(versions);

@@ -1,7 +1,6 @@
 ﻿using legallead.installer.Models;
 using Octokit;
 using System.Diagnostics.CodeAnalysis;
-using System.Security;
 
 namespace legallead.installer.Classes
 {

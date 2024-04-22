@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.desktop
 {
@@ -164,7 +163,7 @@ namespace legallead.desktop
             if (provider == null) return html;
             var user = provider.GetService<UserBo>();
             var api = provider.GetService<IPermissionApi>();
-            var mapper = provider.GetService<IUserRestrictionMapper>(); 
+            var mapper = provider.GetService<IUserRestrictionMapper>();
             if (user == null ||
                 !user.IsAuthenicated ||
                 api == null ||

@@ -1,8 +1,8 @@
-﻿using AngleSharp.Dom;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.implementations
 {
@@ -14,6 +14,7 @@ namespace legallead.desktop.implementations
             return content;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static async Task<string> MapRestriction(IPermissionApi api, UserBo user, string source)
         {
             var payload = new { Id = Guid.NewGuid().ToString(), Name = "legallead.permissions.api" };
@@ -27,6 +28,7 @@ namespace legallead.desktop.implementations
             return TransformAlert(document, result);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static HtmlDocument ToDocument(string content)
         {
             var document = new HtmlDocument();
@@ -34,6 +36,7 @@ namespace legallead.desktop.implementations
             return document;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string TransformAlert(HtmlDocument document, MySearchRestrictions restrictions)
         {
             const string dvquery = "//*[@id='dv-restriction-alert']";

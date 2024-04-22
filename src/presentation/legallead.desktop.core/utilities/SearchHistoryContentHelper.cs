@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
@@ -41,6 +42,7 @@ namespace legallead.desktop.utilities
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendRow(HtmlNode template, HtmlNode header, MyPurchaseBo x)
         {
             var document = header.OwnerDocument;
@@ -56,6 +58,7 @@ namespace legallead.desktop.utilities
             header.AppendChild(newNode);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static List<MyPurchaseBo> GetData(ApiResponse response)
         {
             var message = response.Message;
