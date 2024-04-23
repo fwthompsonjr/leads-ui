@@ -1,0 +1,14 @@
+{
+    "account":  "ses-smtp-user.legallead.2024.04",
+    "type":  "aws-ses",
+    "uid":  "",
+    "secret":  "",
+    "settings":  {
+                     "port":  587,
+                     "endpoint":  "email-smtp.us-east-2.amazonaws.com",
+                     "from":  {
+                                  "email":  "admin@legallead.co",
+                                  "display":  "Legal Lead Admin"
+                              }
+                 }
+}

@@ -1,0 +1,6 @@
+{
+"server": "db-lead-restored.cmmu8tkizri9.us-east-2.rds.amazonaws.com",
+"name": "defaultdb",
+"code": "m/1Ata5kMzR+oEX0y8RHgOvav+k4LuEIbnSJDbhA2G5pMywLOb3eBufnQzSEN+ef",
+"key": "CDODj4oxaiJKcKJEIBHnHw=="
+}
