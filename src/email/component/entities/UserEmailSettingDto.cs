@@ -3,7 +3,7 @@
 namespace legallead.email.entities
 {
     [TargetTable("PRC__GET_USER_EMAIL_SETTINGS")]
-    internal class UserEmailSettingDto : BaseDto
+    public class UserEmailSettingDto : BaseDto
     {
         public string? Email { get; set; }
         public string? UserName { get; set; }

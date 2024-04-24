@@ -2,7 +2,7 @@
 
 namespace legallead.email.models
 {
-    internal class MailSettings
+    public class MailSettings
     {
         [JsonProperty("account")]
         public string Account { get; set; } = string.Empty;
@@ -19,7 +19,7 @@ namespace legallead.email.models
         [JsonProperty("settings")]
         public SmtpSettings Settings { get; set; } = new();
 
-        internal class SmtpSettings
+        public class SmtpSettings
         {
             [JsonProperty("endpoint")]
             public string Endpoint { get; set; } = string.Empty;
@@ -31,7 +31,7 @@ namespace legallead.email.models
             public FromAccount From { get; set; } = new();
         }
 
-        internal class FromAccount
+        public class FromAccount
         {
             [JsonProperty("email")]
             public string Email { get; set; } = string.Empty;

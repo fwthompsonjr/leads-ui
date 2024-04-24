@@ -1,6 +1,6 @@
 ﻿namespace legallead.email.services
 {
-    internal interface IConnectionStringService
+    public interface IConnectionStringService
     {
         string ConnectionString();
         string[] GetCredential();

@@ -3,7 +3,7 @@ using System.Data;
 
 namespace legallead.email.services
 {
-    internal class DataConnectionService(IConnectionStringService connection)
+    internal class DataConnectionService(IConnectionStringService connection) : IDataConnectionService
     {
         private readonly IConnectionStringService connService = connection;
 

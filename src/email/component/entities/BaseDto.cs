@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace legallead.email.entities
 {
-    internal abstract class BaseDto
+    public abstract class BaseDto
     {
         private readonly object locker = new();
         private List<string>? _fieldList;

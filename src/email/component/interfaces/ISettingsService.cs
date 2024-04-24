@@ -2,7 +2,7 @@
 
 namespace legallead.email.services
 {
-    internal interface ISettingsService
+    public interface ISettingsService
     {
         MailSettings GetSettings { get; }
     }
