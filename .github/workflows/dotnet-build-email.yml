@@ -6,8 +6,8 @@ on:
     - '**'
     - '!main'
     - '!releases'
-    paths:
-      - 'src/email/**'
+#    paths:
+#      - 'src/email/**'
 
   pull_request:
     types: [opened, reopened]
@@ -25,11 +25,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.NET_VERSION }}
-        cache: true
-
     - run: dotnet restore ${{ env.SOLUTION_NAME }}
       id: dotnet-restore
       name: DotNet Restore
