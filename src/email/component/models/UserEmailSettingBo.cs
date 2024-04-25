@@ -1,6 +1,6 @@
 ﻿namespace legallead.email.models
 {
-    internal class UserEmailSettingBo
+    public class UserEmailSettingBo
     {
         public string? Id { get; set; }
         public string? Email { get; set; }

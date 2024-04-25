@@ -23,18 +23,18 @@
                 <td width="5%"> &nbsp;</td>
                 <td width="70%">
                     <!-- SubHeading -->
-                    <h2 name="span-sub-heading"><!-- SubHeading.Content --></h2>
+                    <h2 name="span-sub-heading"><!-- SubHeading.Email.Title --></h2>
                 </td>
                 <td width="25%">
                     <!-- SubHeadingDate -->
-                    <h2 name="span-sub-heading-date"><!-- SubHeadingDate.Content --></h2>
+                    <h2 name="span-sub-heading-date"><!-- SubHeading.Email.Date --></h2>
                 </td>
             </tr>
             <tr>
                 <td width="5%"> &nbsp;</td>
                 <td colspan="2">
                     <!-- Greeting -->
-                    <h3 name="span-greeting">Hello <!-- UserName --></h3>
+                    <h3 name="span-greeting">Hello <!-- Greeting.UserName --></h3>
                 </td>
             </tr>
         </table>

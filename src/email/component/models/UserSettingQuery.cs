@@ -2,7 +2,7 @@
 
 namespace legallead.email.models
 {
-    internal class UserSettingQuery
+    public class UserSettingQuery
     {
         public string? Id { get; set; }
         public string? Email { get; set; }

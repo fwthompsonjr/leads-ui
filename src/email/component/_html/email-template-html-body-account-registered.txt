@@ -1,0 +1,13 @@
+<h3>Account Registration Completed</h3>
+<p>
+	Thank you for registering your account with Legal Leads.
+	Please make note of these account registration details
+<p>
+<ul>
+	<li>
+		Email Address: <!-- Email Address -->
+	</li>
+	<li>
+		User Name: <!-- User Name -->
+	</li>
+</ul>

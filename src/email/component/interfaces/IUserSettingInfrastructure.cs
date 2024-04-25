@@ -2,7 +2,7 @@
 
 namespace legallead.email.interfaces
 {
-    internal interface IUserSettingInfrastructure
+    public interface IUserSettingInfrastructure
     {
         Task<List<UserEmailSettingBo>?> GetSettings(UserSettingQuery query);
     }
