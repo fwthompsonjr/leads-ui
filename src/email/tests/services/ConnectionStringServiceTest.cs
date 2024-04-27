@@ -21,7 +21,7 @@ namespace legallead.email.tests.services
                 Assert.NotEmpty(response);
                 Assert.Equal(2, response.Length);
                 Assert.NotEmpty(response[index]);
-            } 
+            }
             else
             {
                 Assert.Empty(response);

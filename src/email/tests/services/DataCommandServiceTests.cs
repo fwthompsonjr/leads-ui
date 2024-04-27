@@ -107,7 +107,7 @@ namespace legallead.email.tests.services
                     .Returns(true)
                     .Returns(true)
                     .Returns(false);
-            } 
+            }
             else
             {
                 readerMq.Setup(m => m.Read()).Returns(false);

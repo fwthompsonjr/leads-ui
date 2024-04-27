@@ -1,0 +1,35 @@
+﻿using legallead.email.implementations;
+using legallead.email.interfaces;
+using legallead.email.services;
+using legallead.email.transforms;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace legallead.email.utility
+{
+    internal static class ServiceInfrastructure
+    {
+        private static readonly object locker = new();
+        private static IServiceProvider? _provider;
+        public static IServiceProvider? Provider => _provider ??= InitializeProvider();
+
+        private static IServiceProvider? InitializeProvider()
+        {
+            lock (locker)
+            {
+                var services = new ServiceCollection();
+                services.AddSingleton<IConnectionStringService, ConnectionStringService>();
+                services.AddSingleton<ICryptographyService, CryptographyService>();
+                services.AddSingleton<IDataCommandService, DataCommandService>();
+                services.AddSingleton<IDataConnectionService, DataConnectionService>();
+                services.AddSingleton<ISettingsService, SettingsService>();
+                services.AddSingleton<ISmtpClientWrapper, SmtpClientWrapper>();
+                services.AddSingleton<ISmtpService, SmtpService>();
+                services.AddSingleton<IUserSettingInfrastructure, UserSettingInfrastructure>();
+                // transients
+                services.AddTransient<IHtmlTransformService, HtmlTransformService>();
+                services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
+                return services.BuildServiceProvider();
+            }
+        }
+    }
+}

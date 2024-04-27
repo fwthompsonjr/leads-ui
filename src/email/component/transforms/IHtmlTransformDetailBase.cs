@@ -7,7 +7,9 @@ namespace legallead.email.transforms
         string BaseHtml { get; }
         List<string> KeyNames { get; }
         Dictionary<string, string?> Substitutions { get; }
+        string TemplateName { get; }
 
+        void FetchTemplateParameters(List<UserEmailSettingBo> attributes);
         string? GetHtmlTemplate(List<UserEmailSettingBo> attributes);
     }
 }

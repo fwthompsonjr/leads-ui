@@ -1,12 +1,8 @@
 ﻿using Bogus;
 using legallead.email.services;
 using Moq;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.email.tests.services
 {
@@ -63,11 +59,12 @@ namespace legallead.email.tests.services
                 if (hasException)
                 {
                     wrapper.Setup(m => m.Send(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>())).Throws(err);
-                } else
+                }
+                else
                 {
                     wrapper.Setup(m => m.Send(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>()));
                 }
-                
+
                 var actual = service.Send(message);
                 Assert.NotEqual(hasException, actual);
             });
@@ -102,7 +99,7 @@ namespace legallead.email.tests.services
         private sealed class MockSmtpService(ISettingsService settings, Mock<ISmtpClientWrapper> wrapper) : SmtpService(settings, wrapper.Object)
         {
 
-            private static Mock<SmtpClient>  _client = new Mock<SmtpClient>();
+            private static Mock<SmtpClient> _client = new Mock<SmtpClient>();
             private static ICredentialsByHost _credential = new NetworkCredential("user", "123abc");
 
 

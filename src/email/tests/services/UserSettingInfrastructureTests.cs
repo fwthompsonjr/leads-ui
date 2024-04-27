@@ -6,12 +6,7 @@ using legallead.email.models;
 using legallead.email.services;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.email.tests.services
 {
@@ -37,7 +32,7 @@ namespace legallead.email.tests.services
         [InlineData(10, true, false)]
         [InlineData(10, false, false)]
         public async Task SutCanGetSettings(
-            int count, 
+            int count,
             bool hasEmail = true,
             bool hasIndex = true)
         {
@@ -59,7 +54,7 @@ namespace legallead.email.tests.services
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>())).ReturnsAsync(data).Verifiable(Times.Once());
-            } 
+            }
             else
             {
                 db.Setup(m => m.QueryAsync<UserEmailSettingDto>(
@@ -68,7 +63,7 @@ namespace legallead.email.tests.services
                     It.IsAny<DynamicParameters>())).ReturnsAsync(data).Verifiable(Times.Never());
             }
             _ = await service.GetSettings(query);
-            
+
             if (isValid) connect.Verify(m => m.CreateConnection());
 
         }

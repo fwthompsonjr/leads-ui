@@ -98,6 +98,27 @@ namespace legallead.email.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;h3&gt;Account Registration Completed&lt;/h3&gt;
+        ///&lt;p&gt;
+        ///	Thank you for registering your account with Legal Leads.
+        ///	Please make note of these account registration details
+        ///&lt;p&gt;
+        ///&lt;ul&gt;
+        ///	&lt;li&gt;
+        ///		Email Address: &lt;!-- Email Address --&gt;
+        ///	&lt;/li&gt;
+        ///	&lt;li&gt;
+        ///		User Name: &lt;!-- User Name --&gt;
+        ///	&lt;/li&gt;
+        ///&lt;/ul&gt;.
+        /// </summary>
+        internal static string email_template_html_body_account_registered {
+            get {
+                return ResourceManager.GetString("email_template_html_body_account_registered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {
         ///    &quot;account&quot;:  &quot;ses-smtp-user.legallead.2024.04&quot;,
         ///    &quot;type&quot;:  &quot;aws-ses&quot;,
