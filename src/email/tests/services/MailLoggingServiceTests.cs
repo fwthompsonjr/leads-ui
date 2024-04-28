@@ -1,5 +1,7 @@
 ﻿using Bogus;
+using legallead.email.interfaces;
 using legallead.email.services;
+using Moq;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Mail;
@@ -9,7 +11,7 @@ namespace legallead.email.tests.services
 {
     public class MailLoggingServiceTests
     {
-        private static readonly MailLoggingService service = new();
+        private static readonly MailLoggingService service = new(new Mock<IUserSettingInfrastructure>().Object);
 
         [Theory]
         [InlineData("")]
