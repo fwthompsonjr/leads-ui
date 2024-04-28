@@ -37,3 +37,8 @@ jobs:
       with: 
         name: dotnet-results-email-${{ env.NET_VERSION }}
         path: TestResults-${{ env.NET_VERSION }}
+
+    - name: Summarize Test Results
+      shell: pwsh
+      run: |
+        & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
