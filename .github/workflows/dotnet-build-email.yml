@@ -1,0 +1,39 @@
+name: 'CQ : Build and Test : Email Component'
+
+on: 
+  push:
+    branches:
+    - '**'
+    - '!main'
+    - '!releases'
+
+  pull_request:
+    types: [opened, reopened]
+    paths:
+      - 'src/email/**'
+
+env:
+  LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
+  LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
+  SOLUTION_NAME: ${{ github.workspace }}/src/email/legallead.email.sln
+  NET_VERSION: '8.0.x'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: dotnet restore ${{ env.SOLUTION_NAME }}
+      id: dotnet-restore
+      name: DotNet Restore
+
+    - run: dotnet test ${{ env.SOLUTION_NAME }} --no-restore --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
+      id: dotnet-test
+      name: DotNet Test
+
+    - name: Upload dotnet test results
+      uses: actions/upload-artifact@v4
+      if: ${{ always() }}
+      with: 
+        name: dotnet-results-email-${{ env.NET_VERSION }}
+        path: TestResults-${{ env.NET_VERSION }}
