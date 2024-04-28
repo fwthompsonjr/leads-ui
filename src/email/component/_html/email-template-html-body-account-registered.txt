@@ -1,13 +1,13 @@
-<h3>Account Registration Completed</h3>
-<p>
+<h3 name="account-registration-heading">Account Registration Completed</h3>
+<p name="account-registration-para-1">
 	Thank you for registering your account with Legal Leads.
 	Please make note of these account registration details
 <p>
-<ul>
-	<li>
-		Email Address: <!-- Email Address -->
+<ul name="account-registration-list-1">
+	<li name="account-registration-list-item-1">
+		Email Address: <span name="account-registration-email"><!-- Email Address --></span>
 	</li>
-	<li>
-		User Name: <!-- User Name -->
+	<li name="account-registration-list-item-2">
+		User Name: <span name="account-registration-user-name"><!-- User Name --></span>
 	</li>
 </ul>

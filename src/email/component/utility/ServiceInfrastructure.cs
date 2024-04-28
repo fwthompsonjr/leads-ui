@@ -1,4 +1,5 @@
-﻿using legallead.email.implementations;
+﻿using legallead.email.actions;
+using legallead.email.implementations;
 using legallead.email.interfaces;
 using legallead.email.services;
 using legallead.email.transforms;
@@ -32,7 +33,18 @@ namespace legallead.email.utility
                 // transients
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
-                services.AddTransient<MailMessageService>();
+                services.AddTransient<AccountRegistrationCompleted>();
+                services.AddTransient(x =>
+                {
+                    var settings = x.GetRequiredService<ISettingsService>();
+                    var infra = x.GetRequiredService<IUserSettingInfrastructure>();
+                    var transform = x.GetRequiredService<IHtmlTransformService>();
+                    return new MailMessageService(settings, infra, transform);
+                });
+                services.AddMvcCore(options =>
+                {
+                    options.Filters.AddService<AccountRegistrationCompleted>();
+                });
                 return services.BuildServiceProvider();
             }
         }

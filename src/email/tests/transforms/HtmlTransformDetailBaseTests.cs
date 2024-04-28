@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.email.models;
+﻿using legallead.email.models;
 using legallead.email.transforms;
 
 namespace legallead.email.tests.transforms
@@ -78,7 +77,7 @@ namespace legallead.email.tests.transforms
             string? personKeyName = "Person",
             string? personKeyValue = null)
         {
-            var attributes = hasSettings ? GetDefaultSettings() : faker.Generate(0);
+            var attributes = hasSettings ? GetDefaultSettings() : MockMessageInfrastructure.UserEmailFaker.Generate(0);
             if (!hasPerson) { attributes.RemoveAll(a => a.KeyName == "Person"); }
             if (!hasKeyNames && attributes.Count > 0)
             {
@@ -108,22 +107,7 @@ namespace legallead.email.tests.transforms
 
         private static List<UserEmailSettingBo> GetDefaultSettings()
         {
-            var list = new List<UserEmailSettingBo>();
-            commonKeys.ForEach(k =>
-            {
-                var item = faker.Generate();
-                item.KeyName = k;
-                if (k == "Person") item.KeyValue = new Faker().Person.FullName;
-                list.Add(item);
-            });
-            var template = list[0];
-            list.ForEach(a =>
-            {
-                a.Id = template.Id;
-                a.Email = template.Email;
-                a.UserName = template.UserName;
-            });
-            return list;
+            return MockMessageInfrastructure.GetDefaultSettings();
         }
         private sealed class TestBaseTemplate : HtmlTransformDetailBase
         {
@@ -151,30 +135,5 @@ namespace legallead.email.tests.transforms
                 "<!-- person -->"
             ];
         }
-
-        private static readonly List<string> commonKeys =
-        [
-            "Email 1",
-            "Email 2",
-            "Email 3",
-            "First Name",
-            "Last Name",
-            "Person"
-        ];
-        private static readonly Faker<UserEmailSettingBo> faker =
-            new Faker<UserEmailSettingBo>()
-            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.Email, y => y.Person.Email)
-            .RuleFor(x => x.UserName, y => y.Person.UserName)
-            .RuleFor(x => x.KeyName, y => y.PickRandom(commonKeys))
-            .FinishWith((a, b) =>
-            {
-                b.KeyValue = b.KeyName switch
-                {
-                    "First Name" => a.Person.FirstName,
-                    "Last Name" => a.Person.LastName,
-                    _ => a.Person.Email
-                };
-            });
     }
 }

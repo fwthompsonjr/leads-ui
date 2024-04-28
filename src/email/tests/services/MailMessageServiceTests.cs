@@ -1,17 +1,19 @@
 ﻿using Bogus;
-using legallead.email.implementations;
 using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.services;
-using legallead.email.transforms;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
 namespace legallead.email.tests.transforms
 {
-    public class MailMessageServiceTests
+    public class MailMessageServiceTests : IDisposable
     {
+        public MailMessageServiceTests()
+        {
+            _ = InitializeProvider();
+        }
         [Fact]
         public void ServiceCanBeCreated()
         {
@@ -79,7 +81,7 @@ namespace legallead.email.tests.transforms
                 var collection = settingsCount switch
                 {
                     null => null,
-                    0 => faker.Generate(0),
+                    0 => MockMessageInfrastructure.UserEmailFaker.Generate(0),
                     _ => GetDefaultSettings()
                 };
                 if (!hasEmail && collection != null)
@@ -176,92 +178,36 @@ namespace legallead.email.tests.transforms
         private static readonly object locker = new();
         private static ServiceProvider InitializeProvider()
         {
-            lock (locker)
-            {
-                var services = new ServiceCollection();
-                var connectionMock = new Mock<IConnectionStringService>();
-                var cryptoMock = new Mock<ICryptographyService>();
-                var dbMock = new Mock<IDataCommandService>();
-                var dbConnectionMock = new Mock<IDataConnectionService>();
-                var smtpWrapperMock = new Mock<ISmtpClientWrapper>();
-                var smtpMock = new Mock<ISmtpService>();
-                var userDbMock = new Mock<IUserSettingInfrastructure>();
-                var collection = GetDefaultSettings();
-                userDbMock.Setup(s => s.GetSettings(It.IsAny<UserSettingQuery>())).ReturnsAsync(collection);
-                // add mocks
-                services.AddSingleton(collection);
-                services.AddSingleton(connectionMock);
-                services.AddSingleton(cryptoMock);
-                services.AddSingleton(dbMock);
-                services.AddSingleton(dbConnectionMock);
-                services.AddSingleton(smtpWrapperMock);
-                services.AddSingleton(smtpMock);
-                services.AddSingleton(userDbMock);
-                // add implementations
-                services.AddSingleton(connectionMock.Object);
-                services.AddSingleton(cryptoMock.Object);
-                services.AddSingleton(dbMock.Object);
-                services.AddSingleton(dbConnectionMock.Object);
-                services.AddSingleton(smtpWrapperMock.Object);
-                services.AddSingleton(smtpMock.Object);
-                services.AddSingleton(userDbMock.Object);
-                services.AddSingleton<ISettingsService, SettingsService>();
-                services.AddTransient<IHtmlTransformService, HtmlTransformService>();
-                services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
-                services.AddTransient<MailMessageService>();
-                var provider = services.BuildServiceProvider();
-                ServiceInfrastructure.Provider = provider;
-                return provider;
-            }
+            return MockMessageInfrastructure.GetServiceProvider(true);
         }
         private static List<UserEmailSettingBo> GetDefaultSettings()
         {
-            var list = new List<UserEmailSettingBo>
-            {
-                new ()
-            };
-            commonKeys.ForEach(k =>
-            {
-                var item = faker.Generate();
-                item.KeyName = k;
-                if (k == "Person") item.KeyValue = new Faker().Person.FullName;
-                list.Add(item);
-            });
-            var template = list[1];
-            list.ForEach(a =>
-            {
-                a.Id = template.Id;
-                a.Email = template.Email;
-                a.UserName = template.UserName;
-            });
-            return list;
+            return MockMessageInfrastructure.GetDefaultSettings(true);
         }
 
+        private bool disposedValue;
 
-        private static readonly List<string> commonKeys =
-        [
-            "Email 1",
-            "Email 2",
-            "Email 3",
-            "First Name",
-            "Last Name"
-        ];
-
-        private static readonly Faker<UserEmailSettingBo> faker =
-            new Faker<UserEmailSettingBo>()
-            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.Email, y => y.Person.Email)
-            .RuleFor(x => x.UserName, y => y.Person.UserName)
-            .RuleFor(x => x.KeyName, y => y.PickRandom(commonKeys))
-            .FinishWith((a, b) =>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
             {
-                b.KeyValue = b.KeyName switch
+                if (disposing)
                 {
-                    "First Name" => a.Person.FirstName,
-                    "Last Name" => a.Person.LastName,
-                    _ => b.KeyValue
-                };
-            });
+                    lock (locker)
+                    {
+                        ServiceInfrastructure.Provider = null;
+                    }
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }
 

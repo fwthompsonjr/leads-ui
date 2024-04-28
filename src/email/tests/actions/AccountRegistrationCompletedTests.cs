@@ -1,10 +1,4 @@
-﻿using Bogus;
-using legallead.email.actions;
-using legallead.email.implementations;
-using legallead.email.interfaces;
-using legallead.email.models;
-using legallead.email.services;
-using legallead.email.transforms;
+﻿using legallead.email.actions;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace legallead.email.tests.actions
 {
@@ -121,129 +114,9 @@ namespace legallead.email.tests.actions
 
         private static ServiceProvider InitializeProvider()
         {
-            lock (locker)
-            {
-                var services = new ServiceCollection();
-                var connectionMock = new Mock<IConnectionStringService>();
-                var cryptoMock = new Mock<ICryptographyService>();
-                var dbMock = new Mock<IDataCommandService>();
-                var dbConnectionMock = new Mock<IDataConnectionService>();
-                var smtpWrapperMock = new Mock<ISmtpClientWrapper>();
-                var smtpMock = new Mock<ISmtpService>();
-                var userDbMock = new Mock<IUserSettingInfrastructure>();
-                var collection = GetDefaultSettings();
-                userDbMock.Setup(s => s.GetSettings(It.IsAny<UserSettingQuery>())).ReturnsAsync(collection);
-                // add mocks
-                services.AddSingleton(collection);
-                services.AddSingleton(connectionMock);
-                services.AddSingleton(cryptoMock);
-                services.AddSingleton(dbMock);
-                services.AddSingleton(dbConnectionMock);
-                services.AddSingleton(smtpWrapperMock);
-                services.AddSingleton(smtpMock);
-                services.AddSingleton(userDbMock);
-                // add implementations
-                services.AddSingleton(connectionMock.Object);
-                services.AddSingleton(cryptoMock.Object);
-                services.AddSingleton(dbMock.Object);
-                services.AddSingleton(dbConnectionMock.Object);
-                services.AddSingleton(smtpWrapperMock.Object);
-                services.AddSingleton(smtpMock.Object);
-                services.AddSingleton(userDbMock.Object);
-                services.AddSingleton<ISettingsService, SettingsService>();
-                services.AddTransient<IHtmlTransformService, HtmlTransformService>();
-                services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
-                services.AddTransient<AccountRegistrationCompleted>();
-                services.AddTransient(x =>
-                {
-                    var settings = x.GetRequiredService<ISettingsService>();
-                    var infra = userDbMock.Object;
-                    var transform = x.GetRequiredService<IHtmlTransformService>();
-                    return new MailMessageService(settings, infra, transform);
-                });
-                services.AddMvcCore(options =>
-                {
-                    options.Filters.AddService<AccountRegistrationCompleted>();
-                });
-                //Arrange
-                var request = new Mock<HttpRequest>();
-                request.Setup(x => x.Scheme).Returns("http");
-                request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
-                request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
-
-                var httpContext = Mock.Of<HttpContext>(_ =>
-                    _.Request == request.Object
-                );
-
-                //Controller needs a controller context
-                var controllerContext = new ControllerContext()
-                {
-                    HttpContext = httpContext,
-                    RouteData = new Microsoft.AspNetCore.Routing.RouteData(),
-                    ActionDescriptor = new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor()
-                };
-                services.AddScoped(a =>
-                {
-                    return new MockController()
-                    {
-                        ControllerContext = controllerContext
-                    };
-                });
-
-                var provider = services.BuildServiceProvider();
-                ServiceInfrastructure.Provider = provider;
-                return provider;
-            }
+            return MockMessageInfrastructure.GetServiceProvider(true);
         }
 
-        private static List<UserEmailSettingBo> GetDefaultSettings()
-        {
-            var list = new List<UserEmailSettingBo>
-            {
-                new ()
-            };
-            commonKeys.ForEach(k =>
-            {
-                var item = faker.Generate();
-                item.KeyName = k;
-                if (k == "Person") item.KeyValue = new Faker().Person.FullName;
-                list.Add(item);
-            });
-            var template = list[1];
-            list.ForEach(a =>
-            {
-                a.Id = template.Id;
-                a.Email = template.Email;
-                a.UserName = template.UserName;
-            });
-            return list;
-        }
-
-
-        private static readonly List<string> commonKeys =
-        [
-            "Email 1",
-            "Email 2",
-            "Email 3",
-            "First Name",
-            "Last Name"
-        ];
-
-        private static readonly Faker<UserEmailSettingBo> faker =
-            new Faker<UserEmailSettingBo>()
-            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.Email, y => y.Person.Email)
-            .RuleFor(x => x.UserName, y => y.Person.UserName)
-            .RuleFor(x => x.KeyName, y => y.PickRandom(commonKeys))
-            .FinishWith((a, b) =>
-            {
-                b.KeyValue = b.KeyName switch
-                {
-                    "First Name" => a.Person.FirstName,
-                    "Last Name" => a.Person.LastName,
-                    _ => b.KeyValue
-                };
-            });
         private bool disposedValue;
 
         protected virtual void Dispose(bool disposing)
