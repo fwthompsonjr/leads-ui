@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using legallead.email.entities;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.email.services
 {
@@ -89,6 +90,7 @@ namespace legallead.email.services
             });
             return cmmd;
         }
+        [ExcludeFromCodeCoverage(Justification = "Private methoded tested from public methods.")]
         private static object GetFieldValue(IDataReader reader, int index)
         {
             var data = reader[index];

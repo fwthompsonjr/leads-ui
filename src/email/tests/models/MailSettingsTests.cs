@@ -34,5 +34,15 @@ namespace legallead.email.tests.models
             });
             Assert.Null(exception);
         }
+        [Fact]
+        public void SettingCopyToAdminIsTrue()
+        {
+            var exception = Record.Exception(() =>
+            {
+                var obj = faker.Generate();
+                Assert.True(obj.CopyToAdmin);
+            });
+            Assert.Null(exception);
+        }
     }
 }

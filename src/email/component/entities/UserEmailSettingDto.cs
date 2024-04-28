@@ -20,8 +20,7 @@ namespace legallead.email.entities
                 if (fieldName.Equals("Email", Comparison)) return Email;
                 if (fieldName.Equals("UserName", Comparison)) return UserName;
                 if (fieldName.Equals("KeyValue", Comparison)) return KeyValue;
-                if (fieldName.Equals("KeyName", Comparison)) return KeyName;
-                return null;
+                return KeyName;
             }
             set
             {

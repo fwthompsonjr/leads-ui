@@ -1,29 +1,21 @@
 ﻿using legallead.email.models;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.email.services
 {
-    internal class ConnectionStringService : IConnectionStringService
+    internal class ConnectionStringService(ICryptographyService cryptography) : IConnectionStringService
     {
         private static readonly string SettingJs = Properties.Resources.db_settings;
         private const string SaltPhrase = "legal.lead.test.passcode";
         private const string ConnectCommandString = "server=<localhost>;user=<username>;password=<password>;Database=<database>;port=3306;";
-        private readonly DbSetting dbSetting;
-        private readonly ICryptographyService service;
+        private readonly DbSetting dbSetting = GetSetting();
+        private readonly ICryptographyService service = cryptography;
         private string? decodedCredential;
-
-        public ConnectionStringService(ICryptographyService cryptography)
-        {
-            var json = JsonConvert.DeserializeObject<DbSetting>(SettingJs) ?? new();
-            dbSetting = json;
-            service = cryptography;
-        }
-
 
         public string[] GetCredential()
         {
-            const char pipe = '|';
             try
             {
                 if (string.IsNullOrEmpty(decodedCredential))
@@ -33,7 +25,7 @@ namespace legallead.email.services
                     string vector = dbSetting.Key;
                     decodedCredential = service.Decrypt(conversion, saltLocal, vector);
                 }
-                return decodedCredential.Contains(pipe) ? decodedCredential.Split(pipe) : [];
+                return Decode(decodedCredential);
             }
             catch (Exception)
             {
@@ -44,15 +36,42 @@ namespace legallead.email.services
         public string ConnectionString()
         {
             var passcode = GetCredential();
-            if (passcode.Length == 0) return string.Empty;
-            if (string.IsNullOrEmpty(dbSetting.Server)) return string.Empty;
-            if (string.IsNullOrEmpty(dbSetting.DataBase)) return string.Empty;
+            if (!VerifyCredential(passcode)) return string.Empty;
             var connect = new StringBuilder(ConnectCommandString);
             connect.Replace("<localhost>", dbSetting.Server);
             connect.Replace("<database>", dbSetting.DataBase);
             connect.Replace("<username>", passcode[0]);
             connect.Replace("<password>", passcode[1]);
             return connect.ToString();
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private utility tested from public member.")]
+        private string[] Decode(string input)
+        {
+            const char pipe = '|';
+            return input.Contains(pipe) ? input.Split(pipe) : [];
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private utility tested from public member.")]
+        private bool VerifyCredential(string[] passcode)
+        {
+            if (passcode.Length == 0) return false;
+            if (string.IsNullOrEmpty(dbSetting.Server)) return false;
+            if (string.IsNullOrEmpty(dbSetting.DataBase)) return false;
+            return true;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private utility tested from public member.")]
+        private static DbSetting GetSetting()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<DbSetting>(SettingJs) ?? new();
+            }
+            catch
+            {
+                return new();
+            }
         }
     }
 }

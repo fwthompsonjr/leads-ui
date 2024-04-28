@@ -5,6 +5,7 @@ $jsfile = [System.IO.Path]::Combine( $jsfolder, "smtp-settings.txt" );
 $mail = @{
 	"account" = "ses-smtp-user.legallead.2024.04"
 	"uid" = ""
+	"copy-admin" = $true
 	"secret" = ""
 	"type" = "aws-ses"
 	"settings" = @{

@@ -9,8 +9,9 @@ namespace legallead.email.services
         private readonly MailSettings _settings = settings.GetSettings;
         private readonly ISmtpClientWrapper wrapper = smtpwrapper;
 
-        public bool Send(MailMessage message)
+        public bool Send(MailMessage? message)
         {
+            ArgumentNullException.ThrowIfNull(message);
             using var client = GetClient();
             client.Credentials = GetCredentials();// Enable SSL encryption
             client.EnableSsl = true;// Try to send the message. Show status in console.
@@ -29,8 +30,9 @@ namespace legallead.email.services
             }
         }
 
-        public async Task<bool> SendAsync(MailMessage message)
+        public async Task<bool> SendAsync(MailMessage? message)
         {
+            ArgumentNullException.ThrowIfNull(message);
             return await Task.Run(() =>
             {
                 using var client = GetClient();

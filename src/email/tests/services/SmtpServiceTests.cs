@@ -48,12 +48,13 @@ namespace legallead.email.tests.services
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public void ServiceCanSend(bool hasException)
+        [InlineData(false, false)]
+        public void ServiceCanSend(bool hasException, bool hasMessage = true)
         {
             var exception = Record.Exception(() =>
             {
                 var err = new Faker().System.Exception();
-                var message = new MailMessage();
+                var message = hasMessage ? new MailMessage() : null;
                 var wrapper = new Mock<ISmtpClientWrapper>();
                 var service = new MockSmtpService(new SettingsService(), wrapper);
                 if (hasException)
@@ -68,18 +69,19 @@ namespace legallead.email.tests.services
                 var actual = service.Send(message);
                 Assert.NotEqual(hasException, actual);
             });
-            Assert.Null(exception);
+            if (hasMessage) Assert.Null(exception);
         }
 
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public async Task ServiceCanSendAsync(bool hasException)
+        [InlineData(false, false)]
+        public async Task ServiceCanSendAsync(bool hasException, bool hasMessage = true)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var err = new Faker().System.Exception();
-                var message = new MailMessage();
+                var message = hasMessage ? new MailMessage() : null;
                 var wrapper = new Mock<ISmtpClientWrapper>();
                 var service = new MockSmtpService(new SettingsService(), wrapper);
                 if (hasException)
@@ -94,13 +96,13 @@ namespace legallead.email.tests.services
                 var actual = await service.SendAsync(message);
                 Assert.NotEqual(hasException, actual);
             });
-            Assert.Null(exception);
+            if (hasMessage) Assert.Null(exception);
         }
         private sealed class MockSmtpService(ISettingsService settings, Mock<ISmtpClientWrapper> wrapper) : SmtpService(settings, wrapper.Object)
         {
 
-            private static Mock<SmtpClient> _client = new Mock<SmtpClient>();
-            private static ICredentialsByHost _credential = new NetworkCredential("user", "123abc");
+            private static readonly Mock<SmtpClient> _client = new();
+            private static readonly ICredentialsByHost _credential = new NetworkCredential("user", "123abc");
 
 
             public override SmtpClient GetClient()

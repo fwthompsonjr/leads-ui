@@ -1,11 +1,6 @@
 ﻿using Bogus;
 using legallead.email.models;
 using legallead.email.transforms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.email.tests.transforms
 {
@@ -60,7 +55,7 @@ namespace legallead.email.tests.transforms
                 var sut = new TestBaseTemplate();
                 sut.FetchTemplateParameters([]);
             });
-            Assert.NotNull(exception);
+            Assert.Null(exception);
         }
 
 
@@ -76,8 +71,8 @@ namespace legallead.email.tests.transforms
         [InlineData(true, true, true, false, "Person", "")]
         [InlineData(true, true, true, false, "Person", "   ")]
         public void TestCanGetHtmlTemplate(
-            bool hasSettings, 
-            bool hasPerson = true, 
+            bool hasSettings,
+            bool hasPerson = true,
             bool hasKeyNames = true,
             bool hasPersonKey = true,
             string? personKeyName = "Person",
@@ -85,7 +80,8 @@ namespace legallead.email.tests.transforms
         {
             var attributes = hasSettings ? GetDefaultSettings() : faker.Generate(0);
             if (!hasPerson) { attributes.RemoveAll(a => a.KeyName == "Person"); }
-            if (!hasKeyNames && attributes.Count > 0) {
+            if (!hasKeyNames && attributes.Count > 0)
+            {
                 var template = attributes[0];
                 attributes.Add(new()
                 {
@@ -141,7 +137,6 @@ namespace legallead.email.tests.transforms
 
             public override void FetchTemplateParameters(List<UserEmailSettingBo> attributes)
             {
-                throw new NotImplementedException();
             }
 
             private static readonly List<string> _html = [

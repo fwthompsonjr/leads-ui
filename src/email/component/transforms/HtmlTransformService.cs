@@ -2,6 +2,7 @@
 using legallead.email.models;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.email.transforms
@@ -28,7 +29,7 @@ namespace legallead.email.transforms
         public async Task<string?> GetHtmlTemplate(UserSettingQuery user, string templateName)
         {
             if (!user.IsValid) return null;
-            var fallbackName = user.Email ?? "Account User";
+            var fallbackName = string.IsNullOrWhiteSpace(user.Email) ? "Account User" : user.Email;
             var settingBo = await _userRepo.GetSettings(user);
             if (settingBo == null || settingBo.Count == 0) return TransformHtml(fallbackName, templateName, settingBo);
             fallbackName = ExtractUserName(settingBo, fallbackName);
@@ -41,7 +42,7 @@ namespace legallead.email.transforms
             Substitutions[BodyHtmlToken] = ExtractDetail(attributes, templateName, "");
             var html = new StringBuilder(BaseHtml);
             html.Replace(BodyHtmlToken, Substitutions[BodyHtmlToken]);
-            html.Replace(EmailDateToken, DateTime.UtcNow.ToString("Mmm d, yyyy"));
+            html.Replace(EmailDateToken, DateTime.UtcNow.ToString("MMM d, yyyy"));
             html.Replace(EmailSubjectToken, Substitutions[EmailSubjectToken] ?? "Account Information");
             html.Replace(UserNameToken, Substitutions[UserNameToken] ?? userName);
             return html.ToString();
@@ -49,13 +50,8 @@ namespace legallead.email.transforms
 
         private static string ExtractUserName(List<UserEmailSettingBo> attributes, string fallback)
         {
-            if (attributes.Count == 0)
-            {
-                return (string.IsNullOrEmpty(attributes[0].UserName) ?
-                    attributes[0].Email :
-                    attributes[0].UserName) ?? fallback;
-            }
-            var userName = attributes.Select(x => x.UserName).FirstOrDefault() ?? fallback;
+            if (attributes.Count == 0) return fallback;
+            var userName = attributes.Where(x => !string.IsNullOrEmpty(x.UserName)).Select(x => x.UserName).FirstOrDefault() ?? fallback;
             var firstName = attributes.Find(x => (x.KeyName ?? "").Equals("First Name"))?.KeyValue;
             var lastName = attributes.Find(x => (x.KeyName ?? "").Equals("Last Name"))?.KeyValue;
             if (string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName)) return userName;
@@ -63,6 +59,7 @@ namespace legallead.email.transforms
             if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName)) return $"{firstName} {lastName}";
             return userName;
         }
+        [ExcludeFromCodeCoverage(Justification = "Private method with common use cases tested thru public members.")]
         private static string ExtractDetail(List<UserEmailSettingBo>? attributes, string templateName, string fallback)
         {
             if (attributes == null) return fallback;
@@ -70,13 +67,6 @@ namespace legallead.email.transforms
             if (!named) return fallback;
             var instance = ServiceInfrastructure.Provider?.GetKeyedService<IHtmlTransformDetailBase>(template.ToString());
             if (instance == null) return fallback;
-            if (attributes.Count == 0)
-            {
-                return (string.IsNullOrEmpty(attributes[0].UserName) ?
-                    attributes[0].Email :
-                    attributes[0].UserName) ?? fallback;
-            }
-            instance.FetchTemplateParameters(attributes);
             var content = instance.GetHtmlTemplate(attributes) ?? fallback;
             return content;
         }

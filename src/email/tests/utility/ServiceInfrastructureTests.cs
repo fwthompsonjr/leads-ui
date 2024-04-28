@@ -24,6 +24,8 @@ namespace legallead.email.tests.utility
         [InlineData(typeof(ISmtpClientWrapper))]
         [InlineData(typeof(ISmtpService))]
         [InlineData(typeof(IUserSettingInfrastructure))]
+        [InlineData(typeof(IHtmlTransformService))]
+        [InlineData(typeof(MailMessageService))]
         public void SutCanGetType(Type serviceType)
         {
 
@@ -33,7 +35,7 @@ namespace legallead.email.tests.utility
         }
 
         [Fact]
-        public void SutCanTemplates()
+        public void SutCanGetTemplates()
         {
             var names = Enum.GetNames<TemplateNames>().ToList();
             var expected = names.Count;

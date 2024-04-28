@@ -9,7 +9,7 @@ namespace legallead.email.transforms
         protected readonly Dictionary<string, string?> _substitions = [];
         protected HtmlTransformDetailBase()
         {
-            _templateName= GetType().Name.Replace("Template", "");
+            _templateName = GetType().Name.Replace("Template", "");
         }
         public abstract string BaseHtml { get; }
         public abstract List<string> KeyNames { get; }
@@ -22,6 +22,7 @@ namespace legallead.email.transforms
         {
             const string keyTemplate = "<!-- {0} -->";
             const string dash = " - ";
+            FetchTemplateParameters(attributes);
             var keynames = Substitutions.Keys.ToList();
             var builder = new StringBuilder(BaseHtml);
             if (attributes.Count == 0)

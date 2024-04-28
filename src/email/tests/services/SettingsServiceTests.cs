@@ -24,5 +24,17 @@ namespace legallead.email.tests.services
             });
             Assert.Null(exception);
         }
+
+        [Theory]
+        [InlineData(true)]
+        public void ServiceCanGetSettingsAdminValue(bool expected)
+        {
+            var exception = Record.Exception(() =>
+            {
+                var test = new SettingsService().GetSettings;
+                Assert.Equal(expected, test.CopyToAdmin);
+            });
+            Assert.Null(exception);
+        }
     }
 }

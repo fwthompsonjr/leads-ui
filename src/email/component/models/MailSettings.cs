@@ -10,6 +10,9 @@ namespace legallead.email.models
         [JsonProperty("uid")]
         public string Uid { get; set; } = string.Empty;
 
+        [JsonProperty("copy-admin")]
+        public bool CopyToAdmin { get; set; } = true;
+
         [JsonProperty("secret")]
         public string Secret { get; set; } = string.Empty;
 

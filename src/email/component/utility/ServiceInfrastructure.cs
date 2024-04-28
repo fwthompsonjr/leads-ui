@@ -10,9 +10,13 @@ namespace legallead.email.utility
     {
         private static readonly object locker = new();
         private static IServiceProvider? _provider;
-        public static IServiceProvider? Provider => _provider ??= InitializeProvider();
+        public static IServiceProvider? Provider
+        {
+            get { return _provider ??= InitializeProvider(); }
+            internal set { _provider = value; }
+        }
 
-        private static IServiceProvider? InitializeProvider()
+        private static ServiceProvider? InitializeProvider()
         {
             lock (locker)
             {
@@ -28,6 +32,7 @@ namespace legallead.email.utility
                 // transients
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
+                services.AddTransient<MailMessageService>();
                 return services.BuildServiceProvider();
             }
         }
