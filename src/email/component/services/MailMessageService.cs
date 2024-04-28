@@ -5,6 +5,7 @@ using legallead.email.transforms;
 using legallead.email.utility;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
+using System.Net.Mime;
 
 namespace legallead.email.services
 {
@@ -66,8 +67,25 @@ namespace legallead.email.services
             BodyHtml = SubstituteTitle(subject, html);
             if (Message != null && !string.IsNullOrEmpty(html))
             {
-                Message.Body = _beautifyService.BeautifyHTML(html);
+                var body = _beautifyService.BeautifyHTML(html);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(body);
+                var textMessage = doc.DocumentNode.SelectSingleNode("//body").InnerText;
+                // Important: Mime standard dictates that text version must come first 
+                using (AlternateView textPart =
+                    AlternateView.CreateAlternateViewFromString(textMessage, null, "text/plain"))
+                {
+                    textPart.TransferEncoding = TransferEncoding.QuotedPrintable;
+                    Message.AlternateViews.Add(textPart);
+                    Message.IsBodyHtml = false;
+                    Message.Body = textMessage;
+                }
+                using AlternateView htmlPart =
+                    AlternateView.CreateAlternateViewFromString(body, System.Text.Encoding.UTF8, "text/html");
+                htmlPart.TransferEncoding = TransferEncoding.QuotedPrintable;
+                Message.AlternateViews.Add(htmlPart);
                 Message.IsBodyHtml = true;
+                Message.Body = body;
             }
             return this;
         }
