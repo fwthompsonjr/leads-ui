@@ -30,6 +30,7 @@ namespace legallead.email.utility
                 services.AddSingleton<ISmtpClientWrapper, SmtpClientWrapper>();
                 services.AddSingleton<ISmtpService, SmtpService>();
                 services.AddSingleton<IUserSettingInfrastructure, UserSettingInfrastructure>();
+                services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 // transients
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
@@ -39,11 +40,8 @@ namespace legallead.email.utility
                     var settings = x.GetRequiredService<ISettingsService>();
                     var infra = x.GetRequiredService<IUserSettingInfrastructure>();
                     var transform = x.GetRequiredService<IHtmlTransformService>();
-                    return new MailMessageService(settings, infra, transform);
-                });
-                services.AddMvcCore(options =>
-                {
-                    options.Filters.AddService<AccountRegistrationCompleted>();
+                    var beauty = x.GetRequiredService<IHtmlBeautifyService>();
+                    return new MailMessageService(settings, infra, transform, beauty);
                 });
                 return services.BuildServiceProvider();
             }

@@ -16,14 +16,6 @@ namespace legallead.email.tests.actions
             _ = InitializeProvider();
         }
 
-        [Fact]
-        public void ControllerCanBeCreated()
-        {
-            var provider = InitializeProvider();
-            var controller = provider.GetRequiredService<MockController>();
-            Assert.NotNull(controller);
-        }
-
         [Theory]
         [InlineData("")]
         [InlineData("not-a-guid")]
@@ -59,30 +51,19 @@ namespace legallead.email.tests.actions
             });
             Assert.Null(exception);
         }
-        [Fact]
-        public void ControllerCanExecuteMyAction()
-        {
-            var provider = InitializeProvider();
-            var controller = provider.GetRequiredService<MockController>();
-            var result = controller.MyAction();
-            Assert.NotNull(result);
-        }
-        [ApiController]
-        private sealed class MockController : ControllerBase
-        {
-            [HttpGet]
-            [ServiceFilter(typeof(AccountRegistrationCompleted))] // Apply the filter to this action method
-            public IActionResult MyAction()
-            {
-                var guid = Guid.NewGuid().ToString();
-                return Ok(guid);
-            }
-        }
+
         private static readonly object locker = new();
 
         private static FilterContext GetContext(string result, bool isExecuted = true)
         {
-            var provider = InitializeProvider();
+            var collection = new ServiceCollection();
+            collection.AddTransient<AccountRegistrationCompleted>();
+            collection.AddMvcCore(o =>
+            {
+                o.Filters.AddService<AccountRegistrationCompleted>();
+            });
+            collection.AddTransient<MockController>();
+            var provider = collection.BuildServiceProvider();
             var controller = provider.GetRequiredService<MockController>();
             // Create a default ActionContext (depending on our case-scenario)
             var actionContext = new ActionContext()
@@ -139,6 +120,18 @@ namespace legallead.email.tests.actions
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        [ApiController]
+        private sealed class MockController : ControllerBase
+        {
+            [HttpGet]
+            [ServiceFilter(typeof(AccountRegistrationCompleted))] // Apply the filter to this action method
+            public IActionResult MyAction()
+            {
+                var guid = Guid.NewGuid().ToString();
+                return Ok(guid);
+            }
         }
     }
 }

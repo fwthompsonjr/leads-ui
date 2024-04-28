@@ -6,8 +6,6 @@ using legallead.email.models;
 using legallead.email.services;
 using legallead.email.transforms;
 using legallead.email.utility;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
@@ -76,6 +74,7 @@ namespace legallead.email.tests
                 services.AddSingleton(smtpMock.Object);
                 services.AddSingleton(userDbMock.Object);
                 services.AddSingleton<ISettingsService, SettingsService>();
+                services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
                 services.AddTransient<AccountRegistrationCompleted>();
@@ -84,37 +83,13 @@ namespace legallead.email.tests
                     var settings = x.GetRequiredService<ISettingsService>();
                     var infra = userDbMock.Object;
                     var transform = x.GetRequiredService<IHtmlTransformService>();
-                    return new MailMessageService(settings, infra, transform);
+                    var beauty = x.GetRequiredService<IHtmlBeautifyService>();
+                    return new MailMessageService(settings, infra, transform, beauty);
                 });
                 services.AddMvcCore(options =>
                 {
                     options.Filters.AddService<AccountRegistrationCompleted>();
                 });
-                //Arrange
-                var request = new Mock<HttpRequest>();
-                request.Setup(x => x.Scheme).Returns("http");
-                request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
-                request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
-
-                var httpContext = Mock.Of<HttpContext>(_ =>
-                    _.Request == request.Object
-                );
-
-                //Controller needs a controller context
-                var controllerContext = new ControllerContext()
-                {
-                    HttpContext = httpContext,
-                    RouteData = new Microsoft.AspNetCore.Routing.RouteData(),
-                    ActionDescriptor = new Microsoft.AspNetCore.Mvc.Controllers.ControllerActionDescriptor()
-                };
-                services.AddScoped(a =>
-                {
-                    return new MockController()
-                    {
-                        ControllerContext = controllerContext
-                    };
-                });
-
                 var provider = services.BuildServiceProvider();
                 ServiceInfrastructure.Provider = provider;
                 return provider;

@@ -1,4 +1,5 @@
-﻿using legallead.email.interfaces;
+﻿using HtmlAgilityPack;
+using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.transforms;
 using legallead.email.utility;
@@ -12,14 +13,17 @@ namespace legallead.email.services
         private readonly IUserSettingInfrastructure _userDb;
         private readonly ISettingsService _settingsService;
         private readonly IHtmlTransformService _htmlService;
+        private readonly IHtmlBeautifyService _beautifyService;
         public MailMessageService(
             ISettingsService settings,
             IUserSettingInfrastructure infrastructure,
-            IHtmlTransformService transformService)
+            IHtmlTransformService transformService,
+            IHtmlBeautifyService beautifyService)
         {
             _settingsService = settings;
             _userDb = infrastructure;
             _htmlService = transformService;
+            _beautifyService = beautifyService;
             InitializeMessage();
         }
 
@@ -58,16 +62,15 @@ namespace legallead.email.services
             var query = hasId ?
                 new UserSettingQuery { Id = userId } :
                 new UserSettingQuery { Email = email };
-            var html = service.GetHtmlTemplate(query, TemplateType).GetAwaiter().GetResult();
-            BodyHtml = html;
-            if (Message != null)
+            var html = service.GetHtmlTemplate(query, template.ToString()).GetAwaiter().GetResult();
+            BodyHtml = SubstituteTitle(subject, html);
+            if (Message != null && !string.IsNullOrEmpty(html))
             {
-                Message.Body = html;
+                Message.Body = _beautifyService.BeautifyHTML(html);
                 Message.IsBodyHtml = true;
             }
             return this;
         }
-
 
         protected MailMessageService With(string userEmail)
         {
@@ -122,6 +125,26 @@ namespace legallead.email.services
             {
                 Message.CC.Clear();
                 CopyAddress.ForEach(Message.CC.Add);
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private class member tested fully from public method.")]
+        private static string? SubstituteTitle(string subject, string? html)
+        {
+            if (string.IsNullOrWhiteSpace(html)) return html;
+            const string query = "//h2[@name='span-sub-heading']";
+            try
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                var node = doc.DocumentNode.SelectSingleNode(query);
+                if (node == null) return html;
+                node.InnerHtml = subject;
+                return doc.DocumentNode.OuterHtml;
+            }
+            catch (Exception)
+            {
+                return html;
             }
         }
 
