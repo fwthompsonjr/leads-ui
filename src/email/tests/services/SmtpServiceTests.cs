@@ -79,6 +79,7 @@ namespace legallead.email.tests.services
             if (hasMessage) Assert.Null(exception);
         }
 
+
         private sealed class MockSmtpService(
             ISettingsService settings,
             Mock<ISmtpClientWrapper> wrapper,

@@ -1,6 +1,9 @@
 ﻿using Bogus;
 using legallead.email.services;
+using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Net.Mail;
+using System.Text;
 
 namespace legallead.email.tests.services
 {
@@ -19,6 +22,27 @@ namespace legallead.email.tests.services
                 _ = await service.Log(userId, GetMessage());
             });
             Assert.Null(exception);
+        }
+        [Fact]
+        public void ServiceCanUnEscape()
+        {
+            var message = GetMessage();
+            var to = JsonConvert.SerializeObject(message.To);
+            var cc = JsonConvert.SerializeObject(message.CC);
+            var subject = message.Subject;
+            var body = message.Body;
+            var bytes = Encoding.UTF8.GetBytes(body);
+            var content64 = Convert.ToBase64String(bytes);
+            var obj = new
+            {
+                From = JsonConvert.SerializeObject(message.From),
+                To = to,
+                Cc = cc,
+                Subject = subject,
+                Body = content64
+            };
+            var serial = MailLoggingService.UnEscape(JsonConvert.SerializeObject(obj));
+            Assert.NotEmpty(serial);
         }
 
         [Theory]
@@ -50,9 +74,12 @@ namespace legallead.email.tests.services
 
         private static MailMessage GetMessage()
         {
-            var message = new MailMessage("admin@somewhere.org", "person@places.com");
-            message.Subject = "Test";
-            message.Body = "Test";
+            
+            var message = new MailMessage("admin@somewhere.org", "person@places.com")
+            {
+                Subject = "Test",
+                Body = Properties.Resources.parser_test_html
+            };
             return message;
         }
     }
