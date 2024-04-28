@@ -42,5 +42,6 @@ jobs:
 
       - name: Summarize Test Results
         shell: pwsh
+        if: ${{ always() }}
         run: |
           & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
