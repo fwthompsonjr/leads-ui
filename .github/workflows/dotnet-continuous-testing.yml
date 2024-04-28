@@ -9,12 +9,18 @@ on:
       - '!main'         # excludes master
       - '!releases'     # excludes releases
     paths:
-      - 'src/**'
+      - 'src/api/**'
+      - 'src/core/**'
+      - 'src/db/**'
+      - 'src/logging/**'
       - '!src/presentation/legallead.installer/**'
       - '!src/presentation/legallead.installer.tests/**'
+      - '!src/email/**'
 env:
     FAILED_TEST_COUNT: "0"
     LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+    LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
+    LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
 
 jobs:
   build:
@@ -57,7 +63,7 @@ jobs:
         & ./pipeline-build-solutions.ps1 -version "${{ env.BUILD_VERSION }}"
 
     - name: Test with dotnet
-      uses: nick-fields/retry@v2
+      uses: nick-fields/retry@v3
       with:
         timeout_minutes: 10
         max_attempts: 3
