@@ -99,7 +99,8 @@ namespace legallead.email.tests.implementations
         {
             const string pattern = "//*[@name='{0}']";
             var query = string.Format(pattern, name);
-            var exception = Record.Exception(() => {
+            var exception = Record.Exception(() =>
+            {
                 var provider = MockMessageInfrastructure.GetServiceProvider();
                 var service = provider.GetRequiredService<MailMessageService>();
                 service.With(TemplateNames.AccountRegistration, Guid.NewGuid().ToString());

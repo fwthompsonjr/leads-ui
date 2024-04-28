@@ -1,6 +1,6 @@
 <h3 name="account-registration-heading">Account Registration Completed</h3>
 <p name="account-registration-para-1">
-	Thank you for registering your account with Legal Leads.
+	Thank you for registering your account with Legal Leads.<br/>
 	Please make note of these account registration details
 <p>
 <ul name="account-registration-list-1">

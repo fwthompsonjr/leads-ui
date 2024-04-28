@@ -28,6 +28,7 @@ namespace legallead.email.utility
                 services.AddSingleton<IDataConnectionService, DataConnectionService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<ISmtpClientWrapper, SmtpClientWrapper>();
+                services.AddSingleton<IMailLoggingService, MailLoggingService>();
                 services.AddSingleton<ISmtpService, SmtpService>();
                 services.AddSingleton<IUserSettingInfrastructure, UserSettingInfrastructure>();
                 services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();

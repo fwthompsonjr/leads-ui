@@ -70,22 +70,12 @@ namespace legallead.email.services
                 var body = _beautifyService.BeautifyHTML(html);
                 var doc = new HtmlDocument();
                 doc.LoadHtml(body);
-                var textMessage = doc.DocumentNode.SelectSingleNode("//body").InnerText;
-                // Important: Mime standard dictates that text version must come first 
-                using (AlternateView textPart =
-                    AlternateView.CreateAlternateViewFromString(textMessage, null, "text/plain"))
-                {
-                    textPart.TransferEncoding = TransferEncoding.QuotedPrintable;
-                    Message.AlternateViews.Add(textPart);
-                    Message.IsBodyHtml = false;
-                    Message.Body = textMessage;
-                }
-                using AlternateView htmlPart =
-                    AlternateView.CreateAlternateViewFromString(body, System.Text.Encoding.UTF8, "text/html");
-                htmlPart.TransferEncoding = TransferEncoding.QuotedPrintable;
-                Message.AlternateViews.Add(htmlPart);
-                Message.IsBodyHtml = true;
+
                 Message.Body = body;
+                Message.IsBodyHtml = true;
+                ContentType mimeType = new("text/html");
+                AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+                Message.AlternateViews.Add(alternate);
             }
             return this;
         }

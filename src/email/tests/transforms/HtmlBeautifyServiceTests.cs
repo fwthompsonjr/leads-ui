@@ -4,13 +4,8 @@ namespace legallead.email.tests.transforms
 {
     public class HtmlBeautifyServiceTests
     {
-        // 
-        private readonly IHtmlBeautifyService parser;
+        private static readonly HtmlBeautifyService parser = new();
         private static readonly string testHtml = Properties.Resources.parser_test_html;
-        public HtmlBeautifyServiceTests()
-        {
-            parser = new HtmlBeautifyService();
-        }
 
         [Theory]
         [InlineData(0)]
@@ -25,11 +20,11 @@ namespace legallead.email.tests.transforms
             Assert.NotEqual(test, actual);
         }
 
-        private static readonly List<string> ContentSamples = new() {
+        private static readonly List<string> ContentSamples = [
             "<html></html>",
             "<html><body></body></html>",
             "<html><body><div><p>This is a sentence.</div></body></html>",
             testHtml
-        };
+        ];
     }
 }

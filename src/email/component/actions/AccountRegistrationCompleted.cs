@@ -25,7 +25,7 @@ namespace legallead.email.actions
                 if (!Guid.TryParse(id, out var _)) return;
                 _mailMessageService.With(TemplateNames.AccountRegistration, id);
                 if (!CanSend()) return;
-                _smtpService.Send(_mailMessageService.Message);
+                _smtpService.Send(_mailMessageService.Message, id);
             });
         }
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]

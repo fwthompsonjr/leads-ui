@@ -61,6 +61,18 @@ namespace legallead.email.tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;uid&quot;: &quot;cf35094a-ad64-41dd-9f2d-32cbc942aaed&quot;,
+        ///	&quot;email&quot;: &quot;frank.thompson.jr@gmail.com&quot;
+        ///}.
+        /// </summary>
+        internal static string email_parameters {
+            get {
+                return ResourceManager.GetString("email_parameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
         ///&lt;html&gt;&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;
