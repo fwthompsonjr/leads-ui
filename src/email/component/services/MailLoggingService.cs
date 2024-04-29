@@ -1,6 +1,6 @@
 ﻿using legallead.email.interfaces;
+using legallead.email.utility;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
 
@@ -37,14 +37,15 @@ namespace legallead.email.services
         {
             if (string.IsNullOrEmpty(id)) return;
             if (!Guid.TryParse(id, out var _)) return;
-            Debug.WriteLine("Message {0} is sent.", id);
+            userDb.LogSuccess(id);
         }
         public void Error(string id, string message)
         {
             if (string.IsNullOrEmpty(id)) return;
             if (string.IsNullOrEmpty(message)) return;
             if (!Guid.TryParse(id, out var _)) return;
-            Debug.WriteLine("Message {0} has error - {1}.", id, message);
+            var messages = JsonConvert.SerializeObject(message.SplitByLength(400));
+            userDb.LogError(id, messages);
         }
 
         public static string UnEscape(string json)

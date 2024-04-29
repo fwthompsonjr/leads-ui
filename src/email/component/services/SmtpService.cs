@@ -30,7 +30,7 @@ namespace legallead.email.services
             }
             catch (Exception ex)
             {
-                if (!string.IsNullOrEmpty(id)) { loggingSvc.Error(id, ex.Message); }
+                if (!string.IsNullOrEmpty(id)) { loggingSvc.Error(id, ex.ToString()); }
                 return false;
             }
         }

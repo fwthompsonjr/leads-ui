@@ -3,7 +3,6 @@ using legallead.email.interfaces;
 using legallead.email.services;
 using Moq;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using System.Net.Mail;
 using System.Text;
 
@@ -76,7 +75,7 @@ namespace legallead.email.tests.services
 
         private static MailMessage GetMessage()
         {
-            
+
             var message = new MailMessage("admin@somewhere.org", "person@places.com")
             {
                 Subject = "Test",

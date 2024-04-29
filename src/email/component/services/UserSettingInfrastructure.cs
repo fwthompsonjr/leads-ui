@@ -2,6 +2,7 @@
 using legallead.email.interfaces;
 using legallead.email.models;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace legallead.email.services
 {
@@ -31,29 +32,40 @@ namespace legallead.email.services
             var response = await _db.QuerySingleOrDefaultAsync<LogCorrespondenceDto>(db, sql, parms);
             return response;
         }
-        /*
-        
 
-        public async Task LogSuccess(string id)
+
+        public void LogSuccess(string id)
         {
-            var db = _connection.CreateConnection();
-            var dto = new LogCorrespondenceDto { Id = id, JsonData = json };
-            var parms = LogCorrespondenceRequest.GetParameters(dto);
-            var sql = $"CALL {dto.TableName} ( ?, ? )";
-            var response = await _db.QuerySingleOrDefaultAsync<LogCorrespondenceDto>(db, sql, parms);
-            return response;
+            try
+            {
+                var db = _connection.CreateConnection();
+                var dto = new LogCorrespondenceSuccessDto { Id = id };
+                var sql = $"CALL {dto.TableName} ( ? )";
+                var parms = LogCorrespondenceRequest.GetParameters(dto);
+                _db.ExecuteAsync(db, sql, parms).Wait();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
-        public async Task LogError(string id, string message)
+        public void LogError(string id, string message)
         {
-            var db = _connection.CreateConnection();
-            var dto = new LogCorrespondenceDto { Id = id, JsonData = json };
-            var parms = LogCorrespondenceRequest.GetParameters(dto);
-            var sql = $"CALL {dto.TableName} ( ?, ? )";
-            var response = await _db.QuerySingleOrDefaultAsync<LogCorrespondenceDto>(db, sql, parms);
-            return response;
+            try
+            {
+                var db = _connection.CreateConnection();
+                var dto = new LogCorrespondenceErrorDto { Id = id, JsonData = message };
+                var parms = LogCorrespondenceRequest.GetParameters(dto);
+                var sql = $"CALL {dto.TableName} ( ?, ? )";
+                _db.ExecuteAsync(db, sql, parms).Wait();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
-        */
+
         private static string? _commandText;
         private static string CommandText()
         {

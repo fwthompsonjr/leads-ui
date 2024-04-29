@@ -13,5 +13,11 @@ namespace legallead.email.models
             parameters.Add("json_data", dto.JsonData);
             return parameters;
         }
+        public static DynamicParameters GetParameters(LogCorrespondenceSuccessDto dto)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("user_index", dto.Id);
+            return parameters;
+        }
     }
 }
