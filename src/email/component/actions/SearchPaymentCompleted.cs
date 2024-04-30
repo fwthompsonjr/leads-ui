@@ -3,6 +3,7 @@ using legallead.email.services;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Diagnostics;
 using System.Net.Mail;
 
 namespace legallead.email.actions
@@ -19,7 +20,7 @@ namespace legallead.email.actions
                 var html = htmlResult.Content;
                 if (IsHtmlValid(html)) return;
                 var email = GetEmailAddress(html);
-                _mailMessageService.With(TemplateNames.RegistrationCompleted, "", email);
+                _mailMessageService.With(TemplateNames.SearchPaymentCompleted, "", email);
                 var id = _mailMessageService.UserId;
                 var message = _mailMessageService.Message;
                 if (string.IsNullOrEmpty(id) || message == null || !CanSend()) return;
@@ -28,9 +29,10 @@ namespace legallead.email.actions
             });
         }
 
-        private MailMessage ApplyTransform(MailMessage message, string html)
+        private static MailMessage ApplyTransform(MailMessage message, string html)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine(html);
+            return message;
         }
 
         private static string GetEmailAddress(string html)

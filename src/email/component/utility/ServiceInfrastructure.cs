@@ -37,7 +37,7 @@ namespace legallead.email.utility
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
                 services.AddTransient<RegistrationCompleted>();
-                services.AddTransient<SearchPaymentCompletedTemplate>();
+                services.AddTransient<SearchPaymentCompleted>();
                 services.AddTransient(x =>
                 {
                     var settings = x.GetRequiredService<ISettingsService>();

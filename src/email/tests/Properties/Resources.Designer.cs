@@ -96,5 +96,27 @@ namespace legallead.email.tests.Properties {
                 return ResourceManager.GetString("parser-test-html", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///	&lt;body class=&quot;text-center&quot;&gt;
+        ///	&lt;div class=&quot;card-body&quot;&gt;
+        ///		&lt;h5 class=&quot;card-title text-success&quot;&gt;Payment Received - Thank You&lt;/h5&gt;	
+        ///		&lt;div class=&quot;row&quot;&gt;
+        ///			&lt;div class=&quot;col-3 text-start&quot;&gt;User Name:&lt;/div&gt;
+        ///			&lt;div id=&quot;account-user-name&quot; class=&quot;col-8 text-secondary text-start&quot;&gt;
+        ///				&lt;span name=&quot;account-user-name&quot;&gt; - &lt;/span&gt;
+        ///			&lt;/div&gt;
+        ///		&lt;/div&gt;
+        ///		&lt;div class=&quot;row&quot;&gt;
+        ///			&lt;div class=&quot;col-3 text-start&quot;&gt;Email:&lt;/div&gt;
+        ///			&lt;div id=&quot;account-user-email&quot; class=&quot;col-8 text-secondary text-start&quot;&gt;
+        ///				&lt;span name=&quot;acco [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string payment_completed_html {
+            get {
+                return ResourceManager.GetString("payment_completed_html", resourceCulture);
+            }
+        }
     }
 }
