@@ -18,6 +18,7 @@ env:
   LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
   LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
   SOLUTION_NAME: ${{ github.workspace }}/src/email/legallead.email.sln
+  COVERAGE_NAME: ${{ github.workspace }}/src/email/tests.runsettings
   NET_VERSION: "8.0.x"
 
 jobs:
@@ -37,14 +38,14 @@ jobs:
         id: dotnet-test
         name: DotNet Test
 
-      - run: dotnet test ${{ env.SOLUTION_NAME }} --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+      - run: dotnet test ${{ env.SOLUTION_NAME }} --no-build --settings ${{ env.COVERAGE_NAME }}
         id: dotnet-test-coverage
         name: DotNet Test Coverage
 
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: coverage/**/coverage.cobertura.xml
+          filename: '**/TestResults/**/coverage.cobertura.xml'
           badge: true
           fail_below_min: true
           format: markdown
@@ -53,6 +54,10 @@ jobs:
           indicators: true
           output: both
           thresholds: '60 80'
+
+      - name: Write to Job Summary
+        shell: bash
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
 
       - name: Add Coverage PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
