@@ -1,4 +1,5 @@
-﻿using legallead.email.implementations;
+﻿using legallead.email.actions;
+using legallead.email.implementations;
 using legallead.email.interfaces;
 using legallead.email.services;
 using legallead.email.transforms;
@@ -27,12 +28,24 @@ namespace legallead.email.utility
                 services.AddSingleton<IDataConnectionService, DataConnectionService>();
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<ISmtpClientWrapper, SmtpClientWrapper>();
+                services.AddSingleton<IMailLoggingService, MailLoggingService>();
                 services.AddSingleton<ISmtpService, SmtpService>();
                 services.AddSingleton<IUserSettingInfrastructure, UserSettingInfrastructure>();
+                services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 // transients
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
-                services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
-                services.AddTransient<MailMessageService>();
+                services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                services.AddTransient<RegistrationCompleted>();
+                services.AddTransient<SearchPaymentCompleted>();
+                services.AddTransient(x =>
+                {
+                    var settings = x.GetRequiredService<ISettingsService>();
+                    var infra = x.GetRequiredService<IUserSettingInfrastructure>();
+                    var transform = x.GetRequiredService<IHtmlTransformService>();
+                    var beauty = x.GetRequiredService<IHtmlBeautifyService>();
+                    return new MailMessageService(settings, infra, transform, beauty);
+                });
                 return services.BuildServiceProvider();
             }
         }

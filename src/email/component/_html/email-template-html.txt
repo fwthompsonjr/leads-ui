@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div id="email" style="width:750px; border: 1px black solid; margin: 5px; padding: 5px; font-family: Arial; font-size: 12px">
+    <div id="email" style="width:750px; margin: 5px; padding: 5px; font-family: Arial; font-size: 12pt">
 
 
         <table name="header" role="presentation" border="0" cellspacing="0" width="100%">
@@ -34,7 +34,9 @@
                 <td width="5%"> &nbsp;</td>
                 <td colspan="2">
                     <!-- Greeting -->
-                    <h3 name="span-greeting">Hello <!-- Greeting.UserName --></h3>
+                    <h3 style="margin-left: 10px;">
+                        <span name="span-greeting">Hello <!-- Greeting.UserName --> </span>,
+                    </h3>
                 </td>
             </tr>
         </table>
@@ -44,7 +46,7 @@
             <tr>
                 <td width="8%"> &nbsp;</td>
                 <td name="body-line-introduction">
-                    Please make note of the following change(s) to your Legal Lead Account:
+                    You are receiving this email due to the following change(s) to your Legal Lead Account:
                 </td>
                 <td width="5%"> &nbsp;</td>
             </tr>

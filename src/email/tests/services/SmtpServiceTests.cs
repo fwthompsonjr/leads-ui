@@ -15,7 +15,8 @@ namespace legallead.email.tests.services
             {
                 var settings = new SettingsService();
                 var wrapper = new Mock<ISmtpClientWrapper>();
-                _ = new SmtpService(settings, wrapper.Object);
+                var logger = new Mock<IMailLoggingService>();
+                _ = new SmtpService(settings, wrapper.Object, logger.Object);
 
             });
             Assert.Null(exception);
@@ -27,7 +28,8 @@ namespace legallead.email.tests.services
             var exception = Record.Exception(() =>
             {
                 var wrapper = new Mock<ISmtpClientWrapper>();
-                var service = new SmtpService(new SettingsService(), wrapper.Object);
+                var logger = new Mock<IMailLoggingService>();
+                var service = new SmtpService(new SettingsService(), wrapper.Object, logger.Object);
                 _ = service.GetClient();
             });
             Assert.Null(exception);
@@ -39,7 +41,8 @@ namespace legallead.email.tests.services
             var exception = Record.Exception(() =>
             {
                 var wrapper = new Mock<ISmtpClientWrapper>();
-                var service = new SmtpService(new SettingsService(), wrapper.Object);
+                var logger = new Mock<IMailLoggingService>();
+                var service = new SmtpService(new SettingsService(), wrapper.Object, logger.Object);
                 _ = service.GetCredentials();
             });
             Assert.Null(exception);
@@ -49,14 +52,18 @@ namespace legallead.email.tests.services
         [InlineData(false)]
         [InlineData(true)]
         [InlineData(false, false)]
-        public void ServiceCanSend(bool hasException, bool hasMessage = true)
+        [InlineData(false, true, false)]
+        public void ServiceCanSend(bool hasException, bool hasMessage = true, bool hasUserId = true)
         {
             var exception = Record.Exception(() =>
             {
                 var err = new Faker().System.Exception();
                 var message = hasMessage ? new MailMessage() : null;
                 var wrapper = new Mock<ISmtpClientWrapper>();
-                var service = new MockSmtpService(new SettingsService(), wrapper);
+                var logger = new Mock<IMailLoggingService>();
+                var service = new MockSmtpService(new SettingsService(), wrapper, logger);
+                var guid = Guid.NewGuid().ToString();
+                logger.Setup(x => x.Log(It.IsAny<string>(), It.IsAny<MailMessage>())).ReturnsAsync(guid);
                 if (hasException)
                 {
                     wrapper.Setup(m => m.Send(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>())).Throws(err);
@@ -66,39 +73,17 @@ namespace legallead.email.tests.services
                     wrapper.Setup(m => m.Send(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>()));
                 }
 
-                var actual = service.Send(message);
+                var actual = hasUserId ? service.Send(message, Guid.NewGuid().ToString()) : service.Send(message);
                 Assert.NotEqual(hasException, actual);
             });
             if (hasMessage) Assert.Null(exception);
         }
 
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        [InlineData(false, false)]
-        public async Task ServiceCanSendAsync(bool hasException, bool hasMessage = true)
-        {
-            var exception = await Record.ExceptionAsync(async () =>
-            {
-                var err = new Faker().System.Exception();
-                var message = hasMessage ? new MailMessage() : null;
-                var wrapper = new Mock<ISmtpClientWrapper>();
-                var service = new MockSmtpService(new SettingsService(), wrapper);
-                if (hasException)
-                {
-                    wrapper.Setup(m => m.SendAsync(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>())).Throws(err);
-                }
-                else
-                {
-                    wrapper.Setup(m => m.SendAsync(It.IsAny<SmtpClient>(), It.IsAny<MailMessage>()));
-                }
 
-                var actual = await service.SendAsync(message);
-                Assert.NotEqual(hasException, actual);
-            });
-            if (hasMessage) Assert.Null(exception);
-        }
-        private sealed class MockSmtpService(ISettingsService settings, Mock<ISmtpClientWrapper> wrapper) : SmtpService(settings, wrapper.Object)
+        private sealed class MockSmtpService(
+            ISettingsService settings,
+            Mock<ISmtpClientWrapper> wrapper,
+            Mock<IMailLoggingService> logger) : SmtpService(settings, wrapper.Object, logger.Object)
         {
 
             private static readonly Mock<SmtpClient> _client = new();

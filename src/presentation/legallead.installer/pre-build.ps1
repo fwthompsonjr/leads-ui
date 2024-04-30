@@ -106,8 +106,8 @@ function updateReadMe() {
     $rmcontent = $rmcontent.Replace( $versionLine, $rmtransform )
     [System.IO.File]::Delete( $readMe ) 
     [System.IO.File]::WriteAllText( $readMe, $rmcontent );
-    
 }
+
 function getReleaseNotes() {
     try {
         $tb = "     ";

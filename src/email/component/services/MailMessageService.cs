@@ -1,9 +1,11 @@
-﻿using legallead.email.interfaces;
+﻿using HtmlAgilityPack;
+using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.transforms;
 using legallead.email.utility;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
+using System.Net.Mime;
 
 namespace legallead.email.services
 {
@@ -12,14 +14,17 @@ namespace legallead.email.services
         private readonly IUserSettingInfrastructure _userDb;
         private readonly ISettingsService _settingsService;
         private readonly IHtmlTransformService _htmlService;
+        private readonly IHtmlBeautifyService _beautifyService;
         public MailMessageService(
             ISettingsService settings,
             IUserSettingInfrastructure infrastructure,
-            IHtmlTransformService transformService)
+            IHtmlTransformService transformService,
+            IHtmlBeautifyService beautifyService)
         {
             _settingsService = settings;
             _userDb = infrastructure;
             _htmlService = transformService;
+            _beautifyService = beautifyService;
             InitializeMessage();
         }
 
@@ -30,7 +35,7 @@ namespace legallead.email.services
         public List<MailAddress>? CopyAddress { get; private set; }
         public string TemplateType { get; private set; } = "Legal Lead Email";
         public string? BodyHtml { get; private set; }
-
+        public string? UserId { get; private set; } 
         public bool CanSend()
         {
             if (Message == null) return false;
@@ -58,16 +63,22 @@ namespace legallead.email.services
             var query = hasId ?
                 new UserSettingQuery { Id = userId } :
                 new UserSettingQuery { Email = email };
-            var html = service.GetHtmlTemplate(query, TemplateType).GetAwaiter().GetResult();
-            BodyHtml = html;
-            if (Message != null)
+            var html = service.GetHtmlTemplate(query, template.ToString()).GetAwaiter().GetResult();
+            BodyHtml = SubstituteTitle(subject, html);
+            if (Message != null && !string.IsNullOrEmpty(html))
             {
-                Message.Body = html;
+                var body = _beautifyService.BeautifyHTML(html);
+                var doc = new HtmlDocument();
+                doc.LoadHtml(body);
+
+                Message.Body = body;
                 Message.IsBodyHtml = true;
+                ContentType mimeType = new("text/html");
+                AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+                Message.AlternateViews.Add(alternate);
             }
             return this;
         }
-
 
         protected MailMessageService With(string userEmail)
         {
@@ -111,6 +122,8 @@ namespace legallead.email.services
         [ExcludeFromCodeCoverage(Justification = "Private class member tested fully from public method.")]
         private void MapUserAddresses(List<UserEmailSettingBo>? settings)
         {
+            var id = settings?.Find(x => !string.IsNullOrEmpty(x.Id))?.Id;
+            if (id != null) { UserId = id; }
             ToAddress = GetToMailAddress(settings);
             CopyAddress = GetCcMailAddresses(settings);
             if (Message != null && ToAddress != null)
@@ -122,6 +135,26 @@ namespace legallead.email.services
             {
                 Message.CC.Clear();
                 CopyAddress.ForEach(Message.CC.Add);
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private class member tested fully from public method.")]
+        private static string? SubstituteTitle(string subject, string? html)
+        {
+            if (string.IsNullOrWhiteSpace(html)) return html;
+            const string query = "//h2[@name='span-sub-heading']";
+            try
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(html);
+                var node = doc.DocumentNode.SelectSingleNode(query);
+                if (node == null) return html;
+                node.InnerHtml = subject;
+                return doc.DocumentNode.OuterHtml;
+            }
+            catch (Exception)
+            {
+                return html;
             }
         }
 
@@ -173,7 +206,7 @@ namespace legallead.email.services
 
         private static readonly Dictionary<TemplateNames, string> EmailSubjects = new()
         {
-            { TemplateNames.AccountRegistration, "Account Registration Completed" }
+            { TemplateNames.RegistrationCompleted, "Account Registration Completed" }
         };
     }
 }

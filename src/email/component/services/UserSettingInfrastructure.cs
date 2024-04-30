@@ -2,6 +2,7 @@
 using legallead.email.interfaces;
 using legallead.email.models;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace legallead.email.services
 {
@@ -21,6 +22,50 @@ namespace legallead.email.services
             var json = JsonConvert.SerializeObject(response);
             return JsonConvert.DeserializeObject<List<UserEmailSettingBo>>(json) ?? [];
         }
+
+        public async Task<LogCorrespondenceDto?> Log(string id, string json)
+        {
+            var db = _connection.CreateConnection();
+            var dto = new LogCorrespondenceDto { Id = id, JsonData = json };
+            var parms = LogCorrespondenceRequest.GetParameters(dto);
+            var sql = $"CALL {dto.TableName} ( ?, ? )";
+            var response = await _db.QuerySingleOrDefaultAsync<LogCorrespondenceDto>(db, sql, parms);
+            return response;
+        }
+
+
+        public void LogSuccess(string id)
+        {
+            try
+            {
+                var db = _connection.CreateConnection();
+                var dto = new LogCorrespondenceSuccessDto { Id = id };
+                var sql = $"CALL {dto.TableName} ( ? )";
+                var parms = LogCorrespondenceRequest.GetParameters(dto);
+                _db.ExecuteAsync(db, sql, parms).Wait();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public void LogError(string id, string message)
+        {
+            try
+            {
+                var db = _connection.CreateConnection();
+                var dto = new LogCorrespondenceErrorDto { Id = id, JsonData = message };
+                var parms = LogCorrespondenceRequest.GetParameters(dto);
+                var sql = $"CALL {dto.TableName} ( ?, ? )";
+                _db.ExecuteAsync(db, sql, parms).Wait();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+        }
+
         private static string? _commandText;
         private static string CommandText()
         {

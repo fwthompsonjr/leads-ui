@@ -6,6 +6,7 @@ using legallead.email.models;
 using legallead.email.services;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Newtonsoft.Json;
 using System.Data;
 
 namespace legallead.email.tests.services
@@ -65,7 +66,95 @@ namespace legallead.email.tests.services
             _ = await service.GetSettings(query);
 
             if (isValid) connect.Verify(m => m.CreateConnection());
+        }
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public async Task SutCanLog(bool hasIndex)
+        {
+            var id = hasIndex ? Guid.NewGuid().ToString() : null;
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var data = hasIndex ? new LogCorrespondenceDto { Id = id ?? string.Empty } : null;
+            var query = logFaker.Generate();
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
 
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+            db.Setup(m => m.QuerySingleOrDefaultAsync<LogCorrespondenceDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(data).Verifiable(Times.Once());
+            _ = await service.Log(query.Id, query.JsonData ?? string.Empty);
+
+            connect.Verify(m => m.CreateConnection());
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void SutCanLogSuccess(bool hasError)
+        {
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var query = logFaker.Generate();
+            var exception = new Faker().System.Exception();
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
+
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+            if (!hasError)
+            {
+                db.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Verifiable(Times.Once());
+            }
+            else
+            {
+                db.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception).Verifiable(Times.Once());
+            }
+            service.LogSuccess(query.Id);
+
+            connect.Verify(m => m.CreateConnection());
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void SutCanLogError(bool hasError)
+        {
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var query = logFaker.Generate();
+            var exception = new Faker().System.Exception();
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
+
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+            if (!hasError)
+            {
+                db.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Verifiable(Times.Once());
+            }
+            else
+            {
+                db.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception).Verifiable(Times.Once());
+            }
+            service.LogError(query.Id, query.JsonData ?? string.Empty);
+
+            connect.Verify(m => m.CreateConnection());
         }
         private static IServiceProvider Provider
         {
@@ -105,6 +194,14 @@ namespace legallead.email.tests.services
                     "Last Name" => a.Person.LastName,
                     _ => a.Person.Email
                 };
+            });
+        private static readonly Faker<LogCorrespondenceDto> logFaker
+            = new Faker<LogCorrespondenceDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.JsonData, y =>
+            {
+                var obj = new { Id = "abc", Number = y.Random.Int(1, 1000), Text = y.Lorem.Paragraph() };
+                return JsonConvert.SerializeObject(obj);
             });
     }
 }

@@ -1,4 +1,5 @@
-﻿using legallead.email.interfaces;
+﻿using HtmlAgilityPack;
+using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,13 +40,20 @@ namespace legallead.email.transforms
 
         private string TransformHtml(string userName, string templateName, List<UserEmailSettingBo>? attributes = null)
         {
-            Substitutions[BodyHtmlToken] = ExtractDetail(attributes, templateName, "");
+            const string detailQuery = "//td[@name='body-line-details']";
+            var detail = ExtractDetail(attributes, templateName, "");
             var html = new StringBuilder(BaseHtml);
-            html.Replace(BodyHtmlToken, Substitutions[BodyHtmlToken]);
+            html.Replace(BodyHtmlToken, detail);
             html.Replace(EmailDateToken, DateTime.UtcNow.ToString("MMM d, yyyy"));
             html.Replace(EmailSubjectToken, Substitutions[EmailSubjectToken] ?? "Account Information");
             html.Replace(UserNameToken, Substitutions[UserNameToken] ?? userName);
-            return html.ToString();
+            var content = html.ToString();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(content);
+            var node = doc.DocumentNode.SelectSingleNode(detailQuery);
+            if (node == null) return content;
+            node.InnerHtml = detail;
+            return doc.DocumentNode.OuterHtml;
         }
 
         private static string ExtractUserName(List<UserEmailSettingBo> attributes, string fallback)
@@ -67,6 +75,7 @@ namespace legallead.email.transforms
             if (!named) return fallback;
             var instance = ServiceInfrastructure.Provider?.GetKeyedService<IHtmlTransformDetailBase>(template.ToString());
             if (instance == null) return fallback;
+            fallback = instance.BaseHtml;
             var content = instance.GetHtmlTemplate(attributes) ?? fallback;
             return content;
         }

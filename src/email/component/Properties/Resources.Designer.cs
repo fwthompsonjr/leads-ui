@@ -84,12 +84,13 @@ namespace legallead.email.Properties {
         ///&lt;/head&gt;
         ///
         ///&lt;body&gt;
-        ///    &lt;div id=&quot;email&quot; style=&quot;width:750px; border: 1px black solid; margin: 5px; padding: 5px; font-family: Arial; font-size: 12px&quot;&gt;
+        ///    &lt;div id=&quot;email&quot; style=&quot;width:750px; margin: 5px; padding: 5px; font-family: Arial; font-size: 12pt&quot;&gt;
         ///
         ///
         ///        &lt;table name=&quot;header&quot; role=&quot;presentation&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;100%&quot;&gt;
         ///            &lt;tr style=&quot;border-bottom-style: dashed&quot;&gt;
-        ///                [rest of string was truncated]&quot;;.
+        ///                &lt;td colspan=&quot;3&quot;&gt;
+        ///       [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string email_template_html {
             get {
@@ -98,32 +99,54 @@ namespace legallead.email.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;h3&gt;Account Registration Completed&lt;/h3&gt;
-        ///&lt;p&gt;
-        ///	Thank you for registering your account with Legal Leads.
+        ///   Looks up a localized string similar to &lt;h3 name=&quot;account-registration-heading&quot;&gt;Account Registration Completed&lt;/h3&gt;
+        ///&lt;p name=&quot;account-registration-para-1&quot;&gt;
+        ///	Thank you for registering your account with Legal Leads.&lt;br/&gt;
         ///	Please make note of these account registration details
         ///&lt;p&gt;
-        ///&lt;ul&gt;
-        ///	&lt;li&gt;
-        ///		Email Address: &lt;!-- Email Address --&gt;
+        ///&lt;ul name=&quot;account-registration-list-1&quot;&gt;
+        ///	&lt;li name=&quot;account-registration-list-item-1&quot;&gt;
+        ///		Email Address: &lt;span name=&quot;account-registration-email&quot;&gt;&lt;!-- Email Address --&gt;&lt;/span&gt;
         ///	&lt;/li&gt;
-        ///	&lt;li&gt;
-        ///		User Name: &lt;!-- User Name --&gt;
-        ///	&lt;/li&gt;
-        ///&lt;/ul&gt;.
+        ///	&lt;li name=&quot;account-registration-list-item-2&quot;&gt;
+        ///		User Name: &lt;span name=&quot;account-regis [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string email_template_html_body_account_registered {
+        internal static string email_template_html_body_registration_completed {
             get {
-                return ResourceManager.GetString("email_template_html_body_account_registered", resourceCulture);
+                return ResourceManager.GetString("email_template_html_body_registration_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;h4 style=&quot;color: green&quot; name=&quot;search-payment-complete-heading&quot;&gt;Payment Received - Thank You&lt;/h4&gt;
+        ///&lt;table name=&quot;search-payment-complete-detail-table&quot; role=&quot;presentation&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; width=&quot;95%&quot;&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width: 25%&quot;&gt;
+        ///			&lt;span&gt;User Name:&lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///		&lt;td style=&quot;width: 75%&quot;&gt;
+        ///			&lt;span name=&quot;search-payment-complete-user-name&quot;&gt; - &lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///	&lt;/tr&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width: 25%&quot;&gt;
+        ///			&lt;span&gt;Email:&lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///		&lt;td style=&quot;width: 75%&quot;&gt;
+        ///			&lt;span name=&quot;search-payment- [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string email_template_html_body_search_payment_completed {
+            get {
+                return ResourceManager.GetString("email_template_html_body_search_payment_completed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to {
         ///    &quot;account&quot;:  &quot;ses-smtp-user.legallead.2024.04&quot;,
-        ///    &quot;type&quot;:  &quot;aws-ses&quot;,
-        ///    &quot;uid&quot;:  &quot;&quot;,
         ///    &quot;secret&quot;:  &quot;&quot;,
+        ///    &quot;uid&quot;:  &quot;&quot;,
+        ///    &quot;copy-admin&quot;:  true,
         ///    &quot;settings&quot;:  {
         ///                     &quot;port&quot;:  587,
         ///                     &quot;endpoint&quot;:  &quot;email-smtp.us-east-2.amazonaws.com&quot;,
@@ -131,7 +154,8 @@ namespace legallead.email.Properties {
         ///                                  &quot;email&quot;:  &quot;admin@legallead.co&quot;,
         ///                                  &quot;display&quot;:  &quot;Legal Lead Admin&quot;
         ///                              }
-        ///                 }
+        ///                 },
+        ///    &quot;type&quot;:  &quot;aws-ses&quot;
         ///}.
         /// </summary>
         internal static string smtp_settings {

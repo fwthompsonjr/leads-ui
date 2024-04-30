@@ -1,0 +1,56 @@
+<h4 style="color: green" name="search-payment-complete-heading">Payment Received - Thank You</h4>
+<table name="search-payment-complete-detail-table" role="presentation" border="0" cellspacing="0" width="95%">
+	<tr>
+		<td style="width: 25%">
+			<span>User Name:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-user-name"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Email:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-email"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="search-payment-complete-detail-spacer" colspan="2">
+			<hr noshade />
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Payment Date:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-payment-date"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Product:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-product"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Amount:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-amount"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Reference Id:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="search-payment-complete-reference-id"> - </span>
+		</td>
+	</tr>
+</table>
