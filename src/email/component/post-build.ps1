@@ -22,7 +22,7 @@ $mail = @{
 
 $jcontent = ($mail | ConvertTo-Json);
 [System.IO.File]::WriteAllText( $jsfile, $jcontent );
-
+# clean up for README file
 if ( [System.IO.File]::Exists( $readMe ) -eq $false ) { 
     Write-Output "README file is not found."
     [System.Environment]::ExitCode = 1;
