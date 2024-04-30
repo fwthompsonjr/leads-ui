@@ -3,12 +3,12 @@ using legallead.email.models;
 
 namespace legallead.email.tests.implementations
 {
-    public class AccountRegistrationTemplateTests
+    public class RegistrationCompletedTemplateTests
     {
         [Fact]
         public void SutCanBeCreated()
         {
-            var exception = Record.Exception(() => { _ = new AccountRegistrationTemplate(); });
+            var exception = Record.Exception(() => { _ = new RegistrationCompletedTemplate(); });
             Assert.Null(exception);
         }
 
@@ -17,7 +17,7 @@ namespace legallead.email.tests.implementations
         {
             var exception = Record.Exception(() =>
             {
-                var service = new AccountRegistrationTemplate();
+                var service = new RegistrationCompletedTemplate();
                 var html = service.BaseHtml;
                 Assert.False(string.IsNullOrWhiteSpace(html));
             });
@@ -29,7 +29,7 @@ namespace legallead.email.tests.implementations
         {
             var exception = Record.Exception(() =>
             {
-                var service = new AccountRegistrationTemplate();
+                var service = new RegistrationCompletedTemplate();
                 var names = service.KeyNames;
                 Assert.NotNull(names);
                 Assert.Equal(2, names.Count);
@@ -49,7 +49,7 @@ namespace legallead.email.tests.implementations
             ];
             var exception = Record.Exception(() =>
             {
-                var service = new AccountRegistrationTemplate();
+                var service = new RegistrationCompletedTemplate();
                 service.FetchTemplateParameters(list);
             });
             Assert.Null(exception);

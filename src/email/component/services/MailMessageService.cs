@@ -35,7 +35,7 @@ namespace legallead.email.services
         public List<MailAddress>? CopyAddress { get; private set; }
         public string TemplateType { get; private set; } = "Legal Lead Email";
         public string? BodyHtml { get; private set; }
-
+        public string? UserId { get; private set; } 
         public bool CanSend()
         {
             if (Message == null) return false;
@@ -122,6 +122,8 @@ namespace legallead.email.services
         [ExcludeFromCodeCoverage(Justification = "Private class member tested fully from public method.")]
         private void MapUserAddresses(List<UserEmailSettingBo>? settings)
         {
+            var id = settings?.Find(x => !string.IsNullOrEmpty(x.Id))?.Id;
+            if (id != null) { UserId = id; }
             ToAddress = GetToMailAddress(settings);
             CopyAddress = GetCcMailAddresses(settings);
             if (Message != null && ToAddress != null)
@@ -204,7 +206,7 @@ namespace legallead.email.services
 
         private static readonly Dictionary<TemplateNames, string> EmailSubjects = new()
         {
-            { TemplateNames.AccountRegistration, "Account Registration Completed" }
+            { TemplateNames.RegistrationCompleted, "Account Registration Completed" }
         };
     }
 }

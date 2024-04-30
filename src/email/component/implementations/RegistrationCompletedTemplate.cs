@@ -4,9 +4,9 @@ using legallead.email.utility;
 
 namespace legallead.email.implementations
 {
-    public class AccountRegistrationTemplate : HtmlTransformDetailBase
+    public class RegistrationCompletedTemplate : HtmlTransformDetailBase
     {
-        public AccountRegistrationTemplate()
+        public RegistrationCompletedTemplate()
         {
             _keynames.ForEach(key =>
             {
@@ -23,7 +23,7 @@ namespace legallead.email.implementations
             const string dash = " - ";
             var named = Enum.TryParse<TemplateNames>(TemplateName, out var template);
             if (!named) return;
-            if (template != TemplateNames.AccountRegistration) return;
+            if (template != TemplateNames.RegistrationCompleted) return;
 
             var item = attributes.Find(a => !string.IsNullOrWhiteSpace(a.Email));
             if (item == null) return;
@@ -45,7 +45,7 @@ namespace legallead.email.implementations
         public override Dictionary<string, string?> Substitutions => _substitions;
         private const string EmailToken = "<!-- Email Address -->";
         private const string UserToken = "<!-- User Name -->";
-        private static readonly string HtmlBase = Properties.Resources.email_template_html_body_account_registered;
+        private static readonly string HtmlBase = Properties.Resources.email_template_html_body_registration_completed;
         private static readonly List<string> _keynames = [
             EmailToken,
             UserToken

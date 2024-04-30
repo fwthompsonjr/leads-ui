@@ -2,6 +2,7 @@
 {
     public enum TemplateNames
     {
-        AccountRegistration
+        RegistrationCompleted,
+        SearchPaymentCompleted
     }
 }

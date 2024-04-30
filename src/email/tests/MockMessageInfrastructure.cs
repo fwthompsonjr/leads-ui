@@ -76,8 +76,10 @@ namespace legallead.email.tests
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
-                services.AddKeyedTransient<IHtmlTransformDetailBase, AccountRegistrationTemplate>("AccountRegistration");
-                services.AddTransient<AccountRegistrationCompleted>();
+                services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                services.AddTransient<RegistrationCompleted>();
+                services.AddTransient<SearchPaymentCompletedTemplate>();
                 services.AddTransient(x =>
                 {
                     var settings = x.GetRequiredService<ISettingsService>();
@@ -88,7 +90,7 @@ namespace legallead.email.tests
                 });
                 services.AddMvcCore(options =>
                 {
-                    options.Filters.AddService<AccountRegistrationCompleted>();
+                    options.Filters.AddService<RegistrationCompleted>();
                 });
                 var provider = services.BuildServiceProvider();
                 ServiceInfrastructure.Provider = provider;

@@ -7,12 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.email.tests.implementations
 {
-    public class AccountRegistrationEmailTests
+    public class RegistrationCompletedEmailTests
     {
         [Fact]
         public void ServiceCanBeCreated()
         {
-            var obj = new AccountRegistrationTemplate();
+            var obj = new RegistrationCompletedTemplate();
             Assert.NotNull(obj);
         }
 
@@ -81,7 +81,7 @@ namespace legallead.email.tests.implementations
         {
             var provider = MockMessageInfrastructure.GetServiceProvider();
             var service = provider.GetRequiredService<MailMessageService>();
-            service.With(TemplateNames.AccountRegistration, Guid.NewGuid().ToString());
+            service.With(TemplateNames.RegistrationCompleted, Guid.NewGuid().ToString());
             var email = service.Message;
             Assert.NotNull(email);
             var body = email.Body;
@@ -103,7 +103,7 @@ namespace legallead.email.tests.implementations
             {
                 var provider = MockMessageInfrastructure.GetServiceProvider();
                 var service = provider.GetRequiredService<MailMessageService>();
-                service.With(TemplateNames.AccountRegistration, Guid.NewGuid().ToString());
+                service.With(TemplateNames.RegistrationCompleted, Guid.NewGuid().ToString());
                 var email = service.Message;
                 Assert.NotNull(email);
                 var body = email.Body;
@@ -128,7 +128,7 @@ namespace legallead.email.tests.implementations
         }
         private static string GetHtmlTemplate()
         {
-            var obj = new AccountRegistrationTemplate();
+            var obj = new RegistrationCompletedTemplate();
             var details = GetDefaultSettings();
             return obj.GetHtmlTemplate(details) ?? string.Empty;
         }

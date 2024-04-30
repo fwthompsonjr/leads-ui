@@ -23,9 +23,9 @@ namespace legallead.email.tests.transforms
         }
 
         [Theory]
-        [InlineData(TemplateNames.AccountRegistration, "", "abcd@email.com", true)]
-        [InlineData(TemplateNames.AccountRegistration, "not-a-guid", "abcd@email.com", true)]
-        [InlineData(TemplateNames.AccountRegistration, "fbd8493d-289c-40ba-84f7-daaeb8015c35", "", true)]
+        [InlineData(TemplateNames.RegistrationCompleted, "", "abcd@email.com", true)]
+        [InlineData(TemplateNames.RegistrationCompleted, "not-a-guid", "abcd@email.com", true)]
+        [InlineData(TemplateNames.RegistrationCompleted, "fbd8493d-289c-40ba-84f7-daaeb8015c35", "", true)]
         public void SutCanMailMessageService(
             TemplateNames template,
             string userId,
@@ -75,7 +75,7 @@ namespace legallead.email.tests.transforms
         {
             var exception = Record.Exception(() =>
             {
-                const TemplateNames template = TemplateNames.AccountRegistration;
+                const TemplateNames template = TemplateNames.RegistrationCompleted;
                 var obj = InitializeProvider();
                 var actual = obj.GetRequiredService<MailMessageService>();
                 var collection = settingsCount switch
@@ -142,7 +142,7 @@ namespace legallead.email.tests.transforms
         {
             var exception = Record.Exception(() =>
             {
-                const TemplateNames template = TemplateNames.AccountRegistration;
+                const TemplateNames template = TemplateNames.RegistrationCompleted;
                 const string userId = "fbd8493d-289c-40ba-84f7-daaeb8015c35";
                 const string userEmail = "abcd@testing.com";
                 string[] collection1 = ["Email 1", "Email 2"];

@@ -21,7 +21,7 @@ namespace legallead.email.tests.services
                 var smtpServer = provider?.GetRequiredService<ISmtpService>();
                 Assert.NotNull(messageHandler);
                 Assert.NotNull(smtpServer);
-                messageHandler.With(TemplateNames.AccountRegistration, parms.UserId);
+                messageHandler.With(TemplateNames.RegistrationCompleted, parms.UserId);
                 Assert.True(messageHandler.CanSend());
                 // alter message To, CC
                 var message = messageHandler.Message;

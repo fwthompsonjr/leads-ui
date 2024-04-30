@@ -9,9 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.email.tests.actions
 {
-    public class AccountRegistrationCompletedTests : IDisposable
+    public class RegistrationCompletedTests : IDisposable
     {
-        public AccountRegistrationCompletedTests()
+        public RegistrationCompletedTests()
         {
             _ = InitializeProvider();
         }
@@ -27,7 +27,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload, false);
                 if (context is not ResultExecutingContext executedContext) return;
-                var controller = provider.GetService<AccountRegistrationCompleted>();
+                var controller = provider.GetService<RegistrationCompleted>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuting(executedContext);
             });
@@ -45,7 +45,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
-                var controller = provider.GetService<AccountRegistrationCompleted>();
+                var controller = provider.GetService<RegistrationCompleted>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuted(executedContext);
             });
@@ -57,10 +57,10 @@ namespace legallead.email.tests.actions
         private static FilterContext GetContext(string result, bool isExecuted = true)
         {
             var collection = new ServiceCollection();
-            collection.AddTransient<AccountRegistrationCompleted>();
+            collection.AddTransient<RegistrationCompleted>();
             collection.AddMvcCore(o =>
             {
-                o.Filters.AddService<AccountRegistrationCompleted>();
+                o.Filters.AddService<RegistrationCompleted>();
             });
             collection.AddTransient<MockController>();
             var provider = collection.BuildServiceProvider();
@@ -126,7 +126,7 @@ namespace legallead.email.tests.actions
         private sealed class MockController : ControllerBase
         {
             [HttpGet]
-            [ServiceFilter(typeof(AccountRegistrationCompleted))] // Apply the filter to this action method
+            [ServiceFilter(typeof(RegistrationCompleted))] // Apply the filter to this action method
             public IActionResult MyAction()
             {
                 var guid = Guid.NewGuid().ToString();
