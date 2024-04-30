@@ -17,8 +17,8 @@ on:
 env:
   LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
   LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
-  SOLUTION_NAME: ${{ github.workspace }}/src/email/legallead.email.sln
-  COVERAGE_NAME: ${{ github.workspace }}/src/email/tests.runsettings
+  SOLUTION_NAME: ${{ github.workspace }}\src\email\legallead.email.sln
+  COVERAGE_NAME: ${{ github.workspace }}\src\email\tests.runsettings
   NET_VERSION: "8.0.x"
 
 jobs:

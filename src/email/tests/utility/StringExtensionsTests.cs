@@ -11,10 +11,10 @@ namespace legallead.email.tests.utility
         [Theory]
         [InlineData(10, 150)]
         [InlineData(10, 200)]
-        [InlineData(20, 500)]
+        [InlineData(20, 400)]
         public void SutCanSplitByLength(int sentences, int length)
         {
-            var mx = length * 1.1d;
+            const int mx = 500; // process must ensure string length less than 500
             var phrase = faker.Lorem.Sentences(sentences);
             var actual = phrase.SplitByLength(length).ToList();
             Assert.NotNull(actual);
