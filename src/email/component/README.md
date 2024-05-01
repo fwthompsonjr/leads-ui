@@ -4,8 +4,7 @@
 ## Releases
 | Id | Date | Description |  
 | --- | --- | --- |
-| 3.2.0 | 2024-04-30 | Setup component deployment process |   
-| 3.2.0 | 2024-04-30 | Initial Email Component Release With Base Commands |   
+| x.y.z | {{ date }} | {{ description }} |
 
 ## Templates:   
 | Name | Description |
