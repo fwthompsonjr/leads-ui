@@ -26,18 +26,8 @@ jobs:
         id: dotnet-build
         name: DotNet Build
 
-      - run: dotnet test ${{ env.SOLUTION_NAME }} -c Release --no-build --no-restore --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
-        id: dotnet-test
-        name: DotNet Test
-
-      - name: Summarize Test Results
-        shell: pwsh
-        if: ${{ always() }}
-        run: |
-          & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
-
       - name: Publish MyGet Packages
         if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
         shell: pwsh
         run: |
-          & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
+          & ./publish-email-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"

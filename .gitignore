@@ -409,3 +409,4 @@ FodyWeavers.xsd
 /_legallead_desktop_windows
 *.zip
 /src/presentation/legallead.installer/_text/configuration-js.txt
+**/coverage/*

@@ -9,16 +9,12 @@ on:
     paths:
       - "src/email/**"
 
-  pull_request:
-    types: [opened, reopened]
-    paths:
-      - "src/email/**"
-
 env:
   LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
   LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
   SOLUTION_NAME: ${{ github.workspace }}\src\email\legallead.email.sln
   COVERAGE_NAME: ${{ github.workspace }}\src\email\tests.runsettings
+  COVERAGE_FILTER: 'src\email'
   NET_VERSION: "8.0.x"
 
 jobs:
@@ -48,6 +44,12 @@ jobs:
         with:
           name: dotnet-results-email-${{ env.NET_VERSION }}
           path: TestResults-${{ env.NET_VERSION }}
+
+      - name: Summarize Test Coverage
+        shell: pwsh
+        if: ${{ always() }}
+        run: |
+          & ./coverage-report-generator.ps1 -search "${{ env.COVERAGE_FILTER }}"
 
       - name: Summarize Test Results
         shell: pwsh
