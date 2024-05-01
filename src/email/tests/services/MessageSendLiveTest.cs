@@ -8,10 +8,14 @@ namespace legallead.email.tests.services
 {
     public class MessageSendLiveTest
     {
-        [Fact]
-        public void MessageCanSendLiveEmail()
+        [Theory]
+        [InlineData(TemplateNames.RegistrationCompleted)]
+        [InlineData(TemplateNames.SearchPaymentCompleted)]
+        public void MessageCanSendLiveEmail(TemplateNames template)
         {
             if (!Debugger.IsAttached) return;
+            var target = TemplateList.Find(x => template == x.GetTemplateName());
+            if (target == null || !target.IsTesting) return;
             var exception = Record.Exception(() =>
             {
                 var parms = JsonConvert.DeserializeObject<SendMailParameters>(emailParameters);
@@ -21,7 +25,7 @@ namespace legallead.email.tests.services
                 var smtpServer = provider?.GetRequiredService<ISmtpService>();
                 Assert.NotNull(messageHandler);
                 Assert.NotNull(smtpServer);
-                messageHandler.With(TemplateNames.RegistrationCompleted, parms.UserId);
+                messageHandler.With(template, parms.UserId);
                 Assert.True(messageHandler.CanSend());
                 // alter message To, CC
                 var message = messageHandler.Message;
@@ -35,6 +39,20 @@ namespace legallead.email.tests.services
             Assert.Null(exception);
         }
 
+        private static List<TemplateTestStatusBo> TemplateList
+        {
+            get
+            {
+                if (templateList != null) return templateList;
+                templateList = JsonConvert.DeserializeObject<List<TemplateTestStatusBo>>(templateJs) ?? [];
+                return templateList;
+            }
+        }
+
+        private static List<TemplateTestStatusBo>? templateList;
         private static readonly string emailParameters = Properties.Resources.email_parameters;
+        private static readonly string templateJs = Properties.Resources.template_test_json;
+
+
     }
 }

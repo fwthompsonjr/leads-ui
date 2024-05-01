@@ -118,5 +118,23 @@ namespace legallead.email.tests.Properties {
                 return ResourceManager.GetString("payment_completed_html", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///	{
+        ///		&quot;name&quot;: &quot;RegistrationCompleted&quot;,
+        ///		&quot;isTesting&quot;: true
+        ///	},
+        ///	{
+        ///		&quot;name&quot;: &quot;SearchPaymentCompleted&quot;,
+        ///		&quot;isTesting&quot;: true
+        ///	}
+        ///].
+        /// </summary>
+        internal static string template_test_json {
+            get {
+                return ResourceManager.GetString("template_test_json", resourceCulture);
+            }
+        }
     }
 }
