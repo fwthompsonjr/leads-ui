@@ -1,4 +1,7 @@
-﻿using legallead.email.actions;
+﻿using Bogus;
+using legallead.email.actions;
+using legallead.email.interfaces;
+using legallead.email.models;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace legallead.email.tests.actions
 {
@@ -36,11 +40,23 @@ namespace legallead.email.tests.actions
         [Theory]
         [InlineData("not-a-guid")]
         [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79")]
-        public void ProviderCanGetResultExecutedFiler(string payload)
+        [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79", false)]
+        [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79", true, false)]
+        public void ProviderCanGetResultExecutedFiler(string payload, bool hasAccount = true, bool hasAccountId = true)
         {
+            var mfaker = new Faker();
             var exception = Record.Exception(() =>
             {
                 var provider = InitializeProvider();
+                var accountId = hasAccountId ? mfaker.Random.Guid().ToString() : null;
+                var account = hasAccount ? new UserAccountByEmailBo
+                {
+                    Email = mfaker.Person.Email,
+                    Id = accountId,
+                    UserName = mfaker.Person.UserName
+                } : null;
+                var userDb = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
+                userDb.Setup(m => m.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(account);
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
                 var controller = provider.GetService<SearchPaymentCompleted>();
@@ -98,9 +114,17 @@ namespace legallead.email.tests.actions
 
         private static ServiceProvider InitializeProvider()
         {
-            return MockMessageInfrastructure.GetServiceProvider(true);
+            var provider = MockMessageInfrastructure.GetServiceProvider(true);
+            var userDb = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
+            var settings = MockMessageInfrastructure.GetDefaultSettings();
+            userDb.Setup(s => s.GetSettings(
+                It.Is<UserSettingQuery>(q => IsGuid(q.Id)))).ReturnsAsync(settings);
+            return provider;
         }
-
+        private static bool IsGuid(string? id)
+        {
+            return Guid.TryParse(id ?? "", out var _);
+        }
         private bool disposedValue;
 
         protected virtual void Dispose(bool disposing)

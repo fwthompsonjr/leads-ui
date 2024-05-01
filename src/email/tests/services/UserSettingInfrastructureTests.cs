@@ -67,6 +67,35 @@ namespace legallead.email.tests.services
 
             if (isValid) connect.Verify(m => m.CreateConnection());
         }
+
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        [InlineData(false, false)]
+        public async Task SutCanGetUserByEmail(bool hasResponse, bool hasEmail = true)
+        {
+            var data = hasResponse ? ConvertFrom(accountfaker.Generate()) : null;
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var query = accountfaker.Generate();
+            if (!hasEmail) query.Email = string.Empty;
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
+
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+
+            db.Setup(m => m.QuerySingleOrDefaultAsync<GetUserAccountByEmailDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).ReturnsAsync(data);
+            _ = await service.GetUserByEmail(query.Email);
+
+            if (hasEmail) connect.Verify(m => m.CreateConnection(), Times.Once);
+            else connect.Verify(m => m.CreateConnection(), Times.Never);
+        }
+
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
@@ -156,6 +185,18 @@ namespace legallead.email.tests.services
 
             connect.Verify(m => m.CreateConnection());
         }
+
+
+        private static GetUserAccountByEmailDto ConvertFrom(UserAccountByEmailBo source)
+        {
+            return new GetUserAccountByEmailDto
+            {
+                Id = source.Id ?? string.Empty,
+                Email = source.Email,
+                UserName = source.UserName,
+            };
+        }
+
         private static IServiceProvider Provider
         {
             get
@@ -203,5 +244,11 @@ namespace legallead.email.tests.services
                 var obj = new { Id = "abc", Number = y.Random.Int(1, 1000), Text = y.Lorem.Paragraph() };
                 return JsonConvert.SerializeObject(obj);
             });
+
+        private static readonly Faker<UserAccountByEmailBo> accountfaker =
+            new Faker<UserAccountByEmailBo>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.UserName, y => y.Person.UserName);
     }
 }
