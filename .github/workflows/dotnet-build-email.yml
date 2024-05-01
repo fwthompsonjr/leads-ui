@@ -55,4 +55,4 @@ jobs:
         shell: pwsh
         if: ${{ always() }}
         run: |
-          & ./pipeline-summarize-tests.ps1 -workingDir "${{ env.workspace }}"
+          & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
