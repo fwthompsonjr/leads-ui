@@ -49,7 +49,8 @@ namespace legallead.email.tests.actions
             {
                 var provider = InitializeProvider();
                 var accountId = hasAccountId ? mfaker.Random.Guid().ToString() : null;
-                var account = hasAccount ? new UserAccountByEmailBo { 
+                var account = hasAccount ? new UserAccountByEmailBo
+                {
                     Email = mfaker.Person.Email,
                     Id = accountId,
                     UserName = mfaker.Person.UserName

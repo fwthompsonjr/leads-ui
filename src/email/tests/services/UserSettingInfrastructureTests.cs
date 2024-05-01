@@ -91,7 +91,7 @@ namespace legallead.email.tests.services
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>())).ReturnsAsync(data);
             _ = await service.GetUserByEmail(query.Email);
-            
+
             if (hasEmail) connect.Verify(m => m.CreateConnection(), Times.Once);
             else connect.Verify(m => m.CreateConnection(), Times.Never);
         }

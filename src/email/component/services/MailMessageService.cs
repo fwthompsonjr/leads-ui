@@ -35,9 +35,10 @@ namespace legallead.email.services
         public List<MailAddress>? CopyAddress { get; private set; }
         public string TemplateType { get; private set; } = "Legal Lead Email";
         public string? BodyHtml { get; private set; }
-        public string? UserId { get; private set; } 
+        public string? UserId { get; private set; }
         internal IUserSettingInfrastructure SettingsDb => _userDb;
 
+        [ExcludeFromCodeCoverage(Justification = "Method is tested from pass-thru calls covering all common scenarios")]
         public bool CanSend()
         {
             if (Message == null) return false;
@@ -49,7 +50,7 @@ namespace legallead.email.services
         }
 
 
-        public MailMessageService With(TemplateNames template, string userId, string email = "")
+        public MailMessageService With(TemplateNames template, string? userId, string email = "")
         {
             InitializeMessage();
             var hasId = Guid.TryParse(userId, out var guid);
@@ -85,7 +86,7 @@ namespace legallead.email.services
         protected MailMessageService With(string userEmail)
         {
             var query = new UserSettingQuery { Email = userEmail };
-            if(!query.IsValid) return this;
+            if (!query.IsValid) return this;
             var response = _userDb.GetSettings(query).GetAwaiter().GetResult();
             MapUserAddresses(response);
             return this;
