@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Registration Completed",
+    "description": "Email to user after completing the registation process",
+    "date": "2024-04-30"
+  },
+  {
+    "name": "Search Payment Completed",
+    "description": "Email to user after payment for a record search.",
+    "date": "2024-04-30"
+  }
+]

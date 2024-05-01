@@ -5,8 +5,10 @@ $projectFile = [System.IO.Path]::Combine( $workfolder, "legallead.email.csproj" 
 $jsfolder = [System.IO.Path]::Combine( $workfolder, "_settings" );
 $jsfile = [System.IO.Path]::Combine( $jsfolder, "smtp-settings.txt" );
 $jsonReadMe = [System.IO.Path]::Combine( $workfolder, "x-email-version.json" );
+$jsonTemplates = [System.IO.Path]::Combine( $workfolder, "x-email-templates.json" );
 $readMe = [System.IO.Path]::Combine( $workfolder, "README.md" );
 $backupReadMe = [System.IO.Path]::Combine( $workfolder, "README.backup.md" );
+$releaseNotes = [System.IO.Path]::Combine( $workfolder, "RELEASE-NOTES.txt" );
 $versionLine = '| x.y.z | {{ date }} | {{ description }} |'
 function getEnvironment($name) {
     try {
@@ -146,6 +148,28 @@ function getReleaseNotes() {
     }
 }
 
+
+function getTemplateNotes() {
+    try {
+        $tb = "     ";
+        $dashes = "$tb - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - "
+        $txt = [System.IO.File]::ReadAllText( $jsonTemplates ) | ConvertFrom-Json
+        $dat = @("", "$tb legallead.email templates", $dashes);
+        $txt.GetEnumerator() | ForEach-Object {
+            $nde = $_;
+            $ln = "$tb : $($nde.name) - $($nde.description)"
+            $dat += $ln
+        }
+        $dat += $dashes
+        $dat += ""
+        $detail = [string]::Join( [Environment]::NewLine, $dat)
+        $detail += "    "
+        return $detail
+    } catch {
+        return $null
+    }
+}
+
 function updateVersionNumbers() {
 
     if ( [System.IO.File]::Exists( $projectFile ) -eq $false ) { 
@@ -169,10 +193,14 @@ function updateVersionNumbers() {
         }
         if ('PackageReleaseNotes' -eq $nodeName ) {
             $expected = getReleaseNotes
-            if ($expected -ne $null -and $expected.Equals($nodeValue) -eq $false ) {
-                $hasXmlChange = $true;
-                $child.InnerText = $expected;
+            $templates = getTemplateNotes
+            if ([System.IO.File]::Exists( $releaseNotes ) -eq $false ) {
+                return;
             }
+            if ( $null -ne $templates ) {
+                $expected = [string]::Concat( $expected, [Environment]::NewLine, $templates );
+            }
+            [System.IO.File]::WriteAllText($releaseNotes, $expected);
         }
     }
     if ($hasXmlChange -eq $true ) {

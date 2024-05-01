@@ -1,0 +1,14 @@
+
+      legallead.email
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.0 - 2024-04-30 - Setup component deployment process
+      : 3.2.0 - 2024-04-30 - Initial Email Component Release With Base Commands
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    
+
+      legallead.email templates
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : Registration Completed - Email to user after completing the registation process
+      : Search Payment Completed - Email to user after payment for a record search.
+      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    
