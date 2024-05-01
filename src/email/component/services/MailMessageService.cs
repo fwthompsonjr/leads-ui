@@ -36,6 +36,8 @@ namespace legallead.email.services
         public string TemplateType { get; private set; } = "Legal Lead Email";
         public string? BodyHtml { get; private set; }
         public string? UserId { get; private set; } 
+        internal IUserSettingInfrastructure SettingsDb => _userDb;
+
         public bool CanSend()
         {
             if (Message == null) return false;
@@ -83,6 +85,7 @@ namespace legallead.email.services
         protected MailMessageService With(string userEmail)
         {
             var query = new UserSettingQuery { Email = userEmail };
+            if(!query.IsValid) return this;
             var response = _userDb.GetSettings(query).GetAwaiter().GetResult();
             MapUserAddresses(response);
             return this;

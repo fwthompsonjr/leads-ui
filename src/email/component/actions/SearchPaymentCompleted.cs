@@ -4,6 +4,7 @@ using legallead.email.utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 
 namespace legallead.email.actions
@@ -14,19 +15,18 @@ namespace legallead.email.actions
     {
         public override void OnResultExecuted(ResultExecutedContext context)
         {
-            Task.Run(() =>
-            {
-                if (context.Result is not ContentResult htmlResult) return;
-                var html = htmlResult.Content;
-                if (IsHtmlValid(html)) return;
-                var email = GetEmailAddress(html);
-                _mailMessageService.With(TemplateNames.SearchPaymentCompleted, "", email);
-                var id = _mailMessageService.UserId;
-                var message = _mailMessageService.Message;
-                if (string.IsNullOrEmpty(id) || message == null || !CanSend()) return;
-                message = ApplyTransform(message, html);
-                _smtpService.Send(message, id);
-            });
+            if (context.Result is not ContentResult htmlResult) return;
+            var html = htmlResult.Content;
+            if (!IsHtmlValid(html)) return;
+            var email = GetEmailAddress(html);
+            var account = _mailMessageService.SettingsDb.GetUserByEmail(email).GetAwaiter().GetResult();
+            if (account == null || string.IsNullOrEmpty(account.Id)) return;
+            _mailMessageService.With(TemplateNames.SearchPaymentCompleted, account.Id);
+            var id = _mailMessageService.UserId;
+            var message = _mailMessageService.Message;
+            if (string.IsNullOrEmpty(id) || message == null || !CanSend()) return;
+            message = ApplyTransform(message, html);
+            _smtpService.Send(message, id);
         }
 
         private static MailMessage ApplyTransform(MailMessage message, string html)
@@ -35,6 +35,7 @@ namespace legallead.email.actions
             return message;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public accessor")]
         private static string GetEmailAddress(string html)
         {
             try
@@ -53,6 +54,7 @@ namespace legallead.email.actions
                 return string.Empty;
             }
         }
+        [ExcludeFromCodeCoverage(Justification = "Private method tested from public accessor")]
         private static bool IsHtmlValid(string html)
         {
             try
