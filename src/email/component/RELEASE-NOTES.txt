@@ -9,6 +9,6 @@
       legallead.email templates
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
       : Registration Completed - Email to user after completing the registation process
-      : Search Payment Completed - Email to user after payment for a record search.
+      : Search Payment Completed - Email to user receiving payment for a record search.
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     

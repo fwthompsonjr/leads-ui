@@ -79,6 +79,7 @@ function processFileData( $obj ) {
 
 $startedAt = [datetime]::UtcNow
 try {
+    installCli
     ## find all files matching *.sln 
     $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
     $di = [System.IO.DirectoryInfo]::new( $currentDir );
