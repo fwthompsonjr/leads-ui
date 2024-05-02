@@ -19,7 +19,7 @@ namespace legallead.permissions.api.Utility
         private readonly ICustomerInfrastructure _custDb;
         private readonly IUserRepository _userDb;
         private readonly string _paymentKey;
-
+        private SubscriptionService? _injectedSubscriptions;
         public PaymentHtmlTranslator(
             IUserSearchRepository db,
             IUserRepository userdb,
@@ -35,6 +35,18 @@ namespace legallead.permissions.api.Utility
             _paymentKey = key.GetActiveName();
             InvoiceExtensions.GetInfrastructure ??= stripeService;
         }
+        public void SetupSubscriptionService(SubscriptionService? service)
+        {
+            _injectedSubscriptions = service;
+        }
+        public SubscriptionService GetSubscriptionService
+        {
+            get { 
+                if(_injectedSubscriptions == null) return new SubscriptionService();
+                return _injectedSubscriptions;
+            }
+        }
+
         public async Task<bool> IsRequestValid(string? status, string? id)
         {
             if (string.IsNullOrWhiteSpace(status)) return false;
@@ -56,7 +68,7 @@ namespace legallead.permissions.api.Utility
             var bo = await _subscriptionDb.GetLevelRequestById(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(bo.SessionId ?? "");
             if (subscription == null) return null;
             return bo;
@@ -67,7 +79,7 @@ namespace legallead.permissions.api.Utility
             var bo = await _subscriptionDb.GetDiscountRequestById(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(bo.SessionId ?? "");
             if (subscription == null) return null;
             return bo;
@@ -77,9 +89,9 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return false;
+            if (!obj.Data.Any()) return false;
             var dat = obj.Data[0];
-            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
             return ispaid.GetValueOrDefault();
         }
@@ -88,7 +100,7 @@ namespace legallead.permissions.api.Utility
         {
             var isSuccess = session.IsPaymentSuccess.GetValueOrDefault();
             if (session.InvoiceUri == "NONE") return isSuccess;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(session.SessionId ?? "");
             if (subscription == null) return false;
             // check subscription status to see if invoice has been paid
@@ -107,9 +119,9 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return false;
+            if (!obj.Data.Any()) return false;
             var dat = obj.Data[0];
-            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var paid = await _repo.IsSearchPaidAndDownloaded(dat.ReferenceId);
             if (paid == null) return false;
             if (paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault()) return true;
@@ -118,11 +130,11 @@ namespace legallead.permissions.api.Utility
 
         public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
+            if (string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
             var js = FormatSessionJson(dto.JsText);
             dto.JsText = js;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return new() { Error = "No search records found for associated request." };
+            if (!obj.Data.Any()) return new() { Error = "No search records found for associated request." };
             var search = obj.Data[0];
             var searchId = search.ReferenceId ?? Guid.NewGuid().ToString();
             var records = (await _repo.GetFinal(searchId))?.ToList();

@@ -114,6 +114,7 @@ namespace permissions.api.tests
         [Fact]
         public void SubscriptionCanMap()
         {
+            InvoiceExtensions.GetInfrastructure = null;
             var session = levelBofaker.Generate();
             var html = session.GetHtml(SubscriptionContent, "123-456-789");
             Assert.False(string.IsNullOrEmpty(html));
@@ -121,6 +122,7 @@ namespace permissions.api.tests
         [Fact]
         public void DiscountCanMap()
         {
+            InvoiceExtensions.GetInfrastructure = null;
             var session = discountBofaker.Generate();
             var html = session.GetHtml(DiscountContent, "123-456-789");
             Assert.False(string.IsNullOrEmpty(html));
