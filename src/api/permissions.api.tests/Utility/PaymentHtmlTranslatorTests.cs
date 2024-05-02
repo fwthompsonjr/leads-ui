@@ -254,7 +254,7 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true, "abc", true, "incomplete")]
         [InlineData(true, true, "abc", true, "incomplete_expired")]
         [InlineData(true, true, "abc", true, "canceled")]
-        [InlineData(true, true, "abc", false, "paid", false)]
+        [InlineData(true, true, "abc", false, "cleared", false)]
         public async Task SutCanValidateIsLevelRequestPaid(
             bool hasRequest,
             bool hasSubscription,
