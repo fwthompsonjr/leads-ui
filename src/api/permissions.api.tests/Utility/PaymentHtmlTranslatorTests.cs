@@ -1,12 +1,10 @@
-﻿using AutoMapper.Internal;
-using legallead.jdbc.entities;
+﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
-using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Newtonsoft.Json;
 using Stripe;
 
@@ -37,7 +35,8 @@ namespace permissions.api.tests.Utility
         [Fact]
         public void BuilderCanBeCreated()
         {
-            var exception = Record.Exception(() => { 
+            var exception = Record.Exception(() =>
+            {
                 using var builder = new PaymentHtmlTranslatorBuilder();
                 // check properties
                 _ = builder.Provider;
@@ -83,7 +82,7 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                var apiResponse = requestNames.Contains(status) && isValid;
+                var apiResponse = PaymentHtmlHelper.requestNames.Contains(status) && isValid;
                 var repo = builder.MockRepo;
                 var service = builder.Translator;
                 repo.Setup(m => m.IsValidExternalId(It.IsAny<string>())).ReturnsAsync(apiResponse);
@@ -102,7 +101,7 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                var apiResponse = isValid ? sessionFaker.Generate() : null;
+                var apiResponse = isValid ? PaymentHtmlHelper.SessionFaker.Generate() : null;
                 var repo = builder.MockRepo;
                 var service = builder.Translator;
                 repo.Setup(m => m.GetPaymentSession(It.IsAny<string>())).ReturnsAsync(apiResponse);
@@ -128,7 +127,7 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                var apiResponse = hasRequest ? levelFaker.Generate() : null;
+                var apiResponse = hasRequest ? PaymentHtmlHelper.LevelFaker.Generate() : null;
                 var svcResponse = hasSubscription ? new Subscription() : null;
                 if (apiResponse != null && invoiceUri != "abc") apiResponse.InvoiceUri = invoiceUri;
                 if (apiResponse != null && !hasSessionId) apiResponse.SessionId = null;
@@ -166,7 +165,7 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                var apiResponse = hasRequest ? levelFaker.Generate() : null;
+                var apiResponse = hasRequest ? PaymentHtmlHelper.LevelFaker.Generate() : null;
                 var svcResponse = hasSubscription ? new Subscription() : null;
                 if (apiResponse != null && invoiceUri != "abc") apiResponse.InvoiceUri = invoiceUri;
                 if (apiResponse != null && !hasSessionId) apiResponse.SessionId = null;
@@ -208,18 +207,18 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                var dto = isDtoNull ? null : sessionFaker.Generate();
+                var dto = isDtoNull ? null : PaymentHtmlHelper.SessionFaker.Generate();
                 if (dto != null && !dtoHasJson) dto.JsText = null;
                 if (dto != null && !dtoJsonIsValid) dto.JsText = "abcdefghijklmnop";
                 if (dto != null && !dtoJsonHasData)
                 {
-                    var payment = paymentfaker.Generate();
+                    var payment = PaymentHtmlHelper.PaymentFaker.Generate();
                     payment.Data = new();
                     dto.JsText = JsonConvert.SerializeObject(payment);
                 }
                 if (dto != null && !dtoJsonHasEmptyData)
                 {
-                    var payment = paymentfaker.Generate();
+                    var payment = PaymentHtmlHelper.PaymentFaker.Generate();
                     payment.Data.Clear();
                     dto.JsText = JsonConvert.SerializeObject(payment);
                 }
@@ -239,6 +238,66 @@ namespace permissions.api.tests.Utility
                     It.IsAny<string>())).ReturnsAsync(searchPurchaseResponse);
 
                 _ = await service.IsRequestPaid(dto);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(false, true, true, true, false, true)] // happy path
+        [InlineData(true, true, true, true, false, true)]
+        [InlineData(false, false, true, true, false, true)]
+        [InlineData(false, true, false, true, false, true)]
+        [InlineData(false, true, true, false, false, true)]
+        [InlineData(false, true, true, true, true, true)]
+        [InlineData(false, true, true, true, false, false)]
+        [InlineData(false, true, true, true, false, true, null)]
+        [InlineData(false, true, true, true, false, true, "")]
+        [InlineData(false, true, true, true, false, true, "abc", null)]
+        [InlineData(false, true, true, true, false, true, "abc", false)]
+        public async Task SutCanValidateIsRequestPaidAndDownloaded(
+            bool isDtoNull,
+            bool dtoHasJson,
+            bool dtoJsonIsValid,
+            bool dtoJsonHasData,
+            bool dtoJsonHasEmptyData,
+            bool? searchIsPaid = true,
+            string? referenceId = "abc",
+            bool? searchIsDownloaded = true)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                using var builder = new PaymentHtmlTranslatorBuilder();
+                var dto = isDtoNull ? null : PaymentHtmlHelper.SessionFaker.Generate();
+                if (dto != null && !dtoHasJson) dto.JsText = null;
+                if (dto != null && !dtoJsonIsValid) dto.JsText = "abcdefghijklmnop";
+                if (dto != null && !dtoJsonHasData)
+                {
+                    var payment = PaymentHtmlHelper.PaymentFaker.Generate();
+                    payment.Data = new();
+                    dto.JsText = JsonConvert.SerializeObject(payment);
+                }
+                if (dto != null && !dtoJsonHasEmptyData)
+                {
+                    var payment = PaymentHtmlHelper.PaymentFaker.Generate();
+                    payment.Data.Clear();
+                    dto.JsText = JsonConvert.SerializeObject(payment);
+                }
+                if (dto != null && referenceId != "abc" && !string.IsNullOrEmpty(dto.JsText))
+                {
+                    var payment = JsonConvert.DeserializeObject<PaymentSessionJs>(dto.JsText) ?? new();
+                    if (payment.Data.Any())
+                    {
+                        payment.Data[0].ReferenceId = referenceId;
+                    }
+                    dto.JsText = JsonConvert.SerializeObject(payment);
+                }
+                var repo = builder.MockRepo;
+                var service = builder.Translator;
+                var serviceResponse = PaymentHtmlHelper.GenerateSearchIsPaid(searchIsPaid, searchIsDownloaded);
+                repo.Setup(m => m.IsSearchPaidAndDownloaded(
+                    It.IsAny<string>())).ReturnsAsync(serviceResponse);
+
+                _ = await service.IsRequestDownloadedAndPaid(dto);
             });
             Assert.Null(error);
         }
@@ -266,7 +325,7 @@ namespace permissions.api.tests.Utility
             var error = await Record.ExceptionAsync(async () =>
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
-                LevelRequestBo apiResponse = hasRequest ? levelFaker.Generate() : new();
+                LevelRequestBo apiResponse = hasRequest ? PaymentHtmlHelper.LevelFaker.Generate() : new();
                 var svcResponse = hasSubscription ? new Subscription { Status = sessionStatus } : null;
                 if (invoiceUri != "abc") apiResponse.InvoiceUri = invoiceUri;
                 if (!hasSessionId) apiResponse.SessionId = null;
@@ -284,172 +343,148 @@ namespace permissions.api.tests.Utility
             });
             Assert.Null(error);
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        [InlineData(true, false)]
+        [InlineData(true, true, false)]
+        [InlineData(true, true, true, true)]
+        [InlineData(true, true, true, false, false)]
+        public async Task SutCanExecuteGetDownload(
+            bool sessionHasData = true,
+            bool hasReferenceId = true,
+            bool hasRecords = true,
+            bool createDownloadError = false,
+            bool sessionHasJson = true)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                using var builder = new PaymentHtmlTranslatorBuilder();
+                PaymentSessionDto request = PaymentHtmlHelper.SessionFaker.Generate();
+                var rc = new Faker().Random.Int(5, 15);
+                var response = hasRecords ? PaymentHtmlHelper.SearchFinalFaker.Generate(rc) : new();
+                var subSvc = builder.MockRepo;
+                var service = builder.Translator;
+                if (!sessionHasData)
+                {
+                    var js = request.JsText ?? string.Empty;
+                    var payment = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
+                    payment.Data.Clear();
+                    request.JsText = JsonConvert.SerializeObject(payment);
+                }
+                if (!hasReferenceId)
+                {
+                    var js = request.JsText ?? string.Empty;
+                    var payment = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
+                    payment.Data[0].ReferenceId = null;
+                    request.JsText = JsonConvert.SerializeObject(payment);
+                }
+                if (createDownloadError)
+                {
+                    var exception = new Faker().System.Exception();
+                    subSvc.Setup(m => m.CreateOrUpdateDownloadRecord(
+                        It.IsAny<string>(), 
+                        It.IsAny<string>())).ThrowsAsync(exception);
+                }
+                if (!sessionHasJson)
+                {
+                    request.JsText = string.Empty;
+                }
+                subSvc.Setup(m => m.GetFinal(It.IsAny<string>())).ReturnsAsync(response);
+                _ = await service.GetDownload(request);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData("success", "12345", true)]
+        [InlineData("cancel", "12345", true)]
+        [InlineData("success", "", true)]
+        [InlineData("success", null, true)]
+        [InlineData("missing", "12345", true)]
+        [InlineData("success", "12345", false)]
+        [InlineData("success", "12345", true, "empty")]
+        public async Task SutCanExecuteIsDiscountLevel(
+            string? status,
+            string? id,
+            bool hasDiscount,
+            string? discountId = "abc")
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                using var builder = new PaymentHtmlTranslatorBuilder();
+                LevelRequestBo? apiResponse = hasDiscount ? PaymentHtmlHelper.LevelFaker.Generate() : null;
+                if (discountId != "abc" && apiResponse != null) apiResponse.Id = discountId;
+                var svc = builder.MockCustDb;
+                var service = builder.Translator;
+                svc.Setup(m => m.GetDiscountRequestById(
+                    It.IsAny<string>())).ReturnsAsync(apiResponse);
+                _ = await service.IsDiscountLevel(status, id);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData("success", "12345", true)]
+        [InlineData("cancel", "12345", true)]
+        [InlineData("success", "", true)]
+        [InlineData("success", null, true)]
+        [InlineData("missing", "12345", true)]
+        [InlineData("success", "12345", false)]
+        [InlineData("success", "12345", true, "empty")]
+        public async Task SutCanExecuteIsChangeUserLevel(
+            string? status,
+            string? id,
+            bool hasDiscount,
+            string? discountId = "abc")
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                using var builder = new PaymentHtmlTranslatorBuilder();
+                LevelRequestBo? apiResponse = hasDiscount ? PaymentHtmlHelper.LevelFaker.Generate() : null;
+                if (discountId != "abc" && apiResponse != null) apiResponse.Id = discountId;
+                var svc = builder.MockCustDb;
+                var service = builder.Translator;
+                svc.Setup(m => m.GetLevelRequestById(
+                    It.IsAny<string>())).ReturnsAsync(apiResponse);
+                _ = await service.IsChangeUserLevel(status, id);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData("base", "base")]
+        [InlineData("base", null)]
+        [InlineData("base", "")]
+        [InlineData(null, "base")]
+        [InlineData("", "base")]
+        [InlineData("base", "base", false)]
+        public async Task SutCanResetDownload(
+            string? userId,
+            string? externalId,
+            bool hasResponse = true)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                using var builder = new PaymentHtmlTranslatorBuilder();
+                DownloadHistoryDto? apiResponse = hasResponse ? new() : null;
+                var payload = PaymentHtmlHelper.DownloadRequestFaker.Generate();
+                if (string.IsNullOrEmpty(userId)) { payload.UserId = userId; }
+                if (string.IsNullOrEmpty(externalId)) { payload.ExternalId = externalId; }
+                var svc = builder.MockRepo;
+                var service = builder.Translator;
+                svc.Setup(m => m.AllowDownloadRollback(
+                    It.IsAny<string>(),
+                    It.IsAny<string>())).ReturnsAsync(apiResponse);
+                _ = await service.ResetDownload(payload);
+            });
+            Assert.Null(error);
+        }
+
         private static IServiceProvider GetProvider()
         {
-            var services = new ServiceCollection();
-            var repo = new Mock<IUserSearchRepository>();
-            var subscriptionDb = new Mock<ISubscriptionInfrastructure>();
-            var custDb = new Mock<ICustomerInfrastructure>();
-            var userDb = new Mock<IUserRepository>();
-            var stripeConfig = new Mock<StripeKeyEntity>(); 
-            var stripe = new Mock<IStripeInfrastructure>();
-            var subscription = new Mock<SubscriptionService>();
-            var paymentKey = keyFaker.Generate();
-            stripeConfig.Setup(x => x.GetActiveName()).Returns(paymentKey.PaymentKey);
-            services.AddSingleton(repo);
-            services.AddSingleton(stripe);
-            services.AddSingleton(subscriptionDb);
-            services.AddSingleton(subscription);
-            services.AddSingleton(custDb);
-            services.AddSingleton(userDb);
-            services.AddSingleton(stripeConfig.Object);
-            services.AddSingleton(stripe.Object);
-            services.AddSingleton(repo.Object);
-            services.AddSingleton(subscriptionDb.Object);
-            services.AddSingleton(subscription.Object);
-            services.AddSingleton(custDb.Object);
-            services.AddSingleton(userDb.Object);
-            services.AddSingleton(x =>
-            {
-                var repo = x.GetRequiredService<IUserSearchRepository>();
-                var subscriptionDb = x.GetRequiredService<ISubscriptionInfrastructure>();
-                var custDb = x.GetRequiredService<ICustomerInfrastructure>();
-                var userDb = x.GetRequiredService<IUserRepository>();
-                var stripeConfig = x.GetRequiredService<StripeKeyEntity>();
-                var stripe = x.GetRequiredService<IStripeInfrastructure>();
-                var translator = new PaymentHtmlTranslator(repo, userDb, custDb, subscriptionDb, stripe, stripeConfig);
-                var subscription = x.GetRequiredService<Mock<SubscriptionService>>();
-                translator.SetupSubscriptionService(subscription.Object);
-                return translator;
-            });
-            return services.BuildServiceProvider();
-        }
-
-        private sealed class PaymentKeyWrapper
-        {
-            public string PaymentKey { get; set; } = string.Empty;
-        }
-
-        private static readonly Faker<PaymentKeyWrapper> keyFaker
-            = new Faker<PaymentKeyWrapper>()
-            .RuleFor(x => x.PaymentKey, y => y.Random.AlphaNumeric(8));
-
-
-        private static readonly Faker<SearchInvoiceBo> invoiceFaker
-            = new Faker<SearchInvoiceBo>()
-            .RuleFor(x => x.LineId, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.ItemType, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.ItemCount, y => y.Random.Int(1, 5))
-            .RuleFor(x => x.UnitPrice, y => y.Random.Decimal(1, 10))
-            .RuleFor(x => x.ReferenceId, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.PurchaseDate, y => y.Date.Recent())
-            .FinishWith((a, b) =>
-            {
-                b.Price = b.UnitPrice.GetValueOrDefault() * b.ItemCount.GetValueOrDefault();
-            });
-
-
-        private static readonly Faker<PaymentSessionJs> paymentfaker = new Faker<PaymentSessionJs>()
-            .RuleFor(x => x.Description, y => y.Person.UserName)
-            .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.SuccessUrl, y => y.Random.Guid().ToString())
-            .FinishWith((a, b) =>
-            {
-                var invoice = invoiceFaker.Generate(a.Random.Int(2, 6));
-                b.Data = invoice;
-            });
-        private static readonly Faker<PaymentSessionDto> sessionFaker
-            = new Faker<PaymentSessionDto>()
-            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.UserId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.InvoiceId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.SessionType, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.SessionId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.IntentId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.ClientId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.ExternalId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.JsText, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.CreateDate, y => y.Date.Recent())
-            .FinishWith((a, b) =>
-            {
-                var data = paymentfaker.Generate();
-                b.JsText = JsonConvert.SerializeObject(data);
-            });
-
-        private static readonly Faker<LevelRequestBo> levelFaker
-            = new Faker<LevelRequestBo>()
-            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.UserId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.InvoiceUri, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.LevelName, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.SessionId, y => y.Random.AlphaNumeric(8))
-            .RuleFor(x => x.IsPaymentSuccess, y => y.Random.Bool())
-            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
-            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
-        private static readonly string[] requestNames = new[] { "success", "cancel" };
-
-        private sealed class PaymentHtmlTranslatorBuilder : IDisposable
-        {
-            private readonly IServiceProvider _provider;
-            private readonly IPaymentHtmlTranslator _translator;
-            private readonly IUserSearchRepository _repo;
-            private readonly ISubscriptionInfrastructure _subscriptionDb;
-            private readonly ICustomerInfrastructure _custDb;
-            private readonly IUserRepository _userDb;
-            private readonly Mock<IUserSearchRepository> _mockrepo;
-            private readonly Mock<ISubscriptionInfrastructure> _mocksubscriptionDb;
-            private readonly Mock<ICustomerInfrastructure> _mockcustDb;
-            private readonly Mock<IUserRepository> _mockuserDb;
-            private readonly Mock<SubscriptionService> _subscriptionService;
-            private bool disposedValue;
-
-            public PaymentHtmlTranslatorBuilder()
-            {
-                _provider = GetProvider();
-                _translator = _provider.GetRequiredService<PaymentHtmlTranslator>();
-                _repo = _provider.GetRequiredService<IUserSearchRepository>();
-                _subscriptionDb = _provider.GetRequiredService<ISubscriptionInfrastructure>();
-                _custDb = _provider.GetRequiredService<ICustomerInfrastructure>();
-                _userDb = _provider.GetRequiredService<IUserRepository>();
-                _mockrepo = _provider.GetRequiredService<Mock<IUserSearchRepository>>();
-                _mocksubscriptionDb = _provider.GetRequiredService<Mock<ISubscriptionInfrastructure>>();
-                _mockcustDb = _provider.GetRequiredService<Mock<ICustomerInfrastructure>>();
-                _mockuserDb = _provider.GetRequiredService<Mock<IUserRepository>>();
-                _subscriptionService = _provider.GetRequiredService<Mock<SubscriptionService>>();
-            }
-
-            public IServiceProvider Provider => _provider;
-            public IPaymentHtmlTranslator Translator => _translator;
-            public IUserSearchRepository Repo => _repo;
-            public ISubscriptionInfrastructure SubscriptionDb => _subscriptionDb;
-            public ICustomerInfrastructure CustDb => _custDb;
-            public IUserRepository UserDb => _userDb;
-            public Mock<IUserSearchRepository> MockRepo => _mockrepo;
-            public Mock<ISubscriptionInfrastructure> MockSubscriptionDb => _mocksubscriptionDb;
-            public Mock<ICustomerInfrastructure> MockCustDb => _mockcustDb;
-            public Mock<IUserRepository> MockUserDb => _mockuserDb;
-            public Mock<SubscriptionService> MockSubscriptionService => _subscriptionService;
-
-            private void Dispose(bool disposing)
-            {
-                if (!disposedValue)
-                {
-                    if (disposing)
-                    {
-                        InvoiceExtensions.GetInfrastructure = null;
-                    }
-                    disposedValue = true;
-                }
-            }
-
-            public void Dispose()
-            {
-                // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-                Dispose(disposing: true);
-                GC.SuppressFinalize(this);
-            }
+            return PaymentHtmlHelper.GetProvider();
         }
 
 

@@ -92,6 +92,14 @@ namespace permissions.api.tests
             Assert.False(string.IsNullOrEmpty(html));
         }
 
+        [Fact]
+        public void InvoiceCalculatePaymentAmountFromNull()
+        {
+            PaymentSessionDto? session = default;
+            var amount = session.CalculatePaymentAmount();
+            Assert.Equal(0, amount);
+        }
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

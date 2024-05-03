@@ -23,7 +23,8 @@ namespace legallead.permissions.api.Extensions
         */
         private static readonly object locker = new();
         private static IStripeInfrastructure? stripeServices;
-        internal static IStripeInfrastructure? GetInfrastructure {
+        internal static IStripeInfrastructure? GetInfrastructure
+        {
             get
             {
                 lock (locker)
@@ -33,7 +34,7 @@ namespace legallead.permissions.api.Extensions
             }
             set
             {
-                lock(locker)
+                lock (locker)
                 {
                     stripeServices = value;
                 }

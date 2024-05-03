@@ -41,8 +41,9 @@ namespace legallead.permissions.api.Utility
         }
         public SubscriptionService GetSubscriptionService
         {
-            get { 
-                if(_injectedSubscriptions == null) return new SubscriptionService();
+            get
+            {
+                if (_injectedSubscriptions == null) return new SubscriptionService();
                 return _injectedSubscriptions;
             }
         }
@@ -124,8 +125,7 @@ namespace legallead.permissions.api.Utility
             if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var paid = await _repo.IsSearchPaidAndDownloaded(dat.ReferenceId);
             if (paid == null) return false;
-            if (paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault()) return true;
-            return false;
+            return paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault();
         }
 
         public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
@@ -137,8 +137,8 @@ namespace legallead.permissions.api.Utility
             if (!obj.Data.Any()) return new() { Error = "No search records found for associated request." };
             var search = obj.Data[0];
             var searchId = search.ReferenceId ?? Guid.NewGuid().ToString();
-            var records = (await _repo.GetFinal(searchId))?.ToList();
-            if (records == null) return new() { Error = "Invalid session parameter." };
+            var records = (await _repo.GetFinal(searchId)).ToList();
+            if (records.Count == 0) return new() { Error = "Invalid session parameter." };
             if (records.Count > search.ItemCount) records = records.Take(records.Count).ToList();
             var response = new DownloadResponse()
             {
@@ -147,17 +147,7 @@ namespace legallead.permissions.api.Utility
             };
             try
             {
-                response.Content = ExcelExtensions.WriteExcel(dto, records);
-                if (response.Content != null)
-                {
-                    var conversion = Convert.ToBase64String(response.Content);
-                    _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
-                    response.CreateDate = DateTime.UtcNow.ToString("s");
-                }
-                else
-                {
-                    response.Error = "Unable to generate excel ouput";
-                }
+                await GenerateExcelResponse(dto, searchId, records, response);
                 return response;
             }
             catch (Exception ex)
@@ -166,12 +156,25 @@ namespace legallead.permissions.api.Utility
                 return response;
             }
         }
-
         public string Transform(PaymentSessionDto? session, string html)
         {
             var converted = session.GetHtml(html, _paymentKey);
             return converted;
         }
+        public string Transform(LevelRequestBo session, string content)
+        {
+            if (string.IsNullOrEmpty(session.SessionId)) return content;
+            content = session.GetHtml(content, _paymentKey);
+            return content;
+        }
+        public string Transform(DiscountRequestBo discountRequest, string content)
+        {
+
+            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
+            content = discountRequest.GetHtml(content, _paymentKey);
+            return content;
+        }
+
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
             const string dash = " - ";
@@ -216,19 +219,6 @@ namespace legallead.permissions.api.Utility
             return doc.DocumentNode.OuterHtml;
         }
 
-        public string Transform(LevelRequestBo session, string content)
-        {
-            if (string.IsNullOrEmpty(session.SessionId)) return content;
-            content = session.GetHtml(content, _paymentKey);
-            return content;
-        }
-        public string Transform(DiscountRequestBo discountRequest, string content)
-        {
-
-            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
-            content = discountRequest.GetHtml(content, _paymentKey);
-            return content;
-        }
 
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
@@ -250,6 +240,7 @@ namespace legallead.permissions.api.Utility
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
         }
+
         public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
         {
             bool? isPermissionSet = default;
@@ -289,7 +280,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsChangeUserLevel(string? status, string? id)
         {
-            var mapped = requestNames.First(s => s.Equals(status));
+            var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
@@ -299,12 +290,29 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsDiscountLevel(string? status, string? id)
         {
-            var mapped = requestNames.First(s => s.Equals(status));
+            var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
             var bo = await _custDb.GetDiscountRequestById(id);
             return bo != null && !string.IsNullOrEmpty(bo.Id);
+        }
+
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
+        private async Task GenerateExcelResponse(PaymentSessionDto dto, string searchId, List<SearchFinalBo> records, DownloadResponse response)
+        {
+            response.Content = ExcelExtensions.WriteExcel(dto, records);
+            if (response.Content != null)
+            {
+                var conversion = Convert.ToBase64String(response.Content);
+                _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
+                response.CreateDate = DateTime.UtcNow.ToString("s");
+            }
+            else
+            {
+                response.Error = "Unable to generate excel ouput";
+            }
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
