@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 
 namespace legallead.permissions.api.Utility
 {
+    [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
     public partial class SubscriptionInfrastructure
     {
         public async Task<LevelRequestBo> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "")

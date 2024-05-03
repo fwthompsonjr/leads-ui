@@ -1,13 +1,6 @@
 ﻿using HtmlAgilityPack;
 using legallead.jdbc.entities;
-using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Utility
 {

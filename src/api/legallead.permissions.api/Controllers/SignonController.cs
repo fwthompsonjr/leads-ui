@@ -4,6 +4,7 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -47,22 +48,11 @@ namespace legallead.permissions.api.Controllers
                 }
                 var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
                 var validUser = await _db.UserDb.IsValidUserAsync(model);
-                var user = validUser.Value;
-                if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
-                {
-                    if (!string.IsNullOrEmpty(user?.Id))
-                    {
-                        await _lockingDb.AddIncident(user.Id);
-                    }
-                    await _logSvc.LogWarning("Failed : Validate User Credential. Returning 401 - Unauthorized");
-                    return Unauthorized("Invalid username or password...");
-                }
-                var isLocked = await _lockingDb.IsAccountLocked(user.Id);
-                if (isLocked)
-                {
-                    await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
-                    return Forbid("Account is locked. Contact system administrator to unlock.");
-                }
+                var user = validUser.Value ?? new();
+                var hasIncident = await IsViolationIncidentCreated(validUser);
+                if (hasIncident != null) return hasIncident;
+                var isLocked = await IsAccountLockedViolation(user.Id);
+                if (isLocked != null) return isLocked;
                 var token = _jWTManager.GenerateToken(user);
 
                 if (token == null)
@@ -180,6 +170,7 @@ namespace legallead.permissions.api.Controllers
             return Ok(usersdata.UserName);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static User MapFromChangePassword(UserChangePasswordModel usersdata, UserModel model, User? user)
         {
             model.Password = usersdata.NewPassword;
@@ -191,6 +182,34 @@ namespace legallead.permissions.api.Controllers
             var update = UserModel.ToUser(model);
             if (!string.IsNullOrEmpty(user?.Id)) update.Id = user.Id;
             return update;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
+        private async Task<IActionResult?> IsViolationIncidentCreated(KeyValuePair<bool, User?> validUser)
+        {
+            var user = validUser.Value;
+            if (validUser.Key && user != null && !string.IsNullOrEmpty(user.Id))
+            {
+                return null;
+            }
+            if (!string.IsNullOrEmpty(user?.Id))
+            {
+                await _lockingDb.AddIncident(user.Id);
+            }
+            await _logSvc.LogWarning("Failed : Validate User Credential. Returning 401 - Unauthorized");
+            return Unauthorized("Invalid username or password...");
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
+        private async Task<IActionResult?> IsAccountLockedViolation(string userId)
+        {
+            var isLocked = await _lockingDb.IsAccountLocked(userId);
+            if (isLocked)
+            {
+                await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
+            return null;
         }
     }
 }

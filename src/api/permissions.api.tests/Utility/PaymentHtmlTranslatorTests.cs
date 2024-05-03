@@ -4,7 +4,6 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
-using Moq;
 using Newtonsoft.Json;
 using Stripe;
 
@@ -384,7 +383,7 @@ namespace permissions.api.tests.Utility
                 {
                     var exception = new Faker().System.Exception();
                     subSvc.Setup(m => m.CreateOrUpdateDownloadRecord(
-                        It.IsAny<string>(), 
+                        It.IsAny<string>(),
                         It.IsAny<string>())).ThrowsAsync(exception);
                 }
                 if (!sessionHasJson)
