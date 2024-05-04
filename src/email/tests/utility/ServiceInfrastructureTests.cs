@@ -38,7 +38,7 @@ namespace legallead.email.tests.utility
         public void SutCanGetTemplates()
         {
             var names = Enum.GetNames<TemplateNames>().ToList();
-            var expected = names.Count;
+            var expected = names.Count - 1; // exclude none
             var obj = ServiceInfrastructure.Provider;
             var found = 0;
             names.ForEach(n =>

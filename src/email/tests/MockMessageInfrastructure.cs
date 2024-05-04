@@ -76,10 +76,18 @@ namespace legallead.email.tests
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
+                // 
+                // begin keyed transients
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
+                // end keyed transients
+                // begin singleton action filters
+                services.AddTransient<BaseEmailActionTemplate>();
                 services.AddTransient<RegistrationCompleted>();
                 services.AddTransient<SearchPaymentCompleted>();
+                services.AddTransient<BeginSearchRequested>();
+                // end singleton action filters
                 services.AddTransient(x =>
                 {
                     var settings = x.GetRequiredService<ISettingsService>();
