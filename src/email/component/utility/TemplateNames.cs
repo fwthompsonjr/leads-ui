@@ -1,8 +1,10 @@
-﻿namespace legallead.email.utility
+namespace legallead.email.utility
 {
     public enum TemplateNames
     {
+        None,
         RegistrationCompleted,
-        SearchPaymentCompleted
+        SearchPaymentCompleted,
+        // end of enumeration
     }
 }

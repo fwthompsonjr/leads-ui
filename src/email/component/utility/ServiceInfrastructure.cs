@@ -1,4 +1,4 @@
-﻿using legallead.email.actions;
+using legallead.email.actions;
 using legallead.email.implementations;
 using legallead.email.interfaces;
 using legallead.email.services;
@@ -36,8 +36,11 @@ namespace legallead.email.utility
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                // end keyed transients
+                // register actions
                 services.AddTransient<RegistrationCompleted>();
                 services.AddTransient<SearchPaymentCompleted>();
+                // end register actions
                 services.AddTransient(x =>
                 {
                     var settings = x.GetRequiredService<ISettingsService>();
