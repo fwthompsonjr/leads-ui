@@ -36,10 +36,12 @@ namespace legallead.email.utility
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
                 // end keyed transients
                 // register actions
                 services.AddTransient<RegistrationCompleted>();
                 services.AddTransient<SearchPaymentCompleted>();
+                services.AddTransient<BeginSearchRequestedTemplate>();
                 // end register actions
                 services.AddTransient(x =>
                 {

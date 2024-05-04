@@ -60,6 +60,58 @@ $sources = @{
         registrationEnd = "                // end register actions"
     }
 }
+
+class backups {
+    static [void] All( $currentDir, $sources, $rollback ) {
+        [backups]::Dependency( $currentDir, $sources, $rollback );
+        [backups]::Enumeration( $currentDir, $sources, $rollback );
+    }
+    
+    static [void] Remove( $currentDir, $sources ) {
+        $shortName = $sources.enumeration.file;
+        $enumerationFile = [System.IO.Path]::Combine( $currentDir, "$($sources.enumeration.file).backup" );
+        $dependencyFile = [System.IO.Path]::Combine( $currentDir, "$($sources.dependency.file).backup" );
+        $removals = @( $enumerationFile, $dependencyFile );
+        $removals.GetEnumerator() | ForEach-Object {
+            $sut = $_;
+            if ( [System.IO.File]::Exists( $sut ) -eq $true ) {
+                [System.IO.File]::Delete( $sut ) | Out-Null
+            }
+        }
+    }
+
+    static [void] Enumeration( $currentDir, $sources, $rollback ){        
+        $shortName = $sources.enumeration.file;
+        $templateFile = [System.IO.Path]::Combine( $currentDir, $shortName );
+        $templateBkupFile = [System.IO.Path]::Combine( $currentDir, "$shortName.backup" );
+        if ($true -eq $rollback) {
+            if ( [System.IO.File]::Exists( $templateBkupFile ) -eq $true ) {
+                [System.IO.File]::Copy( $templateBkupFile, $templateFile, $true );
+                [System.IO.File]::Delete( $templateBkupFile );
+            }
+            return;
+        }
+        if ( [System.IO.File]::Exists( $templateFile ) -eq $true ) {
+            [System.IO.File]::Copy( $templateFile, $templateBkupFile, $true );
+        }
+    }
+    static [void] Dependency( $currentDir, $sources, $rollback ){  
+        $shortName = $sources.dependency.file;
+        $dependencyFile = [System.IO.Path]::Combine( $currentDir, $shortName );
+        $dependencyBkupFile = [System.IO.Path]::Combine( $currentDir, "$shortName.backup" );
+        if ($true -eq $rollback) {
+            if ( [System.IO.File]::Exists( $dependencyBkupFile ) -eq $true ) {
+                [System.IO.File]::Copy( $dependencyBkupFile, $dependencyFile, $true );
+                [System.IO.File]::Delete( $dependencyBkupFile );
+            }
+            return;
+        }
+        if ( [System.IO.File]::Exists( $dependencyFile ) -eq $true ) {
+            [System.IO.File]::Copy( $dependencyFile, $dependencyBkupFile, $true );
+        }
+    }
+}
+
 function getTemplateFileName() {
     $shortName = $sources.enumeration.file;
     $templateFile = [System.IO.Path]::Combine( $workfolder, $shortName );
@@ -203,17 +255,17 @@ function addHtmlAction( $testing ) {
     return $sourceFile;
 }
 
-function addImplementationFile( $name ) {    
-    $sourceFile = getImplementationFileName
-    if ( $null -eq $sourceFile ) { return $null; }
-    $locator = $sources.action.find;
+function addImplementationFile( $name, $testing ) {   
+    $shortName = $sources.implementation.file;
+    $templateFile = [System.IO.Path]::Combine( $workfolder, $shortName );
+    Write-Output "Implementation: $templateFile"
     $additions = @(
         "NoActionTemplate"
     )
     $replacements = @(
         [string]::Concat( $name, "Template" )
     )
-    [string]$content = [System.IO.File]::ReadAllText( $sourceFile );
+    [string]$content = [System.IO.File]::ReadAllText( $templateFile );
     for($i = 0; $i -lt $additions.Count; $i++) {
         $search = $additions[$i];
         $replacement = $replacements[$i];
@@ -221,8 +273,8 @@ function addImplementationFile( $name ) {
     }
     
     if ($testing -eq $false ) {
-        $rootDir = [System.IO.Path]::GetDirectoryName( $sourceFile );
-        $outFile = [string]::Concat( $template, "Template.cs")
+        $rootDir = [System.IO.Path]::GetDirectoryName( $templateFile );
+        $outFile = [string]::Concat( $name, "Template.cs")
         $csfile = [System.IO.Path]::Combine( $rootDir, $outFile );
         [System.IO.File]::WriteAllText( $csfile, $content );
     }
@@ -239,8 +291,8 @@ function addDependencyFile( $name, $testing ) {
         $sources.dependency.registrationEnd
     )
 	$spacer = "               "
-	$transient = [string]::Format( "$spacer services.AddKeyedTransient<IHtmlTransformDetailBase, {0}Template>(TemplateNames.{0}).ToString());", $name)
-	$registration = "$spacer services.AddTransient<{0}Completed>();" -f $name
+	$transient = [string]::Format( "$spacer services.AddKeyedTransient<IHtmlTransformDetailBase, {0}Template>(TemplateNames.{0}.ToString());", $name)
+	$registration = "$spacer services.AddTransient<{0}Template>();" -f $name
     $replacements = @(
         [string]::Join( [Environment]::NewLine, @( $transient, $sources.dependency.transientEnd)),
         [string]::Join( [Environment]::NewLine, @( $registration, $sources.dependency.registrationEnd))
@@ -270,21 +322,38 @@ if ( $null -eq $isNameUnique -or $isNameUnique -eq $false ) {
     Write-Warning "Template name : $template has name violation. Unable to add"
     return;
 }
+
+[backups]::All( $workfolder, $sources, $false );
+[backups]::Remove( $workfolder, $sources );
+
 $conditions = @( $true, $false )
 Write-Output "Creating template constant: $template"
-foreach($condition in $conditions) {
-    $resp = addTemplateName -name $template -testing $condition
-    if ($true -ne $resp ) { throw "Unable to test addTemplateName function" }
+$hadError = $false
+try {
+    
+    foreach($condition in $conditions) {
+        $resp = addTemplateName -name $template -testing $condition
+        if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addTemplateName function" }
 
-    $resp = addTemplateAction -name $template -testing $condition
-    if ($true -ne $resp ) { throw "Unable to test addTemplateAction function" }
+        $resp = addTemplateAction -name $template -testing $condition
+        if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addTemplateAction function" }
 
-    $resp = addHtmlAction -testing $condition
-    if ($true -ne $resp ) { throw "Unable to test addHtmlAction function" }
+        $resp = addHtmlAction -testing $condition
+        if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addHtmlAction function" }
 
-    $resp = addImplementationFile -name $template -testing $condition
-    if ($true -ne $resp ) { throw "Unable to test addImplementationFile function" }
+        $resp = addImplementationFile -name $template -testing $condition
+        if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addImplementationFile function" }
 
-    $resp = addDependencyFile -name $template -testing $condition
-    if ($true -ne $resp ) { throw "Unable to test addDependencyFile function" }
+        $resp = addDependencyFile -name $template -testing $condition
+        if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addDependencyFile function" }
+    }
+} catch {
+    $msg = $_.Exception.ToString()
+    Write-Error $msg;
+}
+finally {
+    if ( $hadError -eq $true ) {
+        [backups]::All( $workfolder, $sources, $true );
+    }
+    [backups]::Remove( $workfolder, $sources );
 }

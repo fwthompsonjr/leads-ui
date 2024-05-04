@@ -5,6 +5,7 @@ namespace legallead.email.utility
         None,
         RegistrationCompleted,
         SearchPaymentCompleted,
+        BeginSearchRequested,
         // end of enumeration
     }
 }
