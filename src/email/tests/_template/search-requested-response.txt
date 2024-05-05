@@ -1,0 +1,24 @@
+{
+    "requestId": "e8983cfb-0a68-11ef-99ce-0af7a01f52e9",
+    "request": {
+        "state": "tx",
+        "county": {
+            "name": "denton",
+            "value": 26730
+        },
+        "details": [
+            {
+                "name": "Court Type",
+                "text": "All County Courts",
+                "value": "9"
+            },
+            {
+                "name": "Case Type",
+                "text": "JP And County Courts",
+                "value": "0"
+            }
+        ],
+        "start": 1696118400000,
+        "end": 1696636800000
+    }
+}

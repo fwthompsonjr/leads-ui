@@ -28,6 +28,7 @@ namespace legallead.email.actions
             var message = _mailMessageService.Message;
             if (!CanSendMessage(id, message)) return;
             message = ApplyTransform(message, html);
+            _mailMessageService.Beautify(message?.Body);
             _smtpService.Send(message, id);
         }
         private static MailMessage ApplyTransformProcess(MailMessage message, string html)

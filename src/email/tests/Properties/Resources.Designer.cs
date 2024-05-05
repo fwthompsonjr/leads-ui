@@ -120,10 +120,38 @@ namespace legallead.email.tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;requestId&quot;: &quot;e8983cfb-0a68-11ef-99ce-0af7a01f52e9&quot;,
+        ///    &quot;request&quot;: {
+        ///        &quot;state&quot;: &quot;tx&quot;,
+        ///        &quot;county&quot;: {
+        ///            &quot;name&quot;: &quot;denton&quot;,
+        ///            &quot;value&quot;: 26730
+        ///        },
+        ///        &quot;details&quot;: [
+        ///            {
+        ///                &quot;name&quot;: &quot;Court Type&quot;,
+        ///                &quot;text&quot;: &quot;All County Courts&quot;,
+        ///                &quot;value&quot;: &quot;9&quot;
+        ///            },
+        ///            {
+        ///                &quot;name&quot;: &quot;Case Type&quot;,
+        ///                &quot;text&quot;: &quot;JP And County Courts&quot;,
+        ///                &quot;value&quot;: &quot;0&quot;
+        ///            }
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string search_requested_response {
+            get {
+                return ResourceManager.GetString("search_requested_response", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [
         ///	{
         ///		&quot;name&quot;: &quot;RegistrationCompleted&quot;,
-        ///		&quot;isTesting&quot;: true
+        ///		&quot;isTesting&quot;: false
         ///	},
         ///	{
         ///		&quot;name&quot;: &quot;SearchPaymentCompleted&quot;,

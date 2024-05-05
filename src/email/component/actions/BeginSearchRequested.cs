@@ -24,7 +24,8 @@ namespace legallead.email.actions
             if (!Guid.TryParse(id, out var _)) return;
             _mailMessageService.With(TemplateNames.BeginSearchRequested, id);
             if (_mailMessageService.Message == null || !CanSend()) return;            
-            _mailMessageService.Message.Body = conversion.ToHtml(_mailMessageService.Message.Body);
+            var body = conversion.ToHtml(account, _mailMessageService.Message.Body);
+            _mailMessageService.Beautify(body);
             _smtpService.Send(_mailMessageService.Message, id);
         }
 

@@ -4,7 +4,8 @@ namespace legallead.email.services
 {
     public interface ISmtpClientWrapper
     {
+        bool EmailEnabled { get; }
+
         void Send(SmtpClient client, MailMessage message);
-        void SendAsync(SmtpClient client, MailMessage message);
     }
 }

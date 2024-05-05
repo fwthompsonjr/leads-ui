@@ -75,17 +75,24 @@ namespace legallead.email.services
             BodyHtml = SubstituteTitle(subject, html);
             if (Message != null && !string.IsNullOrEmpty(html))
             {
-                var body = _beautifyService.BeautifyHTML(html);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(body);
-
-                Message.Body = body;
-                Message.IsBodyHtml = true;
-                ContentType mimeType = new("text/html");
-                AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
-                Message.AlternateViews.Add(alternate);
+                Beautify(html);
             }
             return this;
+        }
+
+        public void Beautify(string? html)
+        {
+            if (Message == null || string.IsNullOrEmpty(html)) return;
+            if (Message.AlternateViews.Count > 0) Message.AlternateViews.Clear();
+            var body = _beautifyService.BeautifyHTML(html);
+            var doc = new HtmlDocument();
+            doc.LoadHtml(body);
+
+            Message.Body = body;
+            Message.IsBodyHtml = true;
+            ContentType mimeType = new("text/html");
+            AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+            Message.AlternateViews.Add(alternate);
         }
 
         private static string? CustomTransform(TemplateNames template, string? html)

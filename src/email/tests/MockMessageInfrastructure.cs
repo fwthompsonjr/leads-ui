@@ -108,6 +108,12 @@ namespace legallead.email.tests
         }
 
 
+        internal static readonly Faker<UserAccountByEmailBo> UserAccountFaker =
+            new Faker<UserAccountByEmailBo>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.UserName, y => y.Person.UserName);
+
         internal static readonly Faker<UserEmailSettingBo> UserEmailFaker =
             new Faker<UserEmailSettingBo>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString())

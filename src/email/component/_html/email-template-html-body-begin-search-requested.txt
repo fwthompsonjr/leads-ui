@@ -51,18 +51,6 @@
 					<td colspan="2">End Date:</td>
 					<td colspan="2" name="td-begin-search-requested-end-date"> - </td>
 				</tr>
-				<tr name="tr-begin-search-requested-parameters">
-					<td colspan="2">Parameters:</td>
-					<td colspan="2" name="td-begin-search-requested-parameters">
-						<table  name="table-begin-search-requested-detail-item-parameters" 
-							role="presentation" border="0" cellspacing="0" 
-							width="95%">
-							<tr name="tr-begin-search-requested-parameters-header">
-								<td width="30%">Name</td>
-								<td width="70%">Value</td>
-							</tr>
-					</td>
-				</tr>
 			</table>
 		</td>
 	</tr>
