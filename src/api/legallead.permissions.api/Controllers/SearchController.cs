@@ -1,7 +1,4 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
@@ -9,23 +6,17 @@ namespace legallead.permissions.api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SearchController : ControllerBase
+    public class SearchController(IUserSearchValidator validator,
+        ISearchInfrastructure infrastructure,
+        ICustomerLockInfrastructure lockingDb) : ControllerBase
     {
-        private readonly IUserSearchValidator searchValidator;
-        private readonly ISearchInfrastructure infrastructure;
-        private readonly ICustomerLockInfrastructure _lockingDb;
-
-        public SearchController(IUserSearchValidator validator,
-            ISearchInfrastructure infrastructure,
-            ICustomerLockInfrastructure lockingDb)
-        {
-            searchValidator = validator;
-            this.infrastructure = infrastructure;
-            _lockingDb = lockingDb;
-        }
+        private readonly IUserSearchValidator searchValidator = validator;
+        private readonly ISearchInfrastructure infrastructure = infrastructure;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
 
         [HttpPost]
         [Route("search-begin")]
+        // [ServiceFilter(typeof(BeginSearchRequested))]
         public async Task<IActionResult> BeginSearch(UserSearchRequest request)
         {
             var user = await infrastructure.GetUser(Request);

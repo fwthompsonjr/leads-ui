@@ -1,8 +1,6 @@
 ﻿using legallead.jdbc.helpers;
-using legallead.permissions.api.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {

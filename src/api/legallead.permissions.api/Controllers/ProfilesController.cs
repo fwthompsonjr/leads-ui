@@ -1,6 +1,4 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using legallead.permissions.api.Utility;
+﻿using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

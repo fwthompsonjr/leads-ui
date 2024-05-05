@@ -1,5 +1,4 @@
 ﻿using legallead.jdbc.interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {

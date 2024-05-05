@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using legallead.json.db;
 using legallead.json.db.entity;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

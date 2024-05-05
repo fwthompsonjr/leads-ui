@@ -1,12 +1,9 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {

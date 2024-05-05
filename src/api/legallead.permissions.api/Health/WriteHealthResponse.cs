@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 

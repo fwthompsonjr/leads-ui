@@ -1,10 +1,8 @@
 using legallead.permissions.api;
 using legallead.permissions.api.Health;
-using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -39,7 +37,7 @@ services.AddSwaggerGen(c =>
 
 services.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(services));
 services.RegisterHealthChecks();
-
+services.RegisterEmailServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,10 +67,13 @@ var details = new HealthCheckOptions
 };
 app.MapHealthChecks("/health", health);
 app.MapHealthChecks("/health-details", details);
+#pragma warning disable ASP0014 // Suggest using top level route registrations
+// this allows backward compatibility to 6.0 projects
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+#pragma warning restore ASP0014 // Suggest using top level route registrations
 
 // Resolve the StartupTasks from the ServiceProvider
 var startupTasks = app.Services.GetServices<IStartupTask>();

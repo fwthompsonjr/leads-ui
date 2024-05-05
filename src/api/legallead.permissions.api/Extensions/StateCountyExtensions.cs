@@ -1,5 +1,4 @@
 ﻿using legallead.models;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Extensions
 {

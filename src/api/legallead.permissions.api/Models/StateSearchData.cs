@@ -1,7 +1,4 @@
-﻿
-using legallead.permissions.api.Model;
-
-namespace legallead.models
+﻿namespace legallead.models
 {
     public class StateSearchData : UsState
     {

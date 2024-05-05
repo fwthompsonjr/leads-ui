@@ -1,12 +1,8 @@
 ﻿using legallead.jdbc;
-using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace legallead.permissions.api.Utility

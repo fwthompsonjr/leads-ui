@@ -1,8 +1,6 @@
 ﻿using legallead.permissions.api.Controllers;
-using legallead.permissions.api.Interfaces;
 using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {

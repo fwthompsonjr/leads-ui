@@ -1,5 +1,4 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
@@ -69,6 +68,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpGet("/payment-checkout")]
+        // [ServiceFilter(typeof(SearchPaymentCompleted))]
         public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
         {
             var session = await paymentSvc.IsSessionValid(id);

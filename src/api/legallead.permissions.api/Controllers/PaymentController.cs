@@ -1,5 +1,4 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers

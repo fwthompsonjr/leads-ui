@@ -1,7 +1,5 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {

@@ -1,8 +1,6 @@
 ﻿using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {

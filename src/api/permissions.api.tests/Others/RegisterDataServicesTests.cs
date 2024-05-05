@@ -1,4 +1,7 @@
-﻿using legallead.jdbc.helpers;
+﻿using legallead.email.interfaces;
+using legallead.email.services;
+using legallead.email.transforms;
+using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.logging.interfaces;
 using legallead.permissions.api;
@@ -36,6 +39,7 @@ namespace permissions.api.tests
                 collection.RegisterDataServices(config);
                 collection.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(collection));
                 collection.RegisterHealthChecks();
+                collection.RegisterEmailServices();
                 _serviceProvider = collection.BuildServiceProvider();
             }
         }
@@ -74,6 +78,15 @@ namespace permissions.api.tests
         [InlineData(typeof(ICustomerInfrastructure))]
         [InlineData(typeof(QueueResetService))]
         [InlineData(typeof(IUserSearchValidator))]
+        [InlineData(typeof(IConnectionStringService))]
+        [InlineData(typeof(ICryptographyService))]
+        [InlineData(typeof(IDataCommandService))]
+        [InlineData(typeof(IDataConnectionService))]
+        [InlineData(typeof(ISettingsService))]
+        [InlineData(typeof(ISmtpClientWrapper))]
+        [InlineData(typeof(ISmtpService))]
+        [InlineData(typeof(IUserSettingInfrastructure))]
+        [InlineData(typeof(IHtmlTransformService))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>

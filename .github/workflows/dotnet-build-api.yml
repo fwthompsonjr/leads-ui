@@ -13,7 +13,7 @@ env:
   SOLUTION_NAME: ${{ github.workspace }}\src\api\legallead.api.sln
   COVERAGE_NAME: ${{ github.workspace }}\src\api\tests.runsettings
   COVERAGE_FILTER: 'src\api'
-  NET_VERSION: "6.0.x"
+  NET_VERSION: "8.0.x"
 
 jobs:
   build:

@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using legallead.jdbc.entities;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {

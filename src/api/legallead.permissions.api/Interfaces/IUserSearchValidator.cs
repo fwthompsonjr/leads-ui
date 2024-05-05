@@ -1,6 +1,4 @@
-﻿using legallead.permissions.api.Model;
-
-namespace legallead.permissions.api.Interfaces
+﻿namespace legallead.permissions.api.Interfaces
 {
     public interface IUserSearchValidator
     {

@@ -1,7 +1,6 @@
 ﻿using legallead.permissions.api.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Controllers
 {

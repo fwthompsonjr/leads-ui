@@ -1,9 +1,5 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.models;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -62,6 +58,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("register")]
+        // [ServiceFilter(typeof(RegistrationCompleted))]
         public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";

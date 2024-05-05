@@ -1,7 +1,4 @@
-﻿using legallead.permissions.api.Interfaces;
-using System.Diagnostics.CodeAnalysis;
-
-namespace legallead.permissions.api.Services
+﻿namespace legallead.permissions.api.Services
 {
     public class PaymentAccountCreationService : BackgroundService
     {

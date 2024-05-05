@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.entities;
-using Stripe.Checkout;
+﻿using Stripe.Checkout;
 
 namespace legallead.permissions.api.Utility
 {

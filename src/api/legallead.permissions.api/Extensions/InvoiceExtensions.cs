@@ -1,11 +1,8 @@
 ﻿using HtmlAgilityPack;
-using legallead.jdbc.entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.permissions.api.Extensions
