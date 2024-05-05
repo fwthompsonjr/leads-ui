@@ -68,7 +68,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpGet("/payment-checkout")]
-        // [ServiceFilter(typeof(SearchPaymentCompleted))]
+        [ServiceFilter(typeof(SearchPaymentCompleted))]
         public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
         {
             var session = await paymentSvc.IsSessionValid(id);

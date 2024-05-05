@@ -58,7 +58,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("register")]
-        // [ServiceFilter(typeof(RegistrationCompleted))]
+        [ServiceFilter(typeof(RegistrationCompleted))]
         public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";

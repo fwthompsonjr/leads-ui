@@ -16,7 +16,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("search-begin")]
-        // [ServiceFilter(typeof(BeginSearchRequested))]
+        [ServiceFilter(typeof(BeginSearchRequested))]
         public async Task<IActionResult> BeginSearch(UserSearchRequest request)
         {
             var user = await infrastructure.GetUser(Request);

@@ -25,7 +25,13 @@ var config = isDevelopment switch
 var services = builder.Services;
 services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
-services.AddControllers();
+services.AddControllers(options =>
+{
+    var filters = options.Filters;
+    filters.Add<BeginSearchRequested>();
+    filters.Add<RegistrationCompleted>();
+    filters.Add<SearchPaymentCompleted>();
+});
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
