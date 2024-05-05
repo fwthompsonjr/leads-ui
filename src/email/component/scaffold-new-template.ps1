@@ -310,17 +310,17 @@ function addDependencyFile( $name, $testing ) {
 }
 if ( [string]::IsNullOrWhiteSpace( $template ) -eq $true ) {
     Write-Warning "Template name is invalid."
-    return;
+    return $null;
 }
 
 if ( [string]::IsNullOrWhiteSpace( $templateToken ) -eq $true ) {
     Write-Warning "Template token name is invalid."
-    return;
+    return $null;
 }
 $isNameUnique = isTemplateNameUnique -name $template
 if ( $null -eq $isNameUnique -or $isNameUnique -eq $false ) {
     Write-Warning "Template name : $template has name violation. Unable to add"
-    return;
+    return $null;
 }
 
 [backups]::All( $workfolder, $sources, $false );
@@ -330,7 +330,6 @@ $conditions = @( $true, $false )
 Write-Output "Creating template constant: $template"
 $hadError = $false
 try {
-    
     foreach($condition in $conditions) {
         $resp = addTemplateName -name $template -testing $condition
         if ($true -ne $resp ) { $hadError = $true; throw "Unable to test addTemplateName function" }
@@ -357,3 +356,5 @@ finally {
     }
     [backups]::Remove( $workfolder, $sources );
 }
+
+return $hadError;
