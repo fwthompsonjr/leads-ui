@@ -6,6 +6,7 @@ using legallead.email.utility;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Runtime.InteropServices;
 
 namespace legallead.email.services
 {
@@ -67,20 +68,54 @@ namespace legallead.email.services
                 new UserSettingQuery { Id = userId } :
                 new UserSettingQuery { Email = email };
             var html = service.GetHtmlTemplate(query, template.ToString()).GetAwaiter().GetResult();
+            if (CustomTemplates.Contains(template))
+            {
+                html = CustomTransform(template, html);
+            }
             BodyHtml = SubstituteTitle(subject, html);
             if (Message != null && !string.IsNullOrEmpty(html))
             {
-                var body = _beautifyService.BeautifyHTML(html);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(body);
-
-                Message.Body = body;
-                Message.IsBodyHtml = true;
-                ContentType mimeType = new("text/html");
-                AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
-                Message.AlternateViews.Add(alternate);
+                Beautify(html);
             }
             return this;
+        }
+
+        public void Beautify(string? html)
+        {
+            if (Message == null || string.IsNullOrEmpty(html)) return;
+            if (Message.AlternateViews.Count > 0) Message.AlternateViews.Clear();
+            var body = _beautifyService.BeautifyHTML(html);
+            var doc = new HtmlDocument();
+            doc.LoadHtml(body);
+
+            Message.Body = body;
+            Message.IsBodyHtml = true;
+            ContentType mimeType = new("text/html");
+            AlternateView alternate = AlternateView.CreateAlternateViewFromString(body, mimeType);
+            Message.AlternateViews.Add(alternate);
+        }
+
+        private static string? CustomTransform(TemplateNames template, string? html)
+        {
+            const string detailQuery = "//td[@name='body-line-details']";
+            const string headingQuery = "//h2[@name='span-sub-heading']";
+            if (string.IsNullOrWhiteSpace(html)) return html;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var heading = doc.DocumentNode.SelectSingleNode(headingQuery);
+            var detail = doc.DocumentNode.SelectSingleNode(detailQuery);
+            if (template == TemplateNames.SearchPaymentCompleted)
+            {
+                if (heading != null)
+                {
+                    heading.InnerHtml = EmailSubjects[template];
+                }
+                if (detail == null) return html;
+                var attr = doc.CreateAttribute("style", "padding: 10px");
+                detail.Attributes.Add(attr);
+                return doc.DocumentNode.OuterHtml;
+            }
+            return html;
         }
 
         protected MailMessageService With(string userEmail)
@@ -210,7 +245,12 @@ namespace legallead.email.services
 
         private static readonly Dictionary<TemplateNames, string> EmailSubjects = new()
         {
-            { TemplateNames.RegistrationCompleted, "Account Registration Completed" }
+            { TemplateNames.RegistrationCompleted, "Account Registration Completed" },
+            { TemplateNames.SearchPaymentCompleted, "Payment Received" }
+        };
+        private static readonly List<TemplateNames> CustomTemplates = new()
+        {
+            TemplateNames.SearchPaymentCompleted
         };
     }
 }

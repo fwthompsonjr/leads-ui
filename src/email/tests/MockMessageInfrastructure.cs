@@ -76,10 +76,18 @@ namespace legallead.email.tests
                 services.AddSingleton<ISettingsService, SettingsService>();
                 services.AddSingleton<IHtmlBeautifyService, HtmlBeautifyService>();
                 services.AddTransient<IHtmlTransformService, HtmlTransformService>();
+                // 
+                // begin keyed transients
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
+                // end keyed transients
+                // begin singleton action filters
+                services.AddTransient<BaseEmailActionTemplate>();
                 services.AddTransient<RegistrationCompleted>();
                 services.AddTransient<SearchPaymentCompleted>();
+                services.AddTransient<BeginSearchRequested>();
+                // end singleton action filters
                 services.AddTransient(x =>
                 {
                     var settings = x.GetRequiredService<ISettingsService>();
@@ -99,6 +107,12 @@ namespace legallead.email.tests
 
         }
 
+
+        internal static readonly Faker<UserAccountByEmailBo> UserAccountFaker =
+            new Faker<UserAccountByEmailBo>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.UserName, y => y.Person.UserName);
 
         internal static readonly Faker<UserEmailSettingBo> UserEmailFaker =
             new Faker<UserEmailSettingBo>()

@@ -1,10 +1,13 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Models;
+using Stripe;
 
 namespace legallead.permissions.api.Interfaces
 {
     public interface IPaymentHtmlTranslator
     {
+        SubscriptionService GetSubscriptionService { get; }
+
         Task<DownloadResponse> GetDownload(PaymentSessionDto dto);
         Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto);
         Task<bool> IsRequestValid(string? status, string? id);
@@ -23,5 +26,6 @@ namespace legallead.permissions.api.Interfaces
         Task<bool> IsDiscountPaid(LevelRequestBo session);
         Task<bool> IsDiscountLevel(string? status, string? id);
         Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html);
+        void SetupSubscriptionService(SubscriptionService? service);
     }
 }

@@ -1,5 +1,5 @@
 <h4 style="color: green" name="search-payment-complete-heading">Payment Received - Thank You</h4>
-<table name="search-payment-complete-detail-table" role="presentation" border="0" cellspacing="0" width="95%">
+<table name="search-payment-complete-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
 	<tr>
 		<td style="width: 25%">
 			<span>User Name:</span>
@@ -18,7 +18,7 @@
 	</tr>
 	<tr>
 		<td name="search-payment-complete-detail-spacer" colspan="2">
-			<hr noshade />
+			<hr style="background: #444; height: 1px; border: 0px;" />
 		</td>
 	</tr>
 	<tr>

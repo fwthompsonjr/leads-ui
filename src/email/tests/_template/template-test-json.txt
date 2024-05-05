@@ -1,0 +1,10 @@
+[
+	{
+		"name": "RegistrationCompleted",
+		"isTesting": false
+	},
+	{
+		"name": "SearchPaymentCompleted",
+		"isTesting": true
+	}
+]

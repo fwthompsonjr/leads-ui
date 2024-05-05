@@ -1,0 +1,57 @@
+<h4 style="color: green" name="begin-search-requested-heading"><!-- Template Heading --></h4>
+<table name="begin-search-requested-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
+	<tr>
+		<td style="width: 25%">
+			<span>User Name:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="begin-search-requested-user-name"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Email:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="begin-search-requested-email"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="begin-search-requested-detail-spacer" colspan="2">
+			<hr style="background: #444; height: 1px; border: 0px;" />
+		</td>
+	</tr>
+	<tr>
+		<td style="padding: 10px;" name="begin-search-requested-details" colspan="2">
+			<table  name="begin-search-requested-detail-item" 
+					role="presentation" border="0" cellspacing="0" 
+					width="95%">
+				<tr>
+					<td colspan="4">
+						You recently submitted a record search.<br/>
+						The details of your search request are listed below.
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4" name="begin-search-requested-detail-item-spacer" colspan="2">
+						<hr style="background: #444; height: 1px; border: 0px;" />
+					</td>
+				</tr>
+				<tr>
+					<td width="25%">State:</td>
+					<td width="25%" name="td-begin-search-requested-state-code"> - </td>
+					<td width="25%">County:</td>
+					<td width="25%" name="td-begin-search-requested-county-name"> - </td>
+				</tr>
+				<tr>
+					<td colspan="2">Start Date:</td>
+					<td colspan="2" name="td-begin-search-requested-start-date"> - </td>
+				</tr>
+				<tr>
+					<td colspan="2">End Date:</td>
+					<td colspan="2" name="td-begin-search-requested-end-date"> - </td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

@@ -2,6 +2,7 @@
 using legallead.jdbc.entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
+using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
 using Stripe;
 using System.Diagnostics.CodeAnalysis;
@@ -20,8 +21,25 @@ namespace legallead.permissions.api.Extensions
         background: transparent; border-color: #444
         
         */
-
-        internal static IStripeInfrastructure? GetInfrastructure { get; set; }
+        private static readonly object locker = new();
+        private static IStripeInfrastructure? stripeServices;
+        internal static IStripeInfrastructure? GetInfrastructure
+        {
+            get
+            {
+                lock (locker)
+                {
+                    return stripeServices;
+                }
+            }
+            set
+            {
+                lock (locker)
+                {
+                    stripeServices = value;
+                }
+            }
+        }
         public static long CalculatePaymentAmount(this PaymentSessionDto? response)
         {
             if (response == null) return 0;
@@ -186,9 +204,9 @@ namespace legallead.permissions.api.Extensions
         private static Tuple<bool, string, Invoice> VerifySubscription(string sessionId, string returnId)
         {
             var failure = new Tuple<bool, string, Invoice>(true, returnId, new() { Total = 0 });
-            if (GetInfrastructure != null)
+            if (GetInfrastructure is StripeInfrastructure stripe)
             {
-                return GetInfrastructure.VerifySubscription(sessionId);
+                return stripe.VerifySubscription(sessionId);
             }
             return failure;
         }

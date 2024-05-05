@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace permissions.api.tests.Contollers
 {
+    using ApiResources = legallead.permissions.api.Properties.Resources;
     public class HomeControllerTests
     {
         [Fact]
@@ -33,7 +34,9 @@ namespace permissions.api.tests.Contollers
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
             var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var content = GetPaymentLandingContent(isValid);
             html.Setup(m => m.IsRequestValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
+            html.Setup(m => m.Transform(It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
             var indx = await controller.PaymentLanding("abcd", "123");
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);
@@ -72,7 +75,9 @@ namespace permissions.api.tests.Contollers
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
             var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var content = GetUserLevelLandingContent(isValid);
             html.Setup(m => m.IsChangeUserLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
+            html.Setup(m => m.TransformForPermissions(It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
             var indx = await controller.UserLevelLanding("abcd", "123");
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);
@@ -133,7 +138,9 @@ namespace permissions.api.tests.Contollers
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
             var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var content = GetUserLevelLandingContent(isValid);
             html.Setup(m => m.IsDiscountLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
+            html.Setup(m => m.TransformForDiscounts(It.IsAny<ISubscriptionInfrastructure>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
             var indx = await controller.DiscountLanding("abcd", "123");
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);
@@ -307,6 +314,23 @@ namespace permissions.api.tests.Contollers
 
             var indx = await controller.RollbackDownload(new() { UserId = user?.UserName ?? "other", ExternalId = "abc-123" });
             Assert.NotNull(indx);
+        }
+
+        private static string GetPaymentLandingContent(bool isValid)
+        {
+            var content =
+                isValid ? ApiResources.page_payment_completed
+                : ApiResources.page_payment_detail_invalid;
+            return content;
+        }
+
+        private static string GetUserLevelLandingContent(bool isValid)
+        {
+            var content =
+                isValid ? ApiResources.page_payment_completed
+                : ApiResources.page_level_request_completed;
+            return content;
+
         }
     }
 }

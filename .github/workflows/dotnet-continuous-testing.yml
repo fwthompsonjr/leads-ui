@@ -9,10 +9,10 @@ on:
       - '!main'         # excludes master
       - '!releases'     # excludes releases
     paths:
-      - 'src/api/**'
       - 'src/core/**'
       - 'src/db/**'
       - 'src/logging/**'
+      - '!src/api/**'
       - '!src/presentation/legallead.installer/**'
       - '!src/presentation/legallead.installer.tests/**'
       - '!src/email/**'
