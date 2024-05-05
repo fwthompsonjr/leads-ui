@@ -96,6 +96,34 @@ namespace legallead.email.tests.services
             else connect.Verify(m => m.CreateConnection(), Times.Never);
         }
 
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        [InlineData(false, false)]
+        public async Task SutCanGetUserBySearchId(bool hasResponse, bool hasIndex = true)
+        {
+            var data = hasResponse ? queryIndexFaker.Generate() : null;
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var query = accountfaker.Generate();
+            if (!hasIndex) query.Id = string.Empty;
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
+
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+
+            db.Setup(m => m.QuerySingleOrDefaultAsync<GetUserAccountBySearchIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).ReturnsAsync(data);
+            _ = await service.GetUserBySearchId(query.Id ?? string.Empty);
+
+            if (hasIndex) connect.Verify(m => m.CreateConnection(), Times.Once);
+            else connect.Verify(m => m.CreateConnection(), Times.Never);
+        }
+
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
@@ -247,6 +275,12 @@ namespace legallead.email.tests.services
 
         private static readonly Faker<UserAccountByEmailBo> accountfaker =
             new Faker<UserAccountByEmailBo>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.UserName, y => y.Person.UserName);
+
+        private static readonly Faker<GetUserAccountBySearchIndexDto> queryIndexFaker =
+            new Faker<GetUserAccountBySearchIndexDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
             .RuleFor(x => x.Email, y => y.Person.Email)
             .RuleFor(x => x.UserName, y => y.Person.UserName);

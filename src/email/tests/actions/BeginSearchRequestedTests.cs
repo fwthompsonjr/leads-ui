@@ -1,4 +1,5 @@
 ﻿using legallead.email.actions;
+using legallead.email.interfaces;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace legallead.email.tests.actions
 {
@@ -41,6 +43,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
+                var svc = provider.GetService<Mock<IUserSettingInfrastructure>>();
                 var controller = provider.GetService<BeginSearchRequested>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuted(executedContext);
@@ -52,6 +55,7 @@ namespace legallead.email.tests.actions
 
         private static FilterContext GetContext(string result, bool isExecuted = true)
         {
+
             var collection = new ServiceCollection();
             collection.AddTransient<BeginSearchRequested>();
             collection.AddMvcCore(o =>

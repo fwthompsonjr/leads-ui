@@ -22,5 +22,12 @@ namespace legallead.email.models
             parameters.Add("email_address", Email);
             return parameters;
         }
+
+        public DynamicParameters GetSearchParameters()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("search_index", Id);
+            return parameters;
+        }
     }
 }
