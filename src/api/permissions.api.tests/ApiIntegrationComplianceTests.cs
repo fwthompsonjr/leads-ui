@@ -24,14 +24,14 @@ namespace permissions.api.tests
         public void PostmanSummaryShouldBeCurrent()
         {
             var latestApplicationFile = Locator.GetCsFiles().FirstOrDefault();
-            var latestWriteDate = latestApplicationFile?.LastWriteTime;
+            var latestWriteDate = latestApplicationFile?.CreationTime;
             var postmanFile = Locator.PostmanSummaryFile();
             Assert.NotNull(latestApplicationFile);
             Assert.True(File.Exists(postmanFile));
             output.WriteLine("Last application file is: {0}, {1:s}", 
                 latestApplicationFile.Name, 
                 latestWriteDate.GetValueOrDefault());
-            var postmanDate = new FileInfo(postmanFile).LastWriteTime;
+            var postmanDate = new FileInfo(postmanFile).CreationTime;
 
             output.WriteLine("Last intergration file is: {0}, {1:s}",
                 Path.GetFileNameWithoutExtension(postmanFile),
@@ -162,7 +162,7 @@ namespace permissions.api.tests
                     .Where(f => !f.FullName.Contains("\\obj\\"))
                     .ToList();
 
-                files.Sort((b,a) => a.LastWriteTime.CompareTo(b.LastWriteTime));
+                files.Sort((b,a) => a.CreationTime.CompareTo(b.CreationTime));
                 return files;
             }
         }
