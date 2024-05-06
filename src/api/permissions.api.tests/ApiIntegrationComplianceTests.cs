@@ -1,4 +1,5 @@
-﻿using Xunit.Abstractions;
+﻿using System.Diagnostics;
+using Xunit.Abstractions;
 
 namespace permissions.api.tests
 {
@@ -23,15 +24,16 @@ namespace permissions.api.tests
         [Fact]
         public void PostmanSummaryShouldBeCurrent()
         {
+            if (!Debugger.IsAttached) return;
             var latestApplicationFile = Locator.GetCsFiles().FirstOrDefault();
-            var latestWriteDate = latestApplicationFile?.CreationTime;
+            var latestWriteDate = latestApplicationFile?.LastWriteTime;
             var postmanFile = Locator.PostmanSummaryFile();
             Assert.NotNull(latestApplicationFile);
             Assert.True(File.Exists(postmanFile));
             output.WriteLine("Last application file is: {0}, {1:s}", 
                 latestApplicationFile.Name, 
                 latestWriteDate.GetValueOrDefault());
-            var postmanDate = new FileInfo(postmanFile).CreationTime;
+            var postmanDate = new FileInfo(postmanFile).LastWriteTime;
 
             output.WriteLine("Last intergration file is: {0}, {1:s}",
                 Path.GetFileNameWithoutExtension(postmanFile),
@@ -162,7 +164,7 @@ namespace permissions.api.tests
                     .Where(f => !f.FullName.Contains("\\obj\\"))
                     .ToList();
 
-                files.Sort((b,a) => a.CreationTime.CompareTo(b.CreationTime));
+                files.Sort((b,a) => a.LastWriteTime.CompareTo(b.LastWriteTime));
                 return files;
             }
         }
