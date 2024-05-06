@@ -6,26 +6,19 @@ using System.Text;
 namespace legallead.permissions.api.Controllers
 {
     [Route("/")]
-    public class HomeController : Controller
+    public class HomeController(
+        IPaymentHtmlTranslator service,
+        ISearchInfrastructure search,
+        ISubscriptionInfrastructure subscriptionSvc,
+        ICustomerLockInfrastructure lockingDb,
+        IStripeInfrastructure stripe) : Controller
     {
-        private readonly IPaymentHtmlTranslator paymentSvc;
-        private readonly ISearchInfrastructure infrastructure;
-        private readonly ISubscriptionInfrastructure subscriptionSvc;
-        private readonly ICustomerLockInfrastructure _lockingDb;
-        private readonly IStripeInfrastructure stripeSvc;
-        public HomeController(
-            IPaymentHtmlTranslator service,
-            ISearchInfrastructure search,
-            ISubscriptionInfrastructure subscriptionSvc,
-            ICustomerLockInfrastructure lockingDb,
-            IStripeInfrastructure stripe)
-        {
-            paymentSvc = service;
-            infrastructure = search;
-            this.subscriptionSvc = subscriptionSvc;
-            _lockingDb = lockingDb;
-            stripeSvc = stripe;
-        }
+        private readonly IPaymentHtmlTranslator paymentSvc = service;
+        private readonly ISearchInfrastructure infrastructure = search;
+        private readonly ISubscriptionInfrastructure subscriptionSvc = subscriptionSvc;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
+        private readonly IStripeInfrastructure stripeSvc = stripe;
+
         [HttpGet]
         [Route("/")]
         public IActionResult Index()

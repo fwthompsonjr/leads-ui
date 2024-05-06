@@ -5,27 +5,18 @@ namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public partial class SignonController : ControllerBase
+    public partial class SignonController(
+        DataProvider db,
+        IJwtManagerRepository jWTManager,
+        IRefreshTokenValidator tokenValidator,
+        ICustomerLockInfrastructure lockingDb,
+        ILoggingInfrastructure logService) : ControllerBase
     {
-        private readonly DataProvider _db;
-        private readonly IJwtManagerRepository _jWTManager;
-        private readonly IRefreshTokenValidator _tokenValidator;
-        private readonly ILoggingInfrastructure _logSvc;
-        private readonly ICustomerLockInfrastructure _lockingDb;
-
-        public SignonController(
-            DataProvider db,
-            IJwtManagerRepository jWTManager,
-            IRefreshTokenValidator tokenValidator,
-            ICustomerLockInfrastructure lockingDb,
-            ILoggingInfrastructure logService)
-        {
-            _db = db;
-            _jWTManager = jWTManager;
-            _tokenValidator = tokenValidator;
-            _lockingDb = lockingDb;
-            _logSvc = logService;
-        }
+        private readonly DataProvider _db = db;
+        private readonly IJwtManagerRepository _jWTManager = jWTManager;
+        private readonly IRefreshTokenValidator _tokenValidator = tokenValidator;
+        private readonly ILoggingInfrastructure _logSvc = logService;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
 
         [AllowAnonymous]
         [HttpPost]

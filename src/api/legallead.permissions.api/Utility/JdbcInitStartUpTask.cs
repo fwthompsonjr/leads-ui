@@ -3,13 +3,10 @@
 namespace legallead.permissions.api
 {
     [ExcludeFromCodeCoverage(Justification = "Class directly interacts with database.")]
-    public class JdbcInitStartUpTask : IStartupTask
+    public class JdbcInitStartUpTask(IDataInitializer dataDb) : IStartupTask
     {
-        private readonly IDataInitializer _dataDb;
+        private readonly IDataInitializer _dataDb = dataDb;
         public int Index => 10;
-
-        public JdbcInitStartUpTask(IDataInitializer dataDb)
-        { _dataDb = dataDb; }
 
         public async Task Execute()
         {

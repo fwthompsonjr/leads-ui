@@ -1,16 +1,10 @@
 ﻿namespace legallead.permissions.api.Services
 {
-    public class PaymentAccountCreationService : BackgroundService
+    public class PaymentAccountCreationService(ILogger<PaymentAccountCreationService> log, ICustomerInfrastructure infrastructure, bool isTest = false) : BackgroundService
     {
-        private readonly ICustomerInfrastructure _customerInfrastructure;
-        private readonly ILogger<PaymentAccountCreationService> logger;
-        private readonly bool _isTestMode;
-        public PaymentAccountCreationService(ILogger<PaymentAccountCreationService> log, ICustomerInfrastructure infrastructure, bool isTest = false)
-        {
-            _customerInfrastructure = infrastructure;
-            logger = log;
-            _isTestMode = isTest;
-        }
+        private readonly ICustomerInfrastructure _customerInfrastructure = infrastructure;
+        private readonly ILogger<PaymentAccountCreationService> logger = log;
+        private readonly bool _isTestMode = isTest;
 
         [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

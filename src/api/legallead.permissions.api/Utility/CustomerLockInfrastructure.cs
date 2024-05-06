@@ -2,13 +2,10 @@
 
 namespace legallead.permissions.api.Utility
 {
-    public class CustomerLockInfrastructure : ICustomerLockInfrastructure
+    public class CustomerLockInfrastructure(IUserLockStatusRepository repo) : ICustomerLockInfrastructure
     {
-        private readonly IUserLockStatusRepository lockRepo;
-        public CustomerLockInfrastructure(IUserLockStatusRepository repo)
-        {
-            lockRepo = repo;
-        }
+        private readonly IUserLockStatusRepository lockRepo = repo;
+
         public async Task AddIncident(string userId)
         {
             await lockRepo.AddIncident(new() { Id = userId });

@@ -4,13 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace legallead.permissions.api.Utility
 {
-    public class ProfileRequestVerification : IProfileRequestVerification
+    public class ProfileRequestVerification(IProfileInfrastructure db) : IProfileRequestVerification
     {
-        private readonly IProfileInfrastructure _db;
-        public ProfileRequestVerification(IProfileInfrastructure db)
-        {
-            _db = db;
-        }
+        private readonly IProfileInfrastructure _db = db;
 
         public async Task<ActionUserResponse> VerifyRequest(HttpRequest http, object[] request)
         {

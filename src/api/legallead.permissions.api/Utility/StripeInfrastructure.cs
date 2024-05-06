@@ -8,15 +8,10 @@ using Stripe.Checkout;
 namespace legallead.permissions.api.Utility
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-    public class StripeInfrastructure : IStripeInfrastructure
+    public class StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity) : IStripeInfrastructure
     {
-        private readonly IUserSearchRepository _repo;
-        private readonly StripeKeyEntity keyEntity;
-        public StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity)
-        {
-            _repo = repo;
-            keyEntity = entity;
-        }
+        private readonly IUserSearchRepository _repo = repo;
+        private readonly StripeKeyEntity keyEntity = entity;
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public async Task<object?> CreatePaymentAsync(

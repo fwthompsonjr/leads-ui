@@ -4,13 +4,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 namespace legallead.permissions.api.Health
 {
     [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
-    public class RepositoryHealthCheck : BaseServiceHealthCheck, IHealthCheck
+    public class RepositoryHealthCheck(IInternalServiceProvider provider) : BaseServiceHealthCheck(provider, ClassContextName), IHealthCheck
     {
         private const string ClassContextName = "Create Repository Context";
-
-        public RepositoryHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
-        {
-        }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
