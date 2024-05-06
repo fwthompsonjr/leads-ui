@@ -60,12 +60,14 @@ function writeGitAction( $content )
         Write-Warning "Unable to append summary to workflow"
     }
 }
-
 [string]$content = [System.IO.File]::ReadAllText( $jsOutputFile );
+
 $aa = $content.IndexOf( $indicator );
 $bb = $content.LastIndexOf( $indicator );
+
 $snippet = $content.Substring($aa, $bb - $aa);
 $markdownarray = @(
+$fi.LastWriteTime.ToString("f"),
 '### Integration Results   ',
 '``` ',
 $snippet,

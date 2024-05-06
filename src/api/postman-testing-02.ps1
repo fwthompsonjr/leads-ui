@@ -33,8 +33,4 @@
     if ( [System.IO.File]::Exists( $environmentFile ) -eq $false ) { return $null }
 
 $ErrorActionPreference="SilentlyContinue"
-Stop-Transcript | out-null
-$ErrorActionPreference = "Continue"
-Start-Transcript -path $jsOutputFile -append
-newman run $collectionFile -e $environmentFile -r cli -k --disable-unicode --color off
-Stop-Transcript
+newman run $collectionFile -e $environmentFile -r cli -k --disable-unicode --color off | Out-File $jsOutputFile -Append

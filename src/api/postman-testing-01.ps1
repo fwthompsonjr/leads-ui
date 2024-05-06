@@ -14,7 +14,7 @@ function verifyExecutable( $name )
 {
     $canExecute =(
         ( $name.IndexOf( "permissions.api.tests" ) -lt 0 ) -and 
-        ( $name.IndexOf( "Release" ) -gt 0 ) -and 
+        ( $name.IndexOf( "Local" ) -gt 0 ) -and 
         ( $name.IndexOf( "net8.0" ) -gt 0 ));
     return $canExecute
 }
