@@ -1,7 +1,17 @@
-﻿namespace permissions.api.tests
+﻿using Xunit.Abstractions;
+
+namespace permissions.api.tests
 {
     public class ApiIntegrationComplianceTests
     {
+        private readonly ITestOutputHelper output;
+
+        public ApiIntegrationComplianceTests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
+
         [Fact]
         public void PostmanSummaryShouldExist()
         {
@@ -18,7 +28,14 @@
             var postmanFile = Locator.PostmanSummaryFile();
             Assert.NotNull(latestApplicationFile);
             Assert.True(File.Exists(postmanFile));
+            output.WriteLine("Last application file is: {0}, {1:s}", 
+                latestApplicationFile.Name, 
+                latestWriteDate.GetValueOrDefault());
             var postmanDate = new FileInfo(postmanFile).LastWriteTime;
+
+            output.WriteLine("Last intergration file is: {0}, {1:s}",
+                Path.GetFileNameWithoutExtension(postmanFile),
+                postmanDate);
             Assert.True(postmanDate > latestWriteDate.GetValueOrDefault());
         }
 
