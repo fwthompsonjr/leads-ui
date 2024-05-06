@@ -9,11 +9,14 @@
 
 <# compute local file system locations #>
     $wkfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
-    $parentDir = [System.IO.Path]::GetDirectoryName( $workfolder );
+    $parentDir = [System.IO.Path]::GetDirectoryName( $wkfolder );
     $parentDirName = [System.IO.Path]::GetFileName( $parentDir );
+    $ii = 0;
     while ( $parentDirName -ne "leads-ui" ) {
         $parentDir = [System.IO.Path]::GetDirectoryName( $parentDir );
         $parentDirName = [System.IO.Path]::GetFileName( $parentDir );
+        $ii++;
+        if( $ii -gt 10 ) { break; }
     }
     $testDir = [System.IO.Path]::Combine( $parentDir, "postman" );
     if ( [System.IO.Directory]::Exists( $testDir ) -eq $false ) { return $null }
@@ -66,6 +69,7 @@ $aa = $content.IndexOf( $indicator );
 $bb = $content.LastIndexOf( $indicator );
 
 $snippet = $content.Substring($aa, $bb - $aa);
+$fi = [System.IO.FileInfo]::new( $jsOutputFile );
 $markdownarray = @(
 $fi.LastWriteTime.ToString("f"),
 '### Integration Results   ',

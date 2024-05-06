@@ -17,6 +17,16 @@ env:
   NET_VERSION: "8.0.x"
 
 jobs:
+  integration:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Integration Test
+        shell: pwsh
+        if: ${{ always() }}
+        run: |
+          & ${{ env.INTEGRATION_NAME }}
   build:
     runs-on: windows-latest
     steps:
@@ -43,12 +53,6 @@ jobs:
         with:
           name: dotnet-results-email-${{ env.NET_VERSION }}
           path: TestResults-${{ env.NET_VERSION }}
-
-      - name: Run Integration Test
-        shell: pwsh
-        if: ${{ always() }}
-        run: |
-          & ${{ env.INTEGRATION_NAME }}
 
       - name: Summarize Test Coverage
         shell: pwsh
