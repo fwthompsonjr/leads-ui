@@ -1,7 +1,6 @@
 ﻿<#
     execute postman testing
-    pre-req
-    test running process on ubuntu.
+    pre-requ
 #>
 function is_npm_installed() {
     try {
