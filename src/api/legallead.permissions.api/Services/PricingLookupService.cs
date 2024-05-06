@@ -1,6 +1,4 @@
-﻿using legallead.jdbc.entities;
-
-namespace legallead.permissions.api.Services
+﻿namespace legallead.permissions.api.Services
 {
     internal static class PricingLookupService
     {

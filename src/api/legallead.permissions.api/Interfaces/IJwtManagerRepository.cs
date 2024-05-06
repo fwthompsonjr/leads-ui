@@ -1,6 +1,4 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Model;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace legallead.permissions.api.Interfaces
 {

@@ -1,31 +1,20 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {
-    public class CustomerInfrastructure : ICustomerInfrastructure
+    public class CustomerInfrastructure(
+        StripeKeyEntity stripeKey,
+        IUserRepository db,
+        ICustomerRepository repository) : ICustomerInfrastructure
     {
-        private readonly string _paymentEnvironment;
-        private readonly ICustomerRepository _repo;
-        private readonly IUserRepository _db;
+        private readonly string _paymentEnvironment = stripeKey.ActiveName;
+        private readonly ICustomerRepository _repo = repository;
+        private readonly IUserRepository _db = db;
         private ISubscriptionInfrastructure? _subscriptiondb;
-        public CustomerInfrastructure(
-            StripeKeyEntity stripeKey,
-            IUserRepository db,
-            ICustomerRepository repository)
-        {
-            GetCustomerService = new();
-            _paymentEnvironment = stripeKey.ActiveName;
-            _db = db;
-            _repo = repository;
-        }
-
 
         internal CustomerInfrastructure(
             StripeKeyEntity stripeKey,
@@ -37,7 +26,7 @@ namespace legallead.permissions.api.Utility
             _subscriptiondb = subscription;
         }
 
-        internal CustomerService GetCustomerService { get; set; }
+        internal CustomerService GetCustomerService { get; set; } = new();
 
         internal void SubscriptionInfrastructure(ISubscriptionInfrastructure subscription)
         {

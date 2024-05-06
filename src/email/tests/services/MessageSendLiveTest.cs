@@ -1,7 +1,6 @@
 ﻿using legallead.email.services;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace legallead.email.tests.services

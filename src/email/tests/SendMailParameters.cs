@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace legallead.email.tests
+﻿namespace legallead.email.tests
 {
     internal class SendMailParameters
     {

@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.email.models;
+﻿using legallead.email.models;
 
 namespace legallead.email.tests.entities
 {

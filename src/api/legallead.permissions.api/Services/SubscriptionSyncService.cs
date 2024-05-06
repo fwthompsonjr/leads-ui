@@ -1,25 +1,17 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
     [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
-    public class SubscriptionSyncService : BackgroundService
+    public class SubscriptionSyncService(
+        ILogger<SubscriptionSyncService> log,
+        ICustomerRepository infrastructure,
+        bool isTestMode = false) : BackgroundService
     {
-        private readonly ICustomerRepository _custDb;
-        private readonly ILogger<SubscriptionSyncService> logger;
-        private readonly bool _testMode;
-        public SubscriptionSyncService(
-            ILogger<SubscriptionSyncService> log,
-            ICustomerRepository infrastructure,
-            bool isTestMode = false)
-        {
-            _custDb = infrastructure;
-            logger = log;
-            _testMode = isTestMode;
-        }
+        private readonly ICustomerRepository _custDb = infrastructure;
+        private readonly ILogger<SubscriptionSyncService> logger = log;
+        private readonly bool _testMode = isTestMode;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

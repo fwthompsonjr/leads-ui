@@ -1,7 +1,5 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.json.db.entity;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api
 {

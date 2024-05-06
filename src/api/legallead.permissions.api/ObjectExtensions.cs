@@ -1,4 +1,4 @@
-﻿using legallead.jdbc.entities;
+﻿using legallead.email.utility;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
@@ -9,8 +9,6 @@ using legallead.logging.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Health;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
@@ -20,7 +18,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Stripe;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.permissions.api
@@ -265,6 +262,11 @@ namespace legallead.permissions.api
                 .AddCheck<PricingHealthCheck>("Pricing");
         }
 
+        public static void RegisterEmailServices(this IServiceCollection services)
+        {
+            services.Initialize();
+        }
+
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class
         {
             try
@@ -413,15 +415,15 @@ namespace legallead.permissions.api
         private static PaymentStripeOption MapOption(IConfiguration configuration)
         {
             if (_paymentOption != null) { return _paymentOption; }
-            var key = configuration.GetValue<string>("Payment:key");
+            var key = configuration.GetValue<string>("Payment:key") ?? string.Empty;
             StripeConfiguration.ApiKey = key;
             var child = new PaymentCode
             {
-                Admin = configuration.GetValue<string>("Payment:codes:admin"),
-                Gold = configuration.GetValue<string>("Payment:codes:gold"),
-                Guest = configuration.GetValue<string>("Payment:codes:guest"),
-                Platinum = configuration.GetValue<string>("Payment:codes:platinum"),
-                Silver = configuration.GetValue<string>("Payment:codes:silver"),
+                Admin = configuration.GetValue<string>("Payment:codes:admin") ?? string.Empty,
+                Gold = configuration.GetValue<string>("Payment:codes:gold") ?? string.Empty,
+                Guest = configuration.GetValue<string>("Payment:codes:guest") ?? string.Empty,
+                Platinum = configuration.GetValue<string>("Payment:codes:platinum") ?? string.Empty,
+                Silver = configuration.GetValue<string>("Payment:codes:silver") ?? string.Empty,
             };
             _paymentOption = new PaymentStripeOption { Key = key, Codes = child };
             return _paymentOption;
@@ -431,9 +433,9 @@ namespace legallead.permissions.api
         {
             if (_stripeKeyEntity != null) { return _stripeKeyEntity; }
             var webid = configuration.GetValue<string>("Payment:keys:webhook");
-            var keytype = configuration.GetValue<string>("Payment:keys:active");
-            var test = configuration.GetValue<string>("Payment:keys:values:test");
-            var prd = configuration.GetValue<string>("Payment:keys:values:prod");
+            var keytype = configuration.GetValue<string>("Payment:keys:active") ?? string.Empty;
+            var test = configuration.GetValue<string>("Payment:keys:values:test") ?? string.Empty;
+            var prd = configuration.GetValue<string>("Payment:keys:values:prod") ?? string.Empty;
             var items = new List<StripeKeyItem> {
                 new() { Name="test", Value= test },
                 new() { Name="prod", Value= prd }

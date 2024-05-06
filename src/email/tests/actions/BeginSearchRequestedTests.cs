@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using Newtonsoft.Json;
 
 namespace legallead.email.tests.actions
 {

@@ -1,8 +1,5 @@
-﻿using Bogus;
-using legallead.email.interfaces;
+﻿using legallead.email.interfaces;
 using legallead.email.services;
-using Moq;
-using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Text;
 

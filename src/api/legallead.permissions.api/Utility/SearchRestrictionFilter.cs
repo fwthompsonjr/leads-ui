@@ -1,6 +1,4 @@
-﻿using legallead.jdbc.entities;
-
-namespace legallead.permissions.api.Utility
+﻿namespace legallead.permissions.api.Utility
 {
     internal static class SearchRestrictionFilter
     {

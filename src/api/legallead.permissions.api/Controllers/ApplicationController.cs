@@ -1,29 +1,19 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.models;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationController : ControllerBase
+    public class ApplicationController(DataProvider db, IStateSearchProvider stateSearch) : ControllerBase
     {
         private const string defaultReadme = "No ReadMe information is available.";
         private static bool isReadMeBuilt = false;
 
         private static readonly object _instance = new();
         private static string? _readme;
-        private readonly DataProvider _db;
-        private readonly IStateSearchProvider _searchProvider;
-
-        public ApplicationController(DataProvider db, IStateSearchProvider stateSearch)
-        {
-            _db = db;
-            _searchProvider = stateSearch;
-        }
+        private readonly DataProvider _db = db;
+        private readonly IStateSearchProvider _searchProvider = stateSearch;
 
         [HttpGet]
         [Route("read-me")]
@@ -62,6 +52,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("register")]
+        [ServiceFilter(typeof(RegistrationCompleted))]
         public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";

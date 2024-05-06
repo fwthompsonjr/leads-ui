@@ -1,9 +1,7 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace legallead.permissions.api.Extensions

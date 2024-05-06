@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Entities
 {

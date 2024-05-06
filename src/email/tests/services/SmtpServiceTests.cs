@@ -1,6 +1,4 @@
-﻿using Bogus;
-using legallead.email.services;
-using Moq;
+﻿using legallead.email.services;
 using System.Net;
 using System.Net.Mail;
 

@@ -1,6 +1,4 @@
 ﻿using legallead.json.db.entity;
-using legallead.permissions.api.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api
 {

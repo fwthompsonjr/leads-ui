@@ -1,20 +1,14 @@
 ﻿using legallead.jdbc.interfaces;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
     [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
-    public class PricingHealthCheck : BaseServiceHealthCheck, IHealthCheck
+    public class PricingHealthCheck(IInternalServiceProvider provider) : BaseServiceHealthCheck(provider, ClassContextName), IHealthCheck
     {
         private const string ClassContextName = "Pricing Synchronization Service";
-        private readonly IPricingRepository? _pricingInfrastructure;
-        public PricingHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
-        {
-            _pricingInfrastructure = provider.ServiceProvider.GetService<IPricingRepository>();
-        }
+        private readonly IPricingRepository? _pricingInfrastructure = provider.ServiceProvider.GetService<IPricingRepository>();
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

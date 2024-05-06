@@ -1,28 +1,19 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.implementations;
+﻿using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
 using Newtonsoft.Json;
 using Stripe;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Services
 {
     [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
-    public class PricingSyncService : BackgroundService
+    public class PricingSyncService(
+        ILogger<PricingSyncService> log,
+        IPricingRepository infrastructure,
+        bool isTestMode = false) : BackgroundService
     {
-        private readonly IPricingRepository _pricingInfrastructure;
-        private readonly ILogger<PricingSyncService> logger;
-        private readonly bool _testMode;
-        public PricingSyncService(
-            ILogger<PricingSyncService> log,
-            IPricingRepository infrastructure,
-            bool isTestMode = false)
-        {
-            _pricingInfrastructure = infrastructure;
-            logger = log;
-            _testMode = isTestMode;
-        }
+        private readonly IPricingRepository _pricingInfrastructure = infrastructure;
+        private readonly ILogger<PricingSyncService> logger = log;
+        private readonly bool _testMode = isTestMode;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

@@ -6,7 +6,6 @@ using legallead.email.utility;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.Runtime.InteropServices;
 
 namespace legallead.email.services
 {
@@ -246,11 +245,13 @@ namespace legallead.email.services
         private static readonly Dictionary<TemplateNames, string> EmailSubjects = new()
         {
             { TemplateNames.RegistrationCompleted, "Account Registration Completed" },
-            { TemplateNames.SearchPaymentCompleted, "Payment Received" }
+            { TemplateNames.SearchPaymentCompleted, "Payment Received" },
+            { TemplateNames.BeginSearchRequested, "Record Search Requested" },
+            { TemplateNames.LockedAccountResponse, "Account Status Changed" }
         };
-        private static readonly List<TemplateNames> CustomTemplates = new()
-        {
+        private static readonly List<TemplateNames> CustomTemplates =
+        [
             TemplateNames.SearchPaymentCompleted
-        };
+        ];
     }
 }

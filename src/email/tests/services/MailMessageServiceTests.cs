@@ -1,10 +1,8 @@
-﻿using Bogus;
-using legallead.email.interfaces;
+﻿using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.services;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace legallead.email.tests.transforms
 {

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using legallead.jdbc.entities;
 using legallead.models;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using System.Diagnostics.CodeAnalysis;
 using UsState = legallead.json.db.entity.UsState;
 using UsStateCounty = legallead.json.db.entity.UsStateCounty;
 

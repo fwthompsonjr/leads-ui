@@ -1,25 +1,17 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-    public class StripeInfrastructure : IStripeInfrastructure
+    public class StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity) : IStripeInfrastructure
     {
-        private readonly IUserSearchRepository _repo;
-        private readonly StripeKeyEntity keyEntity;
-        public StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity)
-        {
-            _repo = repo;
-            keyEntity = entity;
-        }
+        private readonly IUserSearchRepository _repo = repo;
+        private readonly StripeKeyEntity keyEntity = entity;
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public async Task<object?> CreatePaymentAsync(

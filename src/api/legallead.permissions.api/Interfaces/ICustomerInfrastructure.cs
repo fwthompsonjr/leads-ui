@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 
 namespace legallead.permissions.api.Interfaces
 {

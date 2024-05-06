@@ -1,7 +1,7 @@
 
 param (
-	[string]$template = "BeginSearchRequested",
-    [string]$templateToken = "begin-search-requested"
+	[string]$template = "LockedAccountResponse",
+    [string]$templateToken = "locked-account"
 )
 
 $myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
