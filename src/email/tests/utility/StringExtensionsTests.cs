@@ -1,6 +1,4 @@
-﻿using Bogus;
-using legallead.email.utility;
-using Newtonsoft.Json;
+﻿using legallead.email.utility;
 
 namespace legallead.email.tests.utility
 {

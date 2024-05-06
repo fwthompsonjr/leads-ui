@@ -1,6 +1,4 @@
-﻿using legallead.email.actions;
-using legallead.email.interfaces;
-using legallead.email.models;
+using legallead.email.actions;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.email.tests.actions
 {
-    public class BeginSearchRequestedTests : IDisposable
+    public class LockedAccountResponseTests : IDisposable
     {
-        public BeginSearchRequestedTests()
+        public LockedAccountResponseTests()
         {
             _ = InitializeProvider();
         }
@@ -27,7 +25,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload, false);
                 if (context is not ResultExecutingContext executedContext) return;
-                var controller = provider.GetService<BeginSearchRequested>();
+                var controller = provider.GetService<LockedAccountResponse>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuting(executedContext);
             });
@@ -35,7 +33,6 @@ namespace legallead.email.tests.actions
         }
 
         [Theory]
-        [InlineData("")]
         [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79")]
         public void ProviderCanGetResultExecutedFiler(string payload)
         {
@@ -44,11 +41,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
-                var svc = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
-                var controller = provider.GetService<BeginSearchRequested>();
-                var user = MockMessageInfrastructure.UserAccountFaker.Generate();
-                svc.Setup(m => m.GetUserBySearchId(It.IsAny<string>())).ReturnsAsync(user);
-
+                var controller = provider.GetService<LockedAccountResponse>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuted(executedContext);
             });
@@ -59,20 +52,16 @@ namespace legallead.email.tests.actions
 
         private static FilterContext GetContext(string result, bool isExecuted = true)
         {
-
             var collection = new ServiceCollection();
-            collection.AddTransient<BeginSearchRequested>();
+            collection.AddTransient<LockedAccountResponse>();
             collection.AddMvcCore(o =>
             {
-                o.Filters.AddService<BeginSearchRequested>();
+                o.Filters.AddService<LockedAccountResponse>();
             });
             collection.AddTransient<MockController>();
             var provider = collection.BuildServiceProvider();
             var controller = provider.GetRequiredService<MockController>();
             // Create a default ActionContext (depending on our case-scenario)
-            var ok = string.IsNullOrWhiteSpace(result) ?
-                new OkObjectResult(result) :
-                new OkObjectResult(MockController.RecordSearch);
             var actionContext = new ActionContext()
             {
                 HttpContext = new DefaultHttpContext(),
@@ -85,7 +74,7 @@ namespace legallead.email.tests.actions
                 return new ResultExecutedContext(
                     actionContext,
                         new List<IFilterMetadata>(),
-                        ok,
+                        new OkObjectResult(result),
                         controller
                     );
             }
@@ -94,7 +83,7 @@ namespace legallead.email.tests.actions
                 return new ResultExecutingContext(
                     actionContext,
                         new List<IFilterMetadata>(),
-                        ok,
+                        new OkObjectResult(result),
                         controller
                     );
             }
@@ -133,24 +122,12 @@ namespace legallead.email.tests.actions
         private sealed class MockController : ControllerBase
         {
             [HttpGet]
-            [ServiceFilter(typeof(BeginSearchRequested))] // Apply the filter to this action method
+            [ServiceFilter(typeof(LockedAccountResponse))] // Apply the filter to this action method
             public IActionResult MyAction()
             {
                 var guid = Guid.NewGuid().ToString();
                 return Ok(guid);
             }
-
-            public static UserRecordSearch RecordSearch
-            {
-                get
-                {
-                    if (recordSearch != null) return recordSearch;
-                    recordSearch = JsonConvert.DeserializeObject<UserRecordSearch>(BeginSearchResponseText) ?? new();
-                    return recordSearch;
-                }
-            }
-            private static UserRecordSearch? recordSearch;
-            private static readonly string BeginSearchResponseText = Properties.Resources.search_requested_response;
         }
     }
 }

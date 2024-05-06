@@ -2,12 +2,12 @@
 
 namespace legallead.email.tests.entities
 {
-    public class UserSettingQueryTests
+    public class UserLockedModelTests
     {
-        private static readonly Faker<UserSettingQuery> faker =
-            new Faker<UserSettingQuery>()
-            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-            .RuleFor(x => x.Email, y => y.Person.Email);
+        private static readonly Faker<UserLockedModel> faker =
+            new Faker<UserLockedModel>()
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.Message, y => y.Hacker.Phrase());
 
         [Fact]
         public void DtoCanBeGenerated()
@@ -22,10 +22,10 @@ namespace legallead.email.tests.entities
         [Fact]
         public void DtoHasExpectedFieldDefined()
         {
-            var sut = new UserSettingQuery();
+            var sut = new UserLockedModel();
             var test = faker.Generate();
-            Assert.NotEqual(sut.Id, test.Id);
             Assert.NotEqual(sut.Email, test.Email);
+            Assert.NotEqual(sut.Message, test.Message);
         }
     }
 }

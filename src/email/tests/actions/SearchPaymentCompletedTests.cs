@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.email.actions;
+﻿using legallead.email.actions;
 using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.utility;
@@ -9,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace legallead.email.tests.actions
 {

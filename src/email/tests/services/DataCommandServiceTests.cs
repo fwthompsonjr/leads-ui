@@ -2,7 +2,6 @@
 using legallead.email.services;
 using legallead.email.tests.connection;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using Moq.Dapper;
 using System.Data;
 using System.Data.Common;

@@ -3,7 +3,6 @@ using legallead.email.services;
 using legallead.email.transforms;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace legallead.email.tests.utility
 {

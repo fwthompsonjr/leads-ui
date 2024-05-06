@@ -1,13 +1,12 @@
 ﻿using HtmlAgilityPack;
 using legallead.email.models;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace legallead.email.utility
 {
     public static class UserRecordSearchExtensions
     {
-        public static string ToHtml(this UserRecordSearch search, 
+        public static string ToHtml(this UserRecordSearch search,
             UserAccountByEmailBo? user,
             string html)
         {
@@ -23,6 +22,26 @@ namespace legallead.email.utility
                 { "//td[@name='td-begin-search-requested-start-date']", request.Start.FromUnixTime() },
                 { "//td[@name='td-begin-search-requested-end-date']", request.End.FromUnixTime() }
             };
+            return Substitute(doc, dictionary);
+        }
+        public static string ToHtml(this UserLockedModel search,
+            UserAccountByEmailBo? user,
+            string html)
+        {
+            if (string.IsNullOrEmpty(search.Email)) { return html; }
+            var doc = GetDocument(html);
+            if (doc == null) { return html; }
+            var dictionary = new Dictionary<string, string>()
+            {
+                { "//span[@name='locked-account-user-name']", UserKeyOrDefault(user?.UserName) },
+                { "//span[@name='locked-account-email']", UserKeyOrDefault(user?.Email) },
+            };
+            return Substitute(doc, dictionary);
+        }
+
+
+        private static string Substitute(HtmlDocument doc, Dictionary<string, string> dictionary)
+        {
             var keys = dictionary.Keys.ToList();
             keys.ForEach(key =>
             {
@@ -61,7 +80,8 @@ namespace legallead.email.utility
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
                 return doc;
-            } catch
+            }
+            catch
             {
                 return null;
             }

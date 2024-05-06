@@ -1,5 +1,4 @@
-﻿using Bogus;
-using legallead.email.actions;
+﻿using legallead.email.actions;
 using legallead.email.implementations;
 using legallead.email.interfaces;
 using legallead.email.models;
@@ -7,7 +6,6 @@ using legallead.email.services;
 using legallead.email.transforms;
 using legallead.email.utility;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace legallead.email.tests
 {
@@ -81,12 +79,14 @@ namespace legallead.email.tests
                 services.AddKeyedTransient<IHtmlTransformDetailBase, RegistrationCompletedTemplate>(TemplateNames.RegistrationCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, LockedAccountResponseTemplate>(TemplateNames.LockedAccountResponse.ToString());
                 // end keyed transients
                 // begin singleton action filters
                 services.AddTransient<BaseEmailActionTemplate>();
                 services.AddTransient<RegistrationCompleted>();
                 services.AddTransient<SearchPaymentCompleted>();
                 services.AddTransient<BeginSearchRequested>();
+                services.AddTransient<LockedAccountResponse>();
                 // end singleton action filters
                 services.AddTransient(x =>
                 {

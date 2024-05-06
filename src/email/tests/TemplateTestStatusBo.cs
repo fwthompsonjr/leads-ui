@@ -1,5 +1,4 @@
 ﻿using legallead.email.utility;
-using Newtonsoft.Json;
 
 namespace legallead.email.tests
 {

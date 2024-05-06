@@ -1,7 +1,5 @@
-﻿using Bogus;
-using legallead.email.entities;
+﻿using legallead.email.entities;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using System.Data;
 using System.Text;
 

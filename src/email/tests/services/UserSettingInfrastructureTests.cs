@@ -1,12 +1,9 @@
-﻿using Bogus;
-using Dapper;
+﻿using Dapper;
 using legallead.email.entities;
 using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.services;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using Newtonsoft.Json;
 using System.Data;
 
 namespace legallead.email.tests.services

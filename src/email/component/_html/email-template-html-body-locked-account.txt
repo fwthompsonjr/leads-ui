@@ -1,0 +1,50 @@
+<h4 style="color: green" name="locked-account-heading"><!-- Template Heading --></h4>
+<table name="locked-account-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
+	<tr>
+		<td style="width: 25%">
+			<span>User Name:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="locked-account-user-name"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Email:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="locked-account-email"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="locked-account-detail-spacer" colspan="2">
+			<hr style="background: #444; height: 1px; border: 0px;" />
+		</td>
+	</tr>
+	<tr>
+		<td name="locked-account-detail-message-1" colspan="2">
+			<b>IMPORTANT</b>: Your legal lead account has been <span style="color: red">LOCKED</span>.
+		</td>
+	</tr>
+	<tr>
+		<td name="locked-account-detail-message-2" colspan="2">
+			<p>Account lock occurs when the system detects unusual activity on your account such as:</p>
+			<ul>
+				<li>Excessive failed login attempts.</li>
+				<li>Abnormal payment or purchase activities.</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td name="locked-account-detail-message-3" colspan="2">
+			<p>
+				Account lock(s) are not generally permanent, 
+				but during your lock period our security team will review the suspicious activity.</p>
+			<p>
+				Please logout of all legal lead instances, 
+				for additional information 
+				<a target="_blank" href="mailto:admin@legallead.co?subject=Locked Account Inquiry">contact our security team</a>.
+			</p>
+		</td>
+	</tr>
+</table>

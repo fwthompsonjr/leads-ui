@@ -21,7 +21,7 @@ namespace legallead.email.actions
             var email = GetEmailAddress(html);
             var account = _mailMessageService.SettingsDb.GetUserByEmail(email).GetAwaiter().GetResult();
             if (!IsAccountValid(account)) return;
-            
+
             _mailMessageService.With(TemplateNames.SearchPaymentCompleted, account?.Id);
             if (string.IsNullOrEmpty(_mailMessageService.UserId)) return;
             var id = _mailMessageService.UserId;

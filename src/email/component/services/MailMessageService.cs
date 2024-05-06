@@ -6,7 +6,6 @@ using legallead.email.utility;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.Runtime.InteropServices;
 
 namespace legallead.email.services
 {
