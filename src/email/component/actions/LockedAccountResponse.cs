@@ -21,6 +21,7 @@ namespace legallead.email.actions
             if (account == null) return;
             var id = account.Id ?? string.Empty;
             if (!Guid.TryParse(id, out var _)) return;
+            _mailMessageService.With(TemplateNames.LockedAccountResponse, id);
             if (_mailMessageService.Message == null || !CanSend()) return;
             var body = conversion.ToHtml(account, _mailMessageService.Message.Body);
             _mailMessageService.Beautify(body);
