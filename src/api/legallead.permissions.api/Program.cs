@@ -25,6 +25,7 @@ var config = isDevelopment switch
 var services = builder.Services;
 services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
+services.RegisterEmailServices();
 services.AddControllers(options =>
 {
     var filters = options.Filters;
@@ -32,6 +33,10 @@ services.AddControllers(options =>
     filters.Add<RegistrationCompleted>();
     filters.Add<SearchPaymentCompleted>();
 });
+services.AddTransient<BeginSearchRequested>();
+services.AddTransient<RegistrationCompleted>();
+services.AddTransient<RegistrationCompleted>();
+
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,7 +48,6 @@ services.AddSwaggerGen(c =>
 
 services.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(services));
 services.RegisterHealthChecks();
-services.RegisterEmailServices();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

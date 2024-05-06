@@ -12,6 +12,7 @@ on:
 env:
   SOLUTION_NAME: ${{ github.workspace }}\src\api\legallead.api.sln
   COVERAGE_NAME: ${{ github.workspace }}\src\api\tests.runsettings
+  INTEGRATION_NAME: ${{ github.workspace }}\src\api\postman-testing.ps1
   COVERAGE_FILTER: 'src\api'
   NET_VERSION: "8.0.x"
 
@@ -24,15 +25,15 @@ jobs:
         id: dotnet-restore
         name: DotNet Restore
 
-      - run: dotnet build ${{ env.SOLUTION_NAME }} --no-restore
+      - run: dotnet build ${{ env.SOLUTION_NAME }} --no-restore -c Release
         id: dotnet-build
         name: DotNet Build
 
-      - run: dotnet test ${{ env.SOLUTION_NAME }} --no-build --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
+      - run: dotnet test ${{ env.SOLUTION_NAME }} -c Release --no-build --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
         id: dotnet-test
         name: DotNet Test
 
-      - run: dotnet test ${{ env.SOLUTION_NAME }} --no-build --settings ${{ env.COVERAGE_NAME }}
+      - run: dotnet test ${{ env.SOLUTION_NAME }} -c Release --no-build --settings ${{ env.COVERAGE_NAME }}
         id: dotnet-test-coverage
         name: DotNet Test Coverage
 
@@ -42,6 +43,12 @@ jobs:
         with:
           name: dotnet-results-email-${{ env.NET_VERSION }}
           path: TestResults-${{ env.NET_VERSION }}
+
+      - name: Run Integration Test
+        shell: pwsh
+        if: ${{ always() }}
+        run: |
+          & ${{ env.INTEGRATION_NAME }}
 
       - name: Summarize Test Coverage
         shell: pwsh

@@ -1,6 +1,6 @@
 ﻿<#
     execute postman testing
-    pre-requ
+    pre-req
 #>
 function is_npm_installed() {
     try {
@@ -59,8 +59,10 @@ if ($canTest -eq $false ) {
 }
 $process_01 = [System.IO.Path]::Combine( $workfolder, "postman-testing-01.ps1" );
 $process_02 = [System.IO.Path]::Combine( $workfolder, "postman-testing-02.ps1" );
+$process_03 = [System.IO.Path]::Combine( $workfolder, "postman-testing-03.ps1" );
 $processnumber = ( & $process_01 )
 if ($processnumber -eq 0 ) { return }
 Start-Sleep -Seconds 25
 & $process_02
+& $process_03
 Get-Process -Id $processnumber | Stop-Process

@@ -1,0 +1,519 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20240506111705
+Username: NA\Frank.Thompson
+RunAs User: NA\Frank.Thompson
+Configuration Name: 
+Machine: US63TAAL037562 (Microsoft Windows NT 10.0.19045.0)
+Host Application: C:\windows\system32\WindowsPowerShell\v1.0\PowerShell_ISE.exe
+Process ID: 4616
+PSVersion: 5.1.19041.4291
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.19041.4291
+BuildVersion: 10.0.19041.4291
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is C:\_g\lui\fwthompsonjr\leads-ui\postman\ll-authorizations-summary.txt
+newman
+
+ll-authorizations
+
+Folder application
+Sub-folder ReadMe
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | application | ReadMe | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/read-me [200 OK, 378B, 140ms]
+  Pass  Status code is 200
+
+Sub-folder List
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | application | List | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps [200 OK, 230B, 130ms]
+  Pass  Status code is 200
+
+Sub-folder Register
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | application | Register | LL-TEST'
+  -
+  POST https://localhost:44345/api/application/register [409 Conflict, 182B, 132ms]
+  Pass  Status code is not 500 (InternalError)
+  Pass  Status code can be 200 or 400 or 409
+
+Sub-folder State Configuration
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | application | State Configuration
+  |  | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/state-configuration [200 OK, 2.65kB, 26ms]
+  Pass  Status code is not 400 (BadRequest)
+  Pass  Status code is not 500 (InternalError)
+  Pass  Status code should be 200
+
+Folder lists
+Sub-folder GetStateDetails
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | lists | GetStateDetails | LL-TEST
+  | '
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 678ms]
+  GET https://localhost:44345/api/Lists/us-state-list [200 OK, 209B, 82ms]
+  Pass  Status code is 200
+  Pass  Expect 1 active state response
+  Pass  Expect TX as active state code
+  Pass  Expect Texas as active state name
+
+Sub-folder GetCountyDetails
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | lists | GetCountyDetails | LL-TES
+  | T'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 94ms]
+[200 OK, 606B, 375ms]
+  GET https://localhost:44345/api/Lists/us-county-list [200 OK, 396B, 7ms]
+  Pass  Status code is 200
+  Pass  Expect 3 active counties response
+  Pass  Expect TX as active state code
+  Pass  Expect Collin as active county name
+  Pass  Expect Denton as active county name
+  Pass  Expect Tarrant as active county name
+
+Sub-folder GetPermissionGroups
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | lists | GetPermissionGroups | LL-
+  | TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 96ms]
+[200 OK, 606B, 410ms]
+  GET https://localhost:44345/api/Lists/permission-groups [200 OK, 680B, 414ms]
+  Pass  Status code is 200
+  Pass  Expect 5 active permissions response
+
+Sub-folder GetUserProfile
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | lists | GetUserProfile | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 143ms]
+[200 OK, 606B, 473ms]
+  GET https://localhost:44345/api/Lists/user-profile [200 OK, 2.45kB, 546ms]
+  Pass  Status code is 200
+  Pass  Expect 17 or more active permissions
+
+Sub-folder GetUserPermissions
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | lists | GetUserPermissions | LL-T
+  | EST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 110ms]
+[200 OK, 606B, 403ms]
+  GET https://localhost:44345/api/Lists/user-permissions [200 OK, 2.34kB, 607ms]
+  Pass  Status code is 200
+  Pass  Expect 16 active permissions response
+  Pass  Expect 'Setting.MaxRecords.Per.Month' to be in collection.
+
+Folder permissions
+Sub-folder SetPermissionLevel
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | permissions | SetPermissionLevel
+  | | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 606B, 372ms]
+  POST https://localhost:44345/api/Permissions/set-permission [409 Conflict, 190B, 573ms]
+  Pass  Status code is 200
+
+Sub-folder SetDiscount
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | permissions | SetDiscount | LL-TE
+  | ST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 606B, 379ms]
+  POST https://localhost:44345/api/Permissions/set-discount [200 OK, 1.49kB, 1203ms]
+  Pass  Status code is 200
+
+Folder home
+Sub-folder Index
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | home | Index | LL-TEST'
+  -
+  GET https://localhost:44345/ [200 OK, 1.56kB, 5ms]
+  Pass  Status code is 200
+
+Sub-folder Health
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | home | Health | LL-TEST'
+  -
+  GET https://localhost:44345/health [200 OK, 227B, 114ms]
+  Pass  Status code is 200
+  Pass  Health response is Healthy
+
+Sub-folder HealthDetails
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | home | HealthDetails | LL-TEST'
+  -
+  GET https://localhost:44345/health-details [200 OK, 3.7kB, 98ms]
+  Pass  Status code is 200
+  Pass  Health response is Healthy
+  Pass  Health response has results.
+  Pass  Health response has Contollers result.
+  Pass  Health response has Data result.
+  Pass  Health response has DBConnection result.
+  Pass  Health response has Infrastructure result.
+  Pass  Health response has Repository result.
+
+Sub-folder GetDownload
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | home | GetDownload | LL-TEST'
+  -
+  POST https://localhost:44345/payment-fetch-search [401 Unauthorized, 128B, 3ms]
+  Pass  Status code is not 200
+
+Sub-folder GetDownload-Valid
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | home | GetDownload-Valid | LL-TES
+  | T'
+  -
+  POST https://localhost:44345/payment-fetch-search [401 Unauthorized, 128B, 3ms]
+  Pass  Status code is an expected value
+
+Folder signon
+Sub-folder Login By UserName
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Login By UserName | LL-T
+  | EST'
+  -
+  GET https://localhost:44345/api/application/apps [200 OK, 230B, 90ms]
+  POST https://localhost:44345/api/signon/login [200 OK, 606B, 369ms]
+  Pass  Status code is 200
+
+Sub-folder Login By Email
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Login By Email | LL-TEST
+  | '
+  -
+  GET https://localhost:44345/api/application/apps [200 OK, 230B, 95ms]
+  POST https://localhost:44345/api/signon/login [200 OK, 606B, 370ms]
+  Pass  Status code is 200
+
+Sub-folder Refresh By Email
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Refresh By Email | LL-TE
+  | ST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 365ms]
+  POST https://localhost:44345/api/signon/refresh-token [200 OK, 606B, 468ms]
+  Pass  Status code is 200
+
+Sub-folder Refresh By UserName
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Refresh By UserName | LL
+  | -TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 606B, 378ms]
+  POST https://localhost:44345/api/signon/refresh-token [200 OK, 606B, 474ms]
+  Pass  Status code is 200
+
+Sub-folder Verify By Email
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Verify By Email | LL-TES
+  | T'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 96ms]
+[200 OK, 606B, 367ms]
+  POST https://localhost:44345/api/signon/verify-token [200 OK, 152B, 4ms]
+  Pass  Status code is 200
+
+Sub-folder Verify By UserName
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Verify By UserName | LL-
+  | TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 365ms]
+  POST https://localhost:44345/api/signon/verify-token [200 OK, 152B, 3ms]
+  Pass  Status code is 200
+
+Sub-folder Change Password
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | signon | Change Password | LL-TES
+  | T'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 92ms]
+[200 OK, 606B, 377ms]
+  POST https://localhost:44345/api/signon/change-password [200 OK, 154B, 372ms]
+  Pass  Status code is 200
+
+Folder profile / ContactDetail
+Sub-folder GetContactIdentity
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actIdentity | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 606B, 364ms]
+  POST https://localhost:44345/api/profiles/get-contact-identity [200 OK, 1.5kB, 386ms]
+  Pass  Status code is 200
+
+Sub-folder GetContactDetail_All
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actDetail_All | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 92ms]
+[200 OK, 606B, 376ms]
+  POST https://localhost:44345/api/profiles/get-contact-detail [200 OK, 1.17kB, 209ms]
+  Pass  Status code is 200
+  Pass  Response will contain 4 members
+  Pass  Response will contain Name
+  Pass  Response will contain Address
+  Pass  Response will contain Email
+  Pass  Response will contain Phone
+
+Sub-folder GetContactDetail_Address
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actDetail_Address | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 606B, 368ms]
+  POST https://localhost:44345/api/profiles/get-contact-detail [200 OK, 432B, 183ms]
+  Pass  Status code is 200
+  Pass  Response will contain 1 member
+  Pass  Response will contain Address
+
+Sub-folder GetContactDetail_Email
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actDetail_Email | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 365ms]
+  POST https://localhost:44345/api/profiles/get-contact-detail [200 OK, 422B, 180ms]
+  Pass  Status code is 200
+  Pass  Response will contain 1 member
+  Pass  Response will contain Email
+
+Sub-folder GetContactDetail_Name
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actDetail_Name | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 92ms]
+[200 OK, 605B, 369ms]
+  POST https://localhost:44345/api/profiles/get-contact-detail [200 OK, 372B, 193ms]
+  Pass  Status code is 200
+  Pass  Response will contain 1 member
+  Pass  Response will contain Name
+
+Sub-folder GetContactDetail_Phone
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | ContactDetail | GetCont
+  | actDetail_Phone | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 365ms]
+  POST https://localhost:44345/api/profiles/get-contact-detail [200 OK, 392B, 180ms]
+  Pass  Status code is 200
+  Pass  Response will contain 1 member
+  Pass  Response will contain Phone
+
+Folder profile
+Sub-folder EditContactDetail_Address
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | EditContactDetail_Addre
+  | ss | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 95ms]
+[200 OK, 606B, 367ms]
+  POST https://localhost:44345/api/profiles/edit-contact-address [200 OK, 208B, 202ms]
+  Pass  Status code is 200
+  Pass  Response value matches expected
+  Pass  Response key matches expected
+
+Sub-folder EditContactDetail_Email
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | EditContactDetail_Email
+  |  | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 286ms]
+[200 OK, 606B, 596ms]
+  POST https://localhost:44345/api/profiles/edit-contact-email [200 OK, 208B, 202ms]
+  Pass  Status code is 200
+  Pass  Response value matches expected
+  Pass  Response key matches expected
+
+Sub-folder EditContactDetail_Phone
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | EditContactDetail_Phone
+  |  | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 581ms]
+  POST https://localhost:44345/api/profiles/edit-contact-phone [200 OK, 208B, 183ms]
+  Pass  Status code is 200
+  Pass  Response value matches expected
+  Pass  Response key matches expected
+
+Sub-folder EditContactDetail_Name
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | profile | EditContactDetail_Name
+  | | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 388ms]
+  POST https://localhost:44345/api/profiles/edit-contact-name [200 OK, 208B, 188ms]
+  Pass  Status code is 200
+  Pass  Response value matches expected
+  Pass  Response key matches expected
+
+Folder search
+Sub-folder BeginSearch
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | BeginSearch | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 90ms]
+[200 OK, 606B, 369ms]
+  POST https://localhost:44345/api/search/search-begin [200 OK, 444B, 4.4s]
+  Pass  Status code is an acceptable value
+
+Sub-folder RestrictionStatus
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | RestrictionStatus | LL-T
+  | EST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 96ms]
+[200 OK, 606B, 384ms]
+  POST https://localhost:44345/api/search/my-restriction-status [200 OK, 248B, 289ms]
+  Pass  Status code is 200
+
+Sub-folder MySearches
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | MySearches | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 90ms]
+[200 OK, 606B, 373ms]
+  POST https://localhost:44345/api/search/my-searches [200 OK, 14.95kB, 610ms]
+  Pass  Status code is 200
+
+Sub-folder MyPurchases
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | MyPurchases | LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 91ms]
+[200 OK, 605B, 368ms]
+  POST https://localhost:44345/api/search/my-purchases [200 OK, 4.68kB, 294ms]
+  Pass  Status code is 200
+
+Sub-folder MyPurchases-Get
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | MyPurchases-Get | LL-TES
+  | T'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 93ms]
+[200 OK, 606B, 373ms]
+  GET https://localhost:44345/api/search/list-my-purchases?userName=test.account [200 OK, 4.68kB, 286ms]
+  Pass  Status code is 200
+
+Sub-folder MySearchesActive
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | MySearchesActive | LL-TE
+  | ST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 97ms]
+[200 OK, 606B, 373ms]
+  POST https://localhost:44345/api/search/my-active-searches [200 OK, 88.27kB, 492ms]
+  Pass  Status code is 200
+
+Sub-folder MySearchPreview
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | search | MySearchPreview | LL-TES
+  | T'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 94ms]
+[200 OK, 606B, 374ms]
+  POST https://localhost:44345/api/search/my-search-preview [200 OK, 71.22kB, 1033ms]
+  Pass  Status code is an acceptable value
+
+Folder payment
+Sub-folder CreateCheckoutSession
+  -
+  | 'Environment: UseLocalInstance := True'
+  | 'll-authorizations | payment | CreateCheckoutSession |
+  |  LL-TEST'
+  -
+  GET https://localhost:44345/api/application/apps   POST https://localhost:44345/api/signon/login [200 OK, 230B, 94ms]
+[200 OK, 606B, 367ms]
+  POST https://localhost:44345/api/payment/create-checkout-session [200 OK, 1.56kB, 1499ms]
+  Pass  Status code is an acceptable value
+
+-------------------------------------------------------------------
+|                         |          executed |            failed |
+--------------------------+-------------------+--------------------
+|              iterations |                 1 |                 0 |
+--------------------------+-------------------+--------------------
+|                requests |               103 |                 0 |
+--------------------------+-------------------+--------------------
+|            test-scripts |                82 |                 0 |
+--------------------------+-------------------+--------------------
+|      prerequest-scripts |                71 |                 0 |
+--------------------------+-------------------+--------------------
+|              assertions |                85 |                 0 |
+-------------------------------------------------------------------
+| total run duration: 33.3s                                       |
+-------------------------------------------------------------------
+| total data received: 221.2kB (approx)                           |
+-------------------------------------------------------------------
+| average response time: 315ms [min: 3ms, max: 4.4s, s.d.: 475ms] |
+-------------------------------------------------------------------
+**********************
+Windows PowerShell transcript end
+End time: 20240506111739
+**********************
