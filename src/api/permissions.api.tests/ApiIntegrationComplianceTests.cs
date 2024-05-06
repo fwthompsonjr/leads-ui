@@ -3,15 +3,9 @@ using Xunit.Abstractions;
 
 namespace permissions.api.tests
 {
-    public class ApiIntegrationComplianceTests
+    public class ApiIntegrationComplianceTests(ITestOutputHelper output)
     {
-        private readonly ITestOutputHelper output;
-
-        public ApiIntegrationComplianceTests(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
+        private readonly ITestOutputHelper output = output;
 
         [Fact]
         public void PostmanSummaryShouldExist()
