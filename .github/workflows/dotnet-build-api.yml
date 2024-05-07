@@ -13,6 +13,7 @@ env:
   SOLUTION_NAME: ${{ github.workspace }}\src\api\legallead.api.sln
   COVERAGE_NAME: ${{ github.workspace }}\src\api\tests.runsettings
   INTEGRATION_NAME: ${{ github.workspace }}\src\api\postman-testing-03.ps1
+  VALIDATION_SCRIPT_NAME: ${{ github.workspace }}\src\api\postman-testing-AA.ps1
   COVERAGE_FILTER: 'src\api'
   NET_VERSION: "8.0.x"
 
@@ -76,9 +77,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Validate Integration File
+        shell: pwsh
+        run: |
+          & ${{ env.VALIDATION_SCRIPT_NAME }}
+
       - name: Run Integration Test
         shell: pwsh
-        if: ${{ always() }}
         run: |
           & ${{ env.INTEGRATION_NAME }}
 
