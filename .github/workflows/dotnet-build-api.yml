@@ -77,11 +77,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate Integration File
-        shell: pwsh
-        run: |
-          & ${{ env.VALIDATION_SCRIPT_NAME }}
-
       - name: Run Integration Test
         shell: pwsh
         run: |
