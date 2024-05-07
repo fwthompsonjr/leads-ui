@@ -11,6 +11,7 @@ env:
   LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
   SOLUTION_NAME: ${{ github.workspace }}/src/api/legallead.api.sln
   POSTMAN_ENV: 'LL-AWS'
+  NUGET_CERT_REVOCATION_MODE: offline
 
 jobs:
   build:

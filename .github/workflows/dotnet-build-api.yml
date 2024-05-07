@@ -16,6 +16,7 @@ env:
   VALIDATION_SCRIPT_NAME: ${{ github.workspace }}\src\api\postman-testing-AA.ps1
   COVERAGE_FILTER: 'src\api'
   NET_VERSION: "8.0.x"
+  NUGET_CERT_REVOCATION_MODE: offline
 
 jobs:
   build:
