@@ -79,7 +79,7 @@ namespace legallead.email.tests.implementations
         [Fact]
         public void MailMessageWillContainBody()
         {
-            var provider = MockMessageInfrastructure.GetServiceProvider();
+            var provider = MessageMockInfrastructure.GetServiceProvider();
             var service = provider.GetRequiredService<MailMessageService>();
             service.With(TemplateNames.RegistrationCompleted, Guid.NewGuid().ToString());
             var email = service.Message;
@@ -101,7 +101,7 @@ namespace legallead.email.tests.implementations
             var query = string.Format(pattern, name);
             var exception = Record.Exception(() =>
             {
-                var provider = MockMessageInfrastructure.GetServiceProvider();
+                var provider = MessageMockInfrastructure.GetServiceProvider();
                 var service = provider.GetRequiredService<MailMessageService>();
                 service.With(TemplateNames.RegistrationCompleted, Guid.NewGuid().ToString());
                 var email = service.Message;
@@ -134,7 +134,7 @@ namespace legallead.email.tests.implementations
         }
         private static List<UserEmailSettingBo> GetDefaultSettings()
         {
-            return MockMessageInfrastructure.GetDefaultSettings();
+            return MessageMockInfrastructure.GetDefaultSettings();
         }
     }
 }

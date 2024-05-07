@@ -10,9 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.email.tests.actions
 {
-    public class LockedAccountResponseTests : IDisposable
+    public class ProfileChangedTests : IDisposable
     {
-        public LockedAccountResponseTests()
+        public ProfileChangedTests()
         {
             _ = InitializeProvider();
         }
@@ -26,7 +26,7 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload, false);
                 if (context is not ResultExecutingContext executedContext) return;
-                var controller = provider.GetService<LockedAccountResponse>();
+                var controller = provider.GetService<ProfileChanged>();
                 Assert.NotNull(controller);
                 controller.OnResultExecuting(executedContext);
             });
@@ -36,6 +36,10 @@ namespace legallead.email.tests.actions
         [Theory]
         [InlineData("")]
         [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79")]
+        [InlineData("29e8ffcc-1a5d-4ea5-824d-e9555e3161d8")]
+        [InlineData("1a8ee09e-2c57-4055-adbd-458cd41125ea")]
+        [InlineData("f5dbdb76-4be8-43b7-ad75-2df8c4864078")]
+        [InlineData("c216278c-2bf3-4625-b4d2-807859fd663f")]
         public void ProviderCanGetResultExecutedFiler(string payload)
         {
             var exception = Record.Exception(() =>
@@ -43,8 +47,8 @@ namespace legallead.email.tests.actions
                 var provider = InitializeProvider();
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
+                var controller = provider.GetService<ProfileChanged>();
                 var svc = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
-                var controller = provider.GetService<LockedAccountResponse>();
                 var user = MessageMockInfrastructure.UserAccountFaker.Generate();
                 svc.Setup(m => m.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(user);
                 Assert.NotNull(controller);
@@ -58,18 +62,19 @@ namespace legallead.email.tests.actions
         private static FilterContext GetContext(string result, bool isExecuted = true)
         {
             var collection = new ServiceCollection();
-            collection.AddTransient<LockedAccountResponse>();
+            collection.AddTransient<ProfileChanged>();
             collection.AddMvcCore(o =>
             {
-                o.Filters.AddService<LockedAccountResponse>();
+                o.Filters.AddService<ProfileChanged>();
             });
             collection.AddTransient<MockController>();
             var provider = collection.BuildServiceProvider();
             var controller = provider.GetRequiredService<MockController>();
             // Create a default ActionContext (depending on our case-scenario)
+            var name = ProfileMockInfrastructure.GetChangeType();
             var ok = string.IsNullOrWhiteSpace(result) ?
-                new ObjectResult(result) { StatusCode = 200 } :
-                new ObjectResult(new { Email = "abcd.location.com", Message = "This is a message" }) { StatusCode = 409 };
+                ProfileMockInfrastructure.GetResult(404, "None") :
+                ProfileMockInfrastructure.GetResult(200, name);
             var actionContext = new ActionContext()
             {
                 HttpContext = new DefaultHttpContext(),
@@ -130,7 +135,7 @@ namespace legallead.email.tests.actions
         private sealed class MockController : ControllerBase
         {
             [HttpGet]
-            [ServiceFilter(typeof(LockedAccountResponse))] // Apply the filter to this action method
+            [ServiceFilter(typeof(ProfileChanged))] // Apply the filter to this action method
             public IActionResult MyAction()
             {
                 var guid = Guid.NewGuid().ToString();

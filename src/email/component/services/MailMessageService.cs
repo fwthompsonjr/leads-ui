@@ -96,6 +96,7 @@ namespace legallead.email.services
 
         private static string? CustomTransform(TemplateNames template, string? html)
         {
+            const string detailLine = "//td[@name='body-line-closing']";
             const string detailQuery = "//td[@name='body-line-details']";
             const string headingQuery = "//h2[@name='span-sub-heading']";
             if (string.IsNullOrWhiteSpace(html)) return html;
@@ -103,6 +104,7 @@ namespace legallead.email.services
             doc.LoadHtml(html);
             var heading = doc.DocumentNode.SelectSingleNode(headingQuery);
             var detail = doc.DocumentNode.SelectSingleNode(detailQuery);
+            var line = doc.DocumentNode.SelectSingleNode(detailLine);
             if (template == TemplateNames.SearchPaymentCompleted)
             {
                 if (heading != null)
@@ -112,6 +114,11 @@ namespace legallead.email.services
                 if (detail == null) return html;
                 var attr = doc.CreateAttribute("style", "padding: 10px");
                 detail.Attributes.Add(attr);
+                return doc.DocumentNode.OuterHtml;
+            }
+            if (template == TemplateNames.LockedAccountResponse && line != null)
+            {
+                line.InnerHtml = string.Empty;
                 return doc.DocumentNode.OuterHtml;
             }
             return html;
@@ -247,11 +254,13 @@ namespace legallead.email.services
             { TemplateNames.RegistrationCompleted, "Account Registration Completed" },
             { TemplateNames.SearchPaymentCompleted, "Payment Received" },
             { TemplateNames.BeginSearchRequested, "Record Search Requested" },
-            { TemplateNames.LockedAccountResponse, "Account Status Changed" }
+            { TemplateNames.LockedAccountResponse, "Account Status Changed" },
+            { TemplateNames.ProfileChanged, "Account Profile Changed" }
         };
         private static readonly List<TemplateNames> CustomTemplates =
         [
-            TemplateNames.SearchPaymentCompleted
+            TemplateNames.SearchPaymentCompleted,
+            TemplateNames.LockedAccountResponse,
         ];
     }
 }

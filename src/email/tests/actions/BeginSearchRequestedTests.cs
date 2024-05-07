@@ -46,7 +46,7 @@ namespace legallead.email.tests.actions
                 if (context is not ResultExecutedContext executedContext) return;
                 var svc = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
                 var controller = provider.GetService<BeginSearchRequested>();
-                var user = MockMessageInfrastructure.UserAccountFaker.Generate();
+                var user = MessageMockInfrastructure.UserAccountFaker.Generate();
                 svc.Setup(m => m.GetUserBySearchId(It.IsAny<string>())).ReturnsAsync(user);
 
                 Assert.NotNull(controller);
@@ -102,7 +102,7 @@ namespace legallead.email.tests.actions
 
         private static ServiceProvider InitializeProvider()
         {
-            return MockMessageInfrastructure.GetServiceProvider(true);
+            return MessageMockInfrastructure.GetServiceProvider(true);
         }
 
         private bool disposedValue;

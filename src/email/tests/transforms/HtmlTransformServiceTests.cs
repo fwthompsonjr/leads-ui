@@ -68,7 +68,7 @@ namespace legallead.email.tests.transforms
             var settings = settingsCount switch
             {
                 null => null,
-                0 => MockMessageInfrastructure.UserEmailFaker.Generate(0),
+                0 => MessageMockInfrastructure.UserEmailFaker.Generate(0),
                 _ => GetDefaultSettings()
             };
             dbmock.Setup(m => m.GetSettings(It.IsAny<UserSettingQuery>())).ReturnsAsync(settings);
@@ -108,12 +108,12 @@ namespace legallead.email.tests.transforms
         private static readonly object locker = new();
         private static ServiceProvider InitializeProvider()
         {
-            return MockMessageInfrastructure.GetServiceProvider(true);
+            return MessageMockInfrastructure.GetServiceProvider(true);
         }
 
         private static List<UserEmailSettingBo> GetDefaultSettings()
         {
-            return MockMessageInfrastructure.GetDefaultSettings(true);
+            return MessageMockInfrastructure.GetDefaultSettings(true);
         }
 
         private static readonly Faker<UserSettingQuery> queryfaker =

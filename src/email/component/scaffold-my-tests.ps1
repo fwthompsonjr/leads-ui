@@ -1,7 +1,7 @@
 
 param (
-	[string]$template = "LockedAccountResponse",
-    [string]$templateToken = "locked-account"
+	[string]$template = "ProfileChanged",
+    [string]$templateToken = "profile-change"
 )
 
 $myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );

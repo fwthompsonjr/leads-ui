@@ -28,7 +28,9 @@
 	</tr>
 	<tr>
 		<td name="locked-account-detail-message-2" colspan="2">
-			<p>Account lock occurs when the system detects unusual activity on your account such as:</p>
+			<p>
+				Account lock occurs when the system detects unusual activity on your account<br/>
+				such as:</p>
 			<ul>
 				<li>Excessive failed login attempts.</li>
 				<li>Abnormal payment or purchase activities.</li>
@@ -40,6 +42,8 @@
 			<p>
 				Account lock(s) are not generally permanent, 
 				but during your lock period our security team will review the suspicious activity.</p>
+			<p>
+				If your account passes security review, your account status <i>will be restored within 30 minutes</1>.</p>
 			<p>
 				Please logout of all legal lead instances, 
 				for additional information 

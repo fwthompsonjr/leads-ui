@@ -51,12 +51,14 @@ namespace legallead.email.utility
             services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
             services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
             services.AddKeyedTransient<IHtmlTransformDetailBase, LockedAccountResponseTemplate>(TemplateNames.LockedAccountResponse.ToString());
+            services.AddKeyedTransient<IHtmlTransformDetailBase, ProfileChangedTemplate>(TemplateNames.ProfileChanged.ToString());
             // end keyed transients
             // register actions
             services.AddTransient<RegistrationCompleted>();
             services.AddTransient<SearchPaymentCompleted>();
             services.AddTransient<BeginSearchRequested>();
             services.AddTransient<LockedAccountResponse>();
+            services.AddTransient<ProfileChanged>();
             // end register actions
             services.AddTransient(x =>
             {

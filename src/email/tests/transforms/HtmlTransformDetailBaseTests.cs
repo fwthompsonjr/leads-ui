@@ -77,7 +77,7 @@ namespace legallead.email.tests.transforms
             string? personKeyName = "Person",
             string? personKeyValue = null)
         {
-            var attributes = hasSettings ? GetDefaultSettings() : MockMessageInfrastructure.UserEmailFaker.Generate(0);
+            var attributes = hasSettings ? GetDefaultSettings() : MessageMockInfrastructure.UserEmailFaker.Generate(0);
             if (!hasPerson) { attributes.RemoveAll(a => a.KeyName == "Person"); }
             if (!hasKeyNames && attributes.Count > 0)
             {
@@ -107,7 +107,7 @@ namespace legallead.email.tests.transforms
 
         private static List<UserEmailSettingBo> GetDefaultSettings()
         {
-            return MockMessageInfrastructure.GetDefaultSettings();
+            return MessageMockInfrastructure.GetDefaultSettings();
         }
         private sealed class TestBaseTemplate : HtmlTransformDetailBase
         {

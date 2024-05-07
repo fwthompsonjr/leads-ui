@@ -39,6 +39,22 @@ namespace legallead.email.utility
             return Substitute(doc, dictionary);
         }
 
+        public static string ToHtml(this ProfileChangedModel search,
+            UserAccountByEmailBo? user,
+            string html)
+        {
+            if (string.IsNullOrEmpty(search.Email)) { return html; }
+            var doc = GetDocument(html);
+            if (doc == null) { return html; }
+            var dictionary = new Dictionary<string, string>()
+            {
+                { "//span[@name='profile-change-user-name']", UserKeyOrDefault(user?.UserName) },
+                { "//span[@name='profile-change-email']", UserKeyOrDefault(user?.Email) },
+                { "//span[@name='profile-change-request-name']", search.Name },
+                { "//td[@name='profile-change-detail-message-3']", GetChangeItems(search) },
+            };
+            return Substitute(doc, dictionary);
+        }
 
         private static string Substitute(HtmlDocument doc, Dictionary<string, string> dictionary)
         {
@@ -51,6 +67,18 @@ namespace legallead.email.utility
             return doc.DocumentNode.OuterHtml;
         }
 
+
+        private static string GetChangeItems(ProfileChangedModel search)
+        {
+            if (search.ChangeItems.Count == 0) return dash;
+            const string item = "<span style='color:blue;'>{0} : </span><span>{1}</span><br/>";
+            var items = search.ChangeItems.Select(s =>
+            {
+                var line = string.Format(item, s.FieldName, s.Description); return line;
+            });
+            return string.Join(Environment.NewLine, items);
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private method tested from public accessor")]
         private static string ToProperCase(this string text)
         {
@@ -61,14 +89,14 @@ namespace legallead.email.utility
         [ExcludeFromCodeCoverage(Justification = "Private method tested from public accessor")]
         private static string FromUnixTime(this long id)
         {
-            if (id == 0) { return " - "; }
+            if (id == 0) { return dash; }
             var dte = DateTimeOffset.FromUnixTimeMilliseconds(id).DateTime;
             return dte.ToString("MMM d, yyyy");
         }
         [ExcludeFromCodeCoverage(Justification = "Private method tested from public accessor")]
         private static string UserKeyOrDefault(string? item)
         {
-            if (string.IsNullOrEmpty(item)) return " - ";
+            if (string.IsNullOrEmpty(item)) return dash;
             return item;
         }
 
@@ -86,5 +114,6 @@ namespace legallead.email.utility
                 return null;
             }
         }
+        private const string dash = " - ";
     }
 }
