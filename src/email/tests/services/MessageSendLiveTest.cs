@@ -10,6 +10,9 @@ namespace legallead.email.tests.services
         [Theory]
         [InlineData(TemplateNames.RegistrationCompleted)]
         [InlineData(TemplateNames.SearchPaymentCompleted)]
+        [InlineData(TemplateNames.BeginSearchRequested)]
+        [InlineData(TemplateNames.LockedAccountResponse)]
+        [InlineData(TemplateNames.ProfileChanged)]
         public void MessageCanSendLiveEmail(TemplateNames template)
         {
             if (!Debugger.IsAttached) return;

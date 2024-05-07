@@ -1,6 +1,8 @@
 
       legallead.email
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.1 - 2024-05-07 - Adding profile change template
+      : 3.2.0 - 2024-05-06 - Adding locked account template
       : 3.2.0 - 2024-04-30 - Setup component deployment process
       : 3.2.0 - 2024-04-30 - Initial Email Component Release With Base Commands
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -8,6 +10,8 @@
 
       legallead.email templates
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : Profile Changed - Email to user when profile data is updated
+      : Locked Account - Email to user if account has been locked
       : Registration Completed - Email to user after completing the registation process
       : Search Payment Completed - Email to user after receiving payment for a record search.
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

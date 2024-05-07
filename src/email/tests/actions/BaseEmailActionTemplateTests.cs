@@ -91,7 +91,7 @@ namespace legallead.email.tests.actions
 
         private static ServiceProvider InitializeProvider()
         {
-            return MockMessageInfrastructure.GetServiceProvider(true);
+            return MessageMockInfrastructure.GetServiceProvider(true);
         }
 
         private bool disposedValue;

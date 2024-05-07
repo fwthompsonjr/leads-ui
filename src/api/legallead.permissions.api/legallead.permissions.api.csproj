@@ -76,4 +76,7 @@
 	<Target Name="ZipOutputPath" AfterTargets="Build" Condition="'$(Configuration)' == 'Zip'">
 		<ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\$(ProjectName).zip" />
 	</Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Local'">
+		<Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File ..\postman-testing.ps1" ContinueOnError="true" />
+	</Target>
 </Project>

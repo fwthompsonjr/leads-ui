@@ -1,6 +1,7 @@
 ﻿using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace legallead.Profiles.api.Controllers
 {
@@ -88,7 +89,13 @@ namespace legallead.Profiles.api.Controllers
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactEmail(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Email",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
+                
 
             return Conflict(response);
         }
@@ -101,7 +108,12 @@ namespace legallead.Profiles.api.Controllers
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactName(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Name",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
 
             return Conflict(response);
         }
@@ -114,9 +126,32 @@ namespace legallead.Profiles.api.Controllers
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactPhone(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Email",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
 
             return Conflict(response);
+        }
+
+
+        private static KeyValuePair<bool, string> GetChangeResponse(
+            string changeName,
+            string message,
+            User? user,
+            object original)
+        {
+            var js = JsonConvert.SerializeObject(original);
+            var data = new { 
+                Email = user?.Email ?? string.Empty, 
+                Name = changeName, 
+                Message = message, 
+                JsonData = js 
+            };
+            js = JsonConvert.SerializeObject(data);
+            return new(true, js);
         }
     }
 }

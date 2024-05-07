@@ -7,6 +7,7 @@ namespace legallead.email.utility
         SearchPaymentCompleted,
         BeginSearchRequested,
         LockedAccountResponse,
+        ProfileChanged,
         // end of enumeration
     }
 }

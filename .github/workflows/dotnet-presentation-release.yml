@@ -10,6 +10,7 @@ on:
 env:
     PROJECT_NAME: "legallead.desktop-windows"
     LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+    NUGET_CERT_REVOCATION_MODE: offline
 jobs:
   release:
     permissions: write-all

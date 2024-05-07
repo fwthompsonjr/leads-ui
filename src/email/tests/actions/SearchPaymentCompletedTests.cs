@@ -112,9 +112,9 @@ namespace legallead.email.tests.actions
 
         private static ServiceProvider InitializeProvider()
         {
-            var provider = MockMessageInfrastructure.GetServiceProvider(true);
+            var provider = MessageMockInfrastructure.GetServiceProvider(true);
             var userDb = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
-            var settings = MockMessageInfrastructure.GetDefaultSettings();
+            var settings = MessageMockInfrastructure.GetDefaultSettings();
             userDb.Setup(s => s.GetSettings(
                 It.Is<UserSettingQuery>(q => IsGuid(q.Id)))).ReturnsAsync(settings);
             return provider;

@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.email.tests
 {
-    internal static class MockMessageInfrastructure
+    internal static class MessageMockInfrastructure
     {
         public static List<UserEmailSettingBo> GetDefaultSettings(bool includeEmptyEntry = false)
         {
@@ -80,6 +80,7 @@ namespace legallead.email.tests
                 services.AddKeyedTransient<IHtmlTransformDetailBase, SearchPaymentCompletedTemplate>(TemplateNames.SearchPaymentCompleted.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, LockedAccountResponseTemplate>(TemplateNames.LockedAccountResponse.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, ProfileChangedTemplate>(TemplateNames.ProfileChanged.ToString());
                 // end keyed transients
                 // begin singleton action filters
                 services.AddTransient<BaseEmailActionTemplate>();
@@ -87,6 +88,7 @@ namespace legallead.email.tests
                 services.AddTransient<SearchPaymentCompleted>();
                 services.AddTransient<BeginSearchRequested>();
                 services.AddTransient<LockedAccountResponse>();
+                services.AddTransient<ProfileChanged>();
                 // end singleton action filters
                 services.AddTransient(x =>
                 {

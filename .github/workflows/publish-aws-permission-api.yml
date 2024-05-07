@@ -7,6 +7,7 @@ env:
   AWS_NAME: "legalleadpermissionsapi"
   AWS_ENV: "legalleadpermissionsapi-dev"
   AWS_REGION: "us-east-2"
+  NUGET_CERT_REVOCATION_MODE: offline
   
 on:
   push:

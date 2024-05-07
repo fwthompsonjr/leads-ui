@@ -5,6 +5,18 @@
 	},
 	{
 		"name": "SearchPaymentCompleted",
-		"isTesting": true
+		"isTesting": false
+	},
+	{
+		"name": "BeginSearchRequested",
+		"isTesting": false
+	},
+	{
+		"name": "LockedAccountResponse",
+		"isTesting": false
+	},
+	{
+		"name": "ProfileChanged",
+		"isTesting": false
 	}
 ]
