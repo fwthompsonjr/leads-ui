@@ -18,5 +18,9 @@
 	{
 		"name": "ProfileChanged",
 		"isTesting": false
+	},
+	{
+		"isTesting": false,
+		"name":  "PermissionChangeRequested"
 	}
 ]

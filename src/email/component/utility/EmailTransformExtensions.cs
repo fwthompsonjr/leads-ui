@@ -1,10 +1,11 @@
-﻿using HtmlAgilityPack;
+﻿using AngleSharp.Dom;
+using HtmlAgilityPack;
 using legallead.email.models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.email.utility
 {
-    public static class UserRecordSearchExtensions
+    public static class EmailTransformExtensions
     {
         public static string ToHtml(this UserRecordSearch search,
             UserAccountByEmailBo? user,
@@ -66,8 +67,31 @@ namespace legallead.email.utility
             {
                 { "//span[@name='permission-request-user-name']", UserKeyOrDefault(user?.UserName) },
                 { "//span[@name='permission-request-email']", UserKeyOrDefault(user?.Email) },
+                { "//span[@name='permission-request-request-type']", search.Name },
+                { "//td[@name='permission-request-detail-message-3']", GetPermissionItems(search) },
             };
             return Substitute(doc, dictionary);
+        }
+
+        private static string GetPermissionItems(PermissionChangeResponse search)
+        {
+            const string item = "<span style='color:blue;'>{0} : </span><span style='color: gray'>{1}</span><br/>";
+            if (string.IsNullOrEmpty(search.Name)) { return dash; }
+            if (search.Name == "Discount" && search.DiscountRequest != null)
+            {
+                var collection = search.DiscountRequest.Choices.Select(s =>
+                {
+                    var location = $"{s.CountyName}, {s.StateName}";
+                    var activate = s.IsSelected ? "ACTIVE" : "DISABLED";
+                    return string.Format(item, location, activate);
+                });
+                return string.Join(Environment.NewLine, collection);
+            }
+            if (search.Name == "PermissionLevel" && search.LevelRequest != null)
+            {
+                return string.Format(item, "Change Permission Level", search.LevelRequest.Level);
+            }
+            return dash;
         }
 
         private static string Substitute(HtmlDocument doc, Dictionary<string, string> dictionary)

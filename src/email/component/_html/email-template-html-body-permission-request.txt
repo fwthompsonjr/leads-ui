@@ -21,5 +21,19 @@
 			<hr style="background: #444; height: 1px; border: 0px;" />
 		</td>
 	</tr>
-	<!-- Add custom replacements here -->
+	<tr>
+		<td name="permission-request-detail-message-1" colspan="2">
+			<b>IMPORTANT</b>: A change has been requested for your account permissions.
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-message-2" colspan="2">
+			TYPE: <span name="permission-request-request-type"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-message-3" colspan="2">
+			-
+		</td>
+	</tr>
 </table>

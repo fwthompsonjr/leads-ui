@@ -28,4 +28,4 @@ $node = @{
 } | ConvertTo-Json
 $append = [string]::Join( [System.Environment]::NewLine, @( ",", $node, "]" ));
 $jsourcenew = $jsource.Replace( "]", $append )
-$jsourcenew
+[System.IO.File]::WriteAllText( $src, $jsourcenew )

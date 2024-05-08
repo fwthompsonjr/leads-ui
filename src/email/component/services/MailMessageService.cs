@@ -255,7 +255,8 @@ namespace legallead.email.services
             { TemplateNames.SearchPaymentCompleted, "Payment Received" },
             { TemplateNames.BeginSearchRequested, "Record Search Requested" },
             { TemplateNames.LockedAccountResponse, "Account Status Changed" },
-            { TemplateNames.ProfileChanged, "Account Profile Changed" }
+            { TemplateNames.ProfileChanged, "Account Profile Changed" },
+            { TemplateNames.PermissionChangeRequested, "Account Permission Change Requested" }
         };
         private static readonly List<TemplateNames> CustomTemplates =
         [
