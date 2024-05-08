@@ -43,6 +43,8 @@ namespace legallead.email.tests.models
             Assert.NotEqual(sut.Name, test.Name);
             Assert.NotEqual(sut.Request, test.Request);
             Assert.NotEqual(sut.Dto, test.Dto);
+            Assert.Null(test.DiscountRequest);
+            Assert.Null(test.LevelRequest);
         }
     }
 }
