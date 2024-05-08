@@ -13,3 +13,4 @@
 | Search Payment Completed |  Sends email after user has successfully paid for a record search. |
 | Locked Account |  Sends email to user if account has been locked. |
 | Profile Changed |  Sends email when profile data is updated. |
+| Permission Change Request |  Sends email when permission change is requested. |

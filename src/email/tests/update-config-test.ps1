@@ -12,7 +12,8 @@ function doesNodeExist( $source, $search )
     return $isNameFound;
 }
 
-$src = "C:\_g\lui\fwthompsonjr\leads-ui\src\email\tests\_template\template-test-json.txt"
+$myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
+$src = [System.IO.Path]::Combine( $myfolder, "_template\template-test-json.txt" );
 $name = "PermissionChangeRequested"
 
 if ( [System.IO.File]::Exists( $src ) -eq $false ) { return; }
