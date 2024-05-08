@@ -55,6 +55,20 @@ namespace legallead.email.utility
             };
             return Substitute(doc, dictionary);
         }
+        public static string ToHtml(this PermissionChangeResponse search,
+            UserAccountByEmailBo? user,
+            string html)
+        {
+            if (string.IsNullOrEmpty(search.Email)) { return html; }
+            var doc = GetDocument(html);
+            if (doc == null) { return html; }
+            var dictionary = new Dictionary<string, string>()
+            {
+                { "//span[@name='permission-request-user-name']", UserKeyOrDefault(user?.UserName) },
+                { "//span[@name='permission-request-email']", UserKeyOrDefault(user?.Email) },
+            };
+            return Substitute(doc, dictionary);
+        }
 
         private static string Substitute(HtmlDocument doc, Dictionary<string, string> dictionary)
         {

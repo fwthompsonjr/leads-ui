@@ -1,3 +1,4 @@
+using legallead.email.models;
 using legallead.email.services;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,18 @@ namespace legallead.email.actions
         public override void OnResultExecuted(ResultExecutedContext context)
         {
             if (context.Result is not OkObjectResult okResult) return;
-            if (okResult.Value is not string id) return;
+            var model = PermissionMapper.Mapper.Map<PermissionChangeResponse>(okResult);
+            if (model == null) return;
+            var verification = PermissionMapper.Mapper.Map<PermissionChangeValidation>(model);
+            if (verification.IsValid) return;
+            var account = _mailMessageService.SettingsDb.GetUserByEmail(model.Email).GetAwaiter().GetResult();
+            if (account == null) return;
+            var id = account.Id ?? string.Empty;
             if (!Guid.TryParse(id, out var _)) return;
             _mailMessageService.With(TemplateNames.PermissionChangeRequested, id);
-            if (!CanSend()) return;
+            if (_mailMessageService.Message == null || !CanSend()) return;
+            var body = model.ToHtml(account, _mailMessageService.Message.Body);
+            _mailMessageService.Beautify(body);
             _smtpService.Send(_mailMessageService.Message, id);
         }
     }

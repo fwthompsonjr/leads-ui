@@ -63,6 +63,13 @@ namespace legallead.email.tests
                 var js = JsonConvert.SerializeObject(obj);
                 b.Request = js;
             });
+        internal static string GetChangeType()
+        {
+            var faker = new Faker();
+            return faker.PickRandom(changeTypes);
+
+        }
+
         internal static IActionResult GetResult(int statusCode, string changeType)
         {
             if (!changeTypes.Contains(changeType, StringComparer.OrdinalIgnoreCase))

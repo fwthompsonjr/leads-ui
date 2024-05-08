@@ -1,4 +1,5 @@
 using legallead.email.actions;
+using legallead.email.interfaces;
 using legallead.email.utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,10 @@ namespace legallead.email.tests.actions
 
         [Theory]
         [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79")]
+        [InlineData("29e8ffcc-1a5d-4ea5-824d-e9555e3161d8")]
+        [InlineData("1a8ee09e-2c57-4055-adbd-458cd41125ea")]
+        [InlineData("f5dbdb76-4be8-43b7-ad75-2df8c4864078")]
+        [InlineData("c216278c-2bf3-4625-b4d2-807859fd663f")]
         public void ProviderCanGetResultExecutedFiler(string payload)
         {
             var exception = Record.Exception(() =>
@@ -42,6 +47,9 @@ namespace legallead.email.tests.actions
                 var context = GetContext(payload);
                 if (context is not ResultExecutedContext executedContext) return;
                 var controller = provider.GetService<PermissionChangeRequested>();
+                var svc = provider.GetRequiredService<Mock<IUserSettingInfrastructure>>();
+                var user = MessageMockInfrastructure.UserAccountFaker.Generate();
+                svc.Setup(m => m.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(user);
                 Assert.NotNull(controller);
                 controller.OnResultExecuted(executedContext);
             });
@@ -62,6 +70,10 @@ namespace legallead.email.tests.actions
             var provider = collection.BuildServiceProvider();
             var controller = provider.GetRequiredService<MockController>();
             // Create a default ActionContext (depending on our case-scenario)
+            var name = PermissionMockInfrastructure.GetChangeType();
+            var ok = string.IsNullOrWhiteSpace(result) ?
+                PermissionMockInfrastructure.GetResult(404, "None") :
+                PermissionMockInfrastructure.GetResult(200, name);
             var actionContext = new ActionContext()
             {
                 HttpContext = new DefaultHttpContext(),
@@ -74,7 +86,7 @@ namespace legallead.email.tests.actions
                 return new ResultExecutedContext(
                     actionContext,
                         new List<IFilterMetadata>(),
-                        new OkObjectResult(result),
+                        ok,
                         controller
                     );
             }
@@ -83,7 +95,7 @@ namespace legallead.email.tests.actions
                 return new ResultExecutingContext(
                     actionContext,
                         new List<IFilterMetadata>(),
-                        new OkObjectResult(result),
+                        ok,
                         controller
                     );
             }
