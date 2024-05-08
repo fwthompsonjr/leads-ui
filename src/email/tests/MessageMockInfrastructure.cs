@@ -81,6 +81,7 @@ namespace legallead.email.tests
                 services.AddKeyedTransient<IHtmlTransformDetailBase, BeginSearchRequestedTemplate>(TemplateNames.BeginSearchRequested.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, LockedAccountResponseTemplate>(TemplateNames.LockedAccountResponse.ToString());
                 services.AddKeyedTransient<IHtmlTransformDetailBase, ProfileChangedTemplate>(TemplateNames.ProfileChanged.ToString());
+                services.AddKeyedTransient<IHtmlTransformDetailBase, PermissionChangeRequestedTemplate>(TemplateNames.PermissionChangeRequested.ToString());
                 // end keyed transients
                 // begin singleton action filters
                 services.AddTransient<BaseEmailActionTemplate>();
@@ -89,6 +90,7 @@ namespace legallead.email.tests
                 services.AddTransient<BeginSearchRequested>();
                 services.AddTransient<LockedAccountResponse>();
                 services.AddTransient<ProfileChanged>();
+                services.AddTransient<PermissionChangeRequested>();
                 // end singleton action filters
                 services.AddTransient(x =>
                 {
