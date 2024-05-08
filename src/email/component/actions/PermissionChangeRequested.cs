@@ -14,7 +14,7 @@ namespace legallead.email.actions
             var model = PermissionMapper.Mapper.Map<PermissionChangeResponse>(okResult);
             if (model == null) return;
             var verification = PermissionMapper.Mapper.Map<PermissionChangeValidation>(model);
-            if (verification.IsValid) return;
+            if (!verification.IsValid) return;
             var account = _mailMessageService.SettingsDb.GetUserByEmail(model.Email).GetAwaiter().GetResult();
             if (account == null) return;
             var id = account.Id ?? string.Empty;

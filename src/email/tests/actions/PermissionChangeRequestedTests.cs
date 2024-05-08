@@ -34,6 +34,7 @@ namespace legallead.email.tests.actions
         }
 
         [Theory]
+        [InlineData("")]
         [InlineData("2a03793a-7327-4a5a-af11-ddb3851f4b79")]
         [InlineData("29e8ffcc-1a5d-4ea5-824d-e9555e3161d8")]
         [InlineData("1a8ee09e-2c57-4055-adbd-458cd41125ea")]
