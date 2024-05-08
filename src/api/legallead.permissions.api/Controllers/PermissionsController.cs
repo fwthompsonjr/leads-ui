@@ -1,4 +1,5 @@
-﻿using legallead.models;
+﻿using AngleSharp.Io;
+using legallead.models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -43,7 +44,11 @@ namespace legallead.permissions.api.Controllers
             var session = await _db.GenerateDiscountSession(Request, user, jsrequest, isAdmin, "");
             if (!session.IsPaymentSuccess.GetValueOrDefault())
             {
-                return Ok(session);
+                var serilized = GetChangeResponse("Discount",
+                user,
+                request,
+                session);
+                return Ok(serilized);
             }
             return Conflict("Unexpected error during account processing");
         }
@@ -73,9 +78,31 @@ namespace legallead.permissions.api.Controllers
             var session = await _db.GeneratePermissionSession(Request, user, permissionLevel.Level);
             if (!session.IsPaymentSuccess.GetValueOrDefault())
             {
-                return Ok(session);
+                var serilized = GetChangeResponse("PermissionLevel",
+                user,
+                permissionLevel,
+                session);
+                return Ok(serilized);
             }
             return Conflict("Unexpected error during account processing");
+        }
+
+
+        private static object GetChangeResponse(
+            string changeName,
+            User user,
+            object original,
+            LevelRequestBo response)
+        {
+            var js = JsonConvert.SerializeObject(original);
+            var data = new
+            {
+                user.Email,
+                Name = changeName,
+                Request = js,
+                Dto = response
+            };
+            return data;
         }
 
     }

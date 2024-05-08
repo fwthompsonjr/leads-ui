@@ -1,0 +1,39 @@
+<h4 style="color: green" name="permission-request-heading"><!-- Template Heading --></h4>
+<table name="permission-request-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
+	<tr>
+		<td style="width: 25%">
+			<span>User Name:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="permission-request-user-name"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td style="width: 25%">
+			<span>Email:</span>
+		</td>
+		<td style="width: 75%">
+			<span name="permission-request-email"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-spacer" colspan="2">
+			<hr style="background: #444; height: 1px; border: 0px;" />
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-message-1" colspan="2">
+			<b>IMPORTANT</b>: A change has been requested for your account permissions.
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-message-2" colspan="2">
+			TYPE: <span name="permission-request-request-type"> - </span>
+		</td>
+	</tr>
+	<tr>
+		<td name="permission-request-detail-message-3" colspan="2">
+			-
+		</td>
+	</tr>
+</table>

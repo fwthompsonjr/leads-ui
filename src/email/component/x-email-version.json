@@ -1,5 +1,10 @@
 [
   {
+    "id": "3.2.2",
+    "description": "Adding permission change request template",
+    "date": "2024-05-07"
+  },
+  {
     "id": "3.2.1",
     "description": "Adding profile change template",
     "date": "2024-05-07"

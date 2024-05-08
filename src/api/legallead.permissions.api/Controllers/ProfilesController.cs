@@ -70,6 +70,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-address")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactAddress(ChangeContactAddressRequest[] request)
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
@@ -83,6 +84,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-email")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactEmail(ChangeContactEmailRequest[] request)
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
@@ -102,6 +104,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-name")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactName(ChangeContactNameRequest[] request)
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
@@ -120,6 +123,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-phone")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactPhone(ChangeContactPhoneRequest[] request)
         {
             var verification = await GetVerification.VerifyRequest(Request, request);

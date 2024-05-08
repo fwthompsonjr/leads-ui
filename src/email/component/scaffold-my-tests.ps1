@@ -1,7 +1,7 @@
 
 param (
-	[string]$template = "ProfileChanged",
-    [string]$templateToken = "profile-change"
+	[string]$template = "PermissionChangeRequested",
+    [string]$templateToken = "permission-request"
 )
 
 $myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
