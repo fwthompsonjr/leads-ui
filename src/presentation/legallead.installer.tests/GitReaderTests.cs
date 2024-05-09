@@ -45,7 +45,7 @@ namespace legallead.installer.tests
             if (isNotFound && !changeApp) version = "not-matched";
             var client = new GitReader();
             var actual = client.FindAsset(releases, version, name);
-            if (isBlankVersion || isBlankApp || isNotFound)
+            if (isBlankApp || isNotFound)
                 Assert.Null(actual);
             else
                 Assert.NotNull(actual);
