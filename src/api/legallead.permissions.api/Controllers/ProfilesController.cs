@@ -97,7 +97,7 @@ namespace legallead.Profiles.api.Controllers
                     verification.User, request);
                 return Ok(serilized);
             }
-                
+
 
             return Conflict(response);
         }
@@ -148,11 +148,12 @@ namespace legallead.Profiles.api.Controllers
             object original)
         {
             var js = JsonConvert.SerializeObject(original);
-            var data = new { 
-                Email = user?.Email ?? string.Empty, 
-                Name = changeName, 
-                Message = message, 
-                JsonData = js 
+            var data = new
+            {
+                Email = user?.Email ?? string.Empty,
+                Name = changeName,
+                Message = message,
+                JsonData = js
             };
             js = JsonConvert.SerializeObject(data);
             return new(true, js);

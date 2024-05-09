@@ -33,11 +33,13 @@ services.AddControllers(options =>
     filters.Add<RegistrationCompleted>();
     filters.Add<SearchPaymentCompleted>();
     filters.Add<ProfileChanged>();
+    filters.Add<PermissionChangeRequested>();
 });
 services.AddTransient<BeginSearchRequested>();
 services.AddTransient<RegistrationCompleted>();
 services.AddTransient<RegistrationCompleted>();
 services.AddTransient<ProfileChanged>();
+services.AddTransient<PermissionChangeRequested>();
 
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 

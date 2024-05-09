@@ -1,5 +1,5 @@
-﻿using AngleSharp.Io;
-using legallead.models;
+﻿using legallead.models;
+using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -30,6 +30,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("set-discount")]
+        [ServiceFilter(typeof(PermissionChangeRequested))]
         public async Task<IActionResult> SetDiscount(ChangeDiscountRequest request)
         {
             var user = await _db.GetUser(Request);
@@ -55,6 +56,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("set-permission")]
+        [ServiceFilter(typeof(PermissionChangeRequested))]
         public async Task<IActionResult> SetPermissionLevel(UserLevelRequest permissionLevel)
         {
             var user = await _db.GetUser(Request);
@@ -88,16 +90,16 @@ namespace legallead.permissions.api.Controllers
         }
 
 
-        private static object GetChangeResponse(
+        private static PermissionChangeModel GetChangeResponse(
             string changeName,
             User user,
             object original,
             LevelRequestBo response)
         {
             var js = JsonConvert.SerializeObject(original);
-            var data = new
+            var data = new PermissionChangeModel
             {
-                user.Email,
+                Email = user.Email,
                 Name = changeName,
                 Request = js,
                 Dto = response
