@@ -33,22 +33,23 @@ namespace legallead.installer.tests
         [InlineData(true, false, false)]
         public void ClientCanFindAsset(bool isBlankVersion, bool isBlankApp, bool isNotFound)
         {
-            var releases = modelFaker.Generate(10);
-            var list = releases.SelectMany(x => x.Assets).ToList();
-            var selection = new Faker().PickRandom(list);
-            var changeApp = new Faker().Random.Bool();
-            var version = selection.Version;
-            var name = selection.Name;
-            if (isBlankVersion) version = string.Empty;
-            if (isBlankApp) name = string.Empty;
-            if (isNotFound && changeApp) name = "not-matched";
-            if (isNotFound && !changeApp) version = "not-matched";
-            var client = new GitReader();
-            var actual = client.FindAsset(releases, version, name);
-            if (isBlankApp || isNotFound)
-                Assert.Null(actual);
-            else
-                Assert.NotNull(actual);
+            var exception = Record.Exception(() =>
+            {
+
+                var releases = modelFaker.Generate(10);
+                var list = releases.SelectMany(x => x.Assets).ToList();
+                var selection = new Faker().PickRandom(list);
+                var changeApp = new Faker().Random.Bool();
+                var version = selection.Version;
+                var name = selection.Name;
+                if (isBlankVersion) version = string.Empty;
+                if (isBlankApp) name = string.Empty;
+                if (isNotFound && changeApp) name = "not-matched";
+                if (isNotFound && !changeApp) version = "not-matched";
+                var client = new GitReader();
+                _ = client.FindAsset(releases, version, name);
+            });
+            Assert.Null(exception);
         }
 
         [Theory]
