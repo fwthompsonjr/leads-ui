@@ -132,6 +132,7 @@ namespace legallead.permissions.api.Controllers
         [Authorize]
         [HttpPost]
         [Route("change-password")]
+        [ServiceFilter(typeof(PasswordChanged))]
         public async Task<IActionResult> ChangePasswordAsync(UserChangePasswordModel usersdata)
         {
             var response = "An error occurred authenticating account.";
