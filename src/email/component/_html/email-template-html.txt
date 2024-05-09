@@ -35,7 +35,7 @@
                 <td colspan="2">
                     <!-- Greeting -->
                     <h3 style="margin-left: 10px;">
-                        <span name="span-greeting">Hello <!-- Greeting.UserName --> </span>,
+                        <span name="span-greeting">Hello <!-- Greeting.UserName --></span>,
                     </h3>
                 </td>
             </tr>

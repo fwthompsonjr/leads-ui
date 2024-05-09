@@ -14,6 +14,7 @@ namespace legallead.email.tests.services
         [InlineData(TemplateNames.LockedAccountResponse)]
         [InlineData(TemplateNames.ProfileChanged)]
         [InlineData(TemplateNames.PermissionChangeRequested)]
+        [InlineData(TemplateNames.PasswordChanged)]
         public void MessageCanSendLiveEmail(TemplateNames template)
         {
             if (!Debugger.IsAttached) return;

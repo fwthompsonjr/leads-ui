@@ -4,6 +4,7 @@ using legallead.email.interfaces;
 using legallead.email.models;
 using legallead.email.services;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using System.Data;
 
 namespace legallead.email.tests.services
@@ -93,6 +94,33 @@ namespace legallead.email.tests.services
             else connect.Verify(m => m.CreateConnection(), Times.Never);
         }
 
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        [InlineData(false, false)]
+        public async Task SutCanGetUserByUserName(bool hasResponse, bool hasUserName = true)
+        {
+            var data = hasResponse ? userNameFaker.Generate() : null;
+            var provider = Provider;
+            var conn = new Mock<IDbConnection>();
+            var connect = provider.GetRequiredService<Mock<IDataConnectionService>>();
+            var db = provider.GetRequiredService<Mock<IDataCommandService>>();
+            var query = accountfaker.Generate();
+            if (!hasUserName) query.UserName = string.Empty;
+            var service = provider.GetRequiredService<IUserSettingInfrastructure>();
+
+            connect.Setup(m => m.CreateConnection()).Returns(conn.Object);
+
+            db.Setup(m => m.QuerySingleOrDefaultAsync<GetUserAccountByUserNameDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>())).ReturnsAsync(data);
+            _ = await service.GetUserByUserName(query.UserName);
+
+            if (hasUserName) connect.Verify(m => m.CreateConnection(), Times.Once);
+            else connect.Verify(m => m.CreateConnection(), Times.Never);
+        }
 
         [Theory]
         [InlineData(false)]
@@ -278,6 +306,12 @@ namespace legallead.email.tests.services
 
         private static readonly Faker<GetUserAccountBySearchIndexDto> queryIndexFaker =
             new Faker<GetUserAccountBySearchIndexDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.UserName, y => y.Person.UserName);
+
+        private static readonly Faker<GetUserAccountByUserNameDto> userNameFaker =
+            new Faker<GetUserAccountByUserNameDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
             .RuleFor(x => x.Email, y => y.Person.Email)
             .RuleFor(x => x.UserName, y => y.Person.UserName);

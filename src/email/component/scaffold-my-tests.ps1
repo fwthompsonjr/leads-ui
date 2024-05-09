@@ -1,7 +1,7 @@
 
 param (
-	[string]$template = "PermissionChangeRequested",
-    [string]$templateToken = "permission-request"
+	[string]$template = "PasswordChanged",
+    [string]$templateToken = "password-changed"
 )
 
 $myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );

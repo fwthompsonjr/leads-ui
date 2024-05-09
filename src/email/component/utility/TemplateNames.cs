@@ -9,6 +9,7 @@ namespace legallead.email.utility
         LockedAccountResponse,
         ProfileChanged,
         PermissionChangeRequested,
+        PasswordChanged,
         // end of enumeration
     }
 }

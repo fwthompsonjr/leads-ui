@@ -7,9 +7,9 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>3.2.2</AssemblyVersion>
-    <FileVersion>3.2.2</FileVersion>
-    <Version>3.2.2</Version>
+    <AssemblyVersion>3.2.3</AssemblyVersion>
+    <FileVersion>3.2.3</FileVersion>
+    <Version>3.2.3</Version>
     <Description>Windows assembly to enable email behaviors from legal leads components.</Description>
     <PackageReleaseNotes>
 			(Please write the package release notes in “RELEASE NOTES.txt”.)
