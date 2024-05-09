@@ -24,8 +24,8 @@ namespace permissions.api.tests
             var postmanFile = Locator.PostmanSummaryFile();
             Assert.NotNull(latestApplicationFile);
             Assert.True(File.Exists(postmanFile));
-            output.WriteLine("Last application file is: {0}, {1:s}", 
-                latestApplicationFile.Name, 
+            output.WriteLine("Last application file is: {0}, {1:s}",
+                latestApplicationFile.Name,
                 latestWriteDate.GetValueOrDefault());
             var postmanDate = new FileInfo(postmanFile).LastWriteTime;
 
@@ -158,7 +158,7 @@ namespace permissions.api.tests
                     .Where(f => !f.FullName.Contains("\\obj\\"))
                     .ToList();
 
-                files.Sort((b,a) => a.LastWriteTime.CompareTo(b.LastWriteTime));
+                files.Sort((b, a) => a.LastWriteTime.CompareTo(b.LastWriteTime));
                 return files;
             }
         }
