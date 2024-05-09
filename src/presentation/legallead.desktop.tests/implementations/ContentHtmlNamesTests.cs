@@ -1,7 +1,6 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
-using Moq;
 
 namespace legallead.desktop.tests.implementations
 {

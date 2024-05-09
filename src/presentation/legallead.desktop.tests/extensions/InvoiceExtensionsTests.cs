@@ -1,8 +1,8 @@
 ﻿using Bogus;
-using legallead.desktop.entities;
-using legallead.desktop.implementations;
-using legallead.desktop.extensions;
 using HtmlAgilityPack;
+using legallead.desktop.entities;
+using legallead.desktop.extensions;
+using legallead.desktop.implementations;
 namespace legallead.desktop.tests.extensions
 {
 
@@ -44,13 +44,13 @@ namespace legallead.desktop.tests.extensions
                 var model = faker.Generate();
                 if (!hasClientSecret) model.ClientSecret = null;
                 var items = dataItems.HasValue ? datafaker.Generate(dataItems.Value) : null;
-                if (hasLowCost &&  items != null)
+                if (hasLowCost && items != null)
                 {
                     var smallnbr = 0.000001f;
                     items.ForEach(x => x.Price = smallnbr);
                 }
                 model.Data = items;
-                var html = hasTemplateItems ?  GetContent() : RemoveInvoiceLineItemNode(GetContent());
+                var html = hasTemplateItems ? GetContent() : RemoveInvoiceLineItemNode(GetContent());
                 var code = Guid.NewGuid().ToString();
                 var converted = model.GetHtml(html, code);
                 Assert.False(string.IsNullOrEmpty(converted));
