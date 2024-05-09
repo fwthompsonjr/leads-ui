@@ -6,6 +6,7 @@ $jsfile = [System.IO.Path]::Combine( $jsfolder, "configuration-js.txt" );
 $readMe = [System.IO.Path]::Combine( $workfolder, "README.md" );
 $jsonReadMe = [System.IO.Path]::Combine( $workfolder, "x-installer-version.json" );
 $backupReadMe = [System.IO.Path]::Combine( $workfolder, "README.backup.md" );
+$releaseNotesFile = [System.IO.Path]::Combine( $workfolder, "RELEASE-NOTES.txt" );
 $versionLine = '| x.y.z | {{ date }} | {{ description }} |'
 function getEnvironment($name) {
     try {
@@ -150,19 +151,37 @@ function updateVersionNumbers() {
             $hasXmlChange = $true;
             $child.InnerText = $versionStamp;
         }
-        if ('PackageReleaseNotes' -eq $nodeName ) {
-            $expected = getReleaseNotes
-            if ($expected -ne $null -and $expected.Equals($nodeValue) -eq $false ) {
-                $hasXmlChange = $true;
-                $child.InnerText = $expected;
-            }
-        }
     }
     if ($hasXmlChange -eq $true ) {
         $prj.Save( $projectFile );
     }
 }
 
+function updateReleaseTextFile( $text, $destination )
+{
+    if ( [System.IO.File]::Exists( $destination ) -eq $false ) { return; }
+    $tempName = [string]([System.IO.Path]::GetFileName( $destination )).Replace(".txt", ".backup.txt");
+    $sourcePath = [System.IO.Path]::GetDirectoryName( $destination );
+    $tempFile = [System.IO.Path]::Combine( $sourcePath, $tempName );
+    if ( [System.IO.File]::Exists( $tempFile ) -eq $true ) { 
+        [System.IO.File]::Delete( $tempFile ) | Out-Null;
+    }
+    [System.IO.File]::Copy( $destination, $tempFile, $true ) | Out-Null;
+    try {
+        $actualText = [System.IO.File]::ReadAllText( $destination );
+        if ( $actualText -eq $text ) { return; }
+        [System.IO.File]::WriteAllText( $destination, $text );
+    }
+    finally {
+        if ( [System.IO.File]::Exists( $tempFile ) -eq $true ) { 
+            [System.IO.File]::Delete( $tempFile ) | Out-Null;
+        }
+    }
+}
+
+$tmp = getReleaseNotes
+
 updateVersionNumbers
 updateInstallationKey
 updateReadMe
+updateReleaseTextFile -text $tmp -destination $releaseNotesFile
