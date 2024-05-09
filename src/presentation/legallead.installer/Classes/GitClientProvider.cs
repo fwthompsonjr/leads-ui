@@ -47,18 +47,16 @@ namespace legallead.installer.Classes
 
         public static async Task<List<ReleaseModel>?> GetReleases()
         {
-            if (ReleaseList != null) return ReleaseList;
             var repo = await GetRepository();
             if (repo == null) { return null; }
             var repositoryId = repo.Id;
             var releases = await GetClient().Repository.Release.GetAll(repositoryId);
             if (releases == null)
             {
-                ReleaseList = [];
-                return ReleaseList;
+                return [];
             }
-            ReleaseList = TranslateFrom(repositoryId, releases);
-            return ReleaseList;
+            var translated = TranslateFrom(repositoryId, releases);
+            return translated;
         }
 
         public static bool AllowShortcuts
@@ -74,12 +72,10 @@ namespace legallead.installer.Classes
 
         private static async Task<Repository?> GetRepository()
         {
-            if (CurrentRepository != null) return CurrentRepository;
             var client = GetClient();
             var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals(RepositoryName));
             if (!RepositoryId.HasValue && repo != null) { RepositoryId = repo.Id; }
-            CurrentRepository = repo;
-            return CurrentRepository;
+            return repo;
         }
 
         private static string AccessToken
@@ -176,41 +172,7 @@ namespace legallead.installer.Classes
         }
 
         private static long? RepositoryId;
-        private static Repository? CurrentRepository
-        {
-            get
-            {
-                var search = new RepositoryStorage();
-                return search.Find()?.FirstOrDefault();
-            }
-            set
-            {
-                if (value == null) { return; }
-                var storage = new RepositoryStorage
-                {
-                    Detail = [value]
-                };
-                storage.Save();
-            }
-        }
 
-        private static List<ReleaseModel>? ReleaseList
-        {
-            get
-            {
-                var search = new ReleaseModelStorage();
-                return search.Find();
-            }
-            set
-            {
-                if (value == null) { return; }
-                var storage = new ReleaseModelStorage
-                {
-                    Detail = value
-                };
-                storage.Save();
-            }
-        }
 
         private static List<string>? _packages = default;
         private static string? _accessToken = string.Empty;

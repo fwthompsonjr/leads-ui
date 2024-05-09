@@ -32,10 +32,9 @@ namespace legallead.installer.Classes
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
 
-            if (string.IsNullOrWhiteSpace(version)) return null;
-            if (string.IsNullOrWhiteSpace(app)) return null;
+            if (string.IsNullOrWhiteSpace(version) && string.IsNullOrWhiteSpace(app)) return null;
             var list = models.SelectMany(x => x.Assets).ToList().FindAll(x => x.Name.StartsWith(app, oic));
-            if (list.Count == 1 && string.IsNullOrEmpty(version)) return list[0];
+            if (list.Count == 1 || string.IsNullOrEmpty(version)) return list[0];
             var item = list.Find(x => x.Name.Equals(app, oic) && x.Version.Equals(version, oic));
             return item;
         }

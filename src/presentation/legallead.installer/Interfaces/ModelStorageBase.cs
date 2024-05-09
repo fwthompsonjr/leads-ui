@@ -1,6 +1,9 @@
-﻿using legallead.installer.Classes;
+﻿using legallead.installer.Bo;
+using legallead.installer.Classes;
+using legallead.installer.Models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace legallead.installer.Interfaces
 {
@@ -55,7 +58,7 @@ namespace legallead.installer.Interfaces
                     }
                 }
                 if (string.IsNullOrEmpty(js)) return null;
-                var model = JsonConvert.DeserializeObject(js, GetType());
+                var model = DeserializeObject(js, GetType());
                 if (model is not IModelStorage<T> storage) return null;
                 if (!storage.IsValid) return null;
                 return storage.Detail;
@@ -65,6 +68,28 @@ namespace legallead.installer.Interfaces
                 Console.WriteLine(ex.Message);
                 return null;
             }
+        }
+
+        private static object? DeserializeObject(string json, Type type)
+        {
+            if (!ModelStorageMapper.Translators.TryGetValue(type, out var conversion))
+            {
+                var model = JsonConvert.DeserializeObject(json, type);
+                if (model is not IModelStorage<T> _) return null;
+                return model;
+            }
+            var translation = JsonConvert.DeserializeObject(json, conversion);
+            var obj = JsonConvert.DeserializeObject(json, type);
+            if (obj is not IModelStorage<T> storage) return null;
+            if (translation is not ICreateDateProperty creationDt) return null;
+            var dte = creationDt.CreationDate.Replace("T", " ");
+            storage.CreationDate = DateTime.Parse(dte, CultureInfo.InvariantCulture);
+            if (storage is ReleaseModelStorage releases && translation is ReleaseModelStorageBo releasesBo) 
+            {
+                releases.Detail = releasesBo.Models();
+                return releases;
+            }
+            return storage;
         }
 
         private static void SetValue(string keyName, string keyValue, EnvironmentVariableTarget? target)
@@ -98,5 +123,6 @@ namespace legallead.installer.Interfaces
                 return null;
             }
         }
+
     }
 }
