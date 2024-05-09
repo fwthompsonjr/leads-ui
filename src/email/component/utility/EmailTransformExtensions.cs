@@ -73,6 +73,21 @@ namespace legallead.email.utility
             return Substitute(doc, dictionary);
         }
 
+        internal static string ToHtml(this PasswordChangedResponse search,
+            UserAccountByEmailBo? user,
+            string html)
+        {
+            if (string.IsNullOrEmpty(search.UserName)) { return html; }
+            var doc = GetDocument(html);
+            if (doc == null) { return html; }
+            var dictionary = new Dictionary<string, string>()
+            {
+                { "//span[@name='password-changed-user-name']", UserKeyOrDefault(user?.UserName) },
+                { "//span[@name='password-changed-email']", UserKeyOrDefault(user?.Email) },
+            };
+            return Substitute(doc, dictionary);
+        }
+
         private static string GetPermissionItems(PermissionChangeResponse search)
         {
             const string item = "<span style='color:blue;'>{0} : </span><span style='color: gray'>{1}</span><br/>";

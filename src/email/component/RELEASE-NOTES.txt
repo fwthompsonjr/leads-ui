@@ -1,6 +1,7 @@
 
       legallead.email
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.3 - 2024-05-07 - Adding password changed template
       : 3.2.2 - 2024-05-07 - Adding permission change request template
       : 3.2.1 - 2024-05-07 - Adding profile change template
       : 3.2.0 - 2024-05-06 - Adding locked account template
@@ -11,6 +12,7 @@
 
       legallead.email templates
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : Password Changed - Email to user when password change is completed
       : Permission Changed Request - Email to user when permissions change is requested
       : Profile Changed - Email to user when profile data is updated
       : Locked Account - Email to user if account has been locked

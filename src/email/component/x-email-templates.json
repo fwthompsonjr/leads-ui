@@ -1,5 +1,10 @@
 [
   {
+    "name": "Password Changed",
+    "description": "Email to user when password change is completed",
+    "date": "2024-05-08"
+  },
+  {
     "name": "Permission Changed Request",
     "description": "Email to user when permissions change is requested",
     "date": "2024-05-08"

@@ -22,5 +22,9 @@
 	{
 		"isTesting": false,
 		"name":  "PermissionChangeRequested"
+	},
+	{
+		"isTesting": true,
+		"name":  "PasswordChanged"
 	}
 ]

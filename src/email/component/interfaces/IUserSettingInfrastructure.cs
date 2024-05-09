@@ -8,6 +8,7 @@ namespace legallead.email.interfaces
         Task<List<UserEmailSettingBo>?> GetSettings(UserSettingQuery query);
         Task<UserAccountByEmailBo?> GetUserByEmail(string? email);
         Task<UserAccountByEmailBo?> GetUserBySearchId(string id);
+        Task<UserAccountByEmailBo?> GetUserByUserName(string? userName);
         Task<LogCorrespondenceDto?> Log(string id, string json);
         void LogError(string id, string message);
         void LogSuccess(string id);

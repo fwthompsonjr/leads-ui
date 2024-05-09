@@ -14,7 +14,7 @@ function doesNodeExist( $source, $search )
 
 $myfolder = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $src = [System.IO.Path]::Combine( $myfolder, "_template\template-test-json.txt" );
-$name = "PermissionChangeRequested"
+$name = "PasswordChanged"
 
 if ( [System.IO.File]::Exists( $src ) -eq $false ) { return; }
 

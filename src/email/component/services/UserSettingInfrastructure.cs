@@ -35,6 +35,18 @@ namespace legallead.email.services
             return JsonConvert.DeserializeObject<UserAccountByEmailBo>(json);
         }
 
+        public async Task<UserAccountByEmailBo?> GetUserByUserName(string? userName)
+        {
+            var query = new UserAccountByUserNameBo { UserName = userName };
+            if (!query.IsValid) return null;
+            var db = _connection.CreateConnection();
+            var parms = query.GetParameters();
+            var sql = $"CALL {new GetUserAccountByUserNameDto().TableName} ( ? );";
+            var response = await _db.QuerySingleOrDefaultAsync<GetUserAccountByUserNameDto>(db, sql, parms);
+            var json = JsonConvert.SerializeObject(response);
+            return JsonConvert.DeserializeObject<UserAccountByEmailBo>(json);
+        }
+
         public async Task<UserAccountByEmailBo?> GetUserBySearchId(string? id)
         {
             if (string.IsNullOrEmpty(id)) return null;
