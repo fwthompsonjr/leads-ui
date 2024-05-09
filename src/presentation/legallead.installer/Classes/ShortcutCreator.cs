@@ -1,5 +1,6 @@
 ﻿using legallead.installer.Interfaces;
 using legallead.installer.Models;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -23,31 +24,52 @@ namespace legallead.installer.Classes
                 var messagetype = sc == 0 ? "application" : "desktop";
                 var message = $"Creating {messagetype} shortcut: {name} version: {version}.";
                 Console.WriteLine(message);
-                service.Create(item, installPath, sc == 1);
+                var linkAddress = service.Create(item, installPath, sc == 1);
+                if (sc != 1) continue;
+                // launch the shortcut
+                LaunchShortCut(linkAddress);
             }
         }
 
-        public void Build(ReleaseAssetModel model, string targetDir, FileInfo executableFile)
+        public string? Build(ReleaseAssetModel model, string targetDir, FileInfo executableFile)
         {
             try
             {
-
                 var linkFile = $"{model.Name}-{model.Version}.lnk";
                 string shortcutAddress = Path.Combine(targetDir, linkFile);
                 var workingDirectory = Path.GetDirectoryName(executableFile.FullName);
-                if (string.IsNullOrEmpty(workingDirectory)) return;
+                if (string.IsNullOrEmpty(workingDirectory)) return null;
                 if (File.Exists(shortcutAddress)) { File.Delete(shortcutAddress); }
                 IWshShortcut shortcut = (IWshShortcut)m_type.InvokeMember("CreateShortcut", System.Reflection.BindingFlags.InvokeMethod, null, m_shell, new object[] { shortcutAddress });
 
-                if (shortcut == null) return;
+                if (shortcut == null) return null;
                 shortcut.Description = $"Shortcut Legal Lead : {model.Name}-{model.Version}";
                 shortcut.TargetPath = executableFile.FullName;
                 shortcut.WorkingDirectory = workingDirectory;
                 shortcut.Save();
+                return shortcutAddress;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        [ExcludeFromCodeCoverage(Justification = "Interacts with file system. Tested in integration")]
+        private static void LaunchShortCut(string linkAddress)
+        {
+            if (string.IsNullOrEmpty(linkAddress)) return;
+            if (!File.Exists(linkAddress)) return;
+            try
+            {
+                Process proc = new();
+                proc.StartInfo.FileName = linkAddress;
+                proc.Start();
+            }
+            catch (Exception)
+            {
+                // take no action on failure here
+                return;
             }
         }
 

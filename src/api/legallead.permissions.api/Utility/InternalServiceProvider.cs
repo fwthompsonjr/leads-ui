@@ -1,15 +1,8 @@
-﻿using legallead.permissions.api.Interfaces;
-
-namespace legallead.permissions.api
+﻿namespace legallead.permissions.api
 {
-    public class InternalServiceProvider : IInternalServiceProvider
+    public class InternalServiceProvider(IServiceCollection collection) : IInternalServiceProvider
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public InternalServiceProvider(IServiceCollection collection)
-        {
-            _serviceProvider = collection.BuildServiceProvider();
-        }
+        private readonly IServiceProvider _serviceProvider = collection.BuildServiceProvider();
 
         public IServiceProvider ServiceProvider => _serviceProvider;
     }

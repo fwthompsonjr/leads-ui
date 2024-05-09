@@ -1,16 +1,11 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
-using legallead.permissions.api.Interfaces;
+﻿using legallead.jdbc.interfaces;
 
 namespace legallead.permissions.api.Utility
 {
-    public class CustomerLockInfrastructure : ICustomerLockInfrastructure
+    public class CustomerLockInfrastructure(IUserLockStatusRepository repo) : ICustomerLockInfrastructure
     {
-        private readonly IUserLockStatusRepository lockRepo;
-        public CustomerLockInfrastructure(IUserLockStatusRepository repo)
-        {
-            lockRepo = repo;
-        }
+        private readonly IUserLockStatusRepository lockRepo = repo;
+
         public async Task AddIncident(string userId)
         {
             await lockRepo.AddIncident(new() { Id = userId });
@@ -37,8 +32,9 @@ namespace legallead.permissions.api.Utility
         }
         public async Task<bool> LockAccount(string userId)
         {
-            var isLocked = await Task.Run(() => {
-                Console.WriteLine(userId);
+            var isLocked = await Task.Run(async () =>
+            {
+                for (var x = 0; x < 10; x++) await AddIncident(userId);
                 return true;
             });
             return isLocked;

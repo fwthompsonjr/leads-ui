@@ -1,0 +1,30 @@
+[
+	{
+		"name": "RegistrationCompleted",
+		"isTesting": false
+	},
+	{
+		"name": "SearchPaymentCompleted",
+		"isTesting": false
+	},
+	{
+		"name": "BeginSearchRequested",
+		"isTesting": false
+	},
+	{
+		"name": "LockedAccountResponse",
+		"isTesting": false
+	},
+	{
+		"name": "ProfileChanged",
+		"isTesting": false
+	},
+	{
+		"isTesting": false,
+		"name":  "PermissionChangeRequested"
+	},
+	{
+		"isTesting": true,
+		"name":  "PasswordChanged"
+	}
+]

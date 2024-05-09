@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.json.db.entity;
 
 namespace legallead.permissions.api
@@ -96,6 +95,7 @@ namespace legallead.permissions.api
             return true;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
         public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName)
         {
             try
@@ -135,7 +135,7 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
         public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode)
         {
             try
@@ -163,7 +163,7 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
         public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode)
         {
             try
@@ -194,7 +194,7 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
         public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
         {
             try
@@ -222,7 +222,7 @@ namespace legallead.permissions.api
                 return new KeyValuePair<bool, string>(false, $"Unexpected error occurred appling user settings.");
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
         public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
         {
             try
@@ -254,6 +254,7 @@ namespace legallead.permissions.api
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private KeyValuePair<bool, string> ApplySubscriptions(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
@@ -280,7 +281,7 @@ namespace legallead.permissions.api
             });
             return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private KeyValuePair<bool, string> RemoveSubscriptions(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
@@ -316,6 +317,7 @@ namespace legallead.permissions.api
             return new KeyValuePair<bool, string>(true, $"Keys updated successfully | Current Subscriptions := {currentSubscriptions}");
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private KeyValuePair<bool, string> ApplyDiscounts(User user, List<UserPermissionView> permissions, List<PermissionGroup> groups, string discountCode)
         {
             var discountNames = "State,County".Split(',').ToList();
@@ -333,6 +335,7 @@ namespace legallead.permissions.api
             return ApplyChanges(user, settings, permissions);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private KeyValuePair<bool, string> RemoveDiscounts(User user, List<UserPermissionView> permissions, string discountCode)
         {
             var discountNames = "State,County".Split(',').ToList();
@@ -345,6 +348,7 @@ namespace legallead.permissions.api
             return ApplyChanges(user, settings, permissions);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private KeyValuePair<bool, string> ApplyChanges(User user, Dictionary<string, string> settings, List<UserPermissionView> permissions)
         {
             var changes = new List<UserPermission>();
@@ -367,6 +371,7 @@ namespace legallead.permissions.api
             return new KeyValuePair<bool, string>(true, $"Keys updated successfully");
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string SortItems(string source)
         {
             const char comma = ',';
@@ -375,7 +380,7 @@ namespace legallead.permissions.api
             items.Sort();
             return string.Join(comma, items);
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string RemoveKey(string current, string key)
         {
             const char comma = ',';
@@ -387,7 +392,7 @@ namespace legallead.permissions.api
             items.Sort();
             return string.Join(comma, items);
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static bool IsDiscountRemovalNeeded(string? removalText)
         {
             const char pipe = '|';

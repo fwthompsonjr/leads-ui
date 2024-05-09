@@ -1,10 +1,8 @@
 using legallead.permissions.api;
 using legallead.permissions.api.Health;
-using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -27,7 +25,24 @@ var config = isDevelopment switch
 var services = builder.Services;
 services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
-services.AddControllers();
+services.RegisterEmailServices();
+services.AddControllers(options =>
+{
+    var filters = options.Filters;
+    filters.Add<BeginSearchRequested>();
+    filters.Add<RegistrationCompleted>();
+    filters.Add<SearchPaymentCompleted>();
+    filters.Add<ProfileChanged>();
+    filters.Add<PermissionChangeRequested>();
+    filters.Add<PasswordChanged>();
+});
+services.AddTransient<BeginSearchRequested>();
+services.AddTransient<RegistrationCompleted>();
+services.AddTransient<RegistrationCompleted>();
+services.AddTransient<ProfileChanged>();
+services.AddTransient<PermissionChangeRequested>();
+services.AddTransient<PasswordChanged>();
+
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -39,7 +54,6 @@ services.AddSwaggerGen(c =>
 
 services.AddSingleton<IInternalServiceProvider>(new InternalServiceProvider(services));
 services.RegisterHealthChecks();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,10 +83,13 @@ var details = new HealthCheckOptions
 };
 app.MapHealthChecks("/health", health);
 app.MapHealthChecks("/health-details", details);
+#pragma warning disable ASP0014 // Suggest using top level route registrations
+// this allows backward compatibility to 6.0 projects
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+#pragma warning restore ASP0014 // Suggest using top level route registrations
 
 // Resolve the StartupTasks from the ServiceProvider
 var startupTasks = app.Services.GetServices<IStartupTask>();

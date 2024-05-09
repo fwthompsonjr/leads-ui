@@ -1,19 +1,13 @@
 ﻿using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
-using legallead.permissions.api.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
-    public class DataHealthCheck : BaseServiceHealthCheck, IHealthCheck
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
+    public class DataHealthCheck(IInternalServiceProvider provider) : BaseServiceHealthCheck(provider, ClassContextName), IHealthCheck
     {
         private const string ClassContextName = "Create Data Context";
-
-        public DataHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
-        {
-        }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

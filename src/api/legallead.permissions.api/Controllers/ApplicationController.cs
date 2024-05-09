@@ -1,28 +1,19 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.models;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
+﻿
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationController : ControllerBase
+    public class ApplicationController(DataProvider db, IStateSearchProvider stateSearch) : ControllerBase
     {
         private const string defaultReadme = "No ReadMe information is available.";
         private static bool isReadMeBuilt = false;
 
         private static readonly object _instance = new();
         private static string? _readme;
-        private readonly DataProvider _db;
-        private readonly IStateSearchProvider _searchProvider;
-
-        public ApplicationController(DataProvider db, IStateSearchProvider stateSearch)
-        {
-            _db = db;
-            _searchProvider = stateSearch;
-        }
+        private readonly DataProvider _db = db;
+        private readonly IStateSearchProvider _searchProvider = stateSearch;
 
         [HttpGet]
         [Route("read-me")]
@@ -47,7 +38,7 @@ namespace legallead.permissions.api.Controllers
                 var apps = response.Select(s =>
                 new ApplicationModel
                 {
-                    Id = s.Id ?? string.Empty,
+                    Id = s.Id,
                     Name = s.Name ?? string.Empty
                 });
                 return apps;
@@ -61,6 +52,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("register")]
+        [ServiceFilter(typeof(RegistrationCompleted))]
         public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";
@@ -70,7 +62,32 @@ namespace legallead.permissions.api.Controllers
                 response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var applicationCheck = Request.Validate(response);
+            var registration = await Register(Request, model, response);
+            return registration;
+        }
+
+        [HttpGet]
+        [Route("state-configuration")]
+        public IActionResult StateList()
+        {
+            var data = _searchProvider.GetStates();
+            return Ok(data);
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
+        private async Task<IActionResult> Register(HttpRequest request, RegisterAccountModel model, string response)
+        {
+            var registration = await RegisterUser(request, model, response);
+            if (registration is IActionResult action) return action;
+            if (registration is not User user) return UnprocessableEntity();
+            var accountResult = await RegisterUserAccount(user, response);
+            return accountResult;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
+        private async Task<object> RegisterUser(HttpRequest request, RegisterAccountModel model, string response)
+        {
+            var applicationCheck = request.Validate(response);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var account = new UserModel
             {
@@ -84,6 +101,11 @@ namespace legallead.permissions.api.Controllers
             {
                 return Conflict("Potential duplicate account found.");
             }
+            return user;
+        }
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
+        private async Task<IActionResult> RegisterUserAccount(User user, string response)
+        {
             try
             {
                 var isAdded = await TryCreateAccount(user);
@@ -104,14 +126,8 @@ namespace legallead.permissions.api.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("state-configuration")]
-        public IActionResult StateList()
-        {
-            var data = _searchProvider.GetStates();
-            return Ok(data);
-        }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
         private static void GenerateReadMe(ref string? readme)
         {
             if (isReadMeBuilt) return;
@@ -119,6 +135,7 @@ namespace legallead.permissions.api.Controllers
             isReadMeBuilt = true;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
         private async Task<bool> TryCreateAccount(User user)
         {
             try
@@ -136,6 +153,7 @@ namespace legallead.permissions.api.Controllers
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
         private async Task<bool> IsDuplicateAccount(User user)
         {
             try

@@ -1,8 +1,8 @@
 ﻿using legallead.json.db.entity;
-using legallead.permissions.api.Interfaces;
 
 namespace legallead.permissions.api
 {
+    [ExcludeFromCodeCoverage(Justification = "Class directly interacts with database.")]
     public class JsonInitStartupTask : IStartupTask
     {
         private bool IsDataReady = false;

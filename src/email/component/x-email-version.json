@@ -1,0 +1,32 @@
+[
+  {
+    "id": "3.2.3",
+    "description": "Adding password changed template",
+    "date": "2024-05-07"
+  },
+  {
+    "id": "3.2.2",
+    "description": "Adding permission change request template",
+    "date": "2024-05-07"
+  },
+  {
+    "id": "3.2.1",
+    "description": "Adding profile change template",
+    "date": "2024-05-07"
+  },
+  {
+    "id": "3.2.0",
+    "description": "Adding locked account template",
+    "date": "2024-05-06"
+  },
+  {
+    "id": "3.2.0",
+    "description": "Setup component deployment process",
+    "date": "2024-04-30"
+  },
+  {
+    "id": "3.2.0",
+    "description": "Initial Email Component Release With Base Commands",
+    "date": "2024-04-30"
+  }
+]

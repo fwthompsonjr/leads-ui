@@ -1,35 +1,22 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.models;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SignonController : ControllerBase
+    public partial class SignonController(
+        DataProvider db,
+        IJwtManagerRepository jWTManager,
+        IRefreshTokenValidator tokenValidator,
+        ICustomerLockInfrastructure lockingDb,
+        ILoggingInfrastructure logService) : ControllerBase
     {
-        private readonly DataProvider _db;
-        private readonly IJwtManagerRepository _jWTManager;
-        private readonly IRefreshTokenValidator _tokenValidator;
-        private readonly ILoggingInfrastructure _logSvc;
-        private readonly ICustomerLockInfrastructure _lockingDb;
-
-        public SignonController(
-            DataProvider db,
-            IJwtManagerRepository jWTManager,
-            IRefreshTokenValidator tokenValidator,
-            ICustomerLockInfrastructure lockingDb,
-            ILoggingInfrastructure logService)
-        {
-            _db = db;
-            _jWTManager = jWTManager;
-            _tokenValidator = tokenValidator;
-            _lockingDb = lockingDb;
-            _logSvc = logService;
-        }
+        private readonly DataProvider _db = db;
+        private readonly IJwtManagerRepository _jWTManager = jWTManager;
+        private readonly IRefreshTokenValidator _tokenValidator = tokenValidator;
+        private readonly ILoggingInfrastructure _logSvc = logService;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
 
         [AllowAnonymous]
         [HttpPost]
@@ -47,22 +34,11 @@ namespace legallead.permissions.api.Controllers
                 }
                 var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
                 var validUser = await _db.UserDb.IsValidUserAsync(model);
-                var user = validUser.Value;
-                if (!validUser.Key || user == null || string.IsNullOrEmpty(user.Id))
-                {
-                    if (!string.IsNullOrEmpty(user?.Id))
-                    {
-                        await _lockingDb.AddIncident(user.Id);
-                    }
-                    await _logSvc.LogWarning("Failed : Validate User Credential. Returning 401 - Unauthorized");
-                    return Unauthorized("Invalid username or password...");
-                }
-                var isLocked = await _lockingDb.IsAccountLocked(user.Id);
-                if (isLocked)
-                {
-                    await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
-                    return Forbid("Account is locked. Contact system administrator to unlock.");
-                }
+                var user = validUser.Value ?? new();
+                var hasIncident = await IsViolationIncidentCreated(validUser);
+                if (hasIncident != null) return hasIncident;
+                var isLocked = await IsAccountLockedViolation(user.Id, user.Email);
+                if (isLocked != null) return isLocked;
                 var token = _jWTManager.GenerateToken(user);
 
                 if (token == null)
@@ -156,6 +132,7 @@ namespace legallead.permissions.api.Controllers
         [Authorize]
         [HttpPost]
         [Route("change-password")]
+        [ServiceFilter(typeof(PasswordChanged))]
         public async Task<IActionResult> ChangePasswordAsync(UserChangePasswordModel usersdata)
         {
             var response = "An error occurred authenticating account.";
@@ -168,29 +145,12 @@ namespace legallead.permissions.api.Controllers
             {
                 return Unauthorized("Invalid username or password...");
             }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
-            if (isLocked)
-            {
-                await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
-                return Forbid("Account is locked. Contact system administrator to unlock.");
-            }
+            var isLocked = await IsAccountLockedViolation(user.Id, user.Email);
+            if (isLocked != null) return isLocked;
             User update = MapFromChangePassword(usersdata, model, user);
             update.CreateDate = user.CreateDate.GetValueOrDefault(DateTime.UtcNow);
             await _db.UserDb.Update(update);
             return Ok(usersdata.UserName);
-        }
-
-        private static User MapFromChangePassword(UserChangePasswordModel usersdata, UserModel model, User? user)
-        {
-            model.Password = usersdata.NewPassword;
-            if (user != null)
-            {
-                model.Email = user.Email;
-                model.UserName = user.UserName;
-            }
-            var update = UserModel.ToUser(model);
-            if (!string.IsNullOrEmpty(user?.Id)) update.Id = user.Id;
-            return update;
         }
     }
 }

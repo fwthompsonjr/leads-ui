@@ -6,7 +6,7 @@
         public string? WebhookId { get; set; }
         public List<StripeKeyItem> Items { get; set; } = new();
 
-        public string GetActiveName()
+        public virtual string GetActiveName()
         {
             var item = Items.Find(x => x.Name == ActiveName);
             return item?.Value ?? string.Empty;

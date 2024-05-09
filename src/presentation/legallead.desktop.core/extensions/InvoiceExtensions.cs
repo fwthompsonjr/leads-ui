@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.entities;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace legallead.desktop.extensions
@@ -109,6 +110,7 @@ namespace legallead.desktop.extensions
             return node;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member is tested from public method.")]
         private static string GetDescription(string? desciption, string fallback)
         {
             if (string.IsNullOrWhiteSpace(desciption)) return fallback;

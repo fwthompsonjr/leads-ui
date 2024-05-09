@@ -1,6 +1,6 @@
 ﻿using legallead.permissions.api.Utility;
 
-namespace permissions.api.tests
+namespace permissions.api.tests.Others
 {
     public class RoleDescriptionsTests
     {

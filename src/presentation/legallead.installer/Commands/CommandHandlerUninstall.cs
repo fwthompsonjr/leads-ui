@@ -26,7 +26,7 @@ namespace legallead.installer.Commands
                 return;
             }
             var versions = models.SelectMany(x => x.Versions).ToList();
-            var filtered = versions.FindAll(x => x.Name == name); 
+            var filtered = versions.FindAll(x => x.Name == name);
             if (filtered.Count == 1 && string.IsNullOrWhiteSpace(version))
             {
                 TryToDelete(filtered[0]);
@@ -52,7 +52,7 @@ namespace legallead.installer.Commands
                 if (!isFound)
                 {
                     Console.WriteLine(failmsg);
-                    return; 
+                    return;
                 }
                 _fileService.DeleteDirectory(model.FullPath, true);
                 if (_fileService.DirectoryExists(model.FullPath))

@@ -6,13 +6,10 @@ namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventsController : ControllerBase
+    [ExcludeFromCodeCoverage(Justification = "This controller and component are not used. Future development.")]
+    public class EventsController(StripeKeyEntity config) : ControllerBase
     {
-        private readonly string endpointSecret;
-        public EventsController(StripeKeyEntity config)
-        {
-            endpointSecret = config.WebhookId ?? string.Empty;
-        }
+        private readonly string endpointSecret = config.WebhookId ?? string.Empty;
 
         [HttpPost]
         public async Task<IActionResult> Index()

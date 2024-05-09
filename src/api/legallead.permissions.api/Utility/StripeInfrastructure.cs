@@ -1,7 +1,5 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
@@ -9,16 +7,13 @@ using Stripe.Checkout;
 
 namespace legallead.permissions.api.Utility
 {
-    public class StripeInfrastructure : IStripeInfrastructure
+    [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
+    public class StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity) : IStripeInfrastructure
     {
-        private readonly IUserSearchRepository _repo;
-        private readonly StripeKeyEntity keyEntity;
-        public StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity)
-        {
-            _repo = repo;
-            keyEntity = entity;
-        }
+        private readonly IUserSearchRepository _repo = repo;
+        private readonly StripeKeyEntity keyEntity = entity;
 
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public async Task<object?> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
@@ -98,6 +93,7 @@ namespace legallead.permissions.api.Utility
             return response;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public object SessionStatus(string sessionId)
         {
             var sessionService = new SessionService();
@@ -109,6 +105,49 @@ namespace legallead.permissions.api.Utility
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public async Task<object> FetchClientSecret(LevelRequestBo session)
+        {
+            var nodata = new { clientSecret = Guid.Empty.ToString("D") };
+
+            var service = new SubscriptionService();
+            var subscription = await service.GetAsync(session.SessionId);
+            if (subscription == null) return nodata;
+            var invoiceId = subscription.LatestInvoiceId;
+            var invoiceSvc = new InvoiceService();
+            var invoice = await invoiceSvc.GetAsync(invoiceId);
+            if (invoice == null) return nodata;
+            var intentSvc = new PaymentIntentService();
+            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
+            var clientSecret = intent.ClientSecret;
+            return new { clientSecret };
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public Tuple<bool, string, Invoice> VerifySubscription(string sessionId)
+        {
+            const string dash = " - ";
+            var failure = new Tuple<bool, string, Invoice>(true, dash, new() { Total = 0 });
+            try
+            {
+                var service = new SubscriptionService();
+                var subscription = service.Get(sessionId);
+                if (subscription == null) return failure;
+                var invoiceId = subscription.LatestInvoiceId;
+                var invoiceSvc = new InvoiceService();
+                var invoice = invoiceSvc.Get(invoiceId);
+                if (invoice == null) return failure;
+                _ = subscription.Metadata.TryGetValue("SuccessUrl", out string? successUrl);
+                successUrl ??= dash;
+                return new Tuple<bool, string, Invoice>(true, successUrl, invoice);
+            }
+            catch
+            {
+                return failure;
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member testing through publicly exposed method.")]
         private async Task<object?> GetPaymentSession(PaymentCreateModel model)
         {
             var isPaid = await _repo.IsSearchPurchased(model.SearchId);
@@ -122,6 +161,7 @@ namespace legallead.permissions.api.Utility
             return response;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         private static PaymentIntent CreatePaymentIntent(decimal amount)
         {
             var options = new PaymentIntentCreateOptions

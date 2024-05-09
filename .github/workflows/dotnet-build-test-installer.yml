@@ -15,6 +15,7 @@ on:
 env:
     FAILED_TEST_COUNT: "0"
     LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+    NUGET_CERT_REVOCATION_MODE: offline
 
 jobs:
   build:
@@ -34,3 +35,8 @@ jobs:
       uses: actions/github-script@v3
       with:
         script: core.setFailed('One or more test failed')
+
+    - name: Summarize Test Results
+      shell: pwsh
+      run: |
+        & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"

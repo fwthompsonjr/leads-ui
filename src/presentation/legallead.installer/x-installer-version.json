@@ -1,5 +1,15 @@
 [
   {
+    "id": "3.2.3",
+    "description": "Apply formatting to nuget package README",
+    "date": "2024-05-09"
+  },
+  {
+    "id": "3.2.2",
+    "description": "Change implementation to launch application",
+    "date": "2024-04-05"
+  },
+  {
     "id": "3.2.1",
     "description": "Add ability to uninstall application from cli",
     "date": "2024-04-05"

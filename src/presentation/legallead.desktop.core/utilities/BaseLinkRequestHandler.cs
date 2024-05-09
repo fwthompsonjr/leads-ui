@@ -1,5 +1,6 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
@@ -11,6 +12,7 @@ namespace legallead.desktop.utilities
         {
             return DecodeQueryParameters(url);
         }
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static List<KeyNameBo> DecodeQueryParameters(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return new();

@@ -1,6 +1,4 @@
-﻿using legallead.installer.Classes;
-
-namespace legallead.installer.Commands
+﻿namespace legallead.installer.Commands
 {
     public partial class CommandHandler
     {
@@ -72,7 +70,6 @@ namespace legallead.installer.Commands
             Console.WriteLine(" - {0}", installPath);
             if (!_reader.AllowShortcuts) return;
             _linkService.Install(_linkService, item, installPath, name, version);
-            Execute(name, version);
         }
 
     }

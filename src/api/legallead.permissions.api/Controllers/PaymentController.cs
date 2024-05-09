@@ -1,26 +1,18 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PaymentController : ControllerBase
+    public class PaymentController(
+        PaymentStripeOption payment,
+        ISearchInfrastructure infra,
+        IStripeInfrastructure stripe) : ControllerBase
     {
-        private readonly PaymentStripeOption stripeOptions;
-        private readonly ISearchInfrastructure infrastructure;
-        private readonly IStripeInfrastructure stripeService;
-
-        public PaymentController(
-            PaymentStripeOption payment,
-            ISearchInfrastructure infra,
-            IStripeInfrastructure stripe)
-        {
-            stripeOptions = payment;
-            infrastructure = infra;
-            stripeService = stripe;
-        }
+        private readonly PaymentStripeOption stripeOptions = payment;
+        private readonly ISearchInfrastructure infrastructure = infra;
+        private readonly IStripeInfrastructure stripeService = stripe;
 
         [HttpGet("product-codes")]
         public IActionResult ProductCodes()

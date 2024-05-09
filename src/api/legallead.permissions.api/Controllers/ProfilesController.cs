@@ -1,11 +1,7 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using legallead.permissions.api.Utility;
+﻿using legallead.permissions.api.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace legallead.Profiles.api.Controllers
 {
@@ -19,7 +15,10 @@ namespace legallead.Profiles.api.Controllers
         public ProfilesController(IProfileInfrastructure db)
         {
             _db = db;
+            GetVerification = new ProfileRequestVerification(_db);
         }
+
+        internal IProfileRequestVerification GetVerification { get; set; }
 
         [HttpPost]
         [Route("get-contact-identity")]
@@ -71,9 +70,10 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-address")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactAddress(ChangeContactAddressRequest[] request)
         {
-            var verification = await VerifyRequest(request);
+            var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactAddress(verification.User, request);
             if (response.Key)
@@ -84,79 +84,79 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("edit-contact-email")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactEmail(ChangeContactEmailRequest[] request)
         {
-            var verification = await VerifyRequest(request);
+            var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactEmail(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Email",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
+
 
             return Conflict(response);
         }
 
         [HttpPost]
         [Route("edit-contact-name")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactName(ChangeContactNameRequest[] request)
         {
-            var verification = await VerifyRequest(request);
+            var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactName(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Name",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
 
             return Conflict(response);
         }
 
         [HttpPost]
         [Route("edit-contact-phone")]
+        [ServiceFilter(typeof(ProfileChanged))]
         public async Task<IActionResult> ChangeContactPhone(ChangeContactPhoneRequest[] request)
         {
-            var verification = await VerifyRequest(request);
+            var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
             var response = await _db.ChangeContactPhone(verification.User, request);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Email",
+                    response.Value,
+                    verification.User, request);
+                return Ok(serilized);
+            }
 
             return Conflict(response);
         }
 
-        private async Task<ActionUserResponse> VerifyRequest(object[] request)
-        {
-            var response = new ActionUserResponse();
-            var user = await _db.GetUser(Request);
-            if (user == null)
-            {
-                response.Result = Unauthorized("Invalid user account.");
-                return response;
-            }
-            response.User = user;
-            var validation = BulkValidate(request, out var isValid);
-            if (!isValid && validation != null && validation.Any())
-            {
-                var messages = validation.Select(x => x.ErrorMessage).ToList();
-                response.Result = BadRequest(messages);
-                return response;
-            }
-            return response;
-        }
 
-        private static List<ValidationResult> BulkValidate(object[] collection, out bool isvalid)
+        private static KeyValuePair<bool, string> GetChangeResponse(
+            string changeName,
+            string message,
+            User? user,
+            object original)
         {
-            var results = new List<ValidationResult>();
-            foreach (var item in collection)
+            var js = JsonConvert.SerializeObject(original);
+            var data = new
             {
-                var resp = item.Validate(out var _);
-                if (resp != null && resp.Any()) { results.AddRange(resp); }
-            }
-            isvalid = results.Any();
-            return results;
-        }
-
-        private sealed class ActionUserResponse
-        {
-            public IActionResult? Result { get; set; }
-            public User? User { get; set; }
+                Email = user?.Email ?? string.Empty,
+                Name = changeName,
+                Message = message,
+                JsonData = js
+            };
+            js = JsonConvert.SerializeObject(data);
+            return new(true, js);
         }
     }
 }

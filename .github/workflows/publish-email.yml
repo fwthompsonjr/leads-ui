@@ -1,0 +1,34 @@
+name: "CI : Publish : Email Component"
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    types: [ "closed" ]
+    paths:
+      - 'src/email/**'
+
+env:
+  LEGALLEAD_EMAIL_TOKEN: ${{ secrets.SES_SECRET }}
+  LEGALLEAD_EMAIL_USER: ${{ secrets.SES_USER }}
+  SOLUTION_NAME: ${{ github.workspace }}/src/email/legallead.email.sln
+  NET_VERSION: "8.0.x"
+  NUGET_CERT_REVOCATION_MODE: offline
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: dotnet restore ${{ env.SOLUTION_NAME }}
+        id: dotnet-restore
+        name: DotNet Restore
+
+      - run: dotnet build ${{ env.SOLUTION_NAME }} -c Release --no-restore
+        id: dotnet-build
+        name: DotNet Build
+
+      - name: Publish MyGet Packages
+        if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
+        shell: pwsh
+        run: |
+          & ./publish-email-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"

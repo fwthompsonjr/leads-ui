@@ -1,20 +1,13 @@
 ﻿using legallead.jdbc.helpers;
-using legallead.permissions.api.Interfaces;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
-    public class DbConnectionHealthCheck : IHealthCheck
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
+    public class DbConnectionHealthCheck(IInternalServiceProvider provider) : IHealthCheck
     {
-        private readonly IInternalServiceProvider _provider;
-
-        public DbConnectionHealthCheck(IInternalServiceProvider provider)
-        {
-            _provider = provider;
-        }
+        private readonly IInternalServiceProvider _provider = provider;
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

@@ -1,30 +1,24 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stripe;
 using System.Text;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("/")]
-    public class HomeController : Controller
+    public class HomeController(
+        IPaymentHtmlTranslator service,
+        ISearchInfrastructure search,
+        ISubscriptionInfrastructure subscriptionSvc,
+        ICustomerLockInfrastructure lockingDb,
+        IStripeInfrastructure stripe) : Controller
     {
-        private readonly IPaymentHtmlTranslator paymentSvc;
-        private readonly ISearchInfrastructure infrastructure;
-        private readonly ISubscriptionInfrastructure subscriptionSvc;
-        private readonly ICustomerLockInfrastructure _lockingDb;
-        public HomeController(
-            IPaymentHtmlTranslator service,
-            ISearchInfrastructure search,
-            ISubscriptionInfrastructure subscriptionSvc,
-            ICustomerLockInfrastructure lockingDb)
-        {
-            paymentSvc = service;
-            infrastructure = search;
-            this.subscriptionSvc = subscriptionSvc;
-            _lockingDb = lockingDb;
-        }
+        private readonly IPaymentHtmlTranslator paymentSvc = service;
+        private readonly ISearchInfrastructure infrastructure = search;
+        private readonly ISubscriptionInfrastructure subscriptionSvc = subscriptionSvc;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
+        private readonly IStripeInfrastructure stripeSvc = stripe;
+
         [HttpGet]
         [Route("/")]
         public IActionResult Index()
@@ -67,6 +61,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpGet("/payment-checkout")]
+        [ServiceFilter(typeof(SearchPaymentCompleted))]
         public async Task<IActionResult> PaymentCheckout([FromQuery] string? id)
         {
             var session = await paymentSvc.IsSessionValid(id);
@@ -149,18 +144,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-
-            var clientSecret = intent.ClientSecret;
+            var clientSecret = await stripeSvc.FetchClientSecret(session);
             return Json(new { clientSecret });
         }
 
@@ -173,18 +157,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-
-            var clientSecret = intent.ClientSecret;
+            var clientSecret = await stripeSvc.FetchClientSecret(session);
             return Json(new { clientSecret });
         }
 
@@ -193,7 +166,7 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> FetchDownload([FromBody] FetchIntentRequest request)
         {
             var user = await infrastructure.GetUser(Request);
-            if (user == null || string.IsNullOrEmpty (user.Id)) return Unauthorized();
+            if (user == null || string.IsNullOrEmpty(user.Id)) return Unauthorized();
             var isLocked = await _lockingDb.IsAccountLocked(user.Id);
             if (isLocked)
             {

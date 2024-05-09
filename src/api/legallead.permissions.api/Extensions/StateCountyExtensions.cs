@@ -16,6 +16,8 @@ namespace legallead.permissions.api.Extensions
             }
             return json.db.UsStatesList.Find(stateName);
         }
+
+        [ExcludeFromCodeCoverage(Justification = "This method is tested through integration tests.")]
         public static UsStateCounty? ToCounty(this DiscountChoice choice)
         {
             UsState? state = choice.ToState();

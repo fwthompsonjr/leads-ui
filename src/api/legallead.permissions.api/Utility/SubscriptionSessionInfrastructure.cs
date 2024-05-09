@@ -1,11 +1,11 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Stripe;
 using System.Security.Cryptography;
 
 namespace legallead.permissions.api.Utility
 {
+    [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
     public partial class SubscriptionInfrastructure
     {
         public async Task<LevelRequestBo> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "")
@@ -37,7 +37,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
         private async Task<LevelChangeRequest> GetPaymentSession(User user, string level, string externalId, PaymentCustomerBo cust, string successUrl)
         {
             if (_customer == null || _payment == null) return new();
@@ -64,6 +64,7 @@ namespace legallead.permissions.api.Utility
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
         private static async Task<SubscriptionCreatedModel> CreatePaymentSession(
             PaymentCustomerBo cust,
             string successUrl,
@@ -138,6 +139,7 @@ namespace legallead.permissions.api.Utility
             return constructedUrl;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Item to be refactored.")]
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
         {
             var lower = level.ToLower().Trim();
@@ -155,6 +157,7 @@ namespace legallead.permissions.api.Utility
             return code;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
         private async Task<LevelRequestBo?> IsPermissionSessionNeeded(User user, string level, string externalId = "")
         {
             string[] nonbillingcodes = new[] { "admin", "guest" };

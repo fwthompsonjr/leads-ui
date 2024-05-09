@@ -1,32 +1,26 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.implementations;
+﻿using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
 using Newtonsoft.Json;
 using Stripe;
 
 namespace legallead.permissions.api.Services
 {
-    public class PricingSyncService : BackgroundService
+    [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
+    public class PricingSyncService(
+        ILogger<PricingSyncService> log,
+        IPricingRepository infrastructure,
+        bool isTestMode = false) : BackgroundService
     {
-        private readonly IPricingRepository _pricingInfrastructure;
-        private readonly ILogger<PricingSyncService> logger;
-        private readonly bool _testMode;
-        public PricingSyncService(
-            ILogger<PricingSyncService> log,
-            IPricingRepository infrastructure,
-            bool isTestMode = false)
-        {
-            _pricingInfrastructure = infrastructure;
-            logger = log;
-            _testMode = isTestMode;
-        }
+        private readonly IPricingRepository _pricingInfrastructure = infrastructure;
+        private readonly ILogger<PricingSyncService> logger = log;
+        private readonly bool _testMode = isTestMode;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Pricing Sync Service is running.");
             await BackgroundProcessing(stoppingToken);
         }
+
 
         private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
@@ -48,6 +42,7 @@ namespace legallead.permissions.api.Services
                 else await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
             }
         }
+
 
         private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
@@ -80,6 +75,7 @@ namespace legallead.permissions.api.Services
             }, stoppingToken);
         }
 
+
         private async Task CreateProductEntry(Product current, PricingCodeBo item)
         {
             var dtojs = JsonConvert.SerializeObject(item);
@@ -108,6 +104,7 @@ namespace legallead.permissions.api.Services
 
         }
 
+
         private async Task<bool> CreatePricing(PricingCodeBo? item)
         {
             if (item == null || string.IsNullOrEmpty(item.Id) || string.IsNullOrEmpty(item.KeyName)) return false;
@@ -128,6 +125,7 @@ namespace legallead.permissions.api.Services
                 return false;
             }
         }
+
 
         private bool TryCreateProduct(
             string productName,
@@ -179,6 +177,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
+
         private static ProductCreateOptions GetProductOptions(ProductPricingModel item)
         {
             if (string.IsNullOrEmpty(item.Product.Name)) return new();
@@ -192,6 +191,7 @@ namespace legallead.permissions.api.Services
             };
         }
 
+
         private static string GetProductName(PricingCodeBo? codeBo)
         {
             var model = codeBo?.GetModel();
@@ -199,6 +199,7 @@ namespace legallead.permissions.api.Services
             return model.Product.Name;
 
         }
+
 
         private static string UpdateJson(PricingCodeDto dto)
         {

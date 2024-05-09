@@ -7,7 +7,7 @@ namespace legallead.installer.tests
 {
     public class CommandHandlerUninstallTest
     {
-        private static readonly object _lock = new ();
+        private static readonly object _lock = new();
         [Fact]
         public void SutCanUnInstall()
         {
@@ -19,7 +19,7 @@ namespace legallead.installer.tests
             if (models.Count == 0) return;
             var versions = models.SelectMany(x => x.Versions).Where(x => x.Name == appname).ToList();
             if (versions.Count == 0) return;
-            
+
             lock (_lock)
             {
                 var sourceDir = versions[0].FullPath;
@@ -37,14 +37,15 @@ namespace legallead.installer.tests
                 }
                 finally
                 {
-                    if (Directory.Exists(destinationDir) && !Directory.Exists(sourceDir)) { 
+                    if (Directory.Exists(destinationDir) && !Directory.Exists(sourceDir))
+                    {
                         CopyDirectory(destinationDir, sourceDir, true);
                     }
                     if (Directory.Exists(sourceDir) && Directory.Exists(destinationDir))
                     {
                         Directory.Delete(destinationDir, true);
                     }
-                } 
+                }
             }
         }
 

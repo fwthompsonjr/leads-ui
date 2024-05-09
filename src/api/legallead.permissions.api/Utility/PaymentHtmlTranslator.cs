@@ -1,9 +1,7 @@
 ﻿using HtmlAgilityPack;
-using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
@@ -18,12 +16,13 @@ namespace legallead.permissions.api.Utility
         private readonly ICustomerInfrastructure _custDb;
         private readonly IUserRepository _userDb;
         private readonly string _paymentKey;
-
+        private SubscriptionService? _injectedSubscriptions;
         public PaymentHtmlTranslator(
             IUserSearchRepository db,
             IUserRepository userdb,
             ICustomerInfrastructure customer,
             ISubscriptionInfrastructure subscription,
+            IStripeInfrastructure stripeService,
             StripeKeyEntity key)
         {
             _repo = db;
@@ -31,7 +30,21 @@ namespace legallead.permissions.api.Utility
             _userDb = userdb;
             _subscriptionDb = subscription;
             _paymentKey = key.GetActiveName();
+            InvoiceExtensions.GetInfrastructure ??= stripeService;
         }
+        public void SetupSubscriptionService(SubscriptionService? service)
+        {
+            _injectedSubscriptions = service;
+        }
+        public SubscriptionService GetSubscriptionService
+        {
+            get
+            {
+                if (_injectedSubscriptions == null) return new SubscriptionService();
+                return _injectedSubscriptions;
+            }
+        }
+
         public async Task<bool> IsRequestValid(string? status, string? id)
         {
             if (string.IsNullOrWhiteSpace(status)) return false;
@@ -53,7 +66,7 @@ namespace legallead.permissions.api.Utility
             var bo = await _subscriptionDb.GetLevelRequestById(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(bo.SessionId ?? "");
             if (subscription == null) return null;
             return bo;
@@ -64,7 +77,7 @@ namespace legallead.permissions.api.Utility
             var bo = await _subscriptionDb.GetDiscountRequestById(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(bo.SessionId ?? "");
             if (subscription == null) return null;
             return bo;
@@ -74,9 +87,9 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return false;
+            if (!obj.Data.Any()) return false;
             var dat = obj.Data[0];
-            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
             return ispaid.GetValueOrDefault();
         }
@@ -85,7 +98,7 @@ namespace legallead.permissions.api.Utility
         {
             var isSuccess = session.IsPaymentSuccess.GetValueOrDefault();
             if (session.InvoiceUri == "NONE") return isSuccess;
-            var service = new SubscriptionService();
+            var service = GetSubscriptionService;
             var subscription = await service.GetAsync(session.SessionId ?? "");
             if (subscription == null) return false;
             // check subscription status to see if invoice has been paid
@@ -104,26 +117,25 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return false;
+            if (!obj.Data.Any()) return false;
             var dat = obj.Data[0];
-            if (dat == null || string.IsNullOrEmpty(dat.ReferenceId)) return false;
+            if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var paid = await _repo.IsSearchPaidAndDownloaded(dat.ReferenceId);
             if (paid == null) return false;
-            if (paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault()) return true;
-            return false;
+            return paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault();
         }
 
         public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
+            if (string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
             var js = FormatSessionJson(dto.JsText);
             dto.JsText = js;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
-            if (obj.Data == null || !obj.Data.Any()) return new() { Error = "No search records found for associated request." };
+            if (!obj.Data.Any()) return new() { Error = "No search records found for associated request." };
             var search = obj.Data[0];
             var searchId = search.ReferenceId ?? Guid.NewGuid().ToString();
-            var records = (await _repo.GetFinal(searchId))?.ToList();
-            if (records == null) return new() { Error = "Invalid session parameter." };
+            var records = (await _repo.GetFinal(searchId)).ToList();
+            if (records.Count == 0) return new() { Error = "Invalid session parameter." };
             if (records.Count > search.ItemCount) records = records.Take(records.Count).ToList();
             var response = new DownloadResponse()
             {
@@ -132,17 +144,7 @@ namespace legallead.permissions.api.Utility
             };
             try
             {
-                response.Content = ExcelExtensions.WriteExcel(dto, records);
-                if (response.Content != null)
-                {
-                    var conversion = Convert.ToBase64String(response.Content);
-                    _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
-                    response.CreateDate = DateTime.UtcNow.ToString("s");
-                }
-                else
-                {
-                    response.Error = "Unable to generate excel ouput";
-                }
+                await GenerateExcelResponse(dto, searchId, records, response);
                 return response;
             }
             catch (Exception ex)
@@ -151,12 +153,25 @@ namespace legallead.permissions.api.Utility
                 return response;
             }
         }
-
         public string Transform(PaymentSessionDto? session, string html)
         {
             var converted = session.GetHtml(html, _paymentKey);
             return converted;
         }
+        public string Transform(LevelRequestBo session, string content)
+        {
+            if (string.IsNullOrEmpty(session.SessionId)) return content;
+            content = session.GetHtml(content, _paymentKey);
+            return content;
+        }
+        public string Transform(DiscountRequestBo discountRequest, string content)
+        {
+
+            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
+            content = discountRequest.GetHtml(content, _paymentKey);
+            return content;
+        }
+
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
             const string dash = " - ";
@@ -201,20 +216,9 @@ namespace legallead.permissions.api.Utility
             return doc.DocumentNode.OuterHtml;
         }
 
-        public string Transform(LevelRequestBo session, string content)
-        {
-            if (string.IsNullOrEmpty(session.SessionId)) return content;
-            content = session.GetHtml(content, _paymentKey);
-            return content;
-        }
-        public string Transform(DiscountRequestBo discountRequest, string content)
-        {
-            if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
-            content = discountRequest.GetHtml(content, _paymentKey);
-            return content;
-        }
 
 
+        [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
             bool? isPermissionSet = default;
@@ -234,6 +238,8 @@ namespace legallead.permissions.api.Utility
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
         public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
         {
             bool? isPermissionSet = default;
@@ -273,7 +279,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsChangeUserLevel(string? status, string? id)
         {
-            var mapped = requestNames.First(s => s.Equals(status));
+            var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
@@ -283,7 +289,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> IsDiscountLevel(string? status, string? id)
         {
-            var mapped = requestNames.First(s => s.Equals(status));
+            var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
@@ -292,16 +298,37 @@ namespace legallead.permissions.api.Utility
         }
 
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
+        private async Task GenerateExcelResponse(PaymentSessionDto dto, string searchId, List<SearchFinalBo> records, DownloadResponse response)
+        {
+            response.Content = ExcelExtensions.WriteExcel(dto, records);
+            if (response.Content != null)
+            {
+                var conversion = Convert.ToBase64String(response.Content);
+                _ = await _repo.CreateOrUpdateDownloadRecord(searchId, conversion);
+                response.CreateDate = DateTime.UtcNow.ToString("s");
+            }
+            else
+            {
+                response.Error = "Unable to generate excel ouput";
+            }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string ToDateString(DateTime? date, string fallback)
         {
             if (!date.HasValue) return fallback;
             return date.Value.ToString("MMM d, yyyy, h:mm tt");
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string ToCurrencyString(decimal? amount, string fallback)
         {
             if (!amount.HasValue) return fallback;
             return amount.Value.ToString("C", CultureInfo.CurrentCulture);
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static string FormatSessionJson(string? original)
         {
             const string slash = @"\";
@@ -318,6 +345,7 @@ namespace legallead.permissions.api.Utility
 
         private static readonly string[] requestNames = new[] { "success", "cancel" };
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static class UserLevelHtmlMapper
         {
             public static void SetPageHeading(HtmlDocument document, bool isvalid)

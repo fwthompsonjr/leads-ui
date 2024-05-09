@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using legallead.jdbc.entities;
-using legallead.json.db.entity;
 using legallead.models;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using UsState = legallead.json.db.entity.UsState;
@@ -112,6 +109,7 @@ namespace legallead.permissions.api
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView[] ConvertTo(ChangeContactAddressRequest[] source, UserProfileView[] dest)
         {
             var list = new List<UserProfileView>();
@@ -123,6 +121,7 @@ namespace legallead.permissions.api
             return list.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView[] ConvertTo(ChangeContactEmailRequest[] source, UserProfileView[] dest)
         {
             var list = new List<UserProfileView>();
@@ -134,6 +133,7 @@ namespace legallead.permissions.api
             return list.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView[] ConvertTo(ChangeContactPhoneRequest[] source, UserProfileView[] dest)
         {
             var list = new List<UserProfileView>();
@@ -145,6 +145,7 @@ namespace legallead.permissions.api
             return list.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView[] ConvertTo(ChangeContactNameRequest[] source, UserProfileView[] dest)
         {
             var list = new List<UserProfileView>();
@@ -156,6 +157,7 @@ namespace legallead.permissions.api
             return list.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView[] ConvertTo(ChangeContactAddressRequest source, UserProfileView[] dest)
         {
             var hasName = Enum.TryParse<AddressTypeNames>(source.AddressType, out var index);
@@ -177,6 +179,7 @@ namespace legallead.permissions.api
             return list.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView ConvertTo(ChangeContactEmailRequest source, UserProfileView dest)
         {
             var hasName = Enum.TryParse<EmailTypeNames>(source.EmailType, out var index);
@@ -188,6 +191,7 @@ namespace legallead.permissions.api
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView ConvertTo(ChangeContactNameRequest source, UserProfileView dest)
         {
             const char space = ' ';
@@ -203,6 +207,7 @@ namespace legallead.permissions.api
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfileView ConvertTo(ChangeContactPhoneRequest source, UserProfileView dest)
         {
             var hasName = Enum.TryParse<PhoneTypeNames>(source.PhoneType, out var index);
@@ -214,6 +219,7 @@ namespace legallead.permissions.api
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static UserProfile ConvertTo(UserProfileView source, UserProfile dest)
         {
             return new UserProfile
@@ -225,6 +231,7 @@ namespace legallead.permissions.api
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static GetContactResponse[] ConvertTo(UserProfileView[] source, GetContactResponse[] dest)
         {
             var response = new List<GetContactResponse>();
@@ -239,6 +246,7 @@ namespace legallead.permissions.api
             return response.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static ChangeContactAddressRequest[] ConvertTo(UserProfileView[] source, ChangeContactAddressRequest[] dest)
         {
             const string mailingKey = "Address 1";
@@ -252,6 +260,7 @@ namespace legallead.permissions.api
             return response.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static ChangeContactEmailRequest[] ConvertTo(UserProfileView[] source, ChangeContactEmailRequest[] dest)
         {
             const string selector = "Email";
@@ -269,6 +278,7 @@ namespace legallead.permissions.api
             return response.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static ChangeContactPhoneRequest[] ConvertTo(UserProfileView[] source, ChangeContactPhoneRequest[] dest)
         {
             const string selector = "Phone";
@@ -286,6 +296,7 @@ namespace legallead.permissions.api
             return response.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static ChangeContactNameRequest[] ConvertTo(UserProfileView[] source, ChangeContactNameRequest[] dest)
         {
             const string selector = "Name";
@@ -303,6 +314,7 @@ namespace legallead.permissions.api
             return response.ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static GetContactResponse ConvertTo(ChangeContactNameRequest[] source, GetContactResponse dest)
         {
             dest.IsOK = true;
@@ -312,6 +324,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static GetContactResponse ConvertTo(ChangeContactAddressRequest[] source, GetContactResponse dest)
         {
             dest.IsOK = true;
@@ -321,6 +334,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static GetContactResponse ConvertTo(ChangeContactEmailRequest[] source, GetContactResponse dest)
         {
             dest.IsOK = true;
@@ -330,6 +344,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static GetContactResponse ConvertTo(ChangeContactPhoneRequest[] source, GetContactResponse dest)
         {
             dest.IsOK = true;
@@ -339,6 +354,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static List<KeyValuePair<bool, UsState>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsState>> dest)
         {
             dest ??= new();
@@ -354,6 +370,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static List<KeyValuePair<bool, UsStateCounty>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsStateCounty>> dest)
         {
             dest ??= new();
@@ -369,6 +386,7 @@ namespace legallead.permissions.api
             return dest;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static DiscountChangeParent ConvertTo(ChangeDiscountRequest source, DiscountChangeParent dest)
         {
             dest ??= new();

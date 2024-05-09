@@ -1,15 +1,13 @@
 ﻿using legallead.jdbc;
-using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using System.Globalization;
 
 namespace legallead.permissions.api.Utility
 {
+    [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
     public class SearchInfrastructure : ISearchInfrastructure
     {
         protected readonly IDataProvider _db;

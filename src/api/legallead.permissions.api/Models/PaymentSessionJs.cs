@@ -1,6 +1,4 @@
-﻿using legallead.jdbc.entities;
-
-namespace legallead.permissions.api.Models
+﻿namespace legallead.permissions.api.Models
 {
     public class PaymentSessionJs
     {

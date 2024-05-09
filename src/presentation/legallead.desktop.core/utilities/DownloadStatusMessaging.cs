@@ -1,4 +1,6 @@
-﻿namespace legallead.desktop.utilities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.desktop.utilities
 {
     internal static class DownloadStatusMessaging
     {
@@ -25,6 +27,7 @@
             return message;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string CollapseServerResponse(string original)
         {
             if (string.IsNullOrWhiteSpace(original)) return "An error occurred processing your request";

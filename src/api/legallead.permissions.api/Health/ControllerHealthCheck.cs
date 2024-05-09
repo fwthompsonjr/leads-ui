@@ -1,19 +1,13 @@
 ﻿using legallead.permissions.api.Controllers;
-using legallead.permissions.api.Interfaces;
 using legallead.Profiles.api.Controllers;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Health
 {
-    [ExcludeFromCodeCoverage]
-    public class ControllerHealthCheck : BaseServiceHealthCheck, IHealthCheck
+    [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
+    public class ControllerHealthCheck(IInternalServiceProvider provider) : BaseServiceHealthCheck(provider, ClassContextName), IHealthCheck
     {
         private const string ClassContextName = "Create Controller Context";
-
-        public ControllerHealthCheck(IInternalServiceProvider provider) : base(provider, ClassContextName)
-        {
-        }
 
         public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {

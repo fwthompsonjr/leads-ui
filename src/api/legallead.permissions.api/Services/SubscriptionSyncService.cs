@@ -1,27 +1,17 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.implementations;
-using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
-using Microsoft.VisualBasic.FileIO;
-using Newtonsoft.Json;
+﻿using legallead.jdbc.interfaces;
 using Stripe;
 
 namespace legallead.permissions.api.Services
 {
-    public class SubscriptionSyncService : BackgroundService
+    [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
+    public class SubscriptionSyncService(
+        ILogger<SubscriptionSyncService> log,
+        ICustomerRepository infrastructure,
+        bool isTestMode = false) : BackgroundService
     {
-        private readonly ICustomerRepository _custDb;
-        private readonly ILogger<SubscriptionSyncService> logger;
-        private readonly bool _testMode;
-        public SubscriptionSyncService(
-            ILogger<SubscriptionSyncService> log,
-            ICustomerRepository infrastructure,
-            bool isTestMode = false)
-        {
-            _custDb = infrastructure;
-            logger = log;
-            _testMode = isTestMode;
-        }
+        private readonly ICustomerRepository _custDb = infrastructure;
+        private readonly ILogger<SubscriptionSyncService> logger = log;
+        private readonly bool _testMode = isTestMode;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -58,13 +48,13 @@ namespace legallead.permissions.api.Services
                     var item = s.First();
                     _ = item.SubscriptionType ?? "";
                     var details = items.FindAll(d => d.CustomerId == item.CustomerId);
-                    details.Sort((b,a) => a.CreateDate.GetValueOrDefault().CompareTo(b.CreateDate.GetValueOrDefault()));
+                    details.Sort((b, a) => a.CreateDate.GetValueOrDefault().CompareTo(b.CreateDate.GetValueOrDefault()));
                     return new CustomerRef
                     {
                         CustomerId = item.CustomerId ?? "",
                         Email = item.Email ?? "",
                         UserId = item.UserId ?? "",
-                        
+
                         Details = details
                     };
                 }).ToList();
@@ -87,8 +77,8 @@ namespace legallead.permissions.api.Services
             var options = new SubscriptionListOptions { Customer = c.CustomerId };
             var subscriptions = service.List(options);
             if (subscriptions == null || !subscriptions.Any()) return;
-            var cancelOption = new SubscriptionCancelOptions { Prorate = true, CancellationDetails = new() { Comment = "Subscription cancelled by system background process."} }; 
-            foreach(var subscriptionType in subscriptionTypeNames)
+            var cancelOption = new SubscriptionCancelOptions { Prorate = true, CancellationDetails = new() { Comment = "Subscription cancelled by system background process." } };
+            foreach (var subscriptionType in subscriptionTypeNames)
             {
                 var activeSubscription = c.Details.Find(x => x.SubscriptionType == subscriptionType);
                 if (activeSubscription == null || string.IsNullOrWhiteSpace(activeSubscription.ExternalId)) continue;
@@ -108,6 +98,7 @@ namespace legallead.permissions.api.Services
                 }
             }
         }
+
         private async Task CompleteVerification(List<SubscriptionDetailBo> subscriptions)
         {
             foreach (var subscription in subscriptions)
@@ -117,6 +108,7 @@ namespace legallead.permissions.api.Services
                 await _custDb.UpdateSubscriptionVerification(subscription);
             }
         }
+
         private static bool CancelItem(SubscriptionService service, string subscriptionId, SubscriptionCancelOptions options)
         {
             try
@@ -141,8 +133,10 @@ namespace legallead.permissions.api.Services
                 _ = data.TryGetValue(extId, out var externalId);
                 _ = data.TryGetValue(subType, out var remoteType);
                 if (string.IsNullOrEmpty(externalId) || string.IsNullOrEmpty(remoteType)) continue;
-                if (remoteType.Equals(subscriptionType, StringComparison.OrdinalIgnoreCase)) {
-                    found.Add(new (){
+                if (remoteType.Equals(subscriptionType, StringComparison.OrdinalIgnoreCase))
+                {
+                    found.Add(new()
+                    {
                         Id = subscription.Id,
                         ExternalId = externalId,
                         SubscriptionType = subscriptionType,
@@ -152,6 +146,7 @@ namespace legallead.permissions.api.Services
             return found;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private sealed class CustomerRef
         {
             public string CustomerId { get; set; } = string.Empty;
@@ -167,6 +162,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
+        [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
         private sealed class SubscriptionRef
         {
             public string Id { get; set; } = string.Empty;

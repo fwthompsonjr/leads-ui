@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Password Changed",
+    "description": "Email to user when password change is completed",
+    "date": "2024-05-08"
+  },
+  {
+    "name": "Permission Changed Request",
+    "description": "Email to user when permissions change is requested",
+    "date": "2024-05-08"
+  },
+  {
+    "name": "Profile Changed",
+    "description": "Email to user when profile data is updated",
+    "date": "2024-05-07"
+  },
+  {
+    "name": "Locked Account",
+    "description": "Email to user if account has been locked",
+    "date": "2024-05-06"
+  },
+  {
+    "name": "Registration Completed",
+    "description": "Email to user after completing the registation process",
+    "date": "2024-04-30"
+  },
+  {
+    "name": "Search Payment Completed",
+    "description": "Email to user after receiving payment for a record search.",
+    "date": "2024-04-30"
+  }
+]

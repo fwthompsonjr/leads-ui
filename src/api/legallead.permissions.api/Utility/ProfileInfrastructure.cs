@@ -1,19 +1,10 @@
 ﻿using AutoMapper;
-using legallead.jdbc.entities;
-using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
-using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.permissions.api.Utility
 {
-    public class ProfileInfrastructure : SubscriptionInfrastructure, IProfileInfrastructure
+    public class ProfileInfrastructure(IDataProvider db) : SubscriptionInfrastructure(db), IProfileInfrastructure
     {
-        private readonly IMapper mapper;
-
-        public ProfileInfrastructure(IDataProvider db) : base(db)
-        {
-            mapper = ModelMapper.Mapper;
-        }
+        private readonly IMapper mapper = ModelMapper.Mapper;
 
         public async Task<string> GetContactRole(User? user)
         {

@@ -43,6 +43,61 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
+        public async Task ControllerCanListAppsFromNoResponse()
+        {
+            var faker = new Faker<Component>()
+                .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+                .RuleFor(x => x.Name, y => y.Person.FirstName);
+            var provider = GetProvider();
+            var componentdb = provider.GetRequiredService<Mock<IComponentRepository>>();
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var expected = faker.Generate(0).AsEnumerable();
+            componentdb.Setup(c => c.GetAll()).ReturnsAsync(expected);
+            var actual = await sut.List();
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual);
+        }
+
+        [Fact]
+        public async Task ControllerCanListAppsFromNoNames()
+        {
+            var faker = new Faker<Component>()
+                .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
+            var provider = GetProvider();
+            var componentdb = provider.GetRequiredService<Mock<IComponentRepository>>();
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var expected = faker.Generate(5).AsEnumerable();
+            componentdb.Setup(c => c.GetAll()).ReturnsAsync(expected);
+            var actual = await sut.List();
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual);
+        }
+
+
+        [Fact]
+        public async Task ControllerCanListAppsFromException()
+        {
+            var faker = new Faker();
+            var provider = GetProvider();
+            var componentdb = provider.GetRequiredService<Mock<IComponentRepository>>();
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var expected = faker.System.Exception();
+            componentdb.Setup(c => c.GetAll()).ThrowsAsync(expected);
+            var actual = await sut.List();
+            Assert.NotNull(actual);
+            Assert.NotEmpty(actual);
+        }
+
+        [Fact]
+        public void ControllerCanListStates()
+        {
+            var provider = GetProvider();
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var actual = sut.StateList();
+            Assert.NotNull(actual);
+        }
+
+        [Fact]
         public async Task ControllerRegistrationRequiresEmail()
         {
             var faker = new Faker<RegisterAccountModel>()
@@ -116,6 +171,22 @@ namespace permissions.api.tests.Contollers
             var message = Convert.ToString(oresult.Value) ?? string.Empty;
             Assert.False(string.IsNullOrWhiteSpace(message));
             Assert.False(Guid.TryParse(message, out var _));
+        }
+
+        [Fact]
+        public async Task ControllerRegistrationRoundTrip()
+        {
+            var faker = new Faker<RegisterAccountModel>()
+                .RuleFor(x => x.UserName, y => y.Random.Guid().ToString())
+                .RuleFor(x => x.Password, y => y.Random.AlphaNumeric(8))
+                .RuleFor(x => x.Email, y => y.Person.Email);
+
+            var provider = GetProvider();
+            var request = faker.Generate();
+            request.Password = $"135Aa-{request.Password}-Bb531";
+            var sut = provider.GetRequiredService<ApplicationController>();
+            var actual = await sut.Register(request);
+            Assert.NotNull(actual);
         }
     }
 }

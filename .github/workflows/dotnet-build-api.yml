@@ -1,0 +1,85 @@
+name: "CQ : Build and Test : Permission API"
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+      - "!releases"
+    paths:
+      - "src/api/**"
+
+env:
+  SOLUTION_NAME: ${{ github.workspace }}\src\api\legallead.api.sln
+  COVERAGE_NAME: ${{ github.workspace }}\src\api\tests.runsettings
+  INTEGRATION_NAME: ${{ github.workspace }}\src\api\postman-testing-03.ps1
+  VALIDATION_SCRIPT_NAME: ${{ github.workspace }}\src\api\postman-testing-AA.ps1
+  COVERAGE_FILTER: 'src\api'
+  NET_VERSION: "8.0.x"
+  NUGET_CERT_REVOCATION_MODE: offline
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: dotnet restore ${{ env.SOLUTION_NAME }}
+        id: dotnet-restore
+        name: DotNet Restore
+
+      - run: dotnet build ${{ env.SOLUTION_NAME }} --no-restore -c Release
+        id: dotnet-build
+        name: DotNet Build
+
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: dotnet restore ${{ env.SOLUTION_NAME }}
+        id: dotnet-restore
+        name: DotNet Restore
+
+      - run: dotnet test ${{ env.SOLUTION_NAME }} -c Release --logger trx --results-directory "TestResults-${{ env.NET_VERSION }}"
+        id: dotnet-test
+        name: DotNet Test
+
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: dotnet-results-email-${{ env.NET_VERSION }}
+          path: TestResults-${{ env.NET_VERSION }}
+
+      - name: Summarize Test Results
+        shell: pwsh
+        if: ${{ always() }}
+        run: |
+          & ./pipeline-summarize-tests.ps1 -workingDir "${{ github.workspace }}"
+
+  code_cover:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: dotnet restore ${{ env.SOLUTION_NAME }}
+        id: dotnet-restore
+        name: DotNet Restore
+
+      - run: dotnet test ${{ env.SOLUTION_NAME }} -c Release --settings ${{ env.COVERAGE_NAME }}
+        id: dotnet-test-coverage
+        name: DotNet Test Coverage
+
+      - name: Summarize Test Coverage
+        shell: pwsh
+        run: |
+          & ./coverage-report-generator.ps1 -search "${{ env.COVERAGE_FILTER }}"
+          
+  integration:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Integration Test
+        shell: pwsh
+        run: |
+          & ${{ env.INTEGRATION_NAME }}
+

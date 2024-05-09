@@ -31,7 +31,7 @@ function generateBuildCommand( $solution ) {
 
 function isSolutionNotExcluded( $name ) {
     
-    $exclusions = @('integration', 'presentation');
+    $exclusions = @('integration', 'presentation', 'email');
     foreach($item in $exclusions){
         if($name.IndexOf( $item ) -ge 0 ) { return $false; }
     }
@@ -110,6 +110,7 @@ deleteNuPkgFiles -homedir $currentDir
 if( [System.IO.File]::Exists( $errorsFile ) -eq $true ) { 
     [System.IO.File]::Delete( $errorsFile )
     [Environment]::ExitCode = 1000; 
+    echo "FAILED_TEST_COUNT=1000" >> $env:GITHUB_ENV
     return 1000;
 }
 

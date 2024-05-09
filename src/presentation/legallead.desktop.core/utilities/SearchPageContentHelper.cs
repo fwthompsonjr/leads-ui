@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
@@ -56,6 +57,7 @@ namespace legallead.desktop.utilities
             return docNode.OuterHtml;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendClass(HtmlNode? linkNode, string className)
         {
             if (linkNode == null) return;
@@ -67,12 +69,14 @@ namespace legallead.desktop.utilities
             attr.Value = cls;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void RemoveClass(HtmlNode? linkNode, string className)
         {
             if (linkNode == null) return;
             var attr = linkNode.Attributes["class"];
             attr.Value = attr.Value.Replace(className, string.Empty).Trim();
         }
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void SetDisplay(HtmlNode? node, string cssName)
         {
             if (node == null) return;

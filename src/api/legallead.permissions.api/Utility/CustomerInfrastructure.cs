@@ -1,31 +1,20 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
-using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 
 namespace legallead.permissions.api.Utility
 {
-    public class CustomerInfrastructure : ICustomerInfrastructure
+    public class CustomerInfrastructure(
+        StripeKeyEntity stripeKey,
+        IUserRepository db,
+        ICustomerRepository repository) : ICustomerInfrastructure
     {
-        private readonly CustomerService _customerService;
-        private readonly string _paymentEnvironment;
-        private readonly ICustomerRepository _repo;
-        private readonly IUserRepository _db;
+        private readonly string _paymentEnvironment = stripeKey.ActiveName;
+        private readonly ICustomerRepository _repo = repository;
+        private readonly IUserRepository _db = db;
         private ISubscriptionInfrastructure? _subscriptiondb;
-        public CustomerInfrastructure(
-            StripeKeyEntity stripeKey,
-            IUserRepository db,
-            ICustomerRepository repository)
-        {
-            _customerService = new();
-            _paymentEnvironment = stripeKey.ActiveName;
-            _db = db;
-            _repo = repository;
-        }
-
 
         internal CustomerInfrastructure(
             StripeKeyEntity stripeKey,
@@ -36,6 +25,8 @@ namespace legallead.permissions.api.Utility
         {
             _subscriptiondb = subscription;
         }
+
+        internal CustomerService GetCustomerService { get; set; } = new();
 
         internal void SubscriptionInfrastructure(ISubscriptionInfrastructure subscription)
         {
@@ -53,11 +44,6 @@ namespace legallead.permissions.api.Utility
             return customer;
         }
 
-        public async Task<PaymentCustomerBo?> GetCustomer(string userId)
-        {
-            var customer = await GetOrCreateCustomer(userId);
-            return customer;
-        }
 
         public async Task<PaymentCustomerBo?> GetOrCreateCustomer(string userId)
         {
@@ -70,11 +56,16 @@ namespace legallead.permissions.api.Utility
                 var customer = await _repo.GetCustomer(search);
                 return customer;
             }
-            var stripeCustomer = await _customerService.CreateAsync(GenerateCreateOption(user.Email));
-            var creation = await CreateCustomer(user.Id, stripeCustomer.Id);
+            var stripeCustomerId = await CreateStripeCustomerAndGetIndex(user.Email);
+            var creation = await CreateCustomer(user.Id, stripeCustomerId);
             return creation;
         }
 
+        public async Task<PaymentCustomerBo?> GetCustomer(string userId)
+        {
+            var customer = await GetOrCreateCustomer(userId);
+            return customer;
+        }
         public async Task<List<UnMappedCustomerBo>?> GetUnMappedCustomers()
         {
             var response = await _repo.GetUnMappedCustomers(new() { AccountType = _paymentEnvironment });
@@ -83,10 +74,10 @@ namespace legallead.permissions.api.Utility
 
         public async Task<bool> MapCustomers()
         {
-            var customers = await GetUnMappedCustomers();
-            if (customers == null || !customers.Any()) { return true; }
             try
             {
+                var customers = await GetUnMappedCustomers();
+                if (customers == null || !customers.Any()) { return true; }
                 customers.ForEach(async customer =>
                     {
                         if (!string.IsNullOrEmpty(customer.Id))
@@ -157,5 +148,18 @@ namespace legallead.permissions.api.Utility
             };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Implementation depends on 3rd party payment service.")]
+        private async Task<string> CreateStripeCustomerAndGetIndex(string email)
+        {
+            try
+            {
+                var stripeCustomer = await GetCustomerService.CreateAsync(GenerateCreateOption(email));
+                return stripeCustomer?.Id ?? string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
     }
 }

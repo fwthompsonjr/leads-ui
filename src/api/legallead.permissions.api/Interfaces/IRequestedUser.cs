@@ -1,6 +1,4 @@
-﻿using legallead.jdbc.entities;
-
-namespace legallead.permissions.api.Interfaces
+﻿namespace legallead.permissions.api.Interfaces
 {
     public interface IRequestedUser
     {

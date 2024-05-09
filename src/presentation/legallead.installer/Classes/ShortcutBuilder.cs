@@ -8,13 +8,13 @@ namespace legallead.installer.Classes
     internal static class ShortcutBuilder
     {
 
-        public static void Create(this IShortcutCreator builder, ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
+        public static string? Create(this IShortcutCreator builder, ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
         {
             var response = GetTargetDirectory(model, shortcutPath, forDesktop);
-            if (!response.Item1 || response.Item3 == null) return;
+            if (!response.Item1 || response.Item3 == null) return null;
             var targetDir = response.Item2 ?? string.Empty;
             var matched = response.Item3;
-            builder.Build(model, targetDir, matched);
+            return builder.Build(model, targetDir, matched);
         }
 
         private static Tuple<bool, string?, FileInfo?> GetTargetDirectory(ReleaseAssetModel model, string shortcutPath, bool forDesktop = false)
