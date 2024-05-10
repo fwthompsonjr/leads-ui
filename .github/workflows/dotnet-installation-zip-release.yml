@@ -3,9 +3,6 @@
 
 name: 'CD : Create Release : Zip Installer'
 on:
-  push:
-    paths:
-      - 'testing/**'
   pull_request:
     branches: [ "releases" ]
     types: [ "closed" ]
