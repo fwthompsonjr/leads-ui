@@ -410,3 +410,4 @@ FodyWeavers.xsd
 *.zip
 /src/presentation/legallead.installer/_text/configuration-js.txt
 **/coverage/*
+/testing/installation-suite/scripts/steps/dotnet-install.ps1
