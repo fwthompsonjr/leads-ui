@@ -6,7 +6,7 @@
 function echoZipFileName {
     try {
         Write-Output "ZIPFILE: $zipFileName is created."
-        echo "ZIPFILE_NAME::$zipFileName" >> $GITHUB_ENV
+        echo "ZIPFILE_NAME=$zipFileName" >> $env:GITHUB_ENV
     } catch { }
 }
 $startedAt = [datetime]::UtcNow
