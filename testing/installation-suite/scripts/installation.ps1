@@ -8,16 +8,10 @@ $commands = [ordered]@{
 		"file" = "installation-002.ps1"
 		"description" = "Download and Install Legal Lead Installer"
 	}
-	"presentation" = @{
-		"file" = "installation-003.ps1"
-		"description" = "Install Legal Lead Application"
-	}
 }
 function executeCommand( $path ) {
 	try {
 		& $path
-		$result = [System.Environment]::ExitCode;
-        Write-Host $result
 		return $true;
 	} catch {
 		Write-Error $_.Exception.Message
@@ -30,7 +24,8 @@ $hasError = $false;
 $commands.GetEnumerator() | ForEach-Object {
 	if ( $hasError -eq $false ) {
 		$item = $_.Value;
-		$target = [System.IO.Path]::Combine( $currentDir, $item.file );
+		$scriptLocation = "steps/$($item.file)";
+		$target = [System.IO.Path]::Combine( $currentDir, $scriptLocation );
 		$comment = $item.description
 		if ( [System.IO.File]::Exists( $target ) -eq $true ) {
 			Write-Output "Executing: $comment"
@@ -39,5 +34,15 @@ $commands.GetEnumerator() | ForEach-Object {
 		} else {
 			$hasError = $true;
 		}
+	}
+}
+if ( $hasError -eq $false ) {
+	try {
+		$name = "legallead.desktop-windows"
+		leadcli install -n $name
+		(New-Object -ComObject shell.application).toggleDesktop()
+	} catch {
+		Write-Warning "There was an issue installing application."
+		Write-Warning "Please check logs for additional information."
 	}
 }
