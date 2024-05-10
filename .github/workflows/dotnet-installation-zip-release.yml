@@ -1,0 +1,75 @@
+# This workflow will build a .NET framework project(s)
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: 'CD : Create Release : Zip Installer'
+on:
+  push:
+    paths:
+      - 'testing/**'
+  pull_request:
+    branches: [ "releases" ]
+    types: [ "closed" ]
+    paths:
+      - 'testing/**'
+
+env:
+    PROJECT_NAME: "legallead.zip.installer"
+    LEGALLEAD_INSTALLATION_KEY: ${{ secrets.LEGALLEAD_INSTALLATION_KEY }}
+    NUGET_CERT_REVOCATION_MODE: offline
+jobs:
+  release:
+    permissions: write-all
+    runs-on: windows-latest
+    
+
+    steps:
+
+    - uses: actions/checkout@v4  
+    - name: Set Build Version
+      shell: bash
+      run: |
+          echo "BUILD_VERSION=${{format('{0}.{1}', vars.LEGALLEAD_INSTALLER_PREFIX, github.run_number)}}" >> $GITHUB_ENV
+
+    - name: Set Release Version
+      shell: bash
+      run: |
+          echo "RELEASE_VERSION=${{format('v{0}.{1}', vars.LEGALLEAD_INSTALLER_PREFIX, github.run_number)}}" >> $GITHUB_ENV
+
+    - name: Set ZipFile Name
+      shell: bash
+      run: |
+          echo "ZIPFILE_NAME=${{format('{0}-{1}.zip', env.PROJECT_NAME, env.BUILD_VERSION )}}" >> $GITHUB_ENV
+
+    ## create new script to generate release title (maybe)
+    - name: Calculate Release Title
+      shell: pwsh
+      run: |
+        & ./testing/x-pipeline-installer-release-title.ps1
+
+    ## create script to generate a README
+    - name: Update README
+      shell: pwsh
+      run: |
+        & ./testing/x-pipeline-update-release-notes.ps1 -version "${{ env.BUILD_VERSION }}"
+
+    - name: Build Zip File
+      id: buildComponent
+      shell: pwsh
+      run: |
+        & ./testing/x-pipeline-installer-publish.ps1 -version "${{ env.BUILD_VERSION }}"
+
+    - name: Create release
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+      run: |
+          gh release create ${{ env.BUILD_VERSION }} -F ./testing/README.md
+
+    - name: Package windows x64
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+      run: |
+          gh release upload ${{ env.BUILD_VERSION }} ${{ env.ZIPFILE_NAME }}
