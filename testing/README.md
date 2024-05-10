@@ -1,27 +1,18 @@
-# Legal Lead Test Cases
+# legallead.zip.installation   
+Process to install legallead application from zip archive   
 
-## Introduction
-This document details the goals for certification of behaviors in the Lead Lead application.
-The focus of this test suite is validation of the customer experience.
+# Versions  
+## vX.Y.Z - ReleaseDate
+ - Initial zip installation release
 
-### Installation
-A user should be able to install the application.
-The installation should follow the same steps every time.
-The user can uninstall their application.
-The user can re-install application.
+# Behaviors 
 
-### Presentation Layer
-This suite will go over common activities for 
-1. a non-authenticated user
-1. a authenticate user
+## Setup Dotnet SDK
+ - Download and install latest SDK from Microsoft
 
-### Test accounts
-To make test cases repeatable, a series of test accounts will need to be maintained.
-Some database processes might be needed to manage test accounts.
+## Setup LEAD-CLI
+ - Download and install latest command line interface as global tool
 
-
-### Automation
-The strategy for automation is in progress, I would like to setup manual test cases prior to automation.
-
-### Branching
-Let's create a branch called "testing" where we will stage tests in progress or creation prior to merging those tests into the main branch.
+## Install Application
+ - Download and install latest legallead-desktop version
+ - Create desktop shortcut to application
