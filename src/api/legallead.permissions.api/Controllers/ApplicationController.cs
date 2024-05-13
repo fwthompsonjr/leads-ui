@@ -113,9 +113,13 @@ namespace legallead.permissions.api.Controllers
                 if (isAdded)
                 {
                     await _db.InitializeProfile(user);
-                    await _db.InitializePermission(user);
+                    var initOk = (await _db.InitializePermission(user));
                     await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
                     await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
+                    if (initOk)
+                    {
+                        await _db.SetPermissionGroup(user, "Guest");
+                    }
                 }
                 if (aresponse != null) return Ok(aresponse);
                 return UnprocessableEntity(response);
