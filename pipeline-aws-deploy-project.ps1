@@ -22,9 +22,10 @@ function getVersionNumber( $source ){
     $currentLocation = Get-Location
     try {
         $dstamp = (Get-Date).Date.ToString("s").Split("T")[0].Replace("-","");
-        $configFile = [System.IO.Path]::Combine( $source, "legallead.permissions.api.release.json" );
+        $tstamp  = (Get-Date -Format hhmm)
+        $configFile = [System.IO.Path]::Combine( $source, "release/legallead.permissions.api.release.json" );
         if ( [System.IO.File]::Exists( $configFile ) -eq $false ) {
-            $v = [string]::Concat("v.3.2.40x.", $dstamp );
+            $v = [string]::Concat("v.3.2.40x.", $dstamp, ".", $tstamp );
             return $v;
         }
         $content = [System.IO.File]::ReadAllText( $configFile ) | ConvertFrom-Json

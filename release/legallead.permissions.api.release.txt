@@ -37,3 +37,4 @@ Release information - legallead.permissions.api
 05/06/2024 01:33:00 AM added support for email sending, 8.0 NET upgrade
 05/13/2024 12:22:00 PM Testing deploying pipeline
 05/13/2024 15:55:00 PM Environment restore from source
+05/13/2024 16:51:00 PM Testing deploying pipeline
