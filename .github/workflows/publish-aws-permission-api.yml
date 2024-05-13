@@ -10,9 +10,11 @@ env:
   NUGET_CERT_REVOCATION_MODE: offline
   
 on:
-  push:
+  pull_request:
+    branches: [ "main" ]
+    types: [ "labeled" ]
     paths:
-      - 'disabled/legallead.permissions.api.release.txt'
+      - 'release/legallead.permissions.api.**'
 
 jobs:
   build:
@@ -29,22 +31,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
-
-    - name: Set outputs
-      id: commitindex
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-    - name: Extract branch name
-      id: branchname
-      shell: bash
-      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-
-    - name: Restore Packages
-      timeout-minutes: 10
-      shell: pwsh
-      run: |
-        & ./pipeline-restore-packages.ps1
+        dotnet-version: 8.0.x
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -54,7 +41,7 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
     - name: Deploy to AWS
-      timeout-minutes: 15
+      timeout-minutes: 20
       shell: pwsh
       run: |
-        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
+        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-x-y-z"
