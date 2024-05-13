@@ -31,7 +31,7 @@ namespace legallead.desktop
             }
         }
 
-        private void NavigateToMyAccount()
+        internal void NavigateToMyAccount()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
             if (user == null || !user.IsAuthenicated)

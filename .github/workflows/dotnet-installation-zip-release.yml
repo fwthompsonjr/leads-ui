@@ -7,7 +7,7 @@ on:
     branches: [ "releases" ]
     types: [ "closed" ]
     paths:
-      - 'testing/**'
+      - 'testing/installation-suite/scripts/**'
 
 env:
     PROJECT_NAME: "legallead.zip.installer"
