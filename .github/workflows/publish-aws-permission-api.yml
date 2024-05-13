@@ -44,4 +44,4 @@ jobs:
       timeout-minutes: 20
       shell: pwsh
       run: |
-        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-${{ env.BUILD_VERSION }}-${{ steps.commitindex.outputs.sha_short }}"
+        & ./pipeline-aws-deploy-project.ps1 -searchPattern "${{ env.PRJ_PATTERN }}" -versionLabel "v-x-y-z"
