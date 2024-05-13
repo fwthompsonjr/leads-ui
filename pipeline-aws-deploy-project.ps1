@@ -21,8 +21,9 @@ function executeDeployment( $source ){
     $currentLocation = Get-Location
     try {
         $projectDirectory = [System.IO.Path]::GetDirectoryName( $source );
+        $configurationFile = [System.IO.Path]::Combine( $projectDirectory, "aws-beanstalk-tools-defaults.json" );
         Set-Location $projectDirectory
-        dotnet eb deploy-environment -c Release --version-label $versionLabel
+        dotnet eb deploy-environment -c Release -cfg $configurationFile --version-label $versionLabel
     } finally {
         Set-Location $currentLocation
     }
