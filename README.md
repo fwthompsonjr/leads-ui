@@ -3,6 +3,10 @@ Desktop version of lead sourcing application
 
 # Versions  
 ## vX.Y.Z - ReleaseDate
+ - User registration behavior :
+     - Completed registration test: Register Account - Create account
+
+## v3.2.9 ( 2024-05-09 23:11:34 )
  - Complete user logout behavior :
      - User can logout of application from account page
      - User can logout of application from context menu

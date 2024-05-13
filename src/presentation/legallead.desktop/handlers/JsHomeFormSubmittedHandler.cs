@@ -4,6 +4,7 @@ using legallead.desktop.interfaces;
 using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -34,13 +35,26 @@ namespace legallead.desktop.handlers
             try
             {
                 handler.Start();
-                var objectData = ConvertTo(formName, json).Result;
+                var objectData = ConvertTo(formName, json, this).Result;
                 var htm = ConvertHTML(objectData);
                 handler.SetMessage(htm);
                 if (objectData.StatusCode != 200) return;
                 handler.SetMessage("");
                 handler.ClearPassword();
                 handler.LoginCompleted(formName);
+                if (formName == "form-register")
+                {
+
+                    Window mainWindow = Application.Current.Dispatcher.Invoke(() => { 
+                        return Application.Current.MainWindow; 
+                    });
+                    if (mainWindow is MainWindow main)
+                    {
+                        main.NavigateToMyAccount();
+                        return;
+                    }
+                    return;
+                }
                 var data = TryDeserialize<LoginFormModel>(json);
                 SetUserSession(data, Guid.NewGuid().ToString());
                 NavigateTo("MyAccount", objectData);
@@ -81,7 +95,7 @@ namespace legallead.desktop.handlers
             main.NavigateToMySearch();
         }
 
-        private static async Task<ApiResponse> ConvertTo(string formName, string json)
+        private static async Task<ApiResponse> ConvertTo(string formName, string json, JsHomeFormSubmittedHandler? handler = null)
         {
             const string failureMessage = "Unable to parse form submission data.";
             var failed = new ApiResponse { StatusCode = 402, Message = failureMessage };
@@ -115,7 +129,8 @@ namespace legallead.desktop.handlers
                     if (data1 == null) return failed;
                     var obj1 = data1.ToApiModel();
                     var registerResponse = await api.Post("register", obj1, user) ?? failed;
-                    return registerResponse;
+                    if (!RegistrationCompletedHandler(data1, registerResponse, handler)) return failed;
+                    return succeeded;
 
                 default:
                     return succeeded;
@@ -123,5 +138,24 @@ namespace legallead.desktop.handlers
         }
 
         internal static readonly List<string> HomeFormNames = new() { "form-login", "form-register" };
+
+        private static bool RegistrationCompletedHandler(UserRegistrationModel model, ApiResponse registration, JsHomeFormSubmittedHandler? handler = null)
+        {
+            if (handler == null) return false;
+            if (registration.StatusCode != 200) return false;
+            var json = $"'username': '{model.UserName}', 'login-password': '{model.Password}'";
+            json = string.Concat("{ ", json, " }");
+            try
+            {
+                handler.Submit("form-login", json);
+                return true;
+            } 
+            catch
+            {
+                return false;
+            }
+
+        }
+
     }
 }

@@ -1,5 +1,9 @@
 [
   {
+    "id": 4,
+    "description": "Account Registration: Process testing and corrections."
+  },
+  {
     "id": 3,
     "description": "Allow Logout from desktop application."
   },
