@@ -1,8 +1,11 @@
-﻿namespace legallead.installer.Commands
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.installer.Commands
 {
     public partial class CommandHandler
     {
         [Command("list", "Display release details for legallead applications")]
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task List()
         {
             Console.WriteLine("Listing available versions for legallead applications.");

@@ -8,12 +8,14 @@ namespace legallead.installer.Classes
     {
         public bool AllowShortcuts => GitClientProvider.AllowShortcuts;
 
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task<List<ReleaseModel>?> GetReleases()
         {
             var releases = await GitClientProvider.GetReleases();
             return releases;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task<List<ReleaseAssetModel>?> GetAssets()
         {
             var releases = await GitClientProvider.GetReleases();

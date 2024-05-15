@@ -1,7 +1,9 @@
 ﻿using legallead.installer.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Bo
 {
+    [ExcludeFromCodeCoverage(Justification = "Item scheduled for deletion")]
     internal class ModelStorageBo<T> : ICreateDateProperty where T : class
     {
 

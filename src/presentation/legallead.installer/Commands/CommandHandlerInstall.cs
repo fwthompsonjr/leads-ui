@@ -1,8 +1,11 @@
-﻿namespace legallead.installer.Commands
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.installer.Commands
 {
     public partial class CommandHandler
     {
         [Command("install", "Install legallead application")]
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task Install(
             [Option("v", "version number", DefaultValue = "")] string version = "",
             [Option("n", "application name", DefaultValue = "")] string name = "",
