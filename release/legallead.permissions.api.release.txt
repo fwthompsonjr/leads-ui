@@ -38,3 +38,4 @@ Release information - legallead.permissions.api
 05/13/2024 12:22:00 PM Testing deploying pipeline
 05/13/2024 15:55:00 PM Environment restore from source
 05/13/2024 16:51:00 PM Testing deploying pipeline
+05/15/2024 09:45:00 PM Correction duplicate email registry

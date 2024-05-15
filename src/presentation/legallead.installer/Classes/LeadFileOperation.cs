@@ -28,6 +28,14 @@ namespace legallead.installer.Classes
             return File.Exists(path);
         }
 
+        /// <summary>
+        /// Deletes file in the specified path
+        /// </summary>
+        /// <param name="path">The file location.</param>
+        public void DeleteFile(string path)
+        {
+            if (File.Exists(path)) { File.Delete(path); }
+        }
         public bool Extract(string path, byte[] content)
         {
             try
@@ -94,6 +102,7 @@ namespace legallead.installer.Classes
                 info.WindowStyle = ProcessWindowStyle.Normal;
                 info.FileName = path;
                 info.CreateNoWindow = false;
+                info.UseShellExecute = true;
                 myProcess.Start();
                 return true;
             }

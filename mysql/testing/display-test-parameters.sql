@@ -5,6 +5,6 @@
 SET @testName = 'Register Account.Create account';
 
 SELECT * 
-FROM TESTPARAMETER
+FROM testing.TESTPARAMETER
 WHERE `Test` = @testName
 ORDER BY `Test`, IterationId, OrderId;
