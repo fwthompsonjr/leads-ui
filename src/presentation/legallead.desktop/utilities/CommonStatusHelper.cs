@@ -1,6 +1,8 @@
 ﻿using legallead.desktop.entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 
@@ -17,6 +19,20 @@ namespace legallead.desktop.utilities
         public void SetStatus(CommonStatusTypes status)
         {
             SetStatus((int)status);
+        }
+
+        public void SetVersion()
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            if (mainWindow is not MainWindow main) return;
+            var currentVersion = dispatcher.Invoke(() => { return main.sbVersionNumberText.Text; });
+            if (currentVersion.Equals(AppProductVersion)) return;
+            dispatcher = main.Dispatcher;
+            dispatcher.Invoke(() =>
+            {
+                main.sbVersionNumberText.Text = AppProductVersion;
+            });
         }
         private void SetStatus(int index)
         {
@@ -73,6 +89,27 @@ namespace legallead.desktop.utilities
             {
                 return fallback;
             }
+        }
+        private static string AppProductVersion => _appProductVersion ??= GetAppProductVersion();
+        private static string? _appProductVersion;
+        private static string GetAppProductVersion()
+        {
+            const char dash = '-';
+            const char plus = '+';
+            const string fallback = "3.2.10";
+            var process = Process.GetCurrentProcess();
+            if (process == null) return fallback;
+            string processExe = process.MainModule?.ModuleName ?? string.Empty;
+            if (string.IsNullOrEmpty(processExe) || !File.Exists(processExe)) return fallback;
+            var versionInfo = FileVersionInfo.GetVersionInfo(processExe);
+            if (versionInfo == null) return fallback;
+            var product = versionInfo.ProductVersion;
+            if (string.IsNullOrEmpty(product) || !product.Contains(dash)) return fallback;
+            var parsed = product.Split(dash);
+            if (parsed.Length < 2) return fallback;
+            var item = parsed[1];
+            if (!item.Contains(plus)) return fallback;
+            return item.Split(plus)[0];
         }
     }
 }

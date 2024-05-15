@@ -19,6 +19,7 @@ namespace legallead.desktop.handlers
         {
             var provider = AppBuilder.ServiceProvider;
             if (provider == null) return;
+            GetStatusHelper()?.SetVersion();
             var user = provider.GetRequiredService<UserBo>();
             if (user == null || !user.IsInitialized)
             {

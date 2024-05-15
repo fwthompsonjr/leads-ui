@@ -45,5 +45,11 @@ namespace legallead.installer.Interfaces
         string? FindExecutable(string path);
         IEnumerable<string> FindFiles(string path, string pattern);
         bool LaunchExecutable(string path);
+
+        /// <summary>
+        /// Deletes file in the specified path
+        /// </summary>
+        /// <param name="path">The file location.</param>
+        void DeleteFile(string path);
     }
 }
