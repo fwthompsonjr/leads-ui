@@ -26,22 +26,13 @@ var services = builder.Services;
 services.RegisterDataServices(config);
 services.RegisterAuthentication(config);
 services.RegisterEmailServices();
-services.AddControllers(options =>
-{
-    var filters = options.Filters;
-    filters.Add<BeginSearchRequested>();
-    filters.Add<RegistrationCompleted>();
-    filters.Add<SearchPaymentCompleted>();
-    filters.Add<ProfileChanged>();
-    filters.Add<PermissionChangeRequested>();
-    filters.Add<PasswordChanged>();
-});
-services.AddTransient<BeginSearchRequested>();
-services.AddTransient<RegistrationCompleted>();
-services.AddTransient<RegistrationCompleted>();
-services.AddTransient<ProfileChanged>();
-services.AddTransient<PermissionChangeRequested>();
-services.AddTransient<PasswordChanged>();
+services.AddSingleton<BeginSearchRequested>();
+services.AddSingleton<RegistrationCompleted>();
+services.AddSingleton<RegistrationCompleted>();
+services.AddSingleton<ProfileChanged>();
+services.AddSingleton<PermissionChangeRequested>();
+services.AddSingleton<PasswordChanged>();
+services.AddControllers();
 
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
