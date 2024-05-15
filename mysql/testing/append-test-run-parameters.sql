@@ -1,7 +1,7 @@
 /*
 	append test parameter
 */
-SET @testName = 'Login Account.Login By Email Should Complete Successfully';
+SET @testName = 'Login Account.Login By User Name Should Complete Successfully';
 SET @iterationId = 1;
 SET @accountEmail = (SELECT `Name` FROM ACCOUNTS WHERE `Name` LIKE '%live%' LIMIT 1);
 SET @accountUserName = (SELECT UserName FROM testing.USERSCLONE WHERE Email = @accountEmail LIMIT 1);

@@ -6,13 +6,22 @@ namespace legallead.permissions.api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SearchController(IUserSearchValidator validator,
-        ISearchInfrastructure infrastructure,
-        ICustomerLockInfrastructure lockingDb) : ControllerBase
+    public class SearchController : ControllerBase
     {
-        private readonly IUserSearchValidator searchValidator = validator;
-        private readonly ISearchInfrastructure infrastructure = infrastructure;
-        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
+        public SearchController(
+            IUserSearchValidator validator,
+            ISearchInfrastructure infrastructure,
+            ICustomerLockInfrastructure lockingDb)
+        {
+            searchValidator = validator;
+            this.infrastructure = infrastructure;
+            _lockingDb = lockingDb;
+        }
+
+
+        private readonly IUserSearchValidator searchValidator;
+        private readonly ISearchInfrastructure infrastructure;
+        private readonly ICustomerLockInfrastructure _lockingDb;
 
         [HttpPost]
         [Route("search-begin")]
@@ -134,7 +143,10 @@ namespace legallead.permissions.api.Controllers
         public async Task<IActionResult> ListMyPurchases([FromQuery] string userName)
         {
             var user = await infrastructure.GetUser(Request);
-            var isvalid = userName.Equals(user?.UserName ?? "");
+            var email = user?.Email ?? string.Empty;
+            var alias = user?.UserName ?? string.Empty;
+
+            var isvalid = userName.Equals(alias) || userName.Equals(email);
             if (string.IsNullOrEmpty(userName) || !isvalid || user == null) { return Unauthorized(); }
             var isLocked = await _lockingDb.IsAccountLocked(user.Id);
             if (isLocked)

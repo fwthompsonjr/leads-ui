@@ -41,13 +41,6 @@ namespace legallead.permissions.api
                 var mn = Convert.ToInt64(cfg["Search:MinStartDate"]);
                 return new UserSearchValidator { MinStartDate = mn, MaxDays = mx };
             });
-            services.AddScoped(s =>
-            {
-                var db = s.GetRequiredService<ISearchInfrastructure>();
-                var validator = s.GetRequiredService<UserSearchValidator>();
-                var lockdb = s.GetRequiredService<ICustomerLockInfrastructure>();
-                return new SearchController(validator, db, lockdb);
-            });
             services.SetupJwt(configuration);
         }
 
@@ -161,6 +154,13 @@ namespace legallead.permissions.api
                 return new PaymentController(payment,
                     p.GetRequiredService<ISearchInfrastructure>(),
                     p.GetRequiredService<IStripeInfrastructure>());
+            });
+            services.AddScoped(s =>
+            {
+                var db = s.GetRequiredService<ISearchInfrastructure>();
+                var validator = s.GetRequiredService<UserSearchValidator>();
+                var lockdb = s.GetRequiredService<ICustomerLockInfrastructure>();
+                return new SearchController(validator, db, lockdb);
             });
             // logging
             services.AddSingleton<LoggingDbServiceProvider>();

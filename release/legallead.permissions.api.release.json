@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.404.--",
+		"description": "Allow user to login by email",
+		"date": "2024-05-15 16:10:00"
+	},
+	{
 		"name": "3.2.403.--",
 		"description": "Adding initialize process to login process, when needed",
 		"date": "2024-05-15 12:50:00"
