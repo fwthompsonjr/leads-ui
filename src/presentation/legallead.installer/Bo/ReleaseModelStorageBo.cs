@@ -1,9 +1,11 @@
 ﻿using legallead.installer.Models;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace legallead.installer.Bo
 {
+    [ExcludeFromCodeCoverage(Justification = "Item scheduled for deletion")]
     internal class ReleaseModelStorageBo : ModelStorageBo<ReleaseModelBo>
     {
 

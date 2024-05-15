@@ -2901,7 +2901,7 @@
 	"variable": [
 		{
 			"key": "BaseUrl",
-			"value": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com",
+			"value": "http://api.legallead.co",
 			"type": "string"
 		},
 		{

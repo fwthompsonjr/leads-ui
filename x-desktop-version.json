@@ -1,5 +1,9 @@
 [
   {
+    "id": 5,
+    "description": "Desktop: Set remote API location."
+  },
+  {
     "id": 4,
     "description": "Account Registration: Process testing and corrections."
   },

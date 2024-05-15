@@ -3,6 +3,11 @@ Desktop version of lead sourcing application
 
 # Versions  
 ## vX.Y.Z - ReleaseDate
+ - Echo application version to status bar
+ - Remote API location :
+     - Set api location to legallead.co address   
+
+## v3.2.10 ( 2024-05-13 02:47:35 )
  - User registration behavior :
      - Completed registration test: Register Account - Create account
 

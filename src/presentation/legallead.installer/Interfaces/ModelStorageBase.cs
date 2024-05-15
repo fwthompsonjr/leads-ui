@@ -84,7 +84,7 @@ namespace legallead.installer.Interfaces
             if (translation is not ICreateDateProperty creationDt) return null;
             var dte = creationDt.CreationDate.Replace("T", " ");
             storage.CreationDate = DateTime.Parse(dte, CultureInfo.InvariantCulture);
-            if (storage is ReleaseModelStorage releases && translation is ReleaseModelStorageBo releasesBo) 
+            if (storage is ReleaseModelStorage releases && translation is ReleaseModelStorageBo releasesBo)
             {
                 releases.Detail = releasesBo.Models();
                 return releases;

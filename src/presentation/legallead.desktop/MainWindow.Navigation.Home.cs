@@ -33,6 +33,7 @@ namespace legallead.desktop
             var tmp = AppBuilder.ServiceProvider?.GetService(typeof(CommonStatusHelper));
             if (tmp is CommonStatusHelper helper) StatusHelper = helper;
             StatusHelper?.SetStatus(CommonStatusTypes.Loading);
+            StatusHelper?.SetVersion();
         }
     }
 }

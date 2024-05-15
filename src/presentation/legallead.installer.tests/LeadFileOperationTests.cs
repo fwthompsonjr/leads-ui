@@ -163,6 +163,25 @@ namespace legallead.installer.tests
         }
 
         [Fact]
+        public void OpsCanDeleteFile()
+        {
+            var sut = new LeadFileOperation();
+            var filePath = CreateTempExtract();
+            Assert.False(string.IsNullOrEmpty(filePath));
+            var testDir = Path.GetDirectoryName(filePath);
+            Assert.False(string.IsNullOrEmpty(testDir));
+            var fullName = Path.Combine(testDir, tempText);
+            var exception = Record.Exception(() =>
+            {
+                if (File.Exists(fullName))
+                {
+                    sut.DeleteFile(fullName);
+                }
+            });
+            Assert.Null(exception);
+        }
+
+        [Fact]
         public void OpsCanExtractToDirectory()
         {
             var sut = new LeadFileOperation();
@@ -219,6 +238,7 @@ namespace legallead.installer.tests
                     if (!Directory.Exists(sampleFolder)) { return null; }
                     string tempPath = Path.Combine(currentDir, "_test_results");
                     if (!Directory.Exists(tempPath)) { Directory.CreateDirectory(tempPath); }
+                    AppendTextFile(tempPath);
                     string zipPath = Path.Combine(tempPath, "sample.zip");
                     if (File.Exists(zipPath)) return zipPath;
                     ZipFile.CreateFromDirectory(sampleFolder, zipPath);
@@ -231,6 +251,14 @@ namespace legallead.installer.tests
                 return null;
             }
         }
+        private const string tempText = "testfile.txt";
+        private static void AppendTextFile(string tempPath)
+        {
+            var fullName = Path.Combine(tempPath, tempText);
+            if (File.Exists(fullName)) { return; }
+            File.WriteAllText(fullName, tempText);
+        }
+
         private static string? _currentDir;
         private static string CurrentDir
         {

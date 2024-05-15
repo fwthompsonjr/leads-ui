@@ -39,6 +39,7 @@ namespace legallead.installer.Commands
                 return;
             }
             TryToDelete(selection);
+            RemoveShortcut(selection);
         }
         private void TryToDelete(LocalVersionModel model)
         {
@@ -64,6 +65,17 @@ namespace legallead.installer.Commands
             {
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(failmsg);
+            }
+        }
+
+        private void RemoveShortcut(LocalVersionModel model)
+        {
+            var linkFile = $"{model.Name}-{model.Version}.lnk";
+            var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string shortcutAddress = Path.Combine(desktopPath, linkFile);
+            if (_fileService.FileExists(shortcutAddress))
+            {
+                _fileService.DeleteFile(shortcutAddress);
             }
         }
     }

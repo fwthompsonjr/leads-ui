@@ -4,7 +4,6 @@ using legallead.desktop.interfaces;
 using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -45,8 +44,9 @@ namespace legallead.desktop.handlers
                 if (formName == "form-register")
                 {
 
-                    Window mainWindow = Application.Current.Dispatcher.Invoke(() => { 
-                        return Application.Current.MainWindow; 
+                    Window mainWindow = Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        return Application.Current.MainWindow;
                     });
                     if (mainWindow is MainWindow main)
                     {
@@ -149,7 +149,7 @@ namespace legallead.desktop.handlers
             {
                 handler.Submit("form-login", json);
                 return true;
-            } 
+            }
             catch
             {
                 return false;
