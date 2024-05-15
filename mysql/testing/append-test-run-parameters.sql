@@ -1,11 +1,11 @@
 /*
 	append test parameter
 */
-SET @testName = 'Register Account.Create account will validate User Name';
-SET @iterationId = 2;
-SET @accountEmail = (SELECT `Name` FROM ACCOUNTS WHERE `Name` LIKE '%testing%' LIMIT 1);
-SET @accountUserName = 'Abcd123';
-SET @pword = (SELECT `InternalId` FROM ACCOUNTS WHERE `Name` LIKE '%testing%' LIMIT 1);
+SET @testName = 'Login Account.Login By Email Should Complete Successfully';
+SET @iterationId = 1;
+SET @accountEmail = (SELECT `Name` FROM ACCOUNTS WHERE `Name` LIKE '%live%' LIMIT 1);
+SET @accountUserName = (SELECT UserName FROM testing.USERSCLONE WHERE Email = @accountEmail LIMIT 1);
+SET @pword = (SELECT `InternalId` FROM ACCOUNTS WHERE `Name` LIKE '%live%' LIMIT 1);
 
 DROP TEMPORARY TABLE IF EXISTS tmp_field_name;
 CREATE TEMPORARY TABLE tmp_field_name
