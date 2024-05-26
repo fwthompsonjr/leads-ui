@@ -191,7 +191,7 @@ function initializeProfileFormValidation()
 							maxlength: 125
 						},
 						"company-name": {
-							required: true,
+							required: false,
 							minlength: 2,
 							maxlength: 150
 						}

@@ -2,9 +2,9 @@
 	create a list of email accounts that are used for specific test cases
     
 */
-SET @testName = 'Register Account.Create account';
+SET @testName = 'Profile%';
 
 SELECT * 
 FROM testing.TESTPARAMETER
-WHERE `Test` = @testName
+WHERE `Test` LIKE @testName
 ORDER BY `Test`, IterationId, OrderId;

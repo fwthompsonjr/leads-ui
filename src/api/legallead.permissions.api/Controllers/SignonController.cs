@@ -54,6 +54,19 @@ namespace legallead.permissions.api.Controllers
                 };
 
                 await _db.UserTokenDb.Add(obj);
+                var permissions = await _db.UserPermissionDb.GetAll(user);
+                var emptycount = permissions.Count(c => string.IsNullOrEmpty(c.KeyValue));
+                if (emptycount == permissions.Count())
+                {
+                    await _db.InitializeProfile(user);
+                    var initOk = (await _db.InitializePermission(user));
+                    await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
+                    await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
+                    if (initOk)
+                    {
+                        await _db.SetPermissionGroup(user, "Guest");
+                    }
+                }
                 return Ok(token);
             }
             catch (Exception ex)

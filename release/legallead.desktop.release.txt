@@ -1,5 +1,10 @@
 [
 	{
+		"label": "3.2.12",
+		"trackingDt": "2024-05-26T11:15",
+		"description": "Account profile submission default values."
+	},
+	{
 		"label": "3.2.10",
 		"trackingDt": "2024-02-05T10:15",
 		"description": "Setup version stamp for reader component."

@@ -2,7 +2,11 @@
 Desktop version of lead sourcing application   
 
 # Versions  
+
 ## vX.Y.Z - ReleaseDate
+ - Bug fix: blank entry in update profile behaviors  
+
+## v3.2.11 ( 2024-05-15 16:45:21 )
  - Echo application version to status bar
  - Remote API location :
      - Set api location to legallead.co address   
