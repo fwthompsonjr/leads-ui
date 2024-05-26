@@ -2,7 +2,7 @@
 	create a list of email accounts that are used for specific test cases
     
 */
-SET @testName = 'Login Account%';
+SET @testName = 'Profile%';
 
 SELECT * 
 FROM testing.TESTPARAMETER

@@ -75,9 +75,18 @@ namespace legallead.Profiles.api.Controllers
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
-            var response = await _db.ChangeContactAddress(verification.User, request);
+            if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactAddressRequest[] changed)
+            {
+                return UnprocessableEntity(request);
+            }
+            var response = await _db.ChangeContactAddress(verification.User, changed);
             if (response.Key)
-                return Ok(response);
+            {
+                var serilized = GetChangeResponse("Address",
+                    response.Value,
+                    verification.User, changed);
+                return Ok(serilized);
+            }
 
             return Conflict(response);
         }
@@ -89,12 +98,16 @@ namespace legallead.Profiles.api.Controllers
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
-            var response = await _db.ChangeContactEmail(verification.User, request);
+            if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactEmailRequest[] changed)
+            {
+                return UnprocessableEntity(request);
+            }
+            var response = await _db.ChangeContactEmail(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Email",
                     response.Value,
-                    verification.User, request);
+                    verification.User, changed);
                 return Ok(serilized);
             }
 
@@ -109,12 +122,16 @@ namespace legallead.Profiles.api.Controllers
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
-            var response = await _db.ChangeContactName(verification.User, request);
+            if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactNameRequest[] changed)
+            {
+                return UnprocessableEntity(request);
+            }
+            var response = await _db.ChangeContactName(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Name",
                     response.Value,
-                    verification.User, request);
+                    verification.User, changed);
                 return Ok(serilized);
             }
 
@@ -128,12 +145,16 @@ namespace legallead.Profiles.api.Controllers
         {
             var verification = await GetVerification.VerifyRequest(Request, request);
             if (verification.Result != null) return verification.Result;
-            var response = await _db.ChangeContactPhone(verification.User, request);
+            if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactPhoneRequest[] changed)
+            {
+                return UnprocessableEntity(request);
+            }
+            var response = await _db.ChangeContactPhone(verification.User, changed);
             if (response.Key)
             {
-                var serilized = GetChangeResponse("Email",
+                var serilized = GetChangeResponse("Phone",
                     response.Value,
-                    verification.User, request);
+                    verification.User, changed);
                 return Ok(serilized);
             }
 

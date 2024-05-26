@@ -99,8 +99,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "8a3e7482-1d62-43a3-a9b5-e4c73a98c6cc"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -157,8 +156,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "d6f30a59-8908-401b-b76d-a54846e28767"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -249,8 +247,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "03795428-f255-4d50-a89c-bef0e08f7882"
+								"type": "text"
 							}
 						],
 						"url": {
@@ -339,8 +336,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "bde060a9-73f4-4745-9d46-8587e46c2d1e"
+								"type": "text"
 							}
 						],
 						"url": {
@@ -403,8 +399,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "318bdfa0-24bf-4706-b040-c81c07df4670"
+								"type": "text"
 							}
 						],
 						"url": {
@@ -469,8 +464,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "e59c5255-1853-438c-bd0f-1039fdeddc16"
+								"type": "text"
 							}
 						],
 						"url": {
@@ -549,8 +543,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{LocalAppHeader}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "c9ae2131-90e2-4b81-aaca-ae9730eb5977"
+								"type": "text"
 							}
 						],
 						"url": {
@@ -618,8 +611,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{LocalAppHeader}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "06221095-c357-4fd1-a567-76ed6c555518"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -689,8 +681,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{LocalAppHeader}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "dea19a26-b907-4944-b0a6-e0efe0e2fe47"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -988,8 +979,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "6f441169-5fe4-4a3d-b5d5-4dd70b47bbbe"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1036,13 +1026,59 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "0d6fd4eb-119d-45c7-a03c-5ca0a7bd5c6f"
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"userName\": \"{{DefaultEmail}}\",\r\n  \"password\": \"{{DefaultPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/{{SIGNON_LOGIN_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"{{SIGNON_LOGIN_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login By Email for Live Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"legallead.live@mail.com\",\r\n  \"password\": \"010-msLgDapAtA3NYjx-212\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1093,8 +1129,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "63257074-75e2-40eb-aeb5-8815c40dfa5e"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1150,8 +1185,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "e2e9af47-9646-49e3-8273-18d4b78d3db8"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1207,8 +1241,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "77faec03-051b-4cc8-b838-cdc46f5fbc1e"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1264,8 +1297,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "6b13bd53-132b-4573-9330-9019fa2856ab"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1331,8 +1363,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "700a4b2b-d0d6-49ab-88f6-c7981283b5c8"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1406,8 +1437,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "785f51b3-fe1d-4fef-ac98-188de4a3c711"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1506,8 +1536,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "ea904bcf-9662-4c39-ae87-edb28ea00b1a"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1584,8 +1613,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "d0e1d80c-9247-49e5-b54a-42046e70b066"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1662,8 +1690,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "37f289b3-b19c-46b1-9b3f-effa1962d84d"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1740,8 +1767,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "213171ff-d1d8-4b77-bcfa-21cd4a346660"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1818,8 +1844,7 @@
 										"key": "APP_IDENTITY",
 										"value": "{{app_identity}}",
 										"description": "App service header",
-										"type": "text",
-										"uuid": "76baaed4-a48f-4943-820c-4a86d387d9dc"
+										"type": "text"
 									}
 								],
 								"body": {
@@ -1859,13 +1884,7 @@
 									"pm.test(\"Response value matches expected\", function() {\r",
 									"    let expected = \"Contact details updated successfully.\";\r",
 									"    let actual = tryGetJsonField(\"value\");\r",
-									"    pm.expect(actual).to.equal(expected);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response key matches expected\", function() {\r",
-									"    let expected = true;\r",
-									"    let actual = tryGetJsonField(\"key\");\r",
-									"    pm.expect(actual).to.equal(expected);\r",
+									"    pm.expect(actual).to.contain(expected);\r",
 									"});\r",
 									"\r",
 									"function tryGetJsonField(fieldName){\r",
@@ -1877,7 +1896,8 @@
 									"    }\r",
 									"}"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
@@ -1886,7 +1906,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1907,8 +1928,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "8d486e67-2ce1-4fe6-8da7-3a6614d0d5cb"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1941,28 +1961,7 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"  pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response value matches expected\", function() {\r",
-									"    let expected = \"Contact details updated successfully.\";\r",
-									"    let actual = tryGetJsonField(\"value\");\r",
-									"    pm.expect(actual).to.contain(expected);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Response key matches expected\", function() {\r",
-									"    let expected = true;\r",
-									"    let actual = tryGetJsonField(\"key\");\r",
-									"    pm.expect(actual).to.equal(expected);\r",
-									"});\r",
-									"\r",
-									"function tryGetJsonField(fieldName){\r",
-									"    try {\r",
-									"        let response = pm.response.json();\r",
-									"        return response[fieldName];\r",
-									"    } catch {\r",
-									"        return null;\r",
-									"    }\r",
-									"}"
+									"});"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1995,9 +1994,7 @@
 							{
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text",
-								"uuid": "6e91cd8d-b15a-4437-8f40-fd61db18111a"
+								"description": "App service header"
 							}
 						],
 						"body": {
@@ -2084,9 +2081,7 @@
 							{
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text",
-								"uuid": "60732f38-e3ca-4817-a2f6-69c9d8faa379"
+								"description": "App service header"
 							}
 						],
 						"body": {
@@ -2173,9 +2168,7 @@
 							{
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text",
-								"uuid": "d32871dc-098d-4058-a3e8-5c5c9b5ae934"
+								"description": "App service header"
 							}
 						],
 						"body": {
@@ -2250,8 +2243,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "4b1b4b43-e125-4cba-90d3-43cd6d25fd6c"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2318,8 +2310,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "0d1d1714-f34b-450e-94f4-bafa7973f85c"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2385,8 +2376,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "d949dab9-8d58-4d74-9b09-75d4e0fc0973"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2452,8 +2442,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "b09f289f-c346-4fc3-a211-f7cfd566412a"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2522,8 +2511,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "fa7adde9-f76a-4179-ae8d-38d1e2eddd51"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2595,8 +2583,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "4cd63a59-0b9e-4866-ab3e-d5ac19f155e1"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2666,8 +2653,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "521f16fd-c2b7-4c31-af1a-fdd70c1edcee"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2742,8 +2728,7 @@
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
 								"description": "App service header",
-								"type": "text",
-								"uuid": "ebe18215-f826-40bf-b563-f0d1a5807b8a"
+								"type": "text"
 							}
 						],
 						"body": {
@@ -2901,7 +2886,7 @@
 	"variable": [
 		{
 			"key": "BaseUrl",
-			"value": "http://api.legallead.co",
+			"value": "http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com",
 			"type": "string"
 		},
 		{

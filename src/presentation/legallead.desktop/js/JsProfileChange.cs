@@ -77,7 +77,7 @@ namespace legallead.desktop.js
             if (js == null) return new();
             var typeMap = PayloadMap[formName];
             var mapped = JsonConvert.DeserializeObject(js, typeMap);
-            return mapped ?? new();
+            return BlankSubmissionHandler.SubstituteBlankValues(typeMap, mapped);
         }
 
         private static readonly Dictionary<string, string> AddressMap = new()
