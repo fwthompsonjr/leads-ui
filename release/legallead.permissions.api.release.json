@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.405.--",
+		"description": "Allow default values for account profile changes",
+		"date": "2024-05-26 11:15:00"
+	},
+	{
 		"name": "3.2.404.--",
 		"description": "Allow user to login by email",
 		"date": "2024-05-15 16:10:00"
