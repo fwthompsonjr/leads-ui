@@ -1,7 +1,7 @@
 /*
 	append test parameter
 */
-SET @testName = 'Profile.Change Address - should complete successfully';
+SET @testName = 'Account.Change Password - should complete successfully';
 SET @iterationId = 1;
 SET @accountEmail = (SELECT `Name` FROM testing.ACCOUNTS WHERE `Name` LIKE '%live%' LIMIT 1);
 SET @accountUserName = (SELECT UserName FROM testing.USERSCLONE WHERE Email = @accountEmail LIMIT 1);
@@ -16,24 +16,24 @@ CREATE TEMPORARY TABLE tmp_field_name
     PRIMARY KEY ( Id )
 );
 
-SET @streetName1 = (SELECT FieldValue FROM testing.RANDOMADDRESS WHERE `Name` = 'STREET' ORDER BY RAND() LIMIT 1);
-SET @streetName2 = (SELECT FieldValue FROM testing.RANDOMADDRESS WHERE `Name` = 'STREET' ORDER BY RAND() LIMIT 1);
+SET @email1 = (SELECT EmailAddress FROM testing.RANDOMEMAIL ORDER BY RAND() LIMIT 1);
+SET @email2 = (SELECT EmailAddress FROM testing.RANDOMEMAIL WHERE EmailAddress != @email1 ORDER BY RAND() LIMIT 1);
+SET @email3 = (SELECT EmailAddress FROM testing.RANDOMEMAIL WHERE EmailAddress != @email1 AND EmailAddress != @email2 ORDER BY RAND() LIMIT 1);
 
-SET @locationName1 = (SELECT FieldValue FROM testing.RANDOMADDRESS WHERE `Name` = 'LOCATION' ORDER BY RAND() LIMIT 1);
-SET @locationName2 = (SELECT FieldValue FROM testing.RANDOMADDRESS WHERE `Name` = 'LOCATION' ORDER BY RAND() LIMIT 1);
+SET @hasEmail1 = CASE WHEN @iterationId != 4 THEN 1 ELSE 0 END;
+SET @hasEmail2 = CASE WHEN @iterationId in (1, 2) THEN 1 ELSE 0 END;
+SET @hasEmail3 = CASE WHEN @iterationId in (1, 3) THEN 1 ELSE 0 END;
 
-SET @hasMailAddress = 1;
-SET @hasBillAddress = 1;
-
-SET @mailAddress = CASE WHEN @hasMailAddress = 1 THEN CONCAT( @streetName1, ', ', @locationName1 ) ELSE '' END;
-SET @billAddress = CASE WHEN @hasBillAddress = 1 THEN CONCAT( @streetName2, ', ', @locationName2 ) ELSE '' END;
+SET @email1 = CASE WHEN @hasEmail1 = 1 THEN @email1 ELSE '' END;
+SET @email2 = CASE WHEN @hasEmail2 = 1 THEN @email2 ELSE '' END;
+SET @email3 = CASE WHEN @hasEmail3 = 1 THEN @email3 ELSE '' END;
 
 INSERT tmp_field_name ( FieldName, FieldValue )
 VALUES
 	( 'UserName', @accountUserName ),
+	( 'Email', @accountEmail ),
     ( 'Password', @pword ),
-    ( 'Mailing Address', @mailAddress ),
-    ( 'Billing Address', @billAddress );
+    ( 'Change Password', REPLACE( REPLACE( @pword, '0', '7'), '1', '5') );
     
 INSERT testing.TESTPARAMETER ( Test, IterationId, OrderId, FieldName, FieldValue )
 SELECT 
