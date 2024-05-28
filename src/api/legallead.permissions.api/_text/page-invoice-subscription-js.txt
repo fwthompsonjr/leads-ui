@@ -18,7 +18,8 @@ document
 // Fetches a payment intent and captures the client secret
 async function initialize() {
   let obj = { id: "<!-- payment external id -->" }
-  const response = await fetch("/subscription-fetch-intent", {
+  let landing = "".concat("<!-- payment get intent url -->", "/subscription-fetch-intent");
+  const response = await fetch(landing, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(obj),

@@ -121,7 +121,7 @@ namespace legallead.permissions.api.Extensions
             if (detailNode != null) detailNode.InnerHtml = string.Empty;
             var createDate = DateTime.UtcNow.ToString("f");
             var externalId = response.ExternalId ?? dash;
-            var heading = "Legal Lead Subcription";
+            var heading = "Legal Lead Subscription";
             var description = response.LevelName switch
             {
                 "" => "Setup monthly payment",
@@ -143,9 +143,11 @@ namespace legallead.permissions.api.Extensions
                 if (span != null) span.InnerHtml = replacements[key];
             });
             var outerHtml = parentNode.OuterHtml;
+            var domain = GetPaymentIntentUrl(successUrl); 
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
-            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);            
+            outerHtml = outerHtml.Replace("<!-- payment get intent url -->", domain);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);
             return doc.DocumentNode.OuterHtml;
@@ -309,6 +311,21 @@ namespace legallead.permissions.api.Extensions
                 return fallback;
             }
 
+        }
+
+
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
+        private static string GetPaymentIntentUrl(string landing)
+        {
+            if (!Uri.TryCreate(landing, UriKind.Absolute, out var url)) return string.Empty;
+            var host = (url.Scheme) switch
+            {
+                "https" => url.Port == 443 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                "http" => url.Port == 80 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                _ => url.Host,
+            };
+            var constructedUrl = $"{url.Scheme}://{host}";
+            return constructedUrl;
         }
 
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";

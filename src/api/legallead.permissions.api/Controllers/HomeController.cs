@@ -6,6 +6,7 @@ using System.Text;
 namespace legallead.permissions.api.Controllers
 {
     [Route("/")]
+    [SuppressMessage("Sonar Qube Violation", "S6931:ASP.NET controller actions should not have a route template starting with \"/\"", Justification = "<Pending>")]
     public class HomeController(
         IPaymentHtmlTranslator service,
         ISearchInfrastructure search,

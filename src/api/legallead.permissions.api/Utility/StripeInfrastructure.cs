@@ -108,7 +108,14 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         public async Task<object> FetchClientSecret(LevelRequestBo session)
         {
-            var nodata = new { clientSecret = Guid.Empty.ToString("D") };
+            var data = await FetchClientSecretValue(session);
+            return new { clientSecret = data };
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public async Task<string> FetchClientSecretValue(LevelRequestBo session)
+        {
+            var nodata = Guid.Empty.ToString("D");
 
             var service = new SubscriptionService();
             var subscription = await service.GetAsync(session.SessionId);
@@ -119,10 +126,8 @@ namespace legallead.permissions.api.Utility
             if (invoice == null) return nodata;
             var intentSvc = new PaymentIntentService();
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-            var clientSecret = intent.ClientSecret;
-            return new { clientSecret };
+            return intent.ClientSecret;
         }
-
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         public Tuple<bool, string, Invoice> VerifySubscription(string sessionId)
         {
