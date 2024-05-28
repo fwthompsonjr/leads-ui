@@ -7,7 +7,7 @@
     Permissions
 */
 SET SQL_SAFE_UPDATES = 0;
-SET @testName = 'Profile.Change Email%';
+SET @testName = 'Permissions%';
 
 
 SELECT * 
