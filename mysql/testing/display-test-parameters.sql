@@ -4,6 +4,7 @@
 	Profile.Change Email - should complete successfully
 	Profile.Change Name - should complete successfully
 	Profile.Change Phone - should complete successfully
+    Permissions
 */
 SET SQL_SAFE_UPDATES = 0;
 SET @testName = 'Profile.Change%';

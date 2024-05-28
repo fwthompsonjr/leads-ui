@@ -1,5 +1,5 @@
 -- display tests defined in suite
-SET @testSuite = 'Profile';
+SET @testSuite = 'Permissions';
 SET @locator = CONCAT( @testSuite, '%' );
 SELECT nn.*, p.`Test`
 FROM (
