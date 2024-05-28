@@ -1,5 +1,10 @@
 [
 	{
+		"label": "3.2.13",
+		"trackingDt": "2024-05-28T14:15",
+		"description": "Account permission fetch invoice."
+	},
+	{
 		"label": "3.2.12",
 		"trackingDt": "2024-05-26T11:15",
 		"description": "Account profile submission default values."

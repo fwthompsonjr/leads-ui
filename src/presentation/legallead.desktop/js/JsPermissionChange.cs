@@ -46,18 +46,11 @@ namespace legallead.desktop.js
                 return;
             }
             SubmitCompleted();
-            var paymentLandings = new[] { "Discounts", "Subscription" };
-            if (paymentLandings.Contains(submission.SubmissionName, StringComparison.OrdinalIgnoreCase))
-            {
-                var levelChange = ObjectExtensions.TryGet<SubscriptionChangeResponse>(response.Message);
-                var navigateTo = levelChange?.InvoiceUri ?? "NONE";
-                if (navigateTo.Equals("NONE"))
-                {
-                    Reload("myaccount-permissions");
-                    return;
-                }
-                web?.LoadUrl(navigateTo);
-            }
+            JsPermissionChangeHelper.OnSubmissionCompleted(
+                submission.SubmissionName,
+                response.Message,
+                this,
+                web);
         }
 
         /// <summary>
