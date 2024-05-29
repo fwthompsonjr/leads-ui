@@ -6,6 +6,7 @@ using System.Text;
 namespace legallead.permissions.api.Controllers
 {
     [Route("/")]
+    [SuppressMessage("Sonar Qube Violation", "S6931:ASP.NET controller actions should not have a route template starting with \"/\"", Justification = "<Pending>")]
     public class HomeController(
         IPaymentHtmlTranslator service,
         ISearchInfrastructure search,
@@ -94,9 +95,12 @@ namespace legallead.permissions.api.Controllers
             {
                 return await UserLevelLanding("success", id);
             }
-            var content = Properties.Resources.page_invoice_subscription_html;
-            content = paymentSvc.Transform(session, content);
-            return Content(content, "text/html");
+            var clientSecret = await stripeSvc.FetchClientSecretValue(session);
+            var temp = Properties.Resources.page_invoice_subscription_html;
+            var content = paymentSvc.Transform(session, temp) ?? temp;
+            content = content.Replace("<!-- payment get intent index -->", clientSecret);
+            var result = Content(content, "text/html");
+            return result;
         }
 
 

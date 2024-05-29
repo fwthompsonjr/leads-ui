@@ -11,5 +11,6 @@ namespace legallead.permissions.api.Interfaces
             List<SearchInvoiceBo> data);
         Task<object> FetchClientSecret(LevelRequestBo session);
         Tuple<bool, string, Invoice> VerifySubscription(string sessionId);
+        Task<string> FetchClientSecretValue(LevelRequestBo session);
     }
 }

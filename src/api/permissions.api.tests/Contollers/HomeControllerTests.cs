@@ -4,6 +4,7 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -100,6 +101,7 @@ namespace permissions.api.tests.Contollers
             html.Setup(m => m.IsChangeUserLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
             html.Setup(m => m.IsSubscriptionValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
             html.Setup(m => m.IsRequestPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
+            stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync("123456789");
             var indx = await controller.SubscriptionCheckout("abcd", "123");
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);
@@ -186,6 +188,7 @@ namespace permissions.api.tests.Contollers
             LevelRequestBo? dto = isValid ? new() { SessionId = sessionId } : null;
             var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
             subscription.Setup(m => m.GetLevelRequestById(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(dto);
+            stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret.Id);
             stripeSvcs.Setup(m => m.FetchClientSecret(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret);
             var indx = await controller.FetchSubscriptionIntent(new());
             Assert.NotNull(indx);
@@ -209,6 +212,7 @@ namespace permissions.api.tests.Contollers
             LevelRequestBo? dto = isValid ? new() { SessionId = sessionId } : null;
             var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
             subscription.Setup(m => m.GetDiscountRequestById(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(dto);
+            stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret.Id);
             stripeSvcs.Setup(m => m.FetchClientSecret(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret);
             var indx = await controller.FetchDiscountIntent(new());
             Assert.NotNull(indx);

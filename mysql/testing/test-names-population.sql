@@ -1,0 +1,30 @@
+
+use testing;
+
+DROP TABLE IF EXISTS TESTNAMES;
+DROP TABLE IF EXISTS TMP_TESTNAMES;
+DROP TEMPORARY TABLE IF EXISTS TMP_TESTNAMES;
+CREATE TABLE TESTNAMES (
+	`Id` int NOT NULL primary KEY,
+    `Name` varchar(50)
+);
+
+CREATE TEMPORARY TABLE TMP_TESTNAMES
+SELECT 
+	ROW_NUMBER() OVER (ORDER BY `Translation`) * 100 Id ,
+	Translation
+FROM
+(
+	SELECT SUBSTRING_INDEX(`Test`, '.', 1 ) Translation
+	FROM testing.TESTPARAMETER
+	GROUP BY `Test`
+) S
+GROUP BY `Translation`
+ORDER BY `Translation`;
+
+INSERT TESTNAMES ( Id, `Name` )
+SELECT t.Id, t.Translation
+FROM TMP_TESTNAMES t
+LEFT JOIN TESTNAMES n
+ON t.Translation = n.`Name`
+WHERE n.Id IS NULL;
