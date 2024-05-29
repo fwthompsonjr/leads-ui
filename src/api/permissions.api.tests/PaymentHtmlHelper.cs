@@ -24,6 +24,7 @@ namespace permissions.api.tests
             var stripe = new Mock<IStripeInfrastructure>();
             var subscription = new Mock<SubscriptionService>();
             var paymentKey = KeyFaker.Generate();
+            var custRepo = new Mock<ICustomerRepository>();
             stripeConfig.Setup(x => x.GetActiveName()).Returns(paymentKey.PaymentKey);
             services.AddSingleton(repo);
             services.AddSingleton(stripe);
@@ -31,6 +32,7 @@ namespace permissions.api.tests
             services.AddSingleton(subscription);
             services.AddSingleton(custDb);
             services.AddSingleton(userDb);
+            services.AddSingleton(custRepo);
             services.AddSingleton(stripeConfig.Object);
             services.AddSingleton(stripe.Object);
             services.AddSingleton(repo.Object);
@@ -38,6 +40,7 @@ namespace permissions.api.tests
             services.AddSingleton(subscription.Object);
             services.AddSingleton(custDb.Object);
             services.AddSingleton(userDb.Object);
+            services.AddSingleton(custRepo.Object);
             services.AddSingleton(x =>
             {
                 var repo = x.GetRequiredService<IUserSearchRepository>();
@@ -46,7 +49,8 @@ namespace permissions.api.tests
                 var userDb = x.GetRequiredService<IUserRepository>();
                 var stripeConfig = x.GetRequiredService<StripeKeyEntity>();
                 var stripe = x.GetRequiredService<IStripeInfrastructure>();
-                var translator = new PaymentHtmlTranslator(repo, userDb, custDb, subscriptionDb, stripe, stripeConfig);
+                var custRpo = x.GetRequiredService<ICustomerRepository>();
+                var translator = new PaymentHtmlTranslator(repo, userDb, custDb, subscriptionDb, stripe, stripeConfig, custRpo);
                 var subscription = x.GetRequiredService<Mock<SubscriptionService>>();
                 translator.SetupSubscriptionService(subscription.Object);
                 return translator;
@@ -169,6 +173,6 @@ namespace permissions.api.tests
             .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Email, y => y.Random.Guid().ToString("D"));
 
-        public static readonly string[] requestNames = new[] { "success", "cancel" };
+        public static readonly string[] requestNames = ["success", "cancel"];
     }
 }

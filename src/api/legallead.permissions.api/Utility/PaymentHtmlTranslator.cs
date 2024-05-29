@@ -6,7 +6,6 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using System.Globalization;
-using System.Security.Policy;
 
 namespace legallead.permissions.api.Utility
 {
@@ -18,6 +17,7 @@ namespace legallead.permissions.api.Utility
         private readonly ICustomerInfrastructure _custDb;
         private readonly IUserRepository _userDb;
         private readonly string _paymentKey;
+        private readonly ICustomerRepository _custRepo;
         private SubscriptionService? _injectedSubscriptions;
         public PaymentHtmlTranslator(
             IUserSearchRepository db,
@@ -25,13 +25,15 @@ namespace legallead.permissions.api.Utility
             ICustomerInfrastructure customer,
             ISubscriptionInfrastructure subscription,
             IStripeInfrastructure stripeService,
-            StripeKeyEntity key)
+            StripeKeyEntity key,
+            ICustomerRepository customerDb)
         {
             _repo = db;
             _custDb = customer;
             _userDb = userdb;
             _subscriptionDb = subscription;
             _paymentKey = key.GetActiveName();
+            _custRepo = customerDb;
             InvoiceExtensions.GetInfrastructure ??= stripeService;
         }
         public void SetupSubscriptionService(SubscriptionService? service)
@@ -163,7 +165,7 @@ namespace legallead.permissions.api.Utility
         public string Transform(LevelRequestBo session, string content)
         {
             if (string.IsNullOrEmpty(session.SessionId)) return content;
-            content = session.GetHtml(content, _paymentKey);
+            content = session.GetHtml(content, _paymentKey, _custRepo);
             return content;
         }
         public string Transform(DiscountRequestBo discountRequest, string content)
@@ -176,7 +178,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
-            
+
             if (!isvalid || status == null || id == null) return html;
             var issuccess = status == requestNames[0];
             if (issuccess) await _repo.SetInvoicePurchaseDate(id);

@@ -77,7 +77,7 @@ namespace legallead.permissions.api.Utility
             try
             {
                 var customers = await GetUnMappedCustomers();
-                if (customers == null || !customers.Any()) { return true; }
+                if (customers == null || customers.Count == 0) { return true; }
                 customers.ForEach(async customer =>
                     {
                         if (!string.IsNullOrEmpty(customer.Id))

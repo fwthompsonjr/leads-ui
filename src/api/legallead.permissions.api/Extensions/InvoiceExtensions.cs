@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
@@ -105,12 +106,16 @@ namespace legallead.permissions.api.Extensions
         }
 
 
-        public static string GetHtml(this LevelRequestBo response, string html, string paymentKey)
+        public static string GetHtml(
+            this LevelRequestBo response, 
+            string html, 
+            string paymentKey,
+            ICustomerRepository? customerDb = null)
         {
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceSubscriptionScript());
-            var verification = VerifySubscription(response.SessionId, dash);
+            var verification = StripeSubscriptionRetryService.VerifySubscription(response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;
             var invoice = verification.Item3;
@@ -143,10 +148,10 @@ namespace legallead.permissions.api.Extensions
                 if (span != null) span.InnerHtml = replacements[key];
             });
             var outerHtml = parentNode.OuterHtml;
-            var domain = GetPaymentIntentUrl(successUrl); 
+            var domain = GetPaymentIntentUrl(successUrl);
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
-            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);            
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
             outerHtml = outerHtml.Replace("<!-- payment get intent url -->", domain);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);

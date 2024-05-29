@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using legallead.permissions.api.Custom;
+using Polly;
 using Stripe;
 
 namespace legallead.permissions.api.Utility
@@ -8,32 +9,38 @@ namespace legallead.permissions.api.Utility
     {
         public static async Task<string> FetchClientSecret(LevelRequestBo session)
         {
-            const double wait = 150f; 
-            var intervals = new[] {
+            const double wait = 400f;
+            var nodata = Guid.Empty.ToString("D");
+            try
+            {
+                var intervals = new[] {
                 TimeSpan.FromMilliseconds(wait),
                 TimeSpan.FromMilliseconds(wait * 2f),
                 TimeSpan.FromMilliseconds(wait * 4f),
                 TimeSpan.FromMilliseconds(wait * 6f)
             };
-            string response = await Policy.Handle<Exception>()
-                .WaitAndRetryAsync(intervals)
-                .ExecuteAsync(async () => {
-                    var secret = await FetchClientSecretValue(session);
-                    return secret;
+                string response = await Policy.Handle<Exception>()
+                    .WaitAndRetryAsync(intervals)
+                    .ExecuteAsync(async () =>
+                    {
+                        var secret = await FetchClientSecretValue(session);
+                        return secret;
                     });
-            return response;
+                return response;
+            }
+            catch (Exception)
+            {
+                return nodata;
+            }
         }
-        
+
         private static async Task<string> FetchClientSecretValue(LevelRequestBo session)
         {
-            var nodata = Guid.Empty.ToString("D");
             var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
+            var subscription = await service.GetAsync(session.SessionId) ?? throw new SubscriptionNotFoundException();
             var invoiceId = subscription.LatestInvoiceId;
             var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
+            var invoice = await invoiceSvc.GetAsync(invoiceId) ?? throw new InvoiceNotFoundException();
             var intentSvc = new PaymentIntentService();
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
             return intent.ClientSecret;
