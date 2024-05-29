@@ -91,13 +91,13 @@ namespace legallead.permissions.api.Utility
             var options = new SubscriptionCreateOptions
             {
                 Customer = cust.CustomerId,
-                Items = new List<SubscriptionItemOptions>
-                {
+                Items =
+                [
                     new() {
                         Price = priceId,
                         Quantity = 1,
                     },
-                },
+                ],
                 InvoiceSettings = new() { Issuer = new() { Type = "self" } },
                 PaymentSettings = paymentSettings,
                 PaymentBehavior = "default_incomplete",
@@ -160,7 +160,7 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
         private async Task<LevelRequestBo?> IsPermissionSessionNeeded(User user, string level, string externalId = "")
         {
-            string[] nonbillingcodes = new[] { "admin", "guest" };
+            string[] nonbillingcodes = ["admin", "guest"];
             if (string.IsNullOrEmpty(level)) { return null; }
             var code = _payment == null ? string.Empty : GetPermissionCode(level, _payment);
             if (string.IsNullOrEmpty(code)) return null;

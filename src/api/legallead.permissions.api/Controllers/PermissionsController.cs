@@ -78,15 +78,11 @@ namespace legallead.permissions.api.Controllers
                 return Unauthorized(permissionLevel);
             }
             var session = await _db.GeneratePermissionSession(Request, user, permissionLevel.Level);
-            if (!session.IsPaymentSuccess.GetValueOrDefault())
-            {
-                var serilized = GetChangeResponse("PermissionLevel",
+            var serilized = GetChangeResponse("PermissionLevel",
                 user,
                 permissionLevel,
                 session);
-                return Ok(serilized);
-            }
-            return Conflict("Unexpected error during account processing");
+            return Ok(serilized);
         }
 
 
