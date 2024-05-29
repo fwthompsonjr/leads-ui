@@ -6,11 +6,13 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using System.Globalization;
+using System.Security.Policy;
 
 namespace legallead.permissions.api.Utility
 {
     public class PaymentHtmlTranslator : IPaymentHtmlTranslator
     {
+        private const string dash = " - ";
         private readonly IUserSearchRepository _repo;
         private readonly ISubscriptionInfrastructure _subscriptionDb;
         private readonly ICustomerInfrastructure _custDb;
@@ -174,7 +176,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
-            const string dash = " - ";
+            
             if (!isvalid || status == null || id == null) return html;
             var issuccess = status == requestNames[0];
             if (issuccess) await _repo.SetInvoicePurchaseDate(id);
@@ -222,19 +224,26 @@ namespace legallead.permissions.api.Utility
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
             bool? isPermissionSet = default;
-            var bo = (await _custDb.GetLevelRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var externalIndex = id ?? string.Empty;
+            var bo = (await _custDb.GetLevelRequestById(externalIndex)) ?? new() { ExternalId = externalIndex, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
             bo = await _custDb.CompleteLevelRequest(bo);
+            var summary = await _repo.GetPurchaseSummary(externalIndex) ?? new();
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
                 isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
             }
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
+            var paymentDate = ToDateString(bo?.CompletionDate, dash);
+            var paymentAmount = ToCurrencyString(summary.Price, dash);
             UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
             UserLevelHtmlMapper.SetUserDetail(doc, user);
             UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
+            UserLevelHtmlMapper.SetProductPaymentDate(doc, paymentDate);
+            UserLevelHtmlMapper.SetProductPaymentAmount(doc, paymentAmount);
             UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
+
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
         }
@@ -351,7 +360,7 @@ namespace legallead.permissions.api.Utility
             public static void SetPageHeading(HtmlDocument document, bool isvalid)
             {
                 const string nodeSelector = "//*[@id='heading-level-completion-payment-status']";
-                var message = isvalid ? "Payment Recieved - Thank You" : "Payment Failed - Please retry";
+                var message = isvalid ? "Payment Received  - Thank You" : "Payment Failed - Please retry";
                 var node = document.DocumentNode.SelectSingleNode(nodeSelector);
                 if (node == null) return;
                 node.InnerHtml = message;
@@ -366,8 +375,8 @@ namespace legallead.permissions.api.Utility
                 if (user == null) return;
                 var lookup = new Dictionary<string, string>()
                 {
-                    { "//span[name='account-user-name']", user.UserName ?? " - " },
-                    { "//span[name='account-user-email']", user.Email ?? " - " },
+                    { "//span[@name='account-user-name']", user.UserName ?? " - " },
+                    { "//span[@name='account-user-email']", user.Email ?? " - " },
                 };
                 var keys = lookup.Keys.ToList();
                 keys.ForEach(key =>
@@ -380,12 +389,54 @@ namespace legallead.permissions.api.Utility
 
             public static void SetProductDescription(HtmlDocument document, string? level)
             {
-                const string nodeSelector = "//*[@id='payment-details-description']";
                 if (string.IsNullOrEmpty(level)) return;
                 if (!Descriptions.TryGetValue(level, out var message)) return;
-                var node = document.DocumentNode.SelectSingleNode(nodeSelector);
-                if (node == null) return;
-                node.InnerHtml = message;
+                message = englishText.ToTitleCase(level.ToLower());
+                var lookup = new Dictionary<string, string>()
+                {
+                    { "//div[@name='payment-details-payment-product']", $" Subscription {message}" },
+                    { "//*[@id='payment-details-description']", $" Subscription {message}" },
+                };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var txt = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = txt; }
+                });
+            }
+
+            public static void SetProductPaymentDate(HtmlDocument document, string? paymentDate)
+            {
+                if (string.IsNullOrEmpty(paymentDate)) return;
+                var lookup = new Dictionary<string, string>()
+            {
+                { "//div[@name='payment-details-payment-date']", paymentDate },
+            };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var txt = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = txt; }
+                });
+            }
+
+
+            public static void SetProductPaymentAmount(HtmlDocument document, string? paymentAmount)
+            {
+                if (string.IsNullOrEmpty(paymentAmount)) return;
+                var lookup = new Dictionary<string, string>()
+            {
+                { "//div[@name='payment-details-payment-amount']", paymentAmount },
+            };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var txt = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = txt; }
+                });
             }
 
             public static void SetPermissionsErrorFlag(HtmlDocument document, bool? isSuccess)
@@ -404,6 +455,8 @@ namespace legallead.permissions.api.Utility
                 { "platinum", Properties.Resources.description_role_platinum },
                 { "silver", Properties.Resources.description_role_silver }
             };
+
+            private static readonly TextInfo englishText = new CultureInfo("en-US", false).TextInfo;
         }
 
     }
