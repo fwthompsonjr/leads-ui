@@ -45,7 +45,7 @@ namespace legallead.permissions.api.Extensions
                 new() :
                 JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
             var data = dto.Data;
-            if (data == null || !data.Any()) return 0;
+            if (data == null || data.Count == 0) return 0;
             var totalCost = data.Sum(x => x.Price.GetValueOrDefault()) * 100;
             return Convert.ToInt64(totalCost);
         }
@@ -66,7 +66,7 @@ namespace legallead.permissions.api.Extensions
             if (detailNode == null) return html;
             detailNode.InnerHtml = string.Empty;
             var data = dto.Data;
-            if (data == null || !data.Any()) return html;
+            if (data == null || data.Count == 0) return html;
 
             data.ForEach(d =>
             {

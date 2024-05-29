@@ -18,7 +18,7 @@ namespace permissions.api.tests
     public class RegisterDataServicesTests
     {
         private static readonly object locker = new();
-        private static IServiceProvider? _serviceProvider = null;
+        private static IServiceProvider? _serviceProvider;
 
         public RegisterDataServicesTests()
         {

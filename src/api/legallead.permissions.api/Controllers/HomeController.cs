@@ -95,9 +95,12 @@ namespace legallead.permissions.api.Controllers
             {
                 return await UserLevelLanding("success", id);
             }
+            var clientSecret = await stripeSvc.FetchClientSecretValue(session);
             var content = Properties.Resources.page_invoice_subscription_html;
             content = paymentSvc.Transform(session, content);
-            return Content(content, "text/html");
+            content = content.Replace("<!-- payment get intent index -->", clientSecret);
+            var result = Content(content, "text/html");
+            return result;
         }
 
 

@@ -4,6 +4,7 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -100,6 +101,7 @@ namespace permissions.api.tests.Contollers
             html.Setup(m => m.IsChangeUserLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
             html.Setup(m => m.IsSubscriptionValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
             html.Setup(m => m.IsRequestPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
+            stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync("123456789");
             var indx = await controller.SubscriptionCheckout("abcd", "123");
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);

@@ -44,11 +44,11 @@ namespace legallead.permissions.api.Utility
             var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
             {
-                PaymentMethodTypes = new List<string>
-                {
+                PaymentMethodTypes =
+                [
                     "card"
-                },
-                LineItems = new List<SessionLineItemOptions>(),
+                ],
+                LineItems = [],
                 Metadata = new Dictionary<string, string>
                 {
                     { "user-name", user.UserName },

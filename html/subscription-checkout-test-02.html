@@ -401,25 +401,23 @@
 								<h6 class="text-start">
 									<span name="invoice-date-label" class="text-primary">Invoice Date:
 									</span>
-									<span name="invoice-date" class="ml-2">Tuesday, May 28, 2024 10:11 PM</span>
+									<span name="invoice-date" class="ml-2">Wednesday, May 29, 2024 12:28 AM</span>
 								</h6>
 								<h6 class="text-start">
 									<span name="invoice-description-label" class="text-primary">Description:
 									</span>
-									<span name="invoice-description" class="ml-2">silver</span>
+									<span name="invoice-description" class="ml-2">gold</span>
 								</h6>
 								<h6 class="text-start">
 									<span name="invoice-label" class="text-primary">Total:
 									</span>
-									<span name="invoice-total" class="ml-2">$12.00</span>
+									<span name="invoice-total" class="ml-2">$20.00</span>
 								</h6>
 							</div>
 							<div name="payment-place-holder" class="row">
                                 <!-- Display a payment form -->
                                 <form id="payment-form">
-                                  <div id="payment-element">
-                                    <!--Stripe.js injects the Payment Element-->
-                                  </div>
+                                  <div id="payment-element" class="StripeElement"><div class="__PrivateStripeElement" style="margin: -4px 0px !important; padding: 0px !important; border: none !important; display: block !important; background: transparent !important; position: relative !important; opacity: 1 !important; clear: both !important; transition: height 0.35s ease 0s !important;"><iframe name="__privateStripeFrame6104" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *; publickey-credentials-get *" src="https://js.stripe.com/v3/elements-inner-payment-07e344fd9bd75f4a9456db87a1742fea.html#wait=false&amp;rtl=false&amp;publicOptions[layout]=tabs&amp;componentName=payment&amp;keyMode=test&amp;apiKey=pk_test_51LCZucDhgP60CL9xBNAtEMBdGOdZGMH6OqoxySlG4Cpj8aMTNYVzt6P5R2GtDEZiBVnnUsLLTgEUad9rSgtf21ru00THKrc5YO&amp;referrer=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLaNWDhgP60CL9x01Ug4CFt%26id%3DPLTFYFK9RjZwrj8u&amp;controllerId=__privateStripeController6101" title="Secure payment input frame" style="border: 0px !important; margin: -4px; padding: 0px !important; width: calc(100% + 8px); min-width: 100% !important; overflow: hidden !important; display: block !important; user-select: none !important; transform: translate(0px) !important; color-scheme: light only !important; height: 374.125px; opacity: 1; transition: height 0.35s ease 0s, opacity 0.4s ease 0.1s;"></iframe></div></div>
                                   <button id="submit">
                                     <div class="spinner hidden" id="spinner"></div>
                                     <span id="button-text">Pay now</span>
@@ -458,16 +456,15 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
+function getClientSecret() {
+    const jsfmt = '{ "clientSecret": "~0"}';
+    let payload = jsfmt.replace("~0", "pi_3PLaNWDhgP60CL9x4ePb1mKE_secret_kCiF5c3h3EZNmsHXamdL1aZqN");
+    return JSON.parse(payload);
+}
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-  let obj = { id: "OLXqtgt6ACbaDVnG" }
-  let landing = "".concat("https://localhost:44345", "/subscription-fetch-intent");
-  const response = await fetch(landing, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
-  });
-  const { clientSecret } = await response.json();
+    
+  const { clientSecret } = getClientSecret();
 
   const appearance = {
     theme: 'flat',
@@ -490,7 +487,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "https://localhost:44345/subscription-result?session_id=sub_1PLYFADhgP60CL9xxzpza59T&sts=success&id=OLXqtgt6ACbaDVnG",
+      return_url: "https://localhost:44345/subscription-result?session_id=sub_1PLaNWDhgP60CL9x01Ug4CFt&sts=success&id=PLTFYFK9RjZwrj8u",
     },
   });
 
@@ -564,10 +561,10 @@ function setLoading(isLoading) {
   }
 }
 
-</script><iframe name="__privateStripeController5721" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/controller-with-preconnect-91e09c3ce4e1649c3a79bebe1fffeacb.html#apiKey=pk_test_51LCZucDhgP60CL9xBNAtEMBdGOdZGMH6OqoxySlG4Cpj8aMTNYVzt6P5R2GtDEZiBVnnUsLLTgEUad9rSgtf21ru00THKrc5YO&amp;stripeJsId=921fd76a-2b79-49a0-a267-61e9cc1adefa&amp;controllerCount=1&amp;isCheckout=false&amp;stripeJsLoadTime=1716934284224&amp;manualBrowserDeprecationRollout=false&amp;mids[guid]=NA&amp;mids[muid]=c2a681f8-625b-4fdb-8bb7-446585d6ccda463f96&amp;mids[sid]=NA&amp;referrer=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLYFADhgP60CL9xxzpza59T%26id%3DOLXqtgt6ACbaDVnG&amp;controllerId=__privateStripeController5721" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe>
+</script><iframe name="__privateStripeController6101" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/controller-with-preconnect-91e09c3ce4e1649c3a79bebe1fffeacb.html#apiKey=pk_test_51LCZucDhgP60CL9xBNAtEMBdGOdZGMH6OqoxySlG4Cpj8aMTNYVzt6P5R2GtDEZiBVnnUsLLTgEUad9rSgtf21ru00THKrc5YO&amp;stripeJsId=b5d1e866-331d-415c-9672-a91529c27845&amp;controllerCount=1&amp;isCheckout=false&amp;stripeJsLoadTime=1716942491925&amp;manualBrowserDeprecationRollout=false&amp;mids[guid]=NA&amp;mids[muid]=d4c9ab42-45da-4053-bf0c-b527f40c3b03b0da35&amp;mids[sid]=3b82d6b8-96a5-4313-8e43-6e502d7661efe3f803&amp;referrer=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLaNWDhgP60CL9x01Ug4CFt%26id%3DPLTFYFK9RjZwrj8u&amp;controllerId=__privateStripeController6101" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe><iframe name="__privateStripeFrame6103" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/elements-inner-loader-ui-8a29db2d7f395576243009c578e066da.html#referrer=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLaNWDhgP60CL9x01Ug4CFt%26id%3DPLTFYFK9RjZwrj8u&amp;controllerId=__privateStripeController6101" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe><iframe name="__privateStripeFrame6105" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin" referrerpolicy="origin" src="https://js.stripe.com/v3/payment-request-inner-google-pay-815b79f689fffcf46f9cad17d327f8d8.html#authentication[apiKey]=pk_test_51LCZucDhgP60CL9xBNAtEMBdGOdZGMH6OqoxySlG4Cpj8aMTNYVzt6P5R2GtDEZiBVnnUsLLTgEUad9rSgtf21ru00THKrc5YO&amp;mids[guid]=NA&amp;mids[muid]=d4c9ab42-45da-4053-bf0c-b527f40c3b03b0da35&amp;mids[sid]=3b82d6b8-96a5-4313-8e43-6e502d7661efe3f803&amp;origin=https%3A%2F%2Flocalhost%3A44345&amp;referrer=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLaNWDhgP60CL9x01Ug4CFt%26id%3DPLTFYFK9RjZwrj8u&amp;controllerId=__privateStripeController6101" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe>
 
 <!-- Visual Studio Browser Link -->
-<script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestid="a49d6514c3df4bfa9ded83daba5cb28c" data-requestmappingfromserver="false" data-connecturl="http://localhost:63642/6288653e9c2f4e9983d98d920e247360/browserLink"></script>
+<script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestid="24b946fc47d5467088c8da51ae900696" data-requestmappingfromserver="false" data-connecturl="http://localhost:63642/6288653e9c2f4e9983d98d920e247360/browserLink"></script>
 <!-- End Browser Link -->
 <script src="/_framework/aspnetcore-browser-refresh.js"></script>
-<iframe name="__privateStripeMetricsController5720" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/m-outer-3437aaddcdf6922d623e172c2d6f9278.html#url=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLYFADhgP60CL9xxzpza59T%26id%3DOLXqtgt6ACbaDVnG&amp;title=legallead.ui%3A%20invoice&amp;referrer=&amp;muid=c2a681f8-625b-4fdb-8bb7-446585d6ccda463f96&amp;sid=NA&amp;version=6&amp;preview=false" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe></body></html>
+<iframe name="__privateStripeMetricsController6100" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="https://js.stripe.com/v3/m-outer-3437aaddcdf6922d623e172c2d6f9278.html#url=https%3A%2F%2Flocalhost%3A44345%2Fsubscription-checkout%3Fsessionid%3Dsub_1PLaNWDhgP60CL9x01Ug4CFt%26id%3DPLTFYFK9RjZwrj8u&amp;title=legallead.ui%3A%20invoice&amp;referrer=&amp;muid=d4c9ab42-45da-4053-bf0c-b527f40c3b03b0da35&amp;sid=3b82d6b8-96a5-4313-8e43-6e502d7661efe3f803&amp;version=6&amp;preview=false" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe><iframe frameborder="0" allowtransparency="true" scrolling="no" name="hcaptcha-invisible" referrerpolicy="no-referrer" aria-hidden="true" tabindex="-1" src="https://js.stripe.com/v3/hcaptcha-invisible-f8469ab0b366d69eb5bb8ef2b986ff0e.html#debugMode=false&amp;parentOrigin=https%3A%2F%2Flocalhost%3A44345" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;" data-initialized="true"></iframe></body></html>

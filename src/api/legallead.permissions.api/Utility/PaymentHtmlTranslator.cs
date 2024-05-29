@@ -87,7 +87,7 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (!obj.Data.Any()) return false;
+            if (obj.Data.Count == 0) return false;
             var dat = obj.Data[0];
             if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var ispaid = await _repo.IsSearchPurchased(dat.ReferenceId);
@@ -117,7 +117,7 @@ namespace legallead.permissions.api.Utility
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
-            if (!obj.Data.Any()) return false;
+            if (obj.Data.Count == 0) return false;
             var dat = obj.Data[0];
             if (string.IsNullOrEmpty(dat.ReferenceId)) return false;
             var paid = await _repo.IsSearchPaidAndDownloaded(dat.ReferenceId);
@@ -131,7 +131,7 @@ namespace legallead.permissions.api.Utility
             var js = FormatSessionJson(dto.JsText);
             dto.JsText = js;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
-            if (!obj.Data.Any()) return new() { Error = "No search records found for associated request." };
+            if (obj.Data.Count == 0) return new() { Error = "No search records found for associated request." };
             var search = obj.Data[0];
             var searchId = search.ReferenceId ?? Guid.NewGuid().ToString();
             var records = (await _repo.GetFinal(searchId)).ToList();
@@ -343,7 +343,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        private static readonly string[] requestNames = new[] { "success", "cancel" };
+        private static readonly string[] requestNames = ["success", "cancel"];
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static class UserLevelHtmlMapper
