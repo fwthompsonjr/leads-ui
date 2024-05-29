@@ -29,6 +29,20 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
+        private static readonly Faker<LevelPaymentDto> pmtfaker =
+            new Faker<LevelPaymentDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
+            .RuleFor(x => x.PriceType, y => y.Hacker.Phrase())
+            .RuleFor(x => x.Price, y => y.Random.Decimal(1, 50))
+            .RuleFor(x => x.TaxAmount, y => y.Random.Decimal(1, 10))
+            .RuleFor(x => x.ServiceFee, y => y.Random.Decimal(1, 10))
+            .RuleFor(x => x.SubscriptionAmount, y => y.Random.Decimal(50, 100))
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
         private static readonly Faker<SubscriptionDetailDto> detailfaker =
             new Faker<SubscriptionDetailDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
@@ -238,6 +252,45 @@ namespace legallead.jdbc.tests.implementations
             mock.Setup(m => m.QueryAsync<LevelRequestDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
                 .ThrowsAsync(completion);
             var response = await service.GetLevelRequestHistory("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestPaymentAmountHappyPath()
+        {
+            List<LevelPaymentDto>? completion = pmtfaker.Generate(6);
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelPaymentDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestPaymentAmount("");
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestPaymentAmountNoResponse()
+        {
+            List<LevelPaymentDto>? completion = default;
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelPaymentDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ReturnsAsync(completion);
+            var response = await service.GetLevelRequestPaymentAmount("");
+            Assert.Null(response);
+        }
+
+        [Fact]
+        public async Task RepoCanGetLevelRequestPaymentAmountExceptionPath()
+        {
+            var completion = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            mock.Setup(m => m.QueryAsync<LevelPaymentDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                .ThrowsAsync(completion);
+            var response = await service.GetLevelRequestPaymentAmount("");
             Assert.Null(response);
         }
 
