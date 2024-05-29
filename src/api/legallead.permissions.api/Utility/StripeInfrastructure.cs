@@ -8,7 +8,9 @@ using Stripe.Checkout;
 namespace legallead.permissions.api.Utility
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-    public class StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity) : IStripeInfrastructure
+    public class StripeInfrastructure(
+        IUserSearchRepository repo, 
+        StripeKeyEntity entity) : IStripeInfrastructure
     {
         private readonly IUserSearchRepository _repo = repo;
         private readonly StripeKeyEntity keyEntity = entity;
