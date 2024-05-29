@@ -116,17 +116,15 @@ namespace legallead.permissions.api.Utility
         public async Task<string> FetchClientSecretValue(LevelRequestBo session)
         {
             var nodata = Guid.Empty.ToString("D");
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-            return intent.ClientSecret;
+            try
+            {
+                var actual = await StripeRetryService.FetchClientSecret(session);
+                return actual;
+            }
+            catch
+            {
+                return nodata;
+            }
         }
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         public Tuple<bool, string, Invoice> VerifySubscription(string sessionId)
