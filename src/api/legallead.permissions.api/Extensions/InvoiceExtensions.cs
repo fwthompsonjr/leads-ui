@@ -143,10 +143,10 @@ namespace legallead.permissions.api.Extensions
                 if (span != null) span.InnerHtml = replacements[key];
             });
             var outerHtml = parentNode.OuterHtml;
-            var domain = GetPaymentIntentUrl(successUrl); 
+            var domain = GetPaymentIntentUrl(successUrl);
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
-            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);            
+            outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
             outerHtml = outerHtml.Replace("<!-- payment get intent url -->", domain);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);

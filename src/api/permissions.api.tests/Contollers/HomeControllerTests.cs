@@ -4,7 +4,6 @@ using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace permissions.api.tests.Contollers
 {

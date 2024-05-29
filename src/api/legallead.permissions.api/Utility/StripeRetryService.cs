@@ -8,7 +8,7 @@ namespace legallead.permissions.api.Utility
     {
         public static async Task<string> FetchClientSecret(LevelRequestBo session)
         {
-            const double wait = 150f; 
+            const double wait = 150f;
             var intervals = new[] {
                 TimeSpan.FromMilliseconds(wait),
                 TimeSpan.FromMilliseconds(wait * 2f),
@@ -17,13 +17,14 @@ namespace legallead.permissions.api.Utility
             };
             string response = await Policy.Handle<Exception>()
                 .WaitAndRetryAsync(intervals)
-                .ExecuteAsync(async () => {
+                .ExecuteAsync(async () =>
+                {
                     var secret = await FetchClientSecretValue(session);
                     return secret;
-                    });
+                });
             return response;
         }
-        
+
         private static async Task<string> FetchClientSecretValue(LevelRequestBo session)
         {
             var nodata = Guid.Empty.ToString("D");

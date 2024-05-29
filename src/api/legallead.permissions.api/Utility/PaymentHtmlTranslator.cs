@@ -6,7 +6,6 @@ using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using Stripe;
 using System.Globalization;
-using System.Security.Policy;
 
 namespace legallead.permissions.api.Utility
 {
@@ -176,7 +175,7 @@ namespace legallead.permissions.api.Utility
 
         public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
         {
-            
+
             if (!isvalid || status == null || id == null) return html;
             var issuccess = status == requestNames[0];
             if (issuccess) await _repo.SetInvoicePurchaseDate(id);
