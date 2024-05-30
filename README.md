@@ -4,6 +4,10 @@ Desktop version of lead sourcing application
 # Versions  
 
 ## vX.Y.Z - ReleaseDate
+ - Bug fix: account profile change should display payment invoice  
+ - Bug fix: account profile invoice should allow cc entry  
+
+## v3.2.12 ( 2024-05-26 17:37:54 )
  - Bug fix: blank entry in update profile behaviors  
 
 ## v3.2.11 ( 2024-05-15 16:45:21 )

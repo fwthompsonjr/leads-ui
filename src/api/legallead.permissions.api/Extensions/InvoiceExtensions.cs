@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace legallead.permissions.api.Extensions
                 new() :
                 JsonConvert.DeserializeObject<PaymentSessionJs>(js) ?? new();
             var data = dto.Data;
-            if (data == null || !data.Any()) return 0;
+            if (data == null || data.Count == 0) return 0;
             var totalCost = data.Sum(x => x.Price.GetValueOrDefault()) * 100;
             return Convert.ToInt64(totalCost);
         }
@@ -66,7 +67,7 @@ namespace legallead.permissions.api.Extensions
             if (detailNode == null) return html;
             detailNode.InnerHtml = string.Empty;
             var data = dto.Data;
-            if (data == null || !data.Any()) return html;
+            if (data == null || data.Count == 0) return html;
 
             data.ForEach(d =>
             {
@@ -105,12 +106,16 @@ namespace legallead.permissions.api.Extensions
         }
 
 
-        public static string GetHtml(this LevelRequestBo response, string html, string paymentKey)
+        public static string GetHtml(
+            this LevelRequestBo response, 
+            string html, 
+            string paymentKey,
+            ICustomerRepository? customerDb = null)
         {
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceSubscriptionScript());
-            var verification = VerifySubscription(response.SessionId, dash);
+            var verification = StripeSubscriptionRetryService.VerifySubscription(response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;
             var invoice = verification.Item3;
@@ -121,7 +126,7 @@ namespace legallead.permissions.api.Extensions
             if (detailNode != null) detailNode.InnerHtml = string.Empty;
             var createDate = DateTime.UtcNow.ToString("f");
             var externalId = response.ExternalId ?? dash;
-            var heading = "Legal Lead Subcription";
+            var heading = "Legal Lead Subscription";
             var description = response.LevelName switch
             {
                 "" => "Setup monthly payment",
@@ -143,9 +148,11 @@ namespace legallead.permissions.api.Extensions
                 if (span != null) span.InnerHtml = replacements[key];
             });
             var outerHtml = parentNode.OuterHtml;
+            var domain = GetPaymentIntentUrl(successUrl);
             outerHtml = outerHtml.Replace("<!-- stripe public key -->", paymentKey);
             outerHtml = outerHtml.Replace("<!-- payment external id -->", externalId);
             outerHtml = outerHtml.Replace("<!-- payment completed url -->", successUrl);
+            outerHtml = outerHtml.Replace("<!-- payment get intent url -->", domain);
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);
             return doc.DocumentNode.OuterHtml;
@@ -309,6 +316,21 @@ namespace legallead.permissions.api.Extensions
                 return fallback;
             }
 
+        }
+
+
+        [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
+        private static string GetPaymentIntentUrl(string landing)
+        {
+            if (!Uri.TryCreate(landing, UriKind.Absolute, out var url)) return string.Empty;
+            var host = (url.Scheme) switch
+            {
+                "https" => url.Port == 443 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                "http" => url.Port == 80 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
+                _ => url.Host,
+            };
+            var constructedUrl = $"{url.Scheme}://{host}";
+            return constructedUrl;
         }
 
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";

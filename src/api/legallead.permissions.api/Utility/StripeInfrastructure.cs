@@ -8,7 +8,9 @@ using Stripe.Checkout;
 namespace legallead.permissions.api.Utility
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-    public class StripeInfrastructure(IUserSearchRepository repo, StripeKeyEntity entity) : IStripeInfrastructure
+    public class StripeInfrastructure(
+        IUserSearchRepository repo, 
+        StripeKeyEntity entity) : IStripeInfrastructure
     {
         private readonly IUserSearchRepository _repo = repo;
         private readonly StripeKeyEntity keyEntity = entity;
@@ -44,11 +46,11 @@ namespace legallead.permissions.api.Utility
             var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
             {
-                PaymentMethodTypes = new List<string>
-                {
+                PaymentMethodTypes =
+                [
                     "card"
-                },
-                LineItems = new List<SessionLineItemOptions>(),
+                ],
+                LineItems = [],
                 Metadata = new Dictionary<string, string>
                 {
                     { "user-name", user.UserName },
@@ -108,21 +110,24 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         public async Task<object> FetchClientSecret(LevelRequestBo session)
         {
-            var nodata = new { clientSecret = Guid.Empty.ToString("D") };
-
-            var service = new SubscriptionService();
-            var subscription = await service.GetAsync(session.SessionId);
-            if (subscription == null) return nodata;
-            var invoiceId = subscription.LatestInvoiceId;
-            var invoiceSvc = new InvoiceService();
-            var invoice = await invoiceSvc.GetAsync(invoiceId);
-            if (invoice == null) return nodata;
-            var intentSvc = new PaymentIntentService();
-            var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
-            var clientSecret = intent.ClientSecret;
-            return new { clientSecret };
+            var data = await FetchClientSecretValue(session);
+            return new { clientSecret = data };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
+        public async Task<string> FetchClientSecretValue(LevelRequestBo session)
+        {
+            var nodata = Guid.Empty.ToString("D");
+            try
+            {
+                var actual = await StripeRetryService.FetchClientSecret(session);
+                return actual;
+            }
+            catch
+            {
+                return nodata;
+            }
+        }
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
         public Tuple<bool, string, Invoice> VerifySubscription(string sessionId)
         {

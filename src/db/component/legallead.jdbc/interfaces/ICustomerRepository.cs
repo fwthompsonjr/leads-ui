@@ -19,5 +19,6 @@ namespace legallead.jdbc.interfaces
         Task<List<SubscriptionDetailBo>?> GetUserSubscriptions(bool forVerification);
         Task<KeyValuePair<bool, string>> SynchronizeUserSubscriptions();
         Task<KeyValuePair<bool, string>> UpdateSubscriptionVerification(ISubscriptionDetail source);
+        Task<List<LevelPaymentBo>?> GetLevelRequestPaymentAmount(string externalId);
     }
 }

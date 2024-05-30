@@ -15,15 +15,15 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
+function getClientSecret() {
+    const jsfmt = '{ "clientSecret": "~0"}';
+    let payload = jsfmt.replace("~0", "<!-- payment get intent index -->");
+    return JSON.parse(payload);
+}
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-  let obj = { id: "<!-- payment external id -->" }
-  const response = await fetch("/subscription-fetch-intent", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(obj),
-  });
-  const { clientSecret } = await response.json();
+    
+  const { clientSecret } = getClientSecret();
 
   const appearance = {
     theme: 'flat',
