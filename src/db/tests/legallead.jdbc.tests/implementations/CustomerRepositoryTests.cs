@@ -60,6 +60,18 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
+        private static readonly Faker<DiscountPaymentDto> discountfaker =
+            new Faker<DiscountPaymentDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
+            .RuleFor(x => x.PriceType, y => y.Hacker.Phrase())
+            .RuleFor(x => x.Price, y => y.Random.Decimal(1, 50))
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
+
 #pragma warning disable CS8604 // Possible null reference argument.
 
         [Fact]
@@ -292,6 +304,31 @@ namespace legallead.jdbc.tests.implementations
                 .ThrowsAsync(completion);
             var response = await service.GetLevelRequestPaymentAmount("");
             Assert.Null(response);
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, false)]
+        [InlineData(true, true)]
+        public async Task RepoCanGetDiscountRequestPaymentAmount(bool hasData, bool hasException)
+        {
+            List<DiscountPaymentDto>? completion = hasData ? discountfaker.Generate(6) : null;
+            var issues = new Faker().System.Exception();
+            var provider = new CustomerRepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.CustomerRepo;
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<DiscountPaymentDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                    .ThrowsAsync(issues);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<DiscountPaymentDto>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<DynamicParameters>()))
+                    .ReturnsAsync(completion);
+            }
+            _ = await service.GetDiscountRequestPaymentAmount("");
+            mock.Verify();
         }
 
         [Fact]
