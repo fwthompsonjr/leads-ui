@@ -221,8 +221,6 @@ namespace legallead.permissions.api.Utility
         }
 
 
-
-        [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
             bool? isPermissionSet = default;

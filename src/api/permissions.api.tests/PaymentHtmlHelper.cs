@@ -173,6 +173,13 @@ namespace permissions.api.tests
             .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Email, y => y.Random.Guid().ToString("D"));
 
+        public static readonly Faker<User> UserFaker = new Faker<User>()
+            .RuleFor(x => x.UserName, y => y.Person.UserName)
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent())
+            .RuleFor(x => x.Email, y => y.Person.Email)
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
+
         public static readonly string[] requestNames = ["success", "cancel"];
+        public static readonly string[] PermissionNames = ["guest", "gold", "silver", "platinum"];
     }
 }
