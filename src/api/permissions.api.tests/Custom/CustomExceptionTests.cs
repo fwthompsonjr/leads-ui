@@ -9,6 +9,7 @@ namespace permissions.api.tests.Custom
         [InlineData(typeof(InvoiceAmountMismatchedException))]
         [InlineData(typeof(InvoiceNotFoundException))]
         [InlineData(typeof(SubscriptionNotFoundException))]
+        [InlineData(typeof(PaymentIntentNotFoundException))]
         public void ExceptionCanBeCreated(Type type)
         {
             var provider = GetServiceProvider();
