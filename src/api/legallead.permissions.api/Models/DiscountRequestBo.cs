@@ -5,7 +5,7 @@
         public string? Id { get; set; }
 
         public string? UserId { get; set; }
-
+        public string? CustomerId { get; set; }
         public string? ExternalId { get; set; }
 
         public string? InvoiceUri { get; set; }

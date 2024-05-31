@@ -115,10 +115,10 @@ namespace legallead.permissions.api
             var list = new List<UserProfileView>();
             foreach (var item in source)
             {
-                var addition = ConvertTo(item, Array.Empty<UserProfileView>());
+                var addition = ConvertTo(item, []);
                 list.AddRange(addition);
             }
-            return list.ToArray();
+            return [.. list];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -130,7 +130,7 @@ namespace legallead.permissions.api
                 var addition = ConvertTo(item, new UserProfileView());
                 list.Add(addition);
             }
-            return list.ToArray();
+            return [.. list];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -142,7 +142,7 @@ namespace legallead.permissions.api
                 var addition = ConvertTo(item, new UserProfileView());
                 list.Add(addition);
             }
-            return list.ToArray();
+            return [.. list];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -154,7 +154,7 @@ namespace legallead.permissions.api
                 var addition = ConvertTo(item, new UserProfileView());
                 list.Add(addition);
             }
-            return list.ToArray();
+            return [.. list];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -165,7 +165,7 @@ namespace legallead.permissions.api
             var mappedId = hasName ? (int)index : 1;
             var prefix = AddressPrefixes[mappedId];
             var list = new List<UserProfileView>();
-            if (string.IsNullOrEmpty(source.Address)) return list.ToArray();
+            if (string.IsNullOrEmpty(source.Address)) return [.. list];
             var pieces = source.Address.Split(pipe, StringSplitOptions.RemoveEmptyEntries);
             for (var i = 0; i < pieces.Length; i++)
             {
@@ -176,7 +176,7 @@ namespace legallead.permissions.api
                 };
                 list.Add(item);
             }
-            return list.ToArray();
+            return [.. list];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -243,7 +243,7 @@ namespace legallead.permissions.api
             response.Add(addresses);
             response.Add(emails);
             response.Add(phones);
-            return response.ToArray();
+            return [.. response];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -257,7 +257,7 @@ namespace legallead.permissions.api
             var billing = source.Where(w => (w.KeyName ?? string.Empty).StartsWith(billingKey)).Select(x => x.KeyValue);
             response.Add(new ChangeContactAddressRequest { Address = string.Join(joiner, mailing), AddressType = "Mailing" });
             response.Add(new ChangeContactAddressRequest { Address = string.Join(joiner, billing), AddressType = "Billing" });
-            return response.ToArray();
+            return [.. response];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -275,7 +275,7 @@ namespace legallead.permissions.api
             response.Add(new ChangeContactEmailRequest { Email = first.KeyValue, EmailType = "Personal" });
             response.Add(new ChangeContactEmailRequest { Email = second.KeyValue, EmailType = "Business" });
             response.Add(new ChangeContactEmailRequest { Email = third.KeyValue, EmailType = "Other" });
-            return response.ToArray();
+            return [.. response];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -293,7 +293,7 @@ namespace legallead.permissions.api
             response.Add(new ChangeContactPhoneRequest { Phone = first.KeyValue, PhoneType = "Personal" });
             response.Add(new ChangeContactPhoneRequest { Phone = second.KeyValue, PhoneType = "Business" });
             response.Add(new ChangeContactPhoneRequest { Phone = third.KeyValue, PhoneType = "Other" });
-            return response.ToArray();
+            return [.. response];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -311,7 +311,7 @@ namespace legallead.permissions.api
             response.Add(new ChangeContactNameRequest { Name = first.KeyValue, NameType = "First" });
             response.Add(new ChangeContactNameRequest { Name = second.KeyValue, NameType = "Last" });
             response.Add(new ChangeContactNameRequest { Name = third.KeyValue, NameType = "Company" });
-            return response.ToArray();
+            return [.. response];
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
@@ -357,7 +357,7 @@ namespace legallead.permissions.api
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static List<KeyValuePair<bool, UsState>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsState>> dest)
         {
-            dest ??= new();
+            dest ??= [];
             var choices = source.Choices.Where(s =>
                 string.IsNullOrEmpty(s.CountyName) &&
                 !string.IsNullOrEmpty(s.StateName));
@@ -373,7 +373,7 @@ namespace legallead.permissions.api
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static List<KeyValuePair<bool, UsStateCounty>> ConvertTo(ChangeDiscountRequest source, List<KeyValuePair<bool, UsStateCounty>> dest)
         {
-            dest ??= new();
+            dest ??= [];
             var choices = source.Choices.Where(s =>
                 !string.IsNullOrEmpty(s.CountyName) &&
                 !string.IsNullOrEmpty(s.StateName));

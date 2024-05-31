@@ -4,6 +4,7 @@ using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
+using System.Data;
 using System.Text;
 
 namespace legallead.jdbc.implementations
@@ -450,6 +451,63 @@ namespace legallead.jdbc.implementations
             parameters.Add("user_index", userId);
             var response = await _command.QuerySingleOrDefaultAsync<DownloadHistoryDto>(connection, prc, parameters);
             return response;
+        }
+
+        public async Task<bool> AppendAdHocSession(AdHocSessionBo dto)
+        {
+            try
+            {
+                const string prc = "CALL USP_INSERT_ADHOC_SESSION( ?, ?, ?, ? );";
+                using IDbConnection connection = _context.CreateConnection();
+                DynamicParameters parms = new();
+                parms.Add("user_id", dto.UserId);
+                parms.Add("intent_id", dto.IntentId);
+                parms.Add("client_id", dto.ClientId);
+                parms.Add("external_id", dto.ExternalId);
+                await _command.ExecuteAsync(connection, prc, parms);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<bool> CompleteAdHocSession(string externalId)
+        {
+            try
+            {
+                const string prc = "CALL USP_COMPLETE_ADHOC_SESSION( ? );";
+                using IDbConnection connection = _context.CreateConnection();
+                DynamicParameters parms = new();
+                parms.Add("external_id", externalId);
+                await _command.ExecuteAsync(connection, prc, parms);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public async Task<AdHocSessionBo?> FindAdHocSession(string externalId)
+        {
+            try
+            {
+                const string prc = "CALL USP_GET_ADHOC_SESSION( ? );";
+                using IDbConnection connection = _context.CreateConnection();
+                DynamicParameters parms = new();
+                parms.Add("external_id", externalId);
+                var dto = await _command.QuerySingleOrDefaultAsync<AdHocSessionDto>(connection, prc, parms);
+                if (dto == null) return null;
+                return TranslateTo<AdHocSessionBo>(dto);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)

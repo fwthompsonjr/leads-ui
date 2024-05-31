@@ -4,9 +4,7 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
 using Moq;
-using Newtonsoft.Json;
 using System.Data;
 
 namespace legallead.jdbc.tests.implementations

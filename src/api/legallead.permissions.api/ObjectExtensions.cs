@@ -82,6 +82,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
             services.AddScoped<ICustomerLockInfrastructure, CustomerLockInfrastructure>();
+            services.AddScoped<IClientSecretService, ClientSecretService>();
 
             services.AddScoped(d =>
             {

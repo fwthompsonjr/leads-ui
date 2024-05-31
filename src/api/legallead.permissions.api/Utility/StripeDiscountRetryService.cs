@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Custom;
+using legallead.permissions.api.Entities;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
@@ -12,7 +13,7 @@ namespace legallead.permissions.api.Utility
     internal static class StripeDiscountRetryService
     {
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-        public static async Task<object?> CreatePaymentAsync(
+        public static async Task<DiscountModificationResponse?> CreatePaymentAsync(
             DiscountRequestBo requested,
             string paymentType = "Monthly",
             ICustomerRepository? customerDb = null,
@@ -20,28 +21,39 @@ namespace legallead.permissions.api.Utility
             IUserSearchRepository? searchDb = null
             )
         {
-            var description = "Discount Modification Request";
+            const string description = "Discount Modification Request";
             var externalId = requested.ExternalId ?? string.Empty;
+            var existing = searchDb == null ? null : (await searchDb.GetPaymentSession(externalId));
+            if (existing != null)
+            {
+                return new DiscountModificationResponse
+                {
+                    UserId = existing.UserId,
+                    ExternalId = externalId,
+                    ClientSecret = existing.ClientId ?? string.Empty,
+                };
+            }
+
             var data = customerDb == null ? [] : (await customerDb.GetDiscountRequestPaymentAmount(externalId) ?? []);
+            data = data.FindAll(x => x.PriceType == paymentType);
             var amount = data.Sum(x => x.Price.GetValueOrDefault(0));
+            var modification = new DiscountModificationResponse
+            {
+                Id = Guid.Empty.ToString("D"),
+                PaymentIntentId = Guid.Empty.ToString("D"),
+                ClientSecret = string.Empty,
+                ExternalId = externalId,
+                Description = description,
+                Data = data,
+                Amount = amount,
+            };
             const decimal minAmount = 0.50m;
             if (amount <= minAmount)
             {
-                // close invoice as paid
-                // Set Discount Purchase Date by externalId
-                var nocost = new
-                {
-                    Id = Guid.Empty.ToString("D"),
-                    PaymentIntentId = Guid.Empty.ToString("D"),
-                    clientSecret = string.Empty,
-                    externalId,
-                    description,
-                    data
-                };
-                return nocost;
+                return modification;
             }
             var user = GetUserOrDefault(requested.UserId ?? string.Empty, userDb);
-            var intent = CreatePaymentIntent(amount);
+            var intent = CreatePaymentIntent(amount, requested.CustomerId ?? string.Empty);
             var successPg = (requested.InvoiceUri ?? string.Empty).Replace("discount-checkout", $"discount-result?id={externalId}&sts=success");
             var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
@@ -76,6 +88,10 @@ namespace legallead.permissions.api.Utility
                 SuccessUrl = successPg,
                 Data = data
             };
+            modification.SuccessUrl = successPg;
+            modification.PaymentIntentId = intent.Id;
+            modification.ClientSecret = intent.ClientSecret;
+
             var js = JsonConvert.SerializeObject(response);
             var payment = new PaymentSessionDto
             {
@@ -88,10 +104,9 @@ namespace legallead.permissions.api.Utility
                 ExternalId = response.ExternalId,
                 JsText = js
             };
-            if (searchDb == null) return response;
-            var isadded = await searchDb.AppendPaymentSession(payment);
-            if (!isadded) return null;
-            return response;
+            if (searchDb == null) return modification;
+            _ = await searchDb.AppendPaymentSession(payment);
+            return modification;
         }
         public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
             DiscountRequestBo requested,
