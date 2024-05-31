@@ -27,6 +27,7 @@ namespace permissions.api.tests.Custom
             collection.AddSingleton<InvoiceAmountMismatchedException>();
             collection.AddSingleton<InvoiceNotFoundException>();
             collection.AddSingleton<SubscriptionNotFoundException>();
+            collection.AddSingleton<PaymentIntentNotFoundException>();
             return collection.BuildServiceProvider();
         }
     }

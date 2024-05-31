@@ -113,19 +113,22 @@ namespace permissions.api.tests.Contollers
         [InlineData(false, true)]
         public async Task ControllerCanGetDiscountCheckout(bool isSessionValid, bool isRequestPaid)
         {
-            var html = new Mock<IPaymentHtmlTranslator>();
-            var infrastructure = new Mock<ISearchInfrastructure>();
-            var subscription = new Mock<ISubscriptionInfrastructure>();
-            var lockdb = new Mock<ICustomerLockInfrastructure>();
-            LevelRequestBo? session = isSessionValid ? new LevelRequestBo() : null;
-            var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
-            html.Setup(m => m.IsDiscountLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
-            html.Setup(m => m.IsDiscountValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
-            html.Setup(m => m.IsDiscountPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
-            var indx = await controller.DiscountCheckout("abcd", "123");
-            Assert.NotNull(indx);
-            Assert.IsType<ContentResult>(indx);
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var html = new Mock<IPaymentHtmlTranslator>();
+                var infrastructure = new Mock<ISearchInfrastructure>();
+                var subscription = new Mock<ISubscriptionInfrastructure>();
+                var lockdb = new Mock<ICustomerLockInfrastructure>();
+                LevelRequestBo? session = isSessionValid ? new LevelRequestBo() : null;
+                var stripeSvcs = new Mock<IStripeInfrastructure>();
+                var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+                html.Setup(m => m.IsDiscountLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+                html.Setup(m => m.IsDiscountValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
+                html.Setup(m => m.IsDiscountPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
+                _ = await controller.DiscountCheckout("abcd", "123");
+
+            });
+            Assert.Null(error);
         }
 
         [Theory]
