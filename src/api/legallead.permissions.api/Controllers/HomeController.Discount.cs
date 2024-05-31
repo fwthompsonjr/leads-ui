@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
+    [SuppressMessage("Sonar Qube", 
+        "S6967:ModelState.IsValid should be called in controller actions", 
+        Justification = "Model state is not relevent for these landings")]
     public partial class HomeController
     {
 
@@ -41,13 +44,14 @@ namespace legallead.permissions.api.Controllers
             if (clientSecret.Equals(NoPaymentItem))
             {
                 // create ad-hoc invoice for payment
-                clientSecret = string.Empty;
+                clientSecret = secretSvc.GetDiscountSecret(discountRequest);
             }
             content = content.Replace("<!-- payment get intent index -->", clientSecret);
             return Content(content, "text/html");
         }
 
         [HttpPost("/discount-fetch-intent")]
+        
         public async Task<IActionResult> FetchDiscountIntent([FromBody] FetchIntentRequest request)
         {
             var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });

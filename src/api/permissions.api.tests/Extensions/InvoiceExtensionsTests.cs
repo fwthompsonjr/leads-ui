@@ -66,6 +66,7 @@ namespace permissions.api.tests
             new Faker<DiscountRequestBo>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
             .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
             .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())

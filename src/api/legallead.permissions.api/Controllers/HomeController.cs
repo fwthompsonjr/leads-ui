@@ -10,13 +10,15 @@ namespace legallead.permissions.api.Controllers
         ISearchInfrastructure search,
         ISubscriptionInfrastructure subscriptionSvc,
         ICustomerLockInfrastructure lockingDb,
-        IStripeInfrastructure stripe) : Controller
+        IStripeInfrastructure stripe,
+        IClientSecretService secretService) : Controller
     {
         private readonly IPaymentHtmlTranslator paymentSvc = service;
         private readonly ISearchInfrastructure infrastructure = search;
         private readonly ISubscriptionInfrastructure subscriptionSvc = subscriptionSvc;
         private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
         private readonly IStripeInfrastructure stripeSvc = stripe;
+        private readonly IClientSecretService secretSvc = secretService;
 
         [HttpGet]
         [Route("/")]
@@ -25,7 +27,7 @@ namespace legallead.permissions.api.Controllers
             var content = IndexHtml;
             return Content(content, "text/html");
         }
-        private static string NoPaymentItem = Guid.Empty.ToString("D");
+        private static readonly string NoPaymentItem = Guid.Empty.ToString("D");
 
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();

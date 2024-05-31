@@ -18,7 +18,14 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(
+                html.Object, 
+                infrastructure.Object, 
+                subscription.Object, 
+                lockdb.Object, 
+                stripeSvcs.Object,
+                secretSvc.Object);
             var indx = controller.Index();
             Assert.NotNull(indx);
             Assert.IsType<ContentResult>(indx);
@@ -33,7 +40,14 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(
+                html.Object, 
+                infrastructure.Object, 
+                subscription.Object, 
+                lockdb.Object, 
+                stripeSvcs.Object,
+                secretSvc.Object);
             var content = GetPaymentLandingContent(isValid);
             html.Setup(m => m.IsRequestValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
             html.Setup(m => m.Transform(It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
@@ -55,7 +69,8 @@ namespace permissions.api.tests.Contollers
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             PaymentSessionDto? session = isSessionValid ? new PaymentSessionDto() : null;
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             html.Setup(m => m.IsRequestValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
             html.Setup(m => m.IsSessionValid(It.IsAny<string>())).ReturnsAsync(session);
             html.Setup(m => m.IsRequestPaid(It.IsAny<PaymentSessionDto>())).ReturnsAsync(isRequestPaid);
@@ -74,7 +89,8 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             var content = GetUserLevelLandingContent(isValid);
             html.Setup(m => m.IsChangeUserLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
             html.Setup(m => m.TransformForPermissions(It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
@@ -96,7 +112,8 @@ namespace permissions.api.tests.Contollers
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             LevelRequestBo? session = isSessionValid ? new LevelRequestBo() : null;
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             html.Setup(m => m.IsChangeUserLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
             html.Setup(m => m.IsSubscriptionValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
             html.Setup(m => m.IsRequestPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
@@ -120,7 +137,8 @@ namespace permissions.api.tests.Contollers
                 var lockdb = new Mock<ICustomerLockInfrastructure>();
                 LevelRequestBo? session = isSessionValid ? new LevelRequestBo() : null;
                 var stripeSvcs = new Mock<IStripeInfrastructure>();
-                var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+                var secretSvc = new Mock<IClientSecretService>();
+                var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
                 html.Setup(m => m.IsDiscountLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
                 html.Setup(m => m.IsDiscountValid(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(session);
                 html.Setup(m => m.IsDiscountPaid(It.IsAny<LevelRequestBo>())).ReturnsAsync(isRequestPaid);
@@ -140,7 +158,8 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var secretSvc = new Mock<IClientSecretService>();
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             var content = GetUserLevelLandingContent(isValid);
             html.Setup(m => m.IsDiscountLevel(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(isValid);
             html.Setup(m => m.TransformForDiscounts(It.IsAny<ISubscriptionInfrastructure>(), It.IsAny<bool>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(content).Verifiable(Times.Once);
@@ -160,9 +179,10 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
+            var secretSvc = new Mock<IClientSecretService>();
             var clientId = hasClientId ? "abcd" : string.Empty;
             PaymentSessionDto? dto = isValid ? new() { ClientId = clientId } : null;
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             html.Setup(m => m.IsSessionValid(It.IsAny<string>())).ReturnsAsync(dto);
             var indx = await controller.FetchIntent(new());
             Assert.NotNull(indx);
@@ -184,10 +204,11 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
+            var secretSvc = new Mock<IClientSecretService>();
             var secret = new { Id = "00000" };
             var sessionId = hasSessionId ? "abcd" : string.Empty;
             LevelRequestBo? dto = isValid ? new() { SessionId = sessionId } : null;
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             subscription.Setup(m => m.GetLevelRequestById(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(dto);
             stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret.Id);
             stripeSvcs.Setup(m => m.FetchClientSecret(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret);
@@ -208,10 +229,11 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
+            var secretSvc = new Mock<IClientSecretService>();
             var secret = new { Id = "00000" };
             var sessionId = hasSessionId ? "abcd" : string.Empty;
             LevelRequestBo? dto = isValid ? new() { SessionId = sessionId } : null;
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
             subscription.Setup(m => m.GetDiscountRequestById(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(dto);
             stripeSvcs.Setup(m => m.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret.Id);
             stripeSvcs.Setup(m => m.FetchClientSecret(It.IsAny<LevelRequestBo>())).ReturnsAsync(secret);
@@ -243,12 +265,13 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
+            var secretSvc = new Mock<IClientSecretService>();
             var userId = hasUserId ? "1234567" : string.Empty;
             User? user = hasUser ? new User { Id = userId } : null;
             var down = new DownloadResponse();
             var sessionJs = isSessionEmpty ? string.Empty : "abcd";
             PaymentSessionDto? dto = isSessionValid ? new() { Id = "1223456", JsText = sessionJs } : null;
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
 
             infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             lockdb.Setup(m => m.IsAccountLocked(It.IsAny<string>())).ReturnsAsync(isAccountLocked);
@@ -303,12 +326,13 @@ namespace permissions.api.tests.Contollers
             var subscription = new Mock<ISubscriptionInfrastructure>();
             var lockdb = new Mock<ICustomerLockInfrastructure>();
             var stripeSvcs = new Mock<IStripeInfrastructure>();
+            var secretSvc = new Mock<IClientSecretService>();
             var userId = hasUserId ? "1234567" : string.Empty;
             User? user = hasUser ? new User { Id = userId, UserName = new Faker().Person.UserName } : null;
             DownloadResponse? down = isResetSuccess ? new DownloadResponse() : null;
             var sessionJs = isSessionEmpty ? string.Empty : "abcd";
             PaymentSessionDto? dto = isSessionValid ? new() { Id = "1223456", JsText = sessionJs } : null;
-            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object);
+            var controller = new HomeController(html.Object, infrastructure.Object, subscription.Object, lockdb.Object, stripeSvcs.Object, secretSvc.Object);
 
             infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             lockdb.Setup(m => m.IsAccountLocked(It.IsAny<string>())).ReturnsAsync(isAccountLocked);
@@ -320,6 +344,8 @@ namespace permissions.api.tests.Contollers
             var indx = await controller.RollbackDownload(new() { UserId = user?.UserName ?? "other", ExternalId = "abc-123" });
             Assert.NotNull(indx);
         }
+
+
 
         private static string GetPaymentLandingContent(bool isValid)
         {
