@@ -42,6 +42,7 @@ namespace legallead.permissions.api.Utility
             var invoiceSvc = new InvoiceService();
             var invoice = await invoiceSvc.GetAsync(invoiceId) ?? throw new InvoiceNotFoundException();
             var intentSvc = new PaymentIntentService();
+            if (invoice.PaymentIntentId == null) throw new PaymentIntentNotFoundException();
             var intent = await intentSvc.GetAsync(invoice.PaymentIntentId);
             return intent.ClientSecret;
         }

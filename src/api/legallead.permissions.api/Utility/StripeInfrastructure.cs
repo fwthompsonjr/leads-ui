@@ -179,7 +179,8 @@ namespace legallead.permissions.api.Utility
                 },
             };
             var service = new PaymentIntentService();
-            return service.Create(options);
+            var intent = service.Create(options);
+            return intent;
         }
     }
 }

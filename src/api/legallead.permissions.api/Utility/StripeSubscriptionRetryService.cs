@@ -60,7 +60,11 @@ namespace legallead.permissions.api.Utility
             var actual = invoice.Total * 0.01m;
             var data = new Tuple<bool, string, Invoice>(true, successUrl, invoice);
             if (payment == null || amount == 0) return data;
-            if (amount != actual) throw new InvoiceAmountMismatchedException();
+            if (amount != actual)
+            {
+                var pmt = Convert.ToInt64(amount * 100m);
+                return new Tuple<bool, string, Invoice>(true, successUrl, new() { Total = pmt });
+            }
             return data;
         }
 

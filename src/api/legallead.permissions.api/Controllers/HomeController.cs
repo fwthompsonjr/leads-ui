@@ -25,6 +25,8 @@ namespace legallead.permissions.api.Controllers
             var content = IndexHtml;
             return Content(content, "text/html");
         }
+        private static string NoPaymentItem = Guid.Empty.ToString("D");
+
         private static string? _index;
         private static string IndexHtml => _index ??= GetIndex();
 

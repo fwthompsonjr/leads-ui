@@ -36,7 +36,14 @@ namespace legallead.permissions.api.Controllers
             }
             var content = Properties.Resources.page_invoice_discount_html;
             var discountRequest = ModelMapper.Mapper.Map<DiscountRequestBo>(session);
+            var clientSecret = await stripeSvc.FetchClientSecretValue(session);
             content = paymentSvc.Transform(discountRequest, content);
+            if (clientSecret.Equals(NoPaymentItem))
+            {
+                // create ad-hoc invoice for payment
+                clientSecret = string.Empty;
+            }
+            content = content.Replace("<!-- payment get intent index -->", clientSecret);
             return Content(content, "text/html");
         }
 

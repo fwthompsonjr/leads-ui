@@ -10,6 +10,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<LevelRequestDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
             .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
             .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
@@ -62,6 +63,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
+        [InlineData("CustomerId")]
         [InlineData("ExternalId")]
         [InlineData("InvoiceUri")]
         [InlineData("LevelName")]
@@ -81,6 +83,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
+        [InlineData("CustomerId")]
         [InlineData("ExternalId")]
         [InlineData("InvoiceUri")]
         [InlineData("LevelName")]

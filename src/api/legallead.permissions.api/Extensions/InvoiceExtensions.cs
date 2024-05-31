@@ -1,9 +1,11 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
 using Stripe;
+using System.Globalization;
 using System.Text;
 
 namespace legallead.permissions.api.Extensions
@@ -158,12 +160,17 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
-        public static string GetHtml(this DiscountRequestBo response, string html, string paymentKey)
+        public static string GetHtml(
+            this DiscountRequestBo response,
+            string html, 
+            string paymentKey,
+            ICustomerRepository? customerDb = null)
         {
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceDiscountScript());
-            var verification = VerifySubscription(response.SessionId, dash);
+            var verification = StripeDiscountRetryService.VerifySubscription(
+                response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;
             var invoice = verification.Item3;
@@ -295,15 +302,17 @@ namespace legallead.permissions.api.Extensions
         private static string GetDiscountDescription(string jstext)
         {
             const string fallback = "n/a";
+            const char slash = '\\';
             try
             {
+                if (jstext.Contains(slash)) { jstext = jstext.Replace(slash.ToString(), string.Empty); }
                 var source = JsonConvert.DeserializeObject<DiscountChangeParent>(jstext);
                 if (source == null) return fallback;
                 if (!source.Choices.Any(a => a.IsSelected)) return "No Discounts Selected";
                 var counties = source.Choices.Where(w => w.IsSelected && !string.IsNullOrWhiteSpace(w.CountyName));
-                var countyNames = string.Join(", ", counties.Select(x => x.CountyName));
+                var countyNames = englishText.ToTitleCase(string.Join(", ", counties.Select(x => x.CountyName)).ToLower());
                 var states = source.Choices.Where(w => w.IsSelected && string.IsNullOrWhiteSpace(w.CountyName));
-                var stateNames = string.Join(", ", states.Select(x => x.StateName));
+                var stateNames = englishText.ToTitleCase(string.Join(", ", states.Select(x => x.StateName)).ToLower());
                 var items = new[]
                 {
                     $"Counties: {countyNames}<br/>",
@@ -337,5 +346,6 @@ namespace legallead.permissions.api.Extensions
         private static string? _invoiceScript;
         private static string? _invoiceSubscriptionScript;
         private static string? _invoiceDiscountScript;
+        private static readonly TextInfo englishText = new CultureInfo("en-US", false).TextInfo;
     }
 }

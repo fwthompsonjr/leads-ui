@@ -9,6 +9,7 @@ namespace permissions.api.tests.Custom
         [InlineData(typeof(InvoiceAmountMismatchedException))]
         [InlineData(typeof(InvoiceNotFoundException))]
         [InlineData(typeof(SubscriptionNotFoundException))]
+        [InlineData(typeof(PaymentIntentNotFoundException))]
         public void ExceptionCanBeCreated(Type type)
         {
             var provider = GetServiceProvider();
@@ -26,6 +27,7 @@ namespace permissions.api.tests.Custom
             collection.AddSingleton<InvoiceAmountMismatchedException>();
             collection.AddSingleton<InvoiceNotFoundException>();
             collection.AddSingleton<SubscriptionNotFoundException>();
+            collection.AddSingleton<PaymentIntentNotFoundException>();
             return collection.BuildServiceProvider();
         }
     }
