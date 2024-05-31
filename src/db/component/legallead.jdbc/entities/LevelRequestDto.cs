@@ -1,8 +1,11 @@
-﻿namespace legallead.jdbc.entities
+﻿using System;
+
+namespace legallead.jdbc.entities
 {
     public class LevelRequestDto : BaseDto
     {
         public string? UserId { get; set; }
+        public string? CustomerId { get; set; }
         public string? ExternalId { get; set; }
         public string? InvoiceUri { get; set; }
         public string? LevelName { get; set; }
@@ -19,6 +22,7 @@
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("UserId", Comparison)) return UserId;
+                if (fieldName.Equals("CustomerId", Comparison)) return CustomerId;
                 if (fieldName.Equals("ExternalId", Comparison)) return ExternalId;
                 if (fieldName.Equals("InvoiceUri", Comparison)) return InvoiceUri;
                 if (fieldName.Equals("LevelName", Comparison)) return LevelName;
@@ -39,6 +43,7 @@
                     return;
                 }
                 if (fieldName.Equals("UserId", Comparison)) { UserId = ChangeType<string?>(value); return; }
+                if (fieldName.Equals("CustomerId", Comparison)) { CustomerId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("ExternalId", Comparison)) { ExternalId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("InvoiceUri", Comparison)) { InvoiceUri = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("LevelName", Comparison)) { LevelName = ChangeType<string?>(value); return; }

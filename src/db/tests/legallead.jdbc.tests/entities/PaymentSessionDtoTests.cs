@@ -10,6 +10,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<PaymentSessionDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.InvoiceId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.SessionType, y => y.Hacker.Phrase())
             .RuleFor(x => x.SessionId, y => y.Hacker.Phrase())
@@ -53,6 +54,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
+        [InlineData("CustomerId")]
         [InlineData("InvoiceId")]
         [InlineData("SessionType")]
         [InlineData("SessionId")]
@@ -73,6 +75,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
+        [InlineData("CustomerId")]
         [InlineData("InvoiceId")]
         [InlineData("SessionType")]
         [InlineData("SessionId")]

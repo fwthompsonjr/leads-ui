@@ -4,6 +4,7 @@
     public class PaymentSessionDto : BaseDto
     {
         public string? UserId { get; set; }
+        public string? CustomerId { get; set; }
         public string? InvoiceId { get; set; }
         public string? SessionType { get; set; }
         public string? SessionId { get; set; }
@@ -22,6 +23,7 @@
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("UserId", Comparison)) return UserId;
+                if (fieldName.Equals("CustomerId", Comparison)) return CustomerId;
                 if (fieldName.Equals("InvoiceId", Comparison)) return InvoiceId;
                 if (fieldName.Equals("SessionType", Comparison)) return SessionType;
                 if (fieldName.Equals("SessionId", Comparison)) return SessionId;
@@ -43,6 +45,7 @@
                     return;
                 }
                 if (fieldName.Equals("UserId", Comparison)) { UserId = ChangeType<string>(value); return; }
+                if (fieldName.Equals("CustomerId", Comparison)) { CustomerId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("InvoiceId", Comparison)) { InvoiceId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("SessionType", Comparison)) { SessionType = ChangeType<string>(value); return; }
                 if (fieldName.Equals("SessionId", Comparison)) { SessionId = ChangeType<string>(value); return; }

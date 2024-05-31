@@ -11,6 +11,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<LevelRequestBo>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
             .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
             .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
@@ -48,6 +49,16 @@ namespace legallead.jdbc.tests.entities
             var dest = data[1];
             dest.UserId = src.UserId;
             Assert.Equal(src.UserId, dest.UserId);
+        }
+
+        [Fact]
+        public void LevelRequestBoCanSetCustomerId()
+        {
+            var data = faker.Generate(2);
+            var src = data[0];
+            var dest = data[1];
+            dest.CustomerId = src.CustomerId;
+            Assert.Equal(src.CustomerId, dest.CustomerId);
         }
 
         [Fact]
