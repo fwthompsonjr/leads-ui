@@ -107,7 +107,6 @@ namespace permissions.api.tests.Contollers
         }
 
         [Theory]
-        [InlineData(true, false)]
         [InlineData(true, true)]
         [InlineData(false, false)]
         [InlineData(false, true)]

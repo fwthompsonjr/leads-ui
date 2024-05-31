@@ -172,7 +172,7 @@ namespace legallead.permissions.api.Utility
         {
 
             if (string.IsNullOrEmpty(discountRequest.SessionId)) return content;
-            content = discountRequest.GetHtml(content, _paymentKey);
+            content = discountRequest.GetHtml(content, _paymentKey, _custRepo);
             return content;
         }
 

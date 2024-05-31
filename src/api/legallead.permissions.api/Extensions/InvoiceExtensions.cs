@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
@@ -159,12 +160,17 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
-        public static string GetHtml(this DiscountRequestBo response, string html, string paymentKey)
+        public static string GetHtml(
+            this DiscountRequestBo response,
+            string html, 
+            string paymentKey,
+            ICustomerRepository? customerDb = null)
         {
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceDiscountScript());
-            var verification = VerifySubscription(response.SessionId, dash);
+            var verification = StripeDiscountRetryService.VerifySubscription(
+                response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;
             var invoice = verification.Item3;
