@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace legallead.jdbc.entities
+﻿namespace legallead.jdbc.entities
 {
     public class LevelRequestDto : BaseDto
     {
