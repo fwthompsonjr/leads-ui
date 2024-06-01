@@ -1,49 +1,30 @@
 ﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Custom;
 using legallead.permissions.api.Entities;
+using legallead.permissions.api.Models;
 using Polly;
 using Stripe;
 using Stripe.Checkout;
 
 namespace legallead.permissions.api.Utility
 {
-    internal static class StripeSubscriptionRetryService
+    internal static class StripeDiscountRetryService
     {
-        public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
-            LevelRequestBo requested,
-            ICustomerRepository? customerDb = null,
-            string paymentType = "Monthly")
-        {
-            var failure = new Tuple<bool, string, Invoice>(true, dash, new() { Total = 0 });
-            try
-            {
-                var sessionId = requested.SessionId;
-                var expected = customerDb == null ? [] : (await customerDb.GetLevelRequestPaymentAmount(requested.ExternalId ?? string.Empty) ?? []);
-                var paymentData = expected.Find(x => x.PriceType == paymentType);
-                var invoiceData = FetchLatestInvoice(paymentData, sessionId);
-                return invoiceData;
-            }
-            catch
-            {
-                return failure;
-            }
-        }
-
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
-        public static async Task<SubscriptionModificationResponse?> CreatePaymentAsync(
-            LevelRequestBo requested,
+        public static async Task<DiscountModificationResponse?> CreatePaymentAsync(
+            DiscountRequestBo requested,
             string paymentType = "Monthly",
             ICustomerRepository? customerDb = null,
             IUserRepository? userDb = null,
             IUserSearchRepository? searchDb = null
             )
         {
-            const string description = "Subscription Modification Request";
+            const string description = "Discount Modification Request";
             var externalId = requested.ExternalId ?? string.Empty;
             var existing = searchDb == null ? null : (await searchDb.FindAdHocSession(externalId));
             if (existing != null)
             {
-                return new SubscriptionModificationResponse
+                return new DiscountModificationResponse
                 {
                     UserId = existing.UserId,
                     ExternalId = externalId,
@@ -51,16 +32,17 @@ namespace legallead.permissions.api.Utility
                 };
             }
 
-            var data = customerDb == null ? [] : (await customerDb.GetLevelRequestPaymentAmount(externalId) ?? []);
+            var data = customerDb == null ? [] : (await customerDb.GetDiscountRequestPaymentAmount(externalId) ?? []);
             data = data.FindAll(x => x.PriceType == paymentType);
             var amount = data.Sum(x => x.Price.GetValueOrDefault(0));
-            var modification = new SubscriptionModificationResponse
+            var modification = new DiscountModificationResponse
             {
                 Id = Guid.Empty.ToString("D"),
                 PaymentIntentId = Guid.Empty.ToString("D"),
                 ClientSecret = string.Empty,
                 ExternalId = externalId,
                 Description = description,
+                Data = data,
                 Amount = amount,
             };
             const decimal minAmount = 0.50m;
@@ -113,11 +95,31 @@ namespace legallead.permissions.api.Utility
             _ = await searchDb.AppendAdHocSession(payment);
             return modification;
         }
+        public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
+            DiscountRequestBo requested,
+            ICustomerRepository? customerDb = null,
+            string paymentType = "Monthly")
+        {
+            var failure = new Tuple<bool, string, Invoice>(true, dash, new() { Total = 0 });
+            try
+            {
+                var sessionId = requested.SessionId;
+                var expected = customerDb == null ? [] : (await customerDb.GetDiscountRequestPaymentAmount(requested.ExternalId ?? string.Empty) ?? []);
+                var paymentData = expected.FindAll(x => x.PriceType == paymentType);
+                var invoiceData = FetchLatestInvoice(paymentData, sessionId);
+                return invoiceData;
+            }
+            catch
+            {
+                return failure;
+            }
+        }
+
 
         public static string GetSuccesUrl(string? invoiceUri, string externalId)
         {
             const char question = '?';
-            const string landing = "subscription";
+            const string landing = "discount";
             string find = $"{landing}-checkout";
             if (string.IsNullOrWhiteSpace(invoiceUri)) return string.Empty;
             if (!invoiceUri.Contains(find)) return invoiceUri;
@@ -125,8 +127,7 @@ namespace legallead.permissions.api.Utility
             var prefix = invoiceUri.Split(question, StringSplitOptions.RemoveEmptyEntries)[0];
             return prefix.Replace(find, $"{landing}-result?id={externalId}&sts=success");
         }
-
-        private static Tuple<bool, string, Invoice> FetchLatestInvoice(LevelPaymentBo? payment, string? sessionId)
+        private static Tuple<bool, string, Invoice> FetchLatestInvoice(List<DiscountPaymentBo>? list, string? sessionId)
         {
             const double wait = 300f;
             var intervals = new[] {
@@ -136,6 +137,8 @@ namespace legallead.permissions.api.Utility
                 TimeSpan.FromMilliseconds(wait * 6f)
             };
             if (string.IsNullOrEmpty(sessionId)) { throw new ArgumentOutOfRangeException(nameof(sessionId)); }
+            var payment = list?.FirstOrDefault();
+            if (list != null && payment != null) { payment.Price = list.Sum(x => x.Price); }
             var response = Policy.Handle<Exception>()
                 .WaitAndRetry(intervals)
                 .Execute(() =>
@@ -146,7 +149,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Integration testing only")]
-        private static Tuple<bool, string, Invoice> GetInvoiceData(LevelPaymentBo? payment, string sessionId)
+        private static Tuple<bool, string, Invoice> GetInvoiceData(DiscountPaymentBo? payment, string sessionId)
         {
             var service = new SubscriptionService();
             var subscription = service.Get(sessionId) ?? throw new SubscriptionNotFoundException();
@@ -166,7 +169,6 @@ namespace legallead.permissions.api.Utility
             }
             return data;
         }
-
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         private static PaymentIntent CreatePaymentIntent(decimal amount, string customerId = "")
@@ -193,6 +195,7 @@ namespace legallead.permissions.api.Utility
             if (userDb == null) return fallback;
             return userDb.GetById(userId).GetAwaiter().GetResult() ?? fallback;
         }
+
         private const string dash = " - ";
     }
 }

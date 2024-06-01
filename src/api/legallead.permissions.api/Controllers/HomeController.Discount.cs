@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
+    [SuppressMessage("Sonar Qube",
+        "S6967:ModelState.IsValid should be called in controller actions",
+        Justification = "Model state is not relevent for these landings")]
     public partial class HomeController
     {
 
@@ -36,11 +39,14 @@ namespace legallead.permissions.api.Controllers
             }
             var content = Properties.Resources.page_invoice_discount_html;
             var discountRequest = ModelMapper.Mapper.Map<DiscountRequestBo>(session);
+            var clientSecret = GetDiscountSecret(session);
             content = paymentSvc.Transform(discountRequest, content);
+            content = content.Replace("<!-- payment get intent index -->", clientSecret);
             return Content(content, "text/html");
         }
 
         [HttpPost("/discount-fetch-intent")]
+
         public async Task<IActionResult> FetchDiscountIntent([FromBody] FetchIntentRequest request)
         {
             var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });
@@ -49,8 +55,17 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-            var clientSecret = await stripeSvc.FetchClientSecret(session);
+            var clientSecret = GetDiscountSecret(session);
             return Json(new { clientSecret });
+        }
+
+        protected string GetDiscountSecret(LevelRequestBo? session)
+        {
+            if (session == null) return NoPaymentItem;
+            var discountRequest = ModelMapper.Mapper.Map<DiscountRequestBo>(session);
+            var clientSecret = stripeSvc.FetchClientSecretValue(session).GetAwaiter().GetResult();
+            if (!clientSecret.Equals(NoPaymentItem)) return clientSecret;
+            return secretSvc.GetDiscountSecret(discountRequest);
         }
     }
 }

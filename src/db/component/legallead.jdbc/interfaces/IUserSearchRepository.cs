@@ -33,5 +33,8 @@ namespace legallead.jdbc.interfaces
         Task<KeyValuePair<bool, string>> CreateOrUpdateDownloadRecord(string searchId, string? content = null);
         Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId);
         Task<DownloadHistoryDto?> AllowDownloadRollback(string userId, string searchId);
+        Task<bool> AppendAdHocSession(AdHocSessionBo dto);
+        Task<bool> CompleteAdHocSession(string externalId);
+        Task<AdHocSessionBo?> FindAdHocSession(string externalId);
     }
 }

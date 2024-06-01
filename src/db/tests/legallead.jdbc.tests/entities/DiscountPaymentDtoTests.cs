@@ -3,35 +3,33 @@ using legallead.jdbc.entities;
 
 namespace legallead.jdbc.tests.entities
 {
-    public class LevelRequestDtoTests
+    public class DiscountPaymentDtoTests
     {
 
-        private static readonly Faker<LevelRequestDto> faker =
-            new Faker<LevelRequestDto>()
+        private static readonly Faker<DiscountPaymentDto> faker =
+            new Faker<DiscountPaymentDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.CustomerId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ExternalId, y => y.Hacker.Phrase())
-            .RuleFor(x => x.InvoiceUri, y => y.Hacker.Phrase())
             .RuleFor(x => x.LevelName, y => y.Hacker.Phrase())
-            .RuleFor(x => x.SessionId, y => y.Hacker.Phrase())
-            .RuleFor(x => x.IsPaymentSuccess, y => y.Random.Bool())
+            .RuleFor(x => x.PriceType, y => y.Hacker.Phrase())
+            .RuleFor(x => x.Price, y => y.Random.Decimal(1, 50))
             .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
 
         [Fact]
-        public void LevelRequestDtoCanBeCreated()
+        public void DiscountPaymentDtoCanBeCreated()
         {
             var exception = Record.Exception(() =>
             {
-                _ = new LevelRequestDto();
+                _ = new DiscountPaymentDto();
             });
             Assert.Null(exception);
         }
 
         [Fact]
-        public void LevelRequestDtoCanBeGenerated()
+        public void DiscountPaymentDtoCanBeGenerated()
         {
             var exception = Record.Exception(() =>
             {
@@ -41,7 +39,7 @@ namespace legallead.jdbc.tests.entities
         }
 
         [Fact]
-        public void LevelRequestDtoCanSetId()
+        public void DiscountPaymentDtoCanSetId()
         {
             var data = faker.Generate(2);
             var src = data[0];
@@ -51,7 +49,7 @@ namespace legallead.jdbc.tests.entities
         }
 
         [Fact]
-        public void LevelRequestDtoCanSetCreateDate()
+        public void DiscountPaymentDtoCanSetCreateDate()
         {
             var data = faker.Generate(2);
             var src = data[0];
@@ -63,17 +61,15 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
-        [InlineData("CustomerId")]
         [InlineData("ExternalId")]
-        [InlineData("InvoiceUri")]
         [InlineData("LevelName")]
-        [InlineData("SessionId")]
-        [InlineData("IsPaymentSuccess")]
+        [InlineData("PriceType")]
+        [InlineData("Price")]
         [InlineData("CompletionDate")]
         [InlineData("CreateDate")]
-        public void LevelRequestDtoHasExpectedFieldDefined(string name)
+        public void DiscountPaymentDtoHasExpectedFieldDefined(string name)
         {
-            var sut = new LevelRequestDto();
+            var sut = new DiscountPaymentDto();
             var fields = sut.FieldList;
             Assert.NotNull(fields);
             Assert.NotEmpty(fields);
@@ -83,18 +79,16 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserId")]
-        [InlineData("CustomerId")]
         [InlineData("ExternalId")]
-        [InlineData("InvoiceUri")]
         [InlineData("LevelName")]
-        [InlineData("SessionId")]
-        [InlineData("IsPaymentSuccess")]
+        [InlineData("PriceType")]
+        [InlineData("Price")]
         [InlineData("CompletionDate")]
         [InlineData("CreateDate")]
-        public void LevelRequestDtoCanReadWriteByIndex(string fieldName)
+        public void DiscountPaymentDtoCanReadWriteByIndex(string fieldName)
         {
             var demo = faker.Generate();
-            var sut = new LevelRequestDto();
+            var sut = new DiscountPaymentDto();
             var flds = sut.FieldList;
             var position = flds.IndexOf(fieldName);
             sut[position] = demo[position];

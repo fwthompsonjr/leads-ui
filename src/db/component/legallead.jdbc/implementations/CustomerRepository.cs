@@ -131,6 +131,26 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<List<DiscountPaymentBo>?> GetDiscountRequestPaymentAmount(string externalId)
+        {
+            const string prc = "CALL USP_FIND_DISCOUNTREQUEST_PAYMENT_AMOUNT_BY_EXTERNAL_INDEX( ? );";
+            try
+            {
+                var parms = new DynamicParameters();
+                parms.Add("external_id", externalId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<DiscountPaymentDto>(connection, prc, parms);
+                if (response == null) return null;
+                var json = JsonConvert.SerializeObject(response);
+                var bo = JsonConvert.DeserializeObject<List<DiscountPaymentBo>>(json);
+                return bo;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public async Task<LevelRequestBo?> GetLevelRequestById(string externalId)
         {
             const string prc = "CALL USP_FIND_LEVELREQUEST_BY_EXTERNAL_INDEX( ? );";

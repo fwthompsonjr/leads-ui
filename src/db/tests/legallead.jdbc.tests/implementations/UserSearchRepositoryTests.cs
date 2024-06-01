@@ -836,6 +836,106 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
         }
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanAppendAdHocSession(bool isErrored)
+        {
+            var errored = new Faker().System.Exception();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (!isErrored) {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+            } else {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(errored);
+            }
+            var result = await service.AppendAdHocSession(new());
+            Assert.NotEqual(isErrored, result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanCompleteAdHocSession(bool isErrored)
+        {
+            var errored = new Faker().System.Exception();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (!isErrored)
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(errored);
+            }
+            var result = await service.CompleteAdHocSession("");
+            Assert.NotEqual(isErrored, result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task RepoCanFindAdHocSession(int responseId)
+        {
+            var errored = new Faker().System.Exception();
+            var dto = responseId == 1 ? null : adhocfaker.Generate();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (responseId != 2)
+            {
+                mock.Setup(m => m.QuerySingleOrDefaultAsync<AdHocSessionDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            else
+            {
+                mock.Setup(m => m.QuerySingleOrDefaultAsync<AdHocSessionDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(errored);
+            }
+            _ = await service.FindAdHocSession("");
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<AdHocSessionDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        private static readonly Faker<AdHocSessionDto> adhocfaker =
+            new Faker<AdHocSessionDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.IntentId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.ClientId, y => y.Hacker.Phrase())
+            .RuleFor(x => x.ExternalId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
         private sealed class RepoContainer
         {
             private readonly UserSearchRepository repo;

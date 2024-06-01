@@ -1,17 +1,13 @@
 ﻿namespace legallead.jdbc.entities
 {
-    [TargetTable(TableName = "PAYMENTSESSION")]
-    public class PaymentSessionDto : BaseDto
+    [TargetTable(TableName = "ADHOCSESSION")]
+    public class AdHocSessionDto : BaseDto
     {
         public string? UserId { get; set; }
-        public string? CustomerId { get; set; }
-        public string? InvoiceId { get; set; }
-        public string? SessionType { get; set; }
-        public string? SessionId { get; set; }
         public string? IntentId { get; set; }
         public string? ClientId { get; set; }
         public string? ExternalId { get; set; }
-        public string? JsText { get; set; }
+        public DateTime? CompletionDate { get; set; }
         public DateTime? CreateDate { get; set; }
 
         public override object? this[string field]
@@ -23,14 +19,10 @@
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("UserId", Comparison)) return UserId;
-                if (fieldName.Equals("CustomerId", Comparison)) return CustomerId;
-                if (fieldName.Equals("InvoiceId", Comparison)) return InvoiceId;
-                if (fieldName.Equals("SessionType", Comparison)) return SessionType;
-                if (fieldName.Equals("SessionId", Comparison)) return SessionId;
                 if (fieldName.Equals("IntentId", Comparison)) return IntentId;
                 if (fieldName.Equals("ClientId", Comparison)) return ClientId;
                 if (fieldName.Equals("ExternalId", Comparison)) return ExternalId;
-                if (fieldName.Equals("JsText", Comparison)) return JsText;
+                if (fieldName.Equals("CompletionDate", Comparison)) return CompletionDate;
                 if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
                 return null;
             }
@@ -45,14 +37,10 @@
                     return;
                 }
                 if (fieldName.Equals("UserId", Comparison)) { UserId = ChangeType<string>(value); return; }
-                if (fieldName.Equals("CustomerId", Comparison)) { CustomerId = ChangeType<string>(value); return; }
-                if (fieldName.Equals("InvoiceId", Comparison)) { InvoiceId = ChangeType<string>(value); return; }
-                if (fieldName.Equals("SessionType", Comparison)) { SessionType = ChangeType<string>(value); return; }
-                if (fieldName.Equals("SessionId", Comparison)) { SessionId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("IntentId", Comparison)) { IntentId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("ClientId", Comparison)) { ClientId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("ExternalId", Comparison)) { ExternalId = ChangeType<string>(value); return; }
-                if (fieldName.Equals("JsText", Comparison)) { JsText = ChangeType<string>(value); return; }
+                if (fieldName.Equals("CompletionDate", Comparison)) { CompletionDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) { CreateDate = ChangeType<DateTime?>(value); }
             }
         }

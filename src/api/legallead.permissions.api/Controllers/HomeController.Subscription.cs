@@ -31,7 +31,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return await UserLevelLanding("success", id);
             }
-            var clientSecret = await stripeSvc.FetchClientSecretValue(session);
+            var clientSecret = GetSubscriptionSecret(session);
             var temp = Properties.Resources.page_invoice_subscription_html;
             var content = paymentSvc.Transform(session, temp) ?? temp;
             content = content.Replace("<!-- payment get intent index -->", clientSecret);
@@ -49,8 +49,15 @@ namespace legallead.permissions.api.Controllers
             {
                 return nodata;
             }
-            var clientSecret = await stripeSvc.FetchClientSecret(session);
+            var clientSecret = GetSubscriptionSecret(session);
             return Json(new { clientSecret });
+        }
+        protected string GetSubscriptionSecret(LevelRequestBo? session)
+        {
+            if (session == null) return NoPaymentItem;
+            var clientSecret = stripeSvc.FetchClientSecretValue(session).GetAwaiter().GetResult();
+            if (!clientSecret.Equals(NoPaymentItem)) return clientSecret;
+            return secretSvc.GetSubscriptionSecret(session);
         }
     }
 }

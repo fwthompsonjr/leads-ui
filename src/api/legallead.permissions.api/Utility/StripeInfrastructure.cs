@@ -9,7 +9,7 @@ namespace legallead.permissions.api.Utility
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
     public class StripeInfrastructure(
-        IUserSearchRepository repo, 
+        IUserSearchRepository repo,
         StripeKeyEntity entity) : IStripeInfrastructure
     {
         private readonly IUserSearchRepository _repo = repo;
@@ -179,7 +179,8 @@ namespace legallead.permissions.api.Utility
                 },
             };
             var service = new PaymentIntentService();
-            return service.Create(options);
+            var intent = service.Create(options);
+            return intent;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace permissions.api.tests
     public class RegisterDataServicesTests
     {
         private static readonly object locker = new();
-        private static IServiceProvider? _serviceProvider;
+        private static ServiceProvider? _serviceProvider;
 
         public RegisterDataServicesTests()
         {
@@ -87,6 +87,7 @@ namespace permissions.api.tests
         [InlineData(typeof(ISmtpService))]
         [InlineData(typeof(IUserSettingInfrastructure))]
         [InlineData(typeof(IHtmlTransformService))]
+        [InlineData(typeof(IClientSecretService))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
