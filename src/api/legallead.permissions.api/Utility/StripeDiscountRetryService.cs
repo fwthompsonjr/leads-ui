@@ -2,8 +2,6 @@
 using legallead.permissions.api.Custom;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Models;
-using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Polly;
 using Stripe;
 using Stripe.Checkout;
@@ -23,7 +21,7 @@ namespace legallead.permissions.api.Utility
         {
             const string description = "Discount Modification Request";
             var externalId = requested.ExternalId ?? string.Empty;
-            var existing = searchDb == null ? null : (await searchDb.GetPaymentSession(externalId));
+            var existing = searchDb == null ? null : (await searchDb.FindAdHocSession(externalId));
             if (existing != null)
             {
                 return new DiscountModificationResponse
@@ -81,31 +79,20 @@ namespace legallead.permissions.api.Utility
             var service = new SessionService();
             Session session = await service.CreateAsync(options);
             session.PaymentIntent = intent;
-            var response = new 
-            {
-                ExternalId = externalId,
-                Description = description,
-                SuccessUrl = successPg,
-                Data = data
-            };
             modification.SuccessUrl = successPg;
             modification.PaymentIntentId = intent.Id;
             modification.ClientSecret = intent.ClientSecret;
 
-            var js = JsonConvert.SerializeObject(response);
-            var payment = new PaymentSessionDto
+            var payment = new AdHocSessionBo
             {
                 Id = Guid.NewGuid().ToString("D"),
                 UserId = user.Id,
-                SessionId = session.Id,
-                SessionType = "Discount",
                 IntentId = intent.Id,
                 ClientId = intent.ClientSecret,
-                ExternalId = response.ExternalId,
-                JsText = js
+                ExternalId = externalId
             };
             if (searchDb == null) return modification;
-            _ = await searchDb.AppendPaymentSession(payment);
+            _ = await searchDb.AppendAdHocSession(payment);
             return modification;
         }
         public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
