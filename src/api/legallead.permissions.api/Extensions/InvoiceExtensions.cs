@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
@@ -109,8 +108,8 @@ namespace legallead.permissions.api.Extensions
 
 
         public static string GetHtml(
-            this LevelRequestBo response, 
-            string html, 
+            this LevelRequestBo response,
+            string html,
             string paymentKey,
             ICustomerRepository? customerDb = null)
         {
@@ -162,7 +161,7 @@ namespace legallead.permissions.api.Extensions
 
         public static string GetHtml(
             this DiscountRequestBo response,
-            string html, 
+            string html,
             string paymentKey,
             ICustomerRepository? customerDb = null)
         {

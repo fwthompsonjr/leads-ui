@@ -6,18 +6,11 @@ using System.Diagnostics;
 
 namespace permissions.api.tests.Contollers
 {
-    public class DiscountCheckoutIntegrationTest
+    public class SubscriptionCheckoutIntegrationTest
     {
-        [Fact]
-        public void CanGetHomeController()
-        {
-            var provider = GetProvider();
-            var controller = provider.GetService<HomeController>();
-            Assert.NotNull(controller);
-        }
 
         [Theory]
-        [InlineData("rBfFCeSJr89udeNN", "sub_1PLx7BDhgP60CL9xzZXF6rem")]
+        [InlineData("Foc7k135jHxo0WYC", "sub_1PLtruDhgP60CL9xqNZtXBMh")]
         public async Task VerifyCheckout(string id, string sessionId)
         {
             if (!Debugger.IsAttached) return;
@@ -25,7 +18,7 @@ namespace permissions.api.tests.Contollers
             {
                 var provider = GetProvider();
                 var controller = provider.GetRequiredService<HomeController>();
-                _ = await controller.DiscountCheckout(id, sessionId);
+                _ = await controller.SubscriptionCheckout(id, sessionId);
             });
             Assert.Null(errored);
         }

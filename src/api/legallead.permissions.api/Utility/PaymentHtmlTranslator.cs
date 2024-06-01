@@ -256,7 +256,8 @@ namespace legallead.permissions.api.Utility
             {
                 cdb.SubscriptionInfrastructure(infra);
             }
-            var bo = (await _custDb.GetDiscountRequestById(id ?? string.Empty)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var externalId = id ?? string.Empty;
+            var bo = (await _custDb.GetDiscountRequestById(externalId)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
             bo.IsPaymentSuccess = isvalid;
             bo = await _custDb.CompleteDiscountRequest(bo);
