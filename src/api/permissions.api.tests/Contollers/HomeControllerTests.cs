@@ -20,10 +20,10 @@ namespace permissions.api.tests.Contollers
             var stripeSvcs = new Mock<IStripeInfrastructure>();
             var secretSvc = new Mock<IClientSecretService>();
             var controller = new HomeController(
-                html.Object, 
-                infrastructure.Object, 
-                subscription.Object, 
-                lockdb.Object, 
+                html.Object,
+                infrastructure.Object,
+                subscription.Object,
+                lockdb.Object,
                 stripeSvcs.Object,
                 secretSvc.Object);
             var indx = controller.Index();
@@ -42,10 +42,10 @@ namespace permissions.api.tests.Contollers
             var stripeSvcs = new Mock<IStripeInfrastructure>();
             var secretSvc = new Mock<IClientSecretService>();
             var controller = new HomeController(
-                html.Object, 
-                infrastructure.Object, 
-                subscription.Object, 
-                lockdb.Object, 
+                html.Object,
+                infrastructure.Object,
+                subscription.Object,
+                lockdb.Object,
                 stripeSvcs.Object,
                 secretSvc.Object);
             var content = GetPaymentLandingContent(isValid);

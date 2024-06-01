@@ -52,7 +52,7 @@ namespace legallead.permissions.api.Utility
             }
             var user = GetUserOrDefault(requested.UserId ?? string.Empty, userDb);
             var intent = CreatePaymentIntent(amount, requested.CustomerId ?? string.Empty);
-            var successPg = (requested.InvoiceUri ?? string.Empty).Replace("discount-checkout", $"discount-result?id={externalId}&sts=success");
+            var successPg = GetSuccesUrl(requested.InvoiceUri, externalId);
             var failurePg = successPg.Replace("success", "cancel");
             var options = new SessionCreateOptions
             {
@@ -115,6 +115,18 @@ namespace legallead.permissions.api.Utility
             }
         }
 
+
+        public static string GetSuccesUrl(string? invoiceUri, string externalId)
+        {
+            const char question = '?';
+            const string landing = "discount";
+            string find = $"{landing}-checkout";
+            if (string.IsNullOrWhiteSpace(invoiceUri)) return string.Empty;
+            if (!invoiceUri.Contains(find)) return invoiceUri;
+            if (!invoiceUri.Contains(question)) return invoiceUri;
+            var prefix = invoiceUri.Split(question, StringSplitOptions.RemoveEmptyEntries)[0];
+            return prefix.Replace(find, $"{landing}-result?id={externalId}&sts=success");
+        }
         private static Tuple<bool, string, Invoice> FetchLatestInvoice(List<DiscountPaymentBo>? list, string? sessionId)
         {
             const double wait = 300f;
@@ -176,6 +188,7 @@ namespace legallead.permissions.api.Utility
             return intent;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
         private static User GetUserOrDefault(string userId, IUserRepository? userDb)
         {
             var fallback = new User { Id = userId };

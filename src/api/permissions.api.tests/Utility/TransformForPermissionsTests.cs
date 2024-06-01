@@ -1,10 +1,4 @@
 ﻿using legallead.jdbc.entities;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Utility
 {
@@ -27,7 +21,7 @@ namespace permissions.api.tests.Utility
             {
                 using var builder = new PaymentHtmlTranslatorBuilder();
                 LevelRequestBo? apiResponse = hasDiscount ? PaymentHtmlHelper.LevelFaker.Generate() : null;
-                User? user = hasUser ? PaymentHtmlHelper.UserFaker.Generate() : null;                
+                User? user = hasUser ? PaymentHtmlHelper.UserFaker.Generate() : null;
                 var summary = PaymentHtmlHelper.PurchaseSummaryFaker.Generate();
                 var permission = new KeyValuePair<bool, string>(true, "unit test response");
                 var svc = builder.MockCustDb;

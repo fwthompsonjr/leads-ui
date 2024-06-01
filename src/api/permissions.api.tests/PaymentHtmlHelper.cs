@@ -74,6 +74,27 @@ namespace permissions.api.tests
             = new Faker<PaymentKeyWrapper>()
             .RuleFor(x => x.PaymentKey, y => y.Random.AlphaNumeric(8));
 
+        public static readonly Faker<SubscriptionModificationResponse> ModificationFaker
+            = new Faker<SubscriptionModificationResponse>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.UserId, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.PaymentIntentId, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.ClientSecret, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.ExternalId, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.Description, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.Amount, y => y.Random.Decimal(1, 8))
+            .RuleFor(x => x.SuccessUrl, y => y.Random.AlphaNumeric(8));
+
+        public static readonly Faker<DiscountPaymentBo> DiscountPaymentFaker
+            = new Faker<DiscountPaymentBo>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.UserId, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.ExternalId, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.LevelName, y => y.Random.AlphaNumeric(8))
+            .RuleFor(x => x.PriceType, y => "Monthly")
+            .RuleFor(x => x.Price, y => y.Random.Decimal(1, 108))
+            .RuleFor(x => x.CompletionDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
         public static readonly Faker<SearchInvoiceBo> InvoiceFaker
             = new Faker<SearchInvoiceBo>()

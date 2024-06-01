@@ -24,5 +24,18 @@ namespace legallead.permissions.api.Utility
                     searchDb).GetAwaiter().GetResult();
             return response?.ClientSecret ?? string.Empty;
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
+        public string GetSubscriptionSecret(LevelRequestBo requested, string paymentType = "Monthly")
+        {
+            var response =
+                StripeSubscriptionRetryService.CreatePaymentAsync(
+                    requested,
+                    paymentType,
+                    customerDb,
+                    userDb,
+                    searchDb).GetAwaiter().GetResult();
+            return response?.ClientSecret ?? string.Empty;
+        }
     }
 }

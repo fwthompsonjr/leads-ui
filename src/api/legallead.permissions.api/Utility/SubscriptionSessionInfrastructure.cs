@@ -93,7 +93,8 @@ namespace legallead.permissions.api.Utility
                 Customer = cust.CustomerId,
                 Items =
                 [
-                    new() {
+                    new()
+                    {
                         Price = priceId,
                         Quantity = 1,
                     },
