@@ -139,7 +139,7 @@ namespace legallead.permissions.api.Extensions
             {
                 { "//span[@name='invoice']", heading },
                 { "//span[@name='invoice-date']", createDate },
-                { "//span[@name='invoice-description']", description },
+                { "//span[@name='invoice-description']", englishText.ToTitleCase(description.ToLower()) },
                 { "//span[@name='invoice-total']", amount }
             };
             var keys = replacements.Keys.ToList();
@@ -208,17 +208,6 @@ namespace legallead.permissions.api.Extensions
             doc = new HtmlDocument();
             doc.LoadHtml(outerHtml);
             return doc.DocumentNode.OuterHtml;
-        }
-
-        [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
-        private static Tuple<bool, string, Invoice> VerifySubscription(string sessionId, string returnId)
-        {
-            var failure = new Tuple<bool, string, Invoice>(true, returnId, new() { Total = 0 });
-            if (GetInfrastructure is StripeInfrastructure stripe)
-            {
-                return stripe.VerifySubscription(sessionId);
-            }
-            return failure;
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
@@ -298,7 +287,7 @@ namespace legallead.permissions.api.Extensions
             return _invoiceDiscountScript;
         }
         [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
-        private static string GetDiscountDescription(string jstext)
+        public static string GetDiscountDescription(string jstext, bool hasTitle = false)
         {
             const string fallback = "n/a";
             const char slash = '\\';
@@ -312,10 +301,14 @@ namespace legallead.permissions.api.Extensions
                 var countyNames = englishText.ToTitleCase(string.Join(", ", counties.Select(x => x.CountyName)).ToLower());
                 var states = source.Choices.Where(w => w.IsSelected && string.IsNullOrWhiteSpace(w.CountyName));
                 var stateNames = englishText.ToTitleCase(string.Join(", ", states.Select(x => x.StateName)).ToLower());
+                if (string.IsNullOrWhiteSpace(stateNames)) { stateNames = "-None-"; }
+                if (string.IsNullOrWhiteSpace(countyNames)) { countyNames = "-None-"; }
+                var title = hasTitle ? "Initialize Discount(s) " : string.Empty;
                 var items = new[]
                 {
-                    $"Counties: {countyNames}<br/>",
-                    $"States: {stateNames}",
+                    $"{title}<br/>",
+                    $"<span style='margin-left: 10px'>States: {stateNames}</span><br/>",
+                    $"<span style='margin-left: 10px'>Counties: {countyNames}</span>",
                 };
                 return string.Join(Environment.NewLine, items);
             }

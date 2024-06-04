@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
@@ -223,25 +224,28 @@ namespace legallead.permissions.api.Utility
 
         public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
         {
+            string paymentType = "Monthly";
             bool? isPermissionSet = default;
             var externalIndex = id ?? string.Empty;
             var bo = (await _custDb.GetLevelRequestById(externalIndex)) ?? new() { ExternalId = externalIndex, IsPaymentSuccess = isvalid };
+            var expected = ((await _custRepo.GetLevelRequestPaymentAmount(externalIndex)) ?? []).FindAll(x => (x.PriceType ?? string.Empty).Equals(paymentType));
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
             bo = await _custDb.CompleteLevelRequest(bo);
-            var summary = await _repo.GetPurchaseSummary(externalIndex) ?? new();
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
                 isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
             }
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
+            var price = expected.Sum(x => x.Price);
             var paymentDate = ToDateString(bo?.CompletionDate, dash);
-            var paymentAmount = ToCurrencyString(summary.Price, dash);
+            var paymentAmount = ToCurrencyString(price, dash);
             UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
             UserLevelHtmlMapper.SetUserDetail(doc, user);
             UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
             UserLevelHtmlMapper.SetProductPaymentDate(doc, paymentDate);
             UserLevelHtmlMapper.SetProductPaymentAmount(doc, paymentAmount);
+            UserLevelHtmlMapper.SetProductPaymentReferenceNumber(doc, externalIndex);
             UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
 
             var tranformed = doc.DocumentNode.OuterHtml;
@@ -251,6 +255,7 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
         public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
         {
+            string paymentType = "Monthly";
             bool? isPermissionSet = default;
             if (_custDb is CustomerInfrastructure cdb)
             {
@@ -265,11 +270,19 @@ namespace legallead.permissions.api.Utility
             {
                 isPermissionSet = true;
             }
+            var expected = ((await _custRepo.GetDiscountRequestPaymentAmount(externalId)) ?? []).FindAll(x => (x.PriceType ?? string.Empty).Equals(paymentType));
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
+            var price = expected.Sum(x => x.Price);
+            var paymentDate = ToDateString(bo?.CompletionDate, dash);
+            var paymentAmount = ToCurrencyString(price, dash);
+            var description = InvoiceExtensions.GetDiscountDescription(bo?.LevelName ?? string.Empty, true);
             UserLevelHtmlMapper.SetPageHeading(doc, isvalid);
             UserLevelHtmlMapper.SetUserDetail(doc, user);
-            UserLevelHtmlMapper.SetProductDescription(doc, bo?.LevelName);
+            UserLevelHtmlMapper.SetProductPaymentDate(doc, paymentDate);
+            UserLevelHtmlMapper.SetProductPaymentAmount(doc, paymentAmount);
+            UserLevelHtmlMapper.SetDiscountDescription(doc, description);
+            UserLevelHtmlMapper.SetProductPaymentReferenceNumber(doc, externalId);
             UserLevelHtmlMapper.SetPermissionsErrorFlag(doc, isPermissionSet);
             var tranformed = doc.DocumentNode.OuterHtml;
             return tranformed;
@@ -407,6 +420,21 @@ namespace legallead.permissions.api.Utility
                 });
             }
 
+            public static void SetDiscountDescription(HtmlDocument document, string? level)
+            {
+                if (string.IsNullOrEmpty(level)) return;
+                var lookup = new Dictionary<string, string>()
+                {
+                    { "//div[@name='payment-details-payment-product']", level },
+                };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var txt = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = txt; }
+                });
+            }
             public static void SetProductPaymentDate(HtmlDocument document, string? paymentDate)
             {
                 if (string.IsNullOrEmpty(paymentDate)) return;
@@ -430,6 +458,22 @@ namespace legallead.permissions.api.Utility
                 var lookup = new Dictionary<string, string>()
             {
                 { "//div[@name='payment-details-payment-amount']", paymentAmount },
+            };
+                var keys = lookup.Keys.ToList();
+                keys.ForEach(key =>
+                {
+                    var txt = lookup[key];
+                    var node = document.DocumentNode.SelectSingleNode(key);
+                    if (node != null) { node.InnerHtml = txt; }
+                });
+            }
+
+            public static void SetProductPaymentReferenceNumber(HtmlDocument document, string? referenceId)
+            {
+                if (string.IsNullOrEmpty(referenceId)) return;
+                var lookup = new Dictionary<string, string>()
+            {
+                { "//div[@name='payment-details-reference-id']", referenceId },
             };
                 var keys = lookup.Keys.ToList();
                 keys.ForEach(key =>

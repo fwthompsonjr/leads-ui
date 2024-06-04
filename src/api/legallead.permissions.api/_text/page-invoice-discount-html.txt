@@ -413,10 +413,10 @@
 									</span>
 									<span name="invoice-total" class="ml-2">$0.00</span>
 								</h6>
-								<h6 class="text-start">
+								<h6 class="text-start" style="margin-left: 15px">
 									<span name="invoice-disclaimer" class="text-secondary">
-                                        <small>Please note: 
-                                            Invoice total represents cumulative total of all discounts.
+                                        <small>Please note: <br/>
+                                            Invoice total represents cumulative total of all discounts.<br/>
                                             Sometimes, this value can be negative, if you are cancelling an active discount.
                                         </small>
 									</span>
