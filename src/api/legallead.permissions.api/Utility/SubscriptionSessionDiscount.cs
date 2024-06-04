@@ -154,9 +154,8 @@ namespace legallead.permissions.api.Utility
                 response.Url = returnUri;
                 return response;
             }
-            catch (StripeException e)
+            catch
             {
-                Console.WriteLine($"Failed to create subscription.{e}");
                 return response;
             }
         }
