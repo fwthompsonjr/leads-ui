@@ -190,10 +190,11 @@ let permissions_data = {
 		const submitmessage = "<span class='text-warning'>Submitting form values ...</span>";
 		targetScreen.setStatus( submitmessage, true );
 		targetScreen.setIcon( true );
-		let js = JSON.stringify( dta );
-		jsobj.submit(frmname, js);
 		targetScreen.setStatus( '', false );
 		targetScreen.setAlert( true );
+		permisionChangeRequested();
+		let js = JSON.stringify( dta );
+		jsobj.submit(frmname, js);
 	} catch (err) {
 		targetScreen.setStatus( err, true );
 	} finally {
@@ -202,7 +203,26 @@ let permissions_data = {
 	return false;
  }
 };
+function permisionChangeRequested() {
+	var dv = document.getElementById('dv-subcontent-permissions-success');
+	var spn = dv.getElementsByTagName('span')[0];
+	dv.classList.remove('alert-success');
+	dv.classList.add('alert-warning');
+	spn.innerHTML = 'Please wait... submitting account change details';
+	var elementStyle = dv.style;
+	elementStyle.position = "relative";
+	elementStyle.left = "45px";
+	elementStyle.top = "10px";
+	
+	var bttn = document.getElementById('frm-permissions-submit-button');
+	var iconOne = bttn.getElementsByTagName("i")[0];
+	var iconSpin = bttn.getElementsByTagName("i")[1];
+	var dnone = "d-none";
+	iconOne.classList.add(dnone);
+	iconSpin.classList.remove(dnone);
 
+	bttn.setAttribute("disabled", "disabled");
+}
 function changePasswordSubmitButtonClicked() {
 	permissions_data.submission();
 }
