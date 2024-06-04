@@ -98,13 +98,26 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public object SessionStatus(string sessionId)
         {
-            var sessionService = new SessionService();
-            Session session = sessionService.Get(sessionId);
-            return new
+            try
             {
-                status = session.RawJObject["status"],
-                customer_email = session.RawJObject["customer_details"]?["email"]
-            };
+
+                var sessionService = new SessionService();
+                Session session = sessionService.Get(sessionId);
+                return new
+                {
+                    status = session.RawJObject["status"],
+                    customer_email = session.RawJObject["customer_details"]?["email"]
+                };
+            }
+            catch (Exception ex)
+            {
+                return new
+                {
+                    status = "none",
+                    customer_email = "",
+                    message = ex.Message
+                };
+            }
         }
 
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
