@@ -1,9 +1,12 @@
 # legallead.desktop   
 Desktop version of lead sourcing application   
 
-# Versions  
+# Versions   
 
 ## vX.Y.Z - ReleaseDate
+ - Bug fix: account permissions invoicing process
+
+## v3.2.13 ( 2024-05-30 01:06:33 )
  - Bug fix: account profile change should display payment invoice  
  - Bug fix: account profile invoice should allow cc entry  
 
