@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace legallead.desktop.js
 {
@@ -38,6 +39,8 @@ namespace legallead.desktop.js
             var submission = ObjectExtensions.TryGet<UserPermissionChangeRequest>(json);
             if (submission == null || !submission.CanSubmit) return;
             var js = MapPayload(submission);
+            SetLoadingStatus();
+            Thread.Sleep(250);
             var response = permissionApi?.Post(AddressMap[submission.SubmissionName], js, user).Result;
             var htm = JsCompletedHandler.ConvertHTML(response);
             if (response == null || response.StatusCode != 200)
@@ -51,6 +54,16 @@ namespace legallead.desktop.js
                 response.Message,
                 this,
                 web);
+        }
+
+        /// <summary>
+        /// Configure UI that submission is posting
+        /// </summary>
+        /// <param name="htm"></param>
+        private void SetLoadingStatus()
+        {
+            if (!HasBrowser || web == null) return;
+            web.ExecuteScriptAsync("permisionChangeRequested()");
         }
 
         /// <summary>
