@@ -1,4 +1,8 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.interfaces;
+using legallead.desktop.models;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,7 +100,8 @@ namespace legallead.desktop.utilities
         {
             const char dash = '-';
             const char plus = '+';
-            const string fallback = "3.2.10";
+            var mode = GetAppPaymentMode();
+            string fallback = string.Concat("3.2.10", mode);
             var process = Process.GetCurrentProcess();
             if (process == null) return fallback;
             string processExe = process.MainModule?.ModuleName ?? string.Empty;
@@ -109,7 +114,19 @@ namespace legallead.desktop.utilities
             if (parsed.Length < 2) return fallback;
             var item = parsed[1];
             if (!item.Contains(plus)) return fallback;
-            return item.Split(plus)[0];
+            var revised = item.Split(plus)[0];
+            return string.Concat(revised, mode);
+        }
+        private static string GetAppPaymentMode()
+        {
+            const string test = " (TEST)";
+            var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
+            if (api == null) return test;
+            var getpayment = api.Get("payment-process-type").GetAwaiter().GetResult();
+            if (getpayment == null || getpayment.StatusCode != 200) return test;
+            var model = JsonConvert.DeserializeObject<PaymentProcessModel>(getpayment.Message);
+            if (model == null) return test;
+            return model.IsLive ? string.Empty : test;
         }
     }
 }

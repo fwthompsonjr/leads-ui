@@ -1,5 +1,9 @@
 [
   {
+    "id": 9,
+    "description": "Payment: Get Payment Process Type."
+  },
+  {
     "id": 8,
     "description": "Account Permissions: Process refinement."
   },

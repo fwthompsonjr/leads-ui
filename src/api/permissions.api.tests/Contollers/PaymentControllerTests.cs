@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,48 @@ namespace permissions.api.tests.Contollers
             .RuleFor(x => x.LineId, y => y.Random.Guid().ToString())
             .RuleFor(x => x.UserId, y => y.Random.Guid().ToString())
             .RuleFor(x => x.ItemType, y => y.Person.FirstName);
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void SutCanGetPaymentType(int testMode)
+        {
+            var code = new Faker().Random.AlphaNumeric(14);
+            string? paymentkey = testMode switch
+            {
+                0 => "null",
+                1 => code,
+                2 => string.Concat("live_", code),
+                _ => string.Empty
+            };
+            var provider = GetProvider(paymentkey);
+            var service = provider.GetRequiredService<PaymentController>();
+            var result = service.GetPaymentType();
+            Assert.NotNull(result);
+            if (testMode == 0)
+            {
+                Assert.IsAssignableFrom<AcceptedResult>(result);
+                Assert.NotNull(((AcceptedResult)result).Value);
+                if (result is not AcceptedResult accepted) return;
+                if (accepted.Value is not PaymentModeResponse model1) return;
+                Assert.False(model1.IsLive);
+                Assert.Equal("", model1.Name);
+            }
+            else
+            {
+                Assert.IsAssignableFrom<OkObjectResult>(result);
+                Assert.NotNull(((OkObjectResult)result).Value);
+                if (result is not OkObjectResult okresult) return;
+                if (okresult.Value is not PaymentModeResponse model) return;
+                bool isLive = testMode == 2;
+                var expectedName = isLive ? "PROD" : "TEST";
+                Assert.Equal(isLive, model.IsLive);
+                Assert.Equal(expectedName, model.Name);
+
+            }
+        }
 
         [Fact]
         public void SutCanGetProductCodes()
@@ -104,12 +147,16 @@ namespace permissions.api.tests.Contollers
             if (hasUser && hasGuid && hasPreview && !canCreateInvoice) Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(result);
         }
 
-        private static IServiceProvider GetProvider()
+        private static IServiceProvider GetProvider(string paymentMode = "")
         {
             var service = new ServiceCollection();
             var mqSearch = new Mock<ISearchInfrastructure>();
             var mqStripe = new Mock<IStripeInfrastructure>();
             var option = optionfaker.Generate();
+            if (!string.IsNullOrEmpty(paymentMode))
+            {
+                option.Key = paymentMode.Equals("null") ? string.Empty : paymentMode;
+            }
             //Arrange
             var request = new Mock<HttpRequest>();
             request.Setup(x => x.Scheme).Returns("http");

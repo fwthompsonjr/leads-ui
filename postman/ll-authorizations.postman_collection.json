@@ -1927,8 +1927,7 @@
 							{
 								"key": "APP_IDENTITY",
 								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
+								"description": "App service header"
 							}
 						],
 						"body": {
@@ -2747,6 +2746,234 @@
 							],
 							"path": [
 								"{{PAYMENT_CREATE_SESSION}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPaymentType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 202 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2b4a8291-c5d5-11ee-be26-0af7a01f52e9\",\r\n    \"name\": \"legallead.invoice.request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/payment/payment-process-type",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"payment-process-type"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductCodes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 202 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2b4a8291-c5d5-11ee-be26-0af7a01f52e9\",\r\n    \"name\": \"legallead.invoice.request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/payment/product-codes",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"product-codes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetSessionStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 202 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\": \"2b4a8291-c5d5-11ee-be26-0af7a01f52e9\",\r\n    \"name\": \"legallead.invoice.request\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/payment/session-status?session_id=123456789",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"payment",
+								"session-status"
+							],
+							"query": [
+								{
+									"key": "session_id",
+									"value": "123456789"
+								}
 							]
 						}
 					},

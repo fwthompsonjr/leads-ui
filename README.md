@@ -4,6 +4,9 @@ Desktop version of lead sourcing application
 # Versions   
 
 ## vX.Y.Z - ReleaseDate
+ - Enhancement: display payment processing mode
+
+## v3.2.14 ( 2024-06-04 13:10:04 )
  - Bug fix: account permissions invoicing process
 
 ## v3.2.13 ( 2024-05-30 01:06:33 )
