@@ -32,7 +32,9 @@ namespace legallead.records.search.UnitTests.Web
             {
                 var src = SrcFile.Replace(@"\", "/");
                 var url = string.Concat("file:", "///", src);
-                GetDriver = new FirefoxDriver
+                var options = new FirefoxOptions();
+                options.AddArgument("-headless");
+                GetDriver = new FirefoxDriver(options)
                 {
                     Url = url
                 };
