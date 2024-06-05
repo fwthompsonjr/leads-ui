@@ -2,10 +2,12 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Model;
 using legallead.reader.component;
+using legallead.reader.component.services;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
 using Newtonsoft.Json;
 using OfficeOpenXml;
+using System.Diagnostics;
 
 namespace component
 {
@@ -22,9 +24,14 @@ namespace component
             ISearchQueueRepository? repo,
             IBgComponentRepository? component,
             IBackgroundServiceSettings? settings,
-            IExcelGenerator excel) : base(logger, repo, component, settings)
+            IExcelGenerator excel,
+            MainWindowService main) : base(logger, repo, component, settings)
         {
             generator = excel;
+            if (!main.IsMainVisible)
+            {
+                Debug.WriteLine("Main window is hidden.");
+            }
         }
 
         public void Search()
@@ -63,6 +70,7 @@ namespace component
                     IsWorking = true;
                     var queue = GetQueue().Result;
                     if (queue.Count == 0) { return; }
+                    using var hideprocess = new HiddenWindowService();
                     var message = $"Found ( {queue.Count} ) records to process.";
                     DataService.Echo(message);
                     queue.ForEach(Generate);
