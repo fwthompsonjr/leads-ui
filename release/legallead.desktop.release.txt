@@ -1,5 +1,10 @@
 [
 	{
+		"label": "3.2.15",
+		"trackingDt": "2024-06-04T11:30",
+		"description": "Display payment processing mode in status bar."
+	},
+	{
 		"label": "3.2.14",
 		"trackingDt": "2024-06-04T07:30",
 		"description": "Account permission payment process."

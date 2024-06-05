@@ -5,6 +5,7 @@
 
 <# Setup variable names #>
     $indicator = "-------------------------------------------------------------------";
+    $revised   = "-----------------------------------------------------------------"
     $jsOutputName = "ll-authorizations-summary.txt";
 
 <# compute local file system locations #>
@@ -64,6 +65,16 @@ function writeGitAction( $content )
     }
 }
 [string]$content = [System.IO.File]::ReadAllText( $jsOutputFile );
+$hasIndicator = $content.IndexOf( $indicator ) -gt 0;
+if ($hasIndicator -eq $false){
+    $indicator = $revised;
+    $hasIndicator = $content.IndexOf( $indicator ) -gt 0;
+}
+if ($hasIndicator -eq $false) {
+    Write-Output "Unable to parse summary result";
+    return;
+}
+
 
 $aa = $content.IndexOf( $indicator );
 $bb = $content.LastIndexOf( $indicator );
