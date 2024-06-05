@@ -1,0 +1,21 @@
+
+{
+    "region" : "us-east-2",
+    "configuration" : "Debug",
+    "framework"     : "net8.0",
+    "self-contained" : true,
+    "application"    : "legalleadwebreader",
+    "environment"    : "legalleadwebreader-dev",
+    "app-path"       : "/",
+    "iis-website"    : "Default Web Site",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "",
+    "solution-stack"       : "64bit Windows Server Core 2019 v2.15.1 running IIS 10.0",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "legalleadwebreader-dev",
+    "instance-type"        : "t3a.medium",
+    "key-pair"             : "kvp-lead-app",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role"
+}
