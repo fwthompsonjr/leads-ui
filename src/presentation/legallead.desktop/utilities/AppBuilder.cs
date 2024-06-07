@@ -48,6 +48,9 @@ namespace legallead.desktop.utilities
             if (ServiceProvider == null)
             {
                 var serviceCollection = new ServiceCollection();
+                serviceCollection.AddSingleton<IQueueSettings>(q => GetQueueSetting(Configuration));
+                serviceCollection.AddSingleton<IQueueStopper, QueueStopper>();
+                serviceCollection.AddSingleton<IQueueStarter, QueueStarter>();
                 ConfigureServices(serviceCollection);
                 ServiceProvider = serviceCollection.BuildServiceProvider();
             }
@@ -86,6 +89,17 @@ namespace legallead.desktop.utilities
             return keyvalues[0] == "test" ? keyvalues[1] : keyvalues[2];
         }
 
+        private static QueueSettings GetQueueSetting(IConfiguration configuration)
+        {
+            var setting = new QueueSettings
+            {
+                Name = configuration["queue::name"] ?? string.Empty,
+                FolderName = configuration["queue::folder"] ?? string.Empty
+            };
+            var queueEnabled = configuration["queue::isEnabled"] ?? string.Empty;
+            if (bool.TryParse(queueEnabled, out var isEnabled)) { setting.IsEnabled = isEnabled; }
+            return setting;
+        }
         private static void ConfigureServices(IServiceCollection services)
         {
             var provider = DesktopCoreServiceProvider.Provider;
