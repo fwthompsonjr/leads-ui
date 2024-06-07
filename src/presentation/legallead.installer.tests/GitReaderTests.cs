@@ -6,6 +6,7 @@ namespace legallead.installer.tests
 {
     public class GitReaderTests
     {
+        private static readonly string[] Repos = ["leads-ui", "leads-reader"];
         private static readonly Faker<ReleaseAssetModel> assetFaker =
             new Faker<ReleaseAssetModel>()
             .RuleFor(x => x.AssetId, y => y.Random.Int(100, 2000))
@@ -20,6 +21,12 @@ namespace legallead.installer.tests
             .RuleFor(x => x.Id, y => y.Random.Long(1, 1000))
             .RuleFor(x => x.RepositoryId, y => y.Random.Long(1, 1000))
             .RuleFor(x => x.PublishDate, y => y.Date.Recent())
+            .RuleFor(x => x.RepositoryName, y =>
+            {
+                var dc = y.Random.Double();
+                var id = dc > 0.75d ? 1 : 0;
+                return Repos[id];
+            })
             .FinishWith((x, m) =>
             {
                 var nbr = x.Random.Int(2, 5);
@@ -63,6 +70,10 @@ namespace legallead.installer.tests
         [InlineData("legallead.installer", true)]
         [InlineData("LEGALLEAD.INSTALLER", true)]
         [InlineData("Legallead.Installer", true)]
+        [InlineData("legallead.reader.service", true)]
+        [InlineData("  legallead.reader.service", true)]
+        [InlineData("legallead.reader.service  ", true)]
+        [InlineData("  legallead.reader.service  ", true)]
         public void ClientCanVerify(string name, bool expected)
         {
             var client = new GitReader();

@@ -12,13 +12,16 @@ namespace legallead.installer.Classes
         public async Task<List<ReleaseModel>?> GetReleases()
         {
             var releases = await GitClientProvider.GetReleases();
+            var alternates = await GitReaderRepository.GetReleases();
+            if (releases == null && alternates != null) return alternates;
+            if (releases != null && alternates != null) {  releases.AddRange(alternates); }
             return releases;
         }
 
         [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task<List<ReleaseAssetModel>?> GetAssets()
         {
-            var releases = await GitClientProvider.GetReleases();
+            var releases = await GetReleases();
             if (releases == null) return null;
             var assets = releases.SelectMany(s => s.Assets).ToList();
             assets.Sort((a, b) =>
@@ -35,7 +38,13 @@ namespace legallead.installer.Classes
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
 
             if (string.IsNullOrWhiteSpace(version) && string.IsNullOrWhiteSpace(app)) return null;
-            var list = models.SelectMany(x => x.Assets).ToList().FindAll(x => x.Name.StartsWith(app, oic));
+            var alt = models
+                .Where(w => w.RepositoryName == "leads-reader")
+                .SelectMany(x => x.Assets).ToList().FindAll(x => x.Name.StartsWith(app, oic));
+            var list = models
+                .Where(w => w.RepositoryName != "leads-reader")
+                .SelectMany(x => x.Assets).ToList().FindAll(x => x.Name.StartsWith(app, oic));
+            list.AddRange(alt);
             if (list.Count == 1 || string.IsNullOrEmpty(version)) return list[0];
             var item = list.Find(x => x.Name.Equals(app, oic) && x.Version.Equals(version, oic));
             return item;

@@ -8,6 +8,18 @@ $commands = [ordered]@{
 		"file" = "installation-002.ps1"
 		"description" = "Download and Install Legal Lead Installer"
 	}
+	"chocolatey" = @{
+		"file" = "installation-003.ps1"
+		"description" = "Download and Install Chocolatey"
+	}
+	"firefox" = @{
+		"file" = "installation-004.ps1"
+		"description" = "Download and Install Firefox"
+	}
+	"search" = @{
+		"file" = "installation-005.ps1"
+		"description" = "Setup Search Folders"
+	}
 }
 function executeCommand( $path ) {
 	try {

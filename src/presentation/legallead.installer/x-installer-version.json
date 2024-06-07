@@ -1,5 +1,10 @@
 [
   {
+    "id": "3.2.6",
+    "description": "Enhancemnt to deploy reader component.",
+    "date": "2024-06-06"
+  },
+  {
     "id": "3.2.5",
     "description": "Bug fix of uninstall should remove shortcut.",
     "date": "2024-05-15"

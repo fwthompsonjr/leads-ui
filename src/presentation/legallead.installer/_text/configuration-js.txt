@@ -2,9 +2,11 @@
     "key":  "-- no data --",
     "product":  "legallead.installer",
     "repository":  "leads-ui",
+    "reader":  "leads-reader",
     "createShortcut":  true,
     "packages":  [
                      "legallead.desktop-windows",
-                     "legallead.installer"
+                     "legallead.installer",
+                     "legallead.reader.service"
                  ]
 }

@@ -40,6 +40,9 @@
 		<None Include="AppSettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Include="..\..\..\testing\installation-suite\scripts\steps\reader.config.json" Link="_reader\reader.config.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<Content Include="legallead-icon.ico" />
 	</ItemGroup>
 	<ItemGroup>
@@ -61,7 +64,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\legallead.desktop.core\legallead.desktop.core.csproj" />
 	</ItemGroup>
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent"  Condition="'$(Configuration)' == 'Release'">
+
+	<ItemGroup>
+	  <Folder Include="_reader\" />
+	</ItemGroup>
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)' == 'Release'">
 		<Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File pre-build.ps1" ContinueOnError="true" />
 	</Target>
 </Project>
