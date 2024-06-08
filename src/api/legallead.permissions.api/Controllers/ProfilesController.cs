@@ -22,12 +22,16 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("get-contact-index")]
-        public async Task<IActionResult> GetContactId()
+        public async Task<IActionResult> GetContactId(GetContactRequest request)
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
                 };
             var current = fallback[0];
+            if (!(request.RequestType ?? string.Empty).Equals("UserId", StringComparison.OrdinalIgnoreCase))
+            {
+                return Conflict(current);
+            }
             var user = await _db.GetUser(Request);
             if (user == null)
             {

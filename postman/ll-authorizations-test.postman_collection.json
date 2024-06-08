@@ -1508,7 +1508,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "",
+									"raw": "{ \"RequestType\": \"UserId\" }",
 									"options": {
 										"raw": {
 											"language": "json"

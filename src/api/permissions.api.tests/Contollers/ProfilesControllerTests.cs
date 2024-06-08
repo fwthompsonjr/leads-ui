@@ -73,18 +73,24 @@ namespace permissions.api.tests.Contollers
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
         }
 
-        [Fact]
-        public async Task ControllerCanGetContactId()
+
+        [Theory]
+        [InlineData("userId")]
+        [InlineData("UserId")]
+        [InlineData("userid")]
+        [InlineData("")]
+        public async Task ControllerCanGetContactId(string requestType)
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            var payload = new GetContactRequest { RequestType = requestType };
             var user = provider.GetRequiredService<User>();
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
             infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactId();
+            var response = await controller.GetContactId(payload);
             Assert.NotNull(response);
         }
 
@@ -94,12 +100,13 @@ namespace permissions.api.tests.Contollers
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
             User? user = default;
+            var payload = new GetContactRequest { RequestType = "userid" };
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
             infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactId();
+            var response = await controller.GetContactId(payload);
             Assert.NotNull(response);
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
         }
