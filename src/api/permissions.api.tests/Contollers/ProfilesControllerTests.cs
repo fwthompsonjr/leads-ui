@@ -74,6 +74,37 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
+        public async Task ControllerCanGetContactId()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            var user = provider.GetRequiredService<User>();
+            var roleName = new Faker().PickRandom(RoleNames);
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactId();
+            Assert.NotNull(response);
+        }
+
+        [Fact]
+        public async Task ControllerGetContactIdWithNullUser()
+        {
+            var provider = GetTestArtifacts();
+            var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
+            User? user = default;
+            var roleName = new Faker().PickRandom(RoleNames);
+            var controller = provider.GetRequiredService<ProfilesController>();
+
+            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactId();
+            Assert.NotNull(response);
+            Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
+        }
+
+        [Fact]
         public async Task ControllerCanGetContactDetail()
         {
             var provider = GetTestArtifacts();

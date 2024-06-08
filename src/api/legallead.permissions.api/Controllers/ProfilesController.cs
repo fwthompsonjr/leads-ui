@@ -21,6 +21,26 @@ namespace legallead.Profiles.api.Controllers
         internal IProfileRequestVerification GetVerification { get; set; }
 
         [HttpPost]
+        [Route("get-contact-index")]
+        public async Task<IActionResult> GetContactId()
+        {
+            var fallback = new GetContactResponse[] {
+                new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
+                };
+            var current = fallback[0];
+            var user = await _db.GetUser(Request);
+            if (user == null)
+            {
+                current.Message = "Invalid user account.";
+                return Unauthorized(current);
+            }
+            current.IsOK = true;
+            current.ResponseType = "Success";
+            current.Message = user.Id;
+            return Ok(current);
+        }
+
+        [HttpPost]
         [Route("get-contact-identity")]
         public async Task<IActionResult> GetContactIdentity()
         {
