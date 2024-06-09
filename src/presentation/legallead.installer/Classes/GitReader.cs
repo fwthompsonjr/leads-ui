@@ -14,7 +14,7 @@ namespace legallead.installer.Classes
             var releases = await GitClientProvider.GetReleases();
             var alternates = await GitReaderRepository.GetReleases();
             if (releases == null && alternates != null) return alternates;
-            if (releases != null && alternates != null) {  releases.AddRange(alternates); }
+            if (releases != null && alternates != null) { releases.AddRange(alternates); }
             return releases;
         }
 

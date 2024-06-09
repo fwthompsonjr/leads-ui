@@ -1,10 +1,8 @@
-﻿using AngleSharp.Text;
-using CefSharp;
+﻿using CefSharp;
 using CefSharp.Wpf;
 using legallead.desktop.entities;
 using legallead.desktop.handlers;
 using legallead.desktop.interfaces;
-using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;

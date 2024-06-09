@@ -80,9 +80,16 @@ namespace legallead.desktop.js
         private void SubmitCompleted()
         {
             if (!HasBrowser || web == null) return;
+            var queueStart = GetQueueStarter();
+            queueStart?.Start();
             web.ExecuteScriptAsync(scriptNames[2]);
         }
-
+        private static IQueueStarter? GetQueueStarter()
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var starter = provider?.GetService<IQueueStarter>();
+            return starter;
+        }
         private static object MapPayload(string formName, object payload)
         {
             var js = Convert.ToString(payload);

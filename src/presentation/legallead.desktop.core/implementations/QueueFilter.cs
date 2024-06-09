@@ -63,7 +63,8 @@ namespace legallead.desktop.implementations
             try
             {
                 File.Delete(fileInfo.FullName);
-            } catch 
+            }
+            catch
             {
                 // this item is intentionally blacnk
             }

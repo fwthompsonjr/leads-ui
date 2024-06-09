@@ -1,18 +1,11 @@
 ﻿using legallead.desktop.interfaces;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.implementations
 {
     internal class QueueStarter : QueueLocalStarter
     {
-        public QueueStarter(IQueueSettings settings, IQueueStopper stopper) : base (settings, stopper)
+        public QueueStarter(IQueueSettings settings, IQueueStopper stopper) : base(settings, stopper)
         {
             ParentName = TargetFolder(settings.FolderName);
         }

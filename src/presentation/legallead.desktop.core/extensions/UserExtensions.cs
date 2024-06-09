@@ -47,7 +47,7 @@ namespace legallead.desktop.extensions
             var response = await api.Post(landing, payload, user);
             if (response.StatusCode != 200) return string.Empty;
             var data = ObjectExtensions.TryGet<ContactProfileResponse>(response.Message);
-            if (data == null || 
+            if (data == null ||
                 string.IsNullOrEmpty(data.Message) ||
                 !Guid.TryParse(data.Message, out var _)) return string.Empty;
             return data.Message;

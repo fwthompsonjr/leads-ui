@@ -1,10 +1,5 @@
 ﻿using legallead.desktop.interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.desktop.implementations
 {
@@ -12,7 +7,7 @@ namespace legallead.desktop.implementations
     {
         private readonly IQueueSettings queueSettings;
         public QueueStopper(IQueueSettings settings)
-        { 
+        {
             queueSettings = settings;
         }
 
@@ -27,7 +22,7 @@ namespace legallead.desktop.implementations
 
                 var processes = Process.GetProcessesByName(ServiceName).ToList();
                 if (processes.Count == 0) { return; }
-                processes.ForEach(p => { p.Kill(); }); 
+                processes.ForEach(p => { p.Kill(); });
             }
         }
 

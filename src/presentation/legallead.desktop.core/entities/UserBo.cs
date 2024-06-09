@@ -58,21 +58,10 @@ namespace legallead.desktop.entities
 
         public string GetAppServiceHeader()
         {
-            if(Applications == null) return string.Empty;
+            if (Applications == null) return string.Empty;
             if (Applications.Length <= 0) return string.Empty;
-            AppendUserToQueue();
             var item = Applications[0];
             return JsonConvert.SerializeObject(item);
-        }
-
-        private void AppendUserToQueue()
-        {
-            var provider = DesktopCoreServiceProvider.Provider;
-            var api = provider?.GetService<IPermissionApi>();
-            var helper = provider?.GetService<IQueueFilter>();
-            if (api == null || helper == null) return;
-            var userId = this.GetUserId(api).GetAwaiter().GetResult();
-            helper.Append(userId);
         }
 
         private static bool IsExpired(DateTime expires)
