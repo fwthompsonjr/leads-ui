@@ -16,10 +16,6 @@ $commands = [ordered]@{
 		"file" = "installation-004.ps1"
 		"description" = "Download and Install Firefox"
 	}
-	"search" = @{
-		"file" = "installation-005.ps1"
-		"description" = "Setup Search Folders"
-	}
 }
 function executeCommand( $path ) {
 	try {
@@ -49,12 +45,24 @@ $commands.GetEnumerator() | ForEach-Object {
 	}
 }
 if ( $hasError -eq $false ) {
+	$name = "legallead.desktop-windows"
 	try {
-		$name = "legallead.desktop-windows"
 		leadcli install -n $name
 		(New-Object -ComObject shell.application).toggleDesktop()
 	} catch {
-		Write-Warning "There was an issue installing application."
+		$hasError = $true;
+		Write-Warning "There was an issue installing $name application."
+		Write-Warning "Please check logs for additional information."
+	}
+}
+if ( $hasError -eq $false ) {
+	$svcname = "legallead.reader.service"
+	try {
+		leadcli install -n $svcname
+		(New-Object -ComObject shell.application).toggleDesktop()
+	} catch {
+		$hasError = $true;
+		Write-Warning "There was an issue installing $svcname application."
 		Write-Warning "Please check logs for additional information."
 	}
 }
