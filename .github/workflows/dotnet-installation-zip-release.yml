@@ -63,10 +63,7 @@ jobs:
       run: |
           gh release create ${{ env.BUILD_VERSION }} -F ./testing/README.md
 
-    - name: Package windows x64
-      if: github.event_name == 'pull_request'
-      shell: bash
-      env:
-        GITHUB_TOKEN: ${{ github.TOKEN }}
-      run: |
-          gh release upload ${{ env.BUILD_VERSION }} ${{ env.ZIPFILE_NAME }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: installer
+        path: ${{ github.workspace }}/legallead.zip.installation*.zip
