@@ -173,7 +173,5 @@ namespace legallead.installer.Classes
         private static string? _productName = string.Empty;
         private static string? _repositoryName = string.Empty;
         private static string? _readerName = string.Empty;
-        private static bool? _createShortcut;
-        private static readonly Dictionary<string, object?> AssetContents = [];
     }
 }
