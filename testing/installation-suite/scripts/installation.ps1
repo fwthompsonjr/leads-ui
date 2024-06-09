@@ -16,6 +16,10 @@ $commands = [ordered]@{
 		"file" = "installation-004.ps1"
 		"description" = "Download and Install Firefox"
 	}
+	"environment" = @{
+		"file" = "installation-005.ps1"
+		"description" = "Organize environment path variable"
+	}
 }
 function executeCommand( $path ) {
 	try {
@@ -45,24 +49,18 @@ $commands.GetEnumerator() | ForEach-Object {
 	}
 }
 if ( $hasError -eq $false ) {
-	$name = "legallead.desktop-windows"
-	try {
-		leadcli install -n $name
-		(New-Object -ComObject shell.application).toggleDesktop()
-	} catch {
-		$hasError = $true;
-		Write-Warning "There was an issue installing $name application."
-		Write-Warning "Please check logs for additional information."
+	$appnames = @( "legallead.desktop-windows", "legallead.reader.service");
+	$appnames.GetEnumerator() | ForEach-Object {
+		$aname = $_;
+		try {
+			leadcli install -n $aname
+		} catch {
+			$hasError = $true;
+			Write-Warning "There was an issue installing $aname application."
+			Write-Warning "Please check logs for additional information."
+		}
 	}
 }
 if ( $hasError -eq $false ) {
-	$svcname = "legallead.reader.service"
-	try {
-		leadcli install -n $svcname
-		(New-Object -ComObject shell.application).toggleDesktop()
-	} catch {
-		$hasError = $true;
-		Write-Warning "There was an issue installing $svcname application."
-		Write-Warning "Please check logs for additional information."
-	}
+	(New-Object -ComObject shell.application).toggleDesktop()
 }
