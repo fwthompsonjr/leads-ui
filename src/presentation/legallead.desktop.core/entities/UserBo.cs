@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using legallead.desktop.extensions;
+using legallead.desktop.interfaces;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace legallead.desktop.entities
 {
@@ -54,8 +58,8 @@ namespace legallead.desktop.entities
 
         public string GetAppServiceHeader()
         {
-            var count = Applications?.Length ?? 0;
-            if (count <= 0 || Applications == null) return string.Empty;
+            if (Applications == null) return string.Empty;
+            if (Applications.Length <= 0) return string.Empty;
             var item = Applications[0];
             return JsonConvert.SerializeObject(item);
         }

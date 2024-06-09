@@ -14,5 +14,10 @@
   }
   "stripe":{
     "key": "sk_test_51LCZucDhgP60CL9xtS9RSEC5IhGsKkZwnNxwFwpHbDHLLBLvB87uICAJB5fVZNyqEHNpI9ZbLYwFFKXPNnbgucs200OOT3UvbK"
+  },
+  "queue": {
+    "name": "legallead.reader.service",
+    "folder": "_ll-applications",
+    "isEnabled": true
   }
 }

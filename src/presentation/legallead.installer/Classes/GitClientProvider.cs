@@ -139,7 +139,8 @@ namespace legallead.installer.Classes
                     Id = release.Id,
                     Name = release.TagName,
                     RepositoryId = repositoryId,
-                    PublishDate = release.PublishedAt.GetValueOrDefault().Date
+                    PublishDate = release.PublishedAt.GetValueOrDefault().Date,
+                    RepositoryName = RepositoryName
                 };
                 var assets = release.Assets.Where(w =>
                 {

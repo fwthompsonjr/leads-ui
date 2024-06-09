@@ -12,6 +12,8 @@ namespace legallead.installer.Models
         public string Product { get; set; } = string.Empty;
         [JsonProperty("repository")]
         public string Repository { get; set; } = string.Empty;
+        [JsonProperty("reader")]
+        public string ReadRepository { get; set; } = string.Empty;
         [JsonProperty("packages")]
         public List<string> Packages { get; set; } = [];
     }

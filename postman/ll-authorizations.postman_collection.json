@@ -1462,6 +1462,72 @@
 							"response": []
 						},
 						{
+							"name": "GetContactId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \"RequestType\": \"UserId\" }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{PROFILES_CONTACT_ID_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{PROFILES_CONTACT_ID_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "GetContactDetail_All",
 							"event": [
 								{
@@ -1960,7 +2026,22 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"  pm.response.to.have.status(200);\r",
-									"});"
+									"});\r",
+									"\r",
+									"pm.test(\"Response value matches expected\", function() {\r",
+									"    let expected = \"Contact details updated successfully.\";\r",
+									"    let actual = tryGetJsonField(\"value\");\r",
+									"    pm.expect(actual).to.contain(expected);\r",
+									"});\r",
+									"\r",
+									"function tryGetJsonField(fieldName){\r",
+									"    try {\r",
+									"        let response = pm.response.json();\r",
+									"        return response[fieldName];\r",
+									"    } catch {\r",
+									"        return null;\r",
+									"    }\r",
+									"}"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -3266,6 +3347,11 @@
 		{
 			"key": "SEARCH_RESTRICTION_STATUS_URL",
 			"value": "api/search/my-restriction-status",
+			"type": "string"
+		},
+		{
+			"key": "PROFILES_CONTACT_ID_URL",
+			"value": "api/profiles/get-contact-index",
 			"type": "string"
 		}
 	]

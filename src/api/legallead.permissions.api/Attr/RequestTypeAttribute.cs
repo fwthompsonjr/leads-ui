@@ -4,7 +4,7 @@ namespace legallead.permissions.api.Attr
 {
     public class RequestTypeAttribute : ValidationAttribute
     {
-        private static readonly List<string> types = "Address,Email,Name,Phone".Split(',').ToList();
+        private static readonly List<string> types = "Address,Email,Name,Phone,UserId".Split(',').ToList();
         public string? Name { get; set; }
 
         public override bool IsValid(object? value)
