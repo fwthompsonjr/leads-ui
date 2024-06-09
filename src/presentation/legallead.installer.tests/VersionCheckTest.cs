@@ -5,16 +5,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.installer.tests
 {
-    public class CommandHandlerExecuteTest
+    public class VersionCheckTest
     {
+
         [Fact]
-        public void SutCanExecute()
+        public void SutCanGetLocal()
         {
             if (!System.Diagnostics.Debugger.IsAttached) { return; }
+            const string appname = "legallead.reader.service";
+            var provider = GetProvider();
             var exception = Record.Exception(() =>
             {
-                var service = GetProvider().GetRequiredService<CommandHandler>();
-                service.Execute("legallead.desktop-windows");
+                var service = provider.GetRequiredService<CommandHandler>();
+                var items = service.GetAvailables().GetAwaiter().GetResult();
+                Assert.NotEmpty(items);
+                if (!items.Contains(appname, StringComparison.OrdinalIgnoreCase)) return;
+                var parser = provider.GetRequiredService<IAvailablesParser>();
+                var number = parser.GetLatest(items, appname);
+                Assert.NotEmpty(number);
             });
             Assert.Null(exception);
         }

@@ -13,6 +13,8 @@ var app = ConsoleApp.CreateBuilder(args)
         s.AddSingleton<ILeadFileOperation, LeadFileOperation>();
         s.AddSingleton<ILeadAppInstaller, LeadAppInstaller>();
         s.AddSingleton<IShortcutCreator, ShortcutCreator>();
+        s.AddSingleton<ILocalsParser, LocalsParser>();
+        s.AddSingleton<IAvailablesParser, AvailablesParser>();
     })
     .Build();
 app.AddCommands<CommandHandler>();
