@@ -43,7 +43,7 @@ namespace legallead.desktop.utilities
 
         private static string GetInvoiceUri(SubscriptionChangeResponse? response, string landingName)
         {
-            
+
             const string guest = "guest";
             if (response == null || response.Dto == null) return none;
             var levelName = response.Dto.LevelName ?? string.Empty;

@@ -1,18 +1,20 @@
-﻿using legallead.installer.Models;
+﻿
+using legallead.installer.Models;
 using Octokit;
 using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Classes
 {
     [ExcludeFromCodeCoverage(Justification = "Interacts with remote resource. Tested in integration only")]
-    public static class GitClientProvider
+    public static class GitReaderRepository
     {
-        static GitClientProvider()
+        static GitReaderRepository()
         {
             _ = ProductName;
             _ = AccessToken;
             _ = RepositoryName;
             _ = PackageNames;
+            _ = ReaderName;
         }
 
         public static GitHubClient GetClient()
@@ -24,27 +26,6 @@ namespace legallead.installer.Classes
             };
             return client;
         }
-
-        public static async Task<object?> GetAsset(ReleaseAssetModel model)
-        {
-            var key = $"{model.RepositoryId}-{model.AssetId}";
-            if (AssetContents.TryGetValue(key, out object? value)) { return value; }
-            var client = GetClient();
-            var asset = await client.Repository.Release.GetAsset(
-                model.RepositoryId, model.AssetId);
-            if (asset == null) { return null; }
-            string downloadUrl = asset.BrowserDownloadUrl;
-
-            // Download with WebClient
-            using var wb = new HttpClient();
-            wb.DefaultRequestHeaders.Add("Accept", "application/octet-stream");
-            wb.DefaultRequestHeaders.Add("UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36");
-            wb.DefaultRequestHeaders.Add("Authorization", $"token {AccessToken}");
-            var content = await wb.GetByteArrayAsync(downloadUrl);
-            AssetContents[key] = content;
-            return content;
-        }
-
         public static async Task<List<ReleaseModel>?> GetReleases()
         {
             var repo = await GetRepository();
@@ -59,23 +40,27 @@ namespace legallead.installer.Classes
             return translated;
         }
 
-        public static bool AllowShortcuts
-        {
-            get
-            {
-                if (_createShortcut != null) return _createShortcut.Value;
-                var setting = SettingProvider.Common();
-                _createShortcut = setting.CreateShortcut;
-                return _createShortcut.GetValueOrDefault();
-            }
-        }
-
-        private static async Task<Repository?> GetRepository()
+        public static async Task<Repository?> GetRepository()
         {
             var client = GetClient();
-            var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals(RepositoryName));
+            var repo = (await client.Repository.GetAllForCurrent()).First(x => x.Name.Equals(ReaderName));
             if (!RepositoryId.HasValue && repo != null) { RepositoryId = repo.Id; }
             return repo;
+        }
+
+        public static async Task<SearchIssuesResult> GetResults()
+        {
+            var client = GetClient();
+            var request = new SearchIssuesRequest();
+            var repoName = $"fwthompsonjr/{ReaderName}";
+            var threeMonthsAgo = new DateTimeOffset(DateTime.Now.Subtract(TimeSpan.FromDays(90)));
+            request.Repos.Add(repoName);
+            request.Created = new DateRange(threeMonthsAgo, SearchQualifierOperator.GreaterThan);
+            request.Type = IssueTypeQualifier.PullRequest;
+            request.Labels = new List<string>() { "approved" };
+            request.State = ItemState.Closed;
+            var issues = await client.Search.SearchIssues(request);
+            return issues;
         }
 
         private static string AccessToken
@@ -97,6 +82,16 @@ namespace legallead.installer.Classes
                 var setting = SettingProvider.Common();
                 _productName = setting.Product;
                 return _productName;
+            }
+        }
+        private static string ReaderName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_readerName)) return _readerName;
+                var setting = SettingProvider.Common();
+                _readerName = setting.ReadRepository;
+                return _readerName;
             }
         }
 
@@ -128,7 +123,6 @@ namespace legallead.installer.Classes
             return items.Exists(x => x);
         }
 
-
         private static List<ReleaseModel> TranslateFrom(long repositoryId, IEnumerable<Release> releases)
         {
             var results = new List<ReleaseModel>();
@@ -140,7 +134,7 @@ namespace legallead.installer.Classes
                     Name = release.TagName,
                     RepositoryId = repositoryId,
                     PublishDate = release.PublishedAt.GetValueOrDefault().Date,
-                    RepositoryName = RepositoryName
+                    RepositoryName = ReaderName
                 };
                 var assets = release.Assets.Where(w =>
                 {
@@ -153,7 +147,6 @@ namespace legallead.installer.Classes
             }
             return results;
         }
-
         private static List<ReleaseAssetModel> TranslateFrom(long repositoryId, IEnumerable<ReleaseAsset> assets)
         {
             var results = assets.Select(a =>
@@ -179,7 +172,6 @@ namespace legallead.installer.Classes
         private static string? _accessToken = string.Empty;
         private static string? _productName = string.Empty;
         private static string? _repositoryName = string.Empty;
-        private static bool? _createShortcut;
-        private static readonly Dictionary<string, object?> AssetContents = [];
+        private static string? _readerName = string.Empty;
     }
 }

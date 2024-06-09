@@ -8,6 +8,14 @@ $commands = [ordered]@{
 		"file" = "installation-002.ps1"
 		"description" = "Download and Install Legal Lead Installer"
 	}
+	"chocolatey" = @{
+		"file" = "installation-003.ps1"
+		"description" = "Download and Install Chocolatey"
+	}
+	"firefox" = @{
+		"file" = "installation-004.ps1"
+		"description" = "Download and Install Firefox"
+	}
 }
 function executeCommand( $path ) {
 	try {
@@ -37,12 +45,24 @@ $commands.GetEnumerator() | ForEach-Object {
 	}
 }
 if ( $hasError -eq $false ) {
+	$name = "legallead.desktop-windows"
 	try {
-		$name = "legallead.desktop-windows"
 		leadcli install -n $name
 		(New-Object -ComObject shell.application).toggleDesktop()
 	} catch {
-		Write-Warning "There was an issue installing application."
+		$hasError = $true;
+		Write-Warning "There was an issue installing $name application."
+		Write-Warning "Please check logs for additional information."
+	}
+}
+if ( $hasError -eq $false ) {
+	$svcname = "legallead.reader.service"
+	try {
+		leadcli install -n $svcname
+		(New-Object -ComObject shell.application).toggleDesktop()
+	} catch {
+		$hasError = $true;
+		Write-Warning "There was an issue installing $svcname application."
 		Write-Warning "Please check logs for additional information."
 	}
 }

@@ -1,6 +1,7 @@
 
       legallead.installer
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.6 - 2024-06-06 - Enhancemnt to deploy reader component.
       : 3.2.5 - 2024-05-15 - Bug fix of uninstall should remove shortcut.
       : 3.2.4 - 2024-05-09 - Bug fix of serialization preventing installation.
       : 3.2.3 - 2024-05-09 - Apply formatting to nuget package README

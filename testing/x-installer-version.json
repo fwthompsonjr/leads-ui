@@ -1,5 +1,9 @@
 [
   {
+    "id": 1,
+    "description": "Adding dependancies installation to process."
+  },
+  {
     "id": 0,
     "description": "Initial Installation Zip Package"
   }

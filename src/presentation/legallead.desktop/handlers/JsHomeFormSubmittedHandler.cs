@@ -1,5 +1,6 @@
 ﻿using CefSharp.Wpf;
 using legallead.desktop.entities;
+using legallead.desktop.extensions;
 using legallead.desktop.interfaces;
 using legallead.desktop.models;
 using legallead.desktop.utilities;
@@ -85,12 +86,19 @@ namespace legallead.desktop.handlers
 
         private static void NavigateTo(string destination, ApiResponse objectData)
         {
-            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            var provider = AppBuilder.ServiceProvider;
+            var user = provider?.GetRequiredService<UserBo>();
             var dispatcher = Application.Current.Dispatcher;
             Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
             if (mainWindow is not MainWindow main) return;
             if (user == null) return;
-            user.Token = ObjectExtensions.TryGet<AccessTokenBo>(objectData.Message);
+            var token = ObjectExtensions.TryGet<AccessTokenBo>(objectData.Message);
+            user.Token = token;
+            if (provider != null && token != null)
+            {
+                var api = provider.GetService<IPermissionApi>();
+                user.SetUserId(api).GetAwaiter().GetResult();
+            }
             main.NavigateTo(destination);
             main.NavigateToMySearch();
         }

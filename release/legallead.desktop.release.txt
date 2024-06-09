@@ -1,5 +1,10 @@
 [
 	{
+		"label": "3.2.16",
+		"trackingDt": "2024-06-08T21:30",
+		"description": "Enable local search behavior."
+	},
+	{
 		"label": "3.2.15",
 		"trackingDt": "2024-06-04T11:30",
 		"description": "Display payment processing mode in status bar."

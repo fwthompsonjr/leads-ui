@@ -2,6 +2,7 @@
 using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace legallead.desktop.utilities
 {
@@ -21,6 +22,7 @@ namespace legallead.desktop.utilities
             builder.AddSingleton<IUserPermissionsMapper, UserPermissionsMapper>();
             builder.AddSingleton<ICopyrightBuilder>(new CopyrightBuilder());
             builder.AddSingleton(new CommonMessageList());
+            builder.AppendQueueServices();
             var menucontent = Properties.Resources.contextmenu;
             if (string.IsNullOrEmpty(menucontent)) return builder.BuildServiceProvider();
             builder.AddSingleton(s =>
@@ -28,6 +30,41 @@ namespace legallead.desktop.utilities
                 return ObjectExtensions.TryGet<MenuConfiguration>(menucontent);
             });
             return builder.BuildServiceProvider();
+        }
+
+        private static void AppendQueueServices(this IServiceCollection services)
+        {
+            var setting = GetQueueSetting();
+            var stopper = new QueueStopper(setting);
+            var fallback = new QueueBaseStarter(setting, stopper);
+            services.AddSingleton<IQueueSettings>(q => setting);
+            services.AddSingleton<IQueueStopper>(q => stopper);
+            var collection = new List<IQueueStarter>()
+            {
+                fallback,
+                new QueueLocalStarter(setting, stopper),
+                new QueueStarter(setting, stopper)
+            };
+            var instances = collection.FindAll(w => w.IsReady);
+            var mxid = instances.Max(x => x.PriorityId);
+            var selection = instances.Find(x => x.PriorityId == mxid) ?? fallback;
+            services.AddSingleton(q => selection);
+            var filter = new QueueFilter(selection, stopper);
+            services.AddSingleton<IQueueFilter>(q => filter);
+        }
+        private static QueueSettings GetQueueSetting()
+        {
+            var fallback = new QueueSettings { IsEnabled = false, FolderName = "", Name = "Default" };
+            try
+            {
+                var config = Properties.Resources.queuesetting_json;
+                var setting = JsonConvert.DeserializeObject<QueueSettings>(config) ?? fallback;
+                return setting;
+            }
+            catch
+            {
+                return fallback;
+            }
         }
     }
 }

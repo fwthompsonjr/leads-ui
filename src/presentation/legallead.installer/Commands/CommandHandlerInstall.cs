@@ -11,6 +11,7 @@ namespace legallead.installer.Commands
             [Option("n", "application name", DefaultValue = "")] string name = "",
             [Option("i", "application id", DefaultValue = "")] string id = "")
         {
+            const string readingservice = "legallead.reader.service";
             if (!string.IsNullOrEmpty(id))
             {
                 if (!int.TryParse(id, out var assetId))
@@ -71,7 +72,7 @@ namespace legallead.installer.Commands
             if (!completion) return;
             Console.WriteLine("Completed download application: {0} version: {1}.", name, version);
             Console.WriteLine(" - {0}", installPath);
-            if (!_reader.AllowShortcuts) return;
+            if (!_reader.AllowShortcuts || name.Equals(readingservice, StringComparison.OrdinalIgnoreCase)) return;
             _linkService.Install(_linkService, item, installPath, name, version);
         }
 
