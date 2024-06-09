@@ -25,6 +25,10 @@ namespace legallead.desktop.tests.utilities
         [InlineData(typeof(IUserProfileMapper))]
         [InlineData(typeof(IUserPermissionsMapper))]
         [InlineData(typeof(ICopyrightBuilder))]
+        [InlineData(typeof(IQueueSettings))]
+        [InlineData(typeof(IQueueStarter))]
+        [InlineData(typeof(IQueueStopper))]
+        [InlineData(typeof(IQueueFilter))]
         public void CanGetRegisteredType(Type type)
         {
             // DesktopCoreServiceProvider.

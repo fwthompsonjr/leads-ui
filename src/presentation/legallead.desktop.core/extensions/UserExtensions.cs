@@ -1,5 +1,7 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.interfaces;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace legallead.desktop.extensions
 {
@@ -33,6 +35,31 @@ namespace legallead.desktop.extensions
                 return;
             }
             user.Token = newtoken;
+        }
+
+        public static async Task<string> GetUserId(this UserBo user, IPermissionApi? api = null)
+        {
+            const string landing = "get-contact-index";
+            var provider = DesktopCoreServiceProvider.Provider;
+            api ??= provider?.GetService<IPermissionApi>();
+            if (api == null) return string.Empty;
+            var payload = new { RequestType = "UserId" };
+            var response = await api.Post(landing, payload, user);
+            if (response.StatusCode != 200) return string.Empty;
+            var data = ObjectExtensions.TryGet<ContactProfileResponse>(response.Message);
+            if (data == null || 
+                string.IsNullOrEmpty(data.Message) ||
+                !Guid.TryParse(data.Message, out var _)) return string.Empty;
+            return data.Message;
+        }
+        public static async Task SetUserId(this UserBo user, IPermissionApi? api = null)
+        {
+            var userId = await GetUserId(user, api);
+            if (string.IsNullOrEmpty(userId)) return;
+            var provider = DesktopCoreServiceProvider.Provider;
+            var queue = provider?.GetService<IQueueFilter>();
+            if (queue == null) return;
+            queue.Append(userId);
         }
     }
 }

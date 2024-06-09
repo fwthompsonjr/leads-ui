@@ -63,10 +63,10 @@ namespace legallead.desktop.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;Initial_View&quot;: &quot;introduction&quot;,
-        ///  &quot;Permissions_API&quot;: &quot;https://localhost:44345/&quot;,
+        ///  &quot;Permissions_API&quot;: &quot;http://api.legallead.co/&quot;,
         ///  &quot;api.permissions&quot;: {
-        ///    &quot;destination&quot;: &quot;local&quot;,
-        ///    &quot;remote&quot;: &quot;http://legalleadpermissionsapi-dev.us-east-2.elasticbeanstalk.com/&quot;,
+        ///    &quot;destination&quot;: &quot;remote&quot;,
+        ///    &quot;remote&quot;: &quot;http://api.legallead.co/&quot;,
         ///    &quot;local&quot;: &quot;https://localhost:44345/&quot;
         ///  },
         ///  &quot;landings&quot;: {
@@ -77,8 +77,9 @@ namespace legallead.desktop.Properties {
         ///  }
         ///  &quot;stripe&quot;:{
         ///    &quot;key&quot;: &quot;sk_test_51LCZucDhgP60CL9xtS9RSEC5IhGsKkZwnNxwFwpHbDHLLBLvB87uICAJB5fVZNyqEHNpI9ZbLYwFFKXPNnbgucs200OOT3UvbK&quot;
-        ///  }
-        ///}.
+        ///  },
+        ///  &quot;queue&quot;: {
+        ///    &quot;name&quot;: &quot;legallead.reader. [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string appsettings {
             get {
@@ -1194,6 +1195,19 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///&quot;name&quot;: &quot;legallead.reader.service&quot;,
+        ///&quot;folder&quot;: &quot;_ll-applications&quot;,
+        ///&quot;isEnabled&quot;: true
+        ///}.
+        /// </summary>
+        internal static string queuesetting_json {
+            get {
+                return ResourceManager.GetString("queuesetting_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {
@@ -1239,12 +1253,9 @@ namespace legallead.desktop.Properties {
         ///    const keyname = &quot;&quot;.concat(pagename, &quot;-&quot;, buttonname); 
         ///    const destination = &quot;&quot;.concat(domain, target);
         ///    const nonauthorization = [ &quot;user&quot;, &quot;home&quot; ];
-        ///    if (buttonname.indexOf(&apos;logout&apos;) &gt;= 0) {
-        ///        window.location.href = destination;
-        ///        return;
-        ///    }
-        ///    let isvalid = true; 
-        ///        let p [rest of string was truncated]&quot;;.
+        ///    if ( pagename == &apos;user&apos; &amp;&amp; buttonname == &apos;logout&apos; ) {
+        ///        let handler = window.jsHandler;
+        ///	    if( undefined === handler || null === handler ||  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string verifyandpost_js {
             get {
