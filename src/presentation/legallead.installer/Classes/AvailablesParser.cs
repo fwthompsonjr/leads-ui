@@ -4,6 +4,9 @@ namespace legallead.installer.Classes
 {
     public class AvailablesParser : IAvailablesParser
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube",
+            "S4158:Collection is known to be empty here",
+            Justification = "False positive")]
         public string GetLatest(string available, string appName)
         {
             if (string.IsNullOrEmpty(available)) return string.Empty;
@@ -14,15 +17,16 @@ namespace legallead.installer.Classes
             var locals = new List<string>();
             lines.ForEach(line =>
             {
-                if (line.Contains(appName, oic))
+                if (line.Contains(appName, oic) && line.Contains(doubleDash, oic))
                 {
                     locals.Add(line.Replace(doubleDash, "").Trim());
                 }
             });
-            var item = locals.LastOrDefault();
-            if (item == null) { return string.Empty; }
+            var haslines = locals.Exists(x => x.Contains(' '));
+            if (!haslines) { return string.Empty; }
+            var item = locals[^1];
             var items = item.Split(' ');
-            var version = items.LastOrDefault() ?? string.Empty;
+            var version = items[^1];
             return version;
         }
     }

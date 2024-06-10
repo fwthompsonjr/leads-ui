@@ -1,7 +1,5 @@
-﻿using Bogus;
-using legallead.installer.Commands;
+﻿using legallead.installer.Commands;
 using legallead.installer.Interfaces;
-using legallead.installer.Models;
 using Moq;
 using System.Reflection;
 
@@ -59,9 +57,9 @@ namespace legallead.installer.tests
             locator.SetupGet(s => s.SubFolder).Returns(appFolder);
             fileservice.Setup(s => s.Extract(It.IsAny<string>(), It.IsAny<byte[]>())).Returns(extractResult);
             return new CommandHandler(
-                mock.Object, 
-                locator.Object, 
-                fileservice.Object, 
+                mock.Object,
+                locator.Object,
+                fileservice.Object,
                 linkservice.Object,
                 mqLocalService.Object,
                 mqAvailableService.Object);

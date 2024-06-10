@@ -13,6 +13,7 @@ namespace legallead.installer.Commands
             Console.WriteLine(data);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task<string> GetAvailables()
         {
             var builder = new StringBuilder("Listing available versions for legallead applications.");

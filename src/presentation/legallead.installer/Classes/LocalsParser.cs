@@ -31,8 +31,9 @@ namespace legallead.installer.Classes
                     break;
                 }
             }
-            var item = locals.LastOrDefault();
-            if (item == null) { return string.Empty; }
+            var haslines = locals.Exists(x => x.Contains(' '));
+            if (!haslines) { return string.Empty; }
+            var item = locals[^1];
             return item.Split(' ')[0];
         }
     }

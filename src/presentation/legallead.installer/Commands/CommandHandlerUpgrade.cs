@@ -1,9 +1,12 @@
-﻿namespace legallead.installer.Commands
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace legallead.installer.Commands
 {
     public partial class CommandHandler
     {
 
-        [Command("upgrade", $"Upgrade installed application {appName}")]
+        [Command("upgrade", $"Upgrade installed application")]
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public void Upgrade(
             [Option("n", "application name", DefaultValue = "legallead.reader.service")] string name = "legallead.reader.service"
         )

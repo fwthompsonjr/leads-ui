@@ -1,5 +1,10 @@
 [
   {
+    "id": "3.2.7",
+    "description": "Added ability to upgrade applications from cli.",
+    "date": "2024-06-10"
+  },
+  {
     "id": "3.2.6",
     "description": "Enhancement to deploy reader component.",
     "date": "2024-06-06"
