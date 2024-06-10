@@ -1,4 +1,5 @@
 ﻿using legallead.installer.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.installer.Commands
 {
@@ -67,7 +68,7 @@ namespace legallead.installer.Commands
                 Console.WriteLine(failmsg);
             }
         }
-
+        [ExcludeFromCodeCoverage(Justification = "Method interacts with file system")]
         private void RemoveShortcut(LocalVersionModel model)
         {
             var linkFile = $"{model.Name}-{model.Version}.lnk";

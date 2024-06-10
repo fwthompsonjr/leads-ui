@@ -15,6 +15,7 @@
 | locals | Display all local installed applications |
 | run | Run application as defined by parameters |  
 | uninstall | Uninstalls application as defined by parameters |
+| upgrade | Upgrade application as defined by parameters |
 | version | Display version information for legallead.installer |
 
 ## install command
@@ -68,6 +69,17 @@ Uninstalls application as defined by parameters
 Options:
   -n, --name <String>       application name (Required)
   -v, --version <String>    version number (Default: )
+```  
+
+## upgrade command
+
+```shell
+Usage: upgrade [options...]
+
+Upgrade installed application
+
+Options:
+  -n, --name <String>    application name (Default: legallead.reader.service)
 ```  
 
 ## version command

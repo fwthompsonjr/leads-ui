@@ -80,5 +80,74 @@ namespace legallead.installer.tests
             var isLocated = client.VerifyPackageName(name);
             Assert.Equal(expected, isLocated);
         }
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(0, 1)]
+        [InlineData(1, 1)]
+        [InlineData(2, 2)]
+        public void ReaderCanFilterReleases(int releases, int alternates)
+        {
+            var problems = Record.Exception(() =>
+            {
+                var client = new MockGitReader();
+                var list1 = releases switch
+                {
+                    0 => null,
+                    _ => modelFaker.Generate(releases)
+                };
+                var list2 = alternates switch
+                {
+                    0 => null,
+                    _ => modelFaker.Generate(alternates)
+                };
+                var response = client.FilterReleases(list1, list2);
+                var sum = releases + alternates;
+                if (sum == 0) Assert.Null(response);
+                else
+                {
+                    Assert.Equal(sum, response?.Count);
+                }
+            });
+            Assert.Null(problems);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(15)]
+        public void ReaderCanFilterAssets(int releases)
+        {
+            var problems = Record.Exception(() =>
+            {
+                var client = new MockGitReader();
+                _ = client.AllowShortcuts;
+                var list = releases switch
+                {
+                    0 => null,
+                    _ => modelFaker.Generate(releases)
+                };
+                _ = client.FilterAssets(list);
+            });
+            Assert.Null(problems);
+        }
+        private sealed class MockGitReader : GitReader
+        {
+            public List<ReleaseModel>? FilterReleases(
+                List<ReleaseModel>? releases,
+                List<ReleaseModel>? alternates)
+            {
+                return GetReleases(releases, alternates);
+            }
+            public List<ReleaseAssetModel>? FilterAssets(
+                List<ReleaseModel>? releases
+            )
+            {
+                return GetAssets(releases);
+            }
+        }
+
+
     }
 }

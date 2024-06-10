@@ -124,17 +124,23 @@ namespace legallead.installer.tests
             var mqInstaller = new Mock<ILeadAppInstaller>();
             var mqFileService = new Mock<ILeadFileOperation>();
             var mqLinkService = new Mock<IShortcutCreator>();
+            var mqLocalService = new Mock<ILocalsParser>();
+            var mqAvailableService = new Mock<IAvailablesParser>();
 
             // add mocks
             collection.AddSingleton(mqReader);
             collection.AddSingleton(mqInstaller);
             collection.AddSingleton(mqFileService);
             collection.AddSingleton(mqLinkService);
+            collection.AddSingleton(mqLocalService);
+            collection.AddSingleton(mqAvailableService);
             // add implementations
             collection.AddSingleton(mqReader.Object);
             collection.AddSingleton(mqInstaller.Object);
             collection.AddSingleton(mqFileService.Object);
             collection.AddSingleton(mqLinkService.Object);
+            collection.AddSingleton(mqLocalService.Object);
+            collection.AddSingleton(mqAvailableService.Object);
             collection.AddSingleton<CommandHandler>();
             collection.AddSingleton<LeadAppInstaller>(x =>
             {
