@@ -1,10 +1,7 @@
-﻿using Dapper;
+﻿using Bogus;
+using Dapper;
 using legallead.jdbc.helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.tests.helpers
 {
@@ -76,6 +73,41 @@ namespace legallead.jdbc.tests.helpers
             var dest = BoMapper.Map(source);
             if (index == 0) Assert.Null(dest);
             else Assert.NotNull(dest);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void MapperCanConvertFromBase64(int index)
+        {
+            var faker = new Faker();
+            var original = faker.Lorem.Paragraph();
+            string? expected = index switch
+            {
+                0 => null,
+                1 => "",
+                2 => "    ",
+                3 => original,
+                _ => EncodeBase64(original)
+            };
+            var actual = BoMapper.FromBase64(expected);
+            if (index <= 3)
+            {
+                Assert.Equal(expected, actual);
+            }
+            else
+            {
+                Assert.Equal(original, actual);
+            }
+        }
+
+        private static string EncodeBase64(string source)
+        {
+            var result = Encoding.UTF8.GetBytes(source);
+            return Convert.ToBase64String(result);
         }
     }
 }

@@ -6,6 +6,7 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
+using System.Text;
 
 namespace legallead.jdbc.tests.implementations
 {
@@ -65,6 +66,8 @@ namespace legallead.jdbc.tests.implementations
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
         public async Task GetBodySequenceTests(int index)
         {
             var faker = new Faker();
@@ -79,6 +82,10 @@ namespace legallead.jdbc.tests.implementations
             var provider = new RepoContainer();
             var mock = provider.CommandMock;
             var service = provider.Repository;
+            if (completion != null && index > 2)
+            {
+                completion.Body = EncodeBase64(completion.Body);
+            }
             if (index == 2)
             {
                 mock.Setup(m => m.QuerySingleOrDefaultAsync<EmailBodyDto>(
@@ -95,11 +102,22 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()))
                     .ReturnsAsync(completion);
             }
-            _ = await service.GetBody(messageId, uuid);
+            var response = await service.GetBody(messageId, uuid);
             mock.Verify(m => m.QuerySingleOrDefaultAsync<EmailBodyDto>(
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
+            if (completion == null || response == null) return;
+            var actual = response.Body;
+            var original = completion.Body;
+            if (index >2)
+            {
+                Assert.NotEqual(original, actual);
+            } 
+            else
+            {
+                Assert.Equal(original, actual);
+            }
         }
 
         [Theory]
@@ -139,6 +157,15 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
+        }
+
+
+
+        private static string? EncodeBase64(string? source)
+        {
+            if (string.IsNullOrWhiteSpace(source)) return source;
+            var result = Encoding.UTF8.GetBytes(source);
+            return Convert.ToBase64String(result);
         }
 
         private sealed class RepoContainer

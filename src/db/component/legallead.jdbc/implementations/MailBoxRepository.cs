@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.jdbc.implementations
 {
@@ -35,7 +36,7 @@ namespace legallead.jdbc.implementations
                 var parms = BoMapper.GetBodyParameters(messageId, userId);
                 using var connection = _context.CreateConnection();
                 var response = await _command.QuerySingleOrDefaultAsync<EmailBodyDto>(connection, prc, parms);
-                var mapped = BoMapper.Map(response);
+                var mapped = GetEmailBodyBo(response);
                 return mapped;
             }
             catch (Exception)
@@ -59,6 +60,15 @@ namespace legallead.jdbc.implementations
             {
                 return null;
             }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public access.")]
+        private static EmailBodyBo? GetEmailBodyBo(EmailBodyDto? body)
+        {
+            var mapped = BoMapper.Map(body);
+            if (mapped == null) return default;
+            mapped.Body = BoMapper.FromBase64(mapped.Body);
+            return mapped;
         }
     }
 }
