@@ -82,7 +82,7 @@ namespace legallead.jdbc.helpers
             {
                 return false;
             }
-            
+
         }
     }
 }

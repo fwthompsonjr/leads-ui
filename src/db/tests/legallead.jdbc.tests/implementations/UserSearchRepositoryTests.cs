@@ -845,12 +845,15 @@ namespace legallead.jdbc.tests.implementations
             var container = new RepoContainer();
             var service = container.Repo;
             var mock = container.CommandMock;
-            if (!isErrored) {
+            if (!isErrored)
+            {
                 mock.Setup(m => m.ExecuteAsync(
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
-            } else {
+            }
+            else
+            {
                 mock.Setup(m => m.ExecuteAsync(
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),

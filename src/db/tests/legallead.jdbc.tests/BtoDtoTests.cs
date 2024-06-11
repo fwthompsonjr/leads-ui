@@ -1,5 +1,4 @@
 ﻿using legallead.jdbc.entities;
-using System.Diagnostics;
 
 namespace legallead.jdbc.tests
 {

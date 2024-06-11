@@ -45,7 +45,7 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()))
                     .ThrowsAsync(error);
-            } 
+            }
             else
             {
                 mock.Setup(m => m.QuerySingleOrDefaultAsync<EmailCountDto>(
@@ -110,10 +110,10 @@ namespace legallead.jdbc.tests.implementations
             if (completion == null || response == null) return;
             var actual = response.Body;
             var original = completion.Body;
-            if (index >2)
+            if (index > 2)
             {
                 Assert.NotEqual(original, actual);
-            } 
+            }
             else
             {
                 Assert.Equal(original, actual);
