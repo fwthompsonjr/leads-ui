@@ -21,8 +21,7 @@
                 if (fieldName.Equals("LineNbr", Comparison)) return LineNbr;
                 if (fieldName.Equals("StatusName", Comparison)) return StatusName;
                 if (fieldName.Equals("StatusId", Comparison)) return StatusId;
-                if (fieldName.Equals("CreateDate", Comparison)) return CreateDate;
-                return null;
+                return CreateDate;
             }
             set
             {

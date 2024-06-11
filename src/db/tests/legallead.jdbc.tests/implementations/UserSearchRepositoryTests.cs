@@ -946,6 +946,36 @@ namespace legallead.jdbc.tests.implementations
             Assert.Equal(demo[position], actual);
         }
 
+        [Theory]
+        [InlineData("Id")]
+        [InlineData("SearchId")]
+        [InlineData("Name")]
+        [InlineData("Zip")]
+        [InlineData("Address1")]
+        [InlineData("Address2")]
+        [InlineData("Address3")]
+        [InlineData("CaseNumber")]
+        [InlineData("DateFiled")]
+        [InlineData("Court")]
+        [InlineData("CaseType")]
+        [InlineData("CaseStyle")]
+        [InlineData("FirstName")]
+        [InlineData("LastName")]
+        [InlineData("Plantiff")]
+        [InlineData("Status")]
+        [InlineData("County")]
+        [InlineData("CourtAddress")]
+        public void SearchFinalCanBeIndexed(string name)
+        {
+            var demo = finalfaker.Generate();
+            var sut = new SearchFinalDto();
+            var flds = sut.FieldList;
+            sut["id"] = null;
+            var position = flds.IndexOf(name);
+            sut[position] = demo[position];
+            var actual = sut[position];
+            Assert.Equal(demo[position], actual);
+        }
         private static readonly Faker<AdHocSessionDto> adhocfaker =
             new Faker<AdHocSessionDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
