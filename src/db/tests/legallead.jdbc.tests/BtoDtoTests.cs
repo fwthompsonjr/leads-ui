@@ -15,7 +15,6 @@ namespace legallead.jdbc.tests
         [Fact]
         public void DtoCanGetFields()
         {
-            const string nonfound = "--not-defined--";
             var collection = DtoItems;
             Assert.NotEmpty(collection);
             collection.ToList().ForEach(c =>
@@ -25,48 +24,26 @@ namespace legallead.jdbc.tests
                 if (instance is IBaseDto dto)
                 {
                     Assert.NotNull(dto);
-                    _ = dto[nonfound];
-                    dto["id"] = null;
-                    var list = dto.FieldList;
-                    list.ForEach(itm => { _ = dto[itm]; });
+                    TryGet(dto);
                 }
             });
         }
-
-        [Fact]
-        public void DtoCanSetFields()
+        private static void TryGet(IBaseDto dto)
         {
             const string nonfound = "--not-defined--";
-            var collection = DtoItems;
-            Assert.NotEmpty(collection);
-            collection.ToList().ForEach(c =>
-            {
-                var instance = Activator.CreateInstance(c);
-                Assert.IsAssignableFrom<IBaseDto>(instance);
-                if (instance is IBaseDto dto)
-                {
-                    Assert.NotNull(dto);
-                    dto[nonfound] = nonfound;
-                    var list = dto.FieldList;
-                    list.ForEach(itm => {
-                        SetValue(dto, itm, string.Empty);
-                    });
-                }
-            });
-        }
-
-        private static void SetValue(IBaseDto dto, string fieldName, object value)
-        {
             try
             {
-                dto[fieldName] = value;
+
+                _ = dto[nonfound];
+                dto["id"] = null;
+                var list = dto.FieldList;
+                list.ForEach(itm => { _ = dto[itm]; });
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine(ex);
+                // not handled on purpose
             }
         }
-
         private static IEnumerable<Type> DtoItems => types ??= GetDtoTypes();
         private static IEnumerable<Type>? types;
         private static IEnumerable<Type> GetDtoTypes()

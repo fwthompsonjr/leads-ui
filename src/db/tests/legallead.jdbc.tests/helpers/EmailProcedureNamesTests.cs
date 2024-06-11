@@ -7,7 +7,7 @@ namespace legallead.jdbc.tests.helpers
 
         [Theory]
         [InlineData(0, "CALL PRC_EMAIL_GET_MAIL_MESSAGE_BODY( ?, ? );")]
-        [InlineData(1, "CALL PRC_EMAIL_GET_MAIL_COUNT( ? );)")]
+        [InlineData(1, "CALL PRC_EMAIL_GET_MAIL_COUNT( ? );")]
         [InlineData(2, "CALL PRC_EMAIL_GET_MAIL_MESSAGES( ?, ? );")]
         public void ProcContainsName(int index, string expected)
         {
