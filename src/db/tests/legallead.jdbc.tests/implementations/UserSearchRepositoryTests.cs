@@ -926,6 +926,26 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()));
         }
 
+
+        [Theory]
+        [InlineData("Id")]
+        [InlineData("UserId")]
+        [InlineData("FromAddress")]
+        [InlineData("ToAddress")]
+        [InlineData("Subject")]
+        [InlineData("StatusId")]
+        [InlineData("CreateDate")]
+        public void AdHocSessionCanBeIndexed(string name)
+        {
+            var demo = adhocfaker.Generate();
+            var sut = new AdHocSessionDto();
+            var flds = sut.FieldList;
+            var position = flds.IndexOf(name);
+            sut[position] = demo[position];
+            var actual = sut[position];
+            Assert.Equal(demo[position], actual);
+        }
+
         private static readonly Faker<AdHocSessionDto> adhocfaker =
             new Faker<AdHocSessionDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
