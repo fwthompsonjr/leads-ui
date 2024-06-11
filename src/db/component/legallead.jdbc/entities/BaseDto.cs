@@ -2,7 +2,7 @@
 
 namespace legallead.jdbc.entities
 {
-    public abstract class BaseDto
+    public abstract class BaseDto : IBaseDto
     {
         private readonly object locker = new();
         private List<string>? _fieldList;

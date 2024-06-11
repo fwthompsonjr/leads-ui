@@ -132,6 +132,31 @@ namespace legallead.jdbc.tests.entities
             Assert.Null(exception);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void PricingCodeBoDeSerializeResilience(int conditionId)
+        {
+            var data = faker.Generate();
+            var js = conditionId switch
+            {
+                0 => null,
+                1 => "",
+                2 => "     ",
+                3 => "Mary had little lamb",
+                _ => data.KeyJs
+            };
+
+            data.KeyJs = js;
+            var exception = Record.Exception(() =>
+            {
+                _ = data.GetModel();
+            });
+            Assert.Null(exception);
+        }
         private static class ProductGenerator
         {
 

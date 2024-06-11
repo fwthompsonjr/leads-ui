@@ -42,8 +42,11 @@ namespace legallead.jdbc.tests.entities
         [InlineData("Staged")]
         public void ActiveSearchOverviewDtoHasExpectedFieldDefined(string name)
         {
+            const string na = "notmapped";
             var sut = new ActiveSearchOverviewDto();
             var fields = sut.FieldList;
+            sut[na] = na;
+            _ = sut[na];
             Assert.NotNull(fields);
             Assert.NotEmpty(fields);
             Assert.Contains(name, fields);
@@ -59,6 +62,7 @@ namespace legallead.jdbc.tests.entities
             var demo = faker.Generate();
             var sut = new ActiveSearchOverviewDto();
             var flds = sut.FieldList;
+            demo["id"] = null;
             var position = flds.IndexOf(fieldName);
             sut[position] = demo[position];
             var actual = sut[position];

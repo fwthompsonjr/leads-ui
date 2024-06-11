@@ -23,9 +23,7 @@
                 if (fieldName.Equals("StateName", Comparison)) return StateName;
                 if (fieldName.Equals("StartDate", Comparison)) return StartDate;
                 if (fieldName.Equals("EndDate", Comparison)) return EndDate;
-                if (fieldName.Equals("SearchProgress", Comparison)) return SearchProgress;
-
-                return null;
+                return SearchProgress;
             }
             set
             {

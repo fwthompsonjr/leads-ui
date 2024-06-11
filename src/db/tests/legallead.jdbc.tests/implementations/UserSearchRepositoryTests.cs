@@ -845,12 +845,15 @@ namespace legallead.jdbc.tests.implementations
             var container = new RepoContainer();
             var service = container.Repo;
             var mock = container.CommandMock;
-            if (!isErrored) {
+            if (!isErrored)
+            {
                 mock.Setup(m => m.ExecuteAsync(
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
-            } else {
+            }
+            else
+            {
                 mock.Setup(m => m.ExecuteAsync(
                     It.IsAny<IDbConnection>(),
                     It.IsAny<string>(),
@@ -926,6 +929,56 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()));
         }
 
+
+        [Theory]
+        [InlineData("Id")]
+        [InlineData("UserId")]
+        [InlineData("FromAddress")]
+        [InlineData("ToAddress")]
+        [InlineData("Subject")]
+        [InlineData("StatusId")]
+        [InlineData("CreateDate")]
+        public void AdHocSessionCanBeIndexed(string name)
+        {
+            var demo = adhocfaker.Generate();
+            var sut = new AdHocSessionDto();
+            var flds = sut.FieldList;
+            var position = flds.IndexOf(name);
+            sut[position] = demo[position];
+            var actual = sut[position];
+            Assert.Equal(demo[position], actual);
+        }
+
+        [Theory]
+        [InlineData("Id")]
+        [InlineData("SearchId")]
+        [InlineData("Name")]
+        [InlineData("Zip")]
+        [InlineData("Address1")]
+        [InlineData("Address2")]
+        [InlineData("Address3")]
+        [InlineData("CaseNumber")]
+        [InlineData("DateFiled")]
+        [InlineData("Court")]
+        [InlineData("CaseType")]
+        [InlineData("CaseStyle")]
+        [InlineData("FirstName")]
+        [InlineData("LastName")]
+        [InlineData("Plantiff")]
+        [InlineData("Status")]
+        [InlineData("County")]
+        [InlineData("CourtAddress")]
+        public void SearchFinalCanBeIndexed(string name)
+        {
+            var demo = finalfaker.Generate();
+            var sut = new SearchFinalDto();
+            var flds = sut.FieldList;
+            sut["id"] = null;
+            var position = flds.IndexOf(name);
+            sut[position] = demo[position];
+            var actual = sut[position];
+            Assert.Equal(demo[position], actual);
+        }
         private static readonly Faker<AdHocSessionDto> adhocfaker =
             new Faker<AdHocSessionDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
