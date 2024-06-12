@@ -3061,6 +3061,224 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "mailbox",
+			"item": [
+				{
+					"name": "MessageCount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"RequestType\": \"count\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/mailbox/message-count",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"mailbox",
+								"message-count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MessageBody",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"RequestType\": \"body\",\r\n    \"MessageId\": \"4c43a3a8-25df-11ef-99ce-0af7a01f52e9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/mailbox/message-body",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"mailbox",
+								"message-body"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MessageList",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"  var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{LocalAppHeader}}",
+								"description": "App service header"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"RequestType\": \"messages\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/api/mailbox/message-list",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"api",
+								"mailbox",
+								"message-list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
