@@ -67,4 +67,10 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="_mailbox\user-data.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

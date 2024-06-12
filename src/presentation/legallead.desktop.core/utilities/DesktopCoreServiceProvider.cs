@@ -21,6 +21,8 @@ namespace legallead.desktop.utilities
             builder.AddSingleton<IUserProfileMapper, UserProfileMapper>();
             builder.AddSingleton<IUserPermissionsMapper, UserPermissionsMapper>();
             builder.AddSingleton<ICopyrightBuilder>(new CopyrightBuilder());
+            builder.AddSingleton<IMailPersistence>(new MailPersistence());
+            builder.AddSingleton<IMailReader>(new MailReader());
             builder.AddSingleton(new CommonMessageList());
             builder.AppendQueueServices();
             var menucontent = Properties.Resources.contextmenu;

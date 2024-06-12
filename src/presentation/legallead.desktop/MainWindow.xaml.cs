@@ -1,4 +1,5 @@
 ﻿using legallead.desktop.entities;
+using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,7 +25,21 @@ namespace legallead.desktop
             InitializeErrorContent();
             InitializeUserChanged();
             ContentRendered += MainWindow_ContentRendered;
+            Closing += MainWindow_Closing;
             mnuExit.Click += MnuExit_Click;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var manager = provider?.GetService<IMailPersistence>();
+            var mailService = AppBuilder.MailService;
+            var backgroundQueue = AppBuilder.QueueService;
+            mailService?.Dispose();
+            manager?.Clear();
+            if (backgroundQueue == null) { return; }
+            using var source = new CancellationTokenSource();
+            backgroundQueue.StopAsync(source.Token);
         }
 
         private BrowserHelper GetHelper()
@@ -55,6 +70,7 @@ namespace legallead.desktop
 
         private void MnuExit_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow_Closing(sender, new());
             Environment.Exit(0);
         }
 
