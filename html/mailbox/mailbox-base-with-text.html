@@ -1,0 +1,288 @@
+<html>
+<head>
+    <script type="text/javascript">try {
+            CefSharp.BindObjectAsync("jsHandler", "jsHandler");
+        } catch { }</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>legallead.ui: mailbox</title>
+
+    <!-- googleapis : fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+
+    <!-- popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+
+    <style name="correspondence-css">
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            margin-top: 10px;
+            background: #444;
+            color: white;
+            margin-bottom: 10px;
+            overflow-x: clip
+        }
+
+        #footer-copy {
+            padding-top: 10px;
+        }
+
+        div[name="mailbox-header"] {
+            margin: 10px;
+        }
+
+        div[name="mailbox-grid"] {
+            padding-left: 25px;
+        }
+
+        div[name="mailbox-preview"] {
+            overflow: auto;
+        }
+        div.mailbox {
+            vertical-align: text-top;
+            padding: 12px;
+            margin: 10px;
+            border-style: dashed;
+            border-color: #999;
+            border-width: 1px;
+        }
+        /* div name="item-address-to" */
+        div[name="item-address-to"] {
+            margin-left: 15px;
+        }
+        /* mailbox-preview */
+        .box {
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+        }
+
+
+            .box .customrow.header {
+                flex: 0 1 auto;
+                border-bottom: 1px solid #888;
+                margin-bottom: 5px;
+            }
+
+            .box .customrow.content {
+                flex: 1 1 auto;
+            }
+
+            .box .customrow.footer {
+                flex: 0 1 40px;
+            }
+    </style>
+</head>
+<body class="text-center">
+    <div class="box">
+        <div class="customrow header">
+            <h3 class="masthead-brand">
+                <i class="bi bi-bank2"></i>
+                <span>Legal Lead UI</span>
+            </h3>
+        </div>
+        <div class="customrow content">
+            <div name="mailbox-header" class="text-start">
+                <h5>Correspondence</h5>
+            </div>
+            <div name="mailbox-grid" class="row">
+                <div name="mailbox-items" class="col-4 mailbox">
+                    <!-- add mail -->
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                            <div name="item-header" class="d-flex w-100 justify-content-between">
+                                <h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+                                <small name="item-create-date">2024-06-12T00:40:42</small>
+                            </div>
+                            <div name="item-detail" class="row">
+                                <div name="item-address-to" class="col-6 text-start">To: </div>
+                                <div name="item-address-from" class="col-5 text-start">From: </div>
+                                <span name="item-index" class="d-none">4c43a3a8-25df-11ef-99ce-0af7a01f52e9</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div name="item-header" class="d-flex w-100 justify-content-between">
+                                <h5 name="item-subject" class="mb-1">List group item heading</h5>
+                                <small name="item-create-date">2024-06-12T00:40:42</small>
+                            </div>
+                            <div name="item-detail" class="row">
+                                <div name="item-address-to" class="col-6 text-start">To: </div>
+                                <div name="item-address-from" class="col-5 text-start">From: </div>
+                                <span name="item-index" class="d-none">4c43a3a8-25df-11ef-99ce-0af7a01f52e9</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div name="item-header" class="d-flex w-100 justify-content-between">
+                                <h5 name="item-subject" class="mb-1">List group item heading</h5>
+                                <small name="item-create-date">2024-06-12T00:40:42</small>
+                            </div>
+                            <div name="item-detail" class="row">
+                                <div name="item-address-to" class="col-6 text-start">To: </div>
+                                <div name="item-address-from" class="col-5 text-start">From: </div>
+                                <span name="item-index" class="d-none">4c43a3a8-25df-11ef-99ce-0af7a01f52e9</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div name="mailbox-preview" class="col-7 mailbox">
+                    <html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width">
+			<title>Legal Lead Emails</title>
+	</head>
+	<body>
+	<div id="email" style="width:750px; margin: 5px; padding: 5px; font-family: Arial; font-size: 12pt">
+	<table name="header" role="presentation" border="0" cellspacing="0" width="100%">
+	<tbody>
+	<tr style="border-bottom-style: dashed">
+	<td colspan="3">
+		<!-- Heading -->
+		<h1 name="span-heading" style="border-bottom: 1px dashed">
+			<span>Legal Lead Correspondence</span>
+		</h1>
+	</td>
+	</tr>
+	<tr style="color: blue">
+	<td width="5%"/>
+	<td width="70%">
+		<!-- SubHeading -->
+		<h2 name="span-sub-heading">Account Information</h2>
+	</td>
+	<td width="25%">
+		<!-- SubHeadingDate -->
+		<h2 name="span-sub-heading-date">Jun 8, 2024</h2>
+	</td>
+	</tr>
+	<tr>
+	<td width="5%"/>
+	<td colspan="2">
+		<!-- Greeting -->
+		<h3 style="margin-left: 10px;">
+			<span name="span-greeting">Hello Zackery Hickle</span>,        </h3>
+	</td>
+	</tr>
+	</tbody>
+	</table>
+	<table name="body" role="presentation" border="0" cellspacing="0" width="100%">
+	<tbody>
+	<tr>
+	<td width="8%"/>
+	<td name="body-line-introduction">        You are receiving this email due to the following change(s) to your Legal Lead Account:       </td>
+	<td width="5%"/>
+	</tr>
+	<tr>
+	<td width="8%"/>
+	<td name="body-line-details">
+		<h4 style="color: green" name="begin-search-requested-heading">
+			<!-- Template Heading -->
+		</h4>
+		<table name="begin-search-requested-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
+			<tbody>
+				<tr>
+					<td style="width: 25%">
+						<span>User Name:</span>
+					</td>
+					<td style="width: 75%">
+						<span name="begin-search-requested-user-name">test.account</span>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 25%">
+						<span>Email:</span>
+					</td>
+					<td style="width: 75%">
+						<span name="begin-search-requested-email">user@example.com</span>
+					</td>
+				</tr>
+				<tr>
+					<td name="begin-search-requested-detail-spacer" colspan="2">
+						<hr style="background: #444; height: 1px; border: 0px;">           </td>
+					</tr>
+					<tr>
+						<td style="padding: 10px;" name="begin-search-requested-details" colspan="2">
+							<table name="begin-search-requested-detail-item" role="presentation" border="0" cellspacing="0" width="95%">
+								<tbody>
+									<tr>
+										<td colspan="4">                You recently submitted a record search.<br>                The details of your search request are listed below.               </td>
+										</tr>
+										<tr>
+											<td colspan="4" name="begin-search-requested-detail-item-spacer">
+												<hr style="background: #444; height: 1px; border: 0px;">               </td>
+											</tr>
+											<tr>
+												<td width="20%">State:</td>
+												<td width="15%" name="td-begin-search-requested-state-code">TX</td>
+												<td width="20%">County:</td>
+												<td width="45%" name="td-begin-search-requested-county-name">Denton</td>
+											</tr>
+											<tr>
+												<td colspan="1">Start Date:</td>
+												<td colspan="3" name="td-begin-search-requested-start-date">Oct 1, 2023</td>
+											</tr>
+											<tr>
+												<td colspan="1">End Date:</td>
+												<td colspan="3" name="td-begin-search-requested-end-date">Oct 7, 2023</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td width="5%"/>
+			</tr>
+			<tr>
+				<td width="8%"/>
+				<td name="body-line-closing">        For additional information about this change, login to your account in the Legal Lead application.       </td>
+				<td width="5%"/>
+			</tr>
+		</tbody>
+	</table>
+	<br>
+		<table name="footer" role="presentation" border="0" cellspacing="0" width="100%">
+			<tbody>
+				<tr>
+					<td width="5%"/>
+					<td width="95%">
+						<!-- Closing -->
+						<span name="span-closing">Regards,</span>
+						<br>
+							<span name="span-closing">Account Services Team</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>
+                </div>
+            </div>
+        </div>
+        <div class="customrow footer">
+            <div id="footer-copy" class="float-center">
+                <span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
