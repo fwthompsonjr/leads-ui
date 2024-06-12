@@ -88,6 +88,9 @@ namespace permissions.api.tests
         [InlineData(typeof(IUserSettingInfrastructure))]
         [InlineData(typeof(IHtmlTransformService))]
         [InlineData(typeof(IClientSecretService))]
+        [InlineData(typeof(IMailBoxRepository))]
+        [InlineData(typeof(IUserMailbox))]
+        [InlineData(typeof(MailboxController))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exception = Record.Exception(() =>
