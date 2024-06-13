@@ -51,6 +51,7 @@ namespace legallead.desktop
                     "myaccount" => contentMyAccount.Content,
                     "search" => contentMySearch.Content,
                     "mysearch" => contentMySearch.Content,
+                    "mailbox" => contentMyMailbox.Content,
                     "error" => contentError.Content,
                     _ => content1.Content,
                 };
@@ -118,6 +119,7 @@ namespace legallead.desktop
             "home",
             "myaccount",
             "mysearch",
+            "mailbox",
             "error",
             "exit"
         };

@@ -134,6 +134,10 @@ namespace legallead.desktop
                 case "mysearch":
                     NavigateToMySearch();
                     break;
+                case "mailbox":
+                    NavigateToMyMailBox();
+                    landing = string.Empty;
+                    break;
 
                 case "exit":
                     Environment.Exit(0);
