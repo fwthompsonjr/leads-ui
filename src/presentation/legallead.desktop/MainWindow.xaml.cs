@@ -136,8 +136,7 @@ namespace legallead.desktop
                     break;
                 case "mailbox":
                     NavigateToMyMailBox();
-                    landing = string.Empty;
-                    break;
+                    return string.Empty;
 
                 case "exit":
                     Environment.Exit(0);

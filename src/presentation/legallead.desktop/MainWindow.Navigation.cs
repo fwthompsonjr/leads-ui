@@ -137,6 +137,7 @@ namespace legallead.desktop
             "mysearch-history",
             "mysearch-purchases",
             "mysearch-actives",
+            "mailbox-home"
         };
 
         private const string JsScriptTokenFormat = "setDisplay( '{0}' );";

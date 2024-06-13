@@ -115,6 +115,7 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IQueueStarter>());
             services.AddSingleton(s => provider.GetRequiredService<IMailPersistence>());
             services.AddSingleton(s => provider.GetRequiredService<IMailReader>());
+            services.AddSingleton(s => provider.GetRequiredService<IUserMailboxMapper>());
             services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
             services.AddSingleton(s =>
             {

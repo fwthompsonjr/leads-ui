@@ -82,7 +82,7 @@ namespace legallead.desktop.tests.utilities
 
         [Theory]
         [InlineData("read-me", false)]
-        [InlineData("list", false)]
+        [InlineData("listing", false)]
         [InlineData("misspelled", false)]
         [InlineData("application-state-configuration", false)]
         [InlineData("login", true)]
@@ -98,6 +98,9 @@ namespace legallead.desktop.tests.utilities
         [InlineData("permissions-change-password", true)]
         [InlineData("permissions-set-discount", true)]
         [InlineData("permissions-set-permission", true)]
+        [InlineData("message-body", true)]
+        [InlineData("message-count", true)]
+        [InlineData("message-list", true)]
         public void ServiceCanGetPostPageUrl(string landing, bool expected)
         {
             var mock = new ActiveInternetStatus();

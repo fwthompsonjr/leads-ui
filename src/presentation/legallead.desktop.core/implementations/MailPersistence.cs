@@ -147,6 +147,7 @@ namespace legallead.desktop.implementations
             {
                 var di = new DirectoryInfo(folderName);
                 di.Delete(true);
+                if (!Directory.Exists(folderName)) Directory.CreateDirectory(folderName);
             }
         }
     }

@@ -52,12 +52,12 @@ namespace legallead.desktop.extensions
                 !Guid.TryParse(data.Message, out var _)) return string.Empty;
             return data.Message;
         }
-        public static async Task SetUserId(this UserBo user, IPermissionApi? api = null)
+        public static async Task SetUserId(this UserBo user, IPermissionApi? api = null, IQueueFilter? queue = null)
         {
             var userId = await GetUserId(user, api);
             if (string.IsNullOrEmpty(userId)) return;
             var provider = DesktopCoreServiceProvider.Provider;
-            var queue = provider?.GetService<IQueueFilter>();
+            queue ??= provider?.GetService<IQueueFilter>();
             if (queue == null) return;
             queue.Append(userId);
         }

@@ -251,6 +251,7 @@ namespace legallead.desktop.implementations
             new() { Index = 405, Name = "mysearchtemplate-html"},
             new() { Index = 410, Name = "mysearchactive-html"},
             new() { Index = 500, Name = "invoice-html"},
+            new() { Index = 600, Name = "mailbox-base-html"},
         };
 
         private static readonly List<ContentHtml> _mappedcontents = new()
@@ -258,6 +259,7 @@ namespace legallead.desktop.implementations
             new() { Index = 20, Name = "commondialogue-html", Content = Properties.Resources.common_dialogue },
             new() { Index = 30, Name = "commondialoguescript-js", Content = CommonDialogueJs },
             new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
+            new() { Index = 600, Name = "mailbox-base-html", Content = Properties.Resources.mailbox_base_html },
         };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
@@ -295,6 +297,8 @@ namespace legallead.desktop.implementations
         private const string JsCloseInvoice = "<!-- script: invoice-submission-include -->";
         private const string JsMyActiveSearchScript = "<!-- script: my-active-searches-js -->";
         private const string JsReAuthenticateScript = "<!-- script: account-re-authenticate -->";
+        private const string MailboxScriptBlock = "<!-- script: mailbox-behavior -->";
+        private const string MailboxStyleSheet = "<!-- style: mailbox-css -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -332,6 +336,8 @@ namespace legallead.desktop.implementations
             { JsCloseInvoice, Properties.Resources.invoice_submission_js },
             { JsMyActiveSearchScript, Properties.Resources.mysearchactive_js },
             { JsReAuthenticateScript, Properties.Resources.common_authenticate_js },
+            { MailboxScriptBlock, Properties.Resources.mailbox_base_js },
+            { MailboxStyleSheet, Properties.Resources.mailbox_style_css },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

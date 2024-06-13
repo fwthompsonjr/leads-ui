@@ -205,6 +205,15 @@
   <data name="invoice_submission_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\invoice-submission-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="mailbox_base_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mailbox-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="mailbox_base_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mailbox-base-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="mailbox_style_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\mailbox-style-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="myaccount-html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\myaccount-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

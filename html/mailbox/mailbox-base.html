@@ -1,19 +1,14 @@
 <html>
-<script src="moz-extension://6261f2c4-2976-438b-bb3e-5d3ca9951a9d/page/prompt.js"></script>
-<script src="moz-extension://6261f2c4-2976-438b-bb3e-5d3ca9951a9d/page/runScript.js"></script>
 <head>
     <script type="text/javascript">
         try {
             CefSharp.BindObjectAsync("jsHandler", "jsHandler");
-        } catch { }
-
-
-    </script>
+        } catch { }</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>legallead.ui: active searches</title>
+    <title>legallead.ui: mailbox</title>
 
     <!-- googleapis : fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
@@ -33,59 +28,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
 
-    <style name="correspondence-css">
-        html {
-            height: 100%;
-            margin: 0;
-        }
-
-        body {
-            margin-top: 10px;
-            background: #444;
-            color: white;
-            margin-bottom: 10px;
-            overflow-x: clip
-        }
-        #footer-copy {
-            padding-top: 10px;
-        }
-        div[name="mailbox-header"] {
-            margin: 10px;
-        }
-
-        div[name="mailbox-grid"] {
-            padding-left: 25px;
-        }
-        div.mailbox {
-            vertical-align: text-top;
-            padding-top: 5px;
-            margin: 10px;
-            border-style: dashed;
-            border-color: #999;
-            border-width: 1px;
-        }
-
-        .box {
-            display: flex;
-            flex-flow: column;
-            height: 100%;
-        }
-
-
-        .box .customrow.header {
-            flex: 0 1 auto;
-            border-bottom: 1px solid #888;
-            margin-bottom: 5px;
-        }
-
-        .box .customrow.content {
-            flex: 1 1 auto;
-        }
-
-        .box .customrow.footer {
-            flex: 0 1 40px;
-        }
-    </style>
+    <!-- style: mailbox-css -->
 </head>
 <body class="text-center">
     <div class="box">
@@ -97,14 +40,32 @@
         </div>
         <div class="customrow content">
             <div name="mailbox-header" class="text-start">
-                <h5>Correspondence</h5>
+                <h5 id="mailbox-sub-header">Correspondence</h5>
             </div>
             <div name="mailbox-grid" class="row">
-                <div name="mailbox-items" class="col-5 mailbox">
-                    mail
+                <div name="mailbox-items" class="col-4 mailbox">
+                    <!-- add mail -->
+                    <div id="dv-mail-item-no-mail" name="link-mail-items-header" data-item-count="1" class="rounded">
+                        <div class="d-flex w-100 justify-content-between">
+                            <p name="item-header-text" class="mb-1">No Mail Items Found</p>
+                        </div>
+                    </div>
+                    <div id="dv-mail-item-list" name="div-mail-items" class="list-group">
+                        <a data-item-index="1" name="link-mail-items-template" class="list-group-item list-group-item-action">
+                            <div name="item-header" class="d-flex w-100 justify-content-between">
+                                <h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+                                <small name="item-create-date">2024-06-12T00:40:42</small>
+                            </div>
+                            <div name="item-detail" class="row">
+                                <div name="item-address-to" class="col-6 text-start">To: </div>
+                                <div name="item-address-from" class="col-5 text-start">From: </div>
+                                <span name="item-index" class="d-none"></span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                <div name="mailbox-preview" class="col-5 mailbox">
-                    preview
+                <div id="dv-mail-item-preview" name="mailbox-preview" class="col-7 mailbox">
+                    <object type="text/html"></object>
                 </div>
             </div>
         </div>
@@ -114,5 +75,30 @@
             </div>
         </div>
     </div>
+
+
+    <div id="templates">
+        <a href="javascript:fetch_item(-1)" id="mail-item-template" data-item-index="0" name="link-mail-items-template" class="list-group-item list-group-item-action">
+            <div name="item-header" class="d-flex w-100 justify-content-between">
+                <h5 name="item-subject" class="mb-1"></h5>
+                <small name="item-create-date"></small>
+            </div>
+            <div name="item-detail" class="row">
+                <div name="item-address-to" class="col-6 text-start">To: </div>
+                <div name="item-address-from" class="col-5 text-start">From: </div>
+                <span name="item-index" class="d-none"></span>
+            </div>
+        </a>
+        <textarea id="tarea-preview-html">
+<html>
+        <body>
+        <p> ... mail preview ... </p>
+    </body>
+</html>
+        </textarea>
+        <textarea id="tarea-current-html"></textarea>
+        <textarea id="tarea-json"></textarea>
+    </div>
+    <!-- script: mailbox-behavior -->
 </body>
 </html>
