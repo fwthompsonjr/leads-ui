@@ -210,7 +210,10 @@ namespace legallead.desktop.utilities
             { "search-get-purchases", "{0}/api/search/my-purchases" },
             { "search-get-restriction", "{0}/api/search/my-restriction-status" },
             { "make-search-purchase", "{0}/payment-fetch-search" },
-            { "reset-download", "{0}/rollback-download" }
+            { "reset-download", "{0}/rollback-download" },
+            { "mailbox-message-body", "{0}/api/mailbox/message-body" },
+            { "mailbox-message-count", "{0}/api/mailbox/message-count" },
+            { "mailbox-message-list", "{0}/api/mailbox/message-list" }
         };
 
         protected static bool CanConnectToPage(string address, IPingAddress? ping = null)
