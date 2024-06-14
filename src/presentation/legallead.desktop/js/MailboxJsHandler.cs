@@ -1,5 +1,6 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
+using HtmlAgilityPack;
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using legallead.desktop.models;
@@ -7,6 +8,9 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace legallead.desktop.js
 {
@@ -48,15 +52,52 @@ namespace legallead.desktop.js
             }
         }
 
-        public string Fetch(string id)
+        public void Fetch(string id)
         {
-            var response = string.Empty;
-            if (!HasBrowser || web == null || mailSvc == null || user == null || !user.IsAuthenicated) return response;
-            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var _)) return response;
+            if (!HasBrowser || web == null || mailSvc == null || user == null || !user.IsAuthenicated) return;
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var _)) return;
             var content = mailSvc.Fetch(id);
-            if (string.IsNullOrEmpty(content)) return response;
-            web.ExecuteScriptAsync(mailboxScriptNames[2], content);
-            return "ok";
+            if (string.IsNullOrEmpty(content)) return;
+            var dvhtml = GetEmailDiv(content);
+            var dispatcher = Application.Current.Dispatcher;
+            var html = web.GetHTML(dispatcher);
+            if (string.IsNullOrEmpty(html)) return;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            SetActiveMailItem(doc, id);
+            var previewPane = doc.DocumentNode.SelectSingleNode("//*[@id='dv-mail-item-preview']");
+            if (previewPane == null) return;
+            previewPane.InnerHtml = dvhtml;
+            web.SetHTML(dispatcher, doc.DocumentNode.OuterHtml);
+        }
+
+        private static void SetActiveMailItem(HtmlDocument doc, string id)
+        {
+            if (doc == null) return;
+            var collection = doc.DocumentNode.SelectNodes("//a[@name='link-mail-items-template']").ToList();
+            if (collection.Count == 0) return;
+            collection.ForEach(item =>
+            {
+                item.RemoveClass("active");
+                var htm = item.InnerHtml.Trim();
+                if (!string.IsNullOrEmpty(htm) && htm.Contains(id)) { item.AddClass("active"); }
+            });
+        }
+
+        private static string GetEmailDiv(string original)
+        {
+            try
+            {
+                var doc = new HtmlDocument();
+                doc.LoadHtml(original);
+                var div = doc.DocumentNode.SelectSingleNode("//*[@id='email']");
+                if (div == null) return original;
+                return div.OuterHtml;
+            }
+            catch (Exception)
+            {
+                return original;
+            }
         }
 
         private static readonly List<string> mailboxScriptNames = new()

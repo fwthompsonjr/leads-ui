@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace legallead.desktop.services
 {
@@ -20,12 +21,12 @@ namespace legallead.desktop.services
         {
 
             _timer = new Timer(OnTimer, null,
-                TimeSpan.FromMinutes(1d),
+                TimeSpan.FromSeconds(30d),
                 TimeSpan.FromSeconds(45d));
         }
 
         private bool IsWorking = false;
-        private void OnTimer(object? state)
+        internal void OnTimer(object? state)
         {
             lock (sync)
             {
@@ -48,16 +49,27 @@ namespace legallead.desktop.services
                     list = FilterByUserId(list, api, user);
                     if (list.Count == 0) return;
                     isvalid = true;
-                    var storage = new List<MailStorageItem>();
-                    list.ForEach(l =>
-                    {
-                        string html = GetHTML(l.Id, reader, api, user);
-                        if (!string.IsNullOrEmpty(html))
+                    Parallel.ForEach(
+                        list,
+                        new ParallelOptions
                         {
-                            manager?.Save(l.Id ?? string.Empty, html);
+                            MaxDegreeOfParallelism = Convert.ToInt32(Math.Ceiling((Environment.ProcessorCount * 0.75) * 2.0))
+                        },
+                        l => {
+                            var currentId = l.Id ?? string.Empty;
+                            var htmlExists = manager?.DoesItemExist(currentId) ?? false;
+                            if (!htmlExists)
+                            {
+                                var html = GetHTML(l.Id, reader, api, user);
+                                if (!string.IsNullOrEmpty(html))
+                                {
+                                    manager?.Save(l.Id ?? string.Empty, html);
+                                }
+                            }
                         }
-                        storage.Add(l.ToStorage());
-                    });
+                    );
+                    var storage = new List<MailStorageItem>();
+                    list.ForEach(l => storage.Add(l.ToStorage()));
                     manager?.Save(JsonConvert.SerializeObject(storage));
                 }
                 finally
@@ -96,7 +108,7 @@ namespace legallead.desktop.services
                 var list = new List<MailItem>();
                 list.AddRange(source.FindAll(x => !string.IsNullOrEmpty(x.Id)));
                 var userid = user.GetUserId(api).GetAwaiter().GetResult() ?? string.Empty;
-                list.RemoveAll(x => !userid.Equals(x.Id ?? string.Empty));
+                list.RemoveAll(x => !userid.Equals(x.UserId ?? string.Empty, StringComparison.OrdinalIgnoreCase));
                 return list;
             }
             catch (Exception)

@@ -7,5 +7,6 @@
         void Save(string id, string json);
         string? Fetch();
         string? Fetch(string id);
+        bool DoesItemExist(string id);
     }
 }

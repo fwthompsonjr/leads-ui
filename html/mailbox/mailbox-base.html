@@ -78,17 +78,6 @@
 
 
     <div id="templates">
-        <a href="javascript:fetch_item(-1)" id="mail-item-template" data-item-index="0" name="link-mail-items-template" class="list-group-item list-group-item-action">
-            <div name="item-header" class="d-flex w-100 justify-content-between">
-                <h5 name="item-subject" class="mb-1"></h5>
-                <small name="item-create-date"></small>
-            </div>
-            <div name="item-detail" class="row">
-                <div name="item-address-to" class="col-6 text-start">To: </div>
-                <div name="item-address-from" class="col-5 text-start">From: </div>
-                <span name="item-index" class="d-none"></span>
-            </div>
-        </a>
         <textarea id="tarea-preview-html">
 <html>
         <body>
@@ -96,8 +85,8 @@
     </body>
 </html>
         </textarea>
-        <textarea id="tarea-current-html"></textarea>
-        <textarea id="tarea-json"></textarea>
+        <textarea id="tarea-current-html"><!-- exlcuded: html current view --></textarea>
+        <textarea id="tarea-json"><!-- exlcuded: js mail collection --></textarea>
     </div>
     <!-- script: mailbox-behavior -->
 </body>
