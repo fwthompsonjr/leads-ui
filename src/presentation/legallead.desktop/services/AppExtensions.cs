@@ -1,8 +1,5 @@
-﻿using legallead.desktop.interfaces;
-using legallead.desktop.services;
+﻿using legallead.desktop.services;
 using legallead.desktop.utilities;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Threading;
 
 namespace legallead.desktop

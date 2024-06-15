@@ -55,7 +55,7 @@ namespace legallead.desktop.implementations
             const string noItem = "//*[@id=\"dv-mail-item-no-mail\"]";
             const string subHeader = "//*[@id=\"mailbox-sub-header\"]";
             var count = list.Count;
-            var mx = count == 0 ? 0 : list.Max(x => x.PositionId); 
+            var mx = count == 0 ? 0 : list.Max(x => x.PositionId);
             var indx = selected == null ? 0 : selected.PositionId;
             var heading = count == 0 ? "Correspondence" : $"Correspondence ( {indx} of {mx} )";
             var itemAttributeValue = count == 0 ? "0" : "1";
@@ -185,6 +185,6 @@ namespace legallead.desktop.implementations
             return element;
 
         }
-        
+
     }
 }

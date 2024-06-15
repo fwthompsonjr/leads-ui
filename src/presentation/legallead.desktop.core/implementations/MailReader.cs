@@ -43,6 +43,6 @@ namespace legallead.desktop.implementations
             return response.Message;
         }
 
-        
+
     }
 }

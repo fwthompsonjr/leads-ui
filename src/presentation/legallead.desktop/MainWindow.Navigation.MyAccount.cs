@@ -70,7 +70,7 @@ namespace legallead.desktop
 
         private string GetMyAccountContent()
         {
-            return  Dispatcher.Invoke(() =>
+            return Dispatcher.Invoke(() =>
             {
                 var container = contentMyAccount.Content;
                 if (container is not ChromiumWebBrowser web) return string.Empty;

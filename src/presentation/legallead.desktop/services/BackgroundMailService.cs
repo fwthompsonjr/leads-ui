@@ -27,8 +27,8 @@ namespace legallead.desktop.services
         }
 
         private bool IsWorking = false;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube", 
-            "S4158:Empty collections should not be accessed or iterated", 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube",
+            "S4158:Empty collections should not be accessed or iterated",
             Justification = "False Positive")]
         internal void OnTimer(object? state)
         {
@@ -59,7 +59,8 @@ namespace legallead.desktop.services
                         {
                             MaxDegreeOfParallelism = Convert.ToInt32(Math.Ceiling((Environment.ProcessorCount * 0.75) * 2.0))
                         },
-                        l => {
+                        l =>
+                        {
                             var currentId = l.Id ?? string.Empty;
                             var htmlExists = manager?.DoesItemExist(currentId) ?? false;
                             if (!htmlExists)
