@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
 using legallead.desktop.interfaces;
 using legallead.desktop.models;
-using Newtonsoft.Json;
-using System;
 using System.Text;
 
 namespace legallead.desktop.implementations
@@ -11,33 +9,71 @@ namespace legallead.desktop.implementations
     {
         public string Substitute(IMailPersistence? persistence, string source)
         {
-            const string tareajson = "<!-- include: js mail collection -->";
-            const string encodedtareajson = "&lt;!-- include: html current view --&gt;";
-            const string tareacurrentview = "<!-- include: html current view -->";
-            const string encodedtareacurrentview = "&lt;!-- include: js mail collection --&gt;";
             const string findList = "//*[@id=\"dv-mail-item-list\"]";
+            const string findFrame = "//*[@id=\"dv-mail-item-preview\"]";
             var document = GetDocument(source);
             if (document == null) return source;
             var data = persistence?.Fetch() ?? string.Empty;
             var list = GetData(persistence, data);
-            var content = list.Count == 0 ? 
-                string.Empty : 
+            var content = list.Count == 0 ?
+                string.Empty :
                 persistence?.Fetch(list[0].Id ?? string.Empty) ?? string.Empty;
-            if (list.Count > 0)
-            {
-                var listElement = document.DocumentNode.SelectSingleNode(findList);
-                if (listElement != null)
-                {
-                    list.ForEach(item =>
-                    {
-                        var position = list.IndexOf(item);
-                        var child = GetListItem(document, item, position);
-                        if (child != null) { listElement.AppendChild(child); }
-                    });
-                }
-            }
-            
 
+            AppendCount(document, list);
+            AppendList(list, document, findList);
+            AppendPreview(content, document, findFrame);
+
+            return AppendJson(document, data, content);
+        }
+
+        private static void AppendCount(HtmlDocument document, List<MailStorageItem> list)
+        {
+            const string noItem = "//*[@id=\"dv-mail-item-no-mail\"]";
+            const string subHeader = "//*[@id=\"mailbox-sub-header\"]";
+            var count = list.Count;
+            var heading = count == 0 ? "Correspondence" : $"Correspondence ( {count} )";
+            var itemAttributeValue = count == 0 ? "0" : "1";
+            var noItemElement = document.DocumentNode.SelectSingleNode(noItem);
+            var headingElement = document.DocumentNode.SelectSingleNode(subHeader);
+
+            if (headingElement == null && noItemElement == null) return;
+            if (headingElement != null) headingElement.InnerHtml = heading;
+
+            if (noItemElement == null) return;
+            var attribute = noItemElement.Attributes.AsEnumerable().FirstOrDefault(x => x.Name.Equals("data-item-count"));
+            if (attribute == null) return;
+
+            attribute.Value = itemAttributeValue;
+        }
+
+        private static void AppendList(List<MailStorageItem> list, HtmlDocument document, string findList)
+        {
+            if (list.Count == 0) return;
+            var listElement = document.DocumentNode.SelectSingleNode(findList);
+            if (listElement == null) return;
+            list.ForEach(item =>
+            {
+                var position = list.IndexOf(item);
+                var child = GetListItem(document, item, position);
+                if (child != null) { listElement.AppendChild(child); }
+            });
+        }
+
+        private static void AppendPreview(string? content, HtmlDocument document, string findFrame)
+        {
+            if (string.IsNullOrEmpty(content)) return;
+            var viewFrame = document.DocumentNode.SelectSingleNode(findFrame);
+            if (viewFrame == null) return;
+            viewFrame.InnerHtml = content;
+        }
+
+        private static string AppendJson(HtmlDocument document, string data, string content)
+        {
+            const string tareajson = "<!-- include: js mail collection -->";
+            const string encodedtareajson = "&lt;!-- include: html current view --&gt;";
+            const string tareacurrentview = "<!-- include: html current view -->";
+            const string encodedtareacurrentview = "&lt;!-- include: js mail collection --&gt;";
+            var doubleLine = string.Concat(Environment.NewLine, Environment.NewLine);
             var builder = new StringBuilder(document.DocumentNode.OuterHtml);
             var replacements = new[]
             {
@@ -46,7 +82,6 @@ namespace legallead.desktop.implementations
                 new { find = tareacurrentview, replace = content},
                 new { find = encodedtareacurrentview, replace = content},
             };
-            var doubleLine = string.Concat(Environment.NewLine, Environment.NewLine);
             foreach (var item in replacements)
             {
                 var token = string.Concat(doubleLine, item.replace, doubleLine);
@@ -60,6 +95,7 @@ namespace legallead.desktop.implementations
             if (persistence == null || string.IsNullOrEmpty(messages)) return new();
             return ObjectExtensions.TryGet<List<MailStorageItem>>(messages);
         }
+
         private static HtmlNode GetListItem(HtmlDocument document, MailStorageItem item, int index)
         {
             var element = document.CreateElement("a");
@@ -123,5 +159,6 @@ namespace legallead.desktop.implementations
             return element;
 
         }
+        
     }
 }

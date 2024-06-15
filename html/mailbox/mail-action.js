@@ -24,9 +24,7 @@ let mailbox = {
         "item": function (id) {
             try {
                 // get html content based on item id
-                if (isNaN(id)) {
-                    return;
-                }
+                if (isNaN(id)) { return; }
                 // client side validation
                 const inx = parseInt(id);
                 const mbox = document.getElementById(mailbox.controls.maillist);
@@ -39,14 +37,18 @@ let mailbox = {
                 }
                 const mailitem = mbox.children[inx];
                 const uuidx = mailitem.children[1].children[2].innerText;
-                let content = handler.fetch(uuidx);
-                if (null == content || content.length == 0) return;
-                const selector = "#" + mailbox.controls.preview;
-                $(selector).html(html);
+                handler.fetch(uuidx);
             } catch {
                 mailbox.preview.clear();
             }
         }
+    }
+}
+
+let maillist_init = {
+    "setScroll": function () {
+        const selectedItem = "a[name='link-mail-items-template'].active";
+        $(selectedItem).get(0).scrollIntoView();
     }
 }
 
@@ -56,3 +58,16 @@ function fetch_item(id) {
     }
     mailbox.fetch.item(id);
 }
+
+function docReady(fn) {
+    // see if DOM is already available
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        // call on next available tick
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }
+}
+docReady(function () {
+    maillistinit.setScroll();
+});
