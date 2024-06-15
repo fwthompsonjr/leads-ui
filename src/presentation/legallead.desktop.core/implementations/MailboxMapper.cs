@@ -15,23 +15,49 @@ namespace legallead.desktop.implementations
             if (document == null) return source;
             var data = persistence?.Fetch() ?? string.Empty;
             var list = GetData(persistence, data);
-            var content = list.Count == 0 ?
-                string.Empty :
-                persistence?.Fetch(list[0].Id ?? string.Empty) ?? string.Empty;
-
-            AppendCount(document, list);
+            var recordId = list.Count == 0 ? string.Empty : list[0].Id ?? string.Empty;
+            var content = list.Count == 0 ? string.Empty : persistence?.Fetch(recordId) ?? string.Empty;
+            var selected = list.Find(x => (x.Id ?? "--").Equals(recordId, StringComparison.OrdinalIgnoreCase));
+            AppendCount(document, list, selected);
             AppendList(list, document, findList);
             AppendPreview(content, document, findFrame);
 
             return AppendJson(document, data, content);
         }
-
-        private static void AppendCount(HtmlDocument document, List<MailStorageItem> list)
+        internal static string RestyleColumns(string content)
+        {
+            const char semi = ';';
+            const string searches = "<td width=\"70%\">;<td width=\"25%\">";
+            const string alternate = "<td width=\"65%\">;<td width=\"30%\">";
+            var finds = searches.Split(semi).ToList();
+            var replacements = alternate.Split(semi);
+            foreach (var find in finds)
+            {
+                var indx = finds.IndexOf(find);
+                if (content.Contains(find, StringComparison.OrdinalIgnoreCase))
+                {
+                    var replacement = replacements[indx];
+                    content = content.Replace(find, replacement);
+                }
+            }
+            return content;
+        }
+        internal static string RestyleBlue(string content)
+        {
+            const string find = "color: blue";
+            const string alternate = "#0d6efd";
+            var replacement = $"color: {alternate}";
+            if (!content.Contains(find)) return RestyleColumns(content);
+            return RestyleColumns(content.Replace(find, replacement));
+        }
+        private static void AppendCount(HtmlDocument document, List<MailStorageItem> list, MailStorageItem? selected = null)
         {
             const string noItem = "//*[@id=\"dv-mail-item-no-mail\"]";
             const string subHeader = "//*[@id=\"mailbox-sub-header\"]";
             var count = list.Count;
-            var heading = count == 0 ? "Correspondence" : $"Correspondence ( {count} )";
+            var mx = count == 0 ? 0 : list.Max(x => x.PositionId); 
+            var indx = selected == null ? 0 : selected.PositionId;
+            var heading = count == 0 ? "Correspondence" : $"Correspondence ( {indx} of {mx} )";
             var itemAttributeValue = count == 0 ? "0" : "1";
             var noItemElement = document.DocumentNode.SelectSingleNode(noItem);
             var headingElement = document.DocumentNode.SelectSingleNode(subHeader);
@@ -64,7 +90,7 @@ namespace legallead.desktop.implementations
             if (string.IsNullOrEmpty(content)) return;
             var viewFrame = document.DocumentNode.SelectSingleNode(findFrame);
             if (viewFrame == null) return;
-            viewFrame.InnerHtml = content;
+            viewFrame.InnerHtml = RestyleBlue(content);
         }
 
         private static string AppendJson(HtmlDocument document, string data, string content)

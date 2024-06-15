@@ -8,7 +8,7 @@ namespace legallead.desktop.extensions
         public static MailStorageItem ToStorage(this MailItem source)
         {
             var createDate = source.CreateDate.HasValue ?
-                source.CreateDate.Value.ToLocalDateTime().ToString("f") : " - ";
+                source.CreateDate.Value.ToLocalDateTime().ToString("f").ToDdd() : " - ";
             return new()
             {
                 Id = source.Id,
@@ -19,6 +19,7 @@ namespace legallead.desktop.extensions
                 CreateDate = createDate
             };
         }
+
         private static DateTime ToLocalDateTime(this DateTime source)
         {
             DateTime convertedDate = DateTime.SpecifyKind(
@@ -26,6 +27,15 @@ namespace legallead.desktop.extensions
             DateTimeKind.Utc);
 
             return convertedDate.ToLocalTime();
+        }
+
+        private static string ToDdd(this string date)
+        {
+            const char comma = ',';
+            if (string.IsNullOrEmpty(date) || !date.Contains(comma)) { return date; }
+            var components = date.Split(comma);
+            components[0] = components[0].Substring(0, 3);
+            return string.Join(comma, components);
         }
     }
 }

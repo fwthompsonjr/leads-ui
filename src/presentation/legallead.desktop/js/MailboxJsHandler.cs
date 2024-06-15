@@ -2,6 +2,7 @@
 using CefSharp.Wpf;
 using HtmlAgilityPack;
 using legallead.desktop.entities;
+using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
 using legallead.desktop.models;
 using legallead.desktop.utilities;
@@ -64,11 +65,31 @@ namespace legallead.desktop.js
             if (string.IsNullOrEmpty(html)) return;
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
+            SetItemIndex(doc, id);
             SetActiveMailItem(doc, id);
             var previewPane = doc.DocumentNode.SelectSingleNode("//*[@id='dv-mail-item-preview']");
             if (previewPane == null) return;
-            previewPane.InnerHtml = dvhtml;
+            previewPane.InnerHtml = MailboxMapper.RestyleBlue(dvhtml);
             web.SetHTML(dispatcher, doc.DocumentNode.OuterHtml);
+        }
+
+        private void SetItemIndex(HtmlDocument doc, string id)
+        {
+            const string subHeader = "//*[@id=\"mailbox-sub-header\"]";
+            if (doc == null || mailSvc == null) return;
+            var data = mailSvc.Fetch() ?? string.Empty;
+            var collection = ObjectExtensions.TryGet<List<MailStorageItem>>(data);
+            if (collection.Count == 0) return;
+            var selected = collection.Find(item =>
+            {
+                if (string.IsNullOrEmpty(item.Id)) return false;
+                return item.Id.Equals(id);
+            });
+            var mx = collection.Max(x => x.PositionId);
+            var indx = selected == null ? 0 : selected.PositionId;
+            var heading = selected == null ? "Correspondence" : $"Correspondence ( {indx} of {mx} )";
+            var headingElement = doc.DocumentNode.SelectSingleNode(subHeader);
+            if (headingElement != null) headingElement.InnerHtml = heading;
         }
 
         private static void SetActiveMailItem(HtmlDocument doc, string id)

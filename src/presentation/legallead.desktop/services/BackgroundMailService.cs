@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace legallead.desktop.services
 {
@@ -26,6 +27,9 @@ namespace legallead.desktop.services
         }
 
         private bool IsWorking = false;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube", 
+            "S4158:Empty collections should not be accessed or iterated", 
+            Justification = "False Positive")]
         internal void OnTimer(object? state)
         {
             lock (sync)
@@ -70,15 +74,33 @@ namespace legallead.desktop.services
                     );
                     var storage = new List<MailStorageItem>();
                     list.ForEach(l => storage.Add(l.ToStorage()));
+                    storage.ForEach(s => s.PositionId = storage.IndexOf(s) + 1);
                     manager?.Save(JsonConvert.SerializeObject(storage));
                 }
                 finally
                 {
                     IsWorking = false;
                     if (!isvalid) { manager?.Clear(); }
+                    SetEnabled(isvalid);
                 }
 
             }
+        }
+
+        private static void SetEnabled(bool isvalid)
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            if (dispatcher == null) { return; }
+            Window mainWindow = dispatcher.Invoke(() =>
+            {
+                return Application.Current.MainWindow;
+            });
+            if (mainWindow is not MainWindow main) return;
+            dispatcher.Invoke(() =>
+            {
+                var menuItem = main.mnuMyMailboxHome;
+                if (menuItem != null) { menuItem.IsEnabled = isvalid; }
+            });
         }
 
         private static string GetHTML(string? id, IMailReader reader, IPermissionApi api, UserBo user)
