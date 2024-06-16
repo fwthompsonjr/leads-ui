@@ -1,8 +1,10 @@
 ﻿using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.implementations
 {
+    [ExcludeFromCodeCoverage(Justification = "Interacts with file system. Tested in integration only")]
     internal class QueueFilter : IQueueFilter
     {
         private readonly IQueueStarter startingService;

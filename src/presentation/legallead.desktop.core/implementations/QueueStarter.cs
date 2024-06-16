@@ -1,8 +1,10 @@
 ﻿using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace legallead.desktop.implementations
 {
+    [ExcludeFromCodeCoverage(Justification = "Interacts with file system. Tested in integration only")]
     internal class QueueStarter : QueueLocalStarter
     {
         public QueueStarter(IQueueSettings settings, IQueueStopper stopper) : base(settings, stopper)
