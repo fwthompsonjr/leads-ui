@@ -1,0 +1,32 @@
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+    <div name="item-header" class="d-flex w-100 justify-content-between">
+      <h5 name="item-subject" class="mb-1">List group item heading</h5>
+      <small name="item-create-date">2024-06-12T00:40:42</small>
+    </div>
+    <div class="row">
+        <div name="item-address-from" class="col-5">From: </div>
+        <div name="item-address-to" class="col-5">To: </div>
+    </div>
+  </a>
+  <a href="#" class="list-group-item list-group-item-action">
+    <div name="item-header" class="d-flex w-100 justify-content-between">
+      <h5 name="item-subject" class="mb-1">List group item heading</h5>
+      <small name="item-create-date">2024-06-12T00:40:42</small>
+    </div>
+    <div class="row">
+        <div name="item-address-from" class="col-5">From: </div>
+        <div name="item-address-to" class="col-5">To: </div>
+    </div>
+  </a>
+  <a href="#" class="list-group-item list-group-item-action">
+    <div name="item-header" class="d-flex w-100 justify-content-between">
+      <h5 name="item-subject" class="mb-1">List group item heading</h5>
+      <small name="item-create-date">2024-06-12T00:40:42</small>
+    </div>
+    <div class="row">
+        <div name="item-address-from" class="col-5">From: </div>
+        <div name="item-address-to" class="col-5">To: </div>
+    </div>
+  </a>
+</div>

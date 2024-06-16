@@ -1,0 +1,3240 @@
+<html lang="en"><head>
+		<script type="text/javascript">
+                         try { 
+                         CefSharp.BindObjectAsync("jsHandler", "jsHandler"); 
+                              } catch { } 
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: mailbox</title>
+		
+		<!-- googleapis : fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+		
+		<!-- popper -->
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+		
+		<!-- bootstrap -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+		
+		<!-- font awesome -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+		
+		<!-- jquery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+		<style name="correspondence-css">
+                         html { 
+                         height: 100%; 
+                         margin: 0; 
+                         } 
+                         body { 
+                         margin-top: 10px; 
+                         background: #444; 
+                         color: white; 
+                         margin-bottom: 10px; 
+                         overflow-x: clip 
+                         } 
+                         #footer-copy { 
+                         padding-top: 10px; 
+                         } 
+                         #templates { 
+                         display: none; 
+                         } 
+                         div[name="mailbox-header"] { 
+                         margin: 10px; 
+                         } 
+                         div[name="mailbox-grid"] { 
+                         padding-left: 25px; 
+                         } 
+                         div[name="mailbox-preview"] { 
+                         overflow: auto; 
+                         } 
+                         div.mailbox { 
+                         vertical-align: text-top; 
+                         padding: 12px; 
+                         margin: 10px; 
+                         border-style: dashed; 
+                         border-color: #999; 
+                         border-width: 1px; 
+                         max-height: 800px; 
+                         overflow: auto; 
+                         } 
+                         div[name="link-mail-items-header"] { 
+                         border-style: solid; 
+                         border-color: #999; 
+                         border-width: 1px; 
+                         padding-left: 15px; 
+                         padding-top: 5px; 
+                         } 
+                         div[name="link-mail-items-header"][data-item-count="0"] { 
+                         display: block; 
+                         } 
+                         div[name="link-mail-items-header"][data-item-count="1"] { 
+                         display: none; 
+                         } 
+                         a[name="link-mail-items-template"][data-item-index="0"] { 
+                         display: none; 
+                         } 
+                         a[name="link-mail-items-template"]:not([data-item-index="0"]) { 
+                         display: block; 
+                         } 
+                         div[name="item-address-to"] { 
+                         margin-left: 15px; 
+                         } 
+                         .box { 
+                         display: flex; 
+                         flex-flow: column; 
+                         height: 100%; 
+                         } 
+                         .box .customrow.header { 
+                         flex: 0 1 auto; 
+                         border-bottom: 1px solid #888; 
+                         margin-bottom: 5px; 
+                         } 
+                         .box .customrow.content { 
+                         flex: 1 1 auto; 
+                         } 
+                         .box .customrow.footer { 
+                         flex: 0 1 40px; 
+                         } 
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</style>
+	</head>
+	<body class="text-center">
+		<div class="box">
+			<div class="customrow header">
+				<h3 class="masthead-brand">
+					<i class="bi bi-bank2"></i>
+					<span>Legal Lead UI</span>
+				</h3>
+			</div>
+			<div class="customrow content">
+				<div name="mailbox-header" class="text-start">
+					<h5 id="mailbox-sub-header">Correspondence ( 189 )</h5>
+				</div>
+				<div name="mailbox-grid" class="row">
+					<div name="mailbox-items" class="col-4 mailbox">
+						
+						<!-- add mail -->
+						<div id="dv-mail-item-no-mail" name="link-mail-items-header" data-item-count="1" class="rounded">
+							<div class="d-flex w-100 justify-content-between">
+								<p name="item-header-text" class="mb-1">No Mail Items Found</p>
+							</div>
+						</div>
+						<div id="dv-mail-item-list" name="div-mail-items" class="list-group">
+							<a name="link-mail-items-template" href="javascript:fetch_item(0)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 11, 2024 7:40 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<evan vandervort=""></evan>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">662f9e90-2854-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(1)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 11, 2024 7:40 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<zackery hickle=""></zackery>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5f210b4e-2854-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(2)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 11, 2024 7:40 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<zackery hickle=""></zackery>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">57c92a15-2854-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(3)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:37 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<zackery hickle=""></zackery>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4c43a3a8-25df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(4)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:37 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bridie reichel=""></bridie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">453fc33e-25df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(5)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:37 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bridie reichel=""></bridie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3dea5133-25df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(6)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:30 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bridie reichel=""></bridie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">608a2350-25de-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(7)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:30 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<judge mertz=""></judge>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">59757a18-25de-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(8)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:30 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<judge mertz=""></judge>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">51fcb37f-25de-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(9)" data-item-index="1" class="list-group-item list-group-item-action active">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:03 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<judge mertz=""></judge>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">9c94f400-25da-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(10)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:03 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">95a850c6-25da-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(11)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Saturday, June 8, 2024 4:03 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8e391f20-25da-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(12)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, June 5, 2024 11:42 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">96931859-235a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(13)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, June 5, 2024 10:51 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">769130a1-2353-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(14)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, June 5, 2024 9:07 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">fc1ba335-2344-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(15)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:05 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brandi runte=""></brandi>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ab9ee694-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(16)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:05 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<madisyn kemmer=""></madisyn>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a4445695-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(17)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:05 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<madisyn kemmer=""></madisyn>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">9d0024c2-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(18)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:03 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<madisyn kemmer=""></madisyn>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">566af9e4-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(19)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:03 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<alexandrea thompson=""></alexandrea>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4e404981-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(20)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 12:02 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<alexandrea thompson=""></alexandrea>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">46e1e1a4-2294-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(21)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:55 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<alexandrea thompson=""></alexandrea>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3d228bb9-2293-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(22)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:55 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<pat schowalter=""></pat>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3689c40c-2293-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(23)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:55 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<pat schowalter=""></pat>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2fd06b93-2293-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(24)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:54 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<pat schowalter=""></pat>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2d95475f-2293-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(25)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<pat schowalter=""></pat>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">95c207a4-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(26)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<anissa marquardt=""></anissa>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8e061066-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(27)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<anissa marquardt=""></anissa>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">86ad4de8-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(28)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:48 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<anissa marquardt=""></anissa>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5372084e-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(29)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:48 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<kian schaden=""></kian>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4cb34562-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(30)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:48 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<kian schaden=""></kian>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4542992d-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(31)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:47 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<kian schaden=""></kian>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1218127a-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(32)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:46 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leilani beier=""></leilani>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">0b7e51fb-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(33)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:46 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leilani beier=""></leilani>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">0438730d-2292-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(34)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:43 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leilani beier=""></leilani>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8e9a00b4-2291-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(35)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:43 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<adelbert auer=""></adelbert>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">87f420c3-2291-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(36)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:43 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<adelbert auer=""></adelbert>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">82de88b4-2291-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(37)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:42 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<adelbert auer=""></adelbert>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">80a39ace-2291-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(38)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:17 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<adelbert auer=""></adelbert>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">eda1f314-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(39)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:17 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<juliet heaney=""></juliet>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e6bbce84-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(40)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:17 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<juliet heaney=""></juliet>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e15fb756-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(41)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:16 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<juliet heaney=""></juliet>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">df0861f7-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(42)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:14 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<juliet heaney=""></juliet>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8298156c-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(43)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:14 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<elody jerde=""></elody>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">7bdb3db4-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(44)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:14 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<elody jerde=""></elody>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">766c23de-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(45)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, June 4, 2024 11:13 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<elody jerde=""></elody>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">72370a93-228d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(46)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Monday, June 3, 2024 7:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<elody jerde=""></elody>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5ed8a477-220a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(47)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Monday, June 3, 2024 7:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<friedrich nikolaus=""></friedrich>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">57c412bc-220a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(48)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Monday, June 3, 2024 7:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<friedrich nikolaus=""></friedrich>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4f7d684f-220a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(49)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Saturday, June 1, 2024 1:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<friedrich nikolaus=""></friedrich>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3bce6c20-1fe3-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(50)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Saturday, June 1, 2024 1:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<maximus howe=""></maximus>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">34383b23-1fe3-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(51)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Saturday, June 1, 2024 1:50 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<maximus howe=""></maximus>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2cb32749-1fe3-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(52)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:13 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<maximus howe=""></maximus>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">9d0dc919-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(53)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:13 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bart hermann=""></bart>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">917f2788-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(54)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:12 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bart hermann=""></bart>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">853b924f-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(55)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:10 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bart hermann=""></bart>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">24223fc9-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(56)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:09 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<donny schuppe=""></donny>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">194a5de2-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(57)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 4:09 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<donny schuppe=""></donny>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">0f5070b9-1f92-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(58)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 3:08 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<donny schuppe=""></donny>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">82c2cccf-1f89-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(59)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Friday, May 31, 2024 3:08 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<arlie rippin=""></arlie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">7c24c732-1f89-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(60)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 3:07 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<arlie rippin=""></arlie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">74ef7a11-1f89-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(61)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 2:34 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<arlie rippin=""></arlie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c9003c87-1f84-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(62)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Friday, May 31, 2024 2:34 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leonie mante=""></leonie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c24ba6fd-1f84-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(63)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Friday, May 31, 2024 2:33 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leonie mante=""></leonie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">b530dd37-1f84-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(64)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 7:45 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leonie mante=""></leonie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">df4494b9-1e1d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(65)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 7:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<leonie mante=""></leonie>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">478a9b95-1e1b-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(66)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 7:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">40603b63-1e1b-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(67)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 7:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">39064214-1e1b-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(68)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:18 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">f4ad67e0-1e00-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(69)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">d151c2d1-1e00-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(70)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:16 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">bb2dda35-1e00-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(71)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:14 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">700c1712-1e00-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(72)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:11 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ff341b51-1dff-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(73)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 4:07 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">82fd4aac-1dff-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(74)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 3:37 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4e94b256-1dfb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(75)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 3:02 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5bb10522-1df6-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(76)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:50 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a5eba006-1df4-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(77)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:22 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<era wiegand=""></era>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">d1443a1c-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(78)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:22 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<abagail marvin=""></abagail>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ca7fc514-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(79)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:22 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<abagail marvin=""></abagail>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c54bce49-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(80)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:18 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<abagail marvin=""></abagail>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">31505873-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(81)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dasia schamberger=""></dasia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">28eec905-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(82)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 2:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dasia schamberger=""></dasia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">23a664bf-1df0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(83)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 11:54 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dasia schamberger=""></dasia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1c7b3d38-1ddc-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(84)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 11:54 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<shaylee daugherty=""></shaylee>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">15d3fd57-1ddc-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(85)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 11:54 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<shaylee daugherty=""></shaylee>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">0f3b7e8c-1ddc-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(86)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 12:34 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<shaylee daugherty=""></shaylee>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2857ea4e-1d7d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(87)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 12:34 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1f0f5e73-1d7d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(88)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 29, 2024 12:34 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1914ac5b-1d7d-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(89)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:54 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">b7c99c2f-1d66-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(90)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:53 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">9842ab51-1d66-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(91)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:52 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">81dc5f81-1d66-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(92)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:51 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">54e1c790-1d66-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(93)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:20 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ff813869-1d61-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(94)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:18 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">b901f624-1d61-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(95)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a365fab5-1d61-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(96)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 9:09 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">83d40006-1d60-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(97)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:18 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">52e61a24-1d59-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(98)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:16 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1c89b180-1d59-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(99)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:13 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">98b3bbe0-1d58-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(100)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:12 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">86f3bc71-1d58-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(101)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:08 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ee894ec2-1d57-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(102)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:06 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">bfc6bdb0-1d57-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(103)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 8:01 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">f4cf6a3f-1d56-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(104)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:57 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">65578802-1d56-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(105)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:55 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2496974e-1d56-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(106)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:53 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e8275e25-1d55-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(107)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:48 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1f7ebcc6-1d55-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(108)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:47 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">00cb44b3-1d55-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(109)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:43 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">82c8e50c-1d54-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(110)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:42 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5e1e66b5-1d54-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(111)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:28 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">614e44ef-1d52-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(112)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 7:25 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ec2770b5-1d51-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(113)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 5:30 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e9b4270a-1d41-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(114)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 5:28 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8d11d8be-1d41-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(115)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 4:07 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<dominique collins=""></dominique>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">558459d4-1d36-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(116)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 4:07 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<braden feest=""></braden>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4ecb7444-1d36-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(117)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 4:07 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<braden feest=""></braden>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">48b8dd8f-1d36-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(118)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 3:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<braden feest=""></braden>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">d875ccb1-1d31-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(119)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 3:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<briana o'keefe=""></briana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">d197f8fc-1d31-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(120)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 3:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<briana o'keefe=""></briana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">cc1ddc17-1d31-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(121)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 2:27 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<briana o'keefe=""></briana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">564790a2-1d28-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(122)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Tuesday, May 28, 2024 2:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<briana o'keefe=""></briana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2d80cf0a-1d28-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(123)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:56 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<briana o'keefe=""></briana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">edebb6f8-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(124)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:56 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<luis lesch=""></luis>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e7773b32-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(125)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:56 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<luis lesch=""></luis>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e282faf8-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(126)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:53 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<luis lesch=""></luis>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">6d6d95bb-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(127)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:52 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<grady toy=""></grady>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">66e6c13d-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(128)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:52 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<grady toy=""></grady>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">61a44093-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(129)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:51 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<grady toy=""></grady>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3264feaa-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(130)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:51 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<roscoe lynch=""></roscoe>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2b9b1a56-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(131)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:51 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<roscoe lynch=""></roscoe>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">265147bf-1b80-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(132)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<roscoe lynch=""></roscoe>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">36170c9a-1b7f-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(133)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<vicente murphy=""></vicente>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2f760986-1b7f-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(134)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Sunday, May 26, 2024 11:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<vicente murphy=""></vicente>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2a895bfd-1b7f-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(135)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 12:24 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<vicente murphy=""></vicente>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">f903688d-12df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(136)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 12:24 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<noelia haley=""></noelia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">f31442e8-12df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(137)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 12:24 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<noelia haley=""></noelia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ee9f09eb-12df-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(138)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 9:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<noelia haley=""></noelia>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">b2ff0894-12c9-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(139)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Profile Changed</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 9:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<carolyne parisian=""></carolyne>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">aca7ca14-12c9-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(140)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 15, 2024 9:44 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<carolyne parisian=""></carolyne>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a84a8cb1-12c9-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(141)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:23 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<carolyne parisian=""></carolyne>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e3561b7d-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(142)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:23 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<vilma wuckert=""></vilma>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">d7fd7084-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(143)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:21 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<vilma wuckert=""></vilma>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">950adffa-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(144)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:20 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<lyda stiedemann=""></lyda>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">88db7c08-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(145)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<lyda stiedemann=""></lyda>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">1d9382bd-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(146)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 11:17 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<howard kuvalis=""></howard>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">124fea2e-0dbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(147)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 9:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<howard kuvalis=""></howard>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">842c9177-0dab-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(148)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 9:26 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<jamal stehr=""></jamal>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">79d03ba5-0dab-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(149)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Account Permission Change Requested</h5>
+									<small name="item-create-date">Wednesday, May 8, 2024 9:25 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<jamal stehr=""></jamal>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">7897f849-0dab-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(150)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Record Search Requested</h5>
+									<small name="item-create-date">Tuesday, May 7, 2024 4:55 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<jamal stehr=""></jamal>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8b430bf8-0cbc-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(151)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Tuesday, May 7, 2024 4:50 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<brittany borer=""></brittany>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">dd25fec1-0cbb-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(152)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:24 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<armando mcdermott=""></armando>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">fb9eff24-0c18-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(153)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:56 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<porter leannon=""></porter>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a0bf1921-0c0c-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(154)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:41 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<angelina gutmann=""></angelina>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">87c3ca99-0c0a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(155)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:38 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<breana parisian=""></breana>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">23a87292-0c0a-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(156)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:35 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<donato bauch=""></donato>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">b02b4187-0c09-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(157)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:33 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<lucio zemlak=""></lucio>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5eb8678a-0c09-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(158)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:28 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<marquise green=""></marquise>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c937754a-0c08-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(159)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 7:25 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<gennaro marks=""></gennaro>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3f2b646e-0c08-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(160)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 12:51 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<cristal hegmann=""></cristal>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4a149409-0bd1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(161)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 12:47 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<kayleigh heathcote=""></kayleigh>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ac69533b-0bd0-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(162)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 12:28 PM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<carmela o'reilly=""></carmela>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">0b33fdef-0bce-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(163)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 11:17 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<petra nolan=""></petra>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">2ff234d4-0bc4-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(164)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 11:02 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<annamae boyer=""></annamae>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">050075ed-0bc2-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(165)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 11:00 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<alessandra fahey=""></alessandra>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">bb129aa3-0bc1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(166)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 10:59 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<jessica shanahan=""></jessica>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a7714ec5-0bc1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(167)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 10:10 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<alba kessler=""></alba>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c874813a-0bba-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(168)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 10:07 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<phyllis johns=""></phyllis>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">64c18541-0bba-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(169)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:56 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<michel ernser=""></michel>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">db7eee60-0bb8-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(170)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:49 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<johathan turner=""></johathan>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e0b996f1-0bb7-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(171)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:48 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<mable graham=""></mable>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a2d03190-0bb7-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(172)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:47 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<mable graham=""></mable>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">a19820ab-0bb7-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(173)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:45 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<thea stroman=""></thea>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">4400b6b9-0bb7-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(174)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:16 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<roy keebler=""></roy>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">3608b5fd-0bb3-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(175)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:12 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<caleb schimmel=""></caleb>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">ba890b07-0bb2-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(176)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:10 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<tamara beer=""></tamara>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5fdefdc9-0bb2-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(177)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:04 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<shea kertzmann=""></shea>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">8e2f2779-0bb1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(178)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:03 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<muhammad boyle=""></muhammad>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">59bcfd6f-0bb1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(179)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:02 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<muhammad boyle=""></muhammad>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">58a0ff0d-0bb1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(180)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 9:01 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<ezekiel rutherford=""></ezekiel>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">13240d87-0bb1-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(181)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:51 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<bianka shields=""></bianka>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c1e50972-0baf-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(182)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:37 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<lorenza renner=""></lorenza>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">c58d9091-0bad-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(183)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:31 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<lavina okuneva=""></lavina>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">f637e2e7-0bac-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(184)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:28 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<ali orn=""></ali>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">88d234c2-0bac-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(185)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:27 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<theo barton=""></theo>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">63fffa30-0bac-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(186)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:20 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<maximo torp=""></maximo>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5786348a-0bab-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(187)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:19 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<maximo torp=""></maximo>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">5648cdc3-0bab-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+							<a name="link-mail-items-template" href="javascript:fetch_item(188)" data-item-index="1" class="list-group-item list-group-item-action">
+								<div name="item-header" class="d-flex w-100 justify-content-between">
+									<h5 name="item-subject" class="mb-1">Legal Lead Email</h5>
+									<small name="item-create-date">Monday, May 6, 2024 8:02 AM</small>
+								</div>
+								<div name="item-detail" class="row">
+									<div name="item-address-to" class="col-6 text-start">To: user@example.com
+										<karelle zieme=""></karelle>
+									</div>
+									<div name="item-address-to" class="col-6 text-start">From: admin@legallead.co
+										<legal lead="" admin=""></legal>
+									</div>
+									<span name="item-index" class="d-none">e123f4d3-0ba8-11ef-99ce-0af7a01f52e9</span>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div id="dv-mail-item-preview" name="mailbox-preview" class="col-7 mailbox">
+						<div id="email" style="width:750px; margin: 5px; padding: 5px; font-family: Arial; font-size: 12pt">
+							<table name="header" role="presentation" border="0" cellspacing="0" width="100%">
+								<tbody>
+									<tr style="border-bottom-style: dashed">
+										<td colspan="3">
+											
+											<!-- Heading -->
+											<h1 name="span-heading" style="border-bottom: 1px dashed">
+												<span>Legal Lead Correspondence</span>
+											</h1>
+										</td>
+									</tr>
+									<tr style="color: blue">
+										<td width="5%"></td>
+										<td width="70%">
+											
+											<!-- SubHeading -->
+											<h2 name="span-sub-heading">Account Information</h2>
+										</td>
+										<td width="25%">
+											
+											<!-- SubHeadingDate -->
+											<h2 name="span-sub-heading-date">Jun 8, 2024</h2>
+										</td>
+									</tr>
+									<tr>
+										<td width="5%"></td>
+										<td colspan="2">
+											
+											<!-- Greeting -->
+											<h3 style="margin-left: 10px;">
+												<span name="span-greeting">Hello Judge Mertz</span>,
+											</h3>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<table name="body" role="presentation" border="0" cellspacing="0" width="100%">
+								<tbody>
+									<tr>
+										<td width="8%"></td>
+										<td name="body-line-introduction">
+											You are receiving this email due to the following change(s) to your Legal Lead Account:
+										</td>
+										<td width="5%"></td>
+									</tr>
+									<tr>
+										<td width="8%"></td>
+										<td name="body-line-details">
+											<h4 style="color: green" name="begin-search-requested-heading">
+												
+												<!-- Template Heading -->
+											</h4>
+											<table name="begin-search-requested-detail-table" role="presentation" border="0" cellspacing="0" style="margin-left: 15px; margin-bottom= 15px;" width="95%">
+												<tbody>
+													<tr>
+														<td style="width: 25%">
+															<span>User Name:</span>
+														</td>
+														<td style="width: 75%">
+															<span name="begin-search-requested-user-name">test.account</span>
+														</td>
+													</tr>
+													<tr>
+														<td style="width: 25%">
+															<span>Email:</span>
+														</td>
+														<td style="width: 75%">
+															<span name="begin-search-requested-email">user@example.com</span>
+														</td>
+													</tr>
+													<tr>
+														<td name="begin-search-requested-detail-spacer" colspan="2">
+															<hr style="background: #444; height: 1px; border: 0px;">
+														</td>
+													</tr>
+													<tr>
+														<td style="padding: 10px;" name="begin-search-requested-details" colspan="2">
+															<table name="begin-search-requested-detail-item" role="presentation" border="0" cellspacing="0" width="95%">
+																<tbody>
+																	<tr>
+																		<td colspan="4">
+																			You recently submitted a record search.<br>
+																			The details of your search request are listed below.
+																		</td>
+																	</tr>
+																	<tr>
+																		<td colspan="4" name="begin-search-requested-detail-item-spacer">
+																			<hr style="background: #444; height: 1px; border: 0px;">
+																		</td>
+																	</tr>
+																	<tr>
+																		<td width="20%">State:</td>
+																		<td width="15%" name="td-begin-search-requested-state-code">TX</td>
+																		<td width="20%">County:</td>
+																		<td width="45%" name="td-begin-search-requested-county-name">Denton</td>
+																	</tr>
+																	<tr>
+																		<td colspan="1">Start Date:</td>
+																		<td colspan="3" name="td-begin-search-requested-start-date">Oct 1, 2023</td>
+																	</tr>
+																	<tr>
+																		<td colspan="1">End Date:</td>
+																		<td colspan="3" name="td-begin-search-requested-end-date">Oct 7, 2023</td>
+																	</tr>
+																</tbody>
+															</table>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</td>
+										<td width="5%"></td>
+									</tr>
+									<tr>
+										<td width="8%"></td>
+										<td name="body-line-closing">
+											For additional information about this change, login to your account in the Legal Lead application.
+										</td>
+										<td width="5%"></td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<table name="footer" role="presentation" border="0" cellspacing="0" width="100%">
+								<tbody>
+									<tr>
+										<td width="5%"></td>
+										<td width="95%">
+											
+											<!-- Closing -->
+											<span name="span-closing">Regards,</span>
+											<br>
+											<span name="span-closing">Account Services Team</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="customrow footer">
+				<div id="footer-copy" class="float-center">
+					<span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+				</div>
+			</div>
+		</div>
+		<div id="templates">
+			<textarea id="tarea-preview-html">&lt;html&gt;         &lt;body&gt;         &lt;p&gt; ... mail preview ... &lt;/p&gt;     &lt;/body&gt; &lt;/html&gt;
+			</textarea>
+			<textarea id="tarea-current-html">&lt;!-- exclude: html current view --&gt;</textarea>
+			<textarea id="tarea-json">&lt;!-- exclude: js mail collection --&gt;</textarea>
+		</div>
+		<script name="mail-box-js">
+            let mailbox = {
+                "isWorking": false,
+                "controls": {
+                    "maillist": "dv-mail-item-list",
+                    "preview": "dv-mail-item-preview",
+                    "previewtemplate": "tarea-preview-html",
+                    "previewcurrent": "tarea-current-html"
+                },
+                "getElementText": function (elementName) {
+                    try {
+                        let js = document.getElementById(elementName).innerText.trim();
+                        return js;
+                    } catch {
+                        return "";
+                    }
+                },
+                "preview": {
+                    "clear": function () {
+                        let html = mailbox.getElementText(mailbox.controls.previewtemplate);
+                        document.getElementById(mailbox.controls.preview).innerHTML = html;
+                    }
+                },
+                "fetch": {
+                    "item": function (id) {
+                        try {
+                            // get html content based on item id
+                            if (isNaN(id)) { return; }
+                            // client side validation
+                            const inx = parseInt(id);
+                            const mbox = document.getElementById(mailbox.controls.maillist);
+                            const count = mbox.childElementCount - 1;
+                            if (inx < 0 || inx > count) return;
+                            mailbox.preview.clear();
+                            let handler = window.jsHandler;
+                            if (undefined === handler || null === handler || !(handler)) {
+                                return;
+                            }
+                            const mailitem = mbox.children[inx];
+                            const uuidx = mailitem.children[1].children[2].innerText;
+                            handler.fetch(uuidx);
+                        } catch {
+                            mailbox.preview.clear();
+                        }
+                    }
+                }
+            }
+
+            let maillist_init = {
+                "setScroll": function () {
+                    const selectedItem = "a[name='link-mail-items-template'].active";
+                    $(selectedItem).get(0).scrollIntoView();
+                }
+            }
+
+            function fetch_item(id) {
+                if (isNaN(id)) {
+                    return;
+                }
+                mailbox.fetch.item(id);
+            }
+
+            function docReady(fn) {
+                // see if DOM is already available
+                if (document.readyState === "complete" || document.readyState === "interactive") {
+                    // call on next available tick
+                    setTimeout(fn, 1);
+                } else {
+                    document.addEventListener("DOMContentLoaded", fn);
+                }
+            }
+            docReady(function () {
+                maillist_init.setScroll();
+            });
+
+		</script>
+	
+</body></html>

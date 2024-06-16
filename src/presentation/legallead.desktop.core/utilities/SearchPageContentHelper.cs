@@ -5,6 +5,7 @@ namespace legallead.desktop.utilities
 {
     internal static class SearchPageContentHelper
     {
+        [ExcludeFromCodeCoverage(Justification = "Tested in integration only")]
         public static string Transform(string raw, string target)
         {
             const string search_parent = "//*[@id='dv-subcontent-search']";

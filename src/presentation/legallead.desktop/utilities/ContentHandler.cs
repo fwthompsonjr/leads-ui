@@ -75,6 +75,7 @@ namespace legallead.desktop.utilities
                 content = InjectUser(content);
             }
             var html = parser.BeautfyHTML(content.Content);
+            html = RemoveBlankLines(html);
             var base64EncodedHtml = Convert.ToBase64String(Encoding.UTF8.GetBytes(html));
             return string.Format(bs64address, base64EncodedHtml);
         }
@@ -124,6 +125,23 @@ namespace legallead.desktop.utilities
             }
             content.Content = parent.OuterHtml;
             return content;
+        }
+
+        private static string RemoveBlankLines(string html)
+        {
+            var hardReturn = html.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            var builder = new StringBuilder();
+            foreach (var hard in hardReturn)
+            {
+                if (NonWhiteSpace(hard).Length > 0) { builder.AppendLine(hard); }
+            }
+            return builder.ToString().Trim();
+        }
+
+        private static string NonWhiteSpace(string source)
+        {
+            string result = string.Concat(source.Where(c => !char.IsWhiteSpace(c)));
+            return result.Trim();
         }
 
         private static readonly ContentParser parser = new();

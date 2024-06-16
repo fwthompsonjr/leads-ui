@@ -59,25 +59,33 @@ namespace legallead.desktop
 
         private async Task MapMyAccountDetails()
         {
-            var content = Dispatcher.Invoke(() =>
-            {
-                var container = contentMyAccount.Content;
-                if (container is not ChromiumWebBrowser web) return string.Empty;
-                return web.GetHTML(Dispatcher);
-            });
+            var content = GetMyAccountContent();
             if (string.IsNullOrEmpty(content)) return;
             var profile = await MapProfileResponse(content);
             if (string.IsNullOrEmpty(profile)) return;
             var permissions = await MapPermissionsResponse(profile);
             permissions ??= profile;
+            SetMyAccountContent(permissions);
+        }
+
+        private string GetMyAccountContent()
+        {
+            return Dispatcher.Invoke(() =>
+            {
+                var container = contentMyAccount.Content;
+                if (container is not ChromiumWebBrowser web) return string.Empty;
+                return web.GetHTML(Dispatcher);
+            });
+        }
+        private void SetMyAccountContent(string content)
+        {
             Dispatcher.Invoke(() =>
             {
                 var container = contentMyAccount.Content;
                 if (container is not ChromiumWebBrowser web) return;
-                web.SetHTML(Dispatcher, permissions);
+                web.SetHTML(Dispatcher, content);
             });
         }
-
         private static async Task<string> MapProfileResponse(string response)
         {
             var provider = AppBuilder.ServiceProvider;

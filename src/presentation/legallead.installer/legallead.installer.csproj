@@ -9,9 +9,9 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>3.2.6</AssemblyVersion>
-    <FileVersion>3.2.6</FileVersion>
-    <Version>3.2.6</Version>
+    <AssemblyVersion>3.2.7</AssemblyVersion>
+    <FileVersion>3.2.7</FileVersion>
+    <Version>3.2.7</Version>
     <Description>Windows tool used to install legal leads components.</Description>
     <PackageReleaseNotes>
 			(Please write the package release notes in “RELEASE NOTES.txt”.)

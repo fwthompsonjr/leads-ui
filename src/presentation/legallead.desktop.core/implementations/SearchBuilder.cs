@@ -2,6 +2,7 @@
 using legallead.desktop.entities;
 using legallead.desktop.interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace legallead.desktop.implementations
@@ -62,6 +63,7 @@ namespace legallead.desktop.implementations
             return ObjectExtensions.TryGet<List<StateSearchConfiguration>>(_jsConfiguration).ToArray();
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private ApiResponse TryRequest()
         {
             var failed = new ApiResponse { Message = "Unable to connect to remote source", StatusCode = 500 };
@@ -77,6 +79,7 @@ namespace legallead.desktop.implementations
         }
 
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void BuildTableBody(HtmlDocument doc, HtmlNode node, List<StateSearchConfiguration>? configurations = null)
         {
             var indexes = new[] { 0, 1 };
@@ -139,6 +142,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendCounties(HtmlNode cbo, List<StateSearchConfiguration>? config)
         {
             if (config == null) return;
@@ -176,6 +180,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendStates(HtmlNode cbo, List<StateSearchConfiguration>? config)
         {
             if (config == null) return;
@@ -196,6 +201,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void PopulateOptions(int indx, HtmlNode cbo, List<StateSearchConfiguration>? configurations = null)
         {
             var indexes = new[] { 0, 1 };
@@ -205,6 +211,7 @@ namespace legallead.desktop.implementations
             if (indx == 1) AppendCounties(cbo, configurations);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void PopulateParameters(int indx, HtmlNode tr, List<StateSearchConfiguration>? configurations = null)
         {
             var indexes = new[] { 0, 1, 2, 3, 4, 5, 6 };
@@ -223,6 +230,7 @@ namespace legallead.desktop.implementations
             AppendCaseTypeValues(cbo, configurations);
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static HtmlNode? FindComboBox(HtmlNode tr)
         {
             const StringComparison oic = StringComparison.OrdinalIgnoreCase;
@@ -233,6 +241,7 @@ namespace legallead.desktop.implementations
             return element;
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendDropDownValues(int indx, HtmlNode cbo, List<StateSearchConfiguration> configurations)
         {
             var temp = configurations
@@ -285,6 +294,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void AppendCaseTypeValues(HtmlNode cbo, List<StateSearchConfiguration> configurations)
         {
             const string caseType = "Case Type";
@@ -327,6 +337,7 @@ namespace legallead.desktop.implementations
             });
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static void CreateDefaultCountyOption(HtmlNode cbo)
         {
             if (cbo.HasChildNodes) return;

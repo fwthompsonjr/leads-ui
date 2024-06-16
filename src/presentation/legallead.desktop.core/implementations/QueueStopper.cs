@@ -1,8 +1,10 @@
 ﻿using legallead.desktop.interfaces;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.implementations
 {
+    [ExcludeFromCodeCoverage(Justification = "Interacts with file system. Tested in integration only")]
     internal class QueueStopper : IQueueStopper
     {
         private readonly IQueueSettings queueSettings;

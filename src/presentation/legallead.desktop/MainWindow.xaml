@@ -28,6 +28,9 @@
                 <MenuItem x:Name="mnuMySearchProfile" Header="_History" Click="MnuDefault_Click" Tag="mysearch-history" />
                 <MenuItem x:Name="mnuMySearchPermissions" Header="_Purchases" Click="MnuDefault_Click" Tag="mysearch-purchases" />
             </MenuItem>
+            <MenuItem x:Name="mnuMyMailbox" Header="_Messages" Visibility="Hidden">
+                <MenuItem x:Name="mnuMyMailboxHome" Header="_View" Click="MnuDefault_Click" Tag="mailbox-home" IsEnabled="False" />
+            </MenuItem>
             <MenuItem Header="_Error" Visibility="Hidden">
                 <MenuItem x:Name="mnu500" Header="_Unexpected Error" Click="MnuError_Click" />
                 <MenuItem x:Name="mnu503" Header="_Internet Unavailable" Click="MnuError_Click" />
@@ -53,6 +56,9 @@
                 </TabItem>
                 <TabItem x:Name="tabMySearch" IsSelected="False" Tag="MyAccount" Visibility="Collapsed">
                     <ContentControl x:Name="contentMySearch" Content="Hello World!" />
+                </TabItem>
+                <TabItem x:Name="tabMyMailbox" IsSelected="False" Tag="MyAccount" Visibility="Collapsed">
+                    <ContentControl x:Name="contentMyMailbox" Content="Hello World!" />
                 </TabItem>
                 <TabItem x:Name="tabError" IsSelected="False" Tag="Error" Visibility="Collapsed">
                     <ContentControl x:Name="contentError" />

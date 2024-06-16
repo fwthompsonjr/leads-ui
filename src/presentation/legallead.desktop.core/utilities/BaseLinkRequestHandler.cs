@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.utilities
 {
+    [ExcludeFromCodeCoverage(Justification = "Tested directly from subclass")]
     public abstract class BaseLinkRequestHandler : ILinkRequestHandler
     {
         public abstract T GetContent<T>(string url);

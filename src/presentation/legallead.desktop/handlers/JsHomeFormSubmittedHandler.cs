@@ -84,6 +84,9 @@ namespace legallead.desktop.handlers
             user.SessionId = sessionId;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube",
+            "S2589:Boolean expressions should not be gratuitous",
+            Justification = "False positive on Line 100. Null check is valid.")]
         private static void NavigateTo(string destination, ApiResponse objectData)
         {
             var provider = AppBuilder.ServiceProvider;

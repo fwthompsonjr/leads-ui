@@ -22,7 +22,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_release", "_release", "{B8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.installer", "legallead.installer\legallead.installer.csproj", "{7EDD5D73-6925-43FE-8B98-6099FDDF93D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "legallead.installer.tests", "legallead.installer.tests\legallead.installer.tests.csproj", "{DAF6B93C-686E-49C5-A183-8EB250D66CBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.installer.tests", "legallead.installer.tests\legallead.installer.tests.csproj", "{DAF6B93C-686E-49C5-A183-8EB250D66CBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_mockup", "_mockup", "{967A97ED-1D29-48FD-8264-ACD223A75C5D}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\html\mailbox\mail-action.js = ..\..\html\mailbox\mail-action.js
+		..\..\html\mailbox\mailbox-base-with-text.html = ..\..\html\mailbox\mailbox-base-with-text.html
+		..\..\html\mailbox\mailbox-base.html = ..\..\html\mailbox\mailbox-base.html
+		..\..\html\mailbox\mailbox-v1.html = ..\..\html\mailbox\mailbox-v1.html
+		..\..\html\mailbox\mailbox-v2.html = ..\..\html\mailbox\mailbox-v2.html
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
