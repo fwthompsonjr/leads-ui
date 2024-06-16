@@ -16,9 +16,7 @@
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("Searches", Comparison)) return Searches;
                 if (fieldName.Equals("Statuses", Comparison)) return Statuses;
-                if (fieldName.Equals("Staged", Comparison)) return Staged;
-
-                return null;
+                return Staged;
             }
             set
             {

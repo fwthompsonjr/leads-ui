@@ -1,6 +1,7 @@
 ﻿using legallead.desktop.entities;
 using legallead.desktop.implementations;
 using legallead.desktop.interfaces;
+using legallead.desktop.services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,6 +20,8 @@ namespace legallead.desktop.utilities
         public static string? PaymentSessionKey { get; private set; }
         public static string? PermissionApiBase { get; private set; }
         public static string? InitialViewName { get; private set; }
+        public static BackgroundQueueServices? QueueService { get; internal set; }
+        public static BackgroundMailService? MailService { get; internal set; }
 
         public static void Build()
         {
@@ -110,6 +113,9 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<ICopyrightBuilder>());
             services.AddSingleton(s => provider.GetRequiredService<IQueueStopper>());
             services.AddSingleton(s => provider.GetRequiredService<IQueueStarter>());
+            services.AddSingleton(s => provider.GetRequiredService<IMailPersistence>());
+            services.AddSingleton(s => provider.GetRequiredService<IMailReader>());
+            services.AddSingleton(s => provider.GetRequiredService<IUserMailboxMapper>());
             services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
             services.AddSingleton(s =>
             {

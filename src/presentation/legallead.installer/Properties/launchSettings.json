@@ -2,7 +2,7 @@
   "profiles": {
     "legallead.installer": {
       "commandName": "Project",
-      "commandLineArgs": "install -n legallead.desktop",
+      "commandLineArgs": "upgrade help",
       "hotReloadEnabled": false
     }
   }

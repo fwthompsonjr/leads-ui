@@ -723,6 +723,91 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;script type=&quot;text/javascript&quot;&gt;
+        ///        try {
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///        } catch { }&lt;/script&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///    &lt;title&gt;legallead.ui: mailbox&lt;/title&gt;
+        ///
+        ///    &lt;!-- googleapis : fonts --&gt;
+        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;a [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mailbox_base_html {
+            get {
+                return ResourceManager.GetString("mailbox_base_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to let mailbox = {
+        ///    &quot;isWorking&quot;: false,
+        ///    &quot;controls&quot;: {
+        ///        &quot;template&quot;: &quot;mail-item-template&quot;,
+        ///        &quot;maillist&quot;: &quot;dv-mail-item-list&quot;,
+        ///        &quot;preview&quot;: &quot;dv-mail-item-preview&quot;,
+        ///        &quot;previewframe&quot;: &quot;#dv-mail-item-preview-frame&quot;,
+        ///        &quot;textarea&quot;: &quot;tarea-json&quot;,
+        ///        &quot;previewtemplate&quot;: &quot;tarea-preview-html&quot;,
+        ///        &quot;previewcurrent&quot;: &quot;tarea-current-html&quot;,
+        ///        &quot;nodata&quot;: &quot;dv-mail-item-no-mail&quot;,
+        ///        &quot;subheader&quot;: &quot;mailbox-sub-header&quot;
+        ///    },
+        ///    &quot;clear&quot;: function () {
+        ///        le [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mailbox_base_js {
+            get {
+                return ResourceManager.GetString("mailbox_base_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;correspondence-css&quot;&gt;
+        ///    html {
+        ///        height: 100%;
+        ///        margin: 0;
+        ///    }
+        ///
+        ///    body {
+        ///        margin-top: 10px;
+        ///        background: #444;
+        ///        color: white;
+        ///        margin-bottom: 10px;
+        ///        overflow-x: clip
+        ///    }
+        ///
+        ///    #footer-copy {
+        ///        padding-top: 10px;
+        ///    }
+        ///
+        ///    #templates {
+        ///        display: none;
+        ///    }
+        ///
+        ///    div[name=&quot;mailbox-header&quot;] {
+        ///        margin: 10px;
+        ///    }
+        ///
+        ///    div[name=&quot;mailbox-grid&quot;] {
+        ///        padding-left: 25px;
+        ///    }
+        ///
+        ///    div[name=&quot;mailbox-preview&quot;] {
+        ///        ove [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mailbox_style_css {
+            get {
+                return ResourceManager.GetString("mailbox_style_css", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///div.subcontent {

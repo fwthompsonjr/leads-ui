@@ -17,7 +17,7 @@ namespace legallead.desktop
             if (user == null) return;
             user.AuthenicatedChanged = () =>
             {
-                var menus = Dispatcher.Invoke(() => { return new[] { mnuMyAccount, mnuMySearch }.ToList(); });
+                var menus = Dispatcher.Invoke(() => { return new[] { mnuMyAccount, mnuMySearch, mnuMyMailbox }.ToList(); });
                 if (user.IsAuthenicated)
                 {
                     Dispatcher.Invoke(() =>

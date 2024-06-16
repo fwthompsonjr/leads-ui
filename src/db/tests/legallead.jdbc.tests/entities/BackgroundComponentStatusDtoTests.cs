@@ -10,6 +10,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<BackgroundComponentStatusDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ComponentId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LineNbr, y => y.Random.Int(0, 30000))
             .RuleFor(x => x.StatusId, y => y.Random.Int(5, 25055))
             .RuleFor(x => x.StatusName, y => y.Hacker.Phrase())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
@@ -55,13 +56,17 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("ComponentId")]
-        [InlineData("StatusId")]
+        [InlineData("LineNbr")]
         [InlineData("StatusName")]
+        [InlineData("StatusId")]
         [InlineData("CreateDate")]
         public void BackgroundComponentStatusDtoHasExpectedFieldDefined(string name)
         {
+            const string na = "notmapped";
             var sut = new BackgroundComponentStatusDto();
             var fields = sut.FieldList;
+            sut[na] = na;
+            _ = sut[na];
             Assert.NotNull(fields);
             Assert.NotEmpty(fields);
             Assert.Contains(name, fields);
@@ -70,14 +75,16 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("ComponentId")]
-        [InlineData("StatusId")]
+        [InlineData("LineNbr")]
         [InlineData("StatusName")]
+        [InlineData("StatusId")]
         [InlineData("CreateDate")]
         public void BackgroundComponentStatusDtoCanReadWriteByIndex(string fieldName)
         {
             var demo = faker.Generate();
             var sut = new BackgroundComponentStatusDto();
             var flds = sut.FieldList;
+            demo["id"] = null;
             var position = flds.IndexOf(fieldName);
             sut[position] = demo[position];
             var actual = sut[position];

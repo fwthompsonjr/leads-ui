@@ -28,6 +28,8 @@ namespace legallead.installer.tests
             collection.AddSingleton<ILeadFileOperation, LeadFileOperation>();
             collection.AddSingleton<ILeadAppInstaller, LeadAppInstaller>();
             collection.AddSingleton<IShortcutCreator, ShortcutCreator>();
+            collection.AddSingleton<ILocalsParser, LocalsParser>();
+            collection.AddSingleton<IAvailablesParser, AvailablesParser>();
             collection.AddSingleton<CommandHandler>();
             return collection.BuildServiceProvider();
         }

@@ -83,7 +83,9 @@ namespace legallead.permissions.api
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
             services.AddScoped<ICustomerLockInfrastructure, CustomerLockInfrastructure>();
             services.AddScoped<IClientSecretService, ClientSecretService>();
-
+            services.AddScoped<IMailBoxRepository, MailBoxRepository>();
+            services.AddScoped<IUserMailbox, UserMailboxService>();
+            services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {
                 var components = d.GetRequiredService<IComponentRepository>();

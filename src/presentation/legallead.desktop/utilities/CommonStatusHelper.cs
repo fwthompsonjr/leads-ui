@@ -22,21 +22,35 @@ namespace legallead.desktop.utilities
 
         public void SetStatus(CommonStatusTypes status)
         {
-            SetStatus((int)status);
+            try
+            {
+                SetStatus((int)status);
+            }
+            catch (Exception)
+            {
+                // no action to take here
+            }
         }
 
         public void SetVersion()
         {
-            var dispatcher = Application.Current.Dispatcher;
-            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
-            if (mainWindow is not MainWindow main) return;
-            var currentVersion = dispatcher.Invoke(() => { return main.sbVersionNumberText.Text; });
-            if (currentVersion.Equals(AppProductVersion)) return;
-            dispatcher = main.Dispatcher;
-            dispatcher.Invoke(() =>
+            try
             {
-                main.sbVersionNumberText.Text = AppProductVersion;
-            });
+                var dispatcher = Application.Current.Dispatcher;
+                Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+                if (mainWindow is not MainWindow main) return;
+                var currentVersion = dispatcher.Invoke(() => { return main.sbVersionNumberText.Text; });
+                if (currentVersion.Equals(AppProductVersion)) return;
+                dispatcher = main.Dispatcher;
+                dispatcher.Invoke(() =>
+                {
+                    main.sbVersionNumberText.Text = AppProductVersion;
+                });
+            }
+            catch (Exception)
+            {
+                // no action to take
+            }
         }
         private void SetStatus(int index)
         {

@@ -4,6 +4,9 @@ Desktop version of lead sourcing application
 # Versions   
 
 ## vX.Y.Z - ReleaseDate
+ - Enhancement: display user correspondence
+
+## v3.2.16 ( 2024-06-09 03:10:18 )
  - Enhancement: display payment processing mode
 
 ## v3.2.14 ( 2024-06-04 13:10:04 )

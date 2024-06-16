@@ -1,8 +1,4 @@
-﻿using legallead.desktop.extensions;
-using legallead.desktop.interfaces;
-using legallead.desktop.utilities;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace legallead.desktop.entities
 {

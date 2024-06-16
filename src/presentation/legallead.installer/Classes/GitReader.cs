@@ -13,24 +13,14 @@ namespace legallead.installer.Classes
         {
             var releases = await GitClientProvider.GetReleases();
             var alternates = await GitReaderRepository.GetReleases();
-            if (releases == null && alternates != null) return alternates;
-            if (releases != null && alternates != null) { releases.AddRange(alternates); }
-            return releases;
+            return GetReleases(releases, alternates);
         }
 
         [ExcludeFromCodeCoverage(Justification = "Method interacts with 3rd party resources")]
         public async Task<List<ReleaseAssetModel>?> GetAssets()
         {
             var releases = await GetReleases();
-            if (releases == null) return null;
-            var assets = releases.SelectMany(s => s.Assets).ToList();
-            assets.Sort((a, b) =>
-            {
-                var aa = a.Name.CompareTo(b.Name);
-                if (aa != 0) return aa;
-                return b.Version.CompareTo(a.Version);
-            });
-            return assets;
+            return GetAssets(releases);
         }
 
         public ReleaseAssetModel? FindAsset(List<ReleaseModel> models, string version, string app)
@@ -61,6 +51,28 @@ namespace legallead.installer.Classes
         {
             var data = await GitClientProvider.GetAsset(model);
             return data;
+        }
+
+        protected static List<ReleaseModel>? GetReleases(
+            List<ReleaseModel>? releases,
+            List<ReleaseModel>? alternates)
+        {
+            if (releases == null && alternates != null) return alternates;
+            if (releases != null && alternates != null) { releases.AddRange(alternates); }
+            return releases;
+        }
+
+        protected static List<ReleaseAssetModel>? GetAssets(List<ReleaseModel>? releases)
+        {
+            if (releases == null) return null;
+            var assets = releases.SelectMany(s => s.Assets).ToList();
+            assets.Sort((a, b) =>
+            {
+                var aa = a.Name.CompareTo(b.Name);
+                if (aa != 0) return aa;
+                return b.Version.CompareTo(a.Version);
+            });
+            return assets;
         }
     }
 }

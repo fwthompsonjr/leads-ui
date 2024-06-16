@@ -8,17 +8,7 @@ namespace legallead.desktop.utilities
 {
     internal static class SearchHistoryContentHelper
     {
-        /*
-        
-		<tr id="tr-subcontent-purchases-data-template" style="display: none" search-uuid="~0">
-			<td class="text-end"><span name="purchase-date">~1</span></td>
-			<td><span name="item-name">~2</span></td>
-			<td class="text-end"><span name="item-quantity">~3</span></td>
-			<td class="text-end"><span name="total-price">~4</span></td>
-			<td class="text-end" search-uuid="~0"><span name="purchase-status">~5</span></td>
-		</tr>
-
-        */
+        [ExcludeFromCodeCoverage(Justification = "Interacts with remote api. Tested in integration only")]
         public static async Task<string> InjectHistory(IPermissionApi api, UserBo user, string html)
         {
             try
