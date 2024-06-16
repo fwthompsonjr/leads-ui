@@ -1,11 +1,16 @@
 ﻿using legallead.desktop.interfaces;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Text;
 
 namespace legallead.desktop.implementations
 {
     internal class MailPersistence : IMailPersistence
     {
+        private readonly IFileInteraction _fileService;
+        public MailPersistence(IFileInteraction? fileService)
+        {
+            _fileService = fileService ?? new FileInteraction();
+        }
         public void Clear()
         {
             var fileName = MailFile;
@@ -17,80 +22,36 @@ namespace legallead.desktop.implementations
         public void Save(string json)
         {
             var fileName = MailFile;
-            if (string.IsNullOrEmpty(fileName)) { return; }
             lock (sync)
             {
-                var array = Encoding.UTF8.GetBytes(json);
-                var content = Convert.ToBase64String(array);
-                if (File.Exists(fileName)) File.Delete(fileName);
-                File.WriteAllText(fileName, content);
+                _fileService.WriteAllText(fileName, json);
             }
         }
         public void Save(string id, string json)
         {
             var folderName = MailSubFolder;
-            if (string.IsNullOrEmpty(folderName)) { return; }
-            if (!Guid.TryParse(id, out var indx)) { return; }
-            var suffix = $"{indx:D}.txt";
-            var fileName = Path.Combine(folderName, suffix);
-            var array = Encoding.UTF8.GetBytes(json);
-            var content = Convert.ToBase64String(array);
-            if (File.Exists(fileName)) File.Delete(fileName);
-            File.WriteAllText(fileName, content);
+            _fileService.WriteAllText(folderName, id, json);
         }
 
         public bool DoesItemExist(string id)
         {
             var folderName = MailSubFolder;
-            if (string.IsNullOrEmpty(folderName)) { return false; }
-            if (!Guid.TryParse(id, out var indx)) { return false; }
-            var suffix = $"{indx:D}.txt";
-            var fileName = Path.Combine(folderName, suffix);
-            if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName)) { return false; }
-            return true;
+            return _fileService.DoesItemExist(folderName, id);
         }
 
         public string? Fetch()
         {
             var fileName = MailFile;
-            if (string.IsNullOrEmpty(fileName)) { return string.Empty; }
             lock (sync)
             {
-                try
-                {
-                    var content = File.ReadAllText(fileName);
-                    var array = Convert.FromBase64String(content);
-                    var converted = Encoding.UTF8.GetString(array);
-                    return converted;
-                }
-                catch (Exception)
-                {
-                    return string.Empty;
-                }
+                return _fileService.ReadAllText(fileName);
             }
         }
 
         public string? Fetch(string id)
         {
             var folderName = MailSubFolder;
-            if (string.IsNullOrEmpty(folderName)) { return null; }
-            if (!Guid.TryParse(id, out var indx)) { return null; }
-            var suffix = $"{indx:D}.txt";
-            var fileName = Path.Combine(folderName, suffix);
-            if (string.IsNullOrEmpty(fileName) || !File.Exists(fileName)) { return null; }
-            try
-            {
-                using var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                using var reader = new StreamReader(stream);
-                var content = reader.ReadToEnd();
-                var array = Convert.FromBase64String(content);
-                var converted = Encoding.UTF8.GetString(array);
-                return converted;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
+            return _fileService.ReadAllText(folderName, id);
         }
 
         private static readonly object sync = new();
@@ -103,6 +64,8 @@ namespace legallead.desktop.implementations
         private static string? mailFolder;
         private static string? mailFile;
         private static string? mailSubFolder;
+
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetFolder()
         {
             var exeName = Assembly.GetExecutingAssembly().Location;
@@ -111,6 +74,7 @@ namespace legallead.desktop.implementations
             if (!Directory.Exists(exePath)) return string.Empty;
             return exePath;
         }
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetMailFolder()
         {
             const string folderName = "_mailbox";
@@ -120,6 +84,7 @@ namespace legallead.desktop.implementations
             if (!Directory.Exists(child)) return string.Empty;
             return child;
         }
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetMailSubFolder()
         {
             const string folderName = "_letters";
@@ -129,6 +94,7 @@ namespace legallead.desktop.implementations
             if (!Directory.Exists(child)) Directory.CreateDirectory(child);
             return child;
         }
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetMailFile()
         {
             const string folderName = "user-data.txt";
@@ -138,6 +104,7 @@ namespace legallead.desktop.implementations
             if (!File.Exists(child)) return string.Empty;
             return child;
         }
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static void ClearFileContent(string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) { return; }
@@ -147,6 +114,7 @@ namespace legallead.desktop.implementations
                 File.WriteAllText(fileName, string.Empty);
             }
         }
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static void ClearChildContent(string folderName)
         {
             if (string.IsNullOrEmpty(folderName)) { return; }

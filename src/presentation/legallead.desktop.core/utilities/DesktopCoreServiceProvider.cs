@@ -22,7 +22,7 @@ namespace legallead.desktop.utilities
             builder.AddSingleton<IUserPermissionsMapper, UserPermissionsMapper>();
             builder.AddSingleton<IUserMailboxMapper, MailboxMapper>();
             builder.AddSingleton<ICopyrightBuilder>(new CopyrightBuilder());
-            builder.AddSingleton<IMailPersistence>(new MailPersistence());
+            builder.AddSingleton<IMailPersistence>(new MailPersistence(null));
             builder.AddSingleton<IMailReader>(new MailReader());
             builder.AddSingleton(new CommonMessageList());
             builder.AppendQueueServices();

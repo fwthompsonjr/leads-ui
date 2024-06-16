@@ -2,6 +2,7 @@
 using legallead.desktop.interfaces;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.desktop.extensions
 {
@@ -40,8 +41,7 @@ namespace legallead.desktop.extensions
         public static async Task<string> GetUserId(this UserBo user, IPermissionApi? api = null)
         {
             const string landing = "get-contact-index";
-            var provider = DesktopCoreServiceProvider.Provider;
-            api ??= provider?.GetService<IPermissionApi>();
+            api ??= GetApi(api);
             if (api == null) return string.Empty;
             var payload = new { RequestType = "UserId" };
             var response = await api.Post(landing, payload, user);
@@ -60,6 +60,13 @@ namespace legallead.desktop.extensions
             queue ??= provider?.GetService<IQueueFilter>();
             if (queue == null) return;
             queue.Append(userId);
+        }
+        [ExcludeFromCodeCoverage(Justification = "Private member access only from public member.")]
+        private static IPermissionApi? GetApi(IPermissionApi? api = null)
+        {
+            if (api != null) return api;
+            var provider = DesktopCoreServiceProvider.Provider;
+            return provider?.GetService<IPermissionApi>();
         }
     }
 }
