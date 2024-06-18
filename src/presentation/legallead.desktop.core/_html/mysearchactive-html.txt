@@ -25,7 +25,6 @@
 			<nav id="masthead-nav-menu" class="nav nav-masthead justify-content-center">
 				<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link" href="javascript:active_search.change_view('mysearch-home')">Search</a>
 				<a id="nvlink-subcontent-search" name="subcontent-search" class="nav-link active" href="javascript:active_search.change_view('mysearch-actives')">Active</a>
-				<a id="nvlink-subcontent-search-history" name="subcontent-search-history" class="nav-link" href="javascript:active_search.change_view('mysearch-history')">History</a>
 				<a id="nvlink-subcontent-search-purchases" name="subcontent-purchases" class="nav-link" href="javascript:active_search.change_view('mysearch-purchases')">Purchases</a>
 			</nav>
 		</div>

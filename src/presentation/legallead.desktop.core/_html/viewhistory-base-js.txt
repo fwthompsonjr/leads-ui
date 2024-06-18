@@ -1,0 +1,76 @@
+<script name="view-history-box-js">
+
+let historybox = {
+    "isWorking": false,
+    "controls": {
+        "historylist": "dv-history-item-list",
+        "preview": "dv-history-item-preview",
+        "previewtemplate": "tarea-preview-html"
+    },
+    "getElementText": function (elementName) {
+        try {
+            let js = document.getElementById(elementName).innerText.trim();
+            return js;
+        } catch {
+            return "";
+        }
+    },
+    "preview": {
+        "clear": function () {
+            let html = historybox.getElementText(historybox.controls.previewtemplate);
+            document.getElementById(historybox.controls.preview).innerHTML = html;
+        }
+    },
+    "fetch": {
+        "item": function (id) {
+            try {
+                // get html content based on item id
+                if (isNaN(id)) { return; }
+                // client side validation
+                const inx = parseInt(id);
+                const mbox = document.getElementById(historybox.controls.historylist);
+                const count = mbox.childElementCount - 1;
+                if (inx < 0 || inx > count) return;
+                historybox.preview.clear();
+                let handler = window.jsHandler;
+                if (undefined === handler || null === handler || !(handler)) {
+                    return;
+                }
+                const historyitem = mbox.children[inx];
+                const uuidx = historyitem.children[1].children[2].innerText;
+                handler.fetch(uuidx);
+            } catch {
+                historybox.preview.clear();
+            }
+        }
+    }
+}
+
+let historylist_init = {
+    "setScroll": function () {
+        const selectedItem = "a[name='link-mail-items-template'].active";
+        $(selectedItem).get(0).scrollIntoView();
+    }
+}
+
+function fetch_item(id) {
+    if (isNaN(id)) {
+        return;
+    }
+    historybox.fetch.item(id);
+}
+
+function docReady(fn) {
+    // see if DOM is already available
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        // call on next available tick
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }
+}
+docReady(function () {
+    historylist_init.setScroll();
+});
+
+</script>

@@ -74,6 +74,11 @@ namespace legallead.desktop
                 NavigateToMyActiveSearches();
                 return;
             }
+            if (sublanding.Equals("mysearch-history"))
+            {
+                NavigateToMyHistorySearches();
+                return;
+            }
             var directions = sublanding.Split('-');
             var parentName = directions[0];
             var parentView = NavigateTo(parentName);

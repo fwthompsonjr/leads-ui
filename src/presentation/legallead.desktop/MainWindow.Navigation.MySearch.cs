@@ -31,6 +31,20 @@ namespace legallead.desktop
             }
         }
 
+        private void InitializeMyHistoryContent()
+        {
+            var blankContent = ContentHandler.GetLocalContent("viewhistory");
+            if (blankContent != null)
+            {
+                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
+                var browser = new ChromiumWebBrowser()
+                {
+                    Address = blankHtml
+                };
+                browser.JavascriptObjectRepository.Register("jsHandler", new ViewHistoryJsHandler(browser));
+                contentMySearch.Content = browser;
+            }
+        }
         internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
@@ -84,6 +98,24 @@ namespace legallead.desktop
             });
         }
 
+
+        internal void NavigateToMyHistorySearches()
+        {
+            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            if (user == null || !user.IsAuthenicated)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    SetErrorContent(401);
+                    tabError.IsSelected = true;
+                });
+                return;
+            }
+            Dispatcher.Invoke(() =>
+            {
+                InitializeMyHistoryContent();
+            });
+        }
         private async Task MapMySearchDetails()
         {
             var provider = AppBuilder.ServiceProvider;
@@ -102,8 +134,6 @@ namespace legallead.desktop
                     var container = contentMySearch.Content;
                     if (container is not ChromiumWebBrowser web) return string.Empty;
                     var html = web.GetHTML(Dispatcher);
-                    html = await mapper.Map(api, user, html, "history");
-                    // html = await InjectRestrictionAlert(html);
                     web.SetHTML(Dispatcher, html);
                     return html;
                 });
