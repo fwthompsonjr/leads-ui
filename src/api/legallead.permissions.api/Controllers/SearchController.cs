@@ -1,4 +1,5 @@
-﻿using legallead.permissions.api.Models;
+﻿using legallead.jdbc.entities;
+using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -61,6 +62,21 @@ namespace legallead.permissions.api.Controllers
             }
             var searches = await infrastructure.GetHeader(Request, null);
             return Ok(searches);
+        }
+
+        [HttpPost]
+        [Route("my-searches-count")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<UserSearchQueryModel>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> MySearchesCount(ApplicationModel context)
+        {
+            var response = await MySearches(context);
+            if (response is not OkObjectResult ok) return response;
+            var count = new { Count = 0 };
+            if (ok.Value is not IEnumerable<UserSearchQueryModel> searches) return Ok(count);
+            var actual = new { Count = searches.Count() };
+            return Ok(actual);
         }
 
         [HttpPost]
