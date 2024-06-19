@@ -1,5 +1,9 @@
 [
   {
+    "id": 11,
+    "description": "Menu: add user permission level to status bar."
+  },
+  {
     "id": 10,
     "description": "Search: Restyle search history view."
   },

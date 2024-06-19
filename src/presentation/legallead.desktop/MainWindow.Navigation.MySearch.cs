@@ -6,8 +6,10 @@ using legallead.desktop.js;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace legallead.desktop
 {
@@ -44,6 +46,7 @@ namespace legallead.desktop
                 {
                     var content = blankContent.Content;
                     var table = mapper.Map(data);
+                    
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
                     var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
@@ -66,7 +69,6 @@ namespace legallead.desktop
                 contentMySearch.Content = browser;
             }
         }
-
         internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
@@ -136,6 +138,7 @@ namespace legallead.desktop
             Dispatcher.Invoke(() =>
             {
                 InitializeMyHistoryContent();
+                tabMySearch.IsSelected = true;
             });
         }
         private async Task MapMySearchDetails()

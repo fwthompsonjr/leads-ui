@@ -141,6 +141,7 @@ namespace legallead.desktop
                     return string.Empty;
 
                 case "exit":
+                    MainWindow_Closing(null, new());
                     Environment.Exit(0);
                     break;
             }

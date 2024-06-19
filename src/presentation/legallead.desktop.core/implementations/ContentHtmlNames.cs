@@ -303,6 +303,7 @@ namespace legallead.desktop.implementations
         private const string MailboxStyleSheet = "<!-- style: mailbox-css -->";
         private const string ViewHistoryScriptBlock = "<!-- script: search-history-behavior -->";
         private const string ViewHistoryStyleSheet = "<!-- style: search-history-css -->";
+        private const string ViewHistoryItemTemplate = "<!-- include: search item template -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -344,6 +345,7 @@ namespace legallead.desktop.implementations
             { MailboxStyleSheet, Properties.Resources.mailbox_style_css },
             { ViewHistoryScriptBlock, Properties.Resources.viewhistory_base_js },
             { ViewHistoryStyleSheet, Properties.Resources.viewhistory_style_css },
+            { ViewHistoryItemTemplate, Properties.Resources.viewhistory_item_template_html },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;
