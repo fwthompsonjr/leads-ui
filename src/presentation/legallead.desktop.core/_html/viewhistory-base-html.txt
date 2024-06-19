@@ -133,7 +133,7 @@
                             </p>
 							<div class="d-flex justify-content-between">
 								<center style="width: 100%">
-									<button id="btn-user-interaction-purchase" name="bttn-purchase" class="btn btn-primary w-75 m-2" disabled='disabled'>
+									<button id="btn-user-interaction-purchase" name="bttn-purchase" class="btn btn-primary w-75 m-2" onclick="historybox.invoice()" disabled='disabled'>
                                         <i id="bttn-purchase-icon" class="bi bi-box-arrow-in-right" ></i>
                                         <i id="bttn-purchase-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
 										<span>Purchase</span>

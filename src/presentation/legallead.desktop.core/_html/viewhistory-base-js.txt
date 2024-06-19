@@ -57,6 +57,20 @@ let historybox = {
             document.getElementById(historybox.controls.preview).innerHTML = html;
         }
     },
+    "invoice": function() {
+
+	    const handler = window.jsHandler;
+	    const $destitm = $("#dv-history-item-preview > table:nth-child(1)");
+	    if ( undefined === handler || null === handler || !(handler) ) { return; }
+	    if ($destitm.length != 1) { return; }
+	    if ($destitm.find("span[name='search-status']").text().trim().toLowerCase() != 'completed' ) { return; }
+	    const indx = $destitm.find("span[name='search-uuid']").text();
+	    const $bttn = $("#btn-user-interaction-purchase");
+	    $bttn.attr("disabled", "disabled");
+	    $("#bttn-purchase-icon").addClass("d-none");
+	    $("#bttn-purchase-icon-spin").removeClass("d-none");
+	    handler.fetch(indx);
+    },
     "fetch": {
         "item": function (id) {
             try {
