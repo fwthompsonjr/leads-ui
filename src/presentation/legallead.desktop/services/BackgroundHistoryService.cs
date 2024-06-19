@@ -19,7 +19,7 @@ namespace legallead.desktop.services
         {
 
             _timer = new Timer(OnTimer, null,
-                TimeSpan.FromSeconds(20d),
+                TimeSpan.FromSeconds(10d),
                 TimeSpan.FromSeconds(15d));
         }
 
@@ -39,6 +39,7 @@ namespace legallead.desktop.services
                 try
                 {
                     if (api == null || user == null || !user.IsAuthenicated || user.Applications == null) return;
+                    CheckPermission(api, user);
                     isvalid = GetHistory(manager, api, user, user.Applications[0]);
                     isvalid &= GetRestriction(manager, api, user, user.Applications[0]);
                 }
@@ -61,6 +62,33 @@ namespace legallead.desktop.services
 
             }
         }
+
+        private static void CheckPermission(IPermissionApi api, UserBo user)
+        {
+            const string dash = "-";
+            var dispatcher = Application.Current.Dispatcher;
+            if (dispatcher == null) { return; }
+            Window mainWindow = dispatcher.Invoke(() =>
+            {
+                return Application.Current.MainWindow;
+            });
+            if (mainWindow is not MainWindow main) return;
+            dispatcher.InvokeAsync(async () =>
+            {
+                var permissions = await api.Get("user-permissions-list", user);
+                if (permissions == null || permissions.StatusCode != 200)
+                {
+                    main.sbUserLevelText.Text = dash;
+                    return;
+                }
+                var mapped = ObjectExtensions.TryGet<List<ContactPermissionResponse>>(permissions.Message);
+                var current = mapped.Find(x => x.KeyName.Equals("Account.Permission.Level"));
+                var level = current?.KeyValue?.ToUpper() ?? dash;
+                if (main.sbUserLevelText.Text == level) return;
+                main.sbUserLevelText.Text = level;
+            });
+        }
+
         private static bool GetHistory(IHistoryPersistence? manager, IPermissionApi api, UserBo user, object payload)
         {
             try
@@ -69,6 +97,14 @@ namespace legallead.desktop.services
                 if (stuff.StatusCode != 200) return false;
                 var list = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(stuff.Message);
                 if (list.Count == 0) return false;
+                list.ForEach(x =>
+                {
+                    if (x.CreateDate.HasValue)
+                    {
+                        var dt = DateTime.SpecifyKind(x.CreateDate.Value, DateTimeKind.Utc).ToLocalTime();
+                        x.CreateDate = dt;
+                    }
+                });
                 manager?.Save(JsonConvert.SerializeObject(list));
                 return true;
             }
@@ -93,6 +129,7 @@ namespace legallead.desktop.services
                 return false;
             }
         }
+
         private static void SetEnabled(bool isvalid)
         {
             var dispatcher = Application.Current.Dispatcher;
