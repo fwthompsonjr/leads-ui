@@ -8,17 +8,18 @@ namespace legallead.desktop.implementations
 {
     internal class UserSearchMapper : IUserSearchMapper
     {
-        public async Task<string> Map(IPermissionApi api, UserBo user, string source, string target)
+
+        public string Map(string? history)
         {
-            var key = (target ?? string.Empty).Trim().ToLower();
-            if (!Substitutions.ContainsKey(key)) { return source; }
-            switch (key)
-            {
-                case "history":
-                    var content = await MapHistory(api, user, source);
-                    return content;
-            }
-            return source;
+            var html = historyhtml;
+            if (string.IsNullOrEmpty(history)) { return html; }
+            var items = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(history);
+            var template = Substitutions["history"];
+            var document = ToDocument(html);
+            var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
+            var styled = ApplyHistoryStatus(ToDocument(transform), template);
+            return styled;
+
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
@@ -171,5 +172,8 @@ namespace legallead.desktop.implementations
         }
 
         private const int tableRowCount = 10;
+
+
+        private readonly static string historyhtml = Properties.Resources.searchhistory_table_html;
     }
 }

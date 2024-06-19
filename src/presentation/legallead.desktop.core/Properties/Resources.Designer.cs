@@ -1296,6 +1296,29 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;table automationId=&quot;search-history-table&quot; name=&quot;search-dt-table&quot;&gt;
+        ///	&lt;colgroup&gt;
+        ///		&lt;col name=&quot;requested-date&quot; /&gt;
+        ///		&lt;col name=&quot;state-abbr&quot; style=&quot;width: 50px&quot; /&gt;
+        ///		&lt;col name=&quot;county-name&quot; style=&quot;width: 100px&quot; /&gt;
+        ///		&lt;col name=&quot;begin-date&quot; style=&quot;width: 75px&quot; /&gt;
+        ///		&lt;col name=&quot;ending-date&quot; style=&quot;width: 75px&quot; /&gt;
+        ///		&lt;col name=&quot;search-status&quot; style=&quot;width: 50px&quot; /&gt;
+        ///	&lt;/colgroup&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th style=&quot;padding-left: 3px;&quot;&gt;Request Date&lt;/th&gt;
+        ///			&lt;th style=&quot;padding-left: 3px;&quot;&gt;State&lt;/th&gt;
+        ///			&lt;th style=&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string searchhistory_table_html {
+            get {
+                return ResourceManager.GetString("searchhistory_table_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {

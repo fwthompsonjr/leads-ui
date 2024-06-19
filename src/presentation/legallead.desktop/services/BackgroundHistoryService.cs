@@ -1,0 +1,115 @@
+﻿using legallead.desktop.entities;
+using legallead.desktop.extensions;
+using legallead.desktop.interfaces;
+using legallead.desktop.models;
+using legallead.desktop.utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace legallead.desktop.services
+{
+    internal class BackgroundHistoryService : IDisposable
+    {
+        private readonly Timer? _timer;
+        private bool disposedValue;
+
+        public BackgroundHistoryService()
+        {
+
+            _timer = new Timer(OnTimer, null,
+                TimeSpan.FromSeconds(30d),
+                TimeSpan.FromSeconds(20d));
+        }
+
+        private bool IsWorking = false;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube",
+            "S4158:Empty collections should not be accessed or iterated",
+            Justification = "False Positive")]
+        internal void OnTimer(object? state)
+        {
+            lock (sync)
+            {
+                if (IsWorking) { return; }
+                IsWorking = true;
+                var isvalid = false;
+                var provider = AppBuilder.ServiceProvider;
+                var manager = provider?.GetService<IHistoryPersistence>();
+                var api = provider?.GetService<IPermissionApi>();
+                var user = provider?.GetService<UserBo>();
+                try
+                {
+                    if (api == null || user == null || !user.IsAuthenicated || user.Applications == null) return;
+                    var stuff = api.Post("search-get-history", user.Applications[0], user).Result;
+                    if (stuff.StatusCode != 200) return;
+                    var list = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(stuff.Message);
+                    if (list.Count == 0) return;
+                    isvalid = true;
+                    manager?.Save(JsonConvert.SerializeObject(list));
+                }
+                finally
+                {
+                    SetEnabled(isvalid);
+                    if (isvalid)
+                    {
+                        // change time to poll every 5 minutes
+                        _timer?.Change(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5));
+                    } 
+                    else
+                    {
+                        // change time to poll every 30 seconds when user is logged out
+                        manager?.Clear();
+                        _timer?.Change(TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+                    }
+                    IsWorking = false;
+                }
+
+            }
+        }
+
+        private static void SetEnabled(bool isvalid)
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            if (dispatcher == null) { return; }
+            Window mainWindow = dispatcher.Invoke(() =>
+            {
+                return Application.Current.MainWindow;
+            });
+            if (mainWindow is not MainWindow main) return;
+            dispatcher.Invoke(() =>
+            {
+                var menuItem = main.mnuMySearchProfile;
+                if (menuItem != null) { 
+                    menuItem.IsEnabled = isvalid; 
+                    menuItem.IsChecked = isvalid;
+                }
+            });
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _timer?.Change(Timeout.Infinite, 0);
+                    _timer?.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        private static readonly object sync = new();
+    }
+}

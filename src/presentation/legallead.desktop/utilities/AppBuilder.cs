@@ -22,6 +22,7 @@ namespace legallead.desktop.utilities
         public static string? InitialViewName { get; private set; }
         public static BackgroundQueueServices? QueueService { get; internal set; }
         public static BackgroundMailService? MailService { get; internal set; }
+        public static BackgroundHistoryService? HistoryService { get; internal set; }
 
         public static void Build()
         {
@@ -115,8 +116,10 @@ namespace legallead.desktop.utilities
             services.AddSingleton(s => provider.GetRequiredService<IQueueStarter>());
             services.AddSingleton(s => provider.GetRequiredService<IMailPersistence>());
             services.AddSingleton(s => provider.GetRequiredService<IMailReader>());
+            services.AddSingleton(s => provider.GetRequiredService<IHistoryReader>());
             services.AddSingleton(s => provider.GetRequiredService<IUserMailboxMapper>());
             services.AddSingleton(s => provider.GetRequiredService<CommonMessageList>());
+            services.AddSingleton(s => provider.GetRequiredService<IHistoryPersistence>());
             services.AddSingleton(s =>
             {
                 var list = s.GetRequiredService<CommonMessageList>();

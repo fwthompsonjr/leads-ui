@@ -2,6 +2,7 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -60,8 +61,17 @@ namespace legallead.permissions.api.Controllers
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetHeader(Request, null);
-            return Ok(searches);
+            try
+            {
+
+                var searches = await infrastructure.GetHeader(Request, null);
+                return Ok(searches);
+            }
+            catch(Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                return Ok(Array.Empty<UserSearchQueryModel>());
+            }
         }
 
         [HttpPost]

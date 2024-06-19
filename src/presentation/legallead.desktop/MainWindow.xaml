@@ -27,7 +27,7 @@
                 <MenuItem x:Name="mnuMySearchActive" Header="_Active Searches" Click="MnuDefault_Click" Tag="mysearch-actives" />
                 <MenuItem x:Name="mnuMySearchPermissions" Header="_Purchases" Click="MnuDefault_Click" Tag="mysearch-purchases" />
                 <Separator />
-                <MenuItem x:Name="mnuMySearchProfile" Header="_History" Click="MnuDefault_Click" Tag="mysearch-history" />
+                <MenuItem x:Name="mnuMySearchProfile" Header="_History" Click="MnuDefault_Click" Tag="mysearch-history" IsEnabled="False" />
             </MenuItem>
             <MenuItem x:Name="mnuMyMailbox" Header="_Messages" Visibility="Hidden">
                 <MenuItem x:Name="mnuMyMailboxHome" Header="_View" Click="MnuDefault_Click" Tag="mailbox-home" IsEnabled="False" />

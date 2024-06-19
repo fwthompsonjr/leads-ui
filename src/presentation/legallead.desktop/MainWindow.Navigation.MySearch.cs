@@ -45,6 +45,7 @@ namespace legallead.desktop
                 contentMySearch.Content = browser;
             }
         }
+
         internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
