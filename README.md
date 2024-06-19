@@ -4,6 +4,9 @@ Desktop version of lead sourcing application
 # Versions   
 
 ## vX.Y.Z - ReleaseDate
+ - Enhancement: add user level to status bar
+
+## v3.2.18 ( 2024-06-19 20:19:46 )
  - Enhancement: change user search history view
 
 ## v3.2.17 ( 2024-06-16 02:36:20 )
