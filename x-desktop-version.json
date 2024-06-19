@@ -1,5 +1,9 @@
 [
   {
+    "id": 10,
+    "description": "Search: Restyle search history view."
+  },
+  {
     "id": 9,
     "description": "Payment: Get Payment Process Type."
   },

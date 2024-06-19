@@ -4,6 +4,9 @@ Desktop version of lead sourcing application
 # Versions   
 
 ## vX.Y.Z - ReleaseDate
+ - Enhancement: change user search history view
+
+## v3.2.17 ( 2024-06-16 02:36:20 )
  - Enhancement: display user correspondence
 
 ## v3.2.16 ( 2024-06-09 03:10:18 )
