@@ -51,6 +51,7 @@ namespace legallead.desktop.handlers
             if (main == null) return;
             content = TransformHtml(content, detail);
             web?.SetHTML(main.Dispatcher, content);
+            AppBuilder.HistoryService?.OnTimer(null);
         }
 
         private static string TransformHtml(string? html, GenerateInvoiceResponse? response)
