@@ -23,23 +23,6 @@ namespace legallead.desktop.implementations
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
-        private async Task<string> MapHistory(IPermissionApi api, UserBo user, string source)
-        {
-            var payload = new { Id = Guid.NewGuid().ToString(), Name = "legallead.permissions.api" };
-            var template = Substitutions["history"];
-            var response = await api.Post("search-get-history", payload, user);
-            if (response.StatusCode != 200) return source;
-            var json = response.Message;
-            var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
-            if (items == null || items.Count == 0) return source;
-
-            var document = ToDocument(source);
-            var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
-            var styled = ApplyHistoryStatus(ToDocument(transform), template);
-            return styled;
-        }
-
-        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
         private static string ApplyHistoryStatus(HtmlDocument document, MySearchSubstitutions substitutions)
         {
             var node = document.DocumentNode;
@@ -124,7 +107,7 @@ namespace legallead.desktop.implementations
                 rowdata.Attributes.Add(pgnumber);
                 rowdata.Attributes.Add(attrwpos);
                 if (pg > 0) rowdata.Attributes.Add(rwstyle);
-                var row = template.InnerHtml.Replace("~0", r.ToString());
+                var row = template.InnerHtml.Replace("~0", r.ToString()).Replace("~7", r.ToString()); ;
                 for (var i = 1; i < substitutions.Targets + 1; i++)
                 {
                     var search = $"~{i}";

@@ -13,13 +13,22 @@ namespace legallead.desktop.implementations
         }
         public void Clear()
         {
-            var fileName = HistoryFile;
-            ClearFileContent(fileName);
+            var fileNames = new List<string> { HistoryFile, RestrictionFile };
+            fileNames.ForEach(ClearFileContent);
         }
 
         public void Save(string json)
         {
             var fileName = HistoryFile;
+            lock (sync)
+            {
+                _fileService.WriteAllText(fileName, json);
+            }
+        }
+
+        public void SaveRestriction(string json)
+        {
+            var fileName = RestrictionFile;
             lock (sync)
             {
                 _fileService.WriteAllText(fileName, json);
@@ -34,15 +43,25 @@ namespace legallead.desktop.implementations
                 return _fileService.ReadAllText(fileName);
             }
         }
+        public string? Restriction()
+        {
+            var fileName = RestrictionFile;
+            lock (sync)
+            {
+                return _fileService.ReadAllText(fileName);
+            }
+        }
 
         private static readonly object sync = new();
         private static string AppFolder => appFolder ??= GetFolder();
         private static string HistoryFolder => historyFolder ??= GetHistoryFolder();
         private static string HistoryFile => historyFile ??= GetHistoryFile();
+        private static string RestrictionFile => restrictionFile ??= GetRestrictionFile();
 
         private static string? appFolder;
         private static string? historyFolder;
         private static string? historyFile;
+        private static string? restrictionFile;
 
         [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetFolder()
@@ -74,6 +93,18 @@ namespace legallead.desktop.implementations
             if (!File.Exists(child)) return string.Empty;
             return child;
         }
+
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
+        private static string GetRestrictionFile()
+        {
+            const string folderName = "user-restriction.txt";
+            var parent = HistoryFolder;
+            if (!Directory.Exists(parent)) return string.Empty;
+            var child = Path.Combine(parent, folderName);
+            if (!File.Exists(child)) return string.Empty;
+            return child;
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static void ClearFileContent(string fileName)
         {

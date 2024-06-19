@@ -4,6 +4,7 @@ using legallead.desktop.interfaces;
 using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,9 +28,7 @@ namespace legallead.desktop.services
         }
 
         private bool IsWorking = false;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Sonar Qube",
-            "S4158:Empty collections should not be accessed or iterated",
-            Justification = "False Positive")]
+
         internal void OnTimer(object? state)
         {
             lock (sync)
@@ -44,12 +43,8 @@ namespace legallead.desktop.services
                 try
                 {
                     if (api == null || user == null || !user.IsAuthenicated || user.Applications == null) return;
-                    var stuff = api.Post("search-get-history", user.Applications[0], user).Result;
-                    if (stuff.StatusCode != 200) return;
-                    var list = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(stuff.Message);
-                    if (list.Count == 0) return;
-                    isvalid = true;
-                    manager?.Save(JsonConvert.SerializeObject(list));
+                    isvalid = GetHistory(manager, api, user, user.Applications[0]);
+                    isvalid &= GetRestriction(manager, api, user, user.Applications[0]);
                 }
                 finally
                 {
@@ -70,7 +65,38 @@ namespace legallead.desktop.services
 
             }
         }
+        private static bool GetHistory(IHistoryPersistence? manager, IPermissionApi api, UserBo user, object payload)
+        {
+            try
+            {
+                var stuff = api.Post("search-get-history", payload, user).Result;
+                if (stuff.StatusCode != 200) return false;
+                var list = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(stuff.Message);
+                if (list.Count == 0) return false;
+                manager?.Save(JsonConvert.SerializeObject(list));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
+        private static bool GetRestriction(IHistoryPersistence? manager, IPermissionApi api, UserBo user, object payload)
+        {
+            try
+            {
+                var stuff = api.Post("search-get-restriction", payload, user).Result;
+                if (stuff.StatusCode != 200) return false;
+                var list = ObjectExtensions.TryGet<MySearchRestrictions>(stuff.Message);
+                manager?.SaveRestriction(JsonConvert.SerializeObject(list));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private static void SetEnabled(bool isvalid)
         {
             var dispatcher = Application.Current.Dispatcher;

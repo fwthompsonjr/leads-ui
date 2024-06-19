@@ -36,7 +36,9 @@ namespace legallead.desktop
             var blankContent = ContentHandler.GetLocalContent("viewhistory");
             if (blankContent != null)
             {
-                var data = AppBuilder.ServiceProvider?.GetService<IHistoryPersistence>()?.Fetch();
+                var historyService = AppBuilder.ServiceProvider?.GetService<IHistoryPersistence>();
+                var data = historyService?.Fetch();
+                var restriction = historyService?.Restriction();
                 var mapper = AppBuilder.ServiceProvider?.GetService<IUserSearchMapper>();
                 if (mapper != null && !string.IsNullOrEmpty(data))
                 {
@@ -46,6 +48,13 @@ namespace legallead.desktop
                     doc.LoadHtml(content);
                     var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
                     if (element != null) { element.InnerHtml = table; }
+                    if (!string.IsNullOrEmpty(restriction))
+                    {
+                        var obj = ObjectExtensions.TryGet<MySearchRestrictions>(restriction);
+                        var isrestricted = obj.IsLocked.GetValueOrDefault(true) ? "true" : "false";
+                        var node = doc.DocumentNode.SelectSingleNode("//*[@id='user-restriction-status']");
+                        if (node != null) { node.Attributes["value"].Value = isrestricted; }
+                    }
                     blankContent.Content = doc.DocumentNode.OuterHtml;
                 }
                 var blankHtml = ContentHandler.GetAddressBase64(blankContent);

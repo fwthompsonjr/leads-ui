@@ -71,6 +71,9 @@
 	  <None Update="_history\user-history.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="_history\user-restriction.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="_mailbox\user-data.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
