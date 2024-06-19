@@ -22,8 +22,8 @@ namespace legallead.desktop.services
         {
 
             _timer = new Timer(OnTimer, null,
-                TimeSpan.FromSeconds(30d),
-                TimeSpan.FromSeconds(20d));
+                TimeSpan.FromSeconds(20d),
+                TimeSpan.FromSeconds(15d));
         }
 
         private bool IsWorking = false;
@@ -85,7 +85,6 @@ namespace legallead.desktop.services
                 var menuItem = main.mnuMySearchProfile;
                 if (menuItem != null) { 
                     menuItem.IsEnabled = isvalid; 
-                    menuItem.IsChecked = isvalid;
                 }
             });
         }

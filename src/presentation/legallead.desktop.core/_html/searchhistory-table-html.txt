@@ -2,11 +2,11 @@
 <table automationId="search-history-table" name="search-dt-table">
 	<colgroup>
 		<col name="requested-date" />
-		<col name="state-abbr" style="width: 50px" />
-		<col name="county-name" style="width: 100px" />
-		<col name="begin-date" style="width: 75px" />
-		<col name="ending-date" style="width: 75px" />
-		<col name="search-status" style="width: 50px" />
+		<col name="state-abbr" style="width: 60px" />
+		<col name="county-name" style="width: 150px" />
+		<col name="begin-date" style="width: 95px" />
+		<col name="ending-date" style="width: 95px" />
+		<col name="search-status" style="width: 90px" />
 	</colgroup>
 	<thead>
 		<tr>

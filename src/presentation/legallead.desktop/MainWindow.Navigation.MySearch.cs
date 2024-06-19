@@ -36,6 +36,18 @@ namespace legallead.desktop
             var blankContent = ContentHandler.GetLocalContent("viewhistory");
             if (blankContent != null)
             {
+                var data = AppBuilder.ServiceProvider?.GetService<IHistoryPersistence>()?.Fetch();
+                var mapper = AppBuilder.ServiceProvider?.GetService<IUserSearchMapper>();
+                if (mapper != null && !string.IsNullOrEmpty(data))
+                {
+                    var content = blankContent.Content;
+                    var table = mapper.Map(data);
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(content);
+                    var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
+                    if (element != null) { element.InnerHtml = table; }
+                    blankContent.Content = doc.DocumentNode.OuterHtml;
+                }
                 var blankHtml = ContentHandler.GetAddressBase64(blankContent);
                 var browser = new ChromiumWebBrowser()
                 {

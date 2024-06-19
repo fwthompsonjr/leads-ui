@@ -68,7 +68,77 @@
         flex-flow: column;
         height: 100%;
     }
+    
+/*
+ * Data Tables
+ */
+table[name='search-dt-table'],
+table[automationId='search-preview-table'] {
+    font-size: 14px;
+    border: 1px solid #444;
+    width: 100%;
+    margin-left: 5px;
+    margin-right: 10px;
+}
 
+    table[name='search-dt-table'] tbody, 
+    table[name='search-dt-table'] td, 
+    table[name='search-dt-table'] tfoot, 
+    table[name='search-dt-table'] th, 
+    table[name='search-dt-table'] thead, 
+    table[name='search-dt-table'] tr,
+    table[automationId='search-preview-table'] tbody, 
+    table[automationId='search-preview-table'] td, 
+    table[automationId='search-preview-table'] tfoot, 
+    table[automationId='search-preview-table'] th, 
+    table[automationId='search-preview-table'] thead, 
+    table[automationId='search-preview-table'] tr {
+        border: 1px solid #444;
+    }
+
+    table[name='search-dt-table'] td,
+    table[automationId='search-preview-table'] td {
+	    padding-left: 4px;
+	    padding-right: 4px;
+    }
+
+    table[name='search-dt-table'] thead tr,
+    table[automationId='search-preview-table'] thead tr { 
+    background-color: rgba(255, 255, 255, .25);
+    } 
+    table[name='search-dt-table'] tfoot tr td,
+    table[automationId='search-preview-table'] tfoot tr td { 
+      border-top-style: double;
+      border-right-style: none;
+      border-bottom-style: none;
+      border-left-style: none;
+    } 
+
+    table[name='search-dt-table'] tfoot,
+    table[automationId='search-preview-table'] tfoot { 
+        margin-top: 10px;
+    }
+
+
+					 
+    tr[data-position] {
+    cursor: pointer;
+    }
+						 
+    tr[data-position]:hover {
+    background-color: rgba(255, 255, 255, .25);
+    }	 
+    tr[data-position='odd'] {
+    background-color: rgba(125, 125, 125, .25);
+    }
+    tr[data-position] a[name='link-show-details']:hover {
+    color: #0a58ca;
+    }
+    #cbo-subcontent-history-pager {
+        background-color: transparent;
+        border-color: #555;
+        color: ghostwhite;
+    }
 
         .box .customrow.header {
             flex: 0 1 auto;

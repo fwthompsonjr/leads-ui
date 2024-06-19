@@ -171,7 +171,7 @@ namespace legallead.desktop.implementations
             }
         }
 
-        private const int tableRowCount = 10;
+        private const int tableRowCount = 20;
 
 
         private readonly static string historyhtml = Properties.Resources.searchhistory_table_html;
