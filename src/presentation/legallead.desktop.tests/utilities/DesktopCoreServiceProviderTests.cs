@@ -31,6 +31,7 @@ namespace legallead.desktop.tests.utilities
         [InlineData(typeof(IQueueFilter))]
         [InlineData(typeof(IMailPersistence))]
         [InlineData(typeof(IMailReader))]
+        [InlineData(typeof(IHistoryReader))]
         public void CanGetRegisteredType(Type type)
         {
             // DesktopCoreServiceProvider.

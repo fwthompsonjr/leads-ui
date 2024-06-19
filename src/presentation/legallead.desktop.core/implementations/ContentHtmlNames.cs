@@ -252,6 +252,7 @@ namespace legallead.desktop.implementations
             new() { Index = 410, Name = "mysearchactive-html"},
             new() { Index = 500, Name = "invoice-html"},
             new() { Index = 600, Name = "mailbox-base-html"},
+            new() { Index = 700, Name = "viewhistory-base-html"},
         };
 
         private static readonly List<ContentHtml> _mappedcontents = new()
@@ -260,6 +261,7 @@ namespace legallead.desktop.implementations
             new() { Index = 30, Name = "commondialoguescript-js", Content = CommonDialogueJs },
             new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
             new() { Index = 600, Name = "mailbox-base-html", Content = Properties.Resources.mailbox_base_html },
+            new() { Index = 700, Name = "viewhistory-base-html", Content = Properties.Resources.viewhistory_base_html },
         };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";
@@ -299,6 +301,8 @@ namespace legallead.desktop.implementations
         private const string JsReAuthenticateScript = "<!-- script: account-re-authenticate -->";
         private const string MailboxScriptBlock = "<!-- script: mailbox-behavior -->";
         private const string MailboxStyleSheet = "<!-- style: mailbox-css -->";
+        private const string ViewHistoryScriptBlock = "<!-- script: search-history-behavior -->";
+        private const string ViewHistoryStyleSheet = "<!-- style: search-history-css -->";
 
         private static readonly Dictionary<string, string> Replacements = new() {
             { CssBaseLink, GetBaseCssScript() },
@@ -338,6 +342,8 @@ namespace legallead.desktop.implementations
             { JsReAuthenticateScript, Properties.Resources.common_authenticate_js },
             { MailboxScriptBlock, Properties.Resources.mailbox_base_js },
             { MailboxStyleSheet, Properties.Resources.mailbox_style_css },
+            { ViewHistoryScriptBlock, Properties.Resources.viewhistory_base_js },
+            { ViewHistoryStyleSheet, Properties.Resources.viewhistory_style_css },
         };
 
         private static List<ContentReplacementItem>? contentReplacementItems = null;

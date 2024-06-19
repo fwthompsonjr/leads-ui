@@ -1,5 +1,10 @@
 [
 	{
+		"label": "3.2.18",
+		"trackingDt": "2024-06-19T14:45",
+		"description": "Restyling Search History View"
+	},
+	{
 		"label": "3.2.17",
 		"trackingDt": "2024-06-15T21:15",
 		"description": "Enable user mailbox view."

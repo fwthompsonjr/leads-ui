@@ -1,0 +1,2795 @@
+<html><head>
+		<script type="text/javascript">
+                         try { 
+                         CefSharp.BindObjectAsync("jsHandler", "jsHandler"); 
+                              } catch { } 
+
+
+		</script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>legallead.ui: search history</title>
+		
+		<!-- googleapis : fonts -->
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+		
+		<!-- popper -->
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+		
+		<!-- bootstrap -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+		
+		<!-- font awesome -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+		
+		<!-- jquery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+		<style name="view-history-css">
+                         html { 
+                         height: 100%; 
+                         margin: 0; 
+                         } 
+                         body { 
+                         margin-top: 10px; 
+                         background: #444; 
+                         color: white; 
+                         margin-bottom: 10px; 
+                         overflow-x: clip 
+                         } 
+                         #footer-copy { 
+                         padding-top: 10px; 
+                         } 
+                         #templates { 
+                         display: none; 
+                         } 
+                         div[name="search-history-header"] { 
+                         margin: 10px; 
+                         } 
+                         div[name="search-history-grid"] { 
+                         padding-left: 25px; 
+                         } 
+                         div[name="search-history-preview"] { 
+                         overflow: auto; 
+                         } 
+                         div.search-history { 
+                         vertical-align: text-top; 
+                         padding: 12px; 
+                         margin: 10px; 
+                         border-style: dashed; 
+                         border-color: #999; 
+                         border-width: 1px; 
+                         max-height: 800px; 
+                         overflow: auto; 
+                         } 
+                         div[name="link-history-items-header"] { 
+                         border-style: solid; 
+                         border-color: #999; 
+                         border-width: 1px; 
+                         padding-left: 15px; 
+                         padding-top: 5px; 
+                         } 
+                         div[name="link-history-items-header"][data-item-count="0"] { 
+                         display: block; 
+                         } 
+                         div[name="link-history-items-header"][data-item-count="1"] { 
+                         display: none; 
+                         } 
+                         h5[name='item-subject'] { 
+                         font-size: 16px; 
+                         font-weight: bold; 
+                         } 
+                         .box { 
+                         display: flex; 
+                         flex-flow: column; 
+                         height: 100%; 
+                         } 
+                    /* 
+                    * Data Tables 
+                    */ 
+                    table[name='search-dt-table'], 
+                         table[automationId='search-preview-table'] { 
+                         font-size: 14px; 
+                         border: 1px solid #444; 
+                         width: 100%; 
+                         margin-left: 5px; 
+                         margin-right: 10px; 
+                         } 
+                    table[name='search-dt-table'] tbody, 
+                    table[name='search-dt-table'] td, 
+                    table[name='search-dt-table'] tfoot, 
+                    table[name='search-dt-table'] th, 
+                    table[name='search-dt-table'] thead, 
+                    table[name='search-dt-table'] tr, 
+                    table[automationId='search-preview-table'] tbody, 
+                    table[automationId='search-preview-table'] td, 
+                    table[automationId='search-preview-table'] tfoot, 
+                    table[automationId='search-preview-table'] th, 
+                    table[automationId='search-preview-table'] thead, 
+                         table[automationId='search-preview-table'] tr { 
+                         border: 1px solid #444; 
+                         } 
+                    table[name='search-dt-table'] td, 
+                         table[automationId='search-preview-table'] td { 
+                         padding-left: 4px; 
+                         padding-right: 4px; 
+                         } 
+                    table[name='search-dt-table'] thead tr, 
+                         table[automationId='search-preview-table'] thead tr { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                    table[name='search-dt-table'] tfoot tr td, 
+                         table[automationId='search-preview-table'] tfoot tr td { 
+                         border-top-style: double; 
+                         border-right-style: none; 
+                         border-bottom-style: none; 
+                         border-left-style: none; 
+                         } 
+                    table[name='search-dt-table'] tfoot, 
+                         table[automationId='search-preview-table'] tfoot { 
+                         margin-top: 10px; 
+                         } 
+                         tr[data-position] { 
+                         cursor: pointer; 
+                         } 
+                         tr[data-position]:hover { 
+                         background-color: rgba(255, 255, 255, .25); 
+                         } 
+                         tr[data-position='odd'] { 
+                         background-color: rgba(125, 125, 125, .25); 
+                         } 
+                         tr[data-position] a[name='link-show-details']:hover { 
+                         color: #0a58ca; 
+                         } 
+                         #cbo-subcontent-history-pager { 
+                         background-color: transparent; 
+                         border-color: #555; 
+                         color: ghostwhite; 
+                         } 
+                         .box .customrow.header { 
+                         flex: 0 1 auto; 
+                         border-bottom: 1px solid #888; 
+                         margin-bottom: 5px; 
+                         } 
+                         .box .customrow.content { 
+                         flex: 1 1 auto; 
+                         } 
+                         .box .customrow.footer { 
+                         flex: 0 1 40px; 
+                         } 
+
+
+		</style>
+	</head>
+	<body class="text-center">
+		<div class="box">
+			<div class="customrow header">
+				<h3 class="masthead-brand">
+					<i class="bi bi-bank2"></i>
+					<span>Legal Lead UI: Search</span>
+				</h3>
+			</div>
+			<div class="customrow content">
+				<div name="search-history-header" class="text-start">
+					<h5 id="search-history-sub-header">History</h5>
+				</div>
+				<div name="search-history-grid" class="row">
+					<div name="search-history-items" class="col-7 search-history">
+						
+						<!-- add mail -->
+						<div id="dv-history-item-no-history" name="link-history-items-header" data-item-count="1" class="rounded">
+							<div class="d-flex w-100 justify-content-between">
+								<p name="item-header-text" class="mb-1">No Mail Items Found</p>
+							</div>
+						</div>
+						<div id="dv-history-item-list" name="div-history-items" class="list-group">
+							<table automationid="search-history-table" name="search-dt-table">
+								<colgroup>
+									<col name="requested-date">
+									<col name="state-abbr" style="width: 60px">
+									<col name="county-name" style="width: 150px">
+									<col name="begin-date" style="width: 95px">
+									<col name="ending-date" style="width: 95px">
+									<col name="search-status" style="width: 90px">
+								</colgroup>
+								<thead>
+									<tr>
+										<th style="padding-left: 3px;">Request Date</th>
+										<th style="padding-left: 3px;">State</th>
+										<th style="padding-left: 3px;">County</th>
+										<th style="padding-left: 3px;">Starting</th>
+										<th style="padding-left: 3px;">Ending</th>
+										<th style="padding-left: 3px;">Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="tr-subcontent-history-data-template" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(~7)">~1</a>
+										</td>
+										<td>
+											<span name="state-abbr">~2</span>
+										</td>
+										<td>
+											<span name="county-name">~3</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">~4</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">~5</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status">~6</span>
+										</td>
+									</tr>
+									<tr id="tr-subcontent-history-no-data" style="display: none">
+										<td colspan="6">
+											<span name="no-data">No Records Found</span>
+										</td>
+									</tr>
+									<tr search-uuid="0b969955-2d13-11ef-99ce-0af7a01f52e9" data-row-number="0" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(0)">6/18/24 1:35 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">COLLIN</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">6/11/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">6/11/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1bc7f905-2d12-11ef-99ce-0af7a01f52e9" data-row-number="1" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(1)">6/18/24 1:28 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">6/12/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">6/13/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="c61529a9-2d11-11ef-99ce-0af7a01f52e9" data-row-number="2" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(2)">6/18/24 1:26 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">6/11/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">6/12/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="a6abb0d9-2d11-11ef-99ce-0af7a01f52e9" data-row-number="3" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(3)">6/18/24 1:25 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="9875e9b7-2d11-11ef-99ce-0af7a01f52e9" data-row-number="4" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(4)">6/18/24 1:25 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="79a81704-2d0c-11ef-99ce-0af7a01f52e9" data-row-number="5" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(5)">6/18/24 12:48 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="65e5e892-2854-11ef-99ce-0af7a01f52e9" data-row-number="6" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(6)">6/12/24 12:40 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="4bf81a37-25df-11ef-99ce-0af7a01f52e9" data-row-number="7" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(7)">6/8/24 9:37 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="603fc859-25de-11ef-99ce-0af7a01f52e9" data-row-number="8" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(8)">6/8/24 9:30 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="9c4be06f-25da-11ef-99ce-0af7a01f52e9" data-row-number="9" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(9)">6/8/24 9:03 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="ab530120-2294-11ef-99ce-0af7a01f52e9" data-row-number="10" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(10)">6/4/24 5:05 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="561f797d-2294-11ef-99ce-0af7a01f52e9" data-row-number="11" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(11)">6/4/24 5:03 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="3cd6bc5b-2293-11ef-99ce-0af7a01f52e9" data-row-number="12" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(12)">6/4/24 4:55 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="9576ff24-2292-11ef-99ce-0af7a01f52e9" data-row-number="13" data-page-number="0" data-position="odd">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(13)">6/4/24 4:50 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="5325352f-2292-11ef-99ce-0af7a01f52e9" data-row-number="14" data-page-number="0" data-position="even">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(14)">6/4/24 4:48 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="11c73469-2292-11ef-99ce-0af7a01f52e9" data-row-number="15" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(15)">6/4/24 4:47 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="8e4eef3c-2291-11ef-99ce-0af7a01f52e9" data-row-number="16" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(16)">6/4/24 4:43 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="ed576c96-228d-11ef-99ce-0af7a01f52e9" data-row-number="17" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(17)">6/4/24 4:17 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="824c2640-228d-11ef-99ce-0af7a01f52e9" data-row-number="18" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(18)">6/4/24 4:14 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="5e78a431-220a-11ef-99ce-0af7a01f52e9" data-row-number="19" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(19)">6/4/24 12:35 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="3b6dceaa-1fe3-11ef-99ce-0af7a01f52e9" data-row-number="20" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(20)">6/1/24 6:50 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="9c79fbe8-1f92-11ef-99ce-0af7a01f52e9" data-row-number="21" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(21)">5/31/24 9:13 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="238d729e-1f92-11ef-99ce-0af7a01f52e9" data-row-number="22" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(22)">5/31/24 9:09 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="8276fe5c-1f89-11ef-99ce-0af7a01f52e9" data-row-number="23" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(23)">5/31/24 8:08 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="c8b65b40-1f84-11ef-99ce-0af7a01f52e9" data-row-number="24" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(24)">5/31/24 7:34 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="473e4127-1e1b-11ef-99ce-0af7a01f52e9" data-row-number="25" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(25)">5/30/24 12:26 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="d0f71342-1df0-11ef-99ce-0af7a01f52e9" data-row-number="26" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(26)">5/29/24 7:22 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="3105702f-1df0-11ef-99ce-0af7a01f52e9" data-row-number="27" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(27)">5/29/24 7:18 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1c3201b0-1ddc-11ef-99ce-0af7a01f52e9" data-row-number="28" data-page-number="1" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(28)">5/29/24 4:54 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="27fe5515-1d7d-11ef-99ce-0af7a01f52e9" data-row-number="29" data-page-number="1" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(29)">5/29/24 5:34 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="5538c723-1d36-11ef-99ce-0af7a01f52e9" data-row-number="30" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(30)">5/28/24 9:07 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="d8297bcf-1d31-11ef-99ce-0af7a01f52e9" data-row-number="31" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(31)">5/28/24 8:35 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="eda15c29-1b80-11ef-99ce-0af7a01f52e9" data-row-number="32" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(32)">5/26/24 4:56 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="6d225aac-1b80-11ef-99ce-0af7a01f52e9" data-row-number="33" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(33)">5/26/24 4:53 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="32198fe3-1b80-11ef-99ce-0af7a01f52e9" data-row-number="34" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(34)">5/26/24 4:51 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="35cb397f-1b7f-11ef-99ce-0af7a01f52e9" data-row-number="35" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(35)">5/26/24 4:44 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="f8b57222-12df-11ef-99ce-0af7a01f52e9" data-row-number="36" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(36)">5/15/24 5:24 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="b2b37590-12c9-11ef-99ce-0af7a01f52e9" data-row-number="37" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(37)">5/15/24 2:44 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e301ff6f-0dbb-11ef-99ce-0af7a01f52e9" data-row-number="38" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(38)">5/9/24 4:23 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="94b3f407-0dbb-11ef-99ce-0af7a01f52e9" data-row-number="39" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(39)">5/9/24 4:21 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1d3d7472-0dbb-11ef-99ce-0af7a01f52e9" data-row-number="40" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(40)">5/9/24 4:17 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="83d99ecd-0dab-11ef-99ce-0af7a01f52e9" data-row-number="41" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(41)">5/9/24 2:26 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="8ade755e-0cbc-11ef-99ce-0af7a01f52e9" data-row-number="42" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(42)">5/7/24 9:55 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="dcbc3cc0-0cbb-11ef-99ce-0af7a01f52e9" data-row-number="43" data-page-number="2" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(43)">5/7/24 9:50 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="fb37a5ae-0c18-11ef-99ce-0af7a01f52e9" data-row-number="44" data-page-number="2" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(44)">5/7/24 2:24 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="a05da86d-0c0c-11ef-99ce-0af7a01f52e9" data-row-number="45" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(45)">5/7/24 12:56 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="875c5dd0-0c0a-11ef-99ce-0af7a01f52e9" data-row-number="46" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(46)">5/7/24 12:41 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="234610a2-0c0a-11ef-99ce-0af7a01f52e9" data-row-number="47" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(47)">5/7/24 12:38 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="afc8c0b9-0c09-11ef-99ce-0af7a01f52e9" data-row-number="48" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(48)">5/7/24 12:35 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="5e578c96-0c09-11ef-99ce-0af7a01f52e9" data-row-number="49" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(49)">5/7/24 12:33 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="c8cbc8a7-0c08-11ef-99ce-0af7a01f52e9" data-row-number="50" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(50)">5/7/24 12:28 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="3ec7a5fb-0c08-11ef-99ce-0af7a01f52e9" data-row-number="51" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(51)">5/7/24 12:25 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="49afa95d-0bd1-11ef-99ce-0af7a01f52e9" data-row-number="52" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(52)">5/6/24 5:51 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="ac078f79-0bd0-11ef-99ce-0af7a01f52e9" data-row-number="53" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(53)">5/6/24 5:47 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="0ad070ae-0bce-11ef-99ce-0af7a01f52e9" data-row-number="54" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(54)">5/6/24 5:28 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="2f8f4714-0bc4-11ef-99ce-0af7a01f52e9" data-row-number="55" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(55)">5/6/24 4:17 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="049677e9-0bc2-11ef-99ce-0af7a01f52e9" data-row-number="56" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(56)">5/6/24 4:02 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="bac8ca1f-0bc1-11ef-99ce-0af7a01f52e9" data-row-number="57" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(57)">5/6/24 4:00 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="a70e56d9-0bc1-11ef-99ce-0af7a01f52e9" data-row-number="58" data-page-number="3" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(58)">5/6/24 3:59 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="c8105340-0bba-11ef-99ce-0af7a01f52e9" data-row-number="59" data-page-number="3" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(59)">5/6/24 3:10 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="645b8a82-0bba-11ef-99ce-0af7a01f52e9" data-row-number="60" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(60)">5/6/24 3:07 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="db1a0c80-0bb8-11ef-99ce-0af7a01f52e9" data-row-number="61" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(61)">5/6/24 2:56 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e05568b0-0bb7-11ef-99ce-0af7a01f52e9" data-row-number="62" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(62)">5/6/24 2:49 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="a136fe68-0bb7-11ef-99ce-0af7a01f52e9" data-row-number="63" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(63)">5/6/24 2:47 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="439db257-0bb7-11ef-99ce-0af7a01f52e9" data-row-number="64" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(64)">5/6/24 2:45 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="35a3e47d-0bb3-11ef-99ce-0af7a01f52e9" data-row-number="65" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(65)">5/6/24 2:16 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="ba247548-0bb2-11ef-99ce-0af7a01f52e9" data-row-number="66" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(66)">5/6/24 2:12 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="5f7cb74e-0bb2-11ef-99ce-0af7a01f52e9" data-row-number="67" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(67)">5/6/24 2:10 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="8dcb88b7-0bb1-11ef-99ce-0af7a01f52e9" data-row-number="68" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(68)">5/6/24 2:04 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="583f0c4d-0bb1-11ef-99ce-0af7a01f52e9" data-row-number="69" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(69)">5/6/24 2:02 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="12c03eb6-0bb1-11ef-99ce-0af7a01f52e9" data-row-number="70" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(70)">5/6/24 2:01 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="c1810dab-0baf-11ef-99ce-0af7a01f52e9" data-row-number="71" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(71)">5/6/24 1:51 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="c5268844-0bad-11ef-99ce-0af7a01f52e9" data-row-number="72" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(72)">5/6/24 1:37 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="f5ce321f-0bac-11ef-99ce-0af7a01f52e9" data-row-number="73" data-page-number="4" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(73)">5/6/24 1:31 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="8871ef41-0bac-11ef-99ce-0af7a01f52e9" data-row-number="74" data-page-number="4" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(74)">5/6/24 1:28 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="639ec343-0bac-11ef-99ce-0af7a01f52e9" data-row-number="75" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(75)">5/6/24 1:27 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="55e557e2-0bab-11ef-99ce-0af7a01f52e9" data-row-number="76" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(76)">5/6/24 1:19 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e0b498ac-0ba8-11ef-99ce-0af7a01f52e9" data-row-number="77" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(77)">5/6/24 1:02 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="d6e0796d-0b1a-11ef-99ce-0af7a01f52e9" data-row-number="78" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(78)">5/5/24 8:05 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="9e1c2d73-0b1a-11ef-99ce-0af7a01f52e9" data-row-number="79" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(79)">5/5/24 8:04 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="3dea6652-0b18-11ef-99ce-0af7a01f52e9" data-row-number="80" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(80)">5/5/24 7:47 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="f71d9164-0b17-11ef-99ce-0af7a01f52e9" data-row-number="81" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(81)">5/5/24 7:45 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e8983cfb-0a68-11ef-99ce-0af7a01f52e9" data-row-number="82" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(82)">5/4/24 10:51 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="17d40c8d-faa3-11ee-b616-0af7a01f52e9" data-row-number="83" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(83)">4/14/24 9:08 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="06121dc5-faa3-11ee-b616-0af7a01f52e9" data-row-number="84" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(84)">4/14/24 9:07 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="9da7e929-faa2-11ee-b616-0af7a01f52e9" data-row-number="85" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(85)">4/14/24 9:04 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="47fbf8f9-cf91-11ee-be26-0af7a01f52e9" data-row-number="86" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(86)">2/20/24 1:42 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">TARRANT</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">2/12/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">2/15/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="99f9d191-cc11-11ee-be26-0af7a01f52e9" data-row-number="87" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(87)">2/15/24 2:50 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">TARRANT</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">2/12/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">2/13/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="45b0ffd7-cc11-11ee-be26-0af7a01f52e9" data-row-number="88" data-page-number="5" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(88)">2/15/24 2:48 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">2/1/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">2/5/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e7b3d118-cc10-11ee-be26-0af7a01f52e9" data-row-number="89" data-page-number="5" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(89)">2/15/24 2:45 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">COLLIN</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">2/5/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">2/5/2024</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="2b4a8291-c5d5-11ee-be26-0af7a01f52e9" data-row-number="90" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(90)">2/7/24 4:23 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="17a6b38c-c5d4-11ee-be26-0af7a01f52e9" data-row-number="91" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(91)">2/7/24 4:15 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="debb1c55-c5d0-11ee-be26-0af7a01f52e9" data-row-number="92" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(92)">2/7/24 3:52 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="ed3c609d-c5ce-11ee-be26-0af7a01f52e9" data-row-number="93" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(93)">2/7/24 3:38 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-success">
+												Completed</span>
+										</td>
+									</tr>
+									<tr search-uuid="38276732-c407-11ee-be26-0af7a01f52e9" data-row-number="94" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(94)">2/5/24 9:16 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="1df255ac-c3c4-11ee-be26-0af7a01f52e9" data-row-number="95" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(95)">2/5/24 1:15 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="1bcdec07-c3c4-11ee-be26-0af7a01f52e9" data-row-number="96" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(96)">2/5/24 1:15 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="1cb8bd15-c3b7-11ee-be26-0af7a01f52e9" data-row-number="97" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(97)">2/4/24 11:42 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="558dcb84-c3a7-11ee-be26-0af7a01f52e9" data-row-number="98" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(98)">2/4/24 9:49 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="a3d05e8c-c38b-11ee-be26-0af7a01f52e9" data-row-number="99" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(99)">2/4/24 6:31 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="69d984ba-c2f7-11ee-be26-0af7a01f52e9" data-row-number="100" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(100)">2/4/24 12:50 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="b442777f-c2ba-11ee-be26-0af7a01f52e9" data-row-number="101" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(101)">2/3/24 5:36 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="b34d8a49-c2ba-11ee-be26-0af7a01f52e9" data-row-number="102" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(102)">2/3/24 5:36 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="ad03038e-c236-11ee-be26-0af7a01f52e9" data-row-number="103" data-page-number="6" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(103)">2/3/24 1:50 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="e02f1031-c234-11ee-be26-0af7a01f52e9" data-row-number="104" data-page-number="6" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(104)">2/3/24 1:38 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="1e0cabed-c230-11ee-be26-0af7a01f52e9" data-row-number="105" data-page-number="7" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(105)">2/3/24 1:04 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="8f316534-bf75-11ee-be26-0af7a01f52e9" data-row-number="106" data-page-number="7" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(106)">1/30/24 1:43 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="902a4fed-bf12-11ee-be26-0af7a01f52e9" data-row-number="107" data-page-number="7" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(107)">1/30/24 1:54 AM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-danger">
+												Error</span>
+										</td>
+									</tr>
+									<tr search-uuid="4890f996-befc-11ee-be26-0af7a01f52e9" data-row-number="108" data-page-number="7" data-position="even" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(108)">1/29/24 11:15 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+									<tr search-uuid="0d3b51b2-befc-11ee-be26-0af7a01f52e9" data-row-number="109" data-page-number="7" data-position="odd" style="display: none">
+										<td class="text-start">
+											<a title="View" name="link-show-details" href="javascript:historybox.fetch.item(109)">1/29/24 11:13 PM</a>
+										</td>
+										<td>
+											<span name="state-abbr">TX</span>
+										</td>
+										<td>
+											<span name="county-name">DENTON</span>
+										</td>
+										<td class="text-end">
+											<span name="begin-date">10/1/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="ending-date">10/7/2023</span>
+										</td>
+										<td class="text-end">
+											<span name="search-status" class="text-info">
+												Purchased</span>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot class="m-1">
+									<tr id="tr-subcontent-history-pager">
+										<td colspan="4" class="p-2">
+											<select id="cbo-subcontent-history-pager" onchange="historypager.set_page(0)" class="form-control text-secondary">
+												<option value="0" selected="selected">Records: 1 to 15</option>
+												<option value="1">Records: 16 to 30</option>
+												<option value="2">Records: 31 to 45</option>
+												<option value="3">Records: 46 to 60</option>
+												<option value="4">Records: 61 to 75</option>
+												<option value="5">Records: 76 to 90</option>
+												<option value="6">Records: 91 to 105</option>
+												<option value="7">Records: 106 to 110</option>
+											</select>
+										</td>
+										<td id="td-subcontent-history-record-count" class="text-end text-secondary" colspan="2">Records: 110</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+					<div id="dv-history-item-preview" name="search-history-preview" class="col-4 search-history"><table automationid="search-preview-table" style="width: 95%">
+				<colgroup>
+					<col name="heading" style="width: 115px">
+					<col name="detail">
+				</colgroup>
+				<thead>
+					<tr>
+						<th style="padding-left: 3px;" colspan="2">Search Detail</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr name="requested-date">
+						<th style="padding-left: 10px;">Request Date</th>
+						<td>
+							<span name="requested-date">6/4/24 5:05 PM</span>
+							<span class="d-none" name="search-uuid">ab530120-2294-11ef-99ce-0af7a01f52e9</span>
+						</td>
+					</tr>
+					<tr name="state-abbr">
+						<th style="padding-left: 10px;">Location</th>
+						<td>
+							<span name="county-name">DENTON</span>
+							<span style="margin-left: 3px;margin-right: 5px;" name="county-name-spacer">,</span>
+							<span name="state-abbr">TX</span>
+						</td>
+					</tr>
+					<tr name="begin-date">
+						<th style="padding-left: 10px;">Date Range:</th>
+						<td>
+							<span style="margin-left: 3px;margin-right: 5px;" name="begin-date-spacer">FROM:
+							</span>
+							<span name="begin-date">10/1/2023</span>
+							<span style="margin-left: 3px;margin-right: 5px;" name="ending-date-spacer">TO:
+							</span>
+							<span name="ending-date">10/7/2023</span>
+						</td>
+					</tr>
+					<tr name="search-status">
+						<th style="padding-left: 10px;">Status</th>
+						<td>
+							<span name="search-status" class="text-danger">Error</span>
+						</td>
+					</tr>
+					<tr id="tr-subcontent-preview-no-data" class="d-none" name="user-interaction" data-context="none">
+						<td colspan="2">
+							<span name="no-data">No Records Found</span>
+						</td>
+					</tr>
+				</tbody>
+			</table></div>
+				</div>
+			</div>
+			<div class="customrow footer">
+				<div id="footer-copy" class="float-center">
+					<span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+				</div>
+			</div>
+		</div>
+		<div id="templates">
+			<textarea id="tarea-preview-html"></textarea>
+			<input type="hidden" id="user-restriction-status" value="false">
+			<table automationid="search-preview-table" style="width: 95%">
+				<colgroup>
+					<col name="heading" style="width: 115px">
+					<col name="detail">
+				</colgroup>
+				<thead>
+					<tr>
+						<th style="padding-left: 3px;" colspan="2">Search Detail</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr name="requested-date">
+						<th style="padding-left: 10px;">Request Date</th>
+						<td>
+							<span name="requested-date">- n/a -</span>
+							<span class="d-none" name="search-uuid">- n/a -</span>
+						</td>
+					</tr>
+					<tr name="state-abbr">
+						<th style="padding-left: 10px;">Location</th>
+						<td>
+							<span name="county-name">- n/a -</span>
+							<span style="margin-left: 3px;margin-right: 5px;" name="county-name-spacer">,</span>
+							<span name="state-abbr">- n/a -</span>
+						</td>
+					</tr>
+					<tr name="begin-date">
+						<th style="padding-left: 10px;">Date Range:</th>
+						<td>
+							<span style="margin-left: 3px;margin-right: 5px;" name="begin-date-spacer">FROM:
+							</span>
+							<span name="begin-date">- n/a -</span>
+							<span style="margin-left: 3px;margin-right: 5px;" name="ending-date-spacer">TO:
+							</span>
+							<span name="ending-date">- n/a -</span>
+						</td>
+					</tr>
+					<tr name="search-status">
+						<th style="padding-left: 10px;">Status</th>
+						<td>
+							<span name="search-status">- n/a -</span>
+						</td>
+					</tr>
+					<tr id="tr-subcontent-preview-no-data" class="d-none" name="user-interaction" data-context="none">
+						<td colspan="2">
+							<span name="no-data">No Records Found</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<script name="view-history-box-js">
+                         let historypager = { 
+                         "pagers": ["#cbo-subcontent-history-pager"], 
+                         "history_row_select": "table[automationid='search-history-table'] tr[data-row-number]", 
+                         "history_current_row": "table[automationid='search-history-table'] tr[data-row-number='~0']", 
+                         "preview_name": "table[automationid='search-preview-table']", 
+                         "preview_content": null, 
+                              "set_page": function(cboId) { 
+                              let indx = parseInt(cboId); 
+                                   if (isNaN(indx) || indx < 0 || indx > historypager.pagers.length) { 
+                                   return; 
+                                   } 
+                              let keyname = historypager.pagers[indx]; 
+                              let pg = $(keyname).val(); 
+                              let rows = $(keyname).closest('table').find('tbody').find('tr[data-page-number]'); 
+                                   rows.each(function() { 
+                                   $current = $(this); 
+                                   attr = $current.attr("data-page-number"); 
+                                   hscls = $current.attr("class"); 
+                                        if (typeof hscls !== typeof undefined && hscls !== false) { 
+                                        $current.removeAttr('class'); 
+                                        } 
+                                        if (attr == pg) { 
+                                        $current.show() 
+                                             } else { 
+                                        $current.hide(); 
+                                        } 
+                                   }); 
+                              $(keyname).blur(); 
+                              } 
+                         } 
+                         let historybox = { 
+                         "isWorking": false, 
+                              "controls": { 
+                              "historylist": "dv-history-item-list", 
+                              "preview": "dv-history-item-preview", 
+                              "previewtemplate": "tarea-preview-html" 
+                              }, 
+                              "getElementText": function (elementName) { 
+                                   try { 
+                                   let js = document.getElementById(elementName).innerText.trim(); 
+                                   return js; 
+                                        } catch { 
+                                   return ""; 
+                                   } 
+                              }, 
+                              "preview": { 
+                                   "clear": function () { 
+                                   let html = historybox.getElementText(historybox.controls.previewtemplate); 
+                                   document.getElementById(historybox.controls.preview).innerHTML = html; 
+                                   } 
+                              }, 
+                              "fetch": { 
+                                   "item": function (id) { 
+                                        try { 
+                                        const src = 'templates'; 
+                                        const dest = 'dv-history-item-preview'; 
+                                        const qrestriction = 'user-restriction-status'; 
+                                        const dv = document.getElementById(src); 
+                                        const tbl = dv.getElementsByTagName("table")[0]; 
+                                        const htm = tbl.outerHTML; 
+                                        // import template 
+                                        document.getElementById(dest).innerHTML = htm; 
+                                        // populate (please change layout of template item retaining span names) 
+                                        const rowselector = "tr[data-row-number='~0']".replace("~0", id); 
+                                        const src_items = [ 'a[title="View"]', "span[name='state-abbr']", "span[name='county-name']", "span[name='begin-date']", "span[name='ending-date']", "span[name='search-status']"]; 
+                                        const dest_items = [ 'span[name="requested-date"]', "span[name='state-abbr']", "span[name='county-name']", "span[name='begin-date']", "span[name='ending-date']", "span[name='search-status']"]; 
+                                        const $rwitm = $(rowselector); 
+                                        const $destitm = $("#dv-history-item-preview > table:nth-child(1)"); 
+                                        const uuindx = $rwitm.attr('search-uuid'); 
+                                        const sts = $rwitm.find(src_items[src_items.length - 1]).attr('class'); 
+                                        for(let s = 0; s < src_items.length; s++) 
+                                             { 
+                                             let txt = $rwitm.find( src_items[s] ).text().trim(); 
+                                             $destitm.find( dest_items[s] ).text( txt ); 
+                                             } 
+                                        $destitm.find("span[name='search-uuid']").text(uuindx); 
+                                        $destitm.find(dest_items[dest_items.length - 1]).attr('class', sts); 
+                                        return; 
+                                        // check if user is restricted 
+                                        const isRestriction = document.getElementById(qrestriction).getAttribute('value') == 'true'; 
+                                             if (isRestriction) { return; } 
+                                        // reveal and enable buttons to purchase or preview 
+                                             } catch { 
+                                        historybox.preview.clear(); 
+                                        } 
+                                   } 
+                              } 
+                         } 
+                         let historylist_init = { 
+                              "setScroll": function () { 
+                              const selectedItem = "a[name='link-mail-items-template'].active"; 
+                              $(selectedItem).get(0).scrollIntoView(); 
+                              } 
+                         } 
+                         function fetch_item(id) { 
+                              if (isNaN(id)) { 
+                              return; 
+                              } 
+                         historybox.fetch.item(id); 
+                         } 
+                         function docReady(fn) { 
+                         // see if DOM is already available 
+                              if (document.readyState === "complete" || document.readyState === "interactive") { 
+                              // call on next available tick 
+                              setTimeout(fn, 1); 
+                                   } else { 
+                              document.addEventListener("DOMContentLoaded", fn); 
+                              } 
+                         } 
+                         docReady(function () { 
+                         // historylist_init.setScroll(); 
+                         }); 
+
+
+		</script>
+	
+</body></html>

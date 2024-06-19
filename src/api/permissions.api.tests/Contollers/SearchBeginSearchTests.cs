@@ -79,6 +79,35 @@ namespace permissions.api.tests.Contollers
             if (!hasUser) Assert.IsAssignableFrom<UnauthorizedResult>(result);
             if (hasUser && isAccountLocked) Assert.IsAssignableFrom<ForbidResult>(result);
         }
+
+        [Theory]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, false, true, true)]
+        [InlineData(true, true, true, true)]
+        public async Task ControllerCanPostMySearchesCount(
+            bool hasUser,
+            bool isAccountLocked,
+            bool isValid,
+            bool hasResponse)
+        {
+            var request = modelfaker.Generate();
+            var provider = GetServiceProvider();
+            var valid = provider.GetRequiredService<Mock<IUserSearchValidator>>();
+            var infra = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
+            var lockDb = provider.GetRequiredService<Mock<ICustomerLockInfrastructure>>();
+            var validation = new KeyValuePair<bool, string>(isValid, "unit testing");
+            User? user = hasUser ? userfaker.Generate() : null;
+            UserSearchQueryModel[]? response = hasResponse ? Array.Empty<UserSearchQueryModel>() : null;
+            infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infra.Setup(s => s.GetHeader(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
+            lockDb.Setup(s => s.IsAccountLocked(It.IsAny<string>())).ReturnsAsync(isAccountLocked);
+            valid.Setup(s => s.IsValid(It.IsAny<UserSearchRequest>())).Returns(validation);
+            var controller = provider.GetRequiredService<SearchController>();
+            var result = await controller.MySearchesCount(request);
+            Assert.NotNull(result);
+            if (!hasUser) Assert.IsAssignableFrom<UnauthorizedResult>(result);
+            if (hasUser && isAccountLocked) Assert.IsAssignableFrom<ForbidResult>(result);
+        }
         [Theory]
         [InlineData(true, false, true, true)]
         [InlineData(false, false, true, true)]

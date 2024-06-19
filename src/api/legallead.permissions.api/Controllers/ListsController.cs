@@ -27,6 +27,7 @@ namespace legallead.permissions.api.Controllers
         [HttpGet]
         [Route("us-state-list")]
         [AllowAnonymous]
+        [ProducesResponseType<IEnumerable<UsState>>(StatusCodes.Status200OK)]
         public IActionResult GetStateDetails()
         {
             var states = UsStatesList.All.Where(x => x.IsActive);
@@ -36,6 +37,7 @@ namespace legallead.permissions.api.Controllers
         [HttpGet]
         [Route("us-county-list")]
         [AllowAnonymous]
+        [ProducesResponseType<IEnumerable<UsStateCounty>>(StatusCodes.Status200OK)]
         public IActionResult GetCountyDetails()
         {
             var counties = new List<UsStateCounty>();
@@ -47,6 +49,7 @@ namespace legallead.permissions.api.Controllers
         [HttpGet]
         [Route("permission-groups")]
         [AllowAnonymous]
+        [ProducesResponseType<IEnumerable<PermissionGroupModel>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPermissionGroups()
         {
 #if DEBUG
@@ -70,6 +73,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpGet]
         [Route("user-profile")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<UserProfileModel>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserProfile()
         {
             var user = await Request.GetUser(_db);
@@ -89,6 +95,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpGet]
         [Route("user-permissions")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<UserProfileModel>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserPermissions()
         {
             var user = await Request.GetUser(_db);

@@ -1,0 +1,150 @@
+<html>
+<head>
+    <script type="text/javascript">
+        try {
+            CefSharp.BindObjectAsync("jsHandler", "jsHandler");
+        } catch { }</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>legallead.ui: search history</title>
+
+    <!-- googleapis : fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+
+    <!-- popper -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
+    <!-- bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" integrity="sha384-4LISF5TTJX/fLmGSxO53rV4miRxdg84mZsxmO8Rx5jGtp/LbrixFETvWa5a6sESd" crossorigin="anonymous">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+
+    <!-- jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
+
+    <!-- style: search-history-css -->
+</head>
+<body class="text-center">
+    <div class="box">
+        <div class="customrow header">
+            <h3 class="masthead-brand">
+                <i class="bi bi-bank2"></i>
+                <span>Legal Lead UI</span>
+            </h3>
+        </div>
+        <div class="customrow content">
+            <div name="search-history-header" class="text-start">
+                <h5 id="search-history-sub-header">Search History</h5>
+            </div>
+            <div name="search-history-grid" class="row">
+                <div name="search-history-items" class="col-7 search-history">
+                    <!-- add mail -->
+                    <div id="dv-history-item-no-history" name="link-history-items-header" data-item-count="1" class="rounded">
+                        <div class="d-flex w-100 justify-content-between">
+                            <p name="item-header-text" class="mb-1">No Mail Items Found</p>
+                        </div>
+                    </div>
+                    <div id="dv-history-item-list" name="div-history-items" class="list-group"></div>
+                </div>
+                <div id="dv-history-item-preview" name="search-history-preview" class="col-4 search-history">
+                    <object type="text/html"></object>
+                </div>
+            </div>
+        </div>
+        <div class="customrow footer">
+            <div id="footer-copy" class="float-center">
+                <span id="footer-copy-span">(c) 2023, 2024 Legal Lead UI</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="templates">
+        <textarea id="tarea-preview-html"></textarea>
+        <input type="hidden" id="user-restriction-status" value="true" />
+        <table automationId="search-preview-table" style="width: 95%">
+				<colgroup>
+					<col name="heading" style="width: 115px" />
+					<col name="detail" />
+				</colgroup>
+				<thead>
+                    <tr>
+                        <th style="padding-left: 3px;" colspan="2">Search Detail</th>
+                    </tr>
+				</thead>
+				<tbody>
+					<tr name="requested-date">
+						<th style="padding-left: 10px; padding-top: 15px">Request Date</th>
+						<td style="padding-top: 15px">
+						    <span name="requested-date">- n/a -</span>
+						    <span class="d-none" name="search-uuid">- n/a -</span>
+						</td>
+					</tr>
+					<tr name="state-abbr">
+						<th style="padding-left: 10px;">Location</th>
+						<td>
+                            <span name="county-name">- n/a -</span>
+                            <span style="margin-left: 3px;margin-right: 5px;" name="county-name-spacer">,</span>
+                            <span name="state-abbr">- n/a -</span>
+                        </td>
+					</tr>
+					<tr name="begin-date">
+						<th style="padding-left: 10px;">Date Range:</th>
+						<td>
+                            <span style="margin-left: 3px;margin-right: 5px;" name="begin-date-spacer">FROM: </span>
+                            <span name="begin-date">- n/a -</span>
+                            <span style="margin-left: 3px;margin-right: 5px;" name="ending-date-spacer">TO: </span>
+                            <span name="ending-date">- n/a -</span></td>
+                        </td>
+					</tr>
+					<tr name="search-status">
+						<th style="padding-left: 10px;">Status</th>
+						<th><span name="search-status">- n/a -</span></th>
+					</tr>
+					<tr id="tr-user-interaction-error" class="d-none" name="user-interaction" data-context="error">
+						<td style="padding: 20px" colspan="2">
+                            <hr size='1' noshade />
+                            <div style='margin: 10px'>
+						        <span name="no-data">An error occurred while processing request.</span><br/>
+                                <p>
+                                    When an error occurs during processing then system will
+                                    attempt to retry the request.
+                                </p>
+                                <p>
+                                    You may choose to retry your search with a new search request.
+                                </p>
+                            </div>
+                        </td>
+					</tr>
+					<tr id="tr-user-interaction-completed" class="d-none" name="user-interaction" data-context="completed">
+						<td style="padding: 20px" colspan="2">
+                            <hr size='1' noshade />
+                            <p>
+                                Your request has completed successfully.
+                            </p><br/>
+                            <p>
+                                Click below to purchase this search.
+                            </p>
+							<div class="d-flex justify-content-between">
+								<center style="width: 100%">
+									<button id="btn-user-interaction-purchase" name="bttn-purchase" class="btn btn-primary w-75 m-2" onclick="historybox.invoice()" disabled='disabled'>
+                                        <i id="bttn-purchase-icon" class="bi bi-box-arrow-in-right" ></i>
+                                        <i id="bttn-purchase-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>
+										<span>Purchase</span>
+									</button>
+								</center>
+							</div>
+                        </td>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+    <!-- script: search-history-behavior -->
+</body>
+</html>

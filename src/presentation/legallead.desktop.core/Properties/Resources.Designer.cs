@@ -736,7 +736,7 @@ namespace legallead.desktop.Properties {
         ///    &lt;title&gt;legallead.ui: mailbox&lt;/title&gt;
         ///
         ///    &lt;!-- googleapis : fonts --&gt;
-        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;a [rest of string was truncated]&quot;;.
+        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mailbox_base_html {
             get {
@@ -745,21 +745,25 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to let mailbox = {
+        ///   Looks up a localized string similar to &lt;script name=&quot;mail-box-js&quot;&gt;
+        ///
+        ///let mailbox = {
         ///    &quot;isWorking&quot;: false,
         ///    &quot;controls&quot;: {
-        ///        &quot;template&quot;: &quot;mail-item-template&quot;,
         ///        &quot;maillist&quot;: &quot;dv-mail-item-list&quot;,
         ///        &quot;preview&quot;: &quot;dv-mail-item-preview&quot;,
-        ///        &quot;previewframe&quot;: &quot;#dv-mail-item-preview-frame&quot;,
-        ///        &quot;textarea&quot;: &quot;tarea-json&quot;,
         ///        &quot;previewtemplate&quot;: &quot;tarea-preview-html&quot;,
-        ///        &quot;previewcurrent&quot;: &quot;tarea-current-html&quot;,
-        ///        &quot;nodata&quot;: &quot;dv-mail-item-no-mail&quot;,
-        ///        &quot;subheader&quot;: &quot;mailbox-sub-header&quot;
+        ///        &quot;previewcurrent&quot;: &quot;tarea-current-html&quot;
         ///    },
-        ///    &quot;clear&quot;: function () {
-        ///        le [rest of string was truncated]&quot;;.
+        ///    &quot;getElementText&quot;: function (elementName) {
+        ///        try {
+        ///            let js = document.getElementById(elementName).innerText.trim();
+        ///            return js;
+        ///        } catch {
+        ///            return &quot;&quot;;
+        ///        }
+        ///    },
+        ///   [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mailbox_base_js {
             get {
@@ -798,8 +802,7 @@ namespace legallead.desktop.Properties {
         ///        padding-left: 25px;
         ///    }
         ///
-        ///    div[name=&quot;mailbox-preview&quot;] {
-        ///        ove [rest of string was truncated]&quot;;.
+        ///    div[name=&quot;m [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string mailbox_style_css {
             get {
@@ -1293,6 +1296,29 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;table automationId=&quot;search-history-table&quot; name=&quot;search-dt-table&quot;&gt;
+        ///	&lt;colgroup&gt;
+        ///		&lt;col name=&quot;requested-date&quot; /&gt;
+        ///		&lt;col name=&quot;state-abbr&quot; style=&quot;width: 50px&quot; /&gt;
+        ///		&lt;col name=&quot;county-name&quot; style=&quot;width: 100px&quot; /&gt;
+        ///		&lt;col name=&quot;begin-date&quot; style=&quot;width: 75px&quot; /&gt;
+        ///		&lt;col name=&quot;ending-date&quot; style=&quot;width: 75px&quot; /&gt;
+        ///		&lt;col name=&quot;search-status&quot; style=&quot;width: 50px&quot; /&gt;
+        ///	&lt;/colgroup&gt;
+        ///	&lt;thead&gt;
+        ///		&lt;tr&gt;
+        ///			&lt;th style=&quot;padding-left: 3px;&quot;&gt;Request Date&lt;/th&gt;
+        ///			&lt;th style=&quot;padding-left: 3px;&quot;&gt;State&lt;/th&gt;
+        ///			&lt;th style=&quot; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string searchhistory_table_html {
+            get {
+                return ResourceManager.GetString("searchhistory_table_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;style name=&quot;subcontent-css&quot;&gt;
         ///
         ///			div.subcontent {
@@ -1345,6 +1371,94 @@ namespace legallead.desktop.Properties {
         internal static string verifyandpost_js {
             get {
                 return ResourceManager.GetString("verifyandpost_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        ///&lt;head&gt;
+        ///    &lt;script type=&quot;text/javascript&quot;&gt;
+        ///        try {
+        ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;);
+        ///        } catch { }&lt;/script&gt;
+        ///    &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///    &lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///    &lt;title&gt;legallead.ui: search history&lt;/title&gt;
+        ///
+        ///    &lt;!-- googleapis : fonts --&gt;
+        ///    &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wg [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string viewhistory_base_html {
+            get {
+                return ResourceManager.GetString("viewhistory_base_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;script name=&quot;view-history-box-js&quot;&gt;
+        ///
+        ///let historybox = {
+        ///    &quot;isWorking&quot;: false,
+        ///    &quot;controls&quot;: {
+        ///        &quot;historylist&quot;: &quot;dv-history-item-list&quot;,
+        ///        &quot;preview&quot;: &quot;dv-history-item-preview&quot;,
+        ///        &quot;previewtemplate&quot;: &quot;tarea-preview-html&quot;
+        ///    },
+        ///    &quot;getElementText&quot;: function (elementName) {
+        ///        try {
+        ///            let js = document.getElementById(elementName).innerText.trim();
+        ///            return js;
+        ///        } catch {
+        ///            return &quot;&quot;;
+        ///        }
+        ///    },
+        ///    &quot;preview&quot;: {
+        ///        &quot;clea [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string viewhistory_base_js {
+            get {
+                return ResourceManager.GetString("viewhistory_base_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;style name=&quot;view-history-css&quot;&gt;
+        ///    html {
+        ///        height: 100%;
+        ///        margin: 0;
+        ///    }
+        ///
+        ///    body {
+        ///        margin-top: 10px;
+        ///        background: #444;
+        ///        color: white;
+        ///        margin-bottom: 10px;
+        ///        overflow-x: clip
+        ///    }
+        ///
+        ///    #footer-copy {
+        ///        padding-top: 10px;
+        ///    }
+        ///
+        ///    #templates {
+        ///        display: none;
+        ///    }
+        ///
+        ///    div[name=&quot;search-history-header&quot;] {
+        ///        margin: 10px;
+        ///    }
+        ///
+        ///    div[name=&quot;search-history-grid&quot;] {
+        ///        padding-left: 25px;
+        ///    }
+        ///
+        ///    [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string viewhistory_style_css {
+            get {
+                return ResourceManager.GetString("viewhistory_style_css", resourceCulture);
             }
         }
     }

@@ -16,11 +16,11 @@ namespace legallead.desktop.js
 {
     internal class MailboxJsHandler : JsHandler
     {
-        private readonly IPermissionApi? permissionApi;
+        protected readonly IPermissionApi? permissionApi;
         private readonly IMailPersistence? mailSvc;
-        private readonly UserBo? user;
+        protected readonly UserBo? user;
 
-        private bool HasBrowser => permissionApi != null &&
+        protected bool HasBrowser => permissionApi != null &&
             user != null &&
             web != null &&
             web.CanExecuteJavascriptInMainFrame;
@@ -33,7 +33,7 @@ namespace legallead.desktop.js
             mailSvc = provider?.GetService<IMailPersistence>();
         }
 
-        public void Repopulate()
+        public virtual void Repopulate()
         {
             bool found = false;
             try
@@ -52,7 +52,7 @@ namespace legallead.desktop.js
             }
         }
 
-        public void Fetch(string id)
+        public virtual void Fetch(string id)
         {
             if (!HasBrowser || web == null || mailSvc == null || user == null || !user.IsAuthenicated) return;
             if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var _)) return;
