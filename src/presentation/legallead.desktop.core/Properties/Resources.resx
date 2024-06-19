@@ -280,10 +280,22 @@
   <data name="queuesetting_json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_json\queuesetting-json.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="searchhistory_table_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\searchhistory-table-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="subcontent_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\subcontent-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="verifyandpost_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\verifyandpost-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="viewhistory_base_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\viewhistory-base-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="viewhistory_base_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\viewhistory-base-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="viewhistory_style_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\viewhistory-style-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

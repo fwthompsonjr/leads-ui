@@ -1,30 +1,30 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using legallead.jdbc.entities;
+using legallead.permissions.api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class SearchController : ControllerBase
+    public class SearchController(
+        IUserSearchValidator validator,
+        ISearchInfrastructure infrastructure,
+        ICustomerLockInfrastructure lockingDb) : ControllerBase
     {
-        public SearchController(
-            IUserSearchValidator validator,
-            ISearchInfrastructure infrastructure,
-            ICustomerLockInfrastructure lockingDb)
-        {
-            searchValidator = validator;
-            this.infrastructure = infrastructure;
-            _lockingDb = lockingDb;
-        }
-
-
-        private readonly IUserSearchValidator searchValidator;
-        private readonly ISearchInfrastructure infrastructure;
-        private readonly ICustomerLockInfrastructure _lockingDb;
+        private readonly IUserSearchValidator searchValidator = validator;
+        private readonly ISearchInfrastructure infrastructure = infrastructure;
+        private readonly ICustomerLockInfrastructure _lockingDb = lockingDb;
 
         [HttpPost]
         [Route("search-begin")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType<UserSearchBeginResponse>(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(BeginSearchRequested))]
         public async Task<IActionResult> BeginSearch(UserSearchRequest request)
         {
@@ -48,6 +48,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("my-searches")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<UserSearchQueryModel>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> MySearches(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -58,12 +61,39 @@ namespace legallead.permissions.api.Controllers
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetHeader(Request, null);
-            return Ok(searches);
+            try
+            {
+
+                var searches = await infrastructure.GetHeader(Request, null);
+                return Ok(searches);
+            }
+            catch(Exception ex) 
+            {
+                Debug.WriteLine(ex);
+                return Ok(Array.Empty<UserSearchQueryModel>());
+            }
+        }
+
+        [HttpPost]
+        [Route("my-searches-count")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<UserSearchQueryModel>>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> MySearchesCount(ApplicationModel context)
+        {
+            var response = await MySearches(context);
+            if (response is not OkObjectResult ok) return response;
+            var count = new { Count = 0 };
+            if (ok.Value is not IEnumerable<UserSearchQueryModel> searches) return Ok(count);
+            var actual = new { Count = searches.Count() };
+            return Ok(actual);
         }
 
         [HttpPost]
         [Route("my-active-searches")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<object>(StatusCodes.Status200OK)]
         public async Task<IActionResult> MyActiveSearches(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -80,6 +110,10 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("my-search-preview")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType<IEnumerable<SearchPreviewBo>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> Preview(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -97,6 +131,8 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("my-restriction-status")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType<SearchRestrictionModel>(StatusCodes.Status200OK)]
         public async Task<IActionResult> RestrictionStatus(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -108,6 +144,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("my-search-status")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<ActiveSearchOverviewBo>(StatusCodes.Status200OK)]
         public async Task<IActionResult> SearchStatus(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -124,6 +163,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpPost]
         [Route("my-purchases")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<PurchasedSearchBo>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> MyPurchases(ApplicationModel context)
         {
             var user = await infrastructure.GetUser(Request);
@@ -140,6 +182,9 @@ namespace legallead.permissions.api.Controllers
 
         [HttpGet]
         [Route("list-my-purchases")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<IEnumerable<PurchasedSearchBo>>(StatusCodes.Status200OK)]
         public async Task<IActionResult> ListMyPurchases([FromQuery] string userName)
         {
             var user = await infrastructure.GetUser(Request);

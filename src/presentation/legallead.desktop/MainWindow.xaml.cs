@@ -34,8 +34,10 @@ namespace legallead.desktop
             var provider = AppBuilder.ServiceProvider;
             var manager = provider?.GetService<IMailPersistence>();
             var mailService = AppBuilder.MailService;
+            var historyService = AppBuilder.HistoryService;
             var backgroundQueue = AppBuilder.QueueService;
             mailService?.Dispose();
+            historyService?.Dispose();
             manager?.Clear();
             if (backgroundQueue == null) { return; }
             using var source = new CancellationTokenSource();

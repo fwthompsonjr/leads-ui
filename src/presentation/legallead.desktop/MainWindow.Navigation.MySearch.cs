@@ -31,6 +31,42 @@ namespace legallead.desktop
             }
         }
 
+        private void InitializeMyHistoryContent()
+        {
+            var blankContent = ContentHandler.GetLocalContent("viewhistory");
+            if (blankContent != null)
+            {
+                var historyService = AppBuilder.ServiceProvider?.GetService<IHistoryPersistence>();
+                var data = historyService?.Fetch();
+                var restriction = historyService?.Restriction();
+                var mapper = AppBuilder.ServiceProvider?.GetService<IUserSearchMapper>();
+                if (mapper != null && !string.IsNullOrEmpty(data))
+                {
+                    var content = blankContent.Content;
+                    var table = mapper.Map(data);
+                    var doc = new HtmlDocument();
+                    doc.LoadHtml(content);
+                    var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
+                    if (element != null) { element.InnerHtml = table; }
+                    if (!string.IsNullOrEmpty(restriction))
+                    {
+                        var obj = ObjectExtensions.TryGet<MySearchRestrictions>(restriction);
+                        var isrestricted = obj.IsLocked.GetValueOrDefault(true) ? "true" : "false";
+                        var node = doc.DocumentNode.SelectSingleNode("//*[@id='user-restriction-status']");
+                        if (node != null) { node.Attributes["value"].Value = isrestricted; }
+                    }
+                    blankContent.Content = doc.DocumentNode.OuterHtml;
+                }
+                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
+                var browser = new ChromiumWebBrowser()
+                {
+                    Address = blankHtml
+                };
+                browser.JavascriptObjectRepository.Register("jsHandler", new ViewHistoryJsHandler(browser));
+                contentMySearch.Content = browser;
+            }
+        }
+
         internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
@@ -84,6 +120,24 @@ namespace legallead.desktop
             });
         }
 
+
+        internal void NavigateToMyHistorySearches()
+        {
+            var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
+            if (user == null || !user.IsAuthenicated)
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    SetErrorContent(401);
+                    tabError.IsSelected = true;
+                });
+                return;
+            }
+            Dispatcher.Invoke(() =>
+            {
+                InitializeMyHistoryContent();
+            });
+        }
         private async Task MapMySearchDetails()
         {
             var provider = AppBuilder.ServiceProvider;
@@ -102,8 +156,6 @@ namespace legallead.desktop
                     var container = contentMySearch.Content;
                     if (container is not ChromiumWebBrowser web) return string.Empty;
                     var html = web.GetHTML(Dispatcher);
-                    html = await mapper.Map(api, user, html, "history");
-                    // html = await InjectRestrictionAlert(html);
                     web.SetHTML(Dispatcher, html);
                     return html;
                 });

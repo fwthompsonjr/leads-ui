@@ -8,34 +8,18 @@ namespace legallead.desktop.implementations
 {
     internal class UserSearchMapper : IUserSearchMapper
     {
-        public async Task<string> Map(IPermissionApi api, UserBo user, string source, string target)
-        {
-            var key = (target ?? string.Empty).Trim().ToLower();
-            if (!Substitutions.ContainsKey(key)) { return source; }
-            switch (key)
-            {
-                case "history":
-                    var content = await MapHistory(api, user, source);
-                    return content;
-            }
-            return source;
-        }
 
-        [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
-        private async Task<string> MapHistory(IPermissionApi api, UserBo user, string source)
+        public string Map(string? history)
         {
-            var payload = new { Id = Guid.NewGuid().ToString(), Name = "legallead.permissions.api" };
+            var html = historyhtml;
+            if (string.IsNullOrEmpty(history)) { return html; }
+            var items = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(history);
             var template = Substitutions["history"];
-            var response = await api.Post("search-get-history", payload, user);
-            if (response.StatusCode != 200) return source;
-            var json = response.Message;
-            var items = JsonConvert.DeserializeObject<List<UserSearchQueryBo>>(json);
-            if (items == null || items.Count == 0) return source;
-
-            var document = ToDocument(source);
+            var document = ToDocument(html);
             var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
             var styled = ApplyHistoryStatus(ToDocument(transform), template);
             return styled;
+
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
@@ -123,7 +107,7 @@ namespace legallead.desktop.implementations
                 rowdata.Attributes.Add(pgnumber);
                 rowdata.Attributes.Add(attrwpos);
                 if (pg > 0) rowdata.Attributes.Add(rwstyle);
-                var row = template.InnerHtml.Replace("~0", r.ToString());
+                var row = template.InnerHtml.Replace("~0", r.ToString()).Replace("~7", r.ToString()); ;
                 for (var i = 1; i < substitutions.Targets + 1; i++)
                 {
                     var search = $"~{i}";
@@ -170,6 +154,9 @@ namespace legallead.desktop.implementations
             }
         }
 
-        private const int tableRowCount = 10;
+        private const int tableRowCount = 15;
+
+
+        private readonly static string historyhtml = Properties.Resources.searchhistory_table_html;
     }
 }

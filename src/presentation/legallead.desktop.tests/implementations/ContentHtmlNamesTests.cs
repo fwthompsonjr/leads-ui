@@ -119,6 +119,7 @@ namespace legallead.desktop.tests.implementations
         [InlineData("invoice", true)]
         [InlineData("MySearchactive", true)]
         [InlineData("mailbox", true)]
+        [InlineData("viewhistory", true)]
         public void ContentHtmlNamesCanGetContent(string test, bool expected)
         {
             var sut = GetInstance();

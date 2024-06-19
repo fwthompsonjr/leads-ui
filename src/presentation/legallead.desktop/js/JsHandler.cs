@@ -224,6 +224,7 @@ namespace legallead.desktop.js
                     + Environment.NewLine +
                     $"Please open file at : <br/>{openFileSpan}{adjustedName}</span>";
             web.ExecuteScriptAsync("jsPurchases.show_submission_success", msg);
+            AppBuilder.HistoryService?.OnTimer(null);
         }
 
         public virtual void LogoutUser()
