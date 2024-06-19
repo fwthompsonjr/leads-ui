@@ -66,13 +66,51 @@
 
 
     <div id="templates">
-        <textarea id="tarea-preview-html">
-<html>
-        <body>
-        <p> ... history preview ... </p>
-    </body>
-</html>
-        </textarea>
+        <textarea id="tarea-preview-html"></textarea>
+        <table automationId="search-preview-table" style="width: 95%">
+				<colgroup>
+					<col name="heading" style="width: 115px" />
+					<col name="detail" />
+				</colgroup>
+				<thead>
+                    <tr>
+                        <th colspan="2">Search Detail</th>
+                    </tr>
+				</thead>
+				<tbody>
+					<tr name="requested-date">
+						<th style="padding-left: 10px;">Request Date</th>
+						<td>
+						    <span name="requested-date">- n/a -</span>
+						    <span class="d-none" name="search-uuid">- n/a -</span>
+						</td>
+					</tr>
+					<tr name="state-abbr">
+						<th style="padding-left: 10px;">State</th>
+						<td ><span name="state-abbr">- n/a -</span></td>
+					</tr>
+					<tr name="county-name">
+						<th style="padding-left: 10px;">County</th>
+						<td ><span name="county-name">- n/a -</span></td>
+					</tr>
+					<tr name="begin-date">
+						<th style="padding-left: 10px;">Starting</th>
+						<td ><span name="begin-date">- n/a -</span></td>
+					</tr>
+					<tr name="ending-date">
+						<th style="padding-left: 10px;">Ending</th>
+						<td ><span name="ending-date">- n/a -</span></td>
+					</tr>
+					<tr name="search-status">
+						<th style="padding-left: 10px;">Status</th>
+						<td ><span name="search-status">- n/a -</span></td>
+					</tr>
+					<tr id="tr-subcontent-preview-no-data">
+						<td colspan="2">
+						<span name="no-data">No Records Found</span></td>
+					</tr>
+				</tbody>
+			</table>
     </div>
     <!-- script: search-history-behavior -->
 </body>

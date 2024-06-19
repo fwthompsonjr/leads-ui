@@ -1,4 +1,34 @@
 <script name="view-history-box-js">
+let historypager = {
+    "pagers": ["#cbo-subcontent-history-pager"],
+    "history_row_select": "table[automationid='search-history-table'] tr[data-row-number]",
+    "history_current_row": "table[automationid='search-history-table'] tr[data-row-number='~0']",
+    "preview_name": "table[automationid='search-preview-table']",
+    "preview_content": null,
+    "set_page": function(cboId) {
+        let indx = parseInt(cboId);
+        if (isNaN(indx) || indx < 0 || indx > historypager.pagers.length) {
+            return;
+        }
+        let keyname = historypager.pagers[indx];
+        let pg = $(keyname).val();
+        let rows = $(keyname).closest('table').find('tbody').find('tr[data-page-number]');
+        rows.each(function() {
+            $current = $(this);
+            attr = $current.attr("data-page-number");
+            hscls = $current.attr("class");
+            if (typeof hscls !== typeof undefined && hscls !== false) {
+                $current.removeAttr('class');
+            }
+            if (attr == pg) {
+                $current.show()
+            } else {
+                $current.hide();
+            }
+        });
+        $(keyname).blur();
+    }
+}
 
 let historybox = {
     "isWorking": false,
@@ -24,21 +54,12 @@ let historybox = {
     "fetch": {
         "item": function (id) {
             try {
-                // get html content based on item id
-                if (isNaN(id)) { return; }
-                // client side validation
-                const inx = parseInt(id);
-                const mbox = document.getElementById(historybox.controls.historylist);
-                const count = mbox.childElementCount - 1;
-                if (inx < 0 || inx > count) return;
-                historybox.preview.clear();
-                let handler = window.jsHandler;
-                if (undefined === handler || null === handler || !(handler)) {
-                    return;
-                }
-                const historyitem = mbox.children[inx];
-                const uuidx = historyitem.children[1].children[2].innerText;
-                handler.fetch(uuidx);
+                const src = 'templates';
+                const dest = 'dv-history-item-preview';
+                const dv = document.getElementById(src);
+                const tbl = dv.getElementsByTagName("table")[0];
+                const htm = tbl.outerHTML;
+                document.getElementById(dest).innerHTML = htm;
             } catch {
                 historybox.preview.clear();
             }
@@ -70,7 +91,7 @@ function docReady(fn) {
     }
 }
 docReady(function () {
-    historylist_init.setScroll();
+    // historylist_init.setScroll();
 });
 
 </script>
