@@ -1,15 +1,11 @@
 ﻿using legallead.desktop.entities;
-using legallead.desktop.extensions;
 using legallead.desktop.interfaces;
-using legallead.desktop.models;
 using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualBasic.ApplicationServices;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace legallead.desktop.services
@@ -53,7 +49,7 @@ namespace legallead.desktop.services
                     {
                         // change time to poll every 5 minutes
                         _timer?.Change(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5));
-                    } 
+                    }
                     else
                     {
                         // change time to poll every 30 seconds when user is logged out
@@ -109,8 +105,9 @@ namespace legallead.desktop.services
             dispatcher.Invoke(() =>
             {
                 var menuItem = main.mnuMySearchProfile;
-                if (menuItem != null) { 
-                    menuItem.IsEnabled = isvalid; 
+                if (menuItem != null)
+                {
+                    menuItem.IsEnabled = isvalid;
                 }
             });
         }
