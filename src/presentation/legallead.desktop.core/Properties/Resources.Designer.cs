@@ -1300,11 +1300,11 @@ namespace legallead.desktop.Properties {
         ///&lt;table automationId=&quot;search-history-table&quot; name=&quot;search-dt-table&quot;&gt;
         ///	&lt;colgroup&gt;
         ///		&lt;col name=&quot;requested-date&quot; /&gt;
-        ///		&lt;col name=&quot;state-abbr&quot; style=&quot;width: 50px&quot; /&gt;
-        ///		&lt;col name=&quot;county-name&quot; style=&quot;width: 100px&quot; /&gt;
-        ///		&lt;col name=&quot;begin-date&quot; style=&quot;width: 75px&quot; /&gt;
-        ///		&lt;col name=&quot;ending-date&quot; style=&quot;width: 75px&quot; /&gt;
-        ///		&lt;col name=&quot;search-status&quot; style=&quot;width: 50px&quot; /&gt;
+        ///		&lt;col name=&quot;state-abbr&quot; style=&quot;width: 60px&quot; /&gt;
+        ///		&lt;col name=&quot;county-name&quot; style=&quot;width: 150px&quot; /&gt;
+        ///		&lt;col name=&quot;begin-date&quot; style=&quot;width: 95px&quot; /&gt;
+        ///		&lt;col name=&quot;ending-date&quot; style=&quot;width: 95px&quot; /&gt;
+        ///		&lt;col name=&quot;search-status&quot; style=&quot;width: 90px&quot; /&gt;
         ///	&lt;/colgroup&gt;
         ///	&lt;thead&gt;
         ///		&lt;tr&gt;
@@ -1398,28 +1398,42 @@ namespace legallead.desktop.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;script name=&quot;view-history-box-js&quot;&gt;
-        ///
-        ///let historybox = {
-        ///    &quot;isWorking&quot;: false,
-        ///    &quot;controls&quot;: {
-        ///        &quot;historylist&quot;: &quot;dv-history-item-list&quot;,
-        ///        &quot;preview&quot;: &quot;dv-history-item-preview&quot;,
-        ///        &quot;previewtemplate&quot;: &quot;tarea-preview-html&quot;
-        ///    },
-        ///    &quot;getElementText&quot;: function (elementName) {
-        ///        try {
-        ///            let js = document.getElementById(elementName).innerText.trim();
-        ///            return js;
-        ///        } catch {
-        ///            return &quot;&quot;;
-        ///        }
-        ///    },
-        ///    &quot;preview&quot;: {
-        ///        &quot;clea [rest of string was truncated]&quot;;.
+        ///let historypager = {
+        ///    &quot;pagers&quot;: [&quot;#cbo-subcontent-history-pager&quot;],
+        ///    &quot;history_row_select&quot;: &quot;table[automationid=&apos;search-history-table&apos;] tr[data-row-number]&quot;,
+        ///    &quot;history_current_row&quot;: &quot;table[automationid=&apos;search-history-table&apos;] tr[data-row-number=&apos;~0&apos;]&quot;,
+        ///    &quot;preview_name&quot;: &quot;table[automationid=&apos;search-preview-table&apos;]&quot;,
+        ///    &quot;preview_content&quot;: null,
+        ///    &quot;set_page&quot;: function(cboId) {
+        ///        let indx = parseInt(cboId);
+        ///        if (isNaN(indx) || indx &lt; 0 || ind [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string viewhistory_base_js {
             get {
                 return ResourceManager.GetString("viewhistory_base_js", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;table automationId=&quot;search-preview-table&quot; style=&quot;width: 95%&quot;&gt;
+        ///				&lt;colgroup&gt;
+        ///					&lt;col name=&quot;heading&quot; style=&quot;width: 115px&quot; /&gt;
+        ///					&lt;col name=&quot;detail&quot; /&gt;
+        ///				&lt;/colgroup&gt;
+        ///				&lt;thead&gt;
+        ///                    &lt;tr&gt;
+        ///                        &lt;th style=&quot;padding-left: 3px;&quot; colspan=&quot;2&quot;&gt;Search Detail&lt;/th&gt;
+        ///                    &lt;/tr&gt;
+        ///				&lt;/thead&gt;
+        ///				&lt;tbody&gt;
+        ///					&lt;tr name=&quot;requested-date&quot;&gt;
+        ///						&lt;th style=&quot;padding-left: 10px; padding-top: 15px&quot;&gt;Request Date&lt;/th&gt;
+        ///						&lt;td style=&quot;padding-top: 15px&quot;&gt;
+        ///						    &lt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string viewhistory_item_template_html {
+            get {
+                return ResourceManager.GetString("viewhistory_item_template_html", resourceCulture);
             }
         }
         

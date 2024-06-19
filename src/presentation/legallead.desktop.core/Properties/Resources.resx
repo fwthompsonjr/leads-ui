@@ -295,6 +295,9 @@
   <data name="viewhistory_base_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\viewhistory-base-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="viewhistory_item_template_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\viewhistory-item-template-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="viewhistory_style_css" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\viewhistory-style-css.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

@@ -19,7 +19,6 @@ namespace legallead.desktop.implementations
             var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
             var styled = ApplyHistoryStatus(ToDocument(transform), template);
             return styled;
-
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public method.")]
