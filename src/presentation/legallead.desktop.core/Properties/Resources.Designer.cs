@@ -679,6 +679,28 @@ namespace legallead.desktop.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;html lang=&quot;en&quot;&gt;&lt;head&gt;
+        ///		&lt;script type=&quot;text/javascript&quot;&gt;
+        ///                         try { 
+        ///                         CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 
+        ///                              } catch { } 
+        ///		&lt;/script&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;legallead.ui: invoice generation failed&lt;/title&gt;
+        ///		
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href= [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string invoice_failure_html {
+            get {
+                return ResourceManager.GetString("invoice_failure_html", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;
         ///
         ///	&lt;head&gt;

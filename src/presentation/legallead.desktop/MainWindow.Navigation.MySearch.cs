@@ -119,6 +119,7 @@ namespace legallead.desktop
                     web.SetHTML(Dispatcher, text);
                     tabMySearch.IsSelected = true;
                 });
+                tabMySearch.IsSelected = true;
             });
         }
 

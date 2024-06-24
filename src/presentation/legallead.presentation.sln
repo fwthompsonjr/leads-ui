@@ -26,6 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.installer.tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_mockup", "_mockup", "{967A97ED-1D29-48FD-8264-ACD223A75C5D}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\html\invoice-create-failure.html = ..\..\html\invoice-create-failure.html
 		..\..\html\mailbox\mail-action.js = ..\..\html\mailbox\mail-action.js
 		..\..\html\mailbox\mailbox-base-with-text.html = ..\..\html\mailbox\mailbox-base-with-text.html
 		..\..\html\mailbox\mailbox-base.html = ..\..\html\mailbox\mailbox-base.html
