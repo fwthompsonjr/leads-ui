@@ -18,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_release", "_release", "{B89F45C3-C685-47B8-B668-CF4A27495573}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\release\legallead.desktop.release.txt = ..\..\release\legallead.desktop.release.txt
+		..\..\README.md = ..\..\README.md
+		..\..\x-desktop-version.json = ..\..\x-desktop-version.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.installer", "legallead.installer\legallead.installer.csproj", "{7EDD5D73-6925-43FE-8B98-6099FDDF93D3}"
