@@ -2,7 +2,7 @@
 	{
 		"label": "3.2.20",
 		"trackingDt": "2024-06-25T10:30",
-		"description": "Adding user permission level to status bar"
+		"description": "error handling to gen payment invoice process"
 	},
 	{
 		"label": "3.2.19",
