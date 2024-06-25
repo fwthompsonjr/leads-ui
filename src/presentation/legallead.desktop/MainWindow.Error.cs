@@ -33,5 +33,22 @@ namespace legallead.desktop
                 contentError.Content = browser;
             }
         }
+
+        internal void SetInvoiceError()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var blankContent = ContentHandler.GetLocalContent("failed");
+                if (blankContent == null) return;
+                var blankHtml = ContentHandler.GetAddressBase64(blankContent);
+                var browser = new ChromiumWebBrowser()
+                {
+                    Address = blankHtml
+                };
+                browser.JavascriptObjectRepository.Register("jsHandler", new JsHandler(browser));
+                contentError.Content = browser;
+                tabError.IsSelected = true;
+            });
+        }
     }
 }

@@ -38,6 +38,7 @@ namespace legallead.jdbc.implementations
             }
 
         }
+
         public async Task<IEnumerable<SearchDtoHeader>> History(string userId)
         {
             const string prc = "CALL USP_QUERY_USER_SEARCH( '{0}' );";
@@ -510,6 +511,21 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> FlagError(string searchId)
+        {
+            const string prc = "CALL USP_SEARCH_SET_STATUS_TO_ERROR( '{0}' );";
+            try
+            {
+                var command = string.Format(prc, searchId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, command);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         private static int GetAdjustedRecordCount(SearchRestrictionDto? dto)
         {
             const int count = 100000;
