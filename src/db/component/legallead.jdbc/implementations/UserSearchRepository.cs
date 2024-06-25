@@ -25,11 +25,17 @@ namespace legallead.jdbc.implementations
         }
         public async Task<bool> RequeueSearches()
         {
-            const string prc = "CALL USP_SEARCH_QUEUE_RETRY_FAILED_REQUEST( );";
+            const string prc1 = "CALL PRC__VERIFY_SEARCH_STATUS( );";
+            const string prc2 = "CALL USP_SEARCH_QUEUE_RETRY_FAILED_REQUEST( );";
             try
             {
+                var commands = new List<string>() { prc2, prc1 };
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc);
+                await Task.Run(() => { 
+                    commands.ForEach(cmd => { 
+                        _command.ExecuteAsync(connection, cmd).GetAwaiter().GetResult(); 
+                    }); 
+                });
                 return true;
             }
             catch

@@ -215,20 +215,34 @@ namespace legallead.jdbc.tests.implementations
             mock.Verify(m => m.ExecuteAsync(
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
-                It.IsAny<DynamicParameters>()));
+                It.IsAny<DynamicParameters>()), Times.Exactly(2));
         }
 
-        [Fact]
-        public async Task RepoRequeueSearchesExceptionPath()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task RepoRequeueSearchesExceptionPath(int condition)
         {
             var exception = faker.System.Exception;
             var container = new RepoContainer();
             var service = container.Repo;
             var mock = container.CommandMock;
-            mock.Setup(m => m.ExecuteAsync(
-                It.IsAny<IDbConnection>(),
-                It.IsAny<string>(),
-                It.IsAny<DynamicParameters>())).Throws(exception);
+            if (condition == 0)
+            {
+                mock.SetupSequence(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()))
+                        .Returns(Task.FromResult(Task.CompletedTask))
+                        .Throws(exception);
+            } 
+            else
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Throws(exception);
+            }
             var result = await service.RequeueSearches();
             Assert.False(result);
             mock.Verify(m => m.ExecuteAsync(
