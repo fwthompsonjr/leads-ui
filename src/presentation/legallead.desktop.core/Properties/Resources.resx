@@ -199,6 +199,9 @@
   <data name="invoice_content_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\invoice-content-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="invoice_failure_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_html\invoice-failure-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="invoice_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_html\invoice-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

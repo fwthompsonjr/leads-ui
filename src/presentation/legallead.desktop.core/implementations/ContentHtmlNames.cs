@@ -253,6 +253,7 @@ namespace legallead.desktop.implementations
             new() { Index = 500, Name = "invoice-html"},
             new() { Index = 600, Name = "mailbox-base-html"},
             new() { Index = 700, Name = "viewhistory-base-html"},
+            new() { Index = 800, Name = "failed-purchase-html"},
         };
 
         private static readonly List<ContentHtml> _mappedcontents = new()
@@ -262,6 +263,7 @@ namespace legallead.desktop.implementations
             new() { Index = 405, Name = "mysearchtemplate-html", Content = Properties.Resources.mysearchtemplate_html },
             new() { Index = 600, Name = "mailbox-base-html", Content = Properties.Resources.mailbox_base_html },
             new() { Index = 700, Name = "viewhistory-base-html", Content = Properties.Resources.viewhistory_base_html },
+            new() { Index = 800, Name = "failed-purchase-html", Content = Properties.Resources.invoice_failure_html },
         };
         private const string CssBaseLink = "<link rel=\"stylesheet\" name=\"base\" href=\"css/base.css\" />";
         private const string CssBootStrapLink = "<link rel=\"stylesheet\" href=\"bootstrap.min.css\" />";

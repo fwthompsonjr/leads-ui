@@ -1,9 +1,12 @@
 # legallead.desktop   
 Desktop version of lead sourcing application   
 
-# Versions   
+# Versions    
 
 ## vX.Y.Z - ReleaseDate
+ - Bug fix: invocie generation for purchase search error handling
+
+## v3.2.19 ( 2024-06-19 23:57:41 )
  - Enhancement: add user level to status bar
 
 ## v3.2.18 ( 2024-06-19 20:19:46 )

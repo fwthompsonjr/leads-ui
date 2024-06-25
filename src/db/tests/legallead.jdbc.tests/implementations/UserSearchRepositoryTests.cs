@@ -979,6 +979,39 @@ namespace legallead.jdbc.tests.implementations
             var actual = sut[position];
             Assert.Equal(demo[position], actual);
         }
+
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanFlagError(bool isErrored)
+        {
+            var errored = new Faker().System.Exception();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (!isErrored)
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(errored);
+            }
+            var result = await service.FlagError("");
+            Assert.NotEqual(isErrored, result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
         private static readonly Faker<AdHocSessionDto> adhocfaker =
             new Faker<AdHocSessionDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))

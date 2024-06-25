@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace legallead.desktop.js
 {
@@ -41,6 +42,13 @@ namespace legallead.desktop.js
                 var response = permissionApi?.Post(AddressMap[name], js, user).Result;
                 var htm = JsCompletedHandler.ConvertHTML(response);
                 SetMessage(htm);
+                if ((response == null || response.StatusCode != 200) && SearchForms[4] == formName)
+                {
+                    var mn = GetMain();
+                    if (mn == null) return;
+                    mn.SetInvoiceError();
+                    return;
+                }
                 if (response == null || response.StatusCode != 200) return;
                 if (SearchForms[3] == formName)
                 {
@@ -116,6 +124,16 @@ namespace legallead.desktop.js
             { "frm-search-preview", typeof(SearchPreviewModel) },
             { "frm-search-invoice", typeof(GenerateInvoiceModel) }
         };
+
+
+
+        private static MainWindow? GetMain()
+        {
+            var dispatcher = Application.Current.Dispatcher;
+            Window mainWindow = dispatcher.Invoke(() => { return Application.Current.MainWindow; });
+            if (mainWindow is not MainWindow main) return null;
+            return main;
+        }
 
         private static readonly List<string> scriptNames = new()
             {
