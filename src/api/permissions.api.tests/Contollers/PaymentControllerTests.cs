@@ -138,6 +138,10 @@ namespace permissions.api.tests.Contollers
             infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             infra.Setup(s => s.GetPreview(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(preview);
             infra.Setup(s => s.CreateInvoice(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(invoices);
+            if (preview == null)
+            {
+                infra.Setup(s => s.FlagError(It.IsAny<string>())).ReturnsAsync(true);
+            }
             stripe.Setup(s => s.CreatePaymentAsync(It.IsAny<PaymentCreateModel>(), It.IsAny<List<SearchInvoiceBo>>())).ReturnsAsync(payment);
             var service = provider.GetRequiredService<PaymentController>();
             var result = await service.Create(request);

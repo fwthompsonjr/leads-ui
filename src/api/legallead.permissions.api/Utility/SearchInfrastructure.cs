@@ -181,6 +181,11 @@ namespace legallead.permissions.api.Utility
             return searches;
         }
 
+        public async Task<bool> FlagError(string searchId)
+        {
+            var tmp = await _repo.FlagError(searchId);
+            return tmp;
+        }
         private static IEnumerable<SearchStagingSummaryBo> FormatWeb(IEnumerable<SearchStagingSummaryBo> staged)
         {
             const string beginWith = "data-";

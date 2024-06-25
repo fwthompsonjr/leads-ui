@@ -57,7 +57,10 @@ namespace legallead.permissions.api.Controllers
             var guid = request.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
             var searches = await infrastructure.GetPreview(Request, guid);
-            if (searches == null) return UnprocessableEntity(guid);
+            if (searches == null) {
+                await infrastructure.FlagError(guid);
+                return UnprocessableEntity(guid); 
+            }
             var invoice = await infrastructure.CreateInvoice(user.Id, guid);
             if (invoice == null || !invoice.Any()) return UnprocessableEntity(guid);
             var data = invoice.ToList();
