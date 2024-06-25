@@ -29,7 +29,7 @@ namespace legallead.jdbc.implementations
             const string prc2 = "CALL USP_SEARCH_QUEUE_RETRY_FAILED_REQUEST( );";
             try
             {
-                var commands = new List<string>() { prc1, prc2 };
+                var commands = new List<string>() { prc2, prc1 };
                 using var connection = _context.CreateConnection();
                 await Task.Run(() => { 
                     commands.ForEach(cmd => { 
