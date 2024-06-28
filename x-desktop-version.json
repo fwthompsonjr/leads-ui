@@ -1,5 +1,9 @@
 [
   {
+    "id": 13,
+    "description": "Search: allow search to continue on exit."
+  },
+  {
     "id": 12,
     "description": "Invoice: add error handling to purchase workflow."
   },
