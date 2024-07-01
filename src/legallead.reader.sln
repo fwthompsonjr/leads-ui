@@ -33,6 +33,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7CA9556C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.records.search.tests", "core\legallead.core\tests\legallead.records.search.tests\legallead.records.search.tests.csproj", "{53A0B739-5C49-42FD-995A-796499E87EAB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_shared", "_shared", "{940877A9-C34C-4579-8F00-49372206F7D5}"
+	ProjectSection(SolutionItems) = preProject
+		shared\collinCountyMapping_1.json = shared\collinCountyMapping_1.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

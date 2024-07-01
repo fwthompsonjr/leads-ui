@@ -32,7 +32,11 @@ namespace legallead.records.search.DriverFactory
         {
             try
             {
-                return new FirefoxDriver();
+                var profile = new FirefoxOptions();
+                profile.SetPreference("browser.safebrowsing.enabled", true);
+                profile.SetPreference("browser.safebrowsing.malware.enabled", true);
+                profile.UnhandledPromptBehavior = UnhandledPromptBehavior.Accept;
+                return new FirefoxDriver(profile);
             }
             catch
             {

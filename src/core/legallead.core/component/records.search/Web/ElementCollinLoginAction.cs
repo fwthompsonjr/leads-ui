@@ -45,6 +45,7 @@ namespace legallead.records.search.Web
             }
             executor.ExecuteScript("document.getElementById('Login').submit()");
             driver.WaitForNavigation();
+            Thread.Sleep(1000);
         }
     }
 }
