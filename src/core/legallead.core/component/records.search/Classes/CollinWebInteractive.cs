@@ -96,6 +96,10 @@ namespace legallead.records.search.Classes
                     }
 
                     action.Act(item);
+                    if (item.ActionName == "click" && item.DisplayName == "search-type-hyperlink")
+                    {
+                        Thread.Sleep(1250);
+                    }
                     cases = ExtractCaseData(results, cases, actionName, action);
                     if (string.IsNullOrEmpty(caseList) && !string.IsNullOrEmpty(action.OuterHtml))
                     {
