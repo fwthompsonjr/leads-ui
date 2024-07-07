@@ -4,7 +4,7 @@
     using OpenQA.Selenium;
     using System.Threading;
 
-    public class JquerySetTextBox : ElementActionBase
+    public class JquerySetTextBox : JquerySetSelectedIndex
     {
         private const string actionName = "jquery-set-text";
 
@@ -19,6 +19,7 @@
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }
+            WaitForLoad(driver);
             string selector = item.Locator.Query;
             if (string.IsNullOrEmpty(selector))
             {

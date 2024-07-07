@@ -4,6 +4,7 @@ using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
 using OpenQA.Selenium;
+using System.Diagnostics;
 
 namespace legallead.records.search.Classes
 {
@@ -150,8 +151,12 @@ namespace legallead.records.search.Classes
                     {
                         continue;
                     }
-
                     action.Act(item);
+                    if (actionName.Equals("click"))
+                    {
+                        Thread.Sleep(1500);
+                        driver.WaitForNavigation();
+                    }
                     cases = ExtractCaseData(results, cases, actionName, action);
                     if (string.IsNullOrEmpty(caseList) && !string.IsNullOrEmpty(action.OuterHtml))
                     {
@@ -172,8 +177,9 @@ namespace legallead.records.search.Classes
                     PeopleList = people
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 driver?.Quit();
                 driver?.Dispose();
                 throw;
