@@ -18987,8 +18987,8 @@
     "Name": "Harris",
     "Index": 27130,
     "StateCode": "TX",
-    "ShortName": null,
-    "IsActive": false
+    "ShortName": "Harris Civil",
+    "IsActive": true
   },
   {
     "Name": "Harrison",
