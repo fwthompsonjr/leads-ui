@@ -98,6 +98,7 @@ namespace permissions.api.tests.Models
         [Theory]
         [InlineData("TX", "Collin", true)]
         [InlineData("texas", "Denton", true)]
+        [InlineData("texas", "Harris", true)]
         [InlineData("TX", "not-a-name", false)]
         [InlineData("CA", "Collin", false)]
         public void DiscountChoiceCanConvertToCounty(string stateName, string county, bool expected)
