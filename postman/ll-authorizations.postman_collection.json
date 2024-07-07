@@ -186,174 +186,6 @@
 			"name": "lists",
 			"item": [
 				{
-					"name": "GetStateDetails",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect 1 active state response\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    pm.expect(jstring.length).to.equal(1);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect TX as active state code\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.find(x => x[\"shortName\"] == 'TX');\r",
-									"    pm.expect(found).not.eq(undefined);\r",
-									"    pm.expect(found).not.eq(null);\r",
-									"    pm.expect(found[\"isActive\"]).eq(true);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect Texas as active state name\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.find(x => x[\"name\"] == 'Texas');\r",
-									"    pm.expect(found).not.eq(undefined);\r",
-									"    pm.expect(found).not.eq(null);\r",
-									"    pm.expect(found[\"isActive\"]).eq(true);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{app_url}}/api/Lists/us-state-list",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"api",
-								"Lists",
-								"us-state-list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetCountyDetails",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"  pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect 3 active counties response\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    pm.expect(jstring.length).to.equal(3);\r",
-									"});\r",
-									"pm.test(\"Expect TX as active state code\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.filter(x => x[\"stateCode\"] == 'TX');    \r",
-									"    pm.expect(found.length).to.equal(3);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect Collin as active county name\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.find(x => x[\"name\"] == 'Collin' && x[\"stateCode\"] == 'TX');\r",
-									"    pm.expect(found).not.eq(undefined);\r",
-									"    pm.expect(found).not.eq(null);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect Denton as active county name\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.find(x => x[\"name\"] == 'Denton' && x[\"stateCode\"] == 'TX');\r",
-									"    pm.expect(found).not.eq(undefined);\r",
-									"    pm.expect(found).not.eq(null);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Expect Tarrant as active county name\", function () {\r",
-									"    var jstring = pm.response.json();\r",
-									"    var found = jstring.find(x => x[\"name\"] == 'Tarrant' && x[\"stateCode\"] == 'TX');\r",
-									"    pm.expect(found).not.eq(undefined);\r",
-									"    pm.expect(found).not.eq(null);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{app_url}}/api/Lists/us-county-list",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"api",
-								"Lists",
-								"us-county-list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "GetPermissionGroups",
 					"event": [
 						{
@@ -2278,6 +2110,189 @@
 			"name": "search",
 			"item": [
 				{
+					"name": "Lists",
+					"item": [
+						{
+							"name": "GetStateDetails",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect 1 active state response\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    pm.expect(jstring.length).to.equal(1);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect TX as active state code\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"shortName\"] == 'TX');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"    pm.expect(found[\"isActive\"]).eq(true);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect Texas as active state name\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"name\"] == 'Texas');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"    pm.expect(found[\"isActive\"]).eq(true);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{app_url}}/api/Lists/us-state-list",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"api",
+										"Lists",
+										"us-state-list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCountyDetails",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const countyCount = 4;\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"  pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect 4 active counties response\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    pm.expect(jstring.length).to.equal(countyCount);\r",
+											"});\r",
+											"pm.test(\"Expect TX as active state code\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.filter(x => x[\"stateCode\"] == 'TX');    \r",
+											"    pm.expect(found.length).to.equal(countyCount);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect Collin as active county name\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"name\"] == 'Collin' && x[\"stateCode\"] == 'TX');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect Denton as active county name\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"name\"] == 'Denton' && x[\"stateCode\"] == 'TX');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect Tarrant as active county name\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"name\"] == 'Tarrant' && x[\"stateCode\"] == 'TX');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Expect Harris as active county name\", function () {\r",
+											"    var jstring = pm.response.json();\r",
+											"    var found = jstring.find(x => x[\"name\"] == 'Harris' && x[\"stateCode\"] == 'TX');\r",
+											"    pm.expect(found).not.eq(undefined);\r",
+											"    pm.expect(found).not.eq(null);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{app_url}}/api/Lists/us-county-list",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"api",
+										"Lists",
+										"us-county-list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "BeginSearch",
 					"event": [
 						{
@@ -2329,6 +2344,152 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"denton\",\r\n\t\t\"value\": 26730\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Court Type\",\r\n\t\t\t\"text\": \"All County Courts\",\r\n\t\t\t\"value\": \"9\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"name\": \"Case Type\",\r\n\t\t\t\"text\": \"JP And County Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": 1696118400000,\r\n\t\"end\": 1696636800000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_BEGIN_SEARCH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_BEGIN_SEARCH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BeginSearch Harris",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"harris\",\r\n\t\t\"value\": 27130\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Search Type\",\r\n\t\t\t\"text\": \"All Civil Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": 1696118400000,\r\n\t\"end\": 1696636800000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_BEGIN_SEARCH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_BEGIN_SEARCH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RandomSearch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomNumber = Math.floor(Math.random() * 12) + 2;\r",
+									"let endingDt = new Date().setDate(new Date().getDate() - randomNumber);\r",
+									"let startingDt = new Date().setDate(new Date().getDate() - (randomNumber+1));\r",
+									"// setup parms\r",
+									"pm.environment.set(\"start_date_ts\", startingDt);\r",
+									"pm.environment.set(\"end_date_ts\", endingDt); \r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"denton\",\r\n\t\t\"value\": 26730\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Court Type\",\r\n\t\t\t\"text\": \"All County Courts\",\r\n\t\t\t\"value\": \"9\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"name\": \"Case Type\",\r\n\t\t\t\"text\": \"JP And County Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": {{start_date_ts}},\r\n\t\"end\": {{end_date_ts}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
