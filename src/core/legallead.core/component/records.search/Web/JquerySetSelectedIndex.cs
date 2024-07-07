@@ -2,6 +2,7 @@
 {
     using legallead.records.search.Dto;
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Support.UI;
     using System.Threading;
 
     public class JquerySetSelectedIndex : ElementActionBase
@@ -14,11 +15,12 @@
         {
             if (item == null)
             {
-                throw new System.ArgumentNullException(nameof(item));
+                throw new ArgumentNullException(nameof(item));
             }
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }
+            WaitForLoad(driver);
             string selector = item.Locator.Query;
             if (string.IsNullOrEmpty(selector))
             {
@@ -32,6 +34,12 @@
             jse.ExecuteScript(command);
 
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }
+        }
+        protected static void WaitForLoad(IWebDriver driver, int timeoutSec = 15)
+        {
+            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
+            WebDriverWait wait = new WebDriverWait(driver, new TimeSpan(0, 0, timeoutSec));
+            wait.Until(wd => js.ExecuteScript("return document.readyState").ToString() == "complete");
         }
     }
 }
