@@ -13,11 +13,13 @@ namespace legallead.records.search.Tests
         [AssemblyCleanup]
         public static void AssemblyCleanUp()
         {
-            const string processName = "chromedriver";
-            foreach (var process in Process.GetProcessesByName(processName))
+            const string names = "chromedriver,geckodriver";
+            var processes = names.Split(',').ToList();
+            processes.ForEach(p =>
             {
-                process.Kill();
-            }
+                var items = Process.GetProcessesByName(p).ToList();
+                items.ForEach(i => i.Kill());
+            });
         }
 
         [TestMethod]
