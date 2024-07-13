@@ -1,5 +1,9 @@
 [
   {
+    "id": 13,
+    "description": "Search History: add filters for status and county."
+  },
+  {
     "id": 12,
     "description": "Invoice: add error handling to purchase workflow."
   },

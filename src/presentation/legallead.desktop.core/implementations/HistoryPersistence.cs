@@ -35,6 +35,16 @@ namespace legallead.desktop.implementations
             }
         }
 
+        public void SaveFilter(string json)
+        {
+            var fileName = SearchFilterFile;
+            if (string.IsNullOrEmpty(fileName)) return;
+            lock (sync)
+            {
+                _fileService.WriteAllText(fileName, json);
+            }
+        }
+
         public string? Fetch()
         {
             var fileName = HistoryFile;
@@ -51,17 +61,28 @@ namespace legallead.desktop.implementations
                 return _fileService.ReadAllText(fileName);
             }
         }
+        public string? Filter()
+        {
+            var fileName = SearchFilterFile;
+            if (string.IsNullOrEmpty(fileName)) return null;
+            lock (sync)
+            {
+                return _fileService.ReadAllText(fileName);
+            }
+        }
 
         private static readonly object sync = new();
         private static string AppFolder => appFolder ??= GetFolder();
         private static string HistoryFolder => historyFolder ??= GetHistoryFolder();
         private static string HistoryFile => historyFile ??= GetHistoryFile();
         private static string RestrictionFile => restrictionFile ??= GetRestrictionFile();
+        private static string SearchFilterFile => filterSettingFile ??= GetFilterFile();
 
         private static string? appFolder;
         private static string? historyFolder;
         private static string? historyFile;
         private static string? restrictionFile;
+        private static string? filterSettingFile;
 
         [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetFolder()
@@ -86,10 +107,10 @@ namespace legallead.desktop.implementations
         [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetHistoryFile()
         {
-            const string folderName = "user-history.txt";
+            const string fileName = "user-history.txt";
             var parent = HistoryFolder;
             if (!Directory.Exists(parent)) return string.Empty;
-            var child = Path.Combine(parent, folderName);
+            var child = Path.Combine(parent, fileName);
             if (!File.Exists(child)) return string.Empty;
             return child;
         }
@@ -97,10 +118,21 @@ namespace legallead.desktop.implementations
         [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
         private static string GetRestrictionFile()
         {
-            const string folderName = "user-restriction.txt";
+            const string fileName = "user-restriction.txt";
             var parent = HistoryFolder;
             if (!Directory.Exists(parent)) return string.Empty;
-            var child = Path.Combine(parent, folderName);
+            var child = Path.Combine(parent, fileName);
+            if (!File.Exists(child)) return string.Empty;
+            return child;
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Performs file i/o operations")]
+        private static string GetFilterFile()
+        {
+            const string fileName = "user-search-filter.txt";
+            var parent = HistoryFolder;
+            if (!Directory.Exists(parent)) return string.Empty;
+            var child = Path.Combine(parent, fileName);
             if (!File.Exists(child)) return string.Empty;
             return child;
         }

@@ -4,7 +4,12 @@ Desktop version of lead sourcing application
 # Versions    
 
 ## vX.Y.Z - ReleaseDate
- - Bug fix: invocie generation for purchase search error handling
+ ### Enhancements: 
+ - add status filter to user search history view
+ - add county filter to user search history view
+
+## v3.2.20 ( 2024-06-25 17:29:25 )
+ - Bug fix: invoice generation for purchase search error handling
 
 ## v3.2.19 ( 2024-06-19 23:57:41 )
  - Enhancement: add user level to status bar

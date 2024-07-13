@@ -7,5 +7,7 @@
         string? Fetch();
         void SaveRestriction(string json);
         string? Restriction();
+        void SaveFilter(string json);
+        string? Filter();
     }
 }
