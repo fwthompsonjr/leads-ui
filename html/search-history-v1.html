@@ -3406,8 +3406,9 @@
                 }
                 const cbo = document.getElementById(cboname);
                 if (null == cbo) return;
-                let idx = parseInt(cbo.selectedIndex).toString();
-                handler.filter(idx);
+                let idx = parseInt(cbo.selectedIndex)
+                let vlu = cbo.children[idx].getAttribute('value');
+                handler.filter(vlu);
             },
             "invoice": function () {
                 const handler = window.jsHandler;

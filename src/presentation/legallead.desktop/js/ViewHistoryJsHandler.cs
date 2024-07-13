@@ -20,10 +20,10 @@ namespace legallead.desktop.js
             var provider = AppBuilder.ServiceProvider;
             var permissionApi = provider?.GetService<IPermissionApi>();
             var persistence = provider?.GetService<IHistoryPersistence>();
-            if (!HasBrowser || 
-                web == null || 
-                user == null || 
-                !user.IsAuthenicated || 
+            if (!HasBrowser ||
+                web == null ||
+                user == null ||
+                !user.IsAuthenicated ||
                 permissionApi == null ||
                 persistence == null) return;
             if (string.IsNullOrEmpty(id) || !int.TryParse(id, out var index)) return;
@@ -37,26 +37,48 @@ namespace legallead.desktop.js
             var serialized = JsonConvert.SerializeObject(mapped);
             persistence.SaveFilter(serialized);
             mn.NavigateToMyHistorySearches();
+        }
 
+        public void County(string name)
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var permissionApi = provider?.GetService<IPermissionApi>();
+            var persistence = provider?.GetService<IHistoryPersistence>();
+            if (!HasBrowser ||
+                web == null ||
+                user == null ||
+                !user.IsAuthenicated ||
+                permissionApi == null ||
+                persistence == null) return;
+            var mn = GetMain();
+            if (mn == null) return;
+            if (string.IsNullOrEmpty(name) || name.Equals("None", StringComparison.OrdinalIgnoreCase)) name = string.Empty;
+            var obj = new UserSearchFilterBo { County = name };
+            var data = persistence.Filter() ?? JsonConvert.SerializeObject(obj);
+            var mapped = ObjectExtensions.TryGet<UserSearchFilterBo>(data) ?? obj;
+            mapped.County = name;
+            var serialized = JsonConvert.SerializeObject(mapped);
+            persistence.SaveFilter(serialized);
+            mn.NavigateToMyHistorySearches();
         }
 
         public override void Fetch(string id)
         {
-                var provider = AppBuilder.ServiceProvider;
-                var permissionApi = provider?.GetService<IPermissionApi>();
-                if (!HasBrowser || web == null || user == null || !user.IsAuthenicated || permissionApi == null) return;
-                if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var _)) return;
-                var model = new GenerateInvoiceModel { Id = id };
-                var response = permissionApi.Post("search-get-invoice", model, user).Result;
-                if (response == null || response.StatusCode != 200)
-                {
-                    var mn = GetMain();
-                    if (mn == null) return;
-                    mn.SetInvoiceError();
-                    return;
-                }
-                var clspreview = new JsPreviewCompleted(web, response?.Message);
-                clspreview.Invoice();
+            var provider = AppBuilder.ServiceProvider;
+            var permissionApi = provider?.GetService<IPermissionApi>();
+            if (!HasBrowser || web == null || user == null || !user.IsAuthenicated || permissionApi == null) return;
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var _)) return;
+            var model = new GenerateInvoiceModel { Id = id };
+            var response = permissionApi.Post("search-get-invoice", model, user).Result;
+            if (response == null || response.StatusCode != 200)
+            {
+                var mn = GetMain();
+                if (mn == null) return;
+                mn.SetInvoiceError();
+                return;
+            }
+            var clspreview = new JsPreviewCompleted(web, response.Message);
+            clspreview.Invoice();
         }
 
 

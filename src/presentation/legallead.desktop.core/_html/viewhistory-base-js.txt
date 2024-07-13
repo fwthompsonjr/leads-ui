@@ -51,8 +51,21 @@ let historybox = {
 	    }
 	    const cbo = document.getElementById(cboname);
 	    if (null == cbo) return;
-        let idx = parseInt(cbo.selectedIndex).toString();
-        handler.filter(idx);
+        let idx = parseInt(cbo.selectedIndex)
+        let vlu = cbo.children[idx].getAttribute('value');
+        handler.filter(vlu);
+    },
+    "cbocountychanged": function() {
+	    const handler = window.jsHandler;
+	    const cboname = "cbo-search-history-county";
+	    if (undefined === handler || null === handler || !(handler)) {
+		    return;
+	    }
+	    const cbo = document.getElementById(cboname);
+	    if (null == cbo) return;
+        let idx = parseInt(cbo.selectedIndex)
+        let vlu = cbo.children[idx].getAttribute('name');
+        handler.county(vlu);
     },
     "invoice": function() {
 
