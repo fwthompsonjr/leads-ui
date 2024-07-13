@@ -1,4 +1,5 @@
 ﻿using legallead.records.search.Classes;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Reflection;
 
@@ -30,9 +31,12 @@ namespace legallead.records.search.DriverFactory
             {
                 options.BinaryLocation = binaryName;
             }
+            options.AddArgument("guest");
+            options.AddUserProfilePreference("reduce-security-for-testing", null);
             options.AddUserProfilePreference("download.prompt_for_download", false);
             options.AddUserProfilePreference("download.directory_upgrade", true);
             options.AddUserProfilePreference("download.default_directory", CalculateDownloadPath());
+            options.UnhandledPromptBehavior = UnhandledPromptBehavior.Accept;
             return options;
         }
 

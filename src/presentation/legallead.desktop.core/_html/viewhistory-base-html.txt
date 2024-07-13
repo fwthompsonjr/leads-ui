@@ -42,17 +42,43 @@
             <div name="search-history-header" class="text-start">
                 <h5 id="search-history-sub-header">Search History</h5>
             </div>
+			<div name="search-history-filter" class="row">
+				<div name="search-history-filter-title" class="col-2 text-start">
+					<h6 id="search-history-heading-filter">Filter</h6>
+					<h6 id="search-history-heading-caption">None</h6>
+				</div>
+				<div name="search-history-filter-items" class="col-3 text-start">
+					<select id="cbo-search-history-filter" class="w-75 form-control" onchange="historybox.cbochanged()">
+						<option name="None" value="0" selected="selected">All Statuses</option>
+						<option name="Submitted" value="1">Submitted</option>
+						<option name="Processing" value="2">Processing</option>
+						<option name="Completed" value="3">Completed</option>
+						<option name="Purchased" value="4">Purchased</option>
+						<option name="Downloaded" value="5">Downloaded</option>
+						<option name="Error" value="10">Error</option>
+					</select>
+				</div>
+				<div name="search-history-filter-items" class="col-3 text-start">
+					<select id="cbo-search-history-county" class="w-75 form-control" onchange="historybox.cbocountychanged()">
+						<option name="None" value="0" selected="selected">All Counties</option>
+						<option name="Collin" value="1">Collin</option>
+						<option name="Denton" value="2">Denton</option>
+						<option name="Harris" value="3">Harris</option>
+						<option name="Tarrant" value="10">Tarrant</option>
+					</select>
+				</div>
+			</div>
             <div name="search-history-grid" class="row">
                 <div name="search-history-items" class="col-7 search-history">
                     <!-- add mail -->
                     <div id="dv-history-item-no-history" name="link-history-items-header" data-item-count="1" class="rounded">
                         <div class="d-flex w-100 justify-content-between">
-                            <p name="item-header-text" class="mb-1">No Mail Items Found</p>
+                            <p name="item-header-text" class="mb-1">No Search Items Found</p>
                         </div>
                     </div>
-                    <div id="dv-history-item-list" name="div-history-items" class="list-group"></div>
+                    <div id="dv-history-item-list" name="div-history-items" class="list-group" data-item-count="1"></div>
                 </div>
-                <div id="dv-history-item-preview" name="search-history-preview" class="col-4 search-history">
+                <div id="dv-history-item-preview" name="search-history-preview" data-item-count="1" class="col-4 search-history">
                     <object type="text/html"></object>
                 </div>
             </div>
@@ -74,6 +100,7 @@
     <script name="view-history-loaded">
         try {
             historybox.fetch.item(0);
+            historybox.init_filters(); 
         }
         catch {
         }

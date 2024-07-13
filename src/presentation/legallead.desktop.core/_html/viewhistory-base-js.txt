@@ -1,4 +1,18 @@
 <script name="view-history-box-js">
+function getName(find, source) {
+	let kvp = source.split(',');
+    for (let k = 0; k < kvp.length; k++) {
+        let collection = kvp[k].split(':');
+	    for(let i = 0; i < collection.length; i++) {
+            let itm = collection[i].trim();
+		    if (itm == find && i + 1 < collection.length) {
+			    return collection[i+1].trim();
+		    }
+	    }
+    }
+	return '';
+}
+
 let historypager = {
     "pagers": ["#cbo-subcontent-history-pager"],
     "history_row_select": "table[automationid='search-history-table'] tr[data-row-number]",
@@ -42,6 +56,59 @@ let historybox = {
         "historylist": "dv-history-item-list",
         "preview": "dv-history-item-preview",
         "previewtemplate": "tarea-preview-html"
+    },
+    "init_filters": function() {
+		const caption = document.getElementById('search-history-heading-caption').innerText;
+		const chg = "onchange";
+	    let cbonames = ["cbo-search-history-filter", "cbo-search-history-county"];
+	    let cbofxns = ["historybox.cbochanged()", "historybox.cbocountychanged()"];
+	    let findings = ["Status", "County"];
+		const hasFilter = caption != 'None';
+	    for(let i = 0; i < cbonames.length; i++)
+		{
+			const cbo = document.getElementById(cbonames[i]);
+			const changeFunction = cbofxns[i];
+			const find = findings[i];
+			if (null == cbo) continue;
+			const keyvalue = getName(find, caption);
+			cbo.removeAttribute(chg);
+			cbo.selectedIndex = 0;
+			if (hasFilter && keyvalue.length >= 0) { 
+				for(let o = 0; o < cbo.children.length; o++) {
+					let opt = cbo.children[o];
+					let name = opt.getAttribute('name');
+					if (keyvalue == name) { 
+						cbo.selectedIndex = o; 
+						break; 
+					}
+				}
+			}
+			cbo.setAttribute(chg, changeFunction);			
+		}
+    },
+    "cbochanged": function() {
+	    const handler = window.jsHandler;
+	    const cboname = "cbo-search-history-filter";
+	    if (undefined === handler || null === handler || !(handler)) {
+		    return;
+	    }
+	    const cbo = document.getElementById(cboname);
+	    if (null == cbo) return;
+        let idx = parseInt(cbo.selectedIndex)
+        let vlu = cbo.children[idx].getAttribute('value');
+        handler.filter(vlu);
+    },
+    "cbocountychanged": function() {
+	    const handler = window.jsHandler;
+	    const cboname = "cbo-search-history-county";
+	    if (undefined === handler || null === handler || !(handler)) {
+		    return;
+	    }
+	    const cbo = document.getElementById(cboname);
+	    if (null == cbo) return;
+        let idx = parseInt(cbo.selectedIndex)
+        let vlu = cbo.children[idx].getAttribute('name');
+        handler.county(vlu);
     },
     "invoice": function() {
 

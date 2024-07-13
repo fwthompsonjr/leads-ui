@@ -1,0 +1,14 @@
+{
+  "dropDowns": [
+    {
+      "id": 0,
+      "name": "Search Type",
+      "options": [
+        {
+          "id": 0,
+          "name": "All Civil Courts"
+        }
+      ]
+    }
+  ]
+}

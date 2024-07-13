@@ -9,14 +9,107 @@ namespace legallead.desktop.implementations
     internal class UserSearchMapper : IUserSearchMapper
     {
 
-        public string Map(string? history)
+        public void SetCounty(IHistoryPersistence? persistence, HtmlNode? combo)
+        {
+            const string sel = "selected";
+            if (persistence == null || combo == null) return;
+            var json = persistence.Filter();
+            if (string.IsNullOrWhiteSpace(json)) return;
+            var filter = ObjectExtensions.TryGet<UserSearchFilterBo>(json) ?? new();
+            var options = combo.SelectNodes("option").ToList();
+            var search = string.IsNullOrEmpty(filter.County) ? "None" : filter.County;
+            options.ForEach(opt =>
+            {
+                var attribute = opt.Attributes.ToList().Find(x => x.Name.Equals(sel));
+                var ovalue = opt.Attributes["name"].Value;
+                if (search.Equals(ovalue, StringComparison.OrdinalIgnoreCase) && attribute == null)
+                {
+                    opt.Attributes.Add(sel, sel);
+                }
+                else
+                {
+                    if (attribute != null) { opt.Attributes.Remove(attribute); }
+                }
+            });
+        }
+
+        public void SetFilter(IHistoryPersistence? persistence, HtmlNode? combo)
+        {
+            const string sel = "selected";
+            if (persistence == null || combo == null) return;
+            var json = persistence.Filter();
+            if (string.IsNullOrWhiteSpace(json)) return;
+            var filter = ObjectExtensions.TryGet<UserSearchFilterBo>(json) ?? new();
+            var options = combo.SelectNodes("option").ToList();
+            options.ForEach(opt =>
+            {
+                var attribute = opt.Attributes.ToList().Find(x => x.Name.Equals(sel));
+                var ovalue = opt.Attributes["value"].Value;
+                if (int.TryParse(ovalue, out var id) && id == filter.Index && attribute == null)
+                {
+                    opt.Attributes.Add(sel, sel);
+                } 
+                else
+                {
+                    if (attribute != null) { opt.Attributes.Remove(attribute); }
+                }
+            });
+        }
+        public string Map(IHistoryPersistence? persistence, string? history, out int rows)
+        {
+            const char space = ' ';
+            const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
+            rows = 0;
+            if (persistence == null) { return Map(history, out rows); }
+            if (string.IsNullOrWhiteSpace(history)) { return Map(history, out rows); }
+            var json = persistence.Filter();
+            if (string.IsNullOrWhiteSpace(json)) { return Map(history, out rows); }
+            var filter = ObjectExtensions.TryGet<UserSearchFilterBo>(json) ?? new();
+            if (!filter.HasFilter) return Map(history, out rows);
+            var items = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(history);
+            var statusName = filter.Index switch
+            {
+                10 => "Error",
+                1 => "Submitted",
+                2 => "Processing",
+                3 => "Completed",
+                4 => "Purchased",
+                5 => "Downloaded",
+                _ => string.Empty
+            };
+            items = items.FindAll(x =>
+            {
+                if (string.IsNullOrEmpty(statusName)) { return true; }
+                var progress = x.SearchProgress ?? "";
+                if (!string.IsNullOrWhiteSpace(progress) && progress.Contains(space))
+                {
+                    var arr = progress.Split(space);
+                    progress = arr[^1].Trim();
+                }
+                return progress.Equals(statusName, comparison);
+            });
+            if (!string.IsNullOrEmpty(filter.County))
+            {
+                items = items.FindAll(x =>
+                {
+                    var county = (x.CountyName ?? "");
+                    if (string.IsNullOrEmpty(county)) { return false; }
+                    return county.Equals(filter.County, comparison);
+                });
+            }
+            var collection = JsonConvert.SerializeObject(items);
+            return Map(collection, out rows);
+        }
+        public string Map(string? history, out int rows)
         {
             var html = historyhtml;
+            rows = 0;
             if (string.IsNullOrEmpty(history)) { return html; }
             var items = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(history);
+            rows = items.Count;
             var template = Substitutions["history"];
             var document = ToDocument(html);
-            var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);
+            var transform = TransformRows(document, items.Cast<ISearchIndexable>().ToList(), template);            
             var styled = ApplyHistoryStatus(ToDocument(transform), template);
             return styled;
         }

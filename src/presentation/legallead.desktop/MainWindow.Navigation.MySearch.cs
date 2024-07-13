@@ -35,6 +35,13 @@ namespace legallead.desktop
 
         private void InitializeMyHistoryContent()
         {
+            const string nohistory = "//*[@id='dv-history-item-no-history']";
+            const string itemlist = "//*[@id='dv-history-item-list']";
+            const string itemview = "//*[@id='dv-history-item-preview']";
+            const string filterstatus = "//*[@id='cbo-search-history-filter']";
+            const string filtercounty = "//*[@id='cbo-search-history-county']";
+            const string restrictionstatus = "//*[@id='user-restriction-status']";
+            const string countattribute = "data-item-count";
             var blankContent = ContentHandler.GetLocalContent("viewhistory");
             if (blankContent != null)
             {
@@ -45,19 +52,13 @@ namespace legallead.desktop
                 if (mapper != null && !string.IsNullOrEmpty(data))
                 {
                     var content = blankContent.Content;
-                    var table = mapper.Map(data);
-                    
+                    var table = mapper.Map(historyService, data, out var rows);
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
-                    var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
-                    if (element != null) { element.InnerHtml = table; }
-                    if (!string.IsNullOrEmpty(restriction))
-                    {
-                        var obj = ObjectExtensions.TryGet<MySearchRestrictions>(restriction);
-                        var isrestricted = obj.IsLocked.GetValueOrDefault(true) ? "true" : "false";
-                        var node = doc.DocumentNode.SelectSingleNode("//*[@id='user-restriction-status']");
-                        if (node != null) { node.Attributes["value"].Value = isrestricted; }
-                    }
+                    AppendTable(doc, itemlist, table);
+                    ApplyFilter(filterstatus, filtercounty, historyService, mapper, doc);
+                    AppendRestriction(doc, restriction, restrictionstatus);
+                    ToggleVisibility(nohistory, itemlist, itemview, countattribute, rows, doc);
                     blankContent.Content = doc.DocumentNode.OuterHtml;
                 }
                 var blankHtml = ContentHandler.GetAddressBase64(blankContent);
@@ -69,6 +70,8 @@ namespace legallead.desktop
                 contentMySearch.Content = browser;
             }
         }
+
+
         internal void NavigateToMySearch()
         {
             var user = AppBuilder.ServiceProvider?.GetRequiredService<UserBo>();
@@ -226,6 +229,59 @@ namespace legallead.desktop
                 mapper == null) return html;
             html = await mapper.Map(api, user, html);
             return html;
+        }
+
+        private static void AppendTable(HtmlDocument doc, string itemlist, string table)
+        {
+            var element = doc.DocumentNode.SelectSingleNode(itemlist);
+            if (element != null) { element.InnerHtml = table; }
+        }
+
+        private static void ApplyFilter(string filterstatus, string filtercounty, IHistoryPersistence? historyService, IUserSearchMapper? mapper, HtmlDocument doc)
+        {
+            const string finder = "//*[@id='search-history-heading-caption']";
+            var filter = historyService?.Filter() ?? string.Empty;
+            var current = ObjectExtensions.TryGet<UserSearchFilterBo>(filter);
+            var caption = current.GetCaption();
+            var subheading = doc.DocumentNode.SelectSingleNode(finder);
+            subheading.InnerHtml = caption;
+            var cbo = doc.DocumentNode.SelectSingleNode(filterstatus);
+            mapper?.SetFilter(historyService, cbo);
+            cbo = doc.DocumentNode.SelectSingleNode(filtercounty);
+            mapper?.SetCounty(historyService, cbo);
+        }
+
+        private static void AppendRestriction(HtmlDocument doc, string? restriction, string restrictionstatus)
+        {
+            if (string.IsNullOrEmpty(restriction)) return;
+            var obj = ObjectExtensions.TryGet<MySearchRestrictions>(restriction);
+            var isrestricted = obj.IsLocked.GetValueOrDefault(true) ? "true" : "false";
+            var node = doc.DocumentNode.SelectSingleNode(restrictionstatus);
+            if (node != null) { node.Attributes["value"].Value = isrestricted; }
+        }
+
+        private static void ToggleVisibility(
+            string nohistory,
+            string itemlist,
+            string itemview,
+            string countattribute,
+            int rows,
+            HtmlDocument doc)
+        {
+            HtmlNode? element;
+
+            const string previewtable = "//*[@automationid='search-preview-table']";
+            var tablestyle = rows == 0 ? "display: none" : "width: 95%";
+            var dvs = new List<string> { itemlist, itemview, nohistory };
+            var display = rows == 0 ? "0" : "1";
+            dvs.ForEach(d =>
+            {
+                element = doc.DocumentNode.SelectSingleNode(d);
+                if (element != null) element.Attributes[countattribute].Value = display;
+            });
+            element = doc.DocumentNode.SelectSingleNode(previewtable);
+            if (element == null) return;
+            element.Attributes["style"].Value = tablestyle;
         }
     }
 }

@@ -94,8 +94,15 @@ namespace legallead.records.search.Classes
                     {
                         continue;
                     }
-
+                    if (item.DisplayName == "case-type-search")
+                    {
+                        WaitSequence(1, driver);
+                    }
                     action.Act(item);
+                    if (item.DisplayName == "search-type-hyperlink" || item.DisplayName == "case-type-search")
+                    {
+                        WaitSequence(4, driver);
+                    }
                     cases = ExtractCaseData(results, cases, actionName, action);
                     if (string.IsNullOrEmpty(caseList) && !string.IsNullOrEmpty(action.OuterHtml))
                     {
@@ -313,5 +320,40 @@ namespace legallead.records.search.Classes
                     endingDate.Date.ToString(CommonKeyIndexes.DateTimeShort, formatDate);
             }
         }
+        private static void WaitSequence(int delay, IWebDriver driver)
+        {
+            for (int i = 0; i < delay; i++)
+            {
+                Thread.Sleep(450);
+                driver.WaitForNavigation();
+                Proceed(driver);
+            }
+        }
+
+        private static void Proceed(IWebDriver driver)
+        {
+            var by = By.CssSelector("#proceed-button");
+            var element = driver.TryFindElement(by);
+            if (element == null) { return; }
+            var alert = GetAlert(driver);
+            alert?.Accept();
+            var command = "document.getElementById('proceed-button').click()";
+            var jse = (IJavaScriptExecutor)driver;
+            jse.ExecuteScript(command);
+        }
+
+        private static IAlert? GetAlert(IWebDriver driver)
+        {
+            try
+            {
+                return driver.SwitchTo().Alert();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
     }
 }
