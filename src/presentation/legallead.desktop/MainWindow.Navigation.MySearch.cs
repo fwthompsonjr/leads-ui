@@ -45,12 +45,13 @@ namespace legallead.desktop
                 if (mapper != null && !string.IsNullOrEmpty(data))
                 {
                     var content = blankContent.Content;
-                    var table = mapper.Map(data);
-                    
+                    var table = mapper.Map(historyService, data);
                     var doc = new HtmlDocument();
                     doc.LoadHtml(content);
                     var element = doc.DocumentNode.SelectSingleNode("//*[@id='dv-history-item-list']");
                     if (element != null) { element.InnerHtml = table; }
+                    var cbo = doc.DocumentNode.SelectSingleNode("//*[@id='cbo-search-history-filter']");
+                    mapper.SetFilter(historyService, cbo);
                     if (!string.IsNullOrEmpty(restriction))
                     {
                         var obj = ObjectExtensions.TryGet<MySearchRestrictions>(restriction);

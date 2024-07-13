@@ -8,7 +8,65 @@ namespace legallead.desktop.implementations
 {
     internal class UserSearchMapper : IUserSearchMapper
     {
-
+        public void SetFilter(IHistoryPersistence? persistence, HtmlNode? combo)
+        {
+            const string sel = "selected";
+            if (persistence == null || combo == null) return;
+            var json = persistence.Filter();
+            if (string.IsNullOrWhiteSpace(json)) return;
+            var filter = ObjectExtensions.TryGet<UserSearchFilterBo>(json) ?? new();
+            var options = combo.SelectNodes("option").ToList();
+            options.ForEach(opt =>
+            {
+                var attribute = opt.Attributes.ToList().Find(x => x.Name.Equals(sel));
+                var ovalue = opt.Attributes["value"].Value;
+                if (int.TryParse(ovalue, out var id) && id == filter.Index && attribute == null)
+                {
+                    opt.Attributes.Add(sel, sel);
+                } 
+                else
+                {
+                    if (attribute != null) { opt.Attributes.Remove(attribute); }
+                }
+            });
+        }
+        public string Map(IHistoryPersistence? persistence, string? history)
+        {
+            const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
+            if (persistence == null) { return Map(history); }
+            if (string.IsNullOrWhiteSpace(history)) { return Map(history); }
+            var json = persistence.Filter();
+            if (string.IsNullOrWhiteSpace(json)) { return Map(history); }
+            var filter = ObjectExtensions.TryGet<UserSearchFilterBo>(json) ?? new();
+            if (!filter.HasFilter) return Map(history);
+            var items = ObjectExtensions.TryGet<List<UserSearchQueryBo>>(history);
+            var statusName = filter.Index switch
+            {
+                10 => "Error",
+                1 => "Submitted",
+                2 => "Processing",
+                3 => "Completed",
+                4 => "Purchased",
+                5 => "Downloaded",
+                _ => string.Empty
+            };
+            items = items.FindAll(x =>
+            {
+                if (string.IsNullOrEmpty(statusName)) { return true; }
+                return (x.SearchProgress ?? "").Equals(statusName, comparison);
+            });
+            if (!string.IsNullOrEmpty(filter.County))
+            {
+                items = items.FindAll(x =>
+                {
+                    var county = (x.CountyName ?? "");
+                    if (string.IsNullOrEmpty(county)) { return false; }
+                    return county.Equals(filter.County, comparison);
+                });
+            }
+            var collection = JsonConvert.SerializeObject(items);
+            return Map(collection);
+        }
         public string Map(string? history)
         {
             var html = historyhtml;

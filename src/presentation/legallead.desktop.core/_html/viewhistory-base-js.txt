@@ -43,6 +43,17 @@ let historybox = {
         "preview": "dv-history-item-preview",
         "previewtemplate": "tarea-preview-html"
     },
+    "cbochanged": function() {
+	    const handler = window.jsHandler;
+	    const cboname = "cbo-search-history-filter";
+	    if (undefined === handler || null === handler || !(handler)) {
+		    return;
+	    }
+	    const cbo = document.getElementById(cboname);
+	    if (null == cbo) return;
+        let idx = parseInt(cbo.selectedIndex).toString();
+        handler.filter(idx);
+    },
     "invoice": function() {
 
         const handler = window.jsHandler;

@@ -42,6 +42,22 @@
             <div name="search-history-header" class="text-start">
                 <h5 id="search-history-sub-header">Search History</h5>
             </div>
+			<div name="search-history-filter" class="row">
+				<div name="search-history-filter-title" class="col-2 text-start">
+					<h6 id="search-history-sub-header">Filter</h6>
+				</div>
+				<div name="search-history-filter-items" class="col-3 text-start">
+					<select id="cbo-search-history-filter" class="w-75" onchange="historybox.cbochanged()">
+						<option name="None" value="0" selected="selected">All Items</option>
+						<option name="Submitted" value="1">Submitted</option>
+						<option name="Processing" value="2">Processing</option>
+						<option name="Completed" value="3">Completed</option>
+						<option name="Purchased" value="4">Purchased</option>
+						<option name="Downloaded" value="5">Downloaded</option>
+						<option name="Error" value="10">Error</option>
+					</select>
+				</div>
+			</div>
             <div name="search-history-grid" class="row">
                 <div name="search-history-items" class="col-7 search-history">
                     <!-- add mail -->

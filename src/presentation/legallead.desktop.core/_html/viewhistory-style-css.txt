@@ -23,15 +23,18 @@
     div[name="search-history-header"] {
         margin: 10px;
     }
-
+    div[name="search-history-filter"] {
+        margin: 20px;
+    }
+    div[name="search-history-filter-items"] {
+        min-width: 200px;
+    }
     div[name="search-history-grid"] {
         padding-left: 25px;
     }
-
     div[name="search-history-preview"] {
         overflow: auto;
     }
-
     div.search-history {
         vertical-align: text-top;
         padding: 12px;
