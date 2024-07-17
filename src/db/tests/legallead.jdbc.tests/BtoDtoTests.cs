@@ -47,12 +47,16 @@ namespace legallead.jdbc.tests
         private static IEnumerable<Type>? types;
         private static IEnumerable<Type> GetDtoTypes()
         {
-            var type = typeof(BaseDto);
-            return AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p))
-                .Where(i => !i.IsInterface)
-                .Where(a => !a.IsAbstract);
+            lock (_sync)
+            {
+                var type = typeof(BaseDto);
+                return AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => type.IsAssignableFrom(p))
+                    .Where(i => !i.IsInterface)
+                    .Where(a => !a.IsAbstract); 
+            }
         }
+        private static readonly object _sync = new();
     }
 }
