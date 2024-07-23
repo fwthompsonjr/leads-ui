@@ -19,10 +19,15 @@ namespace legallead.records.search.tests
         {
             if (!System.Diagnostics.Debugger.IsAttached)
                 return;
-
+            // execute method in debug mode to test
             var interactive = GetInteractive();
             var response = interactive?.Fetch();
             Assert.IsNotNull(response);
+            var count = response.PeopleList.Count;
+            if (count == 0) return;
+            var min = Convert.ToInt32(Math.Floor(count * 0.1d));
+            var nozip = response.PeopleList.Count(c => c.Zip == "00000");
+            Assert.IsTrue(nozip < min);
         }
 
 
