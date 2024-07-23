@@ -68,7 +68,7 @@ namespace legallead.records.search.Addressing
             var caseStyle = GetCaseStyle(bb);
             var response = new DentonCaseStyleSummary { CaseStyle = caseStyle };
             var th = table.SelectNodes("//th").ToList().FindAll(x => HasClass(x, "ssTableHeaderLabel"));
-            if (th == null || ! th.Any()) return response;
+            if (th == null || !th.Any()) return response;
             var searches = new[] { "Case Type:", "Date Filed:", "Location:" };
             th = th.FindAll(x => searches.Contains(x.InnerText));
             th.ForEach(h =>

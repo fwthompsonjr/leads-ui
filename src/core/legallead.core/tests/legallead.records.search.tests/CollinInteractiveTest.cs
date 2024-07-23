@@ -1,7 +1,6 @@
 ﻿using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using legallead.records.search.tests.Mapper;
-using legallead.records.search.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
@@ -35,7 +34,7 @@ namespace legallead.records.search.tests
         {
             var weekends = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
             DateTime? dt1 = DateTime.Now.AddDays(-7);
-            while(weekends.Contains(dt1.Value.DayOfWeek)) { dt1 = dt1.Value.AddDays(-1); }
+            while (weekends.Contains(dt1.Value.DayOfWeek)) { dt1 = dt1.Value.AddDays(-1); }
             DateTime? dt2 = dt1.Value.AddDays(0);
             var source = GetRequest();
             source.StartDate = ToUnixTime(dt1);

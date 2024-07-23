@@ -1,5 +1,4 @@
-﻿using legallead.models.Search;
-using legallead.records.search.Classes;
+﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;

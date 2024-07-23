@@ -15,7 +15,7 @@ namespace legallead.records.search.Models
         public string Address2 { get; private set; } = string.Empty;
         public string Address3 { get; private set; } = string.Empty;
         public string Zip { get; private set; } = string.Empty;
-        
+
 
         public void Parse()
         {
