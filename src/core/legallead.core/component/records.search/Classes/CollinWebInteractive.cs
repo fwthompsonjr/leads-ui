@@ -61,6 +61,21 @@ namespace legallead.records.search.Classes
                 searchSelect.Locator.Query = selectedCase.Options[searchTypeId].Query;
                 webFetch = SearchWeb(results, steps, startingDate, startingDate,
                     ref cases, out List<PersonAddress>? people);
+                people.ForEach(p =>
+                {
+                    if (p.Zip == "00000" || string.IsNullOrEmpty(p.Zip))
+                    {
+                        var match = CollinAddressList.List.Find(x => x.CaseNumber == p.CaseNumber);
+                        if (match != null)
+                        {
+                            p.Address1 = match.Address1;
+                            p.Address2 = match.Address2;
+                            p.Address3 = match.Address3;
+                            p.Zip = match.Zip;
+                        }
+                    }
+                });
+                CollinAddressList.List.Clear();
                 peopleList.AddRange(people);
                 webFetch.PeopleList = peopleList;
                 var addressobject = JsonConvert.SerializeObject(peopleList);
@@ -258,6 +273,7 @@ namespace legallead.records.search.Classes
             }
             List<FindDefendantBase> finders = new()
             {
+                new FindCollinAddressByJscript(),
                 new FindMultipleDefendantMatch(),
                 new FindDefendantByWordMatch(),
                 new FindPrincipalByWordMatch(),

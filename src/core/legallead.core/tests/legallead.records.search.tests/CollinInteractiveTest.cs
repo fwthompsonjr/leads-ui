@@ -18,16 +18,23 @@ namespace legallead.records.search.tests
         {
             if (!System.Diagnostics.Debugger.IsAttached)
                 return;
-
+            // execute method in debug mode to test
             var interactive = GetInteractive();
             var response = interactive?.Fetch();
             Assert.IsNotNull(response);
+            var count = response.PeopleList.Count;
+            if (count == 0) return;
+            var min = Convert.ToInt32(Math.Floor(count * 0.1d));
+            var nozip = response.PeopleList.Count(c => c.Zip == "00000");
+            Assert.IsTrue(nozip < min);
         }
 
 
         private static WebInteractive? GetInteractive()
         {
-            DateTime? dt1 = new DateTime(2023, 10, 3, 0, 0, 0, DateTimeKind.Utc);
+            var weekends = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
+            DateTime? dt1 = DateTime.Now.AddDays(-7);
+            while (weekends.Contains(dt1.Value.DayOfWeek)) { dt1 = dt1.Value.AddDays(-1); }
             DateTime? dt2 = dt1.Value.AddDays(0);
             var source = GetRequest();
             source.StartDate = ToUnixTime(dt1);
