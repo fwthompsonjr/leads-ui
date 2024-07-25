@@ -36,7 +36,25 @@ namespace legallead.desktop.js
             if (mainWindow is not MainWindow main) return;
             main.NavigateChild(pageName);
         }
+        public virtual void Populate()
+        {
+            var provider = AppBuilder.ServiceProvider;
+            var user = provider?.GetService<UserBo>();
+            var api = provider?.GetService<IPermissionApi>();
+            if (user == null || !user.IsAuthenicated)
+            {
+                Reload("home-login");
+                return;
+            }
+            if (api == null) return;
 
+            var payload = new { id = Guid.NewGuid().ToString(), name = "legallead.permissions.api" };
+            var appresponse = api.Post("search-get-actives", payload, user).Result;
+            if (appresponse == null || appresponse.StatusCode != 200) return;
+            if (web == null) return;
+            var message = JsSearchSubmissionHelper.SortHistory(appresponse.Message);
+            web.ExecuteScriptAsync("injectJson", message);
+        }
         public virtual void CheckSession()
         {
             var bo = AppBuilder.ServiceProvider?.GetService<UserBo>();

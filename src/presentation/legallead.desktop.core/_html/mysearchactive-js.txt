@@ -1,5 +1,18 @@
 <script name="active-searches-js">
 
+function onActiveCompleted()
+{
+	let handler = window.jsHandler;
+	if( undefined === handler || null === handler || !(handler) ) { return; }
+	handler.populate();
+}
+
+function injectJson(json) {
+	$(active_search.controls.txjson).text(json);
+	active_search.bind.all();
+}
+
+
 let active_search = {
 	"controls": {
 		"txjson" : "#text-my-active-searches-js",
@@ -19,8 +32,24 @@ let active_search = {
 		handler.reload(viewName);
 	},
 	"jso": function(){
-		let js = $(active_search.controls.txjson).text();
+		const nodata = {
+			"details": [],
+			"history": {
+				"searches": [],
+				"statuses": [],
+				"staged": []
+			}
+		};
+		try
+		{
+		let js = $(active_search.controls.txjson).text().trim();
+		if (null == js || undefined == js || js.length == 0) { return nodata; }
 		return JSON.parse(js);
+		}
+		catch
+		{ 
+		return nodata; 
+		}		
 	},
 	"get_download_invoice": function() {
 		const dbd = "disabled";
@@ -200,4 +229,6 @@ let active_search = {
 };
 
 active_search.bind.all();
+
+setTimeout(function(){ onActiveCompleted(); }, 1000);
 </script>

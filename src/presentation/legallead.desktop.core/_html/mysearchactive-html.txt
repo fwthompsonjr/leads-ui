@@ -36,7 +36,7 @@
 			<span id="span-restriction-alert-message">message</span>
 		</div>
 		<div id="dv-main-content" name="main-content">
-            <h4Active Searches</h4>
+            <h4>Active Searches</h4>
 			<div class="row" id="dv-active-searches-messages"></div>
             <h5 id="heading-my-active-searches-no-content">No active searches in progress</h5>
             <hr/>
