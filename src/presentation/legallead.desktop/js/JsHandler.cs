@@ -52,7 +52,8 @@ namespace legallead.desktop.js
             var appresponse = api.Post("search-get-actives", payload, user).Result;
             if (appresponse == null || appresponse.StatusCode != 200) return;
             if (web == null) return;
-            web.ExecuteScriptAsync("injectJson", appresponse.Message);
+            var message = JsSearchSubmissionHelper.SortHistory(appresponse.Message);
+            web.ExecuteScriptAsync("injectJson", message);
         }
         public virtual void CheckSession()
         {

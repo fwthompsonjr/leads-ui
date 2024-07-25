@@ -4,6 +4,19 @@ Desktop version of lead sourcing application
 # Versions    
 
 ## vX.Y.Z - ReleaseDate
+ ### Issue Collin County Response Is Missing Address Details
+ - [x] chk ability to download sample
+ - [x] fix ability navigate to my-active-search
+
+ ### Remediation
+ - create a content loading page for active search
+ - added jscript callback to populate active searches
+
+ ### Other
+ - Correction for Harris county search submission responds with non-200 code
+ - Sort Active Search List with most recent first
+
+## v3.2.21 ( 2024-07-13 19:16:22 )
  ### Enhancements: 
  - add status filter to user search history view
  - add county filter to user search history view
