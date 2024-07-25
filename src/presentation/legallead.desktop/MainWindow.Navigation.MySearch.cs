@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace legallead.desktop
 {
@@ -112,18 +111,13 @@ namespace legallead.desktop
             Dispatcher.Invoke(() =>
             {
                 var content = RemoveJson(ContentHandler.GetLocalContent("mysearchactive"));
-                var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
                 var browser = contentMySearch.Content;
                 if (browser is not ChromiumWebBrowser web) { return; }
-                Task.Run(async () =>
-                {
-                    var text = await InjectJson(api, content, user);
-                    text = await InjectRestrictionAlert(text);
-                    web.SetHTML(Dispatcher, text);
-                    tabMySearch.IsSelected = true;
-                });
                 tabMySearch.IsSelected = true;
+                web.SetHTML(Dispatcher, content);
+                Thread.Sleep(500);
             });
+
         }
 
 
@@ -200,19 +194,6 @@ namespace legallead.desktop
             doc.LoadHtml(html.Content);
             var node = doc.DocumentNode.SelectSingleNode("//*[@id='text-my-active-searches-js']");
             if (node != null) node.InnerHtml = string.Empty;
-            return doc.DocumentNode.OuterHtml;
-        }
-        private static async Task<string> InjectJson(IPermissionApi? api, string html, UserBo user)
-        {
-            if (api == null) return html;
-            var payload = new { id = Guid.NewGuid().ToString(), name = "legallead.permissions.api" };
-            var appresponse = await api.Post("search-get-actives", payload, user);
-            if (appresponse == null || appresponse.StatusCode != 200) return html;
-            var message = appresponse.Message;
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            var node = doc.DocumentNode.SelectSingleNode("//*[@id='text-my-active-searches-js']");
-            if (node != null) node.InnerHtml = message;
             return doc.DocumentNode.OuterHtml;
         }
 

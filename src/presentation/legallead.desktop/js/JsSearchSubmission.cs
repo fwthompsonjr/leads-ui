@@ -38,7 +38,7 @@ namespace legallead.desktop.js
             if (!isMapped) { return; }
             try
             {
-                var js = MapPayload(formName, json);
+                var js = JsSearchSubmissionHelper.Refine(MapPayload(formName, json));
                 var response = permissionApi?.Post(AddressMap[name], js, user).Result;
                 var htm = JsCompletedHandler.ConvertHTML(response);
                 SetMessage(htm);

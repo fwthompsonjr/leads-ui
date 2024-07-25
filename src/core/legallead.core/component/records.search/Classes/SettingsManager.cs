@@ -194,7 +194,7 @@ namespace legallead.records.search.Classes
             {
                 idx += 1;
                 string cleaned = Path.GetFileNameWithoutExtension(fileName);
-                cleaned = string.Format(cultureInfo, "{0}_{1}.xml", cleaned, idx.ToString("D9", numberInfo));
+                cleaned = string.Format(cultureInfo, "{0}_{1}.xml", cleaned, idx.ToString("D4", numberInfo));
                 targetFile = string.Format(cultureInfo, "{0}/{1}", Path.GetDirectoryName(fileName), cleaned);
             }
             fileName = targetFile;

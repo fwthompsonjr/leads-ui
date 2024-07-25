@@ -64,7 +64,7 @@ namespace legallead.records.search.Web
         private class GetPageTable
         {
             private int? _pageTypeIndex;
-            private readonly IWebDriver driver; 
+            private readonly IWebDriver driver;
             private readonly IStatusPersistence? reporting;
             private readonly string? uniqueId;
             private readonly string UriPrefix;
