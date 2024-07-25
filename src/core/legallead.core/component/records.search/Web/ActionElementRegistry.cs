@@ -26,6 +26,7 @@ namespace legallead.records.search.Web
             For<IElementActionBase>().Add<JquerySetTextBox>().Named("jquery-set-text");
             For<IElementActionBase>().Add<JquerySetSelectedIndex>().Named("jquery-set-selected-index");
             For<IElementActionBase>().Add<HarrisCivilReadTable>().Named("harris-civil-read-table");
+            For<IElementActionBase>().Add<JsClickElement>().Named("harris-civil-search-click");
         }
     }
 }

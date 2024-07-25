@@ -48,8 +48,8 @@
       <key name="dateRangeMaxDays"><![CDATA[5]]></key>
       <key name="startDate"><![CDATA[]]></key>
       <key name="endDate"><![CDATA[]]></key>
-      <key name="courtIndex"><![CDATA[]]></key>
-      <key name="caseStatusIndex"><![CDATA[]]></key>
+      <key name="courtIndex"><![CDATA[0]]></key>
+      <key name="caseStatusIndex"><![CDATA[0]]></key>
       <key name="navigation.control.file"><![CDATA[harrisCivilMapping]]></key>
       <key name="hlinkUri"><![CDATA[https://www.cclerk.hctx.net/Applications/WebSearch/CourtSearch.aspx?CaseType=Civil]]></key>
       <key name="personNodeXpath"><![CDATA[//*[@id='PIr11']]]></key>

@@ -46,6 +46,7 @@ namespace legallead.records.search.tests.Mapper
             if (string.IsNullOrWhiteSpace(county) ||
                 string.IsNullOrWhiteSpace(st)) return 0;
             var lookup = $"{st.ToLower()}-{county.Replace(' ', '-').ToLower()}";
+            if (lookup.Equals("tx-harris")) return 30;
             if (lookup.Equals("tx-collin")) return 20;
             if (lookup.Equals("tx-tarrant")) return 10;
             return 0;
@@ -68,6 +69,7 @@ namespace legallead.records.search.tests.Mapper
                 0 => new WebInteractive(translated, startDate, endingDate),
                 10 => new TarrantWebInteractive(translated, startDate, endingDate),
                 20 => new CollinWebInteractive(translated, startDate, endingDate),
+                30 => new HarrisCivilInteractive(translated, startDate, endingDate),
                 _ => new WebInteractive(translated, startDate, endingDate)
             };
             return interactive;
@@ -82,7 +84,23 @@ namespace legallead.records.search.tests.Mapper
             if (dest.Id == 0) DentonCountyNavigationMap(source, dest);
             if (dest.Id == 10) TarrantCountyNavigationMap(source, dest);
             if (dest.Id == 20) CollinCountyNavigationMap(source, dest);
+            if (dest.Id == 30) HarrisCivilCountyNavigationMap(source, dest);
             return dest;
+        }
+
+        private static void HarrisCivilCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
+        {
+            const string harrisCivilCountyIndex = "30";
+            var accepted = "0,1,2,3,4".Split(',');
+            var cbxIndex = source.Details.Find(x => x.Name == "Search Type")?.Value ?? accepted[0];
+            if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
+            var idx = int.Parse(cbxIndex).ToString();
+            AppendKeys(dest, harrisCivilCountyIndex);
+            AppendInstructions(dest, harrisCivilCountyIndex);
+            AppendCaseInstructions(dest, harrisCivilCountyIndex);
+            var keyZero = new SearchNavigationKey { Name = "searchTypeSelectedIndex", Value = idx };
+            // add key for combo-index
+            dest.Keys.Add(keyZero);
         }
 
         private static void CollinCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)

@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace legallead.records.search.Web
 {
     [ExcludeFromCodeCoverage]
-    public class HarriCriminalsRealTimeDetail : HarrisCriminalRealTime
+    public class HarrisCriminalsRealTimeDetail : HarrisCriminalRealTime
     {
         public void GetCaseDetails(IWebDriver driver, List<HarrisCriminalDto> details, DateTime runDate, string currentWindow)
         {
