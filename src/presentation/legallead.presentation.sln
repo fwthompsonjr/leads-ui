@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_mockup", "_mockup", "{967A
 		..\..\html\mailbox\mailbox-base.html = ..\..\html\mailbox\mailbox-base.html
 		..\..\html\mailbox\mailbox-v1.html = ..\..\html\mailbox\mailbox-v1.html
 		..\..\html\mailbox\mailbox-v2.html = ..\..\html\mailbox\mailbox-v2.html
+		search-active-v1.html = search-active-v1.html
+		search-active-v2.html = search-active-v2.html
 		..\..\html\search-history-v1.html = ..\..\html\search-history-v1.html
 	EndProjectSection
 EndProject

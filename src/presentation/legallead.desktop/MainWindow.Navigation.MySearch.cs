@@ -7,9 +7,9 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace legallead.desktop
 {
@@ -109,21 +109,18 @@ namespace legallead.desktop
                 });
                 return;
             }
-            Dispatcher.Invoke(() =>
+            var content = Dispatcher.Invoke(() =>
             {
                 var content = RemoveJson(ContentHandler.GetLocalContent("mysearchactive"));
-                var api = AppBuilder.ServiceProvider?.GetService<IPermissionApi>();
                 var browser = contentMySearch.Content;
-                if (browser is not ChromiumWebBrowser web) { return; }
-                Task.Run(async () =>
-                {
-                    var text = await InjectJson(api, content, user);
-                    text = await InjectRestrictionAlert(text);
-                    web.SetHTML(Dispatcher, text);
-                    tabMySearch.IsSelected = true;
-                });
+                if (browser is not ChromiumWebBrowser web) { return content; }
                 tabMySearch.IsSelected = true;
+                web.SetHTML(Dispatcher, content);
+                Thread.Sleep(500);
+                return content;
+
             });
+
         }
 
 
@@ -212,6 +209,7 @@ namespace legallead.desktop
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
             var node = doc.DocumentNode.SelectSingleNode("//*[@id='text-my-active-searches-js']");
+
             if (node != null) node.InnerHtml = message;
             return doc.DocumentNode.OuterHtml;
         }
