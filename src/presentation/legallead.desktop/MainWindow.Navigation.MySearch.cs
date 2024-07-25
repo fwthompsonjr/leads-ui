@@ -199,20 +199,6 @@ namespace legallead.desktop
             if (node != null) node.InnerHtml = string.Empty;
             return doc.DocumentNode.OuterHtml;
         }
-        private static async Task<string> InjectJson(IPermissionApi? api, string html, UserBo user)
-        {
-            if (api == null) return html;
-            var payload = new { id = Guid.NewGuid().ToString(), name = "legallead.permissions.api" };
-            var appresponse = await api.Post("search-get-actives", payload, user);
-            if (appresponse == null || appresponse.StatusCode != 200) return html;
-            var message = appresponse.Message;
-            var doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            var node = doc.DocumentNode.SelectSingleNode("//*[@id='text-my-active-searches-js']");
-
-            if (node != null) node.InnerHtml = message;
-            return doc.DocumentNode.OuterHtml;
-        }
 
         private static async Task<string> InjectRestrictionAlert(string html)
         {
