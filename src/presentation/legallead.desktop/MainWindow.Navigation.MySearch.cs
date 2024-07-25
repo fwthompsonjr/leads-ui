@@ -7,7 +7,6 @@ using legallead.desktop.utilities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -109,16 +108,14 @@ namespace legallead.desktop
                 });
                 return;
             }
-            var content = Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 var content = RemoveJson(ContentHandler.GetLocalContent("mysearchactive"));
                 var browser = contentMySearch.Content;
-                if (browser is not ChromiumWebBrowser web) { return content; }
+                if (browser is not ChromiumWebBrowser web) { return; }
                 tabMySearch.IsSelected = true;
                 web.SetHTML(Dispatcher, content);
                 Thread.Sleep(500);
-                return content;
-
             });
 
         }
