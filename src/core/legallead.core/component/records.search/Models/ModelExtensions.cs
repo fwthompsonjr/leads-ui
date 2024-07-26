@@ -92,27 +92,12 @@ namespace legallead.records.search.Models
             {
                 return noMatch;
             }
-            pieces.ForEach(x => _ = x.Trim());
-            address = string.Empty;
-            // get the person part of this address
-            for (int i = 0; i < pieces.Count; i++)
+            var collection = new List<string>();
+            for (var i = 1; i < pieces.Count; i++)
             {
-                if (i == 0)
-                {
-                    continue;
-                }
-
-                string piece = pieces[i].Trim();
-                if (string.IsNullOrEmpty(address))
-                {
-                    address = piece;
-                }
-                else
-                {
-                    address = (address + pipeString + piece);
-                }
+                collection.Add(pieces[i].Trim());
             }
-            return address;
+            return string.Join(pipe, collection);
         }
 
         public static string ToHtml(this List<CaseRowData> source)
