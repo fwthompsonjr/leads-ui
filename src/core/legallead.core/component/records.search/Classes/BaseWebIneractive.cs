@@ -245,9 +245,22 @@ namespace legallead.records.search.Classes
                 .GetNavigation().Find(x => x.Id == id);
             List<string> datelist = new() { CommonKeyIndexes.StartDate, CommonKeyIndexes.EndDate };
             if (settings == null) return new();
+            var dteStart = startingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat); 
+            var dteEnding = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
             List<WebNavigationKey> keys = settings.Keys.FindAll(s => datelist.Contains(s.Name));
-            keys[0].Value = startingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
-            keys[^1].Value = endingDate.ToString(CommonKeyIndexes.DateTimeShort, CultureInfo.CurrentCulture.DateTimeFormat);
+            keys.ForEach(k => {
+                var nvalue = k.Name switch
+                {
+                    "startDate" => dteStart,
+                    "endDate" => dteEnding,
+                    _ => k.Value,
+                };
+                k.Value = nvalue;
+            });
+            if (id != 30) return settings;
+            var indexes = new List<string> { "courtIndex", "caseStatusIndex" };
+            keys = settings.Keys.FindAll(x  => indexes.Contains(x.Name));
+            keys.ForEach(k => { k.Value = "0"; });
             return settings;
         }
 

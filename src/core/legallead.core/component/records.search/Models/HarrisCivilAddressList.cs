@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace legallead.records.search.Models
+﻿namespace legallead.records.search.Models
 {
     internal static class HarrisCivilAddressList
     {
@@ -44,12 +42,12 @@ namespace legallead.records.search.Models
                 }
             });
             items.ForEach(i => i.Parse());
-            lock (sync) 
+            lock (sync)
             {
                 caseNumbers.ForEach(a => List.RemoveAll(x => x.CaseNumber.Equals(a, oic)));
                 List.AddRange(items);
             }
-            
+
         }
 
         public static void Map(PersonAddress person, int index)
@@ -80,7 +78,7 @@ namespace legallead.records.search.Models
             if (!text.Contains(pipe)) return string.Empty;
             var items = text.Split(pipe, StringSplitOptions.RemoveEmptyEntries);
             var collection = new List<string>();
-            for ( var i = 1; i < items.Length; i++)
+            for (var i = 1; i < items.Length; i++)
             {
                 collection.Add(items[i].Trim());
             }
@@ -88,17 +86,17 @@ namespace legallead.records.search.Models
         }
         private const StringComparison oic = StringComparison.OrdinalIgnoreCase;
         private static readonly object sync = new();
-        private static readonly string[] Keywords = new[] { 
-            "plaintiff", 
-            "defendant", 
-            "principal", 
-            "petitioner", 
-            "applicant", 
-            "claimant", 
-            "decedent", 
-            "respondent", 
-            "condemnee", 
-            "guardian" 
+        private static readonly string[] Keywords = new[] {
+            "plaintiff",
+            "defendant",
+            "principal",
+            "petitioner",
+            "applicant",
+            "claimant",
+            "decedent",
+            "respondent",
+            "condemnee",
+            "guardian"
         };
     }
 }
