@@ -17,6 +17,7 @@ namespace legallead.records.search.Web
                 throw new ArgumentNullException(nameof(item));
             }
             int retries = 5;
+            const int readTableWait = 5000;
             IWebDriver? driver = GetWeb;
             By? selector = GetSelector(item);
             if (driver == null || selector == null) { return; }
@@ -31,7 +32,7 @@ namespace legallead.records.search.Web
             IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
             executor.ExecuteScript("arguments[0].click();", elementToClick);
             Console.WriteLine("-- begin: wait for navigation --");
-            Thread.Sleep(1200);
+            Thread.Sleep(readTableWait * 2);
             Console.WriteLine("-- ending: wait for navigation --");
         }
     }

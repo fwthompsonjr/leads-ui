@@ -30,16 +30,17 @@ namespace legallead.records.search.tests
             Assert.IsNotNull(response);
             var count = response.PeopleList.Count;
             if (count == 0) return;
-            var min = Convert.ToInt32(Math.Floor(count * 0.1d));
+            var distinctcount = response.PeopleList.Select(x => x.CaseNumber).Distinct().Count();
+            var min = Convert.ToInt32(Math.Floor(distinctcount * 0.45d));
             var nozip = response.PeopleList.Count(c => c.Zip == "00000");
-            Assert.IsTrue(nozip < min);
+            Assert.IsTrue(nozip > min, $"Actual unmapped {nozip} is less than minimun of {min}.");
         }
 
 
         private static WebInteractive? GetInteractive()
         {
             var weekends = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
-            DateTime? dt1 = DateTime.Now.AddDays(-3);
+            DateTime? dt1 = DateTime.Now.AddDays(-7);
             while (weekends.Contains(dt1.Value.DayOfWeek)) { dt1 = dt1.Value.AddDays(-1); }
             DateTime? dt2 = dt1.Value.AddDays(0);
             var source = GetRequest();

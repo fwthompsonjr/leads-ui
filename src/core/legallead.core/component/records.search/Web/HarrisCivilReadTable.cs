@@ -6,6 +6,7 @@ namespace legallead.records.search.Web
     using legallead.records.search.Dto;
     using legallead.records.search.Models;
     using OpenQA.Selenium;
+    using System.Text.RegularExpressions;
     using System.Threading;
     using Byy = OpenQA.Selenium.By;
 
@@ -123,6 +124,7 @@ namespace legallead.records.search.Web
                 }
             }
             OuterHtml = rowData.ToHtml();
+            HarrisCivilAddressList.AddRange(rowData);
             rowData.ForEach(d => DataRows.AddRange(d.ConvertToDataRow()));
         }
 
@@ -198,7 +200,9 @@ namespace legallead.records.search.Web
         private static string HtmlDecode(string input)
         {
             const string pipe = " | ";
-            string cleaned = System.Net.WebUtility.HtmlDecode(input);
+            const char space = ' ';
+            var nobr = (char)190;
+            string cleaned = Regex.Replace(System.Net.WebUtility.HtmlDecode(input), @"\s+", " ").Replace(nobr, space);
             StringBuilder sb = new(cleaned);
             sb.Replace("<br>", pipe);
             sb.Replace("<br/>", pipe);

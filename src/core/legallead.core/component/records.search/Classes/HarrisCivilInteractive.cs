@@ -140,6 +140,7 @@ namespace legallead.records.search.Classes
                 ElementActions.ForEach(x => x.GetWeb = driver);
                 DateTimeFormatInfo formatDate = CultureInfo.CurrentCulture.DateTimeFormat;
                 AssignStartAndEndDate(startingDate, endingDate, formatDate, steps);
+                HarrisCivilAddressList.Clear();
                 foreach (NavigationStep item in steps)
                 {
                     string actionName = item.ActionName;
@@ -164,10 +165,22 @@ namespace legallead.records.search.Classes
                         caseList = action.OuterHtml;
                     }
                 }
-                cases.FindAll(c => string.IsNullOrEmpty(c.Address))
-                    .ForEach(c => GetAddressInformation(driver, this, c));
-
                 people = ExtractPeople(cases);
+                var items = people.GroupBy(
+                    x => x.CaseNumber,
+                    (nbr, persons) => 
+                    {
+                        return new { nbr, Persons = persons.ToList() };
+                    }).ToList();
+                items.ForEach(pp =>
+                {
+                    pp.Persons.ForEach(ppp =>
+                    {
+                        var idn = pp.Persons.IndexOf(ppp);
+                        HarrisCivilAddressList.Map(ppp, idn);
+                    });
+                });
+                people = items.SelectMany(s => s.Persons).ToList();
                 caseList = people.ToHtml();
 
                 return new WebFetchResult
@@ -186,6 +199,7 @@ namespace legallead.records.search.Classes
             }
             finally
             {
+                HarrisCivilAddressList.Clear();
                 driver?.Quit();
                 driver?.Dispose();
             }
