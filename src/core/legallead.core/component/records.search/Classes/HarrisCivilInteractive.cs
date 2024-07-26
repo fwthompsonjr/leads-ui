@@ -175,7 +175,7 @@ namespace legallead.records.search.Classes
                 items.ForEach(pp =>
                 {
                     var collection = pp.Persons;
-                    collection.ForEach((ppp, idn) => { HarrisCivilAddressList.Map(ppp, idn);});
+                    _ = collection.Select((prsn, id) => { HarrisCivilAddressList.Map(prsn, id); return id; });
                 });
                 people = items.SelectMany(s => s.Persons).ToList();
                 caseList = people.ToHtml();
