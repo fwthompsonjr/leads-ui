@@ -153,11 +153,6 @@ namespace legallead.records.search.Classes
                         continue;
                     }
                     action.Act(item);
-                    if (actionName.Equals("click"))
-                    {
-                        Thread.Sleep(1500);
-                        driver.WaitForNavigation();
-                    }
                     cases = ExtractCaseData(results, cases, actionName, action);
                     if (string.IsNullOrEmpty(caseList) && !string.IsNullOrEmpty(action.OuterHtml))
                     {
@@ -165,20 +160,22 @@ namespace legallead.records.search.Classes
                         caseList = action.OuterHtml;
                     }
                 }
+                var nonaddressed = cases.FindAll(c => string.IsNullOrEmpty(c.Address));
+
+#if DEBUG
+                var allcases = cases.Count;
+                var nonaddresscount = nonaddressed.Count;
+                if (allcases != nonaddresscount) { Debugger.Break(); }
+#endif
+                
                 people = ExtractPeople(cases);
                 var items = people.GroupBy(
                     x => x.CaseNumber,
-                    (nbr, persons) => 
-                    {
-                        return new { nbr, Persons = persons.ToList() };
-                    }).ToList();
+                    (nbr, persons) => { return new { nbr, Persons = persons.ToList() }; }).ToList();
                 items.ForEach(pp =>
                 {
-                    pp.Persons.ForEach(ppp =>
-                    {
-                        var idn = pp.Persons.IndexOf(ppp);
-                        HarrisCivilAddressList.Map(ppp, idn);
-                    });
+                    var collection = pp.Persons;
+                    _ = collection.Select((prsn, id) => { HarrisCivilAddressList.Map(prsn, id); return id; });
                 });
                 people = items.SelectMany(s => s.Persons).ToList();
                 caseList = people.ToHtml();
@@ -226,7 +223,8 @@ namespace legallead.records.search.Classes
                     CaseStyle = styleInfo,
                     Status = item.Data
                 };
-                item.Address = CleanUpAddress(item.Address);
+                var tmpAddress = CleanUpAddress(item.Address);
+                item.Address = tmpAddress;
                 person = ParseAddress(item.Address, person);
                 if (string.IsNullOrEmpty(person.CaseStyle))
                 {
@@ -257,18 +255,8 @@ namespace legallead.records.search.Classes
                 int dlstart = uncleanAddress.IndexOf(secondLicense, comparison);
                 uncleanAddress = uncleanAddress[..dlstart].Replace(secondLicense, "");
             }
-            if (uncleanAddress.IndexOf("DOB: ", comparison) != 0)
-            {
-                uncleanAddress = string.Empty;
-            }
-            if (uncleanAddress.IndexOf("Retained", comparison) != 0)
-            {
-                uncleanAddress = string.Empty;
-            }
-            if (uncleanAddress.Equals("Pro Se", comparison))
-            {
-                uncleanAddress = string.Empty;
-            }
+            List<string> indicators = new() { "DOB: ", "Retained", "Pro Se" };
+            foreach (var indice in indicators) { if (uncleanAddress.Contains(indice)) return string.Empty; }
             return uncleanAddress;
         }
 
@@ -288,8 +276,9 @@ namespace legallead.records.search.Classes
             var fmt = GetParameterValue<string>(CommonKeyIndexes.HlinkUri);
             if (!string.IsNullOrEmpty(fmt))
             {
+                var gotoPage = string.Format(CultureInfo.CurrentCulture, fmt, linkData.WebAddress);
                 ElementAssertion helper = new(driver);
-                helper.Navigate(string.Format(CultureInfo.CurrentCulture, fmt, linkData.WebAddress));
+                helper.Navigate(gotoPage);
                 driver.WaitForNavigation();
                 FindDefendant(driver, ref linkData);
             }
