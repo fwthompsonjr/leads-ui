@@ -20,6 +20,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{94FC19EC-7A30-4EE2-BA63-7FD5904D1A67}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\CodeCoverage.runsettings = ..\..\CodeCoverage.runsettings
+		..\..\..\.github\workflows\dotnet-build-api.yml = ..\..\..\.github\workflows\dotnet-build-api.yml
+		..\..\..\.github\workflows\dotnet-continuous-testing.yml = ..\..\..\.github\workflows\dotnet-continuous-testing.yml
+		..\..\..\pipeline-build-solutions.ps1 = ..\..\..\pipeline-build-solutions.ps1
 	EndProjectSection
 EndProject
 Global

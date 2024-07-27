@@ -1,4 +1,11 @@
-
+function isSolutionNotExcluded( $name ) {
+    
+    $exclusions = @('integration', 'presentation', 'email', 'logging', '.api');
+    foreach($item in $exclusions){
+        if($name.IndexOf( $item ) -ge 0 ) { return $false; }
+    }
+    return  $true;
+}
 
 function generateRestoreCommand( $solution ) {
     $arr = @();
@@ -27,7 +34,11 @@ $startedAt = [datetime]::UtcNow
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $errorsFile = [System.IO.Path]::Combine( $currentDir, "restore-error-file.txt" );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
-$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories)
+$found = $di.GetFiles('*.sln', [System.IO.SearchOption]::AllDirectories) | Where-Object {  
+        $nme = $_.Name
+        $isNotExcluded = ( isSolutionNotExcluded -name $nme ) 
+        return $isNotExcluded;
+}
 $commands = @();
 
 if( $found.Count -eq $null ) {
