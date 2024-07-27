@@ -376,8 +376,8 @@ namespace legallead.records.search.Classes
                     sb.AppendLine("      <key name=~dateRangeMaxDays~><![CDATA[5]]></key>");
                     sb.AppendLine("      <key name=~startDate~><![CDATA[]]></key>");
                     sb.AppendLine("      <key name=~endDate~><![CDATA[]]></key>");
-                    sb.AppendLine("      <key name=~courtIndex~><![CDATA[]]></key>");
-                    sb.AppendLine("      <key name=~caseStatusIndex~><![CDATA[]]></key>");
+                    sb.AppendLine("      <key name=~courtIndex~><![CDATA[0]]></key>");
+                    sb.AppendLine("      <key name=~caseStatusIndex~><![CDATA[0]]></key>");
                     sb.AppendLine("      <key name=~navigation.control.file~><![CDATA[harrisCivilMapping]]></key>");
                     sb.AppendLine("      <key name=~hlinkUri~><![CDATA[https://www.cclerk.hctx.net/Applications/WebSearch/CourtSearch.aspx?CaseType=Civil]]></key>");
                     sb.AppendLine("      <key name=~personNodeXpath~><![CDATA[//*[@id='PIr11']]]></key>");
