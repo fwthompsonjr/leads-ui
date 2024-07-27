@@ -160,14 +160,7 @@ namespace legallead.records.search.Classes
                         caseList = action.OuterHtml;
                     }
                 }
-                var nonaddressed = cases.FindAll(c => string.IsNullOrEmpty(c.Address));
-
-#if DEBUG
-                var allcases = cases.Count;
-                var nonaddresscount = nonaddressed.Count;
-                if (allcases != nonaddresscount) { Debugger.Break(); }
-#endif
-                
+         
                 people = ExtractPeople(cases);
                 var items = people.GroupBy(
                     x => x.CaseNumber,
