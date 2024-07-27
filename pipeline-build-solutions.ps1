@@ -9,14 +9,14 @@ function generateBuildCommand( $solution ) {
     $shortName = [System.IO.Path]::GetFileNameWithoutExtension( $solutionFile );
     $sln = [string]::Concat( '"', $solution, '"' );
     $arr += [string]::Concat("Write-Output ", "Building Solution: $shortName $version", "; ");
-    $arr += "dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version -t:rebuild --property:Configuration=Release";
+    $arr += "dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version --property:Configuration=Release";
     $command = {
         $version = $args[0]
         $shortName = $args[1]
         $sln = $args[2]
         $errorsFile = $args[3]
         Write-Output "Building Solution: $shortName $version"; 
-        dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version -t:rebuild --property:Configuration=Release
+        dotnet build $sln /p:AssemblyVersion=$version /p:VersionPrefix=$version --property:Configuration=Release
         
         if ($LASTEXITCODE -ne 0) {
             ("Build $shortName failed." + [Environment]::NewLine) >> $errorsFile
@@ -31,7 +31,7 @@ function generateBuildCommand( $solution ) {
 
 function isSolutionNotExcluded( $name ) {
     
-    $exclusions = @('integration', 'presentation', 'email');
+    $exclusions = @('integration', 'presentation', 'email', 'logging', '.api');
     foreach($item in $exclusions){
         if($name.IndexOf( $item ) -ge 0 ) { return $false; }
     }
