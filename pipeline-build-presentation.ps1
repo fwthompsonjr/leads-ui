@@ -6,9 +6,28 @@ function isFileNameValid($fullName) {
     try {
         $blnIsGood = ($null -ne $fullName);
         if ($blnIsGood -eq $true ) { $blnIsGood = $fullName.Contains($version) -and $fullName.ToLower().Contains('release') }
+        if ($blnIsGood -eq $true ) { $blnIsGood = [System.IO.File]::Exists( $fullName ); }
         if ($blnIsGood -eq $true ) { $blnIsGood = ($fullName.ToLower().Contains('legallead.installer') -eq $false) }
         return $blnIsGood;
     } catch { return $false; }
+}
+
+function sanitizeFileName($fullName) {
+    try {
+        if ( [System.IO.File]::Exists( $fullName ) -eq $false ) { return $fullName }
+		$dirname = [System.IO.Path]::GetDirectoryName( $fullName );
+		$shortname = [System.IO.Path]::GetFileName( $fullName );
+		$find = "1.0.0-v$version"
+		if ($shortname.Contains( $find ) ) {
+			$newname = [System.IO.Path]::Combine( $dirname, $shortname.Replace( $find, $version) );
+			[System.IO.File]::Copy( $fullName, $newname, $true )
+			[System.IO.File]::Delete( $fullName ) | Out-Null
+			return $newname;
+		}
+		return $fullName;
+    } catch { 
+		return $fullName; 
+	}
 }
 function generateBuildCommand( $solution ) {
     $arr = @();
@@ -53,6 +72,8 @@ function deleteNuPkgFiles( $homedir ) {
             $shouldExecute = isFileNameValid -fullName $pname
             if ( $shouldExecute -eq $false ) { 
                 [System.IO.File]::Delete( $pname ) | Out-Null
+            } else {
+                sanitizeFileName -fullName $pname
             }
         } else {
             $packages.GetEnumerator() | ForEach-Object {
@@ -60,6 +81,8 @@ function deleteNuPkgFiles( $homedir ) {
                 $shouldExecute = isFileNameValid -fullName $pname
                 if ( $shouldExecute -eq $false ) { 
                     [System.IO.File]::Delete( $pname ) | Out-Null
+                } else {
+                    sanitizeFileName -fullName $pname
                 }
             }
         }
