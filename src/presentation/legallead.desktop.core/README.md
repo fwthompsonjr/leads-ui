@@ -21,3 +21,4 @@ You're feedback is welcome, please reach out to LegalLead Tech Team with your co
 3.3.x - 20240728 - Update to generate package for next web
 3.3.x - 20240728 - Alter nuget publish script
 3.3.x - 20240728 - Alter nuget publish pipeline
+3.3.x - 20240728 - Alter nuget package filter

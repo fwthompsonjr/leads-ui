@@ -21,15 +21,11 @@ $found = $di.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories) | Whe
 $hasEnumerator = canEnumerate -obj $found
 if( $hasEnumerator -eq $false) {
     $package = $found.FullName
-    if ($package.IndexOf("1.0.0") -lt 0) {
-        dotnet nuget push $package --api-key $apikey --source $publishurl
-    }
+    dotnet nuget push $package --api-key $apikey --source $publishurl
     return;
 }
 
 $found.GetEnumerator() | ForEach-Object {
     $package = ([system.io.fileinfo]$_).FullName
-    if ($package.IndexOf("1.0.0") -lt 0) {
-        dotnet nuget push $package --api-key $apikey --source $publishurl
-    }
+    dotnet nuget push $package --api-key $apikey --source $publishurl
 }
