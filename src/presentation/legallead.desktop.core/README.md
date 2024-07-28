@@ -23,3 +23,4 @@ You're feedback is welcome, please reach out to LegalLead Tech Team with your co
 3.3.3 - 20240728 - Alter nuget publish pipeline
 3.3.4 - 20240728 - Alter nuget package filter
 3.3.5 - 20240728 - Alter nuget publish pipeline
+3.3.6 - 20240728 - Alter build script
