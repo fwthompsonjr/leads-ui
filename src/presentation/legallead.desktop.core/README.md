@@ -19,3 +19,4 @@ You're feedback is welcome, please reach out to LegalLead Tech Team with your co
 
 1.0.0 - 20231225 - Initial package creation
 3.3.x - 20240728 - Update to generate package for next web
+3.3.x - 20240728 - Alter nuget publish script
