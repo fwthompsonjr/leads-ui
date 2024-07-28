@@ -14,7 +14,7 @@ env:
 jobs:
   release:
     permissions: write-all
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
 
     steps:
@@ -36,4 +36,4 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
       shell: pwsh
       run: |
-        & ./publish-nuget.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
+        & ./publish-nuget-desktop-core.ps1 -apikey "${{ secrets.MY_GET_ACCESS_KEY }}" -publishurl "${{ secrets.MY_GET_PUBLISH_URL }}"
