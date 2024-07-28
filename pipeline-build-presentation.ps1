@@ -17,7 +17,7 @@ function sanitizeFileName($fullName) {
         if ( [System.IO.File]::Exists( $fullName ) -eq $false ) { return $fullName }
 		$dirname = [System.IO.Path]::GetDirectoryName( $fullName );
 		$shortname = [System.IO.Path]::GetFileName( $fullName );
-		$find = "1.0.0-v$version"
+		$find = "1.0.0-$version"
 		if ($shortname.Contains( $find ) ) {
 			$newname = [System.IO.Path]::Combine( $dirname, $shortname.Replace( $find, $version) );
 			[System.IO.File]::Copy( $fullName, $newname, $true )
