@@ -23,14 +23,14 @@ jobs:
     - name: Set Release Version
       shell: bash
       run: |
-          echo "RELEASE_VERSION=${{format('v{0}.{1}', vars.DESKTOP_CORE_PREFIX, github.run_number)}}" >> $GITHUB_ENV
+          echo "BUILD_VERSION=${{format('{0}.{1}', vars.DESKTOP_CORE_PREFIX, github.run_number)}}" >> $GITHUB_ENV
 
     - name: Build Presentation solution
       timeout-minutes: 5
       id: buildComponent
       shell: pwsh
       run: |
-        & ./x-pipeline-presentation-publish.ps1 -version "${{ env.RELEASE_VERSION }}" 
+        & ./x-pipeline-presentation-publish.ps1 -version "${{ env.BUILD_VERSION }}" 
 
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
