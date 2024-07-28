@@ -30,7 +30,7 @@ jobs:
       id: buildComponent
       shell: pwsh
       run: |
-        & ./x-pipeline-presentation-publish.ps1 -version "${{ env.BUILD_VERSION }}" 
+        & ./x-pipeline-presentation-publish.ps1 -version "${{ env.RELEASE_VERSION }}" 
 
     - name: Publish MyGet Packages
       if: github.ref == 'refs/heads/main' && github.event.pull_request.merged == true
