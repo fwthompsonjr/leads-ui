@@ -31,14 +31,14 @@
 		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<None Include="app.config" />
 		<None Include="text\resource-table.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Content Include="text\PostBuildMacro.txt" />
 		<Content Include="text\ResourceTextBuilder.txt" />
@@ -53,4 +53,15 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>next.web</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>next.web.core</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>next.web.tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
 </Project>
