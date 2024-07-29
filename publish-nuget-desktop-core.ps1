@@ -15,9 +15,7 @@ function canEnumerate( $obj ) {
 ## find all files matching *.nupkg 
 $currentDir = [System.IO.Path]::GetDirectoryName( $MyInvocation.MyCommand.Path );
 $di = [System.IO.DirectoryInfo]::new( $currentDir );
-$found = $di.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories) | Where-Object { 
-    $_.FullName -like '*release*' -or $_.FullName -like '*legallead.installer*'
-};
+$found = $di.GetFiles('*.nupkg', [System.IO.SearchOption]::AllDirectories);
 $hasEnumerator = canEnumerate -obj $found
 if( $hasEnumerator -eq $false) {
     $package = $found.FullName

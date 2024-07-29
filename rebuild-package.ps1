@@ -68,12 +68,9 @@ function processFileData( $obj ) {
             if ( [System.IO.File]::Exists( $newZipFile ) ) {
                 [System.IO.File]::Copy( $newZipFile, $newSpecFile, $true ) | Out-Null
                 [System.IO.File]::Delete( $newZipFile ) | Out-Null
-                Write-Host "New File has been created." # $packageFile
+                Write-Host "New File has been created. $($newSpecFile)" # $packageFile
                 if ( [System.IO.File]::Exists( $packageFile ) ) { [System.IO.File]::Delete( $packageFile ) | Out-Null }
             }
-        }
-        if ( [System.IO.Directory]::Exists( $workdir ) ) {
-            [System.IO.DirectoryInfo]::new( $workdir ).Delete($true) | Out-Null;
         }
     } catch {
         return $null;
