@@ -72,9 +72,6 @@ function processFileData( $obj ) {
                 if ( [System.IO.File]::Exists( $packageFile ) ) { [System.IO.File]::Delete( $packageFile ) | Out-Null }
             }
         }
-        if ( [System.IO.Directory]::Exists( $workdir ) ) {
-            [System.IO.DirectoryInfo]::new( $workdir ).Delete($true) | Out-Null;
-        }
     } catch {
         return $null;
     }
