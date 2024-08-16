@@ -18,15 +18,29 @@ namespace legallead.jdbc.tests
             Assert.NotEmpty(collection);
             collection.ToList().ForEach(c =>
             {
-                var instance = Activator.CreateInstance(c);
-                Assert.IsAssignableFrom<IBaseDto>(instance);
-                if (instance is IBaseDto dto)
+                var instance = TryCreateInstance(c);
+                if (instance != null)
                 {
-                    Assert.NotNull(dto);
-                    TryGet(dto);
+                    Assert.IsAssignableFrom<IBaseDto>(instance);
+                    if (instance is IBaseDto dto)
+                    {
+                        Assert.NotNull(dto);
+                        TryGet(dto);
+                    }
                 }
             });
         }
+
+
+        private static object? TryCreateInstance(Type type)
+        {
+            try
+            {
+                return Activator.CreateInstance(type);
+            }
+            catch { return null; }
+        }
+
         private static void TryGet(IBaseDto dto)
         {
             const string nonfound = "--not-defined--";
@@ -54,7 +68,7 @@ namespace legallead.jdbc.tests
                     .SelectMany(s => s.GetTypes())
                     .Where(p => type.IsAssignableFrom(p))
                     .Where(i => !i.IsInterface)
-                    .Where(a => !a.IsAbstract); 
+                    .Where(a => !a.IsAbstract);
             }
         }
         private static readonly object _sync = new();

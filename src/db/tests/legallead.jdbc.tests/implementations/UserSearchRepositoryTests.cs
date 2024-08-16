@@ -235,7 +235,7 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()))
                         .Returns(Task.FromResult(Task.CompletedTask))
                         .Throws(exception);
-            } 
+            }
             else
             {
                 mock.Setup(m => m.ExecuteAsync(
