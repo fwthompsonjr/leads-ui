@@ -31,10 +31,12 @@ namespace legallead.jdbc.implementations
             {
                 var commands = new List<string>() { prc2, prc1 };
                 using var connection = _context.CreateConnection();
-                await Task.Run(() => { 
-                    commands.ForEach(cmd => { 
-                        _command.ExecuteAsync(connection, cmd).GetAwaiter().GetResult(); 
-                    }); 
+                await Task.Run(() =>
+                {
+                    commands.ForEach(cmd =>
+                    {
+                        _command.ExecuteAsync(connection, cmd).GetAwaiter().GetResult();
+                    });
                 });
                 return true;
             }
