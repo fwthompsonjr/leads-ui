@@ -1,6 +1,11 @@
 [
 	[
 		{
+			"name": "3.2.413.--",
+			"description": "Web - expose variable for http redirects",
+			"date": "2024-08-16 17:00:00"
+		},
+		{
 			"name": "3.2.412.--",
 			"description": "Queue services - collin county fix",
 			"date": "2024-07-05 10:00:00"

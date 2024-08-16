@@ -81,10 +81,12 @@ namespace legallead.permissions.api
             services.AddScoped<IUserPermissionHistoryRepository, UserPermissionHistoryRepository>();
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
+            services.AddScoped<IAppSettingRepository, AppSettingRepository>();
             services.AddScoped<ICustomerLockInfrastructure, CustomerLockInfrastructure>();
             services.AddScoped<IClientSecretService, ClientSecretService>();
             services.AddScoped<IMailBoxRepository, MailBoxRepository>();
             services.AddScoped<IUserMailbox, UserMailboxService>();
+            services.AddScoped<IAppSettingService, AppSettingService>();
             services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {
