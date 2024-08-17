@@ -32,8 +32,7 @@ namespace legallead.records.search.Classes
 
         public static XmlDocument Load(string fileName)
         {
-            using StreamReader reader = new(fileName);
-            string content = reader.ReadToEnd();
+            string content = ResourceFileService.Get(fileName) ?? string.Empty;
             return GetDoc(content);
         }
     }
@@ -185,12 +184,13 @@ namespace legallead.records.search.Classes
             }
 
             const string dfmt = "MMddyyyy";
+            var expiration = TimeSpan.FromMinutes(10);
             string fileName = GetFileName(settingFile);
             string targetFile = fileName;
             int idx = 0;
             CultureInfo cultureInfo = CultureInfo.CurrentCulture;
             NumberFormatInfo numberInfo = cultureInfo.NumberFormat;
-            while (File.Exists(targetFile))
+            while (ResourceFileService.Exists(targetFile))
             {
                 idx += 1;
                 string cleaned = Path.GetFileNameWithoutExtension(fileName);
@@ -198,16 +198,8 @@ namespace legallead.records.search.Classes
                 targetFile = string.Format(cultureInfo, "{0}/{1}", Path.GetDirectoryName(fileName), cleaned);
             }
             fileName = targetFile;
-            using (StreamWriter sw = new(fileName))
-            {
-                sw.Write(Layout);
-                sw.Close();
-            }
-            string content = string.Empty;
-            using (StreamReader reader = new(fileName))
-            {
-                content = reader.ReadToEnd();
-            }
+            ResourceFileService.AddOrUpdate(fileName, Layout, expiration);
+            string content = ResourceFileService.Get(fileName) ?? string.Empty;
             XmlDocument doc = XmlDocProvider.GetDoc(content);
             XmlNode? nde = doc.DocumentElement!.SelectSingleNode(@"parameters");
             List<XmlNode> nds = new(nde!.ChildNodes.Cast<XmlNode>());
@@ -236,8 +228,8 @@ namespace legallead.records.search.Classes
                         break;
                 }
             }
-
-            doc.Save(fileName);
+            var html = doc.OuterXml;
+            ResourceFileService.AddOrUpdate(fileName, html, expiration);
 
             // check for null
             return new XmlContentHolder

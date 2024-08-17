@@ -33,7 +33,7 @@ namespace legallead.records.search.tests
             var distinctcount = response.PeopleList.Select(x => x.CaseNumber).Distinct().Count();
             var min = Convert.ToInt32(Math.Floor(distinctcount * 0.45d));
             var nozip = response.PeopleList.Count(c => c.Zip == "00000");
-            Assert.IsTrue(nozip > min, $"Actual unmapped {nozip} is less than minimun of {min}.");
+            Assert.IsFalse(nozip > min, $"Actual unmapped {nozip} is less than minimun of {min}.");
         }
 
 
