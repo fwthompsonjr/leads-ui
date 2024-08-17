@@ -130,6 +130,7 @@ namespace legallead.desktop.tests.utilities
         [InlineData("refresh", 200)]
         [InlineData("password", 200)]
         [InlineData("change-password", 200)]
+        [InlineData("setting-application-key", 200)]
         [InlineData("non-existing", 404)]
         public async Task ServiceShouldGetPostEndpoint(string pageName, int expectedCode)
         {
