@@ -1,5 +1,6 @@
 ﻿using legallead.records.search.Classes;
 using legallead.records.search.Models;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace legallead.records.search.Dto
@@ -47,8 +48,14 @@ namespace legallead.records.search.Dto
             try
             {
                 string dataFile = CourtLookupFile();
+                var localized = GetSettingFromService(dataFile);
+                if (!string.IsNullOrEmpty(localized))
+                {
+                    var lookup = JsonConvert.DeserializeObject<CourtLookup>(localized) ?? new();
+                    return lookup;
+                }
                 string data = File.ReadAllText(dataFile);
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<CourtLookup>(data) ?? new();
+                return JsonConvert.DeserializeObject<CourtLookup>(data) ?? new();
             }
             catch (Exception)
             {
@@ -59,7 +66,7 @@ namespace legallead.records.search.Dto
         private static CourtLookup GetAlternateCourtLookup()
         {
             string data = FallbackJson.GetJs("courtAddress.json");
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<CourtLookup>(data) ?? new();
+            return JsonConvert.DeserializeObject<CourtLookup>(data) ?? new();
         }
 
         public static NavInstruction GetNonCriminalMapping()
@@ -67,8 +74,14 @@ namespace legallead.records.search.Dto
             try
             {
                 string dataFile = NonCriminalMappingFile();
+                var localized = GetSettingFromService(dataFile);
+                if (!string.IsNullOrEmpty(localized))
+                {
+                    var lookup = JsonConvert.DeserializeObject<NavInstruction>(localized) ?? new();
+                    return lookup;
+                }
                 string data = File.ReadAllText(dataFile);
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+                return JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
             }
             catch
             {
@@ -79,7 +92,7 @@ namespace legallead.records.search.Dto
         public static NavInstruction GetAlternateNonCriminalMapping()
         {
             string data = FallbackJson.GetJs("dentonCaseCustomInstruction_1.json");
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+            return JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
 
         public static NavInstruction GetCriminalMapping()
@@ -87,8 +100,14 @@ namespace legallead.records.search.Dto
             try
             {
                 string dataFile = CriminalMappingFile();
+                var localized = GetSettingFromService(dataFile);
+                if (!string.IsNullOrEmpty(localized))
+                {
+                    var lookup = JsonConvert.DeserializeObject<NavInstruction>(localized) ?? new();
+                    return lookup;
+                }
                 string data = File.ReadAllText(dataFile);
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+                return JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
             }
             catch (Exception)
             {
@@ -99,14 +118,20 @@ namespace legallead.records.search.Dto
         public static NavInstruction GetAlternateCriminalMapping()
         {
             string data = FallbackJson.GetJs("dentonCaseCustomInstruction.json");
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
+            return JsonConvert.DeserializeObject<NavInstruction>(data) ?? new();
         }
 
         public static SearchSettingDto GetDto()
         {
             string dataFile = DataFile();
+            var localized = GetSettingFromService(dataFile);
+            if (!string.IsNullOrEmpty(localized))
+            {
+                var example = JsonConvert.DeserializeObject<Example>(localized) ?? new();
+                return example.SearchSetting;
+            }
             string data = File.ReadAllText(dataFile);
-            Example? parent = Newtonsoft.Json.JsonConvert.DeserializeObject<Example>(data) ?? new();
+            Example? parent = JsonConvert.DeserializeObject<Example>(data) ?? new();
             return parent.SearchSetting;
         }
 
@@ -114,7 +139,7 @@ namespace legallead.records.search.Dto
         {
             string dataFile = DataFile();
             Example parent = new() { SearchSetting = source };
-            string data = Newtonsoft.Json.JsonConvert.SerializeObject(parent, Newtonsoft.Json.Formatting.Indented);
+            string data = JsonConvert.SerializeObject(parent, Formatting.Indented);
             if (File.Exists(dataFile)) { File.Delete(dataFile); }
             using StreamWriter sw = new(dataFile);
             sw.Write(data);
@@ -209,7 +234,13 @@ namespace legallead.records.search.Dto
 
         internal static readonly string SearchSettingFileNotFound
             = CommonKeyIndexes.SearchSettingFileNotFound;
-
+        private static string? GetSettingFromService(string dataFile)
+        {
+            if (!SettingFileService.Exists(dataFile)) return null;
+            var json = SettingFileService.GetContentOrDefault(dataFile, string.Empty);
+            if (string.IsNullOrEmpty(json)) return null;
+            return json;
+        }
         private static class FallbackJson
         {
             public static string GetJs(string json)

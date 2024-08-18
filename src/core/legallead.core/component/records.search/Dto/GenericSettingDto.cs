@@ -52,8 +52,9 @@ namespace legallead.records.search.Dto
                     fileSuffix);
                 var fallback = Fallback(fileSuffix);
                 DataFile = dataFile;
-                Content = File.Exists(dataFile) ?
-                    File.ReadAllText(dataFile) : fallback;
+                var content = GetSettingFromService(dataFile);
+                content ??= GetSettingFromFileSystem(dataFile, fallback);
+                Content = content;
             }
         }
 
@@ -73,12 +74,8 @@ namespace legallead.records.search.Dto
             Example parent = new() { SearchSetting = source };
             string data = Newtonsoft.Json.JsonConvert.SerializeObject(parent,
                 Newtonsoft.Json.Formatting.Indented);
-            if (File.Exists(dataFile)) { File.Delete(dataFile); }
-            using (StreamWriter sw = new(dataFile))
-            {
-                sw.Write(data);
-            }
-            Content = File.ReadAllText(dataFile);
+            ResourceFileService.AddOrUpdate(dataFile, data, TimeSpan.FromHours(12));
+            Content = data;
         }
 
         private static string Fallback(string input)
@@ -96,6 +93,23 @@ namespace legallead.records.search.Dto
             sbb.AppendLine("}");
             sbb.Replace('~', '"');
             return sbb.ToString();
+        }
+
+        private static string? GetSettingFromService(string dataFile)
+        {
+            if (!SettingFileService.Exists(dataFile)) return null;
+            var json = SettingFileService.GetContentOrDefault(dataFile, string.Empty);
+            if (string.IsNullOrEmpty(json)) return null;
+            return json;
+        }
+
+        private static string GetSettingFromFileSystem(string dataFile, string fallback)
+        {
+            if (!File.Exists(dataFile))
+            {
+                return fallback;
+            }
+            return File.ReadAllText(dataFile);
         }
     }
 }
