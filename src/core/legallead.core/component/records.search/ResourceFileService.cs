@@ -10,6 +10,16 @@ namespace legallead.records.search
         {
             lock (_locker) { Models.Clear(); }
         }
+        public static void Expire()
+        {
+            lock (_locker) {
+                var currentDt = DateTime.UtcNow;
+                var found = Models.Count(x => x.ExpirationDate <= currentDt);
+                if (found == 0) return;
+                Models.RemoveAll(x => x.ExpirationDate <= currentDt);
+            }
+        }
+
 
         public static bool Exists(string keyName)
         {

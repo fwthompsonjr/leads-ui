@@ -184,12 +184,13 @@ namespace legallead.records.search.Classes
             }
 
             const string dfmt = "MMddyyyy";
-            var expiration = TimeSpan.FromMinutes(10);
+            var expiration = TimeSpan.FromMinutes(15);
             string fileName = GetFileName(settingFile);
             string targetFile = fileName;
             int idx = 0;
             CultureInfo cultureInfo = CultureInfo.CurrentCulture;
             NumberFormatInfo numberInfo = cultureInfo.NumberFormat;
+            ResourceFileService.Expire();
             while (ResourceFileService.Exists(targetFile))
             {
                 idx += 1;
