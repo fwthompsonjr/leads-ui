@@ -124,6 +124,14 @@ namespace legallead.records.search.Dto
         public static SearchSettingDto GetDto()
         {
             string dataFile = DataFile();
+            if (ResourceFileService.Exists(dataFile))
+            {
+                var response = ResourceFileService.Get(dataFile);
+                if (!string.IsNullOrEmpty(response)) {
+                    var tmp = JsonConvert.DeserializeObject<Example>(response) ?? new();
+                    return tmp.SearchSetting; 
+                }
+            }
             var localized = GetSettingFromService(dataFile);
             if (!string.IsNullOrEmpty(localized))
             {
@@ -140,6 +148,7 @@ namespace legallead.records.search.Dto
             string dataFile = DataFile();
             Example parent = new() { SearchSetting = source };
             string data = JsonConvert.SerializeObject(parent, Formatting.Indented);
+            ResourceFileService.AddOrUpdate(dataFile, data, TimeSpan.FromHours(1));
             if (File.Exists(dataFile)) { File.Delete(dataFile); }
             using StreamWriter sw = new(dataFile);
             sw.Write(data);
