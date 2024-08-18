@@ -47,7 +47,7 @@ namespace legallead.records.search.Dto
                 appDirectory,
                 fileSuffix);
             var fallback = GetFallbackContent(fileSuffix);
-            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            var data = SettingFileService.GetContentOrDefault(dataFile, fallback);
             if (data.Length == 0)
             {
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);

@@ -204,7 +204,7 @@ namespace legallead.records.search.Classes
             XmlDocument doc = XmlDocProvider.GetDoc(content);
             XmlNode? nde = doc.DocumentElement!.SelectSingleNode(@"parameters");
             List<XmlNode> nds = new(nde!.ChildNodes.Cast<XmlNode>());
-            foreach (XmlNode item in nds)
+            nds.ForEach(item =>
             {
                 string? attrName = item.Attributes?.GetNamedItem("name")?.Value;
                 switch (attrName)
@@ -228,7 +228,7 @@ namespace legallead.records.search.Classes
                     default:
                         break;
                 }
-            }
+            });
             var html = doc.OuterXml;
             ResourceFileService.AddOrUpdate(fileName, html, expiration);
 

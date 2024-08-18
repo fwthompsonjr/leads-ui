@@ -22,6 +22,21 @@ namespace legallead.records.search.Dto
                 dataFormat,
                 appDirectory,
                 fileSuffix);
+            var dto = GetSettingFromService(dataFile);
+            dto ??= GetSettingFromFileSystem(dataFile);
+            return dto;
+        }
+
+        private static DataPointLocatorDto? GetSettingFromService(string dataFile)
+        {
+            if (!SettingFileService.Exists(dataFile)) return null;
+            var json = SettingFileService.GetContentOrDefault(dataFile, string.Empty);
+            if (string.IsNullOrEmpty(json)) return null;
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<DataPointLocatorDto>(json) ?? new();
+        }
+
+        private static DataPointLocatorDto GetSettingFromFileSystem(string dataFile)
+        {
             if (!File.Exists(dataFile))
             {
                 throw new FileNotFoundException(CommonKeyIndexes.NavigationFileNotFound);
@@ -29,7 +44,6 @@ namespace legallead.records.search.Dto
             string data = File.ReadAllText(dataFile);
             return Newtonsoft.Json.JsonConvert.DeserializeObject<DataPointLocatorDto>(data) ?? new();
         }
-
         public static DataPointLocatorDto Load(string data)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<DataPointLocatorDto>(data) ?? new();
