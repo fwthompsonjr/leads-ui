@@ -64,18 +64,40 @@ namespace legallead.records.search.Properties {
         ///   Looks up a localized string similar to /*
         ///* find the defendant, principal
         ///*/
-        ///	let keywords = [ &quot;defendant&quot;, &quot;principal&quot;, &quot;petitioner&quot;, &quot;applicant&quot;, &quot;claimant&quot;, &quot;decedent&quot;, &quot;respondent&quot;, &quot;condemnee&quot;, &quot;guardian&quot; ];
+        ///headings = document.getElementsByTagName(&quot;th&quot;);
+        ///keywords = [ &quot;defendant&quot;, &quot;principal&quot;, &quot;petitioner&quot;, &quot;applicant&quot;, &quot;claimant&quot;, &quot;decedent&quot;, &quot;respondent&quot;, &quot;condemnee&quot;, &quot;guardian&quot; ];
         ///hdrs = Array.prototype.slice.call( headings );
         ///ssheaders = hdrs.filter(x =&gt; {
         ///	let attr = x.getAttribute(&quot;class&quot;);
         ///	if(undefined == attr || null == attr || attr.indexOf(&quot;ssTableHeader&quot;) &lt; 0 ) return false;
         ///	let rspan = x.getAttribute(&quot;rowspan&quot;);
-        ///	if(undefined == rspan || null == rspan || rspan != &quot;2&quot; ) return false;
-        ///	let txt = [rest of string was truncated]&quot;;.
+        ///	if(undefined == rspan || null == rspan [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string include_denton_tx_get_address_json {
             get {
                 return ResourceManager.GetString("include_denton_tx_get_address_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;dataPoints&quot;: [
+        ///    {
+        ///      &quot;name&quot;: &quot;CaseStyle&quot;,
+        ///      &quot;xpath&quot;: &quot;/html/body/table[3]/tbody/tr/td[1]/b&quot;,
+        ///      &quot;result&quot;: &quot;&quot;
+        ///    },
+        ///    {
+        ///      &quot;name&quot;: &quot;Plantiff&quot;,
+        ///      &quot;xpath&quot;: &quot;//th[text()=&apos;State&apos;]&quot;,
+        ///      &quot;result&quot;: &quot;&quot;
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string tarrantCountyDataPoint_json {
+            get {
+                return ResourceManager.GetString("tarrantCountyDataPoint_json", resourceCulture);
             }
         }
         
@@ -165,6 +187,27 @@ namespace legallead.records.search.Properties {
         internal static string xml_collinCountyMapping_1_json {
             get {
                 return ResourceManager.GetString("xml-collinCountyMapping-1-json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;createDate&quot;: &quot;04/01/2019 08:00&quot;,
+        ///    &quot;userGuid&quot;: &quot;7n4HjZvPIQ9HOIYGG2YFUgvuXxqhPHP5&quot;,
+        ///    &quot;userKey&quot;: &quot;data.clear.check&quot;
+        ///  },
+        ///  {
+        ///    &quot;createDate&quot;: &quot;11/17/2023 14:10&quot;,
+        ///    &quot;userGuid&quot;: &quot;c5PyieZ40EnYyHXOZulCNfjJyqXuAHVE1PLflC67mdQ=&quot;,
+        ///    &quot;userData&quot;: &quot;5WB6tSC95PmKZ1NLlMt5RA==&quot;,
+        ///    &quot;userKey&quot;: &quot;data.static.chek&quot;
+        ///  }
+        ///].
+        /// </summary>
+        internal static string xml_collinCountyUserMap_json {
+            get {
+                return ResourceManager.GetString("xml_collinCountyUserMap_json", resourceCulture);
             }
         }
         
@@ -616,7 +659,7 @@ namespace legallead.records.search.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///  &quot;webDrivers&quot;: {
-        ///    &quot;selectedIndex&quot;: 3,
+        ///    &quot;selectedIndex&quot;: 1,
         ///    &quot;drivers&quot;: [
         ///      {
         ///        &quot;id&quot;: 0,

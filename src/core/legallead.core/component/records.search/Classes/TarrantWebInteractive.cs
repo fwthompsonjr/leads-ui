@@ -611,7 +611,7 @@ namespace legallead.records.search.Classes
                 suffix);
 
             var fallback = GetFallbackContent(suffix);
-            var data = File.Exists(dataFile) ? File.ReadAllText(dataFile) : fallback;
+            var data = SettingFileService.GetContentOrDefault (dataFile,  fallback);
             if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(

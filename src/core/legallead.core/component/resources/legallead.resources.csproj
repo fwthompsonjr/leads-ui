@@ -63,5 +63,8 @@
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>next.web.tests</_Parameter1>
 		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>next.processor.api</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 </Project>
