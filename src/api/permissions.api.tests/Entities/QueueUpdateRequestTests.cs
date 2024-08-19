@@ -26,7 +26,7 @@ namespace permissions.api.tests.Entities
         }
 
         [Fact]
-        public void QueueUpdateRequestFieldsCanGetAneSet()
+        public void QueueUpdateRequestFieldsCanGetAndSet()
         {
             var error = Record.Exception(() =>
             {

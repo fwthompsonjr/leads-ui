@@ -40,12 +40,7 @@ namespace legallead.permissions.api.Services
                 if (!request.IsValid()) return null;
                 var payload = request.ConvertFrom();
                 var response = _repo.UpdateStatus(payload);
-                if (request.StatusId.GetValueOrDefault() == 1 &&
-                    response != null &&
-                    response.CompletionDate != null)
-                {
-                    await SendCompletionEmail(response);
-                }
+                await TrySendCompletionEmail(request, response);
                 return response;
             }
             catch (Exception)
@@ -60,7 +55,7 @@ namespace legallead.permissions.api.Services
             {
                 var data = await _queue.GetQueue();
                 if (data.Count == 0) return [];
-                var working = _repo.Fetch().Select(x => x.Id).Distinct().ToList();
+                var working = _repo.Fetch().Select(x => x.SearchId).Distinct().ToList();
                 data = data.FindAll(d =>
                 {
                     return !working.Contains(d.Id, StringComparer.OrdinalIgnoreCase);
@@ -72,6 +67,19 @@ namespace legallead.permissions.api.Services
             {
                 return [];
             }
+        }
+
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
+        private async Task TrySendCompletionEmail(QueueUpdateRequest request, QueueWorkingBo? response)
+        {
+            if (request.StatusId.GetValueOrDefault() != 1 ||
+                response == null ||
+                response.CompletionDate == null ||
+                _notificationSvc == null)
+            {
+                return;
+            }
+            await SendCompletionEmail(response);
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]

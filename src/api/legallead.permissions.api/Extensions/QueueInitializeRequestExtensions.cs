@@ -14,6 +14,7 @@ namespace legallead.permissions.api.Extensions
             if (request.MachineName.Length > 256) return false;
             if (request.Message.Length > 255) return false;
             if (!statuses.Contains(request.StatusId.Value)) return false;
+            if (request.Items.Count == 0) return false;
             return true;
         }
 
@@ -28,6 +29,7 @@ namespace legallead.permissions.api.Extensions
             if (!statuses.Contains(request.StatusId.Value)) return false;
             if (!Guid.TryParse(request.Id, out var _)) return false;
             if (!Guid.TryParse(request.SearchId, out var _)) return false;
+            if (!statuses.Contains(request.StatusId.Value)) return false;
             return true;
         }
 
