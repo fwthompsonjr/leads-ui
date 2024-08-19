@@ -1,6 +1,7 @@
 
       legallead.email
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+      : 3.2.4 - 2024-08-18 - Adding search completed template
       : 3.2.3 - 2024-05-07 - Adding password changed template
       : 3.2.2 - 2024-05-07 - Adding permission change request template
       : 3.2.1 - 2024-05-07 - Adding profile change template
@@ -18,5 +19,6 @@
       : Locked Account - Email to user if account has been locked
       : Registration Completed - Email to user after completing the registation process
       : Search Payment Completed - Email to user after receiving payment for a record search.
+      : Search Completed - Email to user record search is completed.
       - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
     
