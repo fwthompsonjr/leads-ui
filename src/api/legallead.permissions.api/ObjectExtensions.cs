@@ -285,6 +285,7 @@ namespace legallead.permissions.api
                 var wrapper = new MailMessageWrapper(notification);
                 return new QueueStatusService(repo, queue, sts, usrdb, wrapper);
             });
+            services.AddScoped<QueueController>();
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class

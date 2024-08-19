@@ -70,6 +70,22 @@ namespace legallead.permissions.api.Extensions
                 return default;
             }
         }
+
+
+        internal static string ToJsonString(this object? obj)
+        {
+            try
+            {
+                if (obj == null) return string.Empty;
+                var model = JsonConvert.SerializeObject(obj);
+                return model;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
         public static QueueWorkingBo ConvertFrom(this QueueUpdateRequest request)
         {
             return new()

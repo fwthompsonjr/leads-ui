@@ -7,6 +7,7 @@ using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Newtonsoft.Json;
 
 namespace permissions.api.tests.Contollers
@@ -69,6 +70,7 @@ namespace permissions.api.tests.Contollers
             var userSearchValidator = new Mock<IUserSearchValidator>();
             var searchInfrastructure = new Mock<ISearchInfrastructure>();
             var lockInfrastructure = new Mock<ICustomerLockInfrastructure>();
+            var queueStatusServiceMock = new Mock<IQueueStatusService>();
             var collection = new ServiceCollection();
             collection.AddScoped(s => request);
             collection.AddScoped(s => userMk);
@@ -107,6 +109,8 @@ namespace permissions.api.tests.Contollers
             collection.AddScoped(s => userSearchValidator.Object);
             collection.AddScoped(s => searchInfrastructure.Object);
             collection.AddScoped(s => lockInfrastructure.Object);
+            collection.AddScoped(s => queueStatusServiceMock);
+            collection.AddScoped(s => queueStatusServiceMock.Object);
             collection.AddScoped(p =>
             {
                 var a = p.GetRequiredService<IComponentRepository>();
@@ -160,6 +164,25 @@ namespace permissions.api.tests.Contollers
             });
             collection.AddScoped(s => new Mock<ILoggingInfrastructure>().Object);
             collection.AddScoped<SearchController>();
+            collection.AddScoped(a =>
+            {
+                var mqRequest = a.GetRequiredService<Mock<HttpRequest>>();
+                var appid = new ApplicationRequestModel
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "oxford.leads.data.services"
+                };
+                var headers = new HeaderDictionary
+                {
+                    { "AppIdentity", new Microsoft.Extensions.Primitives.StringValues(JsonConvert.SerializeObject(appid)) }
+                };
+                mqRequest.SetupGet(m => m.Headers).Returns(headers);
+                var status = a.GetRequiredService<IQueueStatusService>();
+                return new QueueController(status)
+                {
+                    ControllerContext = controllerContext
+                };
+            });
             _serviceProvider = collection.BuildServiceProvider();
             return _serviceProvider;
         }
