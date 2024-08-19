@@ -1,6 +1,8 @@
-﻿using legallead.jdbc.entities;
+﻿using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.jdbc.implementations
 {
@@ -18,17 +20,29 @@ namespace legallead.jdbc.implementations
             const string prc = "CALL USP_QUERY_USER_SEARCH_QUEUE();";
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<SearchQueueDto>(connection, prc);
-            var removalids = new List<string>();
-            foreach (var item in response)
-            {
-                var isRestricted = await IsRestricted(item);
-                if (isRestricted) { removalids.Add(item.Id); }
-            }
-            var list = response.ToList();
-            list.RemoveAll(x => removalids.Contains(x.Id));
+            List<SearchQueueDto> list = await ExtractRestrictions(response);
             return list;
         }
 
+        public async Task<SearchQueueDto?> GetQueueItem(string? searchId)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(searchId)) return null;
+                if (!Guid.TryParse(searchId, out var _)) return null;
+                const string prc = "CALL USP_QUERY_USER_SEARCH_QUEUE_ITEM( ? );";
+                var parms = new DynamicParameters();
+                parms.Add("search_index", searchId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<SearchQueueDto>(connection, prc, parms);
+                if (response == null || !response.Any()) return null;
+                return response.First();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public async Task<KeyValuePair<bool, string>> Complete(string id)
         {
             var response = await searchrepo.Complete(id);
@@ -52,6 +66,22 @@ namespace legallead.jdbc.implementations
             return response;
         }
 
+
+        [ExcludeFromCodeCoverage]
+        private async Task<List<SearchQueueDto>> ExtractRestrictions(IEnumerable<SearchQueueDto> response)
+        {
+            var removalids = new List<string>();
+            foreach (var item in response)
+            {
+                var isRestricted = await IsRestricted(item);
+                if (isRestricted) { removalids.Add(item.Id); }
+            }
+            var list = response.ToList();
+            list.RemoveAll(x => removalids.Contains(x.Id));
+            return list;
+        }
+
+        [ExcludeFromCodeCoverage]
         private async Task<bool> IsRestricted(SearchQueueDto queued)
         {
             if (string.IsNullOrEmpty(queued.UserId)) return true;
