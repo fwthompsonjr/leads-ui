@@ -7,5 +7,6 @@ namespace legallead.jdbc.interfaces
         List<QueueWorkingBo> InsertRange(string json);
         QueueWorkingBo? UpdateStatus(QueueWorkingBo updateBo);
         List<QueueWorkingBo> Fetch();
+        QueueWorkingUserBo? GetUserBySearchId(string? searchId);
     }
 }

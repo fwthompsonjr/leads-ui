@@ -72,6 +72,26 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public QueueWorkingUserBo? GetUserBySearchId(string? searchId)
+        {
+            if (string.IsNullOrEmpty(searchId)) return null;
+            if (!Guid.TryParse(searchId, out var _)) return null;
+            try
+            {
+                var prc = Procs[ProcedureNames.Insert];
+                var parms = new DynamicParameters();
+                parms.Add("search_index", searchId);
+                using var connection = _context.CreateConnection();
+                var list = _command.QueryAsync<CustomerDto>(connection, prc, parms).GetAwaiter().GetResult();
+                if (list == null || !list.Any()) return new();
+                return TranslateTo<QueueWorkingUserBo>(list.First());
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
         private static T TranslateTo<T>(object source) where T : class, new()
         {
 
@@ -83,13 +103,15 @@ namespace legallead.jdbc.implementations
             { ProcedureNames.Insert, "CALL USP_INSERT_QUEUEWORKING( ? );" },
             { ProcedureNames.Update, "CALL USP_UPDATE_QUEUEWORKING( ? );" },
             { ProcedureNames.Fetch, "CALL USP_FETCH_QUEUEWORKING();" },
+            { ProcedureNames.GetUser, "CALL USP_FETCH_ACCOUNT_BY_SEARCH_INDEX( ? );" },
             };
 
         private enum ProcedureNames
         {
             Insert = 0,
             Update = 1,
-            Fetch = 2
+            Fetch = 2,
+            GetUser = 3
         }
     }
 }
