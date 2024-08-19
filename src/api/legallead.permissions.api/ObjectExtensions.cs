@@ -274,13 +274,16 @@ namespace legallead.permissions.api
         {
             services.Initialize();
             services.AddScoped<IQueueNotificationService, QueueNotificationService>();
+            services.AddScoped<ISearchStatusRepository, SearchStatusRepository>();
             services.AddScoped<IQueueStatusService>(s =>
             {
                 var repo = s.GetRequiredService<IQueueWorkRepository>();
                 var queue = s.GetRequiredService<ISearchQueueRepository>();
                 var notification = s.GetRequiredService<IQueueNotificationService>();
+                var sts = s.GetRequiredService<ISearchStatusRepository>();
+                var usrdb = s.GetRequiredService<IUserSearchRepository>();
                 var wrapper = new MailMessageWrapper(notification);
-                return new QueueStatusService(repo, queue, wrapper);
+                return new QueueStatusService(repo, queue, sts, usrdb, wrapper);
             });
         }
 

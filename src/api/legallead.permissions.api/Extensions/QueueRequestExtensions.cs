@@ -33,6 +33,15 @@ namespace legallead.permissions.api.Extensions
             return true;
         }
 
+        public static bool IsValid(this QueueRecordStatusRequest request)
+        {
+            if (request == null) return false;
+            if (string.IsNullOrEmpty(request.UniqueId)) return false;
+            if (!request.MessageId.HasValue) return false;
+            if (!request.StatusId.HasValue) return false;
+            return true;
+        }
+
         public static string Serialize(this QueueInitializeRequest request)
         {
             var fallback = new QueueInitializeRequest { StatusId = -100 };
@@ -48,6 +57,19 @@ namespace legallead.permissions.api.Extensions
             return JsonConvert.SerializeObject(request);
         }
 
+        internal static T? ToInstance<T>(this string? json)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(json)) return default;
+                var model = JsonConvert.DeserializeObject<T>(json);
+                return model;
+            }
+            catch
+            {
+                return default;
+            }
+        }
         public static QueueWorkingBo ConvertFrom(this QueueUpdateRequest request)
         {
             return new()

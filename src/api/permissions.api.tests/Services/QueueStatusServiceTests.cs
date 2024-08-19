@@ -1,7 +1,9 @@
-﻿using legallead.jdbc.entities;
+﻿using legallead.jdbc;
+using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Services;
+using Newtonsoft.Json;
 
 namespace permissions.api.tests.Services
 {
@@ -106,6 +108,48 @@ namespace permissions.api.tests.Services
             mock.Verify();
         }
 
+        [Fact]
+        public async Task ServiceCanStart()
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var payload = recordfaker.Generate();
+                var response = new KeyValuePair<bool, string>(true, "");
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqSearchRepo;
+                mock.Setup(m => m.Start(It.IsAny<SearchDto>())).ReturnsAsync(response);
+                _ = await service.Start(payload);
+                mock.Verify(m => m.Start(It.IsAny<SearchDto>()));
+            });
+            Assert.Null(error);
+        }
+
+
+        [Fact]
+        public async Task ServiceCanComplete()
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var fkr = new Faker();
+                var payload = new QueueRecordStatusRequest
+                {
+                    UniqueId = fkr.Random.Guid().ToString(),
+                    MessageId = fkr.Random.Int(0, 6),
+                    StatusId = fkr.Random.Int(0, 2)
+                };
+                var response = new KeyValuePair<bool, string>(true, "");
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqSearchRepo;
+                mock.Setup(m => m.Complete(It.IsAny<string>())).ReturnsAsync(response);
+                await service.Complete(payload);
+                mock.Verify(m => m.Complete(It.IsAny<string>()));
+            });
+            Assert.Null(error);
+        }
+
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -136,14 +180,137 @@ namespace permissions.api.tests.Services
             _ = await service.Fetch();
             mock.Verify(m => m.GetQueue());
         }
+
+
+        [Theory]
+        [InlineData(30)]
+        [InlineData(20)]
+        [InlineData(20, 5, 1)]
+        [InlineData(20, 10)]
+        [InlineData(20, 15)]
+        [InlineData(20, 20)]
+        [InlineData(20, 25)]
+        public async Task ServiceCanCompleteGeneration(int webId, int rowcount = 5, int identityId = 5)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var fkr = new Faker();
+                var itm = itemfaker.Generate();
+                var data = personfaker.Generate(rowcount);
+                var id = identityId switch
+                {
+                    1 => string.Empty,
+                    _ => fkr.Random.Guid().ToString()
+                };
+                var parameter = rowcount switch
+                {
+                    10 => string.Empty,
+                    20 => "not serializable",
+                    _ => JsonConvert.SerializeObject(itm)
+                };
+                var dataparameter = rowcount switch
+                {
+                    15 => string.Empty,
+                    25 => "not serializable",
+                    _ => JsonConvert.SerializeObject(data)
+                };
+                itm.WebId = webId;
+                var payload = new QueueCompletionRequest
+                {
+                    UniqueId = id,
+                    QueryParameter = parameter,
+                    Data = dataparameter
+                };
+                var response = new KeyValuePair<bool, string>(true, "");
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqSearchRepo;
+                var usrmock = sut.MqUserRepo;
+                mock.Setup(m => m.Complete(It.IsAny<string>())).ReturnsAsync(response);
+                usrmock.Setup(m => m.Append(
+                    It.IsAny<SearchTargetTypes>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())).ReturnsAsync(response);
+                usrmock.Setup(m => m.UpdateRowCount(
+                    It.IsAny<string>(),
+                    It.IsAny<int>())).ReturnsAsync(response);
+                await service.GenerationComplete(payload);
+                mock.Verify(m => m.Complete(It.IsAny<string>()));
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(5, 1)]
+        [InlineData(5, 2)]
+        [InlineData(5, 3)]
+        [InlineData(5, 4)]
+        [InlineData(5, 5)]
+        [InlineData(5, 6)]
+        [InlineData(5, 7)]
+        [InlineData(5, 8)]
+        [InlineData(5, 9)]
+        [InlineData(5, 10)]
+        [InlineData(5, 1, 10)]
+        [InlineData(5, 1, 1)]
+        [InlineData(5, 1, 2)]
+        [InlineData(5, 1, 3)]
+        [InlineData(5, 1, 4)]
+        [InlineData(10, 1, 1)]
+        public async Task ServiceCanPostStatus(int identityId, int messageId = 0, int statusId = 0)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var fkr = new Faker();
+                var id = identityId switch
+                {
+                    1 => string.Empty,
+                    _ => fkr.Random.Guid().ToString()
+                };
+                int? messageIndx = messageId switch
+                {
+                    10 => null,
+                    _ => messageId
+                };
+                int? statusCode = statusId switch
+                {
+                    10 => null,
+                    _ => statusId
+                };
+                var payload = new QueueRecordStatusRequest
+                {
+                    UniqueId = id,
+                    MessageId = messageIndx,
+                    StatusId = statusCode
+                };
+                var response = new KeyValuePair<bool, string>(identityId != 10, "");
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqSearchRepo;
+                var usrmock = sut.MqStatusRepo;
+                mock.Setup(m => m.Status(
+                    It.IsAny<string>(),
+                    It.IsAny<string>())).ReturnsAsync(response);
+                usrmock.Setup(m => m.Update(It.IsAny<WorkStatusBo>())).Returns(true);
+                await service.PostStatus(payload);
+            });
+            Assert.Null(error);
+        }
+
+
         private sealed class TheHarness
         {
             public TheHarness()
             {
-                Service = new(MqQueueRepo.Object, MqSearchRepo.Object);
+                Service = new(MqQueueRepo.Object, MqSearchRepo.Object, MqStatusRepo.Object, MqUserRepo.Object);
             }
             public Mock<IQueueWorkRepository> MqQueueRepo { get; set; } = new();
             public Mock<ISearchQueueRepository> MqSearchRepo { get; set; } = new();
+            public Mock<ISearchStatusRepository> MqStatusRepo { get; set; } = new();
+            public Mock<IUserSearchRepository> MqUserRepo { get; set; } = new();
             public QueueStatusService Service { get; }
         }
 
@@ -185,5 +352,42 @@ namespace permissions.api.tests.Services
             .RuleFor(x => x.ExpectedRows, y => y.Random.Int(0, 50000))
             .RuleFor(x => x.CreateDate, y => y.Date.Recent(60))
             .RuleFor(x => x.Payload, y => SamplePayload);
+
+        private static readonly Faker<QueuedRecord> recordfaker =
+            new Faker<QueuedRecord>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Name, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.StartDate, y => y.Date.Recent(30))
+            .RuleFor(x => x.EndDate, y => y.Date.Recent(60))
+            .RuleFor(x => x.ExpectedRows, y => y.Random.Int(0, 50000))
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent(60))
+            .RuleFor(x => x.Payload, y => SamplePayload);
+
+        private static readonly Faker<QueueSearchItem> itemfaker =
+            new Faker<QueueSearchItem>()
+            .RuleFor(x => x.WebId, y => y.Random.Int(0, 100))
+            .RuleFor(x => x.State, y => "TX")
+            .RuleFor(x => x.County, y => y.PickRandom("DENTON,COLLIN".Split(',')))
+            .RuleFor(x => x.StartDate, y => y.Date.Recent(30).ToString("f"))
+            .RuleFor(x => x.EndDate, y => y.Date.Recent(60).ToString("f"));
+
+
+        private static readonly Faker<QueuePersonItem> personfaker =
+            new Faker<QueuePersonItem>()
+            .RuleFor(x => x.Name, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Zip, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Address1, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Address2, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Address3, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.CaseNumber, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.DateFiled, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Court, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.CaseType, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.CaseStyle, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.FirstName, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.LastName, y => y.Random.Guid().ToString())
+            .RuleFor(x => x.Plantiff, y => y.Random.AlphaNumeric(250))
+            .RuleFor(x => x.Status, y => y.Random.Int(1, 20000).ToString());
     }
 }
