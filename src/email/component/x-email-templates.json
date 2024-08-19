@@ -28,5 +28,10 @@
     "name": "Search Payment Completed",
     "description": "Email to user after receiving payment for a record search.",
     "date": "2024-04-30"
+  },
+  {
+    "name": "Search Completed",
+    "description": "Email to user record search is completed.",
+    "date": "2024-08-18"
   }
 ]

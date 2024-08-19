@@ -1,5 +1,10 @@
 [
   {
+    "id": "3.2.4",
+    "description": "Adding search completed template",
+    "date": "2024-08-18"
+  },
+  {
     "id": "3.2.3",
     "description": "Adding password changed template",
     "date": "2024-05-07"
