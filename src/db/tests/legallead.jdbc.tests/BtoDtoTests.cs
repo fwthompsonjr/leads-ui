@@ -63,12 +63,19 @@ namespace legallead.jdbc.tests
         {
             lock (_sync)
             {
-                var type = typeof(BaseDto);
-                return AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p))
-                    .Where(i => !i.IsInterface)
-                    .Where(a => !a.IsAbstract);
+                try
+                {
+                    var type = typeof(BaseDto);
+                    return AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(s => s.GetTypes())
+                        .Where(p => type.IsAssignableFrom(p))
+                        .Where(i => !i.IsInterface)
+                        .Where(a => !a.IsAbstract);
+                }
+                catch (Exception)
+                {
+                    return Enumerable.Empty<Type>();
+                }
             }
         }
         private static readonly object _sync = new();

@@ -33,6 +33,12 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.LastUpdateDt, y => y.Date.Recent(15))
             .RuleFor(x => x.CompletionDate, y => y.Date.Recent(15));
 
+        private static readonly Faker<CustomerDto> customerfaker =
+            new Faker<CustomerDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserName, y => y.Person.UserName)
+            .RuleFor(x => x.Email, y => y.Person.Email);
+
         private static readonly Faker faker = new();
 
         [Fact]
@@ -142,6 +148,52 @@ namespace legallead.jdbc.tests.implementations
             }
             _ = service.Fetch();
             mock.Verify(m => m.QueryAsync<QueueWorkingDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(false, 0)]
+        [InlineData(false, 5)]
+        [InlineData(false, 10)]
+        [InlineData(false, 12)]
+        [InlineData(false, 15)]
+        [InlineData(true, 10)]
+        public void RepoCanGetUserBySearchId(bool hasException, int recordCount)
+        {
+            var request = bofaker.Generate();
+            var exception = faker.System.Exception();
+            var container = new RepoContainer();
+            var response = customerfaker.Generate(recordCount);
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (recordCount == 12) request.Id = string.Empty;
+            if (recordCount == 15) request.Id = "not-guid";
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<CustomerDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<CustomerDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            _ = service.GetUserBySearchId(request.Id);
+            if (recordCount > 10)
+            {
+                mock.Verify(m => m.QueryAsync<CustomerDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()), Times.Never());
+                return;
+            }
+            mock.Verify(m => m.QueryAsync<CustomerDto>(
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
