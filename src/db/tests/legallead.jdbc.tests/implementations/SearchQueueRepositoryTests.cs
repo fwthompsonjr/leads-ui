@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Bogus;
+using Dapper;
 using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
@@ -41,6 +42,60 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()));
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5, true)]
+        public async Task RepoGetQueueItem(int count, bool hasError = false)
+        {
+            int[] noexecute = new [] { 1, 2, 3 };
+            var faker = new Faker();
+            var error = faker.System.Exception();
+            var request = count switch
+            {
+                1 => null,
+                2 => string.Empty,
+                3 => "not-guid",
+                _ => faker.Random.Guid().ToString(),
+            };
+            var results = new List<SearchQueueDto>();
+            for (int i = 0; i < count; i++) { results.Add(new()); }
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (hasError)
+            {
+                mock.Setup(m => m.QueryAsync<SearchQueueDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<SearchQueueDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(results);
+            }
+            _ = await service.GetQueueItem(request);
+            if (noexecute.Contains(count))
+            {
+                mock.Verify(m => m.QueryAsync<SearchQueueDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()), Times.Never());
+            }
+            else
+            {
+                mock.Verify(m => m.QueryAsync<SearchQueueDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+            }
+        }
 
         [Fact]
         public async Task RepoCompleteHappyPath()
