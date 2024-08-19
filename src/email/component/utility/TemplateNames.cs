@@ -10,6 +10,7 @@ namespace legallead.email.utility
         ProfileChanged,
         PermissionChangeRequested,
         PasswordChanged,
+        SearchCompleted
         // end of enumeration
     }
 }

@@ -26,5 +26,9 @@
 	{
 		"isTesting": true,
 		"name":  "PasswordChanged"
-	}
+	},
+	{
+		"name": "SearchCompleted",
+		"isTesting": false
+	},
 ]

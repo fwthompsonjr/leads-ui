@@ -237,6 +237,29 @@ namespace legallead.email.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;h4 style=&quot;color: green&quot; name=&quot;begin-search-requested-heading&quot;&gt;&lt;!-- Template Heading --&gt;&lt;/h4&gt;
+        ///&lt;table name=&quot;begin-search-requested-detail-table&quot; role=&quot;presentation&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;margin-left: 15px; margin-bottom= 15px;&quot; width=&quot;95%&quot;&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width: 25%&quot;&gt;
+        ///			&lt;span&gt;User Name:&lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///		&lt;td style=&quot;width: 75%&quot;&gt;
+        ///			&lt;span name=&quot;begin-search-requested-user-name&quot;&gt; - &lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///	&lt;/tr&gt;
+        ///	&lt;tr&gt;
+        ///		&lt;td style=&quot;width: 25%&quot;&gt;
+        ///			&lt;span&gt;Email:&lt;/span&gt;
+        ///		&lt;/td&gt;
+        ///		&lt;td style=&quot;wi [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string email_template_html_body_search_completed {
+            get {
+                return ResourceManager.GetString("email_template_html_body_search_completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h4 style=&quot;color: green&quot; name=&quot;search-payment-complete-heading&quot;&gt;Payment Received - Thank You&lt;/h4&gt;
         ///&lt;table name=&quot;search-payment-complete-detail-table&quot; role=&quot;presentation&quot; border=&quot;0&quot; cellspacing=&quot;0&quot; style=&quot;margin-left: 15px; margin-bottom= 15px;&quot; width=&quot;95%&quot;&gt;
         ///	&lt;tr&gt;

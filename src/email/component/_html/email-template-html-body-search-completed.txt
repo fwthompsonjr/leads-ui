@@ -29,6 +29,7 @@
 				<tr>
 					<td colspan="4">
 						You recently submitted a record search.<br/>
+						<span style="color: #097969">This records search has been completed.</span><br/>
 						The details of your search request are listed below.
 					</td>
 				</tr>
