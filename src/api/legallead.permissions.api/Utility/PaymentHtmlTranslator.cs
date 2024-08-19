@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;

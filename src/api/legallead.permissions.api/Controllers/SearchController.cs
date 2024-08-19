@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -67,7 +66,7 @@ namespace legallead.permissions.api.Controllers
                 var searches = await infrastructure.GetHeader(Request, null);
                 return Ok(searches);
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Debug.WriteLine(ex);
                 return Ok(Array.Empty<UserSearchQueryModel>());

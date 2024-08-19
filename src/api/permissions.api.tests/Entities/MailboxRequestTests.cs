@@ -3,11 +3,6 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Enumerations;
 using legallead.permissions.api.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Entities
 {
@@ -38,7 +33,7 @@ namespace permissions.api.tests.Entities
         [InlineData(3, true, true, false)]
         [InlineData(4, true, true, false)]
         [InlineData(5, true, true, false)]
-        public void ItemValidationTest(int requestId, 
+        public void ItemValidationTest(int requestId,
             bool hasUser = true,
             bool hasMessage = true,
             bool hasSearchDate = true)
@@ -121,7 +116,7 @@ namespace permissions.api.tests.Entities
                 _ = sut.IsValid(mock.Object, http.Object);
             });
             Assert.Null(problem);
-            
+
         }
 
         private static readonly Faker<MailboxRequest> faker1 =

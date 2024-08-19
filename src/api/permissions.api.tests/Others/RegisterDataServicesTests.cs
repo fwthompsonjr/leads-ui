@@ -93,12 +93,20 @@ namespace permissions.api.tests
         [InlineData(typeof(MailboxController))]
         [InlineData(typeof(IAppSettingService))]
         [InlineData(typeof(SettingsController))]
+        [InlineData(typeof(IQueueNotificationService))]
+        [InlineData(typeof(IQueueStatusService))]
         public void ProviderCanConstructInstance(Type type)
         {
+            var exclusions = new List<Type>
+            {
+                typeof(JsonInitStartupTask),
+                typeof(JdbcInitStartUpTask)
+            };
             var exception = Record.Exception(() =>
             {
                 Assert.NotNull(_serviceProvider);
-                _serviceProvider.GetService(type);
+                var item = _serviceProvider.GetService(type);
+                if (!exclusions.Contains(type)) Assert.NotNull(item);
             });
             Assert.Null(exception);
         }

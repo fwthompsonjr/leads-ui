@@ -1,8 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Services;
-using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace permissions.api.tests.Services
 {
