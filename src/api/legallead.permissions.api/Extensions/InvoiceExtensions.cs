@@ -3,7 +3,6 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Utility;
 using Newtonsoft.Json;
-using Stripe;
 using System.Globalization;
 using System.Text;
 

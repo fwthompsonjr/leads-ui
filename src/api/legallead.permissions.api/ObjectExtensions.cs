@@ -60,6 +60,7 @@ namespace legallead.permissions.api
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPricingRepository, PricingRepository>();
             services.AddScoped<IUserLockStatusRepository, UserLockStatusRepository>();
+            services.AddScoped<ISearchQueueRepository, SearchQueueRepository>();
             services.AddScoped<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
@@ -82,6 +83,7 @@ namespace legallead.permissions.api
             services.AddScoped<IUserProfileHistoryRepository, UserProfileHistoryRepository>();
             services.AddScoped<IUserSearchRepository, UserSearchRepository>();
             services.AddScoped<IAppSettingRepository, AppSettingRepository>();
+            services.AddScoped<IQueueWorkRepository, QueueWorkRepository>();
             services.AddScoped<ICustomerLockInfrastructure, CustomerLockInfrastructure>();
             services.AddScoped<IClientSecretService, ClientSecretService>();
             services.AddScoped<IMailBoxRepository, MailBoxRepository>();
@@ -152,6 +154,7 @@ namespace legallead.permissions.api
             services.AddSingleton<IStartupTask, JsonInitStartupTask>();
             services.AddSingleton<IStartupTask, JdbcInitStartUpTask>();
             services.AddSingleton<LoggingDbServiceProvider>();
+            services.AddScoped<SettingsController>();
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
             services.AddScoped(p =>
@@ -270,6 +273,19 @@ namespace legallead.permissions.api
         public static void RegisterEmailServices(this IServiceCollection services)
         {
             services.Initialize();
+            services.AddScoped<IQueueNotificationService, QueueNotificationService>();
+            services.AddScoped<ISearchStatusRepository, SearchStatusRepository>();
+            services.AddScoped<IQueueStatusService>(s =>
+            {
+                var repo = s.GetRequiredService<IQueueWorkRepository>();
+                var queue = s.GetRequiredService<ISearchQueueRepository>();
+                var notification = s.GetRequiredService<IQueueNotificationService>();
+                var sts = s.GetRequiredService<ISearchStatusRepository>();
+                var usrdb = s.GetRequiredService<IUserSearchRepository>();
+                var wrapper = new MailMessageWrapper(notification);
+                return new QueueStatusService(repo, queue, sts, usrdb, wrapper);
+            });
+            services.AddScoped<QueueController>();
         }
 
         public static T? GetObjectFromHeader<T>(this HttpRequest request, string headerName) where T : class

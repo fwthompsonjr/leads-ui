@@ -17,7 +17,7 @@ namespace legallead.permissions.api.Controllers
         private readonly PaymentStripeOption stripeOptions = payment;
         private readonly ISearchInfrastructure infrastructure = infra;
         private readonly IStripeInfrastructure stripeService = stripe;
-        
+
         [HttpGet("payment-process-type")]
         [ProducesResponseType<PaymentModeResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<PaymentModeResponse>(StatusCodes.Status202Accepted)]
@@ -57,9 +57,10 @@ namespace legallead.permissions.api.Controllers
             var guid = request.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
             var searches = await infrastructure.GetPreview(Request, guid);
-            if (searches == null) {
+            if (searches == null)
+            {
                 await infrastructure.FlagError(guid);
-                return UnprocessableEntity(guid); 
+                return UnprocessableEntity(guid);
             }
             var invoice = await infrastructure.CreateInvoice(user.Id, guid);
             if (invoice == null || !invoice.Any()) return UnprocessableEntity(guid);

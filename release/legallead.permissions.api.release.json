@@ -1,5 +1,9 @@
 [
-	[
+		{
+			"name": "3.2.414.--",
+			"description": "API - expose landings to recieve queue status updates",
+			"date": "2024-08-18 09:00:00"
+		},
 		{
 			"name": "3.2.413.--",
 			"description": "Web - expose variable for http redirects",

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{6DA7ACEE-4207-4FFD-BF1B-CE9DA390C5F2}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\pipeline-build-solutions.ps1 = ..\..\pipeline-build-solutions.ps1
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6414FF76-621E-4208-930A-1968994421B3}"
 EndProject

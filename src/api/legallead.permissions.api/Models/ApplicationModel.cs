@@ -8,10 +8,11 @@
         internal static List<ApplicationModel> GetApplicationsFallback()
         {
             var emptyGuid = Guid.Empty.ToString("D");
-            return new List<ApplicationModel>()
-            {
-                new() { Id = emptyGuid, Name = "legallead.permissions.api" }
-            };
+            return
+            [
+                new() { Id = emptyGuid, Name = "legallead.permissions.api" },
+                new() { Id = emptyGuid, Name = "oxford.leads.data.services" }
+            ];
         }
     }
 }

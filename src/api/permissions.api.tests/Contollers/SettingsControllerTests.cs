@@ -1,9 +1,7 @@
-﻿using legallead.jdbc.entities;
-using legallead.permissions.api.Controllers;
+﻿using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
-using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -58,7 +56,7 @@ namespace permissions.api.tests.Contollers
         {
             var service = new ServiceCollection();
             var appheader = ApplicationModel.GetApplicationsFallback().FirstOrDefault() ?? new();
-            var mqSearch = new Mock<IAppSettingService>(); 
+            var mqSearch = new Mock<IAppSettingService>();
             var serialObj = JsonConvert.SerializeObject(appheader);
             var dictionary = new HeaderDictionary();
             if (hasHeader)
