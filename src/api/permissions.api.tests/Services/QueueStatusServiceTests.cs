@@ -199,6 +199,7 @@ namespace permissions.api.tests.Services
                 var fkr = new Faker();
                 var itm = itemfaker.Generate();
                 var data = personfaker.Generate(rowcount);
+                itm.WebId = webId;
                 var id = identityId switch
                 {
                     1 => string.Empty,
@@ -216,7 +217,6 @@ namespace permissions.api.tests.Services
                     25 => "not serializable",
                     _ => JsonConvert.SerializeObject(data)
                 };
-                itm.WebId = webId;
                 var payload = new QueueCompletionRequest
                 {
                     UniqueId = id,
