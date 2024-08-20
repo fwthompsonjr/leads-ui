@@ -118,6 +118,7 @@ namespace permissions.api.tests.Services
                 var sut = new TheHarness();
                 var service = sut.Service;
                 var mock = sut.MqSearchRepo;
+                payload.Source = "oxford.leads.data.services";
                 mock.Setup(m => m.Start(It.IsAny<SearchDto>())).ReturnsAsync(response);
                 _ = await service.Start(payload);
                 mock.Verify(m => m.Start(It.IsAny<SearchDto>()));
@@ -136,7 +137,8 @@ namespace permissions.api.tests.Services
                 {
                     UniqueId = fkr.Random.Guid().ToString(),
                     MessageId = fkr.Random.Int(0, 6),
-                    StatusId = fkr.Random.Int(0, 2)
+                    StatusId = fkr.Random.Int(0, 2),
+                    Source = "oxford.leads.data.services",
                 };
                 var response = new KeyValuePair<bool, string>(true, "");
                 var sut = new TheHarness();
@@ -219,7 +221,8 @@ namespace permissions.api.tests.Services
                 {
                     UniqueId = id,
                     QueryParameter = parameter,
-                    Data = dataparameter
+                    Data = dataparameter,
+                    Source = "oxford.leads.data.services"
                 };
                 var response = new KeyValuePair<bool, string>(true, "");
                 var sut = new TheHarness();

@@ -2,7 +2,7 @@
 
 namespace legallead.permissions.api.Entities
 {
-    public class QueueUpdateRequest
+    public class QueueUpdateRequest : BaseQueueRequest
     {
         [JsonProperty("Id")]
         public string? Id { get; set; }

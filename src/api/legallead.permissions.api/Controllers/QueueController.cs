@@ -17,9 +17,10 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             var response = _statusSvc.Insert(request);
             message.Message = response.ToJsonString();
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("update")]
@@ -28,9 +29,10 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             var response = (await _statusSvc.Update(request)) ?? new();
             message.Message = response.ToJsonString();
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("fetch")]
@@ -39,13 +41,14 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.BadRequest };
-            if (string.IsNullOrWhiteSpace(request.Name))
+            if (!IsNameValid(request.Name))
             {
-                return new JsonResult(message);
+                message.Message = invalidapplicationmessage;
+                return new JsonResult(message) { StatusCode = 400 };
             }
             var response = await _statusSvc.Fetch();
             message.Message = response.ToJsonString();
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("start")]
@@ -54,9 +57,10 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             var response = await _statusSvc.Start(request);
             message.Message = response.ToJsonString();
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("status")]
@@ -65,8 +69,9 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             await _statusSvc.PostStatus(request);
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("complete")]
@@ -75,8 +80,9 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             await _statusSvc.Complete(request);
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
         }
 
         [HttpPost("finalize")]
@@ -85,8 +91,25 @@ namespace legallead.permissions.api.Controllers
             var applicationCheck = Request.Validate(invalidapplicationmessage);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
             var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (!request.CanExecute()) return InvalidPayloadResult(message);
             await _statusSvc.GenerationComplete(request);
-            return new JsonResult(message);
+            return new JsonResult(message) { StatusCode = 200 };
+        }
+
+
+        private static JsonResult InvalidPayloadResult(QueueRecordResponse response)
+        {
+            response.StatusCode = (int)HttpStatusCode.BadRequest;
+            response.Message = "Invalid action parameter";
+            return new JsonResult(response) { StatusCode = 401 };
+        }
+
+        private static bool IsNameValid(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return false;
+            var names = ApplicationModel.GetApplicationsFallback()
+                .Select(x => x.Name).ToList();
+            return names.Contains(name, StringComparer.Ordinal);
         }
 
         private const string invalidapplicationmessage = "Invalid application identity";

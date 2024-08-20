@@ -57,6 +57,14 @@ namespace legallead.permissions.api.Extensions
             return JsonConvert.SerializeObject(request);
         }
 
+        internal static bool CanExecute(this BaseQueueRequest request)
+        {
+            var name = request.Source;
+            if (string.IsNullOrWhiteSpace(name)) return false;
+            return AppNames.Contains(name);
+        }
+
+
         internal static T? ToInstance<T>(this string? json)
         {
             try
@@ -97,5 +105,13 @@ namespace legallead.permissions.api.Extensions
             };
         }
         private static readonly int[] statuses = [-1, 0, 1, 2];
+
+        private static List<string> AppNames => appNames ??= GetAppNames();
+        private static List<string>? appNames;
+        private static List<string> GetAppNames()
+        {
+            return ApplicationModel.GetApplicationsFallback()
+            .Select(x => x.Name).ToList();
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace legallead.permissions.api.Entities
 {
-    public class QueuedRecord
+    public class QueuedRecord : BaseQueueRequest
     {
         public string? Id { get; set; }
 

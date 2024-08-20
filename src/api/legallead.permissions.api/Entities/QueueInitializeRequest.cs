@@ -2,7 +2,7 @@
 
 namespace legallead.permissions.api.Entities
 {
-    public class QueueInitializeRequest
+    public class QueueInitializeRequest : BaseQueueRequest
     {
         [JsonProperty("MachineName")]
         public string MachineName { get; set; } = string.Empty;
