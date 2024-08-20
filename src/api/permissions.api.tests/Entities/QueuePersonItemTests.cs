@@ -51,6 +51,26 @@ namespace permissions.api.tests.Entities
             Assert.Null(error);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void QueuePersonItemCanValidate(int fieldId)
+        {
+            var error = Record.Exception(() =>
+            {
+                var test = faker.Generate();
+                if (fieldId == 0) test.Name = string.Empty;
+                if (fieldId == 1) test.Zip = string.Empty;
+                if (fieldId == 2) test.Address1 = string.Empty;
+                var expected = fieldId > 2;
+                var actual = test.IsValid;
+                Assert.Equal(expected, actual);
+            });
+            Assert.Null(error);
+        }
+
         private static readonly Faker<QueuePersonItem> faker =
             new Faker<QueuePersonItem>()
             .RuleFor(x => x.Name, y => y.Random.Guid().ToString())

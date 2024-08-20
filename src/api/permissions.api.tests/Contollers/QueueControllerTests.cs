@@ -124,6 +124,46 @@ namespace permissions.api.tests.Contollers
             Assert.Null(error);
         }
 
+        [Theory]
+        [InlineData("initialize")]
+        [InlineData("update")]
+        [InlineData("start")]
+        [InlineData("status")]
+        [InlineData("complete")]
+        [InlineData("finalize")]
+        public async Task ControllerPostNeedsSource(string landing)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var controller = provider.GetRequiredService<QueueController>();
+                var expectedCode = landing switch
+                {
+                    "fetch" => 400,
+                    _ => 401
+                };
+                var action = landing switch
+                {
+                    "initialize" => controller.Initialize(new QueueInitializeRequest()),
+                    "update" => await controller.Update(new QueueUpdateRequest()),
+                    "fetch" => await controller.Fetch(GetRequest()),
+                    "start" => await controller.Start(new QueuedRecord()),
+                    "status" => await controller.Status(new QueueRecordStatusRequest()),
+                    "complete" => await controller.Complete(new QueueRecordStatusRequest()),
+                    "finalize" => await controller.Finalize(new QueueCompletionRequest()),
+                    _ => new StatusCodeResult(500)
+                };
+                if (action is not JsonResult jsonResult)
+                {
+                    Assert.Fail("response is not of correct type.");
+                    return;
+                }
+                Assert.Equal(expectedCode, jsonResult.StatusCode);
+
+            });
+            Assert.Null(error);
+        }
+
         private static ApplicationRequestModel GetRequest()
         {
             return new ApplicationRequestModel { Id = Guid.NewGuid(), Name = "oxford.test.client" };
