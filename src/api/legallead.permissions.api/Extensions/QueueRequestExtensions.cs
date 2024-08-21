@@ -51,9 +51,10 @@ namespace legallead.permissions.api.Extensions
             }
             request.Items.RemoveAll(x =>
             {
-                if (string.IsNullOrEmpty(x.Id)) return false;
-                return Guid.TryParse(x.Id, out var _);
+                if (string.IsNullOrEmpty(x.Id)) return true;
+                return !Guid.TryParse(x.Id, out var _);
             });
+            request.Source = null;
             return JsonConvert.SerializeObject(request);
         }
 
