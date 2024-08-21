@@ -4,6 +4,7 @@ using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 
 namespace permissions.api.tests.Contollers
 {
@@ -17,8 +18,11 @@ namespace permissions.api.tests.Contollers
         [InlineData("status")]
         [InlineData("complete")]
         [InlineData("finalize")]
+        [InlineData("save")]
         public async Task ControllerCanPost(string landing)
         {
+            var persistence = GetPersistence();
+            persistence.Source = applicationSource;
             var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
@@ -37,6 +41,7 @@ namespace permissions.api.tests.Contollers
                     "status" => await controller.Status(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "complete" => await controller.Complete(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.Finalize(new QueueCompletionRequest() { Source = applicationSource }),
+                    "save" => await controller.Save(persistence),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not JsonResult jsonResult)
@@ -59,8 +64,11 @@ namespace permissions.api.tests.Contollers
         [InlineData("status")]
         [InlineData("complete")]
         [InlineData("finalize")]
+        [InlineData("save")]
         public async Task ControllerPostRequiresHeader(string landing)
         {
+            var persistence = GetPersistence();
+            persistence.Source = applicationSource;
             var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
@@ -77,6 +85,7 @@ namespace permissions.api.tests.Contollers
                     "status" => await controller.Status(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "complete" => await controller.Complete(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.Finalize(new QueueCompletionRequest() { Source = applicationSource }),
+                    "save" => await controller.Save(persistence),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not BadRequestObjectResult _)
@@ -131,8 +140,15 @@ namespace permissions.api.tests.Contollers
         [InlineData("status")]
         [InlineData("complete")]
         [InlineData("finalize")]
+        [InlineData("save")]
+        [InlineData("save-invalid")]
+        [InlineData("save-no-id")]
+        [InlineData("save-no-content")]
         public async Task ControllerPostNeedsSource(string landing)
         {
+            var persistence = GetPersistence();
+            if (landing == "save-no-id") persistence.Id = string.Empty;
+            if (landing == "save-no-content") persistence.Content = null;
             var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
@@ -151,6 +167,10 @@ namespace permissions.api.tests.Contollers
                     "status" => await controller.Status(new QueueRecordStatusRequest()),
                     "complete" => await controller.Complete(new QueueRecordStatusRequest()),
                     "finalize" => await controller.Finalize(new QueueCompletionRequest()),
+                    "save" => await controller.Save(GetPersistence()),
+                    "save-invalid" => await controller.Save(new QueuePersistenceRequest()),
+                    "save-no-id" => await controller.Save(persistence),
+                    "save-no-content" => await controller.Save(persistence),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not JsonResult jsonResult)
@@ -167,6 +187,16 @@ namespace permissions.api.tests.Contollers
         private static ApplicationRequestModel GetRequest()
         {
             return new ApplicationRequestModel { Id = Guid.NewGuid(), Name = "oxford.test.client" };
+        }
+        private static QueuePersistenceRequest GetPersistence()
+        {
+            var name = "oxford.test.client";
+            var content = Encoding.UTF8.GetBytes(name);
+            return new QueuePersistenceRequest
+            {
+                Id = Guid.NewGuid().ToString(),
+                Content = content
+            };
         }
         private const string applicationSource = "oxford.leads.data.services";
         private static string GetAppName()

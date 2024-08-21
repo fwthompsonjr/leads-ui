@@ -11,5 +11,6 @@ namespace legallead.permissions.api.Interfaces
         Task Complete(QueueRecordStatusRequest request);
         Task GenerationComplete(QueueCompletionRequest request);
         Task PostStatus(QueueRecordStatusRequest request);
+        Task Content(string id, byte[] bytes);
     }
 }

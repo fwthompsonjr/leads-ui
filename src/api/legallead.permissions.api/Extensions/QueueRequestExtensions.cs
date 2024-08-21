@@ -42,6 +42,14 @@ namespace legallead.permissions.api.Extensions
             return true;
         }
 
+        public static bool IsValid(this QueuePersistenceRequest request)
+        {
+            if (request == null) return false;
+            if (string.IsNullOrEmpty(request.Id)) return false;
+            if (!Guid.TryParse(request.Id, out var _)) return false;
+            if (request.Content == null) return false;
+            return true;
+        }
         public static string Serialize(this QueueInitializeRequest request)
         {
             var fallback = new QueueInitializeRequest { StatusId = -100 };

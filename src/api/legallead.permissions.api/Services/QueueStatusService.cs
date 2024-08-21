@@ -128,6 +128,11 @@ namespace legallead.permissions.api.Services
             _statusDb.Update(bo);
         }
 
+        public async Task Content(string id, byte[] bytes)
+        {
+            await _queue.Content(id, bytes);
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
         private async Task TrySendCompletionEmail(QueueUpdateRequest request, QueueWorkingBo? response)
         {
@@ -157,6 +162,7 @@ namespace legallead.permissions.api.Services
                 // action on email send failure
             }
         }
+
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
         private static QueuedRecord? GetModel(SearchQueueDto? query)
@@ -190,8 +196,9 @@ namespace legallead.permissions.api.Services
 
         }
 
-        private static readonly List<string> messages = new()
-        {
+
+        private static readonly List<string> messages =
+        [
             $"{0}: process beginning: {1}", // 0
             $"{0}: parameter evaluation: {1}", // 1
             $"{0}: parameter conversion to search request: {1}", // 2
@@ -199,7 +206,7 @@ namespace legallead.permissions.api.Services
             $"{0}: excel content conversion: {1}", // 4
             $"{0}: excel content serialization: {1}", // 5
             $"{0}: process complete: {1}", // 6
-        };
+        ];
 
         internal static readonly string[] statuses = ["begin", "complete", "failed"];
 

@@ -85,6 +85,16 @@ namespace legallead.permissions.api.Controllers
             await _statusSvc.Complete(request);
             return new JsonResult(message) { StatusCode = 200 };
         }
+        [HttpPost("save")]
+        public async Task<IActionResult> Save(QueuePersistenceRequest request)
+        {
+            var applicationCheck = Request.Validate(invalidapplicationmessage);
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
+            var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (request.Content == null || !request.IsValid() || !request.CanExecute()) return InvalidPayloadResult(message);
+            await _statusSvc.Content(request.Id, request.Content);
+            return new JsonResult(message) { StatusCode = 200 };
+        }
 
         [HttpPost("finalize")]
         public async Task<IActionResult> Finalize(QueueCompletionRequest request)

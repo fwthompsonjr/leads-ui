@@ -4,7 +4,7 @@
 		"name": "ll-authorizations",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21414270",
-		"_collection_link": "https://web.postman.co/workspace/TDS-Queue-API~eb03d2bf-7058-49a7-87a6-d7aa710d9602/collection/21414270-b0cc1d79-546d-4190-ba0e-ee8646b9e169?action=share&source=collection_link&creator=21414270"
+		"_collection_link": "https://winter-star-764782.postman.co/workspace/TDS-Queue-API~eb03d2bf-7058-49a7-87a6-d7aa710d9602/collection/21414270-b0cc1d79-546d-4190-ba0e-ee8646b9e169?action=share&source=collection_link&creator=21414270"
 	},
 	"item": [
 		{
@@ -4183,6 +4183,74 @@
 							"response": []
 						},
 						{
+							"name": "Save",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"Content\": \"b3hmb3JkLnRlc3QuY2xpZW50\",\r\n\t\"Source\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_SAVE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_SAVE_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Status",
 							"event": [
 								{
@@ -4736,6 +4804,11 @@
 		{
 			"key": "QUEUE_SAMPLE_SEARCH_INDEX",
 			"value": "94f43cec-5b50-11ef-99ce-0af7a01f52e9",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_SAVE_URL",
+			"value": "api/queue/save",
 			"type": "string"
 		}
 	]
