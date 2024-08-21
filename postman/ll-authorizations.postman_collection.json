@@ -4,7 +4,7 @@
 		"name": "ll-authorizations",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21414270",
-		"_collection_link": "https://winter-star-764782.postman.co/workspace/TDS-Queue-API~eb03d2bf-7058-49a7-87a6-d7aa710d9602/collection/21414270-b0cc1d79-546d-4190-ba0e-ee8646b9e169?action=share&source=collection_link&creator=21414270"
+		"_collection_link": "https://web.postman.co/workspace/TDS-Queue-API~eb03d2bf-7058-49a7-87a6-d7aa710d9602/collection/21414270-b0cc1d79-546d-4190-ba0e-ee8646b9e169?action=share&source=collection_link&creator=21414270"
 	},
 	"item": [
 		{
@@ -3716,480 +3716,678 @@
 			"name": "queue",
 			"item": [
 				{
-					"name": "Initialize",
-					"event": [
+					"name": "readiness",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
+							"name": "Fetch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{{app_identity}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_FETCH_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_FETCH_URL}}"
+									]
+								}
+							},
+							"response": []
 						},
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
+							"name": "Initialize",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"MachineName\": \"My Machine\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": -1,\r\n\t\"Source\": \"{{QUEUE_SOURCE_NAME}}\",\r\n\t\"Items\" : [\r\n        { \"Id\": \"94f43cec-5b50-11ef-99ce-0af7a01f52e9\" },\r\n        { \"Id\": \"empty\"}\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_INITIALIZE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_INITIALIZE_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"{{QUEUE_SAMPLE_INDEX}}\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": 2,\r\n\t\"Source\": \"{{QUEUE_SOURCE_NAME}}\",\r\n\t\"SearchId\" : \"{{QUEUE_SAMPLE_SEARCH_INDEX}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_UPDATE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_UPDATE_URL}}"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"MachineName\": \"My Machine\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": -1,\r\n\t\"Source\": \"test.api.testing\",\r\n\t\"Items\" : []\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_INITIALIZE_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_INITIALIZE_URL}}"
-							]
-						}
-					},
-					"response": []
+					"description": "folder consists of api calls to queue api in order to test the readiness of the endpoints"
 				},
 				{
-					"name": "Update",
-					"event": [
+					"name": "liveliness",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
+							"name": "Initialize",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"MachineName\": \"My Machine\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": -1,\r\n\t\"Source\": \"test.api.testing\",\r\n\t\"Items\" : []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_INITIALIZE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_INITIALIZE_URL}}"
+									]
+								}
+							},
+							"response": []
 						},
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
 								],
-								"type": "text/javascript",
-								"packages": {}
-							}
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"000000\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": -1,\r\n\t\"Source\": \"test.api.testing\",\r\n\t\"SearchId\" : \"000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_UPDATE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_UPDATE_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Fetch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid application identity\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"Name\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_FETCH_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_FETCH_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Start",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"Name\": \"Queue Record\",\r\n\t\"UserId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"StartDate\": \"2024-04-23T00:00:00.000Z\",\r\n\t\"EndDate\": \"2024-04-23T00:00:00.000Z\",\r\n\t\"ExpectedRows\": 1,\r\n\t\"Source\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_START_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_START_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"MessageId\": 1,\r\n\t\"StatusId\": 1,\r\n\t\"Source\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_STATUS_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_STATUS_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Complete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"QueryParameter\": \"1\",\r\n\t\"Data\": \"[]\",\r\n\t\"Source\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_COMPLETE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_COMPLETE_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Finalize",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 400, 401 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});\r",
+											"pm.test(\"Message is properly formatted\", function () {\r",
+											"    var body = pm.response.json();\r",
+											"    pm.expect(body.statusCode).to.equal(400);\r",
+											"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"QueryParameter\": \"1\",\r\n\t\"Data\": \"[]\",\r\n\t\"Source\": \"test.application\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_FINALIZE_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_FINALIZE_URL}}"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"Id\": \"000000\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": -1,\r\n\t\"Source\": \"test.api.testing\",\r\n\t\"SearchId\" : \"000\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_UPDATE_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_UPDATE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Fetch",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid application identity\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"Id\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"Name\": \"test.application\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_FETCH_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_FETCH_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Start",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"Id\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"Name\": \"Queue Record\",\r\n\t\"UserId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"StartDate\": \"2024-04-23T00:00:00.000Z\",\r\n\t\"EndDate\": \"2024-04-23T00:00:00.000Z\",\r\n\t\"ExpectedRows\": 1,\r\n\t\"Source\": \"test.application\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_START_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_START_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Status",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"MessageId\": 1,\r\n\t\"StatusId\": 1,\r\n\t\"Source\": \"test.application\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_STATUS_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_STATUS_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Complete",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"QueryParameter\": \"1\",\r\n\t\"Data\": \"[]\",\r\n\t\"Source\": \"test.application\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_COMPLETE_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_COMPLETE_URL}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Finalize",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is an acceptable value\", function () {\r",
-									"    var acceptable = [ 400, 401 ];\r",
-									"    var code = pm.response.code;\r",
-									"    pm.expect(acceptable).to.include(code);\r",
-									"});\r",
-									"pm.test(\"Message is properly formatted\", function () {\r",
-									"    var body = pm.response.json();\r",
-									"    pm.expect(body.statusCode).to.equal(400);\r",
-									"    pm.expect(body.message).to.equal(\"Invalid action parameter\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "APP_IDENTITY",
-								"value": "{{app_identity}}",
-								"description": "App service header",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n\t\"UniqueId\": \"00000000-0000-0000-0000-000000000000\",\r\n\t\"QueryParameter\": \"1\",\r\n\t\"Data\": \"[]\",\r\n\t\"Source\": \"test.application\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{app_url}}/{{QUEUE_FINALIZE_URL}}",
-							"host": [
-								"{{app_url}}"
-							],
-							"path": [
-								"{{QUEUE_FINALIZE_URL}}"
-							]
-						}
-					},
-					"response": []
+					"description": "folder consists of api calls to queue api in order to test the liveliness of the endpoints"
 				}
 			]
 		}
@@ -4523,6 +4721,21 @@
 		{
 			"key": "QUEUE_FINALIZE_URL",
 			"value": "api/queue/finalize",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_SOURCE_NAME",
+			"value": "legallead.permissions.api",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_SAMPLE_INDEX",
+			"value": "4e33571e-5fc5-11ef-99ce-0af7a01f52e9",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_SAMPLE_SEARCH_INDEX",
+			"value": "94f43cec-5b50-11ef-99ce-0af7a01f52e9",
 			"type": "string"
 		}
 	]

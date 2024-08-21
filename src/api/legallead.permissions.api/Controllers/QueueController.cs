@@ -48,6 +48,7 @@ namespace legallead.permissions.api.Controllers
             }
             var response = await _statusSvc.Fetch();
             message.Message = response.ToJsonString();
+            message.StatusCode = (int)HttpStatusCode.OK;
             return new JsonResult(message) { StatusCode = 200 };
         }
 

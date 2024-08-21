@@ -1,7 +1,10 @@
-﻿namespace legallead.permissions.api.Entities
+﻿using Newtonsoft.Json;
+
+namespace legallead.permissions.api.Entities
 {
     public class BaseQueueRequest
     {
-        public string Source { get; set; } = string.Empty;
+        [JsonProperty("Source", NullValueHandling = NullValueHandling.Ignore)]
+        public string? Source { get; set; }
     }
 }

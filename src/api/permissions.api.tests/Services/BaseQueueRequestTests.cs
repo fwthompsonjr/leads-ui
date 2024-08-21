@@ -16,7 +16,7 @@ namespace permissions.api.tests.Services
             Assert.NotNull(instance);
             Assert.IsAssignableFrom<BaseQueueRequest>(instance);
             if (instance is not BaseQueueRequest request) return;
-            Assert.Equal("", request.Source);
+            Assert.True(string.IsNullOrEmpty(request.Source));
             request.Source = "changed";
         }
     }

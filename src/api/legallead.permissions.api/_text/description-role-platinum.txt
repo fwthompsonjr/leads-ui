@@ -29,7 +29,8 @@
         Discounts:
     </p>
     <p>
-        On top pf your current pricing, you are eligible to purchase State and/or County level subscriptions
+        On top pf your current pricing, 
+        you are eligible to purchase State and/or County level subscriptions!
     </p>
     <ul>
         <li>State Discount - 15% discount applied to eligible records</li>
