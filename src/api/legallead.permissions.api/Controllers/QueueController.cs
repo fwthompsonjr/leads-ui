@@ -5,6 +5,9 @@ using System.Net;
 
 namespace legallead.permissions.api.Controllers
 {
+    /// <summary>
+    /// Supports messaging operations associated to record search generation processes
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class QueueController(IQueueStatusService statusService) : ControllerBase
