@@ -97,8 +97,7 @@ namespace legallead.permissions.api.Services
             if (string.IsNullOrWhiteSpace(uniqueId) ||
                 parameter == null ||
                 list == null ||
-                list.Count == 0 ||
-                parameter.WebId != 30)
+                list.Count == 0)
             {
                 await _queue.Complete(uniqueId);
                 return;
