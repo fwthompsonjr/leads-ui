@@ -92,7 +92,7 @@ namespace legallead.records.search.DriverFactory
                     var environmentDir = Environment.GetEnvironmentVariable("HOME");
                     if (string.IsNullOrEmpty(environmentDir) ||
                         string.IsNullOrEmpty(DriverDirectory) ||
-                        string.IsNullOrEmpty(BinaryFile)) { return false; }
+                        string.IsNullOrEmpty(BinaryFile)) { return null; }
 
                     var downloadDir = Path.Combine(environmentDir, "download");
                     return GetDriver(1, downloadDir);

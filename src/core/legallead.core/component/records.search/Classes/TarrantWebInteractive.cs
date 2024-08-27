@@ -644,11 +644,12 @@ namespace legallead.records.search.Classes
 
         private static string GetFallbackContent(string fileName)
         {
+            StringComparison oic = StringComparison.OrdinalIgnoreCase;
             var sbb = new StringBuilder();
             const char tilde = '~';
             const char qte = '"';
             if (string.IsNullOrEmpty(fileName)) return string.Empty;
-            if (fileName.Equals("tarrantCourtSearchDropDown"))
+            if (fileName.Equals("tarrantCourtSearchDropDown", oic))
             {
                 // tarrantCourtSearchDropDown.json
                 sbb.AppendLine("{");
@@ -678,7 +679,7 @@ namespace legallead.records.search.Classes
                 sbb.AppendLine("	]");
                 sbb.AppendLine("}");
             }
-            if (fileName.Equals("tarrantCountyMapping_1"))
+            if (fileName.Equals("tarrantCountyMapping_1", oic))
             {
                 sbb.AppendLine("{");
                 sbb.AppendLine("  ~steps~: [");
@@ -802,7 +803,7 @@ namespace legallead.records.search.Classes
                 sbb.AppendLine("  ]");
                 sbb.AppendLine("}");
             }
-            if (fileName.Equals("tarrantCountyMapping_2"))
+            if (fileName.Equals("tarrantCountyMapping_2", oic))
             {
                 // tarrantCountyMapping_2
                 sbb.AppendLine("{");
@@ -923,6 +924,217 @@ namespace legallead.records.search.Classes
                 sbb.AppendLine("        ~find~: ~xpath~,");
                 sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
                 sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("collinCountyMapping_1", oic))
+            {
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~steps~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~navigate~,");
+                sbb.AppendLine("      ~displayName~: ~open-website-base-uri~,");
+                sbb.AppendLine("      ~wait~: 1200,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~page~,");
+                sbb.AppendLine("        ~query~: ~https://cijspub.co.collin.tx.us/SecurePA/login.aspx~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~login~,");
+                sbb.AppendLine("      ~displayName~: ~login-to-website~,");
+                sbb.AppendLine("      ~expectedValue~: ~collinCountyUserMap~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#UserName | #Password~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~login-collin-county~,");
+                sbb.AppendLine("      ~displayName~: ~login-submit~,");
+                sbb.AppendLine("      ~expectedValue~: ~collinCountyUserMap~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#UserName | #Password~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-select-value~,");
+                sbb.AppendLine("      ~displayName~: ~sbxControlID2~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#sbxControlID2~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~login-submit~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~input[type='submit']~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~search-type-hyperlink~,");
+                sbb.AppendLine("      ~expectedValue~: ~1~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#tobesetdynamically~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~date-filed-option~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiled~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-status-option~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#OpenOption~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~startDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnAfter~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~set-text~,");
+                sbb.AppendLine("      ~displayName~: ~endDate~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#DateFiledOnBefore~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~click~,");
+                sbb.AppendLine("      ~displayName~: ~case-type-search~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~break-point-ignore~,");
+                sbb.AppendLine("      ~displayName~: ~submit-button~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~css~,");
+                sbb.AppendLine("        ~query~: ~#SearchSubmit~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-record-count~,");
+                sbb.AppendLine("      ~displayName~: ~record-count~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[3]/tbody/tr[1]/td[2]/b~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~actionName~: ~get-table-html~,");
+                sbb.AppendLine("      ~displayName~: ~get-case-data-table~,");
+                sbb.AppendLine("      ~locator~: {");
+                sbb.AppendLine("        ~find~: ~xpath~,");
+                sbb.AppendLine("        ~query~: ~/html/body/table[4]~");
+                sbb.AppendLine("      }");
+                sbb.AppendLine("    }");
+                sbb.AppendLine("  ]");
+                sbb.AppendLine("}");
+            }
+            if (fileName.Equals("collinCountyCaseType", oic))
+            {
+                sbb.AppendLine("{");
+                sbb.AppendLine("  ~dropDowns~: [");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 0,");
+                sbb.AppendLine("      ~name~: ~criminal courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~criminal case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption1 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 1,");
+                sbb.AppendLine("          ~name~: ~probate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption2 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 2,");
+                sbb.AppendLine("          ~name~: ~magistrate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption3 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 3,");
+                sbb.AppendLine("          ~name~: ~civil and family case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption4 > a~");
+                sbb.AppendLine("        },");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 4,");
+                sbb.AppendLine("          ~name~: ~justice of the peace case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption5 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 1,");
+                sbb.AppendLine("      ~name~: ~probate courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~probate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption2 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 2,");
+                sbb.AppendLine("      ~name~: ~magistrate courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~magistrate case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption3 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 3,");
+                sbb.AppendLine("      ~name~: ~civil and family courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~civil and family case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption4 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
+                sbb.AppendLine("    },");
+                sbb.AppendLine("    {");
+                sbb.AppendLine("      ~id~: 4,");
+                sbb.AppendLine("      ~name~: ~justice courts~,");
+                sbb.AppendLine("      ~query~: ~#sbxControlID2~,");
+                sbb.AppendLine("      ~options~: [");
+                sbb.AppendLine("        {");
+                sbb.AppendLine("          ~id~: 0,");
+                sbb.AppendLine("          ~name~: ~justice of the peace case records~,");
+                sbb.AppendLine("          ~query~: ~#divOption5 > a~");
+                sbb.AppendLine("        }");
+                sbb.AppendLine("      ]");
                 sbb.AppendLine("    }");
                 sbb.AppendLine("  ]");
                 sbb.AppendLine("}");
