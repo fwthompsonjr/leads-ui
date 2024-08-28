@@ -91,12 +91,12 @@ namespace legallead.records.search.DriverFactory
                 {
                     var environmentDir = Environment.GetEnvironmentVariable("HOME");
                     var binaryFile = GetBinaryFileName();
+                    var driverDir = GetDriverDirectoryName();
                     if (string.IsNullOrEmpty(environmentDir) ||
-                        string.IsNullOrEmpty(DriverDirectory) ||
+                        string.IsNullOrEmpty(driverDir) ||
                         string.IsNullOrEmpty(binaryFile)) { return null; }
 
-                    var downloadDir = Path.Combine(environmentDir, "download");
-                    return GetDriver(1, downloadDir);
+                    return GetDriver(1);
                 }
                 catch (Exception ex)
                 {
@@ -125,20 +125,18 @@ namespace legallead.records.search.DriverFactory
                 profile.UnhandledPromptBehavior = UnhandledPromptBehavior.Accept;
                 return profile;
             }
-            private static FirefoxDriver GetDriver(int mode, string downloadDir)
+            private static FirefoxDriver GetDriver(int mode)
             {
-                var options = GetOptions(mode, downloadDir);
+                var options = GetOptions(mode, GetDriverDirectoryName());
                 var driver = mode switch
                 {
-                    0 => new FirefoxDriver(DriverDirectory, options),
+                    0 => new FirefoxDriver(GetDriverDirectoryName(), options),
                     1 => new FirefoxDriver(options),
                     _ => new FirefoxDriver()
                 };
                 return driver;
             }
 
-            private static string DriverDirectory => driverDirectory ??= GetDriverDirectoryName();
-            private static string? driverDirectory;
             private static string GetDriverDirectoryName()
             {
                 var environmentDir = Environment.GetEnvironmentVariable("HOME");
