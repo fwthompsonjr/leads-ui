@@ -90,9 +90,10 @@ namespace legallead.records.search.DriverFactory
                 try
                 {
                     var environmentDir = Environment.GetEnvironmentVariable("HOME");
+                    var binaryFile = GetBinaryFileName();
                     if (string.IsNullOrEmpty(environmentDir) ||
                         string.IsNullOrEmpty(DriverDirectory) ||
-                        string.IsNullOrEmpty(BinaryFile)) { return null; }
+                        string.IsNullOrEmpty(binaryFile)) { return null; }
 
                     var downloadDir = Path.Combine(environmentDir, "download");
                     return GetDriver(1, downloadDir);
@@ -110,7 +111,8 @@ namespace legallead.records.search.DriverFactory
                 var profile = new FirefoxOptions();
                 if (mode == 0)
                 {
-                    profile.BrowserExecutableLocation = BinaryFile;
+                    var binaryFile = GetBinaryFileName();
+                    profile.BrowserExecutableLocation = binaryFile;
                 }
 
                 profile.AddArguments("-headless");
@@ -146,10 +148,6 @@ namespace legallead.records.search.DriverFactory
                 return geckoDir;
             }
 
-
-
-            private static string BinaryFile => binaryFile ??= GetBinaryFileName();
-            private static string? binaryFile;
             private static string GetBinaryFileName()
             {
                 var environmentDir = Environment.GetEnvironmentVariable("HOME");
