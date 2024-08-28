@@ -706,22 +706,6 @@ namespace legallead.records.search.Classes
                 settingFile.Parameters.Name.Replace(" ", "").ToLower(CultureInfo.CurrentCulture));
             string? execName = new Uri(Assembly.GetExecutingAssembly().Location).AbsolutePath;
             execName = Path.GetDirectoryName(execName);
-            string targetPath = new Uri(string.Format(
-                CultureInfo.CurrentCulture,
-                @"{0}\xml\", execName)).AbsolutePath;
-            if (!Directory.Exists(targetPath))
-            {
-                Directory.CreateDirectory(targetPath);
-            }
-
-            targetPath = string.Format(
-                CultureInfo.CurrentCulture,
-                @"{0}\data\", targetPath);
-            if (!Directory.Exists(targetPath))
-            {
-                Directory.CreateDirectory(targetPath);
-            }
-
             string targetFile = new Uri(string.Format(
                 CultureInfo.CurrentCulture,
                 @"{0}\xml\data\{1}", execName, fileName)).AbsolutePath;
