@@ -89,7 +89,7 @@ namespace legallead.records.search.DriverFactory
             {
                 try
                 {
-                    var environmentDir = Environment.GetEnvironmentVariable("HOME");
+                    var environmentDir = TheEnvironment.GetHomeFolder();
                     var binaryFile = GetBinaryFileName();
                     var driverDir = GetDriverDirectoryName();
                     if (string.IsNullOrEmpty(environmentDir) ||
@@ -139,7 +139,7 @@ namespace legallead.records.search.DriverFactory
 
             private static string GetDriverDirectoryName()
             {
-                var environmentDir = Environment.GetEnvironmentVariable("HOME");
+                var environmentDir = TheEnvironment.GetHomeFolder();
                 if (string.IsNullOrEmpty(environmentDir)) { return string.Empty; }
                 var destinationDir = Path.Combine(environmentDir, "util");
                 var geckoDir = Path.Combine(destinationDir, "gecko");
@@ -148,7 +148,7 @@ namespace legallead.records.search.DriverFactory
 
             private static string GetBinaryFileName()
             {
-                var environmentDir = Environment.GetEnvironmentVariable("HOME");
+                var environmentDir = TheEnvironment.GetHomeFolder();
                 if (string.IsNullOrEmpty(environmentDir)) { return string.Empty; }
                 var firefoxDir = Path.Combine(environmentDir, "firefox");
                 var subfolders = 0;
