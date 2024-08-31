@@ -37,6 +37,8 @@ namespace legallead.records.search.DriverFactory
                 var isWindows = IsWindows();
                 if (!isWindows) return GetLinuxDriver();
                 var profile = new FirefoxOptions();
+                profile.AddArguments("--headless");
+                profile.AddAdditionalCapability("video", "True", true);
                 profile.SetPreference("browser.safebrowsing.enabled", true);
                 profile.SetPreference("browser.safebrowsing.malware.enabled", true);
                 profile.UnhandledPromptBehavior = UnhandledPromptBehavior.Accept;
