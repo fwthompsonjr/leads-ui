@@ -165,7 +165,10 @@ namespace legallead.records.search.Classes
                     closeTable);
                 }
             }
-            Document.Save(FileName);
+            // this should save document to resource service
+            var html = Document.OuterXml;
+            var expiration = TimeSpan.FromMinutes(15);
+            ResourceFileService.AddOrUpdate(FileName, html, expiration);
         }
 
         private static void SetChildNodeText(XmlNode? node, string text)
