@@ -109,6 +109,8 @@ namespace legallead.records.search.DriverFactory
 
             private static FirefoxOptions GetOptions(int mode, string downloadDir)
             {
+                var locations = _knownPaths.FindAll(x => Directory.Exists(x));
+                locations.ForEach(name => AppendToPath(name));
 
                 var profile = new FirefoxOptions();
                 if (mode == 0)
@@ -163,6 +165,29 @@ namespace legallead.records.search.DriverFactory
                 }
                 return firefoxFile;
             }
+
+
+            private static void AppendToPath(string? keyValue)
+            {
+                const char colon = ':';
+                const char semicolon = ';';
+                const string name = "PATH";
+                if (string.IsNullOrEmpty(keyValue)) return;
+                var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+                var separator = isWindows ? semicolon : colon;
+                var scope = EnvironmentVariableTarget.User;
+                var oldValue = Environment.GetEnvironmentVariable(name, scope) ?? string.Empty;
+                var items = oldValue.Split(separator).ToList();
+                if (items.Contains(keyValue)) return;
+                items.Add(keyValue);
+                var newValue = string.Join(separator, items);
+                Environment.SetEnvironmentVariable(name, newValue, scope);
+            }
+            private static readonly List<string> _knownPaths = new() {
+                "/var/app/current",
+                "/var/app/current/geckodriver",
+                "/home/webapp/.local/share"
+            };
         }
 
     }
