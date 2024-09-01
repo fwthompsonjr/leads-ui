@@ -5,6 +5,7 @@ using legallead.records.search.Models;
 using legallead.records.search.Web;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Xml;
 
@@ -437,7 +438,9 @@ namespace legallead.records.search.Classes
             {
                 return;
             } ((XmlCDataSection)ndeCase.ChildNodes[0]!).Data = caseData;
-            doc.Save(fileName);
+            var html = doc.OuterXml;
+            var expiration = TimeSpan.FromMinutes(15);
+            ResourceFileService.AddOrUpdate(fileName, html, expiration);
         }
 
         private static List<HLinkDataRow> LoadFromHtml(string caseData)
