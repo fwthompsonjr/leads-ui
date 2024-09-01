@@ -109,16 +109,18 @@ namespace legallead.records.search.DriverFactory
 
             private static FirefoxOptions GetOptions(int mode, string downloadDir)
             {
+                var sourceDir = _knownPaths[1];
+                var targetDir = _knownPaths[3];
+                LinuxConfiguration.Copy(sourceDir, targetDir);
                 var locations = _knownPaths.FindAll(x => Directory.Exists(x));
                 locations.ForEach(name => AppendToPath(name));
-
                 var profile = new FirefoxOptions();
                 if (mode == 0)
                 {
                     var binaryFile = GetBinaryFileName();
                     profile.BrowserExecutableLocation = binaryFile;
                 }
-
+                
                 profile.AddArguments("-headless");
                 profile.AddArguments("--headless");
                 profile.AddAdditionalCapability("platform", "LINUX", true);
@@ -131,11 +133,12 @@ namespace legallead.records.search.DriverFactory
             }
             private static FirefoxDriver GetDriver(int mode)
             {
+                var service = FirefoxDriverService.CreateDefaultService(_knownPaths[3], "geckodriver");
                 var options = GetOptions(mode, GetDriverDirectoryName());
                 var driver = mode switch
                 {
                     0 => new FirefoxDriver(GetDriverDirectoryName(), options),
-                    1 => new FirefoxDriver(options),
+                    1 => new FirefoxDriver(service, options),
                     _ => new FirefoxDriver()
                 };
                 return driver;
@@ -186,7 +189,8 @@ namespace legallead.records.search.DriverFactory
             private static readonly List<string> _knownPaths = new() {
                 "/var/app/current",
                 "/var/app/current/geckodriver",
-                "/home/webapp/.local/share"
+                "/home/webapp/.local/share",
+                "/home/webapp/.local/share/geckodriver"
             };
         }
 
