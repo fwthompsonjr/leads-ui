@@ -13,8 +13,6 @@ on:
       - 'src/db/**'
       - 'src/logging/**'
       - '!src/api/**'
-      - '!src/presentation/legallead.installer/**'
-      - '!src/presentation/legallead.installer.tests/**'
       - '!src/email/**'
 env:
     FAILED_TEST_COUNT: "0"
