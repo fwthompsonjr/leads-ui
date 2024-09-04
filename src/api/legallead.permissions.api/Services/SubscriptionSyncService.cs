@@ -40,7 +40,7 @@ namespace legallead.permissions.api.Services
 
         private async Task ProcessSubscriptionsAsync(List<SubscriptionDetailBo>? items, CancellationToken stoppingToken)
         {
-            if (items == null || !items.Any()) return;
+            if (items == null || items.Count == 0) return;
             var customers = items
                 .GroupBy(x => x.CustomerId)
                 .Select(s =>
@@ -85,7 +85,7 @@ namespace legallead.permissions.api.Services
                 var activeId = activeSubscription.ExternalId;
                 var remotes = Find(subscriptions, subscriptionType);
                 // if the item reported from db as active subscription does not exist... exit without taking action
-                if (!remotes.Any() || !remotes.Exists(x => x.ExternalId.Equals(activeId, StringComparison.OrdinalIgnoreCase))) continue;
+                if (remotes.Count == 0 || !remotes.Exists(x => x.ExternalId.Equals(activeId, StringComparison.OrdinalIgnoreCase))) continue;
                 // find any active subscriptions in remote server that should be cancelled
                 var staleItems = remotes.FindAll(x => !x.ExternalId.Equals(activeSubscription.ExternalId, StringComparison.OrdinalIgnoreCase));
                 staleItems.ForEach(r =>

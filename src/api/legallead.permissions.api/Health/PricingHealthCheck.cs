@@ -19,7 +19,7 @@ namespace legallead.permissions.api.Health
                     return HealthCheckResult.Unhealthy(description: $"{ClassContextName} : IPricingRepository is null");
                 }
                 var items = await _pricingInfrastructure.GetPricingTemplates();
-                if (items == null || !items.Any()) return HealthCheckResult.Degraded(description: $"{ClassContextName} : GetPricingTemplates returns no items");
+                if (items == null || items.Count == 0) return HealthCheckResult.Degraded(description: $"{ClassContextName} : GetPricingTemplates returns no items");
                 var count = items.Count(x => x.IsActive.GetValueOrDefault());
                 var mapped = PricingLookupService.PricingCodes.Count;
                 if (mapped != count) return HealthCheckResult.Degraded(description: $"{ClassContextName} : GetPricingTemplates item mismatch. Expected {count}, Actual {mapped}");

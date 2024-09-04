@@ -205,7 +205,7 @@ namespace legallead.permissions.api.Utility
             var pricing = PricingLookupService.PricingCodes.FindAll(x =>
                 (x.KeyName ?? "").Contains(level, StringComparison.OrdinalIgnoreCase) &&
                 x.IsActive.GetValueOrDefault());
-            if (pricing == null || !pricing.Any()) { return discounts; }
+            if (pricing == null || pricing.Count == 0) { return discounts; }
             var choices = discounts.Choices.Where(w => w.IsSelected).ToList();
             choices.ForEach(c =>
             {

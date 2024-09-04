@@ -47,7 +47,7 @@ namespace legallead.permissions.api.Services
         private async Task SynchronizePricingAsync(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
             var names = items.Select(x => x.KeyName).Distinct().ToList();
-            if (!names.Any()) { return; }
+            if (names.Count == 0) { return; }
 
             await Task.Run(() =>
             {
