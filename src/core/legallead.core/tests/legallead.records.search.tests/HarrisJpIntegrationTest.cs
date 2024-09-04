@@ -1,4 +1,5 @@
 ﻿using legallead.records.search.Classes;
+using legallead.records.search.Dto;
 using legallead.records.search.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
@@ -27,9 +28,30 @@ namespace legallead.records.search.tests.Web
 
         [TestMethod]
         [TestCategory("harris.jp.county.actions")]
+        public void CanGetNavigationSteps()
+        {
+            var interactive = GetHarrisJpInteractive();
+            var steps = interactive.GetDto();
+            Assert.IsNotNull(steps);
+            Assert.IsNotNull(steps.Steps);
+            Assert.AreEqual(9, steps.Steps.Count);
+        }
+
+        [TestMethod]
+        [TestCategory("harris.jp.county.actions")]
         public void CanGetFromJsonInteractive()
         {
             if (!Debugger.IsAttached) return;
+            var interactive = GetHarrisJpInteractive();
+            var result = interactive.Fetch();
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.PeopleList);
+            Assert.IsTrue(result.PeopleList.Any());
+        }
+
+        private static MockHarrisJpWeb GetHarrisJpInteractive()
+        {
+
             DayOfWeek[] weekends = new[] { DayOfWeek.Sunday, DayOfWeek.Saturday };
             var dte = DateTime.Now.Date.AddDays(-4);
             while (weekends.Contains(dte.DayOfWeek))
@@ -43,12 +65,9 @@ namespace legallead.records.search.tests.Web
                 new () { Name = "caseStatusIndex", Value = "0" }
             };
             custom.ForEach(x => { AddOrUpdateKey(webParameter.Keys, x); });
-            var interactive = new HarrisJpInteractive(webParameter);
-            var result = interactive.Fetch();
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.PeopleList);
-            Assert.IsTrue(result.PeopleList.Any());
+            return new MockHarrisJpWeb(webParameter);
         }
+
         private static void AddOrUpdateKey(List<WebNavigationKey> list, WebNavigationKey model)
         {
             var found = list.Find(x => x.Name.Equals(model.Name));
@@ -58,6 +77,17 @@ namespace legallead.records.search.tests.Web
                 return;
             }
             found.Value = model.Value;
+        }
+
+        private sealed class MockHarrisJpWeb : HarrisJpInteractive
+        {
+            public MockHarrisJpWeb(WebNavigationParameter parameters) : base(parameters)
+            {
+            }
+            public NavigationInstructionDto GetDto()
+            {
+                return GetAppSteps("harrisJpMapping");
+            }
         }
     }
 }
