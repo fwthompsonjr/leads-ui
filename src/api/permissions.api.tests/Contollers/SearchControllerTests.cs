@@ -19,7 +19,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ControllerCanBeginSearchHappyPath()
+        public async Task ControllerCanBeginSearchHappyPathAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -28,16 +28,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.Begin(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.BeginAsync(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.BeginSearch(new UserSearchRequest());
+            var actual = await sut.BeginSearchAsync(new UserSearchRequest());
             Assert.NotNull(actual);
             Assert.IsType<OkObjectResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanBeginNoUserReturnsUnauthorized()
+        public async Task ControllerCanBeginNoUserReturnsUnauthorizedAsync()
         {
             User? user = default;
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -46,15 +46,15 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.Begin(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.BeginAsync(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.BeginSearch(new UserSearchRequest());
+            var actual = await sut.BeginSearchAsync(new UserSearchRequest());
             Assert.NotNull(actual);
             Assert.IsType<UnauthorizedResult>(actual);
         }
         [Fact]
-        public async Task ControllerCanBeginSearchInvalidParameter()
+        public async Task ControllerCanBeginSearchInvalidParameterAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(false, "test response");
@@ -63,16 +63,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.Begin(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.BeginAsync(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.BeginSearch(new UserSearchRequest());
+            var actual = await sut.BeginSearchAsync(new UserSearchRequest());
             Assert.NotNull(actual);
             Assert.IsType<BadRequestObjectResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanBeginSearchNullResultShouldBeConflict()
+        public async Task ControllerCanBeginSearchNullResultShouldBeConflictAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -81,16 +81,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.Begin(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.BeginAsync(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.BeginSearch(new UserSearchRequest());
+            var actual = await sut.BeginSearchAsync(new UserSearchRequest());
             Assert.NotNull(actual);
             Assert.IsType<ConflictObjectResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanBeginSearchEmptyResponeIsUnprocessableEntity()
+        public async Task ControllerCanBeginSearchEmptyResponeIsUnprocessableEntityAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -99,16 +99,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.Begin(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.BeginAsync(It.IsAny<HttpRequest>(), It.IsAny<UserSearchRequest>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.BeginSearch(new UserSearchRequest());
+            var actual = await sut.BeginSearchAsync(new UserSearchRequest());
             Assert.NotNull(actual);
             Assert.IsType<UnprocessableEntityObjectResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanGetMySearchesHappyPath()
+        public async Task ControllerCanGetMySearchesHappyPathAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -117,16 +117,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetHeader(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetHeaderAsync(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.MySearches(new ApplicationModel { Id = Guid.NewGuid().ToString() });
+            var actual = await sut.MySearchesAsync(new ApplicationModel { Id = Guid.NewGuid().ToString() });
             Assert.NotNull(actual);
             Assert.IsType<OkObjectResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanGetMySearchesNoUserIsUnauthorized()
+        public async Task ControllerCanGetMySearchesNoUserIsUnauthorizedAsync()
         {
             User? user = default;
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -135,16 +135,16 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetHeader(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetHeaderAsync(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.MySearches(new ApplicationModel { Id = Guid.NewGuid().ToString() });
+            var actual = await sut.MySearchesAsync(new ApplicationModel { Id = Guid.NewGuid().ToString() });
             Assert.NotNull(actual);
             Assert.IsType<UnauthorizedResult>(actual);
         }
 
         [Fact]
-        public async Task ControllerCanGetMySearchesNoGuidIsUnauthorized()
+        public async Task ControllerCanGetMySearchesNoGuidIsUnauthorizedAsync()
         {
             var user = new User();
             var vrsp = new KeyValuePair<bool, string>(true, "test response");
@@ -153,10 +153,10 @@ namespace permissions.api.tests.Contollers
             var validator = provider.GetRequiredService<Mock<IUserSearchValidator>>();
             var infrastructure = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var sut = provider.GetRequiredService<SearchController>();
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetHeader(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetHeaderAsync(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(response);
             validator.Setup(m => m.IsValid(It.IsAny<UserSearchRequest>())).Returns(vrsp);
-            var actual = await sut.MySearches(new ApplicationModel { Id = "not-a-guid" });
+            var actual = await sut.MySearchesAsync(new ApplicationModel { Id = "not-a-guid" });
             Assert.NotNull(actual);
             Assert.IsType<UnauthorizedResult>(actual);
         }

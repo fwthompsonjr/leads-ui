@@ -24,7 +24,7 @@ namespace permissions.api.tests.Contollers
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
 
         [Fact]
-        public async Task SutCanUpdateEmail()
+        public async Task SutCanUpdateEmailAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -33,20 +33,20 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactEmail(
+            db.Setup(s => s.ChangeContactEmailAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactEmailRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactEmail(payload);
+            var result = await service.ChangeContactEmailAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<OkObjectResult>(result);
         }
 
         [Fact]
-        public async Task SutVerifiesUpdateEmail()
+        public async Task SutVerifiesUpdateEmailAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -55,19 +55,19 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user, Result = new BadRequestObjectResult("Test response") };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactEmail(
+            db.Setup(s => s.ChangeContactEmailAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactEmailRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactEmail(payload);
+            var result = await service.ChangeContactEmailAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         }
         [Fact]
-        public async Task SutCanConflictUpdateEmail()
+        public async Task SutCanConflictUpdateEmailAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -76,14 +76,14 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(false, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactEmail(
+            db.Setup(s => s.ChangeContactEmailAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactEmailRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactEmail(payload);
+            var result = await service.ChangeContactEmailAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<ConflictObjectResult>(result);
         }

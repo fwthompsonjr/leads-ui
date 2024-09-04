@@ -21,17 +21,17 @@ namespace legallead.permissions.api.Utility
             _db = db;
         }
 
-        public async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
+        public async Task<KeyValuePair<bool, string>> AddCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
-            var response = await _db.AddCountySubscriptions(user, countyCode);
+            var response = await _db.AddCountySubscriptionsAsync(user, countyCode);
             if (response.Key)
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.SubscriptionCountyChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode)
+        public async Task<KeyValuePair<bool, string>> AddStateSubscriptionsAsync(User user, string stateCode)
         {
-            var response = await _db.AddStateSubscriptions(user, stateCode);
+            var response = await _db.AddStateSubscriptionsAsync(user, stateCode);
             if (response.Key)
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.SubscriptionStateChanged);
             return response;
@@ -47,35 +47,35 @@ namespace legallead.permissions.api.Utility
             return UsStatesList.Find(state);
         }
 
-        public async Task<User?> GetUser(HttpRequest request)
+        public async Task<User?> GetUserAsync(HttpRequest request)
         {
-            return await request.GetUser(_db);
+            return await request.GetUserAsync(_db);
         }
 
-        public async Task<bool> IsAdminUser(HttpRequest request)
+        public async Task<bool> IsAdminUserAsync(HttpRequest request)
         {
-            return await request.IsAdminUser(_db);
+            return await request.IsAdminUserAsync(_db);
         }
 
-        public async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
+        public async Task<KeyValuePair<bool, string>> RemoveCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
-            var response = await _db.RemoveCountySubscriptions(user, countyCode);
+            var response = await _db.RemoveCountySubscriptionsAsync(user, countyCode);
             if (response.Key)
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.SubscriptionCountyChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode)
+        public async Task<KeyValuePair<bool, string>> RemoveStateSubscriptionsAsync(User user, string stateCode)
         {
-            var response = await _db.RemoveStateSubscriptions(user, stateCode);
+            var response = await _db.RemoveStateSubscriptionsAsync(user, stateCode);
             if (response.Key)
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.SubscriptionStateChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName)
+        public async Task<KeyValuePair<bool, string>> SetPermissionGroupAsync(User user, string groupName)
         {
-            var response = await _db.SetPermissionGroup(user, groupName);
+            var response = await _db.SetPermissionGroupAsync(user, groupName);
             if (response.Key)
                 await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.PermissionLevelChanged);
             return response;

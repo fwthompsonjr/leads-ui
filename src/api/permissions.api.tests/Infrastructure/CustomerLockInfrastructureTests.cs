@@ -20,13 +20,13 @@ namespace permissions.api.tests.Infrastructure
         }
 
         [Fact]
-        public async Task ServiceCanAddIncident()
+        public async Task ServiceCanAddIncidentAsync()
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
                 var service = provider.GetRequiredService<ICustomerLockInfrastructure>();
-                await service.AddIncident("abcd");
+                await service.AddIncidentAsync("abcd");
             });
             Assert.Null(exception);
         }
@@ -38,7 +38,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public async Task ServiceCanCalculateIsAccountLocked(int id)
+        public async Task ServiceCanCalculateIsAccountLockedAsync(int id)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -60,7 +60,7 @@ namespace permissions.api.tests.Infrastructure
                     .ReturnsAsync(statusResponse)
                     .ReturnsAsync(cleared);
                 var service = provider.GetRequiredService<ICustomerLockInfrastructure>();
-                _ = await service.IsAccountLocked("abcd");
+                _ = await service.IsAccountLockedAsync("abcd");
             });
             Assert.Null(exception);
         }

@@ -19,7 +19,7 @@ namespace legallead.permissions.api.Utility
         public async Task<object?> CreatePaymentAsync(
             PaymentCreateModel model, List<SearchInvoiceBo> data)
         {
-            var existing = await GetPaymentSession(model);
+            var existing = await GetPaymentSessionAsync(model);
             if (existing != null) return existing;
             var description = (await _repo.InvoiceDescription(model.SearchId)).ItemDescription;
             var externalId = data[0].ExternalId ?? model.SearchId;
@@ -121,19 +121,19 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
-        public async Task<object> FetchClientSecret(LevelRequestBo session)
+        public async Task<object> FetchClientSecretAsync(LevelRequestBo session)
         {
-            var data = await FetchClientSecretValue(session);
+            var data = await FetchClientSecretValueAsync(session);
             return new { clientSecret = data };
         }
 
         [ExcludeFromCodeCoverage(Justification = "Using 3rd resources that should not be invoked from unit tests.")]
-        public async Task<string> FetchClientSecretValue(LevelRequestBo session)
+        public async Task<string> FetchClientSecretValueAsync(LevelRequestBo session)
         {
             var nodata = Guid.Empty.ToString("D");
             try
             {
-                var actual = await StripeRetryService.FetchClientSecret(session);
+                var actual = await StripeRetryService.FetchClientSecretAsync(session);
                 return actual;
             }
             catch
@@ -166,7 +166,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member testing through publicly exposed method.")]
-        private async Task<object?> GetPaymentSession(PaymentCreateModel model)
+        private async Task<object?> GetPaymentSessionAsync(PaymentCreateModel model)
         {
             var isPaid = await _repo.IsSearchPurchased(model.SearchId);
             if (!isPaid.GetValueOrDefault()) { return null; }

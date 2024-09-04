@@ -109,7 +109,7 @@ namespace permissions.api.tests.Entities
             };
             var mock = new Mock<ISearchInfrastructure>();
             var http = new Mock<HttpRequest>();
-            mock.Setup(x => x.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            mock.Setup(x => x.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             var sut = faker1.Generate();
             var problem = Record.Exception(() =>
             {

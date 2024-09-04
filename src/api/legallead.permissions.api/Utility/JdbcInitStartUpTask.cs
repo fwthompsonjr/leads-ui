@@ -8,7 +8,7 @@ namespace legallead.permissions.api
         private readonly IDataInitializer _dataDb = dataDb;
         public int Index => 10;
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
             await _dataDb.Init();
         }

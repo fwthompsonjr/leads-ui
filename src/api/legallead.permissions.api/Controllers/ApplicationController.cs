@@ -29,7 +29,7 @@ namespace legallead.permissions.api.Controllers
 
         [HttpGet]
         [Route("apps")]
-        public async Task<IEnumerable<ApplicationModel>?> List()
+        public async Task<IEnumerable<ApplicationModel>?> ListAsync()
         {
             try
             {
@@ -53,7 +53,7 @@ namespace legallead.permissions.api.Controllers
         [HttpPost]
         [Route("register")]
         [ServiceFilter(typeof(RegistrationCompleted))]
-        public async Task<IActionResult> Register([FromBody] RegisterAccountModel model)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterAccountModel model)
         {
             var response = "An error occurred registering account.";
             var merrors = model.Validate(out bool isModelValid);
@@ -62,7 +62,7 @@ namespace legallead.permissions.api.Controllers
                 response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var registration = await Register(Request, model, response);
+            var registration = await RegisterAsync(Request, model, response);
             return registration;
         }
 
@@ -75,17 +75,17 @@ namespace legallead.permissions.api.Controllers
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
-        private async Task<IActionResult> Register(HttpRequest request, RegisterAccountModel model, string response)
+        private async Task<IActionResult> RegisterAsync(HttpRequest request, RegisterAccountModel model, string response)
         {
-            var registration = await RegisterUser(request, model, response);
+            var registration = await RegisterUserAsync(request, model, response);
             if (registration is IActionResult action) return action;
             if (registration is not User user) return UnprocessableEntity();
-            var accountResult = await RegisterUserAccount(user, response);
+            var accountResult = await RegisterUserAccountAsync(user, response);
             return accountResult;
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
-        private async Task<object> RegisterUser(HttpRequest request, RegisterAccountModel model, string response)
+        private async Task<object> RegisterUserAsync(HttpRequest request, RegisterAccountModel model, string response)
         {
             var applicationCheck = request.Validate(response);
             if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
@@ -96,7 +96,7 @@ namespace legallead.permissions.api.Controllers
                 Password = model.Password,
             };
             var user = UserModel.ToUser(account);
-            var isDuplicate = await IsDuplicateAccount(user);
+            var isDuplicate = await IsDuplicateAccountAsync(user);
             if (user == null || isDuplicate)
             {
                 return Conflict("Potential duplicate account found.");
@@ -104,21 +104,21 @@ namespace legallead.permissions.api.Controllers
             return user;
         }
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
-        private async Task<IActionResult> RegisterUserAccount(User user, string response)
+        private async Task<IActionResult> RegisterUserAccountAsync(User user, string response)
         {
             try
             {
-                var isAdded = await TryCreateAccount(user);
+                var isAdded = await TryCreateAccountAsync(user);
                 var aresponse = isAdded ? user.Id : response;
                 if (isAdded)
                 {
-                    await _db.InitializeProfile(user);
-                    var initOk = (await _db.InitializePermission(user));
+                    await _db.InitializeProfileAsync(user);
+                    var initOk = (await _db.InitializePermissionAsync(user));
                     await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
                     await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
                     if (initOk)
                     {
-                        await _db.SetPermissionGroup(user, "Guest");
+                        await _db.SetPermissionGroupAsync(user, "Guest");
                     }
                 }
                 if (aresponse != null) return Ok(aresponse);
@@ -140,7 +140,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
-        private async Task<bool> TryCreateAccount(User user)
+        private async Task<bool> TryCreateAccountAsync(User user)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method accessing public tested members")]
-        private async Task<bool> IsDuplicateAccount(User user)
+        private async Task<bool> IsDuplicateAccountAsync(User user)
         {
             try
             {

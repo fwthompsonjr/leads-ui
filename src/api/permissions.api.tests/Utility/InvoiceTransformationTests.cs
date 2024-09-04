@@ -96,14 +96,14 @@ namespace permissions.api.tests.Utility
         [InlineData(false)]
         [InlineData(true, "cancel")]
         [InlineData(true, "success", null)]
-        public async Task SutCanTransformInvoiceRequest(
+        public async Task SutCanTransformInvoiceRequestAsync(
             bool isvalid,
             string? status = "success",
             string? id = "123-456-789")
         {
             var error = await Record.ExceptionAsync(async () =>
             {
-                var converted = await ConvertInvoice(isvalid, status, id);
+                var converted = await ConvertInvoiceAsync(isvalid, status, id);
                 Assert.False(string.IsNullOrEmpty(converted));
             });
             Assert.Null(error);
@@ -136,7 +136,7 @@ namespace permissions.api.tests.Utility
             return service.Transform(request, DiscountBase);
         }
 
-        private async static Task<string> ConvertInvoice(bool isvalid, string? status, string? id)
+        private async static Task<string> ConvertInvoiceAsync(bool isvalid, string? status, string? id)
         {
             using var builder = new PaymentHtmlTranslatorBuilder();
             var service = builder.Translator;
@@ -145,7 +145,7 @@ namespace permissions.api.tests.Utility
             var html = isvalid ? InvoiceCompletedBase : InvoiceInvalidBase;
             repo.Setup(m => m.GetPurchaseSummary(It.IsAny<string>())).ReturnsAsync(purchase);
             repo.Setup(m => m.SetInvoicePurchaseDate(It.IsAny<string>())).ReturnsAsync(true);
-            var response = await service.Transform(isvalid, status, id, html);
+            var response = await service.TransformAsync(isvalid, status, id, html);
             return response;
         }
 

@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
+using Microsoft.VisualStudio.Shell;
 
 namespace legallead.permissions.api.Utility
 {
@@ -15,26 +16,34 @@ namespace legallead.permissions.api.Utility
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public string GetDiscountSecret(DiscountRequestBo requested, string paymentType = "Monthly")
         {
-            var response =
-                StripeDiscountRetryService.CreatePaymentAsync(
+            var jwt = ThreadHelper.JoinableTaskFactory;
+            var response = jwt.Run(async delegate
+            {
+                var answer = await StripeDiscountRetryService.CreatePaymentAsync(
                     requested,
                     paymentType,
                     customerDb,
                     userDb,
-                    searchDb).GetAwaiter().GetResult();
+                    searchDb);
+                return answer;
+            });
             return response?.ClientSecret ?? string.Empty;
         }
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party service")]
         public string GetSubscriptionSecret(LevelRequestBo requested, string paymentType = "Monthly")
         {
-            var response =
-                StripeSubscriptionRetryService.CreatePaymentAsync(
+            var jwt = ThreadHelper.JoinableTaskFactory;
+            var response = jwt.Run(async delegate
+            {
+                var answer = await StripeSubscriptionRetryService.CreatePaymentAsync(
                     requested,
                     paymentType,
                     customerDb,
                     userDb,
-                    searchDb).GetAwaiter().GetResult();
+                    searchDb);
+                return answer;
+            });
             return response?.ClientSecret ?? string.Empty;
         }
     }

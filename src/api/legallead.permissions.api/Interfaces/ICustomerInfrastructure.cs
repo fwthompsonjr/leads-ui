@@ -4,16 +4,16 @@ namespace legallead.permissions.api.Interfaces
 {
     public interface ICustomerInfrastructure
     {
-        Task<PaymentCustomerBo?> GetCustomer(string userId);
-        Task<PaymentCustomerBo?> CreateCustomer(string userId, string accountId);
-        Task<PaymentCustomerBo?> GetOrCreateCustomer(string userId);
-        Task<List<UnMappedCustomerBo>?> GetUnMappedCustomers();
-        Task<bool> MapCustomers();
-        Task<LevelRequestBo?> AddLevelChangeRequest(LevelChangeRequest request);
-        Task<LevelRequestBo?> GetLevelRequestById(string externalId);
-        Task<LevelRequestBo?> CompleteLevelRequest(LevelRequestBo request);
-        Task<LevelRequestBo?> CompleteDiscountRequest(LevelRequestBo request);
-        Task<LevelRequestBo?> AddDiscountChangeRequest(LevelChangeRequest request);
-        Task<LevelRequestBo?> GetDiscountRequestById(string externalId);
+        Task<PaymentCustomerBo?> GetCustomerAsync(string userId);
+        Task<PaymentCustomerBo?> CreateCustomerAsync(string userId, string accountId);
+        Task<PaymentCustomerBo?> GetOrCreateCustomerAsync(string userId);
+        Task<List<UnMappedCustomerBo>?> GetUnMappedCustomersAsync();
+        Task<bool> MapCustomersAsync();
+        Task<LevelRequestBo?> AddLevelChangeRequestAsync(LevelChangeRequest request);
+        Task<LevelRequestBo?> GetLevelRequestByIdAsync(string externalId);
+        Task<LevelRequestBo?> CompleteLevelRequestAsync(LevelRequestBo request);
+        Task<LevelRequestBo?> CompleteDiscountRequestAsync(LevelRequestBo request);
+        Task<LevelRequestBo?> AddDiscountChangeRequestAsync(LevelChangeRequest request);
+        Task<LevelRequestBo?> GetDiscountRequestByIdAsync(string externalId);
     }
 }

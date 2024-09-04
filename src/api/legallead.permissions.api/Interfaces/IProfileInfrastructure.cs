@@ -2,16 +2,16 @@
 {
     public interface IProfileInfrastructure : ISubscriptionInfrastructure
     {
-        Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request);
+        Task<KeyValuePair<bool, string>> ChangeContactAddressAsync(User? user, ChangeContactAddressRequest[] request);
 
-        Task<KeyValuePair<bool, string>> ChangeContactEmail(User? user, ChangeContactEmailRequest[] request);
+        Task<KeyValuePair<bool, string>> ChangeContactEmailAsync(User? user, ChangeContactEmailRequest[] request);
 
-        Task<KeyValuePair<bool, string>> ChangeContactName(User? user, ChangeContactNameRequest[] request);
+        Task<KeyValuePair<bool, string>> ChangeContactNameAsync(User? user, ChangeContactNameRequest[] request);
 
-        Task<KeyValuePair<bool, string>> ChangeContactPhone(User? user, ChangeContactPhoneRequest[] request);
+        Task<KeyValuePair<bool, string>> ChangeContactPhoneAsync(User? user, ChangeContactPhoneRequest[] request);
 
-        Task<GetContactResponse[]?> GetContactDetail(User? user, string responseType);
+        Task<GetContactResponse[]?> GetContactDetailAsync(User? user, string responseType);
 
-        Task<string> GetContactRole(User? user);
+        Task<string> GetContactRoleAsync(User? user);
     }
 }

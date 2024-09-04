@@ -3,9 +3,9 @@ namespace legallead.permissions.api.Interfaces
 {
     public interface ICustomerLockInfrastructure
     {
-        Task AddIncident(string userId);
-        Task<bool> IsAccountLocked(string userId);
-        Task<bool> LockAccount(string userId);
-        Task<bool> UnLockAccount(string userId);
+        Task AddIncidentAsync(string userId);
+        Task<bool> IsAccountLockedAsync(string userId);
+        Task<bool> LockAccountAsync(string userId);
+        Task<bool> UnLockAccountAsync(string userId);
     }
 }

@@ -116,7 +116,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(true, true, false, true, true, true)]
         [InlineData(true, true, true, false, true, true)]
         [InlineData(true, true, true, true, true, false)]
-        public async Task SutCanCreatePaymentSession(
+        public async Task SutCanCreatePaymentSessionAsync(
             bool hasUser,
             bool hasGuid,
             bool hasPreview,
@@ -135,16 +135,16 @@ namespace permissions.api.tests.Contollers
 
             var infra = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
             var stripe = provider.GetRequiredService<Mock<IStripeInfrastructure>>();
-            infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infra.Setup(s => s.GetPreview(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(preview);
-            infra.Setup(s => s.CreateInvoice(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(invoices);
+            infra.Setup(s => s.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infra.Setup(s => s.GetPreviewAsync(It.IsAny<HttpRequest>(), It.IsAny<string>())).ReturnsAsync(preview);
+            infra.Setup(s => s.CreateInvoiceAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(invoices);
             if (preview == null)
             {
-                infra.Setup(s => s.FlagError(It.IsAny<string>())).ReturnsAsync(true);
+                infra.Setup(s => s.FlagErrorAsync(It.IsAny<string>())).ReturnsAsync(true);
             }
             stripe.Setup(s => s.CreatePaymentAsync(It.IsAny<PaymentCreateModel>(), It.IsAny<List<SearchInvoiceBo>>())).ReturnsAsync(payment);
             var service = provider.GetRequiredService<PaymentController>();
-            var result = await service.Create(request);
+            var result = await service.CreateAsync(request);
             Assert.NotNull(result);
             if (!hasUser || !hasGuid) Assert.IsAssignableFrom<UnauthorizedResult>(result);
             if (hasUser && hasGuid && !hasPreview) Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(result);

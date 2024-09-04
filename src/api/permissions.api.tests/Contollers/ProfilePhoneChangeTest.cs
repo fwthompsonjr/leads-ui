@@ -47,7 +47,7 @@ namespace permissions.api.tests.Contollers
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
 
         [Fact]
-        public async Task SutCanUpdatePhoneNumber()
+        public async Task SutCanUpdatePhoneNumberAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -56,20 +56,20 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactPhone(
+            db.Setup(s => s.ChangeContactPhoneAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactPhoneRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactPhone(payload);
+            var result = await service.ChangeContactPhoneAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<OkObjectResult>(result);
         }
 
         [Fact]
-        public async Task SutVerifiesUpdatePhoneNumber()
+        public async Task SutVerifiesUpdatePhoneNumberAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -78,19 +78,19 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user, Result = new BadRequestObjectResult("Test response") };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactPhone(
+            db.Setup(s => s.ChangeContactPhoneAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactPhoneRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactPhone(payload);
+            var result = await service.ChangeContactPhoneAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         }
         [Fact]
-        public async Task SutCanConflictUpdatePhoneNumber()
+        public async Task SutCanConflictUpdatePhoneNumberAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -99,14 +99,14 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(false, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactPhone(
+            db.Setup(s => s.ChangeContactPhoneAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactPhoneRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactPhone(payload);
+            var result = await service.ChangeContactPhoneAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<ConflictObjectResult>(result);
         }

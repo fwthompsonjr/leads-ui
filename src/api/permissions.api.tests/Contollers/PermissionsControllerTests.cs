@@ -95,7 +95,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(true, false, true, false)]
         [InlineData(true, false, false, true)]
         [InlineData(false, false, false, false)]
-        public async Task ContollerCanSetDiscount(bool hasUser, bool isLocked, bool isAdmin, bool isPaid)
+        public async Task ContollerCanSetDiscountAsync(bool hasUser, bool isLocked, bool isAdmin, bool isPaid)
         {
             var provider = GetProvider();
             var request = drequestfaker.Generate();
@@ -106,16 +106,16 @@ namespace permissions.api.tests.Contollers
 
             discount.IsPaymentSuccess = isPaid;
             User? user = hasUser ? userfaker.Generate() : null;
-            infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infra.Setup(s => s.IsAdminUser(It.IsAny<HttpRequest>())).ReturnsAsync(isAdmin);
-            infra.Setup(s => s.GenerateDiscountSession(
+            infra.Setup(s => s.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infra.Setup(s => s.IsAdminUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(isAdmin);
+            infra.Setup(s => s.GenerateDiscountSessionAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<User>(),
                 It.IsAny<string>(),
                 It.IsAny<bool>(),
                 It.IsAny<string>())).ReturnsAsync(discount);
-            lockDb.Setup(s => s.IsAccountLocked(It.IsAny<string>())).ReturnsAsync(isLocked);
-            var result = await controller.SetDiscount(request);
+            lockDb.Setup(s => s.IsAccountLockedAsync(It.IsAny<string>())).ReturnsAsync(isLocked);
+            var result = await controller.SetDiscountAsync(request);
             Assert.NotNull(result);
             if (user == null) Assert.IsAssignableFrom<UnauthorizedObjectResult>(result);
             if (user != null && isLocked) Assert.IsAssignableFrom<ForbidResult>(result);
@@ -129,7 +129,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(true, false, false, false, "admin")]
         [InlineData(true, false, true, false, "admin")]
         [InlineData(true, false, false, false, "invalid-level")]
-        public async Task ContollerCanSetPermissionLevel(
+        public async Task ContollerCanSetPermissionLevelAsync(
             bool hasUser,
             bool isLocked,
             bool isAdmin,
@@ -145,15 +145,15 @@ namespace permissions.api.tests.Contollers
             discount.IsPaymentSuccess = isPaid;
             if (!string.IsNullOrEmpty(permissionReqeuested)) { request.Level = permissionReqeuested; }
             User? user = hasUser ? userfaker.Generate() : null;
-            infra.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infra.Setup(s => s.IsAdminUser(It.IsAny<HttpRequest>())).ReturnsAsync(isAdmin);
-            infra.Setup(s => s.GeneratePermissionSession(
+            infra.Setup(s => s.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infra.Setup(s => s.IsAdminUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(isAdmin);
+            infra.Setup(s => s.GeneratePermissionSessionAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<User>(),
                 It.IsAny<string>(),
                 It.IsAny<string>())).ReturnsAsync(discount);
-            lockDb.Setup(s => s.IsAccountLocked(It.IsAny<string>())).ReturnsAsync(isLocked);
-            var result = await controller.SetPermissionLevel(request);
+            lockDb.Setup(s => s.IsAccountLockedAsync(It.IsAny<string>())).ReturnsAsync(isLocked);
+            var result = await controller.SetPermissionLevelAsync(request);
             Assert.NotNull(result);
             if (user == null) Assert.IsAssignableFrom<UnauthorizedObjectResult>(result);
             if (user != null && isLocked) Assert.IsAssignableFrom<ForbidResult>(result);

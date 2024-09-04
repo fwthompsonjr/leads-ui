@@ -4,6 +4,6 @@
     {
         int Index { get; }
 
-        Task Execute();
+        Task ExecuteAsync();
     }
 }

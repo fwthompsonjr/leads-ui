@@ -8,29 +8,29 @@ namespace legallead.permissions.api.Utility
     [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
     public partial class SubscriptionInfrastructure
     {
-        public async Task<LevelRequestBo> GeneratePermissionSession(HttpRequest request, User user, string level, string externalId = "")
+        public async Task<LevelRequestBo> GeneratePermissionSessionAsync(HttpRequest request, User user, string level, string externalId = "")
         {
-            var findSession = await IsPermissionSessionNeeded(user, level, externalId);
+            var findSession = await IsPermissionSessionNeededAsync(user, level, externalId);
             if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
             if (_customer == null || _payment == null) return new();
             if (string.IsNullOrEmpty(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
             {
                 externalId = findSession.ExternalId;
             }
-            var cust = await _customer.GetOrCreateCustomer(user.Id);
+            var cust = await _customer.GetOrCreateCustomerAsync(user.Id);
             if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return new();
 
             var successUrl = $"{request.Scheme}://{request.Host}/subscription-result?session_id=~1&sts=success&id=~0";
-            LevelChangeRequest changeRq = await GetPaymentSession(user, level, externalId, cust, successUrl);
-            var bo = (await _customer.AddLevelChangeRequest(changeRq)) ?? new();
+            LevelChangeRequest changeRq = await GetPaymentSessionAsync(user, level, externalId, cust, successUrl);
+            var bo = (await _customer.AddLevelChangeRequestAsync(changeRq)) ?? new();
             return bo;
         }
 
-        public async Task<LevelRequestBo?> GetLevelRequestById(string? id, string? sessionid)
+        public async Task<LevelRequestBo?> GetLevelRequestByIdAsync(string? id, string? sessionid)
         {
             if (string.IsNullOrWhiteSpace(id)) return null;
             if (_customer == null) return null;
-            var bo = await _customer.GetLevelRequestById(id);
+            var bo = await _customer.GetLevelRequestByIdAsync(id);
             if (bo == null || string.IsNullOrEmpty(bo.SessionId)) return null;
             if (!string.IsNullOrEmpty(sessionid) && bo.SessionId != sessionid) return null;
             return bo;
@@ -38,14 +38,14 @@ namespace legallead.permissions.api.Utility
 
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
-        private async Task<LevelChangeRequest> GetPaymentSession(User user, string level, string externalId, PaymentCustomerBo cust, string successUrl)
+        private async Task<LevelChangeRequest> GetPaymentSessionAsync(User user, string level, string externalId, PaymentCustomerBo cust, string successUrl)
         {
             if (_customer == null || _payment == null) return new();
             try
             {
                 var cancelUrl = successUrl.Replace("sts=success", "sts=cancel");
                 var priceId = GetPermissionCode(level, _payment);
-                var session = await CreatePaymentSession(cust, successUrl, cancelUrl, externalId, priceId);
+                var session = await CreatePaymentSessionAsync(cust, successUrl, cancelUrl, externalId, priceId);
                 var changeRq = new LevelChangeRequest
                 {
                     ExternalId = externalId,
@@ -65,7 +65,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
-        private static async Task<SubscriptionCreatedModel> CreatePaymentSession(
+        private static async Task<SubscriptionCreatedModel> CreatePaymentSessionAsync(
             PaymentCustomerBo cust,
             string successUrl,
             string cancelUrl,
@@ -159,7 +159,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
-        private async Task<LevelRequestBo?> IsPermissionSessionNeeded(User user, string level, string externalId = "")
+        private async Task<LevelRequestBo?> IsPermissionSessionNeededAsync(User user, string level, string externalId = "")
         {
             string[] nonbillingcodes = ["admin", "guest"];
             if (string.IsNullOrEmpty(level)) { return null; }
@@ -181,7 +181,7 @@ namespace legallead.permissions.api.Utility
                     SessionId = "NONE",
                     UserId = user.Id
                 };
-                var session = await _customer.AddLevelChangeRequest(request);
+                var session = await _customer.AddLevelChangeRequestAsync(request);
                 return session;
             }
             return new LevelRequestBo { ExternalId = externalId };

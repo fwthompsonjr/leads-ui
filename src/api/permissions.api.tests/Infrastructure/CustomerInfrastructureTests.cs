@@ -30,7 +30,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(true, true)]
         [InlineData(false, true)]
         [InlineData(true, false)]
-        public async Task ServiceCanCreateCustomer(
+        public async Task ServiceCanCreateCustomerAsync(
             bool doesUserExist,
             bool isCustomerAdded)
         {
@@ -50,7 +50,7 @@ namespace permissions.api.tests.Infrastructure
                 custDb.Setup(s => s.GetCustomer(It.IsAny<PaymentCustomerQuery>())).ReturnsAsync(getCustomerResponse);
 
                 var service = provider.GetRequiredService<ICustomerInfrastructure>();
-                _ = await service.CreateCustomer(parms.UserId, parms.AccountId);
+                _ = await service.CreateCustomerAsync(parms.UserId, parms.AccountId);
             });
             Assert.Null(exception);
         }
@@ -59,7 +59,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(true, false, true)] // happy path
         [InlineData(false, false, true)] // user is not found
         [InlineData(true, true, true)] // user account is alreay created
-        public async Task ServiceCanGetOrCreateCustomer(
+        public async Task ServiceCanGetOrCreateCustomerAsync(
             bool doesUserExist,
             bool doesCustomerExist,
             bool isCustomerAdded)
@@ -81,7 +81,7 @@ namespace permissions.api.tests.Infrastructure
                 custDb.Setup(s => s.GetCustomer(It.IsAny<PaymentCustomerQuery>())).ReturnsAsync(getCustomerResponse);
 
                 var service = provider.GetRequiredService<ICustomerInfrastructure>();
-                _ = await service.GetOrCreateCustomer(parms.UserId);
+                _ = await service.GetOrCreateCustomerAsync(parms.UserId);
             });
             Assert.Null(exception);
         }
@@ -90,7 +90,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(true, false, true)] // happy path
         [InlineData(false, false, true)] // user is not found
         [InlineData(true, true, true)] // user account is alreay created
-        public async Task ServiceCanGetCustomer(
+        public async Task ServiceCanGetCustomerAsync(
             bool doesUserExist,
             bool doesCustomerExist,
             bool isCustomerAdded)
@@ -112,13 +112,13 @@ namespace permissions.api.tests.Infrastructure
                 custDb.Setup(s => s.GetCustomer(It.IsAny<PaymentCustomerQuery>())).ReturnsAsync(getCustomerResponse);
 
                 var service = provider.GetRequiredService<ICustomerInfrastructure>();
-                _ = await service.GetCustomer(parms.UserId);
+                _ = await service.GetCustomerAsync(parms.UserId);
             });
             Assert.Null(exception);
         }
 
         [Fact]
-        public async Task ServiceCanGetUnMappedCustomers()
+        public async Task ServiceCanGetUnMappedCustomersAsync()
         {
             var customers = fakeUnMapCustomer.Generate(10);
             var provider = GetProvider();
@@ -126,7 +126,7 @@ namespace permissions.api.tests.Infrastructure
 
             custDb.Setup(s => s.GetUnMappedCustomers(It.IsAny<PaymentCustomerQuery>())).ReturnsAsync(customers);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.GetUnMappedCustomers();
+            var response = await service.GetUnMappedCustomersAsync();
             Assert.NotNull(response);
         }
         [Theory]
@@ -136,7 +136,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(true, false, true, null)]
         [InlineData(true, false, true, 0)]
         [InlineData(true, false, true, 5, true)]
-        public async Task ServiceCanMapCustomers(
+        public async Task ServiceCanMapCustomersAsync(
             bool doesUserExist,
             bool doesCustomerExist,
             bool isCustomerAdded,
@@ -166,13 +166,13 @@ namespace permissions.api.tests.Infrastructure
                 else
                     custDb.Setup(s => s.GetUnMappedCustomers(It.IsAny<PaymentCustomerQuery>())).ReturnsAsync(customers);
                 var service = provider.GetRequiredService<ICustomerInfrastructure>();
-                _ = await service.MapCustomers();
+                _ = await service.MapCustomersAsync();
             });
             Assert.Null(exception);
         }
 
         [Fact]
-        public async Task ServiceCanAddLevelChangeRequest()
+        public async Task ServiceCanAddLevelChangeRequestAsync()
         {
             var request = new LevelChangeRequest { ExternalId = "123456", LevelName = "Test" };
             var insertResponse = new KeyValuePair<bool, string>(true, "Unit test mock execution");
@@ -183,12 +183,12 @@ namespace permissions.api.tests.Infrastructure
             custDb.Setup(m => m.AddLevelChangeRequest(It.IsAny<string>())).ReturnsAsync(insertResponse);
             custDb.Setup(m => m.GetLevelRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.AddLevelChangeRequest(request);
+            var response = await service.AddLevelChangeRequestAsync(request);
             Assert.NotNull(response);
         }
 
         [Fact]
-        public async Task ServiceCanGetLevelRequestById()
+        public async Task ServiceCanGetLevelRequestByIdAsync()
         {
             var externalId = "123456";
             var findLevelResponse = new LevelRequestBo();
@@ -197,7 +197,7 @@ namespace permissions.api.tests.Infrastructure
 
             custDb.Setup(m => m.GetLevelRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.GetLevelRequestById(externalId);
+            var response = await service.GetLevelRequestByIdAsync(externalId);
             Assert.NotNull(response);
         }
 
@@ -205,7 +205,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(null)]
         [InlineData("")]
         [InlineData("12345")]
-        public async Task ServiceCanCompleteLevelRequest(string? externalId)
+        public async Task ServiceCanCompleteLevelRequestAsync(string? externalId)
         {
             var request = new LevelRequestBo { ExternalId = externalId };
             var updateResponse = new KeyValuePair<bool, string>(true, "Unit test mock execution");
@@ -216,7 +216,7 @@ namespace permissions.api.tests.Infrastructure
             custDb.Setup(m => m.UpdateLevelChangeRequest(It.IsAny<string>())).ReturnsAsync(updateResponse);
             custDb.Setup(m => m.GetLevelRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.CompleteLevelRequest(request);
+            var response = await service.CompleteLevelRequestAsync(request);
             if (string.IsNullOrEmpty(externalId)) Assert.Null(response);
             else Assert.NotNull(response);
         }
@@ -225,7 +225,7 @@ namespace permissions.api.tests.Infrastructure
         [InlineData(null)]
         [InlineData("")]
         [InlineData("12345")]
-        public async Task ServiceCanCompleteDiscountRequest(string? externalId)
+        public async Task ServiceCanCompleteDiscountRequestAsync(string? externalId)
         {
             var request = new LevelRequestBo { ExternalId = externalId };
             var updateResponse = new KeyValuePair<bool, string>(true, "Unit test mock execution");
@@ -236,13 +236,13 @@ namespace permissions.api.tests.Infrastructure
             custDb.Setup(m => m.UpdateDiscountChangeRequest(It.IsAny<string>())).ReturnsAsync(updateResponse);
             custDb.Setup(m => m.GetDiscountRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.CompleteDiscountRequest(request);
+            var response = await service.CompleteDiscountRequestAsync(request);
             if (string.IsNullOrEmpty(externalId)) Assert.Null(response);
             else Assert.NotNull(response);
         }
 
         [Fact]
-        public async Task ServiceCanAddDiscountChangeRequest()
+        public async Task ServiceCanAddDiscountChangeRequestAsync()
         {
             var request = new LevelChangeRequest { ExternalId = "123456", LevelName = "Test" };
             var insertResponse = new KeyValuePair<bool, string>(true, "Unit test mock execution");
@@ -253,12 +253,12 @@ namespace permissions.api.tests.Infrastructure
             custDb.Setup(m => m.AddDiscountChangeRequest(It.IsAny<string>())).ReturnsAsync(insertResponse);
             custDb.Setup(m => m.GetDiscountRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.AddDiscountChangeRequest(request);
+            var response = await service.AddDiscountChangeRequestAsync(request);
             Assert.NotNull(response);
         }
 
         [Fact]
-        public async Task ServiceCanGetDiscountRequestById()
+        public async Task ServiceCanGetDiscountRequestByIdAsync()
         {
             var request = new LevelChangeRequest { ExternalId = "123456", LevelName = "Test" };
             var findLevelResponse = new LevelRequestBo();
@@ -267,7 +267,7 @@ namespace permissions.api.tests.Infrastructure
 
             custDb.Setup(m => m.GetDiscountRequestById(It.IsAny<string>())).ReturnsAsync(findLevelResponse);
             var service = provider.GetRequiredService<ICustomerInfrastructure>();
-            var response = await service.GetDiscountRequestById(request.ExternalId);
+            var response = await service.GetDiscountRequestByIdAsync(request.ExternalId);
             Assert.NotNull(response);
         }
 

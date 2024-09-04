@@ -51,18 +51,18 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType<string>(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType<object>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Create(PaymentCreateRequest request)
+        public async Task<IActionResult> CreateAsync(PaymentCreateRequest request)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = request.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var searches = await infrastructure.GetPreview(Request, guid);
+            var searches = await infrastructure.GetPreviewAsync(Request, guid);
             if (searches == null)
             {
-                await infrastructure.FlagError(guid);
+                await infrastructure.FlagErrorAsync(guid);
                 return UnprocessableEntity(guid);
             }
-            var invoice = await infrastructure.CreateInvoice(user.Id, guid);
+            var invoice = await infrastructure.CreateInvoiceAsync(user.Id, guid);
             if (invoice == null || !invoice.Any()) return UnprocessableEntity(guid);
             var data = invoice.ToList();
             var model = new PaymentCreateModel(Request, user, guid, request.ProductType);

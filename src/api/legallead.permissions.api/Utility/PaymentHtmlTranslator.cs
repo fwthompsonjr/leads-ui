@@ -49,7 +49,7 @@ namespace legallead.permissions.api.Utility
             }
         }
 
-        public async Task<bool> IsRequestValid(string? status, string? id)
+        public async Task<bool> IsRequestValidAsync(string? status, string? id)
         {
             if (string.IsNullOrWhiteSpace(status)) return false;
             if (string.IsNullOrWhiteSpace(id)) return false;
@@ -58,16 +58,16 @@ namespace legallead.permissions.api.Utility
             return isValid;
         }
 
-        public async Task<PaymentSessionDto?> IsSessionValid(string? id)
+        public async Task<PaymentSessionDto?> IsSessionValidAsync(string? id)
         {
             if (string.IsNullOrWhiteSpace(id)) return null;
             var session = await _repo.GetPaymentSession(id);
             return session;
         }
 
-        public async Task<LevelRequestBo?> IsSubscriptionValid(string? id, string? sessionid)
+        public async Task<LevelRequestBo?> IsSubscriptionValidAsync(string? id, string? sessionid)
         {
-            var bo = await _subscriptionDb.GetLevelRequestById(id, sessionid);
+            var bo = await _subscriptionDb.GetLevelRequestByIdAsync(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
             var service = GetSubscriptionService;
@@ -76,9 +76,9 @@ namespace legallead.permissions.api.Utility
             return bo;
         }
 
-        public async Task<LevelRequestBo?> IsDiscountValid(string? id, string? sessionid)
+        public async Task<LevelRequestBo?> IsDiscountValidAsync(string? id, string? sessionid)
         {
-            var bo = await _subscriptionDb.GetDiscountRequestById(id, sessionid);
+            var bo = await _subscriptionDb.GetDiscountRequestByIdAsync(id, sessionid);
             if (bo == null || string.IsNullOrEmpty(bo.InvoiceUri)) return null;
             if (bo.InvoiceUri == "NONE") return bo;
             var service = GetSubscriptionService;
@@ -87,7 +87,7 @@ namespace legallead.permissions.api.Utility
             return bo;
         }
 
-        public async Task<bool> IsRequestPaid(PaymentSessionDto? dto)
+        public async Task<bool> IsRequestPaidAsync(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
@@ -98,7 +98,7 @@ namespace legallead.permissions.api.Utility
             return ispaid.GetValueOrDefault();
         }
 
-        public async Task<bool> IsRequestPaid(LevelRequestBo session)
+        public async Task<bool> IsRequestPaidAsync(LevelRequestBo session)
         {
             var isSuccess = session.IsPaymentSuccess.GetValueOrDefault();
             if (session.InvoiceUri == "NONE") return isSuccess;
@@ -112,12 +112,12 @@ namespace legallead.permissions.api.Utility
             return isSuccess;
         }
 
-        public async Task<bool> IsDiscountPaid(LevelRequestBo session)
+        public async Task<bool> IsDiscountPaidAsync(LevelRequestBo session)
         {
-            var response = await IsRequestPaid(session);
+            var response = await IsRequestPaidAsync(session);
             return response;
         }
-        public async Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto)
+        public async Task<bool> IsRequestDownloadedAndPaidAsync(PaymentSessionDto? dto)
         {
             if (dto == null || string.IsNullOrWhiteSpace(dto.JsText)) return false;
             var obj = JsonConvert.DeserializeObject<PaymentSessionJs>(FormatSessionJson(dto.JsText)) ?? new();
@@ -129,7 +129,7 @@ namespace legallead.permissions.api.Utility
             return paid.IsPaid.GetValueOrDefault() && paid.IsDownloaded.GetValueOrDefault();
         }
 
-        public async Task<DownloadResponse> GetDownload(PaymentSessionDto dto)
+        public async Task<DownloadResponse> GetDownloadAsync(PaymentSessionDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.JsText)) return new() { Error = "Invalid session parameter." };
             var js = FormatSessionJson(dto.JsText);
@@ -148,7 +148,7 @@ namespace legallead.permissions.api.Utility
             };
             try
             {
-                await GenerateExcelResponse(dto, searchId, records, response);
+                await GenerateExcelResponseAsync(dto, searchId, records, response);
                 return response;
             }
             catch (Exception ex)
@@ -176,7 +176,7 @@ namespace legallead.permissions.api.Utility
             return content;
         }
 
-        public async Task<string> Transform(bool isvalid, string? status, string? id, string html)
+        public async Task<string> TransformAsync(bool isvalid, string? status, string? id, string html)
         {
 
             if (!isvalid || status == null || id == null) return html;
@@ -221,18 +221,18 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        public async Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html)
+        public async Task<string> TransformForPermissionsAsync(bool isvalid, string? status, string? id, string html)
         {
             string paymentType = "Monthly";
             bool? isPermissionSet = default;
             var externalIndex = id ?? string.Empty;
-            var bo = (await _custDb.GetLevelRequestById(externalIndex)) ?? new() { ExternalId = externalIndex, IsPaymentSuccess = isvalid };
+            var bo = (await _custDb.GetLevelRequestByIdAsync(externalIndex)) ?? new() { ExternalId = externalIndex, IsPaymentSuccess = isvalid };
             var expected = ((await _custRepo.GetLevelRequestPaymentAmount(externalIndex)) ?? []).FindAll(x => (x.PriceType ?? string.Empty).Equals(paymentType));
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
-            bo = await _custDb.CompleteLevelRequest(bo);
+            bo = await _custDb.CompleteLevelRequestAsync(bo);
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
-                isPermissionSet = (await _subscriptionDb.SetPermissionGroup(user, bo.LevelName)).Key;
+                isPermissionSet = (await _subscriptionDb.SetPermissionGroupAsync(user, bo.LevelName)).Key;
             }
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
@@ -252,7 +252,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Coverage is to be handled later. Reference GitHub Issue")]
-        public async Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
+        public async Task<string> TransformForDiscountsAsync(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html)
         {
             string paymentType = "Monthly";
             bool? isPermissionSet = default;
@@ -261,10 +261,10 @@ namespace legallead.permissions.api.Utility
                 cdb.SubscriptionInfrastructure(infra);
             }
             var externalId = id ?? string.Empty;
-            var bo = (await _custDb.GetDiscountRequestById(externalId)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
+            var bo = (await _custDb.GetDiscountRequestByIdAsync(externalId)) ?? new() { ExternalId = id, IsPaymentSuccess = isvalid };
             var user = await _userDb.GetById(bo.UserId ?? string.Empty);
             bo.IsPaymentSuccess = isvalid;
-            bo = await _custDb.CompleteDiscountRequest(bo);
+            bo = await _custDb.CompleteDiscountRequestAsync(bo);
             if (isvalid && bo != null && !string.IsNullOrWhiteSpace(bo.LevelName) && user != null)
             {
                 isPermissionSet = true;
@@ -287,7 +287,7 @@ namespace legallead.permissions.api.Utility
             return tranformed;
         }
 
-        public async Task<object?> ResetDownload(DownloadResetRequest request)
+        public async Task<object?> ResetDownloadAsync(DownloadResetRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.UserId) || string.IsNullOrWhiteSpace(request.ExternalId))
             {
@@ -299,29 +299,29 @@ namespace legallead.permissions.api.Utility
 
 
 
-        public async Task<bool> IsChangeUserLevel(string? status, string? id)
+        public async Task<bool> IsChangeUserLevelAsync(string? status, string? id)
         {
             var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
-            var bo = await _custDb.GetLevelRequestById(id);
+            var bo = await _custDb.GetLevelRequestByIdAsync(id);
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
-        public async Task<bool> IsDiscountLevel(string? status, string? id)
+        public async Task<bool> IsDiscountLevelAsync(string? status, string? id)
         {
             var mapped = requestNames.ToList().Find(s => s.Equals(status));
             if (string.IsNullOrEmpty(mapped)) return false;
             if (string.IsNullOrEmpty(id)) return false;
             if (mapped.Equals(requestNames[1])) return false;
-            var bo = await _custDb.GetDiscountRequestById(id);
+            var bo = await _custDb.GetDiscountRequestByIdAsync(id);
             return bo != null && !string.IsNullOrEmpty(bo.Id);
         }
 
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested thru public method.")]
-        private async Task GenerateExcelResponse(PaymentSessionDto dto, string searchId, List<SearchFinalBo> records, DownloadResponse response)
+        private async Task GenerateExcelResponseAsync(PaymentSessionDto dto, string searchId, List<SearchFinalBo> records, DownloadResponse response)
         {
             response.Content = ExcelExtensions.WriteExcel(dto, records);
             if (response.Content != null)

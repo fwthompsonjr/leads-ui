@@ -7,7 +7,7 @@ namespace legallead.permissions.api.Health
     [ExcludeFromCodeCoverage(Justification = "This class is tested through postman integration tests.")]
     internal static class WriteHealthResponse
     {
-        public static Task WriteResponse(HttpContext context, HealthReport healthReport)
+        public static Task WriteResponseAsync(HttpContext context, HealthReport healthReport)
         {
             context.Response.ContentType = "application/json; charset=utf-8";
 

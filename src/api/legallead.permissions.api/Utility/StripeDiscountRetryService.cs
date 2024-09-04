@@ -95,7 +95,7 @@ namespace legallead.permissions.api.Utility
             _ = await searchDb.AppendAdHocSession(payment);
             return modification;
         }
-        public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
+        public async static Task<Tuple<bool, string, Invoice>> VerifySubscriptionAsync(
             DiscountRequestBo requested,
             ICustomerRepository? customerDb = null,
             string paymentType = "Monthly")

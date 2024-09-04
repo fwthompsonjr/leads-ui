@@ -13,7 +13,7 @@ namespace permissions.api.tests.Contollers
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ControllerCanGetCount(bool hasUser = true)
+        public async Task ControllerCanGetCountAsync(bool hasUser = true)
         {
             var provider = GetProvider();
             var user = hasUser ? provider.GetRequiredService<User>() : null;
@@ -21,19 +21,19 @@ namespace permissions.api.tests.Contollers
             var mailbox = provider.GetRequiredService<Mock<IUserMailbox>>();
             var payload = provider.GetRequiredService<MailboxRequest>();
             var bo = new EmailCountBo();
-            mailbox.Setup(m => m.GetCount(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
-            search.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            mailbox.Setup(m => m.GetCountAsync(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
+            search.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             var controller = provider.GetRequiredService<MailboxController>();
             var problems = await Record.ExceptionAsync(async () =>
             {
-                _ = await controller.GetCount(payload);
+                _ = await controller.GetCountAsync(payload);
             });
             Assert.Null(problems);
         }
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ControllerCanGetBody(bool hasUser = true)
+        public async Task ControllerCanGetBodyAsync(bool hasUser = true)
         {
             var provider = GetProvider();
             var user = hasUser ? provider.GetRequiredService<User>() : null;
@@ -41,12 +41,12 @@ namespace permissions.api.tests.Contollers
             var mailbox = provider.GetRequiredService<Mock<IUserMailbox>>();
             var payload = provider.GetRequiredService<MailboxRequest>();
             var bo = new EmailBodyBo();
-            mailbox.Setup(m => m.GetBody(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
-            search.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            mailbox.Setup(m => m.GetBodyAsync(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
+            search.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             var controller = provider.GetRequiredService<MailboxController>();
             var problems = await Record.ExceptionAsync(async () =>
             {
-                _ = await controller.GetBody(payload);
+                _ = await controller.GetBodyAsync(payload);
             });
             Assert.Null(problems);
         }
@@ -55,7 +55,7 @@ namespace permissions.api.tests.Contollers
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ControllerCanGetMailMessages(bool hasUser = true)
+        public async Task ControllerCanGetMailMessagesAsync(bool hasUser = true)
         {
             var provider = GetProvider();
             var user = hasUser ? provider.GetRequiredService<User>() : null;
@@ -63,12 +63,12 @@ namespace permissions.api.tests.Contollers
             var mailbox = provider.GetRequiredService<Mock<IUserMailbox>>();
             var payload = provider.GetRequiredService<MailboxRequest>();
             var bo = new List<EmailListBo>();
-            mailbox.Setup(m => m.GetMailMessages(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
-            search.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            mailbox.Setup(m => m.GetMailMessagesAsync(It.IsAny<MailboxRequest>())).ReturnsAsync(bo);
+            search.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             var controller = provider.GetRequiredService<MailboxController>();
             var problems = await Record.ExceptionAsync(async () =>
             {
-                _ = await controller.GetMailMessages(payload);
+                _ = await controller.GetMailMessagesAsync(payload);
             });
             Assert.Null(problems);
         }

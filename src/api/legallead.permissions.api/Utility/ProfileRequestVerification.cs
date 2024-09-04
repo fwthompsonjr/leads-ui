@@ -8,10 +8,10 @@ namespace legallead.permissions.api.Utility
     {
         private readonly IProfileInfrastructure _db = db;
 
-        public async Task<ActionUserResponse> VerifyRequest(HttpRequest http, object[] request)
+        public async Task<ActionUserResponse> VerifyRequestAsync(HttpRequest http, object[] request)
         {
             var response = new ActionUserResponse();
-            var user = await _db.GetUser(http);
+            var user = await _db.GetUserAsync(http);
             if (user == null)
             {
                 response.Result = new UnauthorizedObjectResult("Invalid user account.");

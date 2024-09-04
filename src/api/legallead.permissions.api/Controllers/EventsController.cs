@@ -12,11 +12,11 @@ namespace legallead.permissions.api.Controllers
         private readonly string endpointSecret = config.WebhookId ?? string.Empty;
 
         [HttpPost]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexAsync()
         {
             try
             {
-                var stripeEvent = await GetEvent(endpointSecret, Request);
+                var stripeEvent = await GetEventAsync(endpointSecret, Request);
                 if (stripeEvent == null) { return BadRequest(); }
                 switch (stripeEvent.Type)
                 {
@@ -49,7 +49,7 @@ namespace legallead.permissions.api.Controllers
             }
         }
 
-        private static async Task<Event?> GetEvent(string webhook, HttpRequest request)
+        private static async Task<Event?> GetEventAsync(string webhook, HttpRequest request)
         {
             try
             {

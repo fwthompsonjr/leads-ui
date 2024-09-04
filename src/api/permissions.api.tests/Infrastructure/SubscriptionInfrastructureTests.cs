@@ -10,7 +10,7 @@ namespace permissions.api.tests
     public class SubscriptionInfrastructureTests : BaseControllerTest
     {
         [Fact]
-        public async Task AddCountySubscriptionsHappyPath()
+        public async Task AddCountySubscriptionsHappyPathAsync()
         {
             var response = new KeyValuePair<bool, string>(true, "Unit test is passed.");
             var tmpCounty = new UsStateCounty();
@@ -19,18 +19,18 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.AddCountySubscriptions(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
+            dp.Setup(m => m.AddCountySubscriptionsAsync(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
             permissionHistoryMock.Setup(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()));
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.AddCountySubscriptions(tmpUser, tmpCounty);
+            var actual = await sut.AddCountySubscriptionsAsync(tmpUser, tmpCounty);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Once);
         }
 
         [Fact]
-        public async Task AddCountySubscriptionsNoSubscriptionPath()
+        public async Task AddCountySubscriptionsNoSubscriptionPathAsync()
         {
             var response = new KeyValuePair<bool, string>(false, "Unit test is passed.");
             var tmpCounty = new UsStateCounty();
@@ -39,18 +39,18 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.AddCountySubscriptions(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
+            dp.Setup(m => m.AddCountySubscriptionsAsync(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
             permissionHistoryMock.Setup(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()));
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.AddCountySubscriptions(tmpUser, tmpCounty);
+            var actual = await sut.AddCountySubscriptionsAsync(tmpUser, tmpCounty);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Never);
         }
 
         [Fact]
-        public async Task AddStateSubscriptionsHappyPath()
+        public async Task AddStateSubscriptionsHappyPathAsync()
         {
             var response = new KeyValuePair<bool, string>(true, "Unit test is passed.");
             var tmpState = "1234567";
@@ -60,19 +60,19 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.AddStateSubscriptions(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
+            dp.Setup(m => m.AddStateSubscriptionsAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.AddStateSubscriptions(tmpUser, tmpState);
+            var actual = await sut.AddStateSubscriptionsAsync(tmpUser, tmpState);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Once);
         }
 
         [Fact]
-        public async Task AddStateSubscriptionsNoSubscriptionPath()
+        public async Task AddStateSubscriptionsNoSubscriptionPathAsync()
         {
             var response = new KeyValuePair<bool, string>(false, "Unit test is passed.");
             var tmpState = "1234567";
@@ -82,19 +82,19 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.AddStateSubscriptions(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
+            dp.Setup(m => m.AddStateSubscriptionsAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.AddStateSubscriptions(tmpUser, tmpState);
+            var actual = await sut.AddStateSubscriptionsAsync(tmpUser, tmpState);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Never);
         }
 
         [Fact]
-        public async Task RemoveCountySubscriptionsHappyPath()
+        public async Task RemoveCountySubscriptionsHappyPathAsync()
         {
             var response = new KeyValuePair<bool, string>(true, "Unit test is passed.");
             var tmpCounty = new UsStateCounty();
@@ -104,19 +104,19 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.RemoveCountySubscriptions(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
+            dp.Setup(m => m.RemoveCountySubscriptionsAsync(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.RemoveCountySubscriptions(tmpUser, tmpCounty);
+            var actual = await sut.RemoveCountySubscriptionsAsync(tmpUser, tmpCounty);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Once);
         }
 
         [Fact]
-        public async Task RemoveCountySubscriptionsNoSubscriptionPath()
+        public async Task RemoveCountySubscriptionsNoSubscriptionPathAsync()
         {
             var response = new KeyValuePair<bool, string>(false, "Unit test is passed.");
             var tmpCounty = new UsStateCounty();
@@ -126,19 +126,19 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.RemoveCountySubscriptions(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
+            dp.Setup(m => m.RemoveCountySubscriptionsAsync(It.IsAny<User>(), It.IsAny<UsStateCounty>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.RemoveCountySubscriptions(tmpUser, tmpCounty);
+            var actual = await sut.RemoveCountySubscriptionsAsync(tmpUser, tmpCounty);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Never);
         }
 
         [Fact]
-        public async Task RemoveStateSubscriptionsHappyPath()
+        public async Task RemoveStateSubscriptionsHappyPathAsync()
         {
             var response = new KeyValuePair<bool, string>(true, "Unit test is passed.");
             var tmpState = "1234567";
@@ -148,19 +148,19 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.RemoveStateSubscriptions(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
+            dp.Setup(m => m.RemoveStateSubscriptionsAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.RemoveStateSubscriptions(tmpUser, tmpState);
+            var actual = await sut.RemoveStateSubscriptionsAsync(tmpUser, tmpState);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Once);
         }
 
         [Fact]
-        public async Task RemoveStateSubscriptionsNoSubscriptionPath()
+        public async Task RemoveStateSubscriptionsNoSubscriptionPathAsync()
         {
             var response = new KeyValuePair<bool, string>(false, "Unit test is passed.");
             var tmpState = "1234567";
@@ -170,12 +170,12 @@ namespace permissions.api.tests
 
             var permissionHistoryMock = new Mock<IUserPermissionHistoryRepository>();
             dp.SetupGet(x => x.PermissionHistoryDb).Returns(permissionHistoryMock.Object);
-            dp.Setup(m => m.RemoveStateSubscriptions(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
+            dp.Setup(m => m.RemoveStateSubscriptionsAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(response);
             permissionHistoryMock.SetupSequence(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()))
                 .Returns(snapshot);
 
             var sut = new SubscriptionInfrastructure(dp.Object);
-            var actual = await sut.RemoveStateSubscriptions(tmpUser, tmpState);
+            var actual = await sut.RemoveStateSubscriptionsAsync(tmpUser, tmpState);
 
             Assert.Equal(response, actual);
             permissionHistoryMock.Verify(s => s.CreateSnapshot(It.IsAny<User>(), It.IsAny<legallead.jdbc.PermissionChangeTypes>()), Times.Never);

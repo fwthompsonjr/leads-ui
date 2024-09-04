@@ -17,7 +17,7 @@ namespace permissions.api.tests.Contollers
             var guid = testIndex == 2 ? Guid.Empty.ToString("D") : response;
             var controller = new SubscriptionTestContoller();
             var request = testIndex == 0 ? null : controller.GetLevelRequest();
-            controller.MqStripeSvc.Setup(x => x.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
+            controller.MqStripeSvc.Setup(x => x.FetchClientSecretValueAsync(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
             controller.MqSecretSvc.Setup(x => x.GetSubscriptionSecret(It.IsAny<LevelRequestBo>(), It.IsAny<string>())).Returns(response);
             var uid = controller.GetSecret(request);
             Assert.NotNull(uid);
@@ -30,7 +30,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public async Task SutCanDiscountCheckout(int testIndex, string? sts = "success", string? id = "012345")
+        public async Task SutCanDiscountCheckoutAsync(int testIndex, string? sts = "success", string? id = "012345")
         {
             var errored = await Record.ExceptionAsync(async () =>
             {
@@ -39,15 +39,15 @@ namespace permissions.api.tests.Contollers
                 var controller = new SubscriptionTestContoller();
                 var request = testIndex == 0 ? null : controller.GetLevelRequest();
                 var ispaid = testIndex != 4;
-                controller.MqHtml.Setup(x => x.IsChangeUserLevel(
+                controller.MqHtml.Setup(x => x.IsChangeUserLevelAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(true);
-                controller.MqHtml.Setup(x => x.IsSubscriptionValid(
+                controller.MqHtml.Setup(x => x.IsSubscriptionValidAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(request);
-                controller.MqHtml.Setup(x => x.IsRequestPaid(
+                controller.MqHtml.Setup(x => x.IsRequestPaidAsync(
                     It.IsAny<LevelRequestBo>()
                     )).ReturnsAsync(ispaid);
                 if (testIndex != 5)
@@ -57,17 +57,17 @@ namespace permissions.api.tests.Contollers
                         It.IsAny<string>()
                         )).Returns(response);
                 }
-                controller.MqHtml.Setup(x => x.TransformForPermissions(
+                controller.MqHtml.Setup(x => x.TransformForPermissionsAsync(
                     It.IsAny<bool>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(response);
-                controller.MqStripeSvc.Setup(x => x.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
+                controller.MqStripeSvc.Setup(x => x.FetchClientSecretValueAsync(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
                 controller.MqSecretSvc.Setup(x => x.GetSubscriptionSecret(
                     It.IsAny<LevelRequestBo>(),
                     It.IsAny<string>())).Returns(response);
-                _ = await controller.SubscriptionCheckout(sts, id);
+                _ = await controller.SubscriptionCheckoutAsync(sts, id);
             });
             Assert.Null(errored);
         }

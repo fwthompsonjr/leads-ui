@@ -84,13 +84,13 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true)]
         [InlineData(false, false)]
         [InlineData(false, true)]
-        public async Task ServiceCanVerify(bool hasUser, bool hasError)
+        public async Task ServiceCanVerifyAsync(bool hasUser, bool hasError)
         {
             var provider = GetProvider();
             var http = provider.GetRequiredService<HttpRequest>();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
             User? user = hasUser ? fakeUser.Generate() : null;
-            db.Setup(s => s.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            db.Setup(s => s.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
             var payload = faker.Generate(10).ToArray();
             if (hasError)
             {
@@ -99,7 +99,7 @@ namespace permissions.api.tests.Utility
                 invalid.Phone = string.Empty;
             }
             var service = provider.GetRequiredService<IProfileRequestVerification>();
-            var response = await service.VerifyRequest(http, payload);
+            var response = await service.VerifyRequestAsync(http, payload);
             Assert.NotNull(response);
             if (hasUser && hasError)
             {

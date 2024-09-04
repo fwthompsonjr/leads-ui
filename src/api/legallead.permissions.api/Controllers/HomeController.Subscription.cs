@@ -7,29 +7,29 @@ namespace legallead.permissions.api.Controllers
     {
 
         [HttpGet("/subscription-result")]
-        public async Task<IActionResult> UserLevelLanding([FromQuery] string? sts, [FromQuery] string? id)
+        public async Task<IActionResult> UserLevelLandingAsync([FromQuery] string? sts, [FromQuery] string? id)
         {
-            var isValid = await paymentSvc.IsChangeUserLevel(sts, id);
+            var isValid = await paymentSvc.IsChangeUserLevelAsync(sts, id);
             var content =
                 isValid ? Properties.Resources.page_payment_completed
                 : Properties.Resources.page_level_request_completed;
-            content = await paymentSvc.TransformForPermissions(isValid, sts, id, content);
+            content = await paymentSvc.TransformForPermissionsAsync(isValid, sts, id, content);
             return Content(content, "text/html");
         }
 
         [HttpGet("/subscription-checkout")]
-        public async Task<IActionResult> SubscriptionCheckout([FromQuery] string? id, string? sessionid)
+        public async Task<IActionResult> SubscriptionCheckoutAsync([FromQuery] string? id, string? sessionid)
         {
-            var session = await paymentSvc.IsSubscriptionValid(id, sessionid);
+            var session = await paymentSvc.IsSubscriptionValidAsync(id, sessionid);
             if (session == null)
             {
                 var nodata = Properties.Resources.page_payment_detail_invalid;
                 return Content(nodata, "text/html");
             }
-            var ispaid = await paymentSvc.IsRequestPaid(session);
+            var ispaid = await paymentSvc.IsRequestPaidAsync(session);
             if (ispaid)
             {
-                return await UserLevelLanding("success", id);
+                return await UserLevelLandingAsync("success", id);
             }
             var clientSecret = GetSubscriptionSecret(session);
             var temp = Properties.Resources.page_invoice_subscription_html;
@@ -41,10 +41,10 @@ namespace legallead.permissions.api.Controllers
 
 
         [HttpPost("/subscription-fetch-intent")]
-        public async Task<IActionResult> FetchSubscriptionIntent([FromBody] FetchIntentRequest request)
+        public async Task<IActionResult> FetchSubscriptionIntentAsync([FromBody] FetchIntentRequest request)
         {
             var nodata = Json(new { clientSecret = Guid.Empty.ToString("D") });
-            var session = await subscriptionSvc.GetLevelRequestById(request.Id, null);
+            var session = await subscriptionSvc.GetLevelRequestByIdAsync(request.Id, null);
             if (session == null || string.IsNullOrEmpty(session.SessionId))
             {
                 return nodata;
@@ -55,7 +55,7 @@ namespace legallead.permissions.api.Controllers
         protected string GetSubscriptionSecret(LevelRequestBo? session)
         {
             if (session == null) return NoPaymentItem;
-            var clientSecret = stripeSvc.FetchClientSecretValue(session).GetAwaiter().GetResult();
+            var clientSecret = stripeSvc.FetchClientSecretValueAsync(session).GetAwaiter().GetResult();
             if (!clientSecret.Equals(NoPaymentItem)) return clientSecret;
             return secretSvc.GetSubscriptionSecret(session);
         }

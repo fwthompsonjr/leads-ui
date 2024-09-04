@@ -13,7 +13,7 @@ namespace legallead.permissions.api.Health
         {
             try
             {
-                var response = await CanCreate(types);
+                var response = await CanCreateAsync(types);
                 return response;
             }
             catch (Exception ex)

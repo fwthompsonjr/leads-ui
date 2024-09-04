@@ -45,10 +45,10 @@ namespace permissions.api.tests
         }
 
         [Fact]
-        public async Task ProfileGetContactDetailNoUser()
+        public async Task ProfileGetContactDetailNoUserAsync()
         {
             var service = GetInfrastructure();
-            var response = await service.GetContactDetail(null, string.Empty);
+            var response = await service.GetContactDetailAsync(null, string.Empty);
             Assert.NotNull(response);
             Assert.Single(response);
             var item = response[0];
@@ -57,11 +57,11 @@ namespace permissions.api.tests
         }
 
         [Fact]
-        public async Task ProfileGetContactRoleNoUser()
+        public async Task ProfileGetContactRoleNoUserAsync()
         {
             User? user = null;
             var service = GetInfrastructure();
-            var response = await service.GetContactRole(user);
+            var response = await service.GetContactRoleAsync(user);
             Assert.NotNull(response);
             Assert.Equal("Guest", response);
         }
@@ -72,7 +72,7 @@ namespace permissions.api.tests
         [InlineData("Platinum")]
         [InlineData("Gold")]
         [InlineData("Silver")]
-        public async Task ProfileGetContactRole(string roleName)
+        public async Task ProfileGetContactRoleAsync(string roleName)
         {
             var provider = GetTestArtifacts();
             var service = provider.GetRequiredService<IProfileInfrastructure>();
@@ -80,13 +80,13 @@ namespace permissions.api.tests
             var user = provider.GetRequiredService<User>();
             var permissions = GetPermissions(roleName);
             db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
-            var response = await service.GetContactRole(user);
+            var response = await service.GetContactRoleAsync(user);
             Assert.NotNull(response);
             Assert.Equal(roleName, response);
         }
 
         [Fact]
-        public async Task ProfileGetContactWithRoleMissingReturnsDefault()
+        public async Task ProfileGetContactWithRoleMissingReturnsDefaultAsync()
         {
             const string permissionName = "Account.Permission.Level";
             var provider = GetTestArtifacts();
@@ -96,13 +96,13 @@ namespace permissions.api.tests
             var permissions = GetPermissions("").ToList();
             permissions.RemoveAll(a => a.KeyName.Equals(permissionName));
             db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
-            var response = await service.GetContactRole(user);
+            var response = await service.GetContactRoleAsync(user);
             Assert.NotNull(response);
             Assert.Equal("Guest", response);
         }
 
         [Fact]
-        public async Task ProfileGetContactWithRoleEmptyReturnsDefault()
+        public async Task ProfileGetContactWithRoleEmptyReturnsDefaultAsync()
         {
             var provider = GetTestArtifacts();
             var service = provider.GetRequiredService<IProfileInfrastructure>();
@@ -110,18 +110,18 @@ namespace permissions.api.tests
             var user = provider.GetRequiredService<User>();
             var permissions = GetPermissions("").ToList();
             db.Setup(m => m.GetAll(It.IsAny<User>())).ReturnsAsync(permissions);
-            var response = await service.GetContactRole(user);
+            var response = await service.GetContactRoleAsync(user);
             Assert.NotNull(response);
             Assert.Equal("Guest", response);
         }
 
         [Fact]
-        public async Task ProfileCanGetContactDetailNoResponseType()
+        public async Task ProfileCanGetContactDetailNoResponseTypeAsync()
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
             var user = provider.GetRequiredService<User>();
-            var response = await service.GetContactDetail(user, string.Empty);
+            var response = await service.GetContactDetailAsync(user, string.Empty);
             Assert.NotNull(response);
             Assert.NotEmpty(response);
             Assert.Equal(4, response.Length);
@@ -132,19 +132,19 @@ namespace permissions.api.tests
         [InlineData("Email")]
         [InlineData("Phone")]
         [InlineData("Name")]
-        public async Task ProfileCanGetContactDetailResponseType(string typeName)
+        public async Task ProfileCanGetContactDetailResponseTypeAsync(string typeName)
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
             var user = provider.GetRequiredService<User>();
-            var response = await service.GetContactDetail(user, typeName);
+            var response = await service.GetContactDetailAsync(user, typeName);
             Assert.NotNull(response);
             Assert.NotEmpty(response);
             Assert.Single(response);
         }
 
         [Fact]
-        public async Task ProfileGetContactDetailWillHandleException()
+        public async Task ProfileGetContactDetailWillHandleExceptionAsync()
         {
             var provider = GetTestArtifacts();
             var service = provider.GetRequiredService<IProfileInfrastructure>();
@@ -153,7 +153,7 @@ namespace permissions.api.tests
             var exception = new Faker().System.Exception();
             var message = exception.Message;
             userProfileVwMock.Setup(m => m.GetAll(It.IsAny<User>())).ThrowsAsync(exception);
-            var response = await service.GetContactDetail(user, string.Empty);
+            var response = await service.GetContactDetailAsync(user, string.Empty);
             Assert.NotNull(response);
             Assert.Single(response);
             var item = response[0];
@@ -161,7 +161,7 @@ namespace permissions.api.tests
         }
 
         [Fact]
-        public async Task ProfileCanChangeContactAddress()
+        public async Task ProfileCanChangeContactAddressAsync()
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
@@ -170,12 +170,12 @@ namespace permissions.api.tests
             var changerequest = JsonConvert.DeserializeObject<ChangeContactAddressRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 
-            var actual = await service.ChangeContactAddress(user, changerequest);
+            var actual = await service.ChangeContactAddressAsync(user, changerequest);
             Assert.True(actual.Key);
         }
 
         [Fact]
-        public async Task ProfileCanChangeContactEmail()
+        public async Task ProfileCanChangeContactEmailAsync()
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
@@ -184,12 +184,12 @@ namespace permissions.api.tests
             var changerequest = JsonConvert.DeserializeObject<ChangeContactEmailRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 
-            var actual = await service.ChangeContactEmail(user, changerequest);
+            var actual = await service.ChangeContactEmailAsync(user, changerequest);
             Assert.True(actual.Key);
         }
 
         [Fact]
-        public async Task ProfileCanChangeContactPhone()
+        public async Task ProfileCanChangeContactPhoneAsync()
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
@@ -198,12 +198,12 @@ namespace permissions.api.tests
             var changerequest = JsonConvert.DeserializeObject<ChangeContactPhoneRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 
-            var actual = await service.ChangeContactPhone(user, changerequest);
+            var actual = await service.ChangeContactPhoneAsync(user, changerequest);
             Assert.True(actual.Key);
         }
 
         [Fact]
-        public async Task ProfileCanChangeContactName()
+        public async Task ProfileCanChangeContactNameAsync()
         {
             var provider = GetTestArtifacts();
             var service = GetInfrastructure();
@@ -212,7 +212,7 @@ namespace permissions.api.tests
             var changerequest = JsonConvert.DeserializeObject<ChangeContactNameRequest[]>(change.Data);
             Assert.NotNull(changerequest);
 
-            var actual = await service.ChangeContactName(user, changerequest);
+            var actual = await service.ChangeContactNameAsync(user, changerequest);
             Assert.True(actual.Key);
         }
 

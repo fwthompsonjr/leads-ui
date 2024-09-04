@@ -8,37 +8,37 @@ namespace legallead.permissions.api.Utility
 {
     public partial class SubscriptionInfrastructure
     {
-        public async Task<LevelRequestBo> GenerateDiscountSession(HttpRequest request, User user, string json, bool isAdmin, string externalId = "")
+        public async Task<LevelRequestBo> GenerateDiscountSessionAsync(HttpRequest request, User user, string json, bool isAdmin, string externalId = "")
         {
 
-            var findSession = await IsDiscountSessionNeeded(user, json, isAdmin, externalId);
+            var findSession = await IsDiscountSessionNeededAsync(user, json, isAdmin, externalId);
             if (findSession != null && findSession.IsPaymentSuccess.GetValueOrDefault()) return findSession;
             if (_customer == null || _payment == null) return new();
             if (string.IsNullOrWhiteSpace(externalId) && !string.IsNullOrEmpty(findSession?.ExternalId))
             {
                 externalId = findSession.ExternalId;
             }
-            var cust = await _customer.GetOrCreateCustomer(user.Id);
+            var cust = await _customer.GetOrCreateCustomerAsync(user.Id);
             if (cust == null || string.IsNullOrEmpty(cust.CustomerId)) return new();
 
             var successUrl = $"{request.Scheme}://{request.Host}/discount-result?session_id=~1&sts=success&id=~0";
-            LevelChangeRequest changeRq = await GetDiscountSession(user, json, externalId, cust, successUrl);
-            var bo = (await _customer.AddDiscountChangeRequest(changeRq)) ?? new();
+            LevelChangeRequest changeRq = await GetDiscountSessionAsync(user, json, externalId, cust, successUrl);
+            var bo = (await _customer.AddDiscountChangeRequestAsync(changeRq)) ?? new();
             return bo;
         }
 
-        public async Task<LevelRequestBo?> GetDiscountRequestById(string? id, string? sessionid)
+        public async Task<LevelRequestBo?> GetDiscountRequestByIdAsync(string? id, string? sessionid)
         {
             if (string.IsNullOrWhiteSpace(id)) return null;
             if (_customer == null) return null;
-            var bo = await _customer.GetDiscountRequestById(id);
+            var bo = await _customer.GetDiscountRequestByIdAsync(id);
             if (bo == null || string.IsNullOrEmpty(bo.SessionId)) return null;
             if (!string.IsNullOrEmpty(sessionid) && bo.SessionId != sessionid) return null;
             return bo;
         }
 
 
-        private async Task<LevelRequestBo?> IsDiscountSessionNeeded(User user, string json, bool isAdmin, string externalId = "")
+        private async Task<LevelRequestBo?> IsDiscountSessionNeededAsync(User user, string json, bool isAdmin, string externalId = "")
         {
             if (string.IsNullOrEmpty(json) || !CanMapDiscountJson(json)) { return null; }
             var payloadObj = MapDiscountJson(json);
@@ -60,13 +60,13 @@ namespace legallead.permissions.api.Utility
                     SessionId = "NONE",
                     UserId = user.Id
                 };
-                var session = await _customer.AddDiscountChangeRequest(request);
+                var session = await _customer.AddDiscountChangeRequestAsync(request);
                 return session;
             }
             return new LevelRequestBo { ExternalId = externalId };
         }
 
-        private async Task<LevelChangeRequest> GetDiscountSession(User user, string json, string externalId, PaymentCustomerBo cust, string successUrl)
+        private async Task<LevelChangeRequest> GetDiscountSessionAsync(User user, string json, string externalId, PaymentCustomerBo cust, string successUrl)
         {
             if (_customer == null || _payment == null || !CanMapDiscountJson(json)) return new();
             var payloadObj = MapDiscountJson(json);
@@ -77,7 +77,7 @@ namespace legallead.permissions.api.Utility
             {
                 var payload = JsonConvert.SerializeObject(payloadObj);
                 var cancelUrl = successUrl.Replace("sts=success", "sts=cancel");
-                var session = await CreateDiscountSession(cust, successUrl, cancelUrl, externalId, payloadObj);
+                var session = await CreateDiscountSessionAsync(cust, successUrl, cancelUrl, externalId, payloadObj);
                 var changeRq = new LevelChangeRequest
                 {
                     ExternalId = externalId,
@@ -97,7 +97,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        private static async Task<SubscriptionCreatedModel> CreateDiscountSession(
+        private static async Task<SubscriptionCreatedModel> CreateDiscountSessionAsync(
             PaymentCustomerBo cust,
             string successUrl,
             string cancelUrl,

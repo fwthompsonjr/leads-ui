@@ -6,19 +6,19 @@ namespace legallead.permissions.api.Utility
     {
         private readonly IMapper mapper = ModelMapper.Mapper;
 
-        public async Task<string> GetContactRole(User? user)
+        public async Task<string> GetContactRoleAsync(User? user)
         {
             const string fallbackName = "Guest";
             const string permissionName = "Account.Permission.Level";
             if (user == null) { return fallbackName; }
-            await _db.InitializePermission(user);
+            await _db.InitializePermissionAsync(user);
             var profiles = (await _db.UserPermissionVw.GetAll(user)).ToList();
             var roleItem = profiles.Find(x => x.KeyName.Equals(permissionName));
             var roleName = roleItem?.KeyValue ?? fallbackName;
             return string.IsNullOrWhiteSpace(roleName) ? fallbackName : roleName;
         }
 
-        public async Task<GetContactResponse[]?> GetContactDetail(User? user, string responseType)
+        public async Task<GetContactResponse[]?> GetContactDetailAsync(User? user, string responseType)
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
@@ -38,35 +38,35 @@ namespace legallead.permissions.api.Utility
             }
         }
 
-        public async Task<KeyValuePair<bool, string>> ChangeContactAddress(User? user, ChangeContactAddressRequest[] request)
+        public async Task<KeyValuePair<bool, string>> ChangeContactAddressAsync(User? user, ChangeContactAddressRequest[] request)
         {
-            var updated = await ChangeContact(_db, mapper, user, request);
-            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserAddressDetailChanged);
+            var updated = await ChangeContactAsync(_db, mapper, user, request);
+            var response = await CreateSnapshotInternalAsync(_db, updated, user, jdbc.ProfileChangeTypes.UserAddressDetailChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> ChangeContactEmail(User? user, ChangeContactEmailRequest[] request)
+        public async Task<KeyValuePair<bool, string>> ChangeContactEmailAsync(User? user, ChangeContactEmailRequest[] request)
         {
-            var updated = await ChangeContact(_db, mapper, user, request);
-            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
+            var updated = await ChangeContactAsync(_db, mapper, user, request);
+            var response = await CreateSnapshotInternalAsync(_db, updated, user, jdbc.ProfileChangeTypes.UserEmailAddressChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> ChangeContactName(User? user, ChangeContactNameRequest[] request)
+        public async Task<KeyValuePair<bool, string>> ChangeContactNameAsync(User? user, ChangeContactNameRequest[] request)
         {
-            var updated = await ChangeContact(_db, mapper, user, request);
-            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserContactNameChanged);
+            var updated = await ChangeContactAsync(_db, mapper, user, request);
+            var response = await CreateSnapshotInternalAsync(_db, updated, user, jdbc.ProfileChangeTypes.UserContactNameChanged);
             return response;
         }
 
-        public async Task<KeyValuePair<bool, string>> ChangeContactPhone(User? user, ChangeContactPhoneRequest[] request)
+        public async Task<KeyValuePair<bool, string>> ChangeContactPhoneAsync(User? user, ChangeContactPhoneRequest[] request)
         {
-            var updated = await ChangeContact(_db, mapper, user, request);
-            var response = await CreateSnapshotInternal(_db, updated, user, jdbc.ProfileChangeTypes.UserPhoneNumberChanged);
+            var updated = await ChangeContactAsync(_db, mapper, user, request);
+            var response = await CreateSnapshotInternalAsync(_db, updated, user, jdbc.ProfileChangeTypes.UserPhoneNumberChanged);
             return response;
         }
 
-        private static async Task<KeyValuePair<bool, string>> ChangeContact(IDataProvider db, IMapper mapper, User? user, object request)
+        private static async Task<KeyValuePair<bool, string>> ChangeContactAsync(IDataProvider db, IMapper mapper, User? user, object request)
         {
             if (user == null) return new KeyValuePair<bool, string>(false, "Invalid user context");
             var current = await db.UserProfileVw.GetAll(user);
@@ -95,7 +95,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private method tested from public members.")]
-        private static async Task<KeyValuePair<bool, string>> CreateSnapshotInternal(
+        private static async Task<KeyValuePair<bool, string>> CreateSnapshotInternalAsync(
             IDataProvider db,
             KeyValuePair<bool, string> updated,
             User? user,

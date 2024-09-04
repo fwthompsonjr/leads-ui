@@ -9,7 +9,7 @@ namespace legallead.permissions.api.Utility
 {
     internal static class StripeSubscriptionRetryService
     {
-        public async static Task<Tuple<bool, string, Invoice>> VerifySubscription(
+        public async static Task<Tuple<bool, string, Invoice>> VerifySubscriptionAsync(
             LevelRequestBo requested,
             ICustomerRepository? customerDb = null,
             string paymentType = "Monthly")

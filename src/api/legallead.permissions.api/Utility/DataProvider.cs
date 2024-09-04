@@ -59,7 +59,7 @@ namespace legallead.permissions.api
         public virtual IUserProfileHistoryRepository ProfileHistoryDb => _profileHistoryDb;
         public virtual IUserRepository UserDb => _userDb;
 
-        public virtual async Task<bool> InitializeProfile(User user)
+        public virtual async Task<bool> InitializeProfileAsync(User user)
         {
             var profiles = await ProfileDb.GetAll();
             if (!profiles.Any()) { return true; }
@@ -77,7 +77,7 @@ namespace legallead.permissions.api
             return true;
         }
 
-        public virtual async Task<bool> InitializePermission(User user)
+        public virtual async Task<bool> InitializePermissionAsync(User user)
         {
             var permissions = await PermissionDb.GetAll();
             if (!permissions.Any()) { return true; }
@@ -96,7 +96,7 @@ namespace legallead.permissions.api
         }
 
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName)
+        public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroupAsync(User user, string groupName)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode)
+        public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptionsAsync(User user, string stateCode)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode)
+        public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptionsAsync(User user, string stateCode)
         {
             try
             {
@@ -195,7 +195,7 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
+        public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
             try
             {
@@ -223,7 +223,7 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
+        public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
             try
             {

@@ -5,9 +5,9 @@
         protected readonly IDataProvider _db = db;
 
         [ExcludeFromCodeCoverage(Justification = "This wrapper method is tested elswwhere.")]
-        public async Task<User?> GetUser(HttpRequest request)
+        public async Task<User?> GetUserAsync(HttpRequest request)
         {
-            return await request.GetUser(_db);
+            return await request.GetUserAsync(_db);
         }
     }
 }

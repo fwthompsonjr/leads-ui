@@ -7,19 +7,19 @@ namespace legallead.permissions.api.Services
     {
         private readonly IMailBoxRepository db = repository;
 
-        public async Task<EmailBodyBo?> GetBody(MailboxRequest request)
+        public async Task<EmailBodyBo?> GetBodyAsync(MailboxRequest request)
         {
             var response = await db.GetBody(request.MessageId, request.UserId);
             return response;
         }
 
-        public async Task<EmailCountBo?> GetCount(MailboxRequest request)
+        public async Task<EmailCountBo?> GetCountAsync(MailboxRequest request)
         {
             var response = await db.GetCount(request.UserId);
             return response;
         }
 
-        public async Task<List<EmailListBo>?> GetMailMessages(MailboxRequest request)
+        public async Task<List<EmailListBo>?> GetMailMessagesAsync(MailboxRequest request)
         {
             var response = await db.GetMailMessages(request.UserId, request.LastUpdate);
             return response;

@@ -18,11 +18,11 @@ namespace legallead.permissions.api.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Pricing Sync Service is running.");
-            await BackgroundProcessing(stoppingToken);
+            await BackgroundProcessingAsync(stoppingToken);
         }
 
 
-        private async Task BackgroundProcessing(CancellationToken stoppingToken)
+        private async Task BackgroundProcessingAsync(CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested) return;
 
@@ -35,7 +35,7 @@ namespace legallead.permissions.api.Services
                 {
                     Active = true,
                 });
-                await SynchronizePricing(existing, items, stoppingToken);
+                await SynchronizePricingAsync(existing, items, stoppingToken);
                 items = (await _pricingInfrastructure.GetPricingTemplates()).FindAll(x => x.IsActive.GetValueOrDefault());
                 PricingLookupService.Append(items);
                 if (_testMode) await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
@@ -44,7 +44,7 @@ namespace legallead.permissions.api.Services
         }
 
 
-        private async Task SynchronizePricing(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
+        private async Task SynchronizePricingAsync(StripeList<Product> existing, List<PricingCodeBo> items, CancellationToken stoppingToken)
         {
             var names = items.Select(x => x.KeyName).Distinct().ToList();
             if (!names.Any()) { return; }
@@ -63,11 +63,11 @@ namespace legallead.permissions.api.Services
                         if (current != null && item != null)
                         {
                             // create price db record
-                            await CreateProductEntry(current, item);
+                            await CreateProductEntryAsync(current, item);
                         }
                         else
                         {
-                            await CreatePricing(item);
+                            await CreatePricingAsync(item);
                         }
 
                     }
@@ -76,7 +76,7 @@ namespace legallead.permissions.api.Services
         }
 
 
-        private async Task CreateProductEntry(Product current, PricingCodeBo item)
+        private async Task CreateProductEntryAsync(Product current, PricingCodeBo item)
         {
             var dtojs = JsonConvert.SerializeObject(item);
             var dto = JsonConvert.DeserializeObject<PricingCodeDto>(dtojs);
@@ -105,7 +105,7 @@ namespace legallead.permissions.api.Services
         }
 
 
-        private async Task<bool> CreatePricing(PricingCodeBo? item)
+        private async Task<bool> CreatePricingAsync(PricingCodeBo? item)
         {
             if (item == null || string.IsNullOrEmpty(item.Id) || string.IsNullOrEmpty(item.KeyName)) return false;
             var model = item.GetModel();

@@ -40,14 +40,14 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        public async Task<QueueWorkingBo?> Update(QueueUpdateRequest request)
+        public async Task<QueueWorkingBo?> UpdateAsync(QueueUpdateRequest request)
         {
             try
             {
                 if (!request.IsValid()) return null;
                 var payload = request.ConvertFrom();
                 var response = _repo.UpdateStatus(payload);
-                await TrySendCompletionEmail(request, response);
+                await TrySendCompletionEmailAsync(request, response);
                 return response;
             }
             catch (Exception)
@@ -56,7 +56,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        public async Task<List<QueuedRecord>> Fetch()
+        public async Task<List<QueuedRecord>> FetchAsync()
         {
             try
             {
@@ -76,7 +76,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        public async Task<KeyValuePair<bool, string>> Start(QueuedRecord search)
+        public async Task<KeyValuePair<bool, string>> StartAsync(QueuedRecord search)
         {
             var dto = GetDto(search);
             if (dto == null) return new(false, "unmappable entity");
@@ -84,12 +84,12 @@ namespace legallead.permissions.api.Services
             return dbresponse;
         }
 
-        public async Task Complete(QueueRecordStatusRequest request)
+        public async Task CompleteAsync(QueueRecordStatusRequest request)
         {
             var uniqueId = request.UniqueId ?? string.Empty;
             await _queue.Complete(uniqueId);
         }
-        public async Task GenerationComplete(QueueCompletionRequest request)
+        public async Task GenerationCompleteAsync(QueueCompletionRequest request)
         {
             var uniqueId = request.UniqueId ?? string.Empty;
             var parameter = request.QueryParameter.ToInstance<QueueSearchItem>();
@@ -110,7 +110,7 @@ namespace legallead.permissions.api.Services
             _ = _userDb.UpdateRowCount(uniqueId, rcount);
         }
 
-        public async Task PostStatus(QueueRecordStatusRequest request)
+        public async Task PostStatusAsync(QueueRecordStatusRequest request)
         {
             if (!request.IsValid()) return;
             var uniqueId = request.UniqueId ?? string.Empty;
@@ -127,13 +127,13 @@ namespace legallead.permissions.api.Services
             _statusDb.Update(bo);
         }
 
-        public async Task Content(string id, byte[] bytes)
+        public async Task ContentAsync(string id, byte[] bytes)
         {
             await _queue.Content(id, bytes);
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
-        private async Task TrySendCompletionEmail(QueueUpdateRequest request, QueueWorkingBo? response)
+        private async Task TrySendCompletionEmailAsync(QueueUpdateRequest request, QueueWorkingBo? response)
         {
             if (request.StatusId.GetValueOrDefault() != 1 ||
                 response == null ||
@@ -142,11 +142,11 @@ namespace legallead.permissions.api.Services
             {
                 return;
             }
-            await SendCompletionEmail(response);
+            await SendCompletionEmailAsync(response);
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
-        private async Task SendCompletionEmail(QueueWorkingBo response)
+        private async Task SendCompletionEmailAsync(QueueWorkingBo response)
         {
             try
             {
