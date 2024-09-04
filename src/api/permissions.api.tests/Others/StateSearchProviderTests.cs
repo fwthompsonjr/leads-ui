@@ -7,7 +7,7 @@ namespace permissions.api.tests
         [Fact]
         public void ProviderCanGetStates()
         {
-            const int activeCounties = 4;
+            const int activeCounties = 5;
             var sut = new StateSearchProvider();
             var list = sut.GetStates();
             Assert.NotNull(list);
