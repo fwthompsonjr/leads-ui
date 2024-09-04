@@ -1,8 +1,0 @@
-Listing installed versions for legallead applications.
- - legallead.desktop-windows
-     -- 3.2.16 Sunday, June 9, 2024
-     -- 3.2.15 Wednesday, June 5, 2024
-     -- 3.2.13 Saturday, June 1, 2024
-     -- 3.2.12 Tuesday, May 28, 2024
- - legallead.reader.service
-     -- v3.2.6 Sunday, June 9, 2024

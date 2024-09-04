@@ -1318,6 +1318,11 @@ namespace legallead.records.search.Classes
                 sbb.AppendLine("  ]");
                 sbb.AppendLine("}");
             }
+            if (fileName.Equals("harrisJpMapping", oic))
+            {
+                var content = Properties.Resources.xml_harrisJpMapping_json;
+                sbb.AppendLine(content);
+            }
             sbb.Replace(tilde, qte);
             return sbb.ToString();
         }

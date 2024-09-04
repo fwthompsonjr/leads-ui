@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "legallead.installer": {
-      "commandName": "Project",
-      "commandLineArgs": "upgrade help",
-      "hotReloadEnabled": false
-    }
-  }
-}

@@ -31,7 +31,7 @@ function generateBuildCommand( $solution ) {
 
 function isSolutionNotExcluded( $name ) {
     
-    $exclusions = @('integration', 'presentation', 'email', 'logging', '.api');
+    $exclusions = @('email', 'logging', '.api');
     foreach($item in $exclusions){
         if($name.IndexOf( $item ) -ge 0 ) { return $false; }
     }
