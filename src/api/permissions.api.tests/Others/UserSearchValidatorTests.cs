@@ -127,6 +127,24 @@ namespace permissions.api.tests
             Assert.False(actual.Key);
             Assert.Contains("Date range", actual.Value);
         }
+        [Theory]
+        [InlineData(26550, "Collin", true)]
+        [InlineData(26730, "Denton", true)]
+        [InlineData(27130, "Harris", true)]
+        [InlineData(28330, "Tarrant", true)]
+        [InlineData(32190, "Harris-JP", true)]
+        [InlineData(32180, "Weston", false)]
+        [InlineData(32195, "Harris-JP", false)]
+        [InlineData(26550, "NoMatch", false)]
+        public void ModelCountyValidationTest(int index, string name, bool expected)
+        {
+            var sut = GetValidator();
+            var request = GetRequest();
+            request.County.Value = index;
+            request.County.Name = name;
+            var actual = sut.IsValid(request);
+            Assert.Equal(expected, actual.Key);
+        }
 
         private static UserSearchValidator GetValidator()
         {
