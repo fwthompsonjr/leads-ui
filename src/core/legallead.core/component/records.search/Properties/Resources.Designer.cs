@@ -460,6 +460,36 @@ namespace legallead.records.search.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;steps&quot;: [
+        ///    {
+        ///      &quot;actionName&quot;: &quot;navigate&quot;,
+        ///      &quot;displayName&quot;: &quot;open-website-base-uri&quot;,
+        ///      &quot;wait&quot;: 1200,
+        ///      &quot;locator&quot;: {
+        ///        &quot;find&quot;: &quot;page&quot;,
+        ///        &quot;query&quot;: &quot;https://jpwebsite.harriscountytx.gov/PublicExtracts/search.jsp&quot;
+        ///      }
+        ///    },
+        ///    {
+        ///      &quot;actionName&quot;: &quot;js-check-radio-button&quot;,
+        ///      &quot;displayName&quot;: &quot;set extract type&quot;,
+        ///      &quot;expectedValue&quot;: &quot;1&quot;,
+        ///      &quot;locator&quot;: {
+        ///        &quot;find&quot;: &quot;css&quot;,
+        ///        &quot;query&quot;: &quot;#civil&quot;
+        ///      }
+        ///    },
+        ///    {
+        ///      &quot;actionName&quot;: &quot;jq [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string xml_harrisJpMapping_json {
+            get {
+                return ResourceManager.GetString("xml_harrisJpMapping_json", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;settings&gt;
         ///  &lt;setting name=&quot;Websites&quot;&gt;

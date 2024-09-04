@@ -4,9 +4,9 @@
     using OpenQA.Selenium;
     using System.Threading;
 
-    public class JquerySetTextBox : JquerySetSelectedIndex
+    public class JquerySetRadioButtonSelected : ElementActionBase
     {
-        private const string actionName = "jquery-set-text";
+        private const string actionName = "js-check-radio-button";
 
         public override string ActionName => actionName;
 
@@ -14,12 +14,11 @@
         {
             if (item == null)
             {
-                throw new System.ArgumentNullException(nameof(item));
+                throw new ArgumentNullException(nameof(item));
             }
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }
-            WaitForLoad(driver);
             string selector = item.Locator.Query;
             if (string.IsNullOrEmpty(selector))
             {
@@ -27,7 +26,7 @@
             }
 
             string objText = item.ExpectedValue;
-            string command = $"$('{selector}').val('{objText}'); $('{selector}').trigger('change');";
+            string command = $"$('{selector}').attr('checked', true); $('{selector}').trigger('change');";
 
             IJavaScriptExecutor jse = (IJavaScriptExecutor)driver;
             jse.ExecuteScript(command);

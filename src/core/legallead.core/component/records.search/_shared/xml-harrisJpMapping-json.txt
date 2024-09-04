@@ -1,0 +1,84 @@
+{
+  "steps": [
+    {
+      "actionName": "navigate",
+      "displayName": "open-website-base-uri",
+      "wait": 1200,
+      "locator": {
+        "find": "page",
+        "query": "https://jpwebsite.harriscountytx.gov/PublicExtracts/search.jsp"
+      }
+    },
+    {
+      "actionName": "js-check-radio-button",
+      "displayName": "set extract type",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#civil"
+      }
+    },
+    {
+      "actionName": "jquery-set-selected-value",
+      "displayName": "set extract to request",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#extract"
+      }
+    },
+    {
+      "actionName": "jquery-set-selected-value",
+      "displayName": "set court",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#court"
+      }
+    },
+    {
+      "actionName": "jquery-set-selected-value",
+      "displayName": "set case type",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#casetype"
+      }
+    },
+    {
+      "actionName": "jquery-set-selected-value",
+      "displayName": "set data format",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#format"
+      }
+    },
+    {
+      "actionName": "jquery-set-text",
+      "displayName": "startDate",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#fdate"
+      }
+    },
+    {
+      "actionName": "jquery-set-text",
+      "displayName": "endDate",
+      "expectedValue": "1",
+      "locator": {
+        "find": "css",
+        "query": "#tdate"
+      }
+    },
+    {
+      "actionName": "harris-jp-submit-form",
+      "displayName": "login-submit",
+      "locator": {
+        "find": "css",
+        "query": "#promptForm"
+      }
+    }
+  ]
+}

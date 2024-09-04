@@ -70,6 +70,7 @@ namespace legallead.records.search.tests.Mapper
                 10 => new TarrantWebInteractive(translated, startDate, endingDate),
                 20 => new CollinWebInteractive(translated, startDate, endingDate),
                 30 => new HarrisCivilInteractive(translated, startDate, endingDate),
+                50 => new HarrisCivilInteractive(translated, startDate, endingDate),
                 _ => new WebInteractive(translated, startDate, endingDate)
             };
             return interactive;
@@ -85,9 +86,24 @@ namespace legallead.records.search.tests.Mapper
             if (dest.Id == 10) TarrantCountyNavigationMap(source, dest);
             if (dest.Id == 20) CollinCountyNavigationMap(source, dest);
             if (dest.Id == 30) HarrisCivilCountyNavigationMap(source, dest);
+            if (dest.Id == 50) HarrisJpNavigationMap(source, dest);
             return dest;
         }
 
+        private static void HarrisJpNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
+        {
+            const string harrisJpIndex = "50";
+            var accepted = "0,1,2,3,4".Split(',');
+            var cbxIndex = source.Details.Find(x => x.Name == "Search Type")?.Value ?? accepted[0];
+            if (!accepted.Contains(cbxIndex)) cbxIndex = accepted[0];
+            var idx = int.Parse(cbxIndex).ToString();
+            AppendKeys(dest, harrisJpIndex);
+            AppendInstructions(dest, harrisJpIndex);
+            AppendCaseInstructions(dest, harrisJpIndex);
+            var keyZero = new SearchNavigationKey { Name = "searchTypeSelectedIndex", Value = idx };
+            // add key for combo-index
+            dest.Keys.Add(keyZero);
+        }
         private static void HarrisCivilCountyNavigationMap(UserSearchRequest source, SearchNavigationParameter dest)
         {
             const string harrisCivilCountyIndex = "30";
