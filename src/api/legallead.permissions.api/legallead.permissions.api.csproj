@@ -11,6 +11,22 @@
 		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;NU1701;VSTHRD002;VSTHRD101;VSTHRD105</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;NU1701;VSTHRD002;VSTHRD101;VSTHRD105</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local|AnyCPU'">
+	  <NoWarn>1701;1702;NU1701;VSTHRD002;VSTHRD101;VSTHRD105</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Zip|AnyCPU'">
+	  <NoWarn>1701;1702;NU1701;VSTHRD002;VSTHRD101;VSTHRD105</NoWarn>
+	</PropertyGroup>
+
 	<ItemGroup>
 	  <Compile Remove="_db\**" />
 	  <Content Remove="_db\**" />

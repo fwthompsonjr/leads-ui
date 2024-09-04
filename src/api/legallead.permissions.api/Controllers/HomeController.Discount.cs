@@ -1,5 +1,6 @@
 ﻿using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Shell;
 
 namespace legallead.permissions.api.Controllers
 {
