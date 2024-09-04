@@ -22,7 +22,7 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("get-contact-index")]
-        public async Task<IActionResult> GetContactId(GetContactRequest request)
+        public async Task<IActionResult> GetContactIdAsync(GetContactRequest request)
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
@@ -32,7 +32,7 @@ namespace legallead.Profiles.api.Controllers
             {
                 return Conflict(current);
             }
-            var user = await _db.GetUser(Request);
+            var user = await _db.GetUserAsync(Request);
             if (user == null)
             {
                 current.Message = "Invalid user account.";
@@ -46,18 +46,18 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("get-contact-identity")]
-        public async Task<IActionResult> GetContactIdentity()
+        public async Task<IActionResult> GetContactIdentityAsync()
         {
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = "Unable to retrieve user detail" }
                 };
-            var user = await _db.GetUser(Request);
+            var user = await _db.GetUserAsync(Request);
             if (user == null)
             {
                 fallback[0].Message = "Invalid user account.";
                 return Unauthorized(fallback);
             }
-            var roleName = await _db.GetContactRole(user);
+            var roleName = await _db.GetContactRoleAsync(user);
             var roleDescription = RoleDescriptions.GetDescription(roleName);
             var useritem = new
             {
@@ -72,19 +72,19 @@ namespace legallead.Profiles.api.Controllers
 
         [HttpPost]
         [Route("get-contact-detail")]
-        public async Task<IActionResult> GetContactDetail(GetContactRequest request)
+        public async Task<IActionResult> GetContactDetailAsync(GetContactRequest request)
         {
             const string noDetailMessage = "Unable to retrieve user detail";
             var fallback = new GetContactResponse[] {
                 new() { ResponseType = "Error", Message = noDetailMessage }
                 };
-            var user = await _db.GetUser(Request);
+            var user = await _db.GetUserAsync(Request);
             if (user == null)
             {
                 fallback[0].Message = "Invalid user account.";
                 return Unauthorized(fallback);
             }
-            var response = await _db.GetContactDetail(user, request.RequestType ?? string.Empty);
+            var response = await _db.GetContactDetailAsync(user, request.RequestType ?? string.Empty);
             var failure = response?.ToList().Find(a => !a.IsOK);
             if (response != null && failure == null)
                 return Ok(response);
@@ -95,15 +95,15 @@ namespace legallead.Profiles.api.Controllers
         [HttpPost]
         [Route("edit-contact-address")]
         [ServiceFilter(typeof(ProfileChanged))]
-        public async Task<IActionResult> ChangeContactAddress(ChangeContactAddressRequest[] request)
+        public async Task<IActionResult> ChangeContactAddressAsync(ChangeContactAddressRequest[] request)
         {
-            var verification = await GetVerification.VerifyRequest(Request, request);
+            var verification = await GetVerification.VerifyRequestAsync(Request, request);
             if (verification.Result != null) return verification.Result;
             if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactAddressRequest[] changed)
             {
                 return UnprocessableEntity(request);
             }
-            var response = await _db.ChangeContactAddress(verification.User, changed);
+            var response = await _db.ChangeContactAddressAsync(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Address",
@@ -118,15 +118,15 @@ namespace legallead.Profiles.api.Controllers
         [HttpPost]
         [Route("edit-contact-email")]
         [ServiceFilter(typeof(ProfileChanged))]
-        public async Task<IActionResult> ChangeContactEmail(ChangeContactEmailRequest[] request)
+        public async Task<IActionResult> ChangeContactEmailAsync(ChangeContactEmailRequest[] request)
         {
-            var verification = await GetVerification.VerifyRequest(Request, request);
+            var verification = await GetVerification.VerifyRequestAsync(Request, request);
             if (verification.Result != null) return verification.Result;
             if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactEmailRequest[] changed)
             {
                 return UnprocessableEntity(request);
             }
-            var response = await _db.ChangeContactEmail(verification.User, changed);
+            var response = await _db.ChangeContactEmailAsync(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Email",
@@ -142,15 +142,15 @@ namespace legallead.Profiles.api.Controllers
         [HttpPost]
         [Route("edit-contact-name")]
         [ServiceFilter(typeof(ProfileChanged))]
-        public async Task<IActionResult> ChangeContactName(ChangeContactNameRequest[] request)
+        public async Task<IActionResult> ChangeContactNameAsync(ChangeContactNameRequest[] request)
         {
-            var verification = await GetVerification.VerifyRequest(Request, request);
+            var verification = await GetVerification.VerifyRequestAsync(Request, request);
             if (verification.Result != null) return verification.Result;
             if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactNameRequest[] changed)
             {
                 return UnprocessableEntity(request);
             }
-            var response = await _db.ChangeContactName(verification.User, changed);
+            var response = await _db.ChangeContactNameAsync(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Name",
@@ -165,15 +165,15 @@ namespace legallead.Profiles.api.Controllers
         [HttpPost]
         [Route("edit-contact-phone")]
         [ServiceFilter(typeof(ProfileChanged))]
-        public async Task<IActionResult> ChangeContactPhone(ChangeContactPhoneRequest[] request)
+        public async Task<IActionResult> ChangeContactPhoneAsync(ChangeContactPhoneRequest[] request)
         {
-            var verification = await GetVerification.VerifyRequest(Request, request);
+            var verification = await GetVerification.VerifyRequestAsync(Request, request);
             if (verification.Result != null) return verification.Result;
             if (BlankProfileHandler.SubstituteBlankValues(request.GetType(), request) is not ChangeContactPhoneRequest[] changed)
             {
                 return UnprocessableEntity(request);
             }
-            var response = await _db.ChangeContactPhone(verification.User, changed);
+            var response = await _db.ChangeContactPhoneAsync(verification.User, changed);
             if (response.Key)
             {
                 var serilized = GetChangeResponse("Phone",

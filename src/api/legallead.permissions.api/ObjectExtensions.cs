@@ -369,7 +369,7 @@ namespace legallead.permissions.api
             return SimpleNameValidation(application.Name);
         }
 
-        internal static async Task<User?> GetUser(this HttpRequest request, IDataProvider db)
+        internal static async Task<User?> GetUserAsync(this HttpRequest request, IDataProvider db)
         {
             var identity = request.HttpContext.User.Identity;
             if (identity == null) return null;
@@ -377,10 +377,10 @@ namespace legallead.permissions.api
             return user;
         }
 
-        internal static async Task<string?> GetUserLevel(this HttpRequest request, IDataProvider db)
+        internal static async Task<string?> GetUserLevelAsync(this HttpRequest request, IDataProvider db)
         {
             const string fallback = "None";
-            var user = await request.GetUser(db);
+            var user = await request.GetUserAsync(db);
             if (user == null) return fallback;
             var userlevel = (await db.UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>();
             var level = userlevel.FirstOrDefault(x => x.KeyName == "Account.Permission.Level");
@@ -388,9 +388,9 @@ namespace legallead.permissions.api
             return levelName;
         }
 
-        internal static async Task<bool> IsAdminUser(this HttpRequest request, IDataProvider db)
+        internal static async Task<bool> IsAdminUserAsync(this HttpRequest request, IDataProvider db)
         {
-            var level = await request.GetUserLevel(db);
+            var level = await request.GetUserLevelAsync(db);
             if (level == null) return false;
             return level.Equals("admin", StringComparison.OrdinalIgnoreCase);
         }

@@ -50,7 +50,7 @@ namespace permissions.api.tests.Contollers
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
             "S2925:\"Thread.Sleep\" should not be used in tests",
             Justification = "Code refactor pending to avoid flaky test.")]
-        public async Task GetPermissionGroupsHappyPath()
+        public async Task GetPermissionGroupsHappyPathAsync()
         {
             var retries = 3;
             while (retries > 0)
@@ -72,7 +72,7 @@ namespace permissions.api.tests.Contollers
                     userDb.Setup(m => m.GetByEmail(It.IsAny<string>())).ReturnsAsync(new User());
                     mockRq.SetupGet(m => m.HttpContext).Returns(sut.HttpContext);
 
-                    var actual = await sut.GetPermissionGroups();
+                    var actual = await sut.GetPermissionGroupsAsync();
                     Assert.NotNull(actual);
                     Assert.IsType<OkObjectResult>(actual);
                 });
@@ -87,7 +87,7 @@ namespace permissions.api.tests.Contollers
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
             "S2925:\"Thread.Sleep\" should not be used in tests",
             Justification = "Code refactor pending to avoid flaky test.")]
-        public async Task GetUserProfileHappyPath()
+        public async Task GetUserProfileHappyPathAsync()
         {
             var retries = 3;
             while (retries > 0)
@@ -109,7 +109,7 @@ namespace permissions.api.tests.Contollers
                     userDb.Setup(m => m.GetByEmail(It.IsAny<string>())).ReturnsAsync(new User());
                     mockRq.SetupGet(m => m.HttpContext).Returns(sut.HttpContext);
 
-                    var actual = await sut.GetUserProfile();
+                    var actual = await sut.GetUserProfileAsync();
                     Assert.NotNull(actual);
                     Assert.IsType<OkObjectResult>(actual);
                 });
@@ -124,7 +124,7 @@ namespace permissions.api.tests.Contollers
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
             "S2925:\"Thread.Sleep\" should not be used in tests",
             Justification = "Code refactor pending to avoid flaky test.")]
-        public async Task GetUserPermissionsHappyPath()
+        public async Task GetUserPermissionsHappyPathAsync()
         {
             var retries = 3;
             while (retries > 0)
@@ -146,7 +146,7 @@ namespace permissions.api.tests.Contollers
                     userDb.Setup(m => m.GetByEmail(It.IsAny<string>())).ReturnsAsync(new User());
                     mockRq.SetupGet(m => m.HttpContext).Returns(sut.HttpContext);
 
-                    var actual = await sut.GetUserPermissions();
+                    var actual = await sut.GetUserPermissionsAsync();
                     Assert.NotNull(actual);
                     Assert.IsType<OkObjectResult>(actual);
                 });

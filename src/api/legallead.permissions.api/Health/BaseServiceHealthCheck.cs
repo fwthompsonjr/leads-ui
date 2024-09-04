@@ -16,7 +16,7 @@ namespace legallead.permissions.api.Health
             _contextName = contextName;
         }
 
-        protected async Task<HealthCheckResult> CanCreate(List<Type> types)
+        protected async Task<HealthCheckResult> CanCreateAsync(List<Type> types)
         {
             var response = await Task.Run(() =>
             {

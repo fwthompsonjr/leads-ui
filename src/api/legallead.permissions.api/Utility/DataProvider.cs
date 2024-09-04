@@ -59,7 +59,7 @@ namespace legallead.permissions.api
         public virtual IUserProfileHistoryRepository ProfileHistoryDb => _profileHistoryDb;
         public virtual IUserRepository UserDb => _userDb;
 
-        public virtual async Task<bool> InitializeProfile(User user)
+        public virtual async Task<bool> InitializeProfileAsync(User user)
         {
             var profiles = await ProfileDb.GetAll();
             if (!profiles.Any()) { return true; }
@@ -72,12 +72,12 @@ namespace legallead.permissions.api
             }).ToList();
             var existing = await UserProfileDb.GetAll(user);
             var additions = current.FindAll(x => !existing.Any(a => a.ProfileMapId == x.ProfileMapId));
-            if (!additions.Any()) { return true; }
+            if (additions.Count == 0) { return true; }
             additions.ForEach(async a => await UserProfileDb.Create(a));
             return true;
         }
 
-        public virtual async Task<bool> InitializePermission(User user)
+        public virtual async Task<bool> InitializePermissionAsync(User user)
         {
             var permissions = await PermissionDb.GetAll();
             if (!permissions.Any()) { return true; }
@@ -90,20 +90,20 @@ namespace legallead.permissions.api
             }).ToList();
             var existing = await UserPermissionDb.GetAll(user);
             var additions = current.FindAll(x => !existing.Any(a => a.PermissionMapId == x.PermissionMapId));
-            if (!additions.Any()) { return true; }
+            if (additions.Count == 0) { return true; }
             additions.ForEach(async a => await UserPermissionDb.Create(a));
             return true;
         }
 
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroup(User user, string groupName)
+        public virtual async Task<KeyValuePair<bool, string>> SetPermissionGroupAsync(User user, string groupName)
         {
             try
             {
-                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
-                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
-                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
-                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var groups = ((await PermissionGroupDb.GetAll()) ?? []).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? []).ToList();
+                if (groups.Count == 0) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (permissions.Count == 0) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Equals(groupName, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
                 if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{groupName} not defined.");
                 var settings = new Dictionary<string, string>()
@@ -136,15 +136,15 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptions(User user, string stateCode)
+        public virtual async Task<KeyValuePair<bool, string>> AddStateSubscriptionsAsync(User user, string stateCode)
         {
             try
             {
                 const string search = "State.Discount.Pricing";
-                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
-                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
-                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
-                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var groups = ((await PermissionGroupDb.GetAll()) ?? []).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? []).ToList();
+                if (groups.Count == 0) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (permissions.Count == 0) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
                 if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode}' not defined.");
                 var settings = new Dictionary<string, string>()
@@ -164,15 +164,15 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptions(User user, string stateCode)
+        public virtual async Task<KeyValuePair<bool, string>> RemoveStateSubscriptionsAsync(User user, string stateCode)
         {
             try
             {
                 const string search = ".State.Subscriptions";
-                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
-                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
-                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
-                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var groups = ((await PermissionGroupDb.GetAll()) ?? []).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? []).ToList();
+                if (groups.Count == 0) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (permissions.Count == 0) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
                 if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{stateCode} not defined.");
                 var settings = new Dictionary<string, string>()
@@ -195,15 +195,15 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptions(User user, UsStateCounty countyCode)
+        public virtual async Task<KeyValuePair<bool, string>> AddCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
             try
             {
                 const string search = "County.Discount.Pricing";
-                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
-                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
-                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
-                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var groups = ((await PermissionGroupDb.GetAll()) ?? []).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? []).ToList();
+                if (groups.Count == 0) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (permissions.Count == 0) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
                 if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{countyCode.Name}, {countyCode.StateCode} not defined.");
                 var settings = new Dictionary<string, string>()
@@ -223,15 +223,15 @@ namespace legallead.permissions.api
             }
         }
         [ExcludeFromCodeCoverage(Justification = "Member is covered from integration testing")]
-        public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptions(User user, UsStateCounty countyCode)
+        public virtual async Task<KeyValuePair<bool, string>> RemoveCountySubscriptionsAsync(User user, UsStateCounty countyCode)
         {
             try
             {
                 const string search = "County.Discount.Pricing";
-                var groups = ((await PermissionGroupDb.GetAll()) ?? Array.Empty<PermissionGroup>()).ToList();
-                var permissions = ((await UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>()).ToList();
-                if (!groups.Any()) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
-                if (!permissions.Any()) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
+                var groups = ((await PermissionGroupDb.GetAll()) ?? []).ToList();
+                var permissions = ((await UserPermissionVw.GetAll(user)) ?? []).ToList();
+                if (groups.Count == 0) return new KeyValuePair<bool, string>(false, "No groups defined in repository.");
+                if (permissions.Count == 0) return new KeyValuePair<bool, string>(false, "No permissions defined for user.");
                 var group = groups.Find(g => g.Name.Contains(search, StringComparison.OrdinalIgnoreCase) && g.IsActive.GetValueOrDefault());
                 if (group == null) return new KeyValuePair<bool, string>(false, $"Group with name '{countyCode.Name}, {countyCode.StateCode} not defined.");
                 var settings = new Dictionary<string, string>()

@@ -76,7 +76,7 @@ namespace permissions.api.tests.Utility
         [InlineData(null, "1234567", true)]
         [InlineData("unmapped", "1234567", true)]
         [InlineData("success", "1234567", false)]
-        public async Task SutCanValidateRequest(string? status, string? id, bool isValid)
+        public async Task SutCanValidateRequestAsync(string? status, string? id, bool isValid)
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -85,7 +85,7 @@ namespace permissions.api.tests.Utility
                 var repo = builder.MockRepo;
                 var service = builder.Translator;
                 repo.Setup(m => m.IsValidExternalId(It.IsAny<string>())).ReturnsAsync(apiResponse);
-                _ = await service.IsRequestValid(status, id);
+                _ = await service.IsRequestValidAsync(status, id);
             });
             Assert.Null(error);
         }
@@ -95,7 +95,7 @@ namespace permissions.api.tests.Utility
         [InlineData(null, true)]
         [InlineData("   ", true)]
         [InlineData("1234567", false)]
-        public async Task SutCanValidateSession(string? id, bool isValid)
+        public async Task SutCanValidateSessionAsync(string? id, bool isValid)
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -104,7 +104,7 @@ namespace permissions.api.tests.Utility
                 var repo = builder.MockRepo;
                 var service = builder.Translator;
                 repo.Setup(m => m.GetPaymentSession(It.IsAny<string>())).ReturnsAsync(apiResponse);
-                _ = await service.IsSessionValid(id);
+                _ = await service.IsSessionValidAsync(id);
             });
             Assert.Null(error);
         }
@@ -117,7 +117,7 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true, "")]
         [InlineData(true, true, "NONE")]
         [InlineData(true, true, "abc", false)]
-        public async Task SutCanValidateSubscription(
+        public async Task SutCanValidateSubscriptionAsync(
             bool hasRequest,
             bool hasSubscription,
             string? invoiceUri = "abc",
@@ -134,7 +134,7 @@ namespace permissions.api.tests.Utility
                 var subSvc = builder.MockSubscriptionService;
                 var service = builder.Translator;
 
-                repo.Setup(m => m.GetLevelRequestById(
+                repo.Setup(m => m.GetLevelRequestByIdAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>())).ReturnsAsync(apiResponse);
                 subSvc.Setup(m => m.GetAsync(
@@ -142,7 +142,7 @@ namespace permissions.api.tests.Utility
                     It.IsAny<SubscriptionGetOptions>(),
                     It.IsAny<RequestOptions>(),
                     It.IsAny<CancellationToken>())).ReturnsAsync(svcResponse);
-                _ = await service.IsSubscriptionValid("1234", "abc-def");
+                _ = await service.IsSubscriptionValidAsync("1234", "abc-def");
             });
             Assert.Null(error);
         }
@@ -155,7 +155,7 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true, "")]
         [InlineData(true, true, "NONE")]
         [InlineData(true, true, "abc", false)]
-        public async Task SutCanValidateDiscount(
+        public async Task SutCanValidateDiscountAsync(
             bool hasRequest,
             bool hasSubscription,
             string? invoiceUri = "abc",
@@ -172,7 +172,7 @@ namespace permissions.api.tests.Utility
                 var subSvc = builder.MockSubscriptionService;
                 var service = builder.Translator;
 
-                repo.Setup(m => m.GetDiscountRequestById(
+                repo.Setup(m => m.GetDiscountRequestByIdAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>())).ReturnsAsync(apiResponse);
                 subSvc.Setup(m => m.GetAsync(
@@ -180,7 +180,7 @@ namespace permissions.api.tests.Utility
                     It.IsAny<SubscriptionGetOptions>(),
                     It.IsAny<RequestOptions>(),
                     It.IsAny<CancellationToken>())).ReturnsAsync(svcResponse);
-                _ = await service.IsDiscountValid("1234", "abc-def");
+                _ = await service.IsDiscountValidAsync("1234", "abc-def");
             });
             Assert.Null(error);
         }
@@ -194,7 +194,7 @@ namespace permissions.api.tests.Utility
         [InlineData(false, true, true, true, false, false)]
         [InlineData(false, true, true, true, false, true, null)]
         [InlineData(false, true, true, true, false, true, "")]
-        public async Task SutCanValidateIsRequestPaid(
+        public async Task SutCanValidateIsRequestPaidAsync(
             bool isDtoNull,
             bool dtoHasJson,
             bool dtoJsonIsValid,
@@ -236,7 +236,7 @@ namespace permissions.api.tests.Utility
                 repo.Setup(m => m.IsSearchPurchased(
                     It.IsAny<string>())).ReturnsAsync(searchPurchaseResponse);
 
-                _ = await service.IsRequestPaid(dto);
+                _ = await service.IsRequestPaidAsync(dto);
             });
             Assert.Null(error);
         }
@@ -253,7 +253,7 @@ namespace permissions.api.tests.Utility
         [InlineData(false, true, true, true, false, true, "")]
         [InlineData(false, true, true, true, false, true, "abc", null)]
         [InlineData(false, true, true, true, false, true, "abc", false)]
-        public async Task SutCanValidateIsRequestPaidAndDownloaded(
+        public async Task SutCanValidateIsRequestPaidAndDownloadedAsync(
             bool isDtoNull,
             bool dtoHasJson,
             bool dtoJsonIsValid,
@@ -296,7 +296,7 @@ namespace permissions.api.tests.Utility
                 repo.Setup(m => m.IsSearchPaidAndDownloaded(
                     It.IsAny<string>())).ReturnsAsync(serviceResponse);
 
-                _ = await service.IsRequestDownloadedAndPaid(dto);
+                _ = await service.IsRequestDownloadedAndPaidAsync(dto);
             });
             Assert.Null(error);
         }
@@ -313,7 +313,7 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true, "abc", true, "incomplete_expired")]
         [InlineData(true, true, "abc", true, "canceled")]
         [InlineData(true, true, "abc", false, "cleared", false)]
-        public async Task SutCanValidateIsLevelRequestPaid(
+        public async Task SutCanValidateIsLevelRequestPaidAsync(
             bool hasRequest,
             bool hasSubscription,
             string? invoiceUri = "abc",
@@ -337,8 +337,8 @@ namespace permissions.api.tests.Utility
                     It.IsAny<SubscriptionGetOptions>(),
                     It.IsAny<RequestOptions>(),
                     It.IsAny<CancellationToken>())).ReturnsAsync(svcResponse);
-                _ = await service.IsRequestPaid(apiResponse);
-                _ = await service.IsDiscountPaid(apiResponse);
+                _ = await service.IsRequestPaidAsync(apiResponse);
+                _ = await service.IsDiscountPaidAsync(apiResponse);
             });
             Assert.Null(error);
         }
@@ -350,7 +350,7 @@ namespace permissions.api.tests.Utility
         [InlineData(true, true, false)]
         [InlineData(true, true, true, true)]
         [InlineData(true, true, true, false, false)]
-        public async Task SutCanExecuteGetDownload(
+        public async Task SutCanExecuteGetDownloadAsync(
             bool sessionHasData = true,
             bool hasReferenceId = true,
             bool hasRecords = true,
@@ -391,7 +391,7 @@ namespace permissions.api.tests.Utility
                     request.JsText = string.Empty;
                 }
                 subSvc.Setup(m => m.GetFinal(It.IsAny<string>())).ReturnsAsync(response);
-                _ = await service.GetDownload(request);
+                _ = await service.GetDownloadAsync(request);
             });
             Assert.Null(error);
         }
@@ -404,7 +404,7 @@ namespace permissions.api.tests.Utility
         [InlineData("missing", "12345", true)]
         [InlineData("success", "12345", false)]
         [InlineData("success", "12345", true, "empty")]
-        public async Task SutCanExecuteIsDiscountLevel(
+        public async Task SutCanExecuteIsDiscountLevelAsync(
             string? status,
             string? id,
             bool hasDiscount,
@@ -417,9 +417,9 @@ namespace permissions.api.tests.Utility
                 if (discountId != "abc" && apiResponse != null) apiResponse.Id = discountId;
                 var svc = builder.MockCustDb;
                 var service = builder.Translator;
-                svc.Setup(m => m.GetDiscountRequestById(
+                svc.Setup(m => m.GetDiscountRequestByIdAsync(
                     It.IsAny<string>())).ReturnsAsync(apiResponse);
-                _ = await service.IsDiscountLevel(status, id);
+                _ = await service.IsDiscountLevelAsync(status, id);
             });
             Assert.Null(error);
         }
@@ -432,7 +432,7 @@ namespace permissions.api.tests.Utility
         [InlineData("missing", "12345", true)]
         [InlineData("success", "12345", false)]
         [InlineData("success", "12345", true, "empty")]
-        public async Task SutCanExecuteIsChangeUserLevel(
+        public async Task SutCanExecuteIsChangeUserLevelAsync(
             string? status,
             string? id,
             bool hasDiscount,
@@ -445,9 +445,9 @@ namespace permissions.api.tests.Utility
                 if (discountId != "abc" && apiResponse != null) apiResponse.Id = discountId;
                 var svc = builder.MockCustDb;
                 var service = builder.Translator;
-                svc.Setup(m => m.GetLevelRequestById(
+                svc.Setup(m => m.GetLevelRequestByIdAsync(
                     It.IsAny<string>())).ReturnsAsync(apiResponse);
-                _ = await service.IsChangeUserLevel(status, id);
+                _ = await service.IsChangeUserLevelAsync(status, id);
             });
             Assert.Null(error);
         }
@@ -459,7 +459,7 @@ namespace permissions.api.tests.Utility
         [InlineData(null, "base")]
         [InlineData("", "base")]
         [InlineData("base", "base", false)]
-        public async Task SutCanResetDownload(
+        public async Task SutCanResetDownloadAsync(
             string? userId,
             string? externalId,
             bool hasResponse = true)
@@ -476,7 +476,7 @@ namespace permissions.api.tests.Utility
                 svc.Setup(m => m.AllowDownloadRollback(
                     It.IsAny<string>(),
                     It.IsAny<string>())).ReturnsAsync(apiResponse);
-                _ = await service.ResetDownload(payload);
+                _ = await service.ResetDownloadAsync(payload);
             });
             Assert.Null(error);
         }

@@ -7,24 +7,24 @@ namespace legallead.permissions.api.Interfaces
     {
         SubscriptionService GetSubscriptionService { get; }
 
-        Task<DownloadResponse> GetDownload(PaymentSessionDto dto);
-        Task<bool> IsRequestDownloadedAndPaid(PaymentSessionDto? dto);
-        Task<bool> IsRequestValid(string? status, string? id);
-        Task<PaymentSessionDto?> IsSessionValid(string? id);
-        Task<object?> ResetDownload(DownloadResetRequest request);
-        Task<bool> IsChangeUserLevel(string? status, string? id);
-        Task<LevelRequestBo?> IsSubscriptionValid(string? id, string? sessionid);
-        Task<bool> IsRequestPaid(LevelRequestBo session);
-        Task<bool> IsRequestPaid(PaymentSessionDto? dto);
+        Task<DownloadResponse> GetDownloadAsync(PaymentSessionDto dto);
+        Task<bool> IsRequestDownloadedAndPaidAsync(PaymentSessionDto? dto);
+        Task<bool> IsRequestValidAsync(string? status, string? id);
+        Task<PaymentSessionDto?> IsSessionValidAsync(string? id);
+        Task<object?> ResetDownloadAsync(DownloadResetRequest request);
+        Task<bool> IsChangeUserLevelAsync(string? status, string? id);
+        Task<LevelRequestBo?> IsSubscriptionValidAsync(string? id, string? sessionid);
+        Task<bool> IsRequestPaidAsync(LevelRequestBo session);
+        Task<bool> IsRequestPaidAsync(PaymentSessionDto? dto);
         string Transform(LevelRequestBo session, string content);
         string Transform(DiscountRequestBo discountRequest, string content);
-        Task<string> Transform(bool isvalid, string? status, string? id, string html);
+        Task<string> TransformAsync(bool isvalid, string? status, string? id, string html);
         string Transform(PaymentSessionDto? session, string html);
-        Task<string> TransformForPermissions(bool isvalid, string? status, string? id, string html);
-        Task<LevelRequestBo?> IsDiscountValid(string? id, string? sessionid);
-        Task<bool> IsDiscountPaid(LevelRequestBo session);
-        Task<bool> IsDiscountLevel(string? status, string? id);
-        Task<string> TransformForDiscounts(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html);
+        Task<string> TransformForPermissionsAsync(bool isvalid, string? status, string? id, string html);
+        Task<LevelRequestBo?> IsDiscountValidAsync(string? id, string? sessionid);
+        Task<bool> IsDiscountPaidAsync(LevelRequestBo session);
+        Task<bool> IsDiscountLevelAsync(string? status, string? id);
+        Task<string> TransformForDiscountsAsync(ISubscriptionInfrastructure infra, bool isvalid, string? id, string html);
         void SetupSubscriptionService(SubscriptionService? service);
     }
 }

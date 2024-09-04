@@ -20,17 +20,17 @@ namespace legallead.permissions.api.Utility
             _usrDb = usr;
         }
 
-        public async Task<SearchRestrictionModel?> GetRestrictionStatus(HttpRequest http)
+        public async Task<SearchRestrictionModel?> GetRestrictionStatusAsync(HttpRequest http)
         {
-            var user = await GetUser(http);
+            var user = await GetUserAsync(http);
             if (user == null) return null;
             var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
             return restrictions.ToModel();
         }
 
-        public async Task<UserSearchBeginResponse?> Begin(HttpRequest http, UserSearchRequest request)
+        public async Task<UserSearchBeginResponse?> BeginAsync(HttpRequest http, UserSearchRequest request)
         {
-            var user = await GetUser(http);
+            var user = await GetUserAsync(http);
             if (user == null) return null;
             var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
             if (restrictions.IsRestricted())
@@ -49,16 +49,16 @@ namespace legallead.permissions.api.Utility
             };
         }
 
-        public async Task<IEnumerable<SearchPreviewBo>?> GetPreview(HttpRequest http, string searchId)
+        public async Task<IEnumerable<SearchPreviewBo>?> GetPreviewAsync(HttpRequest http, string searchId)
         {
-            var user = await GetUser(http);
+            var user = await GetUserAsync(http);
             if (user == null) return null;
             var restrictions = await _repo.GetSearchRestriction(user.Id) ?? new();
             if (restrictions.IsRestricted())
             {
                 return null;
             }
-            var searches = await GetHeader(http, searchId);
+            var searches = await GetHeaderAsync(http, searchId);
             if (searches == null || !searches.Any()) return Array.Empty<SearchPreviewBo>();
             var rawdata = await _repo.Preview(searchId);
             if (rawdata == null || !rawdata.Any()) return null;
@@ -67,9 +67,9 @@ namespace legallead.permissions.api.Utility
             return SearchRestrictionFilter.Sanitize(filtered);
         }
 
-        public async Task<IEnumerable<UserSearchQueryModel>?> GetHeader(HttpRequest http, string? id)
+        public async Task<IEnumerable<UserSearchQueryModel>?> GetHeaderAsync(HttpRequest http, string? id)
         {
-            var user = await GetUser(http);
+            var user = await GetUserAsync(http);
             if (user == null) return null;
             _ = await _repo.UpdateSearchRowCount();
             var histories = await _repo.History(user.Id);
@@ -93,53 +93,53 @@ namespace legallead.permissions.api.Utility
             return models;
         }
 
-        public async Task<IEnumerable<UserSearchDetail>?> GetDetail(HttpRequest http, string? id)
+        public async Task<IEnumerable<UserSearchDetail>?> GetDetailAsync(HttpRequest http, string? id)
         {
-            return await GetData(http, SearchTargetTypes.Detail, id);
+            return await GetDataAsync(http, SearchTargetTypes.Detail, id);
         }
 
-        public async Task<IEnumerable<UserSearchDetail>?> GetResult(HttpRequest http, string? id)
+        public async Task<IEnumerable<UserSearchDetail>?> GetResultAsync(HttpRequest http, string? id)
         {
-            return await GetData(http, SearchTargetTypes.Response, id);
+            return await GetDataAsync(http, SearchTargetTypes.Response, id);
         }
 
-        public async Task<IEnumerable<UserSearchDetail>?> GetStatus(HttpRequest http, string? id)
+        public async Task<IEnumerable<UserSearchDetail>?> GetStatusAsync(HttpRequest http, string? id)
         {
-            return await GetData(http, SearchTargetTypes.Status, id);
+            return await GetDataAsync(http, SearchTargetTypes.Status, id);
         }
 
-        public async Task<bool> SetDetail(string id, object detail)
+        public async Task<bool> SetDetailAsync(string id, object detail)
         {
             var payload = JsonConvert.SerializeObject(detail) ?? string.Empty;
-            var response = await SetData(SearchTargetTypes.Detail, id, payload);
+            var response = await SetDataAsync(SearchTargetTypes.Detail, id, payload);
             return response.Key;
         }
 
-        public async Task<bool> SetResult(string id, object result)
+        public async Task<bool> SetResultAsync(string id, object result)
         {
             var payload = JsonConvert.SerializeObject(result) ?? string.Empty;
-            var response = await SetData(SearchTargetTypes.Response, id, payload);
+            var response = await SetDataAsync(SearchTargetTypes.Response, id, payload);
             return response.Key;
         }
 
-        public async Task<bool> SetStatus(string id, string message)
+        public async Task<bool> SetStatusAsync(string id, string message)
         {
-            var response = await SetData(SearchTargetTypes.Status, id, message);
+            var response = await SetDataAsync(SearchTargetTypes.Status, id, message);
             return response.Key;
         }
-        public async Task<bool> SetResponse(string id, object response)
+        public async Task<bool> SetResponseAsync(string id, object response)
         {
             var payload = JsonConvert.SerializeObject(response) ?? string.Empty;
-            var data = await SetData(SearchTargetTypes.Response, id, payload);
+            var data = await SetDataAsync(SearchTargetTypes.Response, id, payload);
             return data.Key;
         }
 
-        public async Task<User?> GetUser(HttpRequest request)
+        public async Task<User?> GetUserAsync(HttpRequest request)
         {
-            return await _usrDb.GetUser(request);
+            return await _usrDb.GetUserAsync(request);
         }
 
-        public async Task<IEnumerable<SearchInvoiceBo>?> CreateInvoice(string userid, string searchid)
+        public async Task<IEnumerable<SearchInvoiceBo>?> CreateInvoiceAsync(string userid, string searchid)
         {
             var hasinvoice = await _repo.CreateInvoice(userid, searchid);
             if (!hasinvoice) { return null; }
@@ -147,18 +147,18 @@ namespace legallead.permissions.api.Utility
             return records;
         }
 
-        public async Task<IEnumerable<SearchInvoiceBo>?> GetInvoices(string userid, string? searchid)
+        public async Task<IEnumerable<SearchInvoiceBo>?> GetInvoicesAsync(string userid, string? searchid)
         {
             var records = await _repo.Invoices(userid, searchid);
             return records;
         }
 
-        public async Task<ActiveSearchOverviewBo?> GetSearchProgress(string searchId)
+        public async Task<ActiveSearchOverviewBo?> GetSearchProgressAsync(string searchId)
         {
             var history = await _repo.GetActiveSearches(searchId);
             return history;
         }
-        public async Task<object?> GetSearchDetails(string userId)
+        public async Task<object?> GetSearchDetailsAsync(string userId)
         {
             var searches = await _repo.GetActiveSearchDetails(userId);
             if (searches == null || !searches.Any()) return new();
@@ -175,13 +175,13 @@ namespace legallead.permissions.api.Utility
             };
         }
 
-        public async Task<IEnumerable<PurchasedSearchBo>?> GetPurchases(string userId)
+        public async Task<IEnumerable<PurchasedSearchBo>?> GetPurchasesAsync(string userId)
         {
             var searches = await _repo.GetPurchases(userId);
             return searches;
         }
 
-        public async Task<bool> FlagError(string searchId)
+        public async Task<bool> FlagErrorAsync(string searchId)
         {
             var tmp = await _repo.FlagError(searchId);
             return tmp;
@@ -204,9 +204,9 @@ namespace legallead.permissions.api.Utility
             return staged;
         }
 
-        private async Task<IEnumerable<UserSearchDetail>?> GetData(HttpRequest http, SearchTargetTypes target, string? id)
+        private async Task<IEnumerable<UserSearchDetail>?> GetDataAsync(HttpRequest http, SearchTargetTypes target, string? id)
         {
-            var user = await GetUser(http);
+            var user = await GetUserAsync(http);
             if (user == null) return null;
             var records = await _repo.GetTargets(target, user.Id, id);
             if (records == null || !records.Any()) return Enumerable.Empty<UserSearchDetail>();
@@ -222,7 +222,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        private async Task<KeyValuePair<bool, string>> SetData(SearchTargetTypes target, string id, string message)
+        private async Task<KeyValuePair<bool, string>> SetDataAsync(SearchTargetTypes target, string id, string message)
         {
             var records = await _repo.Append(target, id, message);
             return records;

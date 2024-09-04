@@ -43,7 +43,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ControllerCanGetContactIdentity()
+        public async Task ControllerCanGetContactIdentityAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -51,14 +51,14 @@ namespace permissions.api.tests.Contollers
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactIdentity();
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRoleAsync(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdentityAsync();
             Assert.NotNull(response);
         }
 
         [Fact]
-        public async Task ControllerGetContactIdentityWithNullUser()
+        public async Task ControllerGetContactIdentityWithNullUserAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -66,9 +66,9 @@ namespace permissions.api.tests.Contollers
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactIdentity();
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRoleAsync(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdentityAsync();
             Assert.NotNull(response);
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
         }
@@ -79,7 +79,7 @@ namespace permissions.api.tests.Contollers
         [InlineData("UserId")]
         [InlineData("userid")]
         [InlineData("")]
-        public async Task ControllerCanGetContactId(string requestType)
+        public async Task ControllerCanGetContactIdAsync(string requestType)
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -88,14 +88,14 @@ namespace permissions.api.tests.Contollers
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactId(payload);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRoleAsync(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdAsync(payload);
             Assert.NotNull(response);
         }
 
         [Fact]
-        public async Task ControllerGetContactIdWithNullUser()
+        public async Task ControllerGetContactIdWithNullUserAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -104,15 +104,15 @@ namespace permissions.api.tests.Contollers
             var roleName = new Faker().PickRandom(RoleNames);
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactRole(It.IsAny<User>())).ReturnsAsync(roleName);
-            var response = await controller.GetContactId(payload);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactRoleAsync(It.IsAny<User>())).ReturnsAsync(roleName);
+            var response = await controller.GetContactIdAsync(payload);
             Assert.NotNull(response);
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
         }
 
         [Fact]
-        public async Task ControllerCanGetContactDetail()
+        public async Task ControllerCanGetContactDetailAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -121,15 +121,15 @@ namespace permissions.api.tests.Contollers
             var request = new GetContactRequest();
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
-            var response = await controller.GetContactDetail(request);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetailAsync(request);
             Assert.NotNull(response);
             Assert.IsAssignableFrom<OkObjectResult>(response);
         }
 
         [Fact]
-        public async Task ControllerGetContactDetailWithoutUserIsUnauthorized()
+        public async Task ControllerGetContactDetailWithoutUserIsUnauthorizedAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -138,15 +138,15 @@ namespace permissions.api.tests.Contollers
             var request = new GetContactRequest();
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
-            var response = await controller.GetContactDetail(request);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetailAsync(request);
             Assert.NotNull(response);
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(response);
         }
 
         [Fact]
-        public async Task ControllerGetContactDetailWithoutDetailIsConflict()
+        public async Task ControllerGetContactDetailWithoutDetailIsConflictAsync()
         {
             var provider = GetTestArtifacts();
             var infrastructure = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -155,9 +155,9 @@ namespace permissions.api.tests.Contollers
             var request = new GetContactRequest();
             var controller = provider.GetRequiredService<ProfilesController>();
 
-            infrastructure.Setup(m => m.GetUser(It.IsAny<HttpRequest>())).ReturnsAsync(user);
-            infrastructure.Setup(m => m.GetContactDetail(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
-            var response = await controller.GetContactDetail(request);
+            infrastructure.Setup(m => m.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infrastructure.Setup(m => m.GetContactDetailAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(contactResponse);
+            var response = await controller.GetContactDetailAsync(request);
             Assert.NotNull(response);
             Assert.IsAssignableFrom<ConflictObjectResult>(response);
         }

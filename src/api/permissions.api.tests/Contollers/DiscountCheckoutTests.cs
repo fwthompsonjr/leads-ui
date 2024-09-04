@@ -18,7 +18,7 @@ namespace permissions.api.tests.Contollers
             var guid = testIndex == 2 ? Guid.Empty.ToString("D") : response;
             var controller = new DiscountTestController();
             var request = testIndex == 0 ? null : controller.GetLevelRequest();
-            controller.MqStripeSvc.Setup(x => x.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
+            controller.MqStripeSvc.Setup(x => x.FetchClientSecretValueAsync(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
             controller.MqSecretSvc.Setup(x => x.GetDiscountSecret(It.IsAny<DiscountRequestBo>(), It.IsAny<string>())).Returns(response);
             var uid = controller.GetSecret(request);
             Assert.NotNull(uid);
@@ -30,7 +30,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(2)]
         [InlineData(3)]
         [InlineData(4)]
-        public async Task SutCanDiscountCheckout(int testIndex, string? sts = "success", string? id = "012345")
+        public async Task SutCanDiscountCheckoutAsync(int testIndex, string? sts = "success", string? id = "012345")
         {
             var errored = await Record.ExceptionAsync(async () =>
             {
@@ -39,32 +39,32 @@ namespace permissions.api.tests.Contollers
                 var controller = new DiscountTestController();
                 var request = testIndex == 0 ? null : controller.GetLevelRequest();
                 var ispaid = testIndex != 4;
-                controller.MqHtml.Setup(x => x.IsDiscountLevel(
+                controller.MqHtml.Setup(x => x.IsDiscountLevelAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(true);
-                controller.MqHtml.Setup(x => x.IsDiscountValid(
+                controller.MqHtml.Setup(x => x.IsDiscountValidAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(request);
-                controller.MqHtml.Setup(x => x.IsDiscountPaid(
+                controller.MqHtml.Setup(x => x.IsDiscountPaidAsync(
                     It.IsAny<LevelRequestBo>()
                     )).ReturnsAsync(ispaid);
                 controller.MqHtml.Setup(x => x.Transform(
                     It.IsAny<DiscountRequestBo>(),
                     It.IsAny<string>()
                     )).Returns(response);
-                controller.MqHtml.Setup(x => x.TransformForDiscounts(
+                controller.MqHtml.Setup(x => x.TransformForDiscountsAsync(
                     It.IsAny<ISubscriptionInfrastructure>(),
                     It.IsAny<bool>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()
                     )).ReturnsAsync(response);
-                controller.MqStripeSvc.Setup(x => x.FetchClientSecretValue(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
+                controller.MqStripeSvc.Setup(x => x.FetchClientSecretValueAsync(It.IsAny<LevelRequestBo>())).ReturnsAsync(guid);
                 controller.MqSecretSvc.Setup(x => x.GetDiscountSecret(
                     It.IsAny<DiscountRequestBo>(),
                     It.IsAny<string>())).Returns(response);
-                _ = await controller.DiscountCheckout(sts, id);
+                _ = await controller.DiscountCheckoutAsync(sts, id);
             });
             Assert.Null(errored);
         }

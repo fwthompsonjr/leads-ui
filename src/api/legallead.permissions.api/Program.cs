@@ -70,7 +70,7 @@ var health = new HealthCheckOptions { ResultStatusCodes = statuscodes };
 var details = new HealthCheckOptions
 {
     ResultStatusCodes = statuscodes,
-    ResponseWriter = WriteHealthResponse.WriteResponse
+    ResponseWriter = WriteHealthResponse.WriteResponseAsync
 };
 app.MapHealthChecks("/health", health);
 app.MapHealthChecks("/health-details", details);
@@ -88,7 +88,7 @@ var startupTasks = app.Services.GetServices<IStartupTask>();
 // Run the StartupTasks
 foreach (var startupTask in startupTasks)
 {
-    _ = Task.Factory.StartNew(async () => await startupTask.Execute().ConfigureAwait(false)).ConfigureAwait(false);
+    _ = Task.Factory.StartNew(async () => await startupTask.ExecuteAsync().ConfigureAwait(false)).ConfigureAwait(false);
 }
 app.Run();
 

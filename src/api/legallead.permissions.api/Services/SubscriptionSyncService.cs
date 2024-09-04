@@ -16,10 +16,10 @@ namespace legallead.permissions.api.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Subscription Sync Service is running.");
-            await BackgroundProcessing(stoppingToken);
+            await BackgroundProcessingAsync(stoppingToken);
         }
 
-        private async Task BackgroundProcessing(CancellationToken stoppingToken)
+        private async Task BackgroundProcessingAsync(CancellationToken stoppingToken)
         {
             if (stoppingToken.IsCancellationRequested) return;
 
@@ -32,15 +32,15 @@ namespace legallead.permissions.api.Services
                     var queue = await _custDb.GetUserSubscriptions(true);
                     return queue;
                 }, stoppingToken);
-                await ProcessSubscriptions(items, stoppingToken);
+                await ProcessSubscriptionsAsync(items, stoppingToken);
                 if (_testMode) await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 else await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
             }
         }
 
-        private async Task ProcessSubscriptions(List<SubscriptionDetailBo>? items, CancellationToken stoppingToken)
+        private async Task ProcessSubscriptionsAsync(List<SubscriptionDetailBo>? items, CancellationToken stoppingToken)
         {
-            if (items == null || !items.Any()) return;
+            if (items == null || items.Count == 0) return;
             var customers = items
                 .GroupBy(x => x.CustomerId)
                 .Select(s =>
@@ -61,11 +61,11 @@ namespace legallead.permissions.api.Services
             var service = new SubscriptionService();
             await Task.Run(() =>
             {
-                customers.ForEach(async c => await ProcessCustomer(c, service, stoppingToken));
+                customers.ForEach(async c => await ProcessCustomerAsync(c, service, stoppingToken));
             }, stoppingToken);
         }
 
-        private async Task ProcessCustomer(CustomerRef c, SubscriptionService service, CancellationToken stoppingToken)
+        private async Task ProcessCustomerAsync(CustomerRef c, SubscriptionService service, CancellationToken stoppingToken)
         {
             if (!c.IsValid() || stoppingToken.IsCancellationRequested) return;
             var user = await _custDb.GetCustomer(new() { UserId = c.UserId });
@@ -85,7 +85,7 @@ namespace legallead.permissions.api.Services
                 var activeId = activeSubscription.ExternalId;
                 var remotes = Find(subscriptions, subscriptionType);
                 // if the item reported from db as active subscription does not exist... exit without taking action
-                if (!remotes.Any() || !remotes.Exists(x => x.ExternalId.Equals(activeId, StringComparison.OrdinalIgnoreCase))) continue;
+                if (remotes.Count == 0 || !remotes.Exists(x => x.ExternalId.Equals(activeId, StringComparison.OrdinalIgnoreCase))) continue;
                 // find any active subscriptions in remote server that should be cancelled
                 var staleItems = remotes.FindAll(x => !x.ExternalId.Equals(activeSubscription.ExternalId, StringComparison.OrdinalIgnoreCase));
                 staleItems.ForEach(r =>
@@ -94,12 +94,12 @@ namespace legallead.permissions.api.Services
                 });
                 if (!staleItems.Exists(a => !a.IsProcessed))
                 {
-                    await CompleteVerification(c.Details.FindAll(x => x.SubscriptionType == subscriptionType));
+                    await CompleteVerificationAsync(c.Details.FindAll(x => x.SubscriptionType == subscriptionType));
                 }
             }
         }
 
-        private async Task CompleteVerification(List<SubscriptionDetailBo> subscriptions)
+        private async Task CompleteVerificationAsync(List<SubscriptionDetailBo> subscriptions)
         {
             foreach (var subscription in subscriptions)
             {

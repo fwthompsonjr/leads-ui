@@ -13,16 +13,16 @@ namespace legallead.permissions.api.Services
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Queued Hosted Service is running.");
-            await BackgroundProcessing(stoppingToken);
+            await BackgroundProcessingAsync(stoppingToken);
         }
 
-        private async Task BackgroundProcessing(CancellationToken stoppingToken)
+        private async Task BackgroundProcessingAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    await ResetItems(stoppingToken);
+                    await ResetItemsAsync(stoppingToken);
                 }
                 catch (Exception ex)
                 {
@@ -38,7 +38,7 @@ namespace legallead.permissions.api.Services
             await base.StopAsync(cancellationToken);
         }
 
-        private async Task ResetItems(CancellationToken stoppingToken)
+        private async Task ResetItemsAsync(CancellationToken stoppingToken)
         {
             _ = await Task.Run(async () =>
             {

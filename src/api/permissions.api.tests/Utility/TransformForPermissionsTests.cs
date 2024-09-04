@@ -10,7 +10,7 @@ namespace permissions.api.tests.Utility
         [InlineData(false, "success", "12345")]
         [InlineData(true, "success", "12345", false)]
         [InlineData(true, "success", "12345", true, false)]
-        public async Task SutCanExecuteTransformForPermissions(
+        public async Task SutCanExecuteTransformForPermissionsAsync(
             bool isvalid,
             string? status,
             string? id,
@@ -33,12 +33,12 @@ namespace permissions.api.tests.Utility
                 {
                     apiResponse.LevelName = new Faker().PickRandom(PaymentHtmlHelper.PermissionNames);
                 }
-                svc.Setup(m => m.GetLevelRequestById(It.IsAny<string>())).ReturnsAsync(apiResponse);
-                svc.Setup(m => m.CompleteLevelRequest(It.IsAny<LevelRequestBo>())).ReturnsAsync(apiResponse);
+                svc.Setup(m => m.GetLevelRequestByIdAsync(It.IsAny<string>())).ReturnsAsync(apiResponse);
+                svc.Setup(m => m.CompleteLevelRequestAsync(It.IsAny<LevelRequestBo>())).ReturnsAsync(apiResponse);
                 userDb.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(user);
                 searchDb.Setup(m => m.GetPurchaseSummary(It.IsAny<string>())).ReturnsAsync(summary);
-                subscriptionDb.Setup(m => m.SetPermissionGroup(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(permission);
-                _ = await service.TransformForPermissions(isvalid, status, id, levelChangeHtml);
+                subscriptionDb.Setup(m => m.SetPermissionGroupAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(permission);
+                _ = await service.TransformForPermissionsAsync(isvalid, status, id, levelChangeHtml);
             });
             Assert.Null(error);
         }

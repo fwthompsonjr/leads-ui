@@ -115,7 +115,7 @@ namespace legallead.permissions.api.Extensions
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceSubscriptionScript());
-            var verification = StripeSubscriptionRetryService.VerifySubscription(response, customerDb).GetAwaiter().GetResult();
+            var verification = StripeSubscriptionRetryService.VerifySubscriptionAsync(response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;
             var invoice = verification.Item3;
@@ -167,7 +167,7 @@ namespace legallead.permissions.api.Extensions
             const string dash = " - ";
             if (string.IsNullOrEmpty(response.SessionId)) return html;
             html = html.Replace(InvoiceScriptTag, InvoiceDiscountScript());
-            var verification = StripeDiscountRetryService.VerifySubscription(
+            var verification = StripeDiscountRetryService.VerifySubscriptionAsync(
                 response, customerDb).GetAwaiter().GetResult();
             if (!verification.Item1) return html;
             var successUrl = verification.Item2;

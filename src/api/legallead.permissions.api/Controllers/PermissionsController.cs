@@ -31,18 +31,18 @@ namespace legallead.permissions.api.Controllers
         [HttpPost]
         [Route("set-discount")]
         [ServiceFilter(typeof(PermissionChangeRequested))]
-        public async Task<IActionResult> SetDiscount(ChangeDiscountRequest request)
+        public async Task<IActionResult> SetDiscountAsync(ChangeDiscountRequest request)
         {
-            var user = await _db.GetUser(Request);
+            var user = await _db.GetUserAsync(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var isAdmin = await _db.IsAdminUser(Request);
+            var isAdmin = await _db.IsAdminUserAsync(Request);
             var jsrequest = JsonConvert.SerializeObject(request);
-            var session = await _db.GenerateDiscountSession(Request, user, jsrequest, isAdmin, "");
+            var session = await _db.GenerateDiscountSessionAsync(Request, user, jsrequest, isAdmin, "");
             if (!session.IsPaymentSuccess.GetValueOrDefault())
             {
                 var serilized = GetChangeResponse("Discount",
@@ -57,11 +57,11 @@ namespace legallead.permissions.api.Controllers
         [HttpPost]
         [Route("set-permission")]
         [ServiceFilter(typeof(PermissionChangeRequested))]
-        public async Task<IActionResult> SetPermissionLevel(UserLevelRequest permissionLevel)
+        public async Task<IActionResult> SetPermissionLevelAsync(UserLevelRequest permissionLevel)
         {
-            var user = await _db.GetUser(Request);
+            var user = await _db.GetUserAsync(Request);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
@@ -72,12 +72,12 @@ namespace legallead.permissions.api.Controllers
                 var messages = validation.Select(x => x.ErrorMessage).ToList();
                 return BadRequest(messages);
             }
-            var isAdmin = await _db.IsAdminUser(Request);
+            var isAdmin = await _db.IsAdminUserAsync(Request);
             if (!isAdmin && permissionLevel.Level.Equals("admin", StringComparison.OrdinalIgnoreCase))
             {
                 return Unauthorized(permissionLevel);
             }
-            var session = await _db.GeneratePermissionSession(Request, user, permissionLevel.Level);
+            var session = await _db.GeneratePermissionSessionAsync(Request, user, permissionLevel.Level);
             var serilized = GetChangeResponse("PermissionLevel",
                 user,
                 permissionLevel,

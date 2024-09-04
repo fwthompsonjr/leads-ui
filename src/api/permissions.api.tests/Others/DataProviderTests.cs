@@ -107,7 +107,7 @@ namespace permissions.api.tests
         [InlineData(false, true)]
         [InlineData(true, false)]
         [InlineData(false, false)]
-        public async Task ServiceCanInitializeProfile(
+        public async Task ServiceCanInitializeProfileAsync(
             bool hasProfiles,
             bool hasProfileMatched
         )
@@ -129,7 +129,7 @@ namespace permissions.api.tests
             var dp = provider.GetRequiredService<DataProvider>();
             profileDb.Setup(s => s.GetAll()).ReturnsAsync(profiles);
             userProfileDb.Setup(s => s.GetAll(It.IsAny<User>())).ReturnsAsync(userprofiles);
-            var response = await dp.InitializeProfile(user);
+            var response = await dp.InitializeProfileAsync(user);
             Assert.True(response);
         }
 
@@ -138,7 +138,7 @@ namespace permissions.api.tests
         [InlineData(false, true)]
         [InlineData(true, false)]
         [InlineData(false, false)]
-        public async Task ServiceCanInitializePermission(
+        public async Task ServiceCanInitializePermissionAsync(
             bool hasProfiles,
             bool hasProfileMatched
         )
@@ -160,14 +160,14 @@ namespace permissions.api.tests
             var dp = provider.GetRequiredService<DataProvider>();
             permissionsDb.Setup(s => s.GetAll()).ReturnsAsync(permissions);
             userPermissionsDb.Setup(s => s.GetAll(It.IsAny<User>())).ReturnsAsync(userpermissions);
-            var response = await dp.InitializePermission(user);
+            var response = await dp.InitializePermissionAsync(user);
             Assert.True(response);
         }
 
         [Theory]
         [InlineData("Account.IsPrimary", true, true)]
         [InlineData("Setting.Pricing.Per.Year", true, true)]
-        public async Task ServiceCanSetPermissionGroup(
+        public async Task ServiceCanSetPermissionGroupAsync(
             string groupName,
             bool hasGroups,
             bool hasPermissions
@@ -182,7 +182,7 @@ namespace permissions.api.tests
             var dp = provider.GetRequiredService<DataProvider>();
             groupDb.Setup(s => s.GetAll()).ReturnsAsync(permissions);
             userViewDb.Setup(s => s.GetAll(It.IsAny<User>())).ReturnsAsync(existing);
-            var response = await dp.SetPermissionGroup(user, groupName);
+            var response = await dp.SetPermissionGroupAsync(user, groupName);
             Assert.True(response.Key);
         }
         private static List<PermissionGroup> GetPermissions()

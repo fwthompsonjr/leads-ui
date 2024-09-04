@@ -10,18 +10,18 @@
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             logger.LogInformation("Queued Hosted Service is running.");
-            await BackgroundProcessing(stoppingToken);
+            await BackgroundProcessingAsync(stoppingToken);
         }
 
         [ExcludeFromCodeCoverage(Justification = "This process directly interacts with data services and is for integration testing only.")]
-        private async Task BackgroundProcessing(CancellationToken stoppingToken)
+        private async Task BackgroundProcessingAsync(CancellationToken stoppingToken)
         {
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 if (stoppingToken.IsCancellationRequested) break;
-                await _customerInfrastructure.MapCustomers();
+                await _customerInfrastructure.MapCustomersAsync();
                 if (!_isTestMode) await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
             }
         }

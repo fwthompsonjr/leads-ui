@@ -23,7 +23,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogCritical(bool useConcreteClass)
+        public async Task ServiceCanLogCriticalAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -32,7 +32,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogCritical("message");
+                await service.LogCriticalAsync("message");
             });
             Assert.Null(exception);
         }
@@ -40,7 +40,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogDebug(bool useConcreteClass)
+        public async Task ServiceCanLogDebugAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -49,7 +49,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogDebug("message");
+                await service.LogDebugAsync("message");
             });
             Assert.Null(exception);
         }
@@ -58,7 +58,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogError(bool useConcreteClass)
+        public async Task ServiceCanLogErrorAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -68,7 +68,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogError(error);
+                await service.LogErrorAsync(error);
             });
             Assert.Null(exception);
         }
@@ -76,7 +76,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogInformation(bool useConcreteClass)
+        public async Task ServiceCanLogInformationAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -85,7 +85,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogInformation("message");
+                await service.LogInformationAsync("message");
             });
             Assert.Null(exception);
         }
@@ -94,7 +94,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogVerbose(bool useConcreteClass)
+        public async Task ServiceCanLogVerboseAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -103,7 +103,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogVerbose("message");
+                await service.LogVerboseAsync("message");
             });
             Assert.Null(exception);
         }
@@ -111,7 +111,7 @@ namespace permissions.api.tests.Infrastructure
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanLogWarning(bool useConcreteClass)
+        public async Task ServiceCanLogWarningAsync(bool useConcreteClass)
         {
             var exception = await Record.ExceptionAsync(async () =>
             {
@@ -120,7 +120,7 @@ namespace permissions.api.tests.Infrastructure
                     useConcreteClass ?
                     provider.GetRequiredService<LoggingInfrastructure>() :
                     provider.GetRequiredService<ILoggingInfrastructure>();
-                await service.LogWarning("message");
+                await service.LogWarningAsync("message");
             });
             Assert.Null(exception);
         }

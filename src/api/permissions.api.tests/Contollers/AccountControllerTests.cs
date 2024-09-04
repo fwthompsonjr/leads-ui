@@ -24,7 +24,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateRequiresAppHeader()
+        public async Task AuthenicateRequiresAppHeaderAsync()
         {
             var provider = GetProvider();
             var sut = provider.GetRequiredService<SignonController>();
@@ -45,7 +45,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateExpectsValidUserResponse()
+        public async Task AuthenicateExpectsValidUserResponseAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -74,7 +74,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateExpectsNotNullUserResponse()
+        public async Task AuthenicateExpectsNotNullUserResponseAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -103,7 +103,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateExpectsNotEmptyUserId()
+        public async Task AuthenicateExpectsNotEmptyUserIdAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -132,7 +132,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateExpectsNotNullTokenResponse()
+        public async Task AuthenicateExpectsNotNullTokenResponseAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -164,7 +164,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateHappyPath()
+        public async Task AuthenicateHappyPathAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -197,7 +197,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task AuthenicateCatchesExceptions()
+        public async Task AuthenicateCatchesExceptionsAsync()
         {
             var provider = GetProvider();
             var request = faker.Generate();
@@ -219,14 +219,14 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresAppHeader()
+        public async Task RefreshRequiresAppHeaderAsync()
         {
             var provider = GetProvider();
             var sut = provider.GetRequiredService<SignonController>();
             var request = tokenFaker.Generate();
             var mockRq = provider.GetRequiredService<Mock<HttpRequest>>();
             mockRq.SetupGet(x => x.Headers).Returns(new HeaderDictionary());
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<UnauthorizedObjectResult>(actual);
             if (actual is UnauthorizedObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -236,7 +236,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNonNullClaimsPrincipal()
+        public async Task RefreshRequiresNonNullClaimsPrincipalAsync()
         {
             var request = tokenFaker.Generate();
             var provider = GetProvider();
@@ -253,7 +253,7 @@ namespace permissions.api.tests.Contollers
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
             userDbMq.Setup(m => m.IsValidUserAsync(It.IsAny<UserModel>())).ReturnsAsync(userResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
             if (actual is BadRequestObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -263,7 +263,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNonNullClaimsIdentity()
+        public async Task RefreshRequiresNonNullClaimsIdentityAsync()
         {
             var request = tokenFaker.Generate();
             var provider = GetProvider();
@@ -282,7 +282,7 @@ namespace permissions.api.tests.Contollers
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
             userDbMq.Setup(m => m.IsValidUserAsync(It.IsAny<UserModel>())).ReturnsAsync(userResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
             if (actual is BadRequestObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -292,7 +292,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNonNullClaimsIdentityName()
+        public async Task RefreshRequiresNonNullClaimsIdentityNameAsync()
         {
             var request = tokenFaker.Generate();
             var provider = GetProvider();
@@ -313,7 +313,7 @@ namespace permissions.api.tests.Contollers
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
             userDbMq.Setup(m => m.IsValidUserAsync(It.IsAny<UserModel>())).ReturnsAsync(userResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
             if (actual is BadRequestObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -327,7 +327,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNonNullUser()
+        public async Task RefreshRequiresNonNullUserAsync()
         {
             var request = tokenFaker.Generate();
             var provider = GetProvider();
@@ -348,7 +348,7 @@ namespace permissions.api.tests.Contollers
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
             userDbMq.Setup(m => m.GetByEmail(It.IsAny<string>())).ReturnsAsync(userResponse.Value);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
             if (actual is BadRequestObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -362,7 +362,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNonEmptyUserId()
+        public async Task RefreshRequiresNonEmptyUserIdAsync()
         {
             var request = tokenFaker.Generate();
             var provider = GetProvider();
@@ -383,7 +383,7 @@ namespace permissions.api.tests.Contollers
             compDbMq.Setup(m => m.GetById(It.IsAny<string>())).ReturnsAsync(appHeader.App);
             userDbMq.Setup(m => m.GetByEmail(It.IsAny<string>())).ReturnsAsync(userResponse.Value);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
             if (actual is BadRequestObjectResult objectResult && objectResult.Value is string objectResponse)
@@ -397,7 +397,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task RefreshRequiresNotNullRefreshToken()
+        public async Task RefreshRequiresNotNullRefreshTokenAsync()
         {
             var fk = new Faker();
             var request = tokenFaker.Generate();
@@ -424,12 +424,12 @@ namespace permissions.api.tests.Contollers
             userTokenMq.Setup(m => m.Find(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(findResponse);
             validMq.Setup(m => m.Verify(It.IsAny<UserRefreshToken?>())).Returns(findResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
         }
 
         [Fact]
-        public async Task RefreshRequiresActiveRefreshToken()
+        public async Task RefreshRequiresActiveRefreshTokenAsync()
         {
             var fk = new Faker();
             var request = tokenFaker.Generate();
@@ -461,12 +461,12 @@ namespace permissions.api.tests.Contollers
             userTokenMq.Setup(m => m.Find(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(findResponse);
             validMq.Setup(m => m.Verify(It.IsAny<UserRefreshToken?>())).Returns(findResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
         }
 
         [Fact]
-        public async Task RefreshRequiresNonNullJwtResponse()
+        public async Task RefreshRequiresNonNullJwtResponseAsync()
         {
             var fk = new Faker();
             var request = tokenFaker.Generate();
@@ -500,12 +500,12 @@ namespace permissions.api.tests.Contollers
             validMq.Setup(m => m.Verify(It.IsAny<UserRefreshToken?>())).Returns(findResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
             jwtMq.Setup(m => m.GenerateRefreshToken(It.IsAny<User>())).Returns(jwtResponse);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
         }
 
         [Fact]
-        public async Task RefreshHappyPath()
+        public async Task RefreshHappyPathAsync()
         {
             var fk = new Faker();
             var request = tokenFaker.Generate();
@@ -543,7 +543,7 @@ namespace permissions.api.tests.Contollers
             validMq.Setup(m => m.Verify(It.IsAny<UserRefreshToken?>())).Returns(findResponse);
             jwtMq.Setup(m => m.GetPrincipalFromExpiredToken(It.IsAny<string>())).Returns(principal);
             jwtMq.Setup(m => m.GenerateRefreshToken(It.IsAny<User>())).Returns(jwtResponse);
-            var actual = await sut.Refresh(request);
+            var actual = await sut.RefreshAsync(request);
             Assert.NotNull(actual);
             Assert.IsAssignableFrom<OkObjectResult>(actual);
             if (actual is OkObjectResult objectResult && objectResult.Value is Tokens objectResponse)
@@ -640,7 +640,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ChangePasswordRequiresAppHeader()
+        public async Task ChangePasswordRequiresAppHeaderAsync()
         {
             var provider = GetProvider();
             var sut = provider.GetRequiredService<SignonController>();
@@ -661,7 +661,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ChangePasswordExpectsValidUserResponse()
+        public async Task ChangePasswordExpectsValidUserResponseAsync()
         {
             var provider = GetProvider();
             var request = changeFaker.Generate();
@@ -690,7 +690,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ChangePasswordExpectsNotNullUserResponse()
+        public async Task ChangePasswordExpectsNotNullUserResponseAsync()
         {
             var provider = GetProvider();
             var request = changeFaker.Generate();
@@ -719,7 +719,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ChangePasswordExpectsNotEmptyUserId()
+        public async Task ChangePasswordExpectsNotEmptyUserIdAsync()
         {
             var provider = GetProvider();
             var request = changeFaker.Generate();
@@ -748,7 +748,7 @@ namespace permissions.api.tests.Contollers
         }
 
         [Fact]
-        public async Task ChangePasswordHappyPath()
+        public async Task ChangePasswordHappyPathAsync()
         {
             var fkr = new Faker();
             var provider = GetProvider();

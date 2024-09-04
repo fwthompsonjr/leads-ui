@@ -12,7 +12,7 @@ namespace legallead.permissions.api
         {
         }
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
             if (IsDataReady) { return; }
             await Task.Run(() =>

@@ -29,21 +29,21 @@ namespace legallead.permissions.api.Controllers
                 var applicationCheck = Request.Validate(response);
                 if (!applicationCheck.Key)
                 {
-                    await _logSvc.LogWarning("Failed : Validate Application Header. Returning 401 - Unauthorized");
+                    await _logSvc.LogWarningAsync("Failed : Validate Application Header. Returning 401 - Unauthorized");
                     return Unauthorized(applicationCheck.Value);
                 }
                 var model = new UserModel { Password = usersdata.Password, Email = usersdata.UserName, UserName = usersdata.UserName };
                 var validUser = await _db.UserDb.IsValidUserAsync(model);
                 var user = validUser.Value ?? new();
-                var hasIncident = await IsViolationIncidentCreated(validUser);
+                var hasIncident = await IsViolationIncidentCreatedAsync(validUser);
                 if (hasIncident != null) return hasIncident;
-                var isLocked = await IsAccountLockedViolation(user.Id, user.Email);
+                var isLocked = await IsAccountLockedViolationAsync(user.Id, user.Email);
                 if (isLocked != null) return isLocked;
                 var token = _jWTManager.GenerateToken(user);
 
                 if (token == null)
                 {
-                    await _logSvc.LogWarning("Failed : Generate Access Token. Returning 401 - Unauthorized");
+                    await _logSvc.LogWarningAsync("Failed : Generate Access Token. Returning 401 - Unauthorized");
                     return Unauthorized("Invalid Attempt..");
                 }
 
@@ -58,20 +58,20 @@ namespace legallead.permissions.api.Controllers
                 var emptycount = permissions.Count(c => string.IsNullOrEmpty(c.KeyValue));
                 if (emptycount == permissions.Count())
                 {
-                    await _db.InitializeProfile(user);
-                    var initOk = (await _db.InitializePermission(user));
+                    await _db.InitializeProfileAsync(user);
+                    var initOk = (await _db.InitializePermissionAsync(user));
                     await _db.PermissionHistoryDb.CreateSnapshot(user, jdbc.PermissionChangeTypes.AccountRegistrationCompleted);
                     await _db.ProfileHistoryDb.CreateSnapshot(user, jdbc.ProfileChangeTypes.AccountRegistrationCompleted);
                     if (initOk)
                     {
-                        await _db.SetPermissionGroup(user, "Guest");
+                        await _db.SetPermissionGroupAsync(user, "Guest");
                     }
                 }
                 return Ok(token);
             }
             catch (Exception ex)
             {
-                await _logSvc.LogError(ex);
+                await _logSvc.LogErrorAsync(ex);
                 return StatusCode(500, ex.Message);
             }
         }
@@ -79,7 +79,7 @@ namespace legallead.permissions.api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("refresh-token")]
-        public async Task<IActionResult> Refresh(Tokens token)
+        public async Task<IActionResult> RefreshAsync(Tokens token)
         {
             var response = "An error occurred refreshing authentication token.";
             var applicationCheck = Request.Validate(response);
@@ -96,10 +96,10 @@ namespace legallead.permissions.api.Controllers
             {
                 return BadRequest("User data is null or empty.");
             }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
-                await _logSvc.LogWarning("Failed : Account is locked. Returning 403 - Forbidden");
+                await _logSvc.LogWarningAsync("Failed : Account is locked. Returning 403 - Forbidden");
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
             var found = await _db.UserTokenDb.Find(user.Id, token.RefreshToken);
@@ -158,7 +158,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return Unauthorized("Invalid username or password...");
             }
-            var isLocked = await IsAccountLockedViolation(user.Id, user.Email);
+            var isLocked = await IsAccountLockedViolationAsync(user.Id, user.Email);
             if (isLocked != null) return isLocked;
             User update = MapFromChangePassword(usersdata, model, user);
             update.CreateDate = user.CreateDate.GetValueOrDefault(DateTime.UtcNow);

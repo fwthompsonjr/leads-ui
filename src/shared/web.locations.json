@@ -1,0 +1,19 @@
+{
+	"sites": [
+		{
+			"name": "api"
+			"ip": "52.15.228.134",
+			"uri": "http://api.legallead.co"
+		},
+		{
+			"name": "web"
+			"ip": "3.136.133.109",
+			"uri": "http://oxfordlegalleads.com"
+		},
+		{
+			"name": "maintenance"
+			"ip": "3.22.134.2",
+			"uri": "http://oxfordlegalleads.com"
+		}
+	] 
+}

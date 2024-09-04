@@ -24,7 +24,7 @@ namespace permissions.api.tests.Contollers
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString());
 
         [Fact]
-        public async Task SutCanUpdateName()
+        public async Task SutCanUpdateNameAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -33,20 +33,20 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactName(
+            db.Setup(s => s.ChangeContactNameAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactNameRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactName(payload);
+            var result = await service.ChangeContactNameAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<OkObjectResult>(result);
         }
 
         [Fact]
-        public async Task SutVerifiesUpdateName()
+        public async Task SutVerifiesUpdateNameAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -55,19 +55,19 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user, Result = new BadRequestObjectResult("Test response") };
             var contactResponse = new KeyValuePair<bool, string>(true, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactName(
+            db.Setup(s => s.ChangeContactNameAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactNameRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactName(payload);
+            var result = await service.ChangeContactNameAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         }
         [Fact]
-        public async Task SutCanConflictUpdateName()
+        public async Task SutCanConflictUpdateNameAsync()
         {
             var provider = GetProvider();
             var db = provider.GetRequiredService<Mock<IProfileInfrastructure>>();
@@ -76,14 +76,14 @@ namespace permissions.api.tests.Contollers
             var response = new ActionUserResponse { User = user };
             var contactResponse = new KeyValuePair<bool, string>(false, string.Empty);
             var payload = faker.Generate(10).ToArray();
-            verifications.Setup(s => s.VerifyRequest(
+            verifications.Setup(s => s.VerifyRequestAsync(
                 It.IsAny<HttpRequest>(),
                 It.IsAny<object[]>())).ReturnsAsync(response);
-            db.Setup(s => s.ChangeContactName(
+            db.Setup(s => s.ChangeContactNameAsync(
                 It.IsAny<User>(),
                 It.IsAny<ChangeContactNameRequest[]>())).ReturnsAsync(contactResponse);
             var service = provider.GetRequiredService<ProfilesController>();
-            var result = await service.ChangeContactName(payload);
+            var result = await service.ChangeContactNameAsync(payload);
             Assert.NotNull(result);
             Assert.IsAssignableFrom<ConflictObjectResult>(result);
         }

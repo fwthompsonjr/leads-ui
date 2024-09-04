@@ -25,11 +25,11 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType<UserSearchBeginResponse>(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(BeginSearchRequested))]
-        public async Task<IActionResult> BeginSearch(UserSearchRequest request)
+        public async Task<IActionResult> BeginSearchAsync(UserSearchRequest request)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             if (user == null) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
@@ -39,7 +39,7 @@ namespace legallead.permissions.api.Controllers
             {
                 return BadRequest(isValid);
             }
-            var result = await infrastructure.Begin(Request, request);
+            var result = await infrastructure.BeginAsync(Request, request);
             if (result == null) return Conflict(request);
             if (string.IsNullOrWhiteSpace(result.RequestId)) return UnprocessableEntity(result);
             return Ok(result);
@@ -50,12 +50,12 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<UserSearchQueryModel>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> MySearches(ApplicationModel context)
+        public async Task<IActionResult> MySearchesAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
@@ -63,7 +63,7 @@ namespace legallead.permissions.api.Controllers
             try
             {
 
-                var searches = await infrastructure.GetHeader(Request, null);
+                var searches = await infrastructure.GetHeaderAsync(Request, null);
                 return Ok(searches);
             }
             catch (Exception ex)
@@ -78,9 +78,9 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<UserSearchQueryModel>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> MySearchesCount(ApplicationModel context)
+        public async Task<IActionResult> MySearchesCountAsync(ApplicationModel context)
         {
-            var response = await MySearches(context);
+            var response = await MySearchesAsync(context);
             if (response is not OkObjectResult ok) return response;
             var count = new { Count = 0 };
             if (ok.Value is not IEnumerable<UserSearchQueryModel> searches) return Ok(count);
@@ -93,17 +93,17 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<object>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> MyActiveSearches(ApplicationModel context)
+        public async Task<IActionResult> MyActiveSearchesAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var detail = await infrastructure.GetSearchDetails(user.Id);
+            var detail = await infrastructure.GetSearchDetailsAsync(user.Id);
             return Ok(detail);
         }
 
@@ -113,17 +113,17 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType<IEnumerable<SearchPreviewBo>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Preview(ApplicationModel context)
+        public async Task<IActionResult> PreviewAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetPreview(Request, guid);
+            var searches = await infrastructure.GetPreviewAsync(Request, guid);
             if (searches == null) return UnprocessableEntity(guid);
             return Ok(searches);
         }
@@ -132,12 +132,12 @@ namespace legallead.permissions.api.Controllers
         [Route("my-restriction-status")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType<SearchRestrictionModel>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> RestrictionStatus(ApplicationModel context)
+        public async Task<IActionResult> RestrictionStatusAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var status = await infrastructure.GetRestrictionStatus(Request);
+            var status = await infrastructure.GetRestrictionStatusAsync(Request);
             return Ok(status);
         }
 
@@ -146,17 +146,17 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<ActiveSearchOverviewBo>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> SearchStatus(ApplicationModel context)
+        public async Task<IActionResult> SearchStatusAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetSearchProgress(guid);
+            var searches = await infrastructure.GetSearchProgressAsync(guid);
             return Ok(searches);
         }
 
@@ -165,17 +165,17 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<PurchasedSearchBo>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> MyPurchases(ApplicationModel context)
+        public async Task<IActionResult> MyPurchasesAsync(ApplicationModel context)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var guid = context.Id;
             if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetPurchases(user.Id);
+            var searches = await infrastructure.GetPurchasesAsync(user.Id);
             return Ok(searches);
         }
 
@@ -184,20 +184,20 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<PurchasedSearchBo>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ListMyPurchases([FromQuery] string userName)
+        public async Task<IActionResult> ListMyPurchasesAsync([FromQuery] string userName)
         {
-            var user = await infrastructure.GetUser(Request);
+            var user = await infrastructure.GetUserAsync(Request);
             var email = user?.Email ?? string.Empty;
             var alias = user?.UserName ?? string.Empty;
 
             var isvalid = userName.Equals(alias) || userName.Equals(email);
             if (string.IsNullOrEmpty(userName) || !isvalid || user == null) { return Unauthorized(); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            var searches = await infrastructure.GetPurchases(user.Id);
+            var searches = await infrastructure.GetPurchasesAsync(user.Id);
             if (searches == null || !searches.Any()) { return Ok(Array.Empty<PurchasedSearchBo>()); }
             var list = searches.ToList();
             list.Sort((a, b) => b.PurchaseDate.GetValueOrDefault().CompareTo(a.PurchaseDate.GetValueOrDefault()));

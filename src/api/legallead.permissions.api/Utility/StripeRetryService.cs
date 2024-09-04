@@ -7,7 +7,7 @@ namespace legallead.permissions.api.Utility
     [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Integration testing only")]
     internal static class StripeRetryService
     {
-        public static async Task<string> FetchClientSecret(LevelRequestBo session)
+        public static async Task<string> FetchClientSecretAsync(LevelRequestBo session)
         {
             const double wait = 400f;
             var nodata = Guid.Empty.ToString("D");
@@ -23,7 +23,7 @@ namespace legallead.permissions.api.Utility
                     .WaitAndRetryAsync(intervals)
                     .ExecuteAsync(async () =>
                     {
-                        var secret = await FetchClientSecretValue(session);
+                        var secret = await FetchClientSecretValueAsync(session);
                         return secret;
                     });
                 return response;
@@ -34,7 +34,7 @@ namespace legallead.permissions.api.Utility
             }
         }
 
-        private static async Task<string> FetchClientSecretValue(LevelRequestBo session)
+        private static async Task<string> FetchClientSecretValueAsync(LevelRequestBo session)
         {
             var service = new SubscriptionService();
             var subscription = await service.GetAsync(session.SessionId) ?? throw new SubscriptionNotFoundException();

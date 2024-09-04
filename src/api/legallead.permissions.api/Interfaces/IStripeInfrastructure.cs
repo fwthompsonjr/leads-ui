@@ -9,8 +9,8 @@ namespace legallead.permissions.api.Interfaces
         Task<object?> CreatePaymentAsync(
             PaymentCreateModel model,
             List<SearchInvoiceBo> data);
-        Task<object> FetchClientSecret(LevelRequestBo session);
+        Task<object> FetchClientSecretAsync(LevelRequestBo session);
         Tuple<bool, string, Invoice> VerifySubscription(string sessionId);
-        Task<string> FetchClientSecretValue(LevelRequestBo session);
+        Task<string> FetchClientSecretValueAsync(LevelRequestBo session);
     }
 }

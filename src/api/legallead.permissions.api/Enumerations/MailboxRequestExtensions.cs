@@ -29,7 +29,7 @@ namespace legallead.permissions.api.Enumerations
 
         private static void AssignUser(this MailboxRequest request, ISearchInfrastructure infrastructure, HttpRequest http)
         {
-            var user = infrastructure.GetUser(http).GetAwaiter().GetResult();
+            var user = infrastructure.GetUserAsync(http).GetAwaiter().GetResult();
             if (user == null)
             {
                 request.UserId = string.Empty;

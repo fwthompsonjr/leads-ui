@@ -11,14 +11,14 @@ namespace permissions.api.tests.Contollers
 
         [Theory]
         [InlineData("Foc7k135jHxo0WYC", "sub_1PLtruDhgP60CL9xqNZtXBMh")]
-        public async Task VerifyCheckout(string id, string sessionId)
+        public async Task VerifyCheckoutAsync(string id, string sessionId)
         {
             if (!Debugger.IsAttached) return;
             var errored = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
                 var controller = provider.GetRequiredService<HomeController>();
-                _ = await controller.SubscriptionCheckout(id, sessionId);
+                _ = await controller.SubscriptionCheckoutAsync(id, sessionId);
             });
             Assert.Null(errored);
         }

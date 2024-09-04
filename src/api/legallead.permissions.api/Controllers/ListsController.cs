@@ -50,14 +50,14 @@ namespace legallead.permissions.api.Controllers
         [Route("permission-groups")]
         [AllowAnonymous]
         [ProducesResponseType<IEnumerable<PermissionGroupModel>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPermissionGroups()
+        public async Task<IActionResult> GetPermissionGroupsAsync()
         {
 #if DEBUG
-            var isAdmin = await Request.IsAdminUser(_db);
+            var isAdmin = await Request.IsAdminUserAsync(_db);
 #else
-            var user = await Request.GetUser(_db);
+            var user = await Request.GetUserAsync(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isAdmin = await Request.IsAdminUser(_db);
+            var isAdmin = await Request.IsAdminUserAsync(_db);
 #endif
 
             var permissions = (await _db.PermissionGroupDb.GetAll()).Where(p => isAdmin || p.IsVisible.GetValueOrDefault());
@@ -76,16 +76,16 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<UserProfileModel>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetUserProfile()
+        public async Task<IActionResult> GetUserProfileAsync()
         {
-            var user = await Request.GetUser(_db);
+            var user = await Request.GetUserAsync(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            await _db.InitializeProfile(user);
+            await _db.InitializeProfileAsync(user);
             var profiles = await _db.UserProfileVw.GetAll(user);
             var models = profiles.Select(s => _mapper.Map<UserProfileModel>(s)).ToList();
             models.ForEach(m => m.UserName = user.UserName);
@@ -98,16 +98,16 @@ namespace legallead.permissions.api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType<IEnumerable<UserProfileModel>>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetUserPermissions()
+        public async Task<IActionResult> GetUserPermissionsAsync()
         {
-            var user = await Request.GetUser(_db);
+            var user = await Request.GetUserAsync(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isLocked = await _lockingDb.IsAccountLocked(user.Id);
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
             if (isLocked)
             {
                 return Forbid("Account is locked. Contact system administrator to unlock.");
             }
-            await _db.InitializePermission(user);
+            await _db.InitializePermissionAsync(user);
             var profiles = await _db.UserPermissionVw.GetAll(user);
             var models = profiles.Select(s => _mapper.Map<UserProfileModel>(s)).ToList();
             models.ForEach(m => m.UserName = user.UserName);

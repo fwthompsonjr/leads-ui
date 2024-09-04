@@ -1,8 +1,10 @@
 ﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Models;
+using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
 using Stripe;
+using System.Text.Json;
 
 namespace legallead.permissions.api.Utility
 {
@@ -34,7 +36,7 @@ namespace legallead.permissions.api.Utility
             _subscriptiondb = subscription;
         }
 
-        public async Task<PaymentCustomerBo?> CreateCustomer(string userId, string accountId)
+        public async Task<PaymentCustomerBo?> CreateCustomerAsync(string userId, string accountId)
         {
             var user = await _db.GetById(userId);
             if (user == null) { return null; }
@@ -45,7 +47,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        public async Task<PaymentCustomerBo?> GetOrCreateCustomer(string userId)
+        public async Task<PaymentCustomerBo?> GetOrCreateCustomerAsync(string userId)
         {
             var user = await _db.GetById(userId);
             if (user == null) { return null; }
@@ -56,33 +58,37 @@ namespace legallead.permissions.api.Utility
                 var customer = await _repo.GetCustomer(search);
                 return customer;
             }
-            var stripeCustomerId = await CreateStripeCustomerAndGetIndex(user.Email);
-            var creation = await CreateCustomer(user.Id, stripeCustomerId);
+            var stripeCustomerId = await CreateStripeCustomerAndGetIndexAsync(user.Email);
+            var creation = await CreateCustomerAsync(user.Id, stripeCustomerId);
             return creation;
         }
 
-        public async Task<PaymentCustomerBo?> GetCustomer(string userId)
+        public async Task<PaymentCustomerBo?> GetCustomerAsync(string userId)
         {
-            var customer = await GetOrCreateCustomer(userId);
+            var customer = await GetOrCreateCustomerAsync(userId);
             return customer;
         }
-        public async Task<List<UnMappedCustomerBo>?> GetUnMappedCustomers()
+        public async Task<List<UnMappedCustomerBo>?> GetUnMappedCustomersAsync()
         {
             var response = await _repo.GetUnMappedCustomers(new() { AccountType = _paymentEnvironment });
             return response;
         }
 
-        public async Task<bool> MapCustomers()
+        public async Task<bool> MapCustomersAsync()
         {
             try
             {
-                var customers = await GetUnMappedCustomers();
+                var jwt = ThreadHelper.JoinableTaskFactory;
+                var customers = await GetUnMappedCustomersAsync();
                 if (customers == null || customers.Count == 0) { return true; }
-                customers.ForEach(async customer =>
+                customers.ForEach(customer =>
                     {
                         if (!string.IsNullOrEmpty(customer.Id))
                         {
-                            _ = await GetOrCreateCustomer(customer.Id);
+                            jwt.Run(async delegate
+                            {
+                                _ = await GetOrCreateCustomerAsync(customer.Id);
+                            });
                         }
                     });
                 return true;
@@ -93,20 +99,20 @@ namespace legallead.permissions.api.Utility
             }
         }
 
-        public async Task<LevelRequestBo?> AddLevelChangeRequest(LevelChangeRequest request)
+        public async Task<LevelRequestBo?> AddLevelChangeRequestAsync(LevelChangeRequest request)
         {
             _ = await _repo.AddLevelChangeRequest(JsonConvert.SerializeObject(request));
             var item = await _repo.GetLevelRequestById(request.ExternalId ?? string.Empty);
             return item;
         }
 
-        public async Task<LevelRequestBo?> GetLevelRequestById(string externalId)
+        public async Task<LevelRequestBo?> GetLevelRequestByIdAsync(string externalId)
         {
             var item = await _repo.GetLevelRequestById(externalId);
             return item;
         }
 
-        public async Task<LevelRequestBo?> CompleteLevelRequest(LevelRequestBo request)
+        public async Task<LevelRequestBo?> CompleteLevelRequestAsync(LevelRequestBo request)
         {
             if (string.IsNullOrEmpty(request.ExternalId)) return null;
             var detail = new { request.ExternalId, IsPaymentSuccess = request.IsPaymentSuccess.GetValueOrDefault() };
@@ -115,7 +121,7 @@ namespace legallead.permissions.api.Utility
             return item;
         }
 
-        public async Task<LevelRequestBo?> CompleteDiscountRequest(LevelRequestBo request)
+        public async Task<LevelRequestBo?> CompleteDiscountRequestAsync(LevelRequestBo request)
         {
             if (string.IsNullOrEmpty(request.ExternalId)) return null;
             var detail = new { request.ExternalId, IsPaymentSuccess = request.IsPaymentSuccess.GetValueOrDefault() };
@@ -125,7 +131,7 @@ namespace legallead.permissions.api.Utility
             return item;
         }
 
-        public async Task<LevelRequestBo?> AddDiscountChangeRequest(LevelChangeRequest request)
+        public async Task<LevelRequestBo?> AddDiscountChangeRequestAsync(LevelChangeRequest request)
         {
             _ = await _repo.AddDiscountChangeRequest(JsonConvert.SerializeObject(request));
             var item = await _repo.GetDiscountRequestById(request.ExternalId ?? string.Empty);
@@ -133,7 +139,7 @@ namespace legallead.permissions.api.Utility
         }
 
 
-        public async Task<LevelRequestBo?> GetDiscountRequestById(string externalId)
+        public async Task<LevelRequestBo?> GetDiscountRequestByIdAsync(string externalId)
         {
             var item = await _repo.GetDiscountRequestById(externalId);
             return item;
@@ -149,7 +155,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Implementation depends on 3rd party payment service.")]
-        private async Task<string> CreateStripeCustomerAndGetIndex(string email)
+        private async Task<string> CreateStripeCustomerAndGetIndexAsync(string email)
         {
             try
             {

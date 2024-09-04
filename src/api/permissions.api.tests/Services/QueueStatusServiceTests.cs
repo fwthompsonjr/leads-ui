@@ -54,7 +54,7 @@ namespace permissions.api.tests.Services
         [InlineData(1, 30)]
         [InlineData(1, 31)]
         [InlineData(1, 32)]
-        public async Task ServiceCanUpdate(int id, int requestId = 5)
+        public async Task ServiceCanUpdateAsync(int id, int requestId = 5)
         {
             int[] badrequests = [0, 1, 2, 10, 11, 12, 20, 21, 22, 30, 31];
             var fkr = new Faker();
@@ -99,7 +99,7 @@ namespace permissions.api.tests.Services
             {
                 mock.Setup(m => m.UpdateStatus(It.IsAny<QueueWorkingBo>())).Returns(response);
             }
-            _ = await service.Update(request);
+            _ = await service.UpdateAsync(request);
             if (badrequests.Contains(requestId))
             {
                 mock.Verify(m => m.UpdateStatus(It.IsAny<QueueWorkingBo>()), Times.Never());
@@ -109,7 +109,7 @@ namespace permissions.api.tests.Services
         }
 
         [Fact]
-        public async Task ServiceCanStart()
+        public async Task ServiceCanStartAsync()
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -120,7 +120,7 @@ namespace permissions.api.tests.Services
                 var mock = sut.MqSearchRepo;
                 payload.Source = "oxford.leads.data.services";
                 mock.Setup(m => m.Start(It.IsAny<SearchDto>())).ReturnsAsync(response);
-                _ = await service.Start(payload);
+                _ = await service.StartAsync(payload);
                 mock.Verify(m => m.Start(It.IsAny<SearchDto>()));
             });
             Assert.Null(error);
@@ -128,7 +128,7 @@ namespace permissions.api.tests.Services
 
 
         [Fact]
-        public async Task ServiceCanComplete()
+        public async Task ServiceCanCompleteAsync()
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -145,7 +145,7 @@ namespace permissions.api.tests.Services
                 var service = sut.Service;
                 var mock = sut.MqSearchRepo;
                 mock.Setup(m => m.Complete(It.IsAny<string>())).ReturnsAsync(response);
-                await service.Complete(payload);
+                await service.CompleteAsync(payload);
                 mock.Verify(m => m.Complete(It.IsAny<string>()));
             });
             Assert.Null(error);
@@ -157,7 +157,7 @@ namespace permissions.api.tests.Services
         [InlineData(1)]
         [InlineData(1, 0)]
         [InlineData(1, 50)]
-        public async Task ServiceCanFetch(int id, int recordCount = 5)
+        public async Task ServiceCanFetchAsync(int id, int recordCount = 5)
         {
             var fkr = new Faker();
             var exception = new Faker().System.Exception();
@@ -179,7 +179,7 @@ namespace permissions.api.tests.Services
             if (id == 0) mock.Setup(m => m.GetQueue()).ThrowsAsync(exception);
             else mock.Setup(m => m.GetQueue()).ReturnsAsync(response);
 
-            _ = await service.Fetch();
+            _ = await service.FetchAsync();
             mock.Verify(m => m.GetQueue());
         }
 
@@ -192,7 +192,7 @@ namespace permissions.api.tests.Services
         [InlineData(20, 15)]
         [InlineData(20, 20)]
         [InlineData(20, 25)]
-        public async Task ServiceCanCompleteGeneration(int webId, int rowcount = 5, int identityId = 5)
+        public async Task ServiceCanCompleteGenerationAsync(int webId, int rowcount = 5, int identityId = 5)
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -238,7 +238,7 @@ namespace permissions.api.tests.Services
                 usrmock.Setup(m => m.UpdateRowCount(
                     It.IsAny<string>(),
                     It.IsAny<int>())).ReturnsAsync(response);
-                await service.GenerationComplete(payload);
+                await service.GenerationCompleteAsync(payload);
                 mock.Verify(m => m.Complete(It.IsAny<string>()));
             });
             Assert.Null(error);
@@ -263,7 +263,7 @@ namespace permissions.api.tests.Services
         [InlineData(5, 1, 3)]
         [InlineData(5, 1, 4)]
         [InlineData(10, 1, 1)]
-        public async Task ServiceCanPostStatus(int identityId, int messageId = 0, int statusId = 0)
+        public async Task ServiceCanPostStatusAsync(int identityId, int messageId = 0, int statusId = 0)
         {
             var error = await Record.ExceptionAsync(async () =>
             {
@@ -298,7 +298,7 @@ namespace permissions.api.tests.Services
                     It.IsAny<string>(),
                     It.IsAny<string>())).ReturnsAsync(response);
                 usrmock.Setup(m => m.Update(It.IsAny<WorkStatusBo>())).Returns(true);
-                await service.PostStatus(payload);
+                await service.PostStatusAsync(payload);
             });
             Assert.Null(error);
         }

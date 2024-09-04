@@ -2,6 +2,6 @@
 {
     public interface IRequestedUser
     {
-        Task<User?> GetUser(HttpRequest request);
+        Task<User?> GetUserAsync(HttpRequest request);
     }
 }

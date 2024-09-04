@@ -2198,12 +2198,12 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"const countyCount = 4;\r",
+											"const countyCount = 5;\r",
 											"pm.test(\"Status code is 200\", function () {\r",
 											"  pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Expect 4 active counties response\", function () {\r",
+											"pm.test(\"Expect 5 active counties response\", function () {\r",
 											"    var jstring = pm.response.json();\r",
 											"    pm.expect(jstring.length).to.equal(countyCount);\r",
 											"});\r",

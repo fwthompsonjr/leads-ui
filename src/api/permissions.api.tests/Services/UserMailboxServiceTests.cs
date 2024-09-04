@@ -16,7 +16,7 @@ namespace permissions.api.tests.Services
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanGetBody(bool hasResponse)
+        public async Task ServiceCanGetBodyAsync(bool hasResponse)
         {
             var request = new MailboxRequest();
             var response = hasResponse ? bodyFaker.Generate() : null;
@@ -25,7 +25,7 @@ namespace permissions.api.tests.Services
                 It.IsAny<string>(),
                 It.IsAny<string>())).ReturnsAsync(response);
             var sut = new UserMailboxService(svc.Object);
-            _ = await sut.GetBody(request);
+            _ = await sut.GetBodyAsync(request);
             svc.Verify(x => x.GetBody(
                 It.IsAny<string>(),
                 It.IsAny<string>()));
@@ -34,7 +34,7 @@ namespace permissions.api.tests.Services
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public async Task ServiceCanGetCount(bool hasResponse)
+        public async Task ServiceCanGetCountAsync(bool hasResponse)
         {
             var request = new MailboxRequest();
             var response = hasResponse ? countFaker.Generate() : null;
@@ -42,7 +42,7 @@ namespace permissions.api.tests.Services
             svc.Setup(x => x.GetCount(
                 It.IsAny<string>())).ReturnsAsync(response);
             var sut = new UserMailboxService(svc.Object);
-            _ = await sut.GetCount(request);
+            _ = await sut.GetCountAsync(request);
             svc.Verify(x => x.GetCount(
                 It.IsAny<string>()));
         }
@@ -51,7 +51,7 @@ namespace permissions.api.tests.Services
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(10)]
-        public async Task ServiceCanGetMailMessages(int responseId)
+        public async Task ServiceCanGetMailMessagesAsync(int responseId)
         {
             var request = new MailboxRequest();
             var response = responseId switch
@@ -63,7 +63,7 @@ namespace permissions.api.tests.Services
             svc.Setup(x => x.GetMailMessages(
                 It.IsAny<string>(), It.IsAny<DateTime?>())).ReturnsAsync(response);
             var sut = new UserMailboxService(svc.Object);
-            _ = await sut.GetMailMessages(request);
+            _ = await sut.GetMailMessagesAsync(request);
             svc.Verify(x => x.GetMailMessages(
                 It.IsAny<string>(), It.IsAny<DateTime?>()));
         }
