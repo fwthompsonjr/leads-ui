@@ -55,9 +55,9 @@ namespace legallead.permissions.api.Controllers
 #if DEBUG
             var isAdmin = await Request.IsAdminUserAsync(_db);
 #else
-            var user = await Request.GetUser(_db);
+            var user = await Request.GetUserAsync(_db);
             if (user == null) { return Unauthorized("Invalid user account."); }
-            var isAdmin = await Request.IsAdminUser(_db);
+            var isAdmin = await Request.IsAdminUserAsync(_db);
 #endif
 
             var permissions = (await _db.PermissionGroupDb.GetAll()).Where(p => isAdmin || p.IsVisible.GetValueOrDefault());
