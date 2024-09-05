@@ -39,17 +39,21 @@ namespace legallead.records.search.tests.Web
 
         [TestMethod]
         [TestCategory("harris.jp.county.actions")]
-        public void CanGetFromJsonInteractive()
+        [DataRow("a")]
+        [DataRow("0")]
+        [DataRow("1")]
+        [DataRow("2")]
+        public void CanGetFromJsonInteractive(string courtIndex = "0")
         {
             if (!Debugger.IsAttached) return;
-            var interactive = GetHarrisJpInteractive();
+            var interactive = GetHarrisJpInteractive(courtIndex);
             var result = interactive.Fetch();
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.PeopleList);
             Assert.IsTrue(result.PeopleList.Any());
         }
 
-        private static MockHarrisJpWeb GetHarrisJpInteractive()
+        private static MockHarrisJpWeb GetHarrisJpInteractive(string courtIndex = "0")
         {
 
             DayOfWeek[] weekends = new[] { DayOfWeek.Sunday, DayOfWeek.Saturday };
@@ -61,7 +65,7 @@ namespace legallead.records.search.tests.Web
             var webParameter = BaseWebIneractive.GetWebNavigation(HarrisJpId, dte, dte);
             var custom = new List<WebNavigationKey>
             {
-                new () { Name = "courtIndex", Value = "0" },
+                new () { Name = "courtIndex", Value = courtIndex },
                 new () { Name = "caseStatusIndex", Value = "0" }
             };
             custom.ForEach(x => { AddOrUpdateKey(webParameter.Keys, x); });
