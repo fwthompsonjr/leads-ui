@@ -28,6 +28,7 @@ namespace legallead.records.search.Classes
             // get any output file to store data from extract
             DateTime startingDate = GetParameterValue<DateTime>(CommonKeyIndexes.StartDate);
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
+            int courtIndex = GetSearchIndex();
             List<PersonAddress> peopleList = new();
             WebFetchResult webFetch = new();
             XmlContentHolder results = new SettingsManager().GetOutput(this);
@@ -38,7 +39,7 @@ namespace legallead.records.search.Classes
             if (string.IsNullOrEmpty(navigationFile)) return webFetch;
             List<string> sources = navigationFile.Split(',').ToList();
             sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
-            webFetch = SearchWeb(results, steps, startingDate, endingDate, peopleList);
+            webFetch = SearchWeb(courtIndex, results, steps, startingDate, endingDate, peopleList);
             peopleList.ForEach(p =>
             {
                 p = p.ToCalculatedNames();
@@ -49,17 +50,32 @@ namespace legallead.records.search.Classes
             return webFetch;
         }
 
-        private static WebFetchResult SearchWeb(XmlContentHolder results, List<NavigationStep> steps, DateTime startingDate, DateTime endingDate, List<PersonAddress> people)
+        private int GetSearchIndex()
+        {
+            int[] indicies = new [] { 0, 1, 2 };
+            try
+            {
+                int courtIndex = GetParameterValue<int>("courtIndex");
+                if (!indicies.Contains(courtIndex)) return 0;
+                return courtIndex;
+            }
+            catch { return 0; }
+        }
+
+
+        private static WebFetchResult SearchWeb(int searchTypeId, XmlContentHolder results, List<NavigationStep> steps, DateTime startingDate, DateTime endingDate, List<PersonAddress> people)
         {
             IWebDriver driver = WebUtilities.GetWebDriver();
-
+            var searches = new List<string>(extractTypes);
+            if (searchTypeId == 1) searches.Remove("criminal");
+            if (searchTypeId == 2) searches.Remove("civil");
             try
             {
                 ElementAssertion assertion = new(driver);
                 string caseList = string.Empty;
                 ElementActions.ForEach(x => x.GetAssertion = assertion);
                 ElementActions.ForEach(x => x.GetWeb = driver);
-                extractTypes.ForEach(searchtype =>
+                searches.ForEach(searchtype =>
                 {
                     var courtIndexes = extractCourtIndexes[searchtype].Split(',').ToList();
                     courtIndexes.ForEach(indx =>
