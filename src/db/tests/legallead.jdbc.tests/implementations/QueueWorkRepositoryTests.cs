@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Dapper;
 using legallead.jdbc.entities;
+using legallead.jdbc.enumerations;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
@@ -38,6 +39,20 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserName, y => y.Person.UserName)
             .RuleFor(x => x.Email, y => y.Person.Email);
+
+        private static readonly Faker<StatusSummaryDto> statusfaker =
+            new Faker<StatusSummaryDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Region, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Count, y => y.Random.Int(0, 125000))
+            .RuleFor(x => x.Oldest, y => y.Date.Recent())
+            .RuleFor(x => x.Newest, y => y.Date.Recent());
+
+        private static readonly Faker<StatusDto> summaryfaker =
+            new Faker<StatusDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.SearchProgress, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Total, y => y.Random.Int(0, 125000));
 
         private static readonly Faker faker = new();
 
@@ -194,6 +209,73 @@ namespace legallead.jdbc.tests.implementations
                 return;
             }
             mock.Verify(m => m.QueryAsync<CustomerDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(false, QueueStatusTypes.Error)]
+        [InlineData(false, QueueStatusTypes.Submitted)]
+        [InlineData(false, QueueStatusTypes.Purchased)]
+        [InlineData(false, QueueStatusTypes.Error, 0)]
+        [InlineData(true, QueueStatusTypes.Purchased)]
+        public void RepoCanGetSummary(bool hasException, QueueStatusTypes sts, int recordCount = 5)
+        {
+            var exception = faker.System.Exception();
+            var container = new RepoContainer();
+            var response = statusfaker.Generate(recordCount);
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<StatusSummaryDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<StatusSummaryDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            _ = service.GetSummary(sts);
+            mock.Verify(m => m.QueryAsync<StatusSummaryDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(false, 0)]
+        [InlineData(true)]
+        public void RepoCanGetStatus(bool hasException, int recordCount = 5)
+        {
+            var exception = faker.System.Exception();
+            var container = new RepoContainer();
+            var response = summaryfaker.Generate(recordCount);
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<StatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<StatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            _ = service.GetStatus();
+            mock.Verify(m => m.QueryAsync<StatusDto>(
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));

@@ -115,6 +115,8 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<DynamicParameters>()));
         }
 
+#pragma warning disable CS8604 // Possible null reference argument.
+
         [Theory]
         [InlineData(false, 0)]
         [InlineData(false, 5)]
@@ -151,6 +153,9 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
         }
+
+#pragma warning restore CS8604 // Possible null reference argument.
+
         private sealed class RepoContainer
         {
             private readonly SearchStatusRepository repo;
