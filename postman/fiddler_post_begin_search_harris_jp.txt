@@ -1,0 +1,24 @@
+POST https://localhost:44345/api/search/search-begin HTTP/1.0
+User-Agent: Fiddler
+Host: localhost:44345
+Content-Type: application/json
+APP_IDENTITY: {'id':'d6450506-3479-4c02-92c7-de59f6e7091e','name':'legallead.permissions.api'}
+Authorization: Bearer -- add token --
+Content-Length: 238
+
+{
+	"state": "tx",
+	"county": {
+		"name": "harris-jp",
+		"value": 32190
+	},
+	"details": [
+		{
+			"name": "Court Selection",
+			"text": "All JP Courts",
+			"value": "0"
+		}
+	],
+	"start": 1725283795586,
+	"end": 1725283795586
+}

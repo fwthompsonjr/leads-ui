@@ -1,0 +1,11 @@
+POST https://localhost:44345/api/signon/login HTTP/1.0
+User-Agent: Fiddler
+Host: localhost:44345
+Content-Type: application/json
+APP_IDENTITY: {'id':'d6450506-3479-4c02-92c7-de59f6e7091e','name':'legallead.permissions.api'}
+Content-Length: 66
+
+{
+  "UserName": "test.account",
+  "Password": "*******"
+}
