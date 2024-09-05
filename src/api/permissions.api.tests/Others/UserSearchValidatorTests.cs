@@ -139,7 +139,7 @@ namespace permissions.api.tests
         public void ModelCountyValidationTest(int index, string name, bool expected)
         {
             var sut = GetValidator();
-            var request = GetRequest();
+            var request = TransformRequest(name, GetRequest());
             request.County.Value = index;
             request.County.Name = name;
             var actual = sut.IsValid(request);
@@ -158,7 +158,39 @@ namespace permissions.api.tests
         {
             return JsonConvert.DeserializeObject<UserSearchRequest>(requestjs) ?? new();
         }
-
+        private static UserSearchRequest TransformRequest(string countyName, UserSearchRequest request)
+        {
+            var oic = StringComparison.OrdinalIgnoreCase;
+            if (countyName.Equals("collin", oic))
+            {
+                request.Details.Clear();
+                request.Details.Add(new() { Name = "Search Type", Value = "0", Text = "criminal case records" });
+                return request;
+            }
+            if (countyName.Equals("denton", oic))
+            {
+                return request;
+            }
+            if (countyName.Equals("harris", oic))
+            {
+                request.Details.Clear();
+                request.Details.Add(new() { Name = "Search Type", Value = "0", Text = "All Civil Courts" });
+                return request;
+            }
+            if (countyName.Equals("harris-jp", oic))
+            {
+                request.Details.Clear();
+                request.Details.Add(new() { Name = "Search Type", Value = "0", Text = "All JP Courts" });
+                return request;
+            }
+            if (countyName.Equals("tarrant", oic))
+            {
+                request.Details.Clear();
+                request.Details.Add(new() { Name = "Search Type", Value = "0", Text = "All Probate Courts" });
+                return request;
+            }
+            return request;
+        }
 
         private static long GetUnixTime(DateTime? startDate = null, DateTimeKind dateKind = DateTimeKind.Utc)
         {

@@ -1,0 +1,22 @@
+{
+  "dropDowns": [
+    {
+      "id": 0,
+      "name": "Court Selection",
+      "options": [
+        {
+          "id": 0,
+          "name": "All JP Courts"
+        },
+        {
+          "id": 1,
+          "name": "All JP Civil Courts"
+        },
+        {
+          "id": 2,
+          "name": "All JP Criminal Courts"
+        }
+      ]
+    }
+  ]
+}
