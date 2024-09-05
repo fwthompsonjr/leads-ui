@@ -515,6 +515,36 @@ namespace legallead.permissions.api.Properties {
         ///  &quot;dropDowns&quot;: [
         ///    {
         ///      &quot;id&quot;: 0,
+        ///      &quot;name&quot;: &quot;Court Selection&quot;,
+        ///      &quot;options&quot;: [
+        ///        {
+        ///          &quot;id&quot;: 0,
+        ///          &quot;name&quot;: &quot;All JP Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 1,
+        ///          &quot;name&quot;: &quot;All JP Civil Courts&quot;
+        ///        },
+        ///        {
+        ///          &quot;id&quot;: 2,
+        ///          &quot;name&quot;: &quot;All JP Criminal Courts&quot;
+        ///        }
+        ///      ]
+        ///    }
+        ///  ]
+        ///}.
+        /// </summary>
+        internal static string tx_harris_jp_drop_down {
+            get {
+                return ResourceManager.GetString("tx_harris_jp_drop_down", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;dropDowns&quot;: [
+        ///    {
+        ///      &quot;id&quot;: 0,
         ///      &quot;name&quot;: &quot;Search Type&quot;,
         ///      &quot;options&quot;: [
         ///        {

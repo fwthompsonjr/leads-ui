@@ -2433,6 +2433,81 @@
 					"response": []
 				},
 				{
+					"name": "BeginSearch Harris JS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is an acceptable value\", function () {\r",
+									"    var acceptable = [ 200, 400, 401, 402, 409, 422 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomNumber = Math.floor(Math.random() * 14) + 2;\r",
+									"let endingDt = new Date().setDate(new Date().getDate() - randomNumber);\r",
+									"let startingDt = new Date().setDate(new Date().getDate() - (randomNumber+1));\r",
+									"// setup parms\r",
+									"pm.environment.set(\"start_date_ts\", startingDt);\r",
+									"pm.environment.set(\"end_date_ts\", endingDt); "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "APP_IDENTITY",
+								"value": "{{app_identity}}",
+								"description": "App service header",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"harris-jp\",\r\n\t\t\"value\": 32190\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Search Type\",\r\n\t\t\t\"text\": \"All Civil Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": {{start_date_ts}},\r\n\t\"end\": {{end_date_ts}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/{{SEARCH_BEGIN_SEARCH_URL}}",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"{{SEARCH_BEGIN_SEARCH_URL}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "RandomSearch",
 					"event": [
 						{
