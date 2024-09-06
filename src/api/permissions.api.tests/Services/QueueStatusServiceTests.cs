@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc;
 using legallead.jdbc.entities;
+using legallead.jdbc.enumerations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Services;
@@ -303,8 +304,66 @@ namespace permissions.api.tests.Services
             Assert.Null(error);
         }
 
+        [Theory]
+        [InlineData(null)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        public async Task ServiceCanGetQueueStatusAsync(int? statusId, int recordCount = 10)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var statusIndex = statusId.GetValueOrDefault(-1);
+                var willExecute = acceptedStatusIndexes.Contains(statusIndex);
+                var times = willExecute ? Times.Once() : Times.Never();
+                var payload = new QueueSummaryRequest
+                {
+                    StatusId = statusId
+                };
+                var response = summaryfaker.Generate(recordCount);
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqQueueRepo;
+                mock.Setup(m => m.GetSummary(It.IsAny<QueueStatusTypes>())).ReturnsAsync(response);
+                await service.GetQueueStatusAsync(payload);
+                mock.Verify(m => m.GetSummary(It.IsAny<QueueStatusTypes>()), times);
+            });
+            Assert.Null(error);
+        }
 
-        private sealed class TheHarness
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(10)]
+        public async Task ServiceCanGetQueueSummaryAsync(int? statusId, int recordCount = 10)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+
+                var statusIndex = statusId.GetValueOrDefault(-1);
+                var willExecute = acceptedStatusIndexes.Contains(statusIndex);
+                var times = willExecute ? Times.Once() : Times.Never();
+                var payload = new QueueSummaryRequest
+                {
+                    StatusId = statusId
+                };
+                var response = statusfaker.Generate(recordCount);
+                var sut = new TheHarness();
+                var service = sut.Service;
+                var mock = sut.MqQueueRepo;
+                mock.Setup(m => m.GetStatus()).ReturnsAsync(response);
+                await service.GetQueueSummaryAsync(payload);
+                mock.Verify(m => m.GetStatus(), times);
+            });
+            Assert.Null(error);
+        }
+
+
+    private sealed class TheHarness
         {
             public TheHarness()
             {
@@ -392,5 +451,19 @@ namespace permissions.api.tests.Services
             .RuleFor(x => x.LastName, y => y.Random.Guid().ToString())
             .RuleFor(x => x.Plantiff, y => y.Random.AlphaNumeric(250))
             .RuleFor(x => x.Status, y => y.Random.Int(1, 20000).ToString());
+
+        private static readonly Faker<StatusSummaryByCountyBo> summaryfaker =
+            new Faker<StatusSummaryByCountyBo>()
+            .RuleFor(x => x.Region, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Count, y => y.Random.Int(0, 125000))
+            .RuleFor(x => x.Oldest, y => y.Date.Recent())
+            .RuleFor(x => x.Newest, y => y.Date.Recent());
+
+        private static readonly Faker<StatusSummaryBo> statusfaker =
+            new Faker<StatusSummaryBo>()
+            .RuleFor(x => x.SearchProgress, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Total, y => y.Random.Int(0, 125000));
+
+        private static readonly List<int> acceptedStatusIndexes = [0, 1, 2];
     }
 }
