@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc;
+using legallead.jdbc.enumerations;
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
@@ -132,6 +133,24 @@ namespace legallead.permissions.api.Services
             await _queue.Content(id, bytes);
         }
 
+
+        public async Task<List<StatusSummaryByCountyBo>> GetQueueStatusAsync(QueueSummaryRequest request)
+        {
+            var statusId = request.StatusId.GetValueOrDefault(-1);
+            if (!Enum.IsDefined(typeof(QueueStatusTypes), statusId)) return [];
+            var status = Enum.Parse< QueueStatusTypes>(statusId.ToString());
+            var list = await _repo.GetSummary(status);
+            return list;
+        }
+
+        public async Task<List<StatusSummaryBo>> GetQueueSummaryAsync(QueueSummaryRequest request)
+        {
+            var statusId = request.StatusId.GetValueOrDefault(-1);
+            if (!Enum.IsDefined(typeof(QueueStatusTypes), statusId)) return [];
+            var list = await _repo.GetStatus();
+            return list;
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
         private async Task TrySendCompletionEmailAsync(QueueUpdateRequest request, QueueWorkingBo? response)
         {
@@ -194,7 +213,6 @@ namespace legallead.permissions.api.Services
             }
 
         }
-
 
         private static readonly List<string> messages =
         [

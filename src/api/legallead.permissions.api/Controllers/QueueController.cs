@@ -111,6 +111,30 @@ namespace legallead.permissions.api.Controllers
         }
 
 
+
+        [HttpPost("queue-status")]
+        public async Task<IActionResult> GetQueueStatusAsync(QueueSummaryRequest request)
+        {
+            var applicationCheck = Request.Validate(invalidapplicationmessage);
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
+            var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.BadRequest };
+            var response = await _statusSvc.GetQueueStatusAsync(request);
+            message.Message = response.ToJsonString();
+            message.StatusCode = (int)HttpStatusCode.OK;
+            return new JsonResult(message) { StatusCode = 200 };
+        }
+
+        [HttpPost("queue-summary")]
+        public async Task<IActionResult> GetQueueSummaryAsync(QueueSummaryRequest request)
+        {
+            var applicationCheck = Request.Validate(invalidapplicationmessage);
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
+            var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.BadRequest };
+            var response = await _statusSvc.GetQueueSummaryAsync(request);
+            message.Message = response.ToJsonString();
+            message.StatusCode = (int)HttpStatusCode.OK;
+            return new JsonResult(message) { StatusCode = 200 };
+        }
         private static JsonResult InvalidPayloadResult(QueueRecordResponse response)
         {
             response.StatusCode = (int)HttpStatusCode.BadRequest;

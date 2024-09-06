@@ -2,11 +2,13 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api;
 using legallead.permissions.api.Controllers;
+using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Newtonsoft.Json;
 
 namespace permissions.api.tests.Contollers
@@ -163,6 +165,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped<SearchController>();
                 collection.AddScoped(a =>
                 {
+                    var summary = new List<StatusSummaryByCountyBo>();
+                    var stslist = new List<StatusSummaryBo>();
                     var mqRequest = a.GetRequiredService<Mock<HttpRequest>>();
                     var appid = new ApplicationRequestModel
                     {
@@ -174,7 +178,10 @@ namespace permissions.api.tests.Contollers
                     { "APP_IDENTITY", new Microsoft.Extensions.Primitives.StringValues(JsonConvert.SerializeObject(appid)) }
                     };
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
+                    queueStatusServiceMock.Setup(s => s.GetQueueStatusAsync(It.IsAny<QueueSummaryRequest>())).ReturnsAsync(summary);
+                    queueStatusServiceMock.Setup(s => s.GetQueueSummaryAsync(It.IsAny<QueueSummaryRequest>())).ReturnsAsync(stslist);
                     var status = a.GetRequiredService<IQueueStatusService>();
+                    
                     return new QueueController(status)
                     {
                         ControllerContext = controllerContext

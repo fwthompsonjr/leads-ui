@@ -19,6 +19,8 @@ namespace permissions.api.tests.Contollers
         [InlineData("complete")]
         [InlineData("finalize")]
         [InlineData("save")]
+        [InlineData("queue-status")]
+        [InlineData("queue-summary")]
         public async Task ControllerCanPostAsync(string landing)
         {
             var persistence = GetPersistence();
@@ -42,6 +44,8 @@ namespace permissions.api.tests.Contollers
                     "complete" => await controller.CompleteAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.FinalizeAsync(new QueueCompletionRequest() { Source = applicationSource }),
                     "save" => await controller.SaveAsync(persistence),
+                    "queue-status" => await controller.GetQueueStatusAsync(GetSummary(0)),
+                    "queue-summary" => await controller.GetQueueSummaryAsync(GetSummary(0)),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not JsonResult jsonResult)
@@ -65,6 +69,8 @@ namespace permissions.api.tests.Contollers
         [InlineData("complete")]
         [InlineData("finalize")]
         [InlineData("save")]
+        [InlineData("queue-status")]
+        [InlineData("queue-summary")]
         public async Task ControllerPostRequiresHeaderAsync(string landing)
         {
             var persistence = GetPersistence();
@@ -86,6 +92,8 @@ namespace permissions.api.tests.Contollers
                     "complete" => await controller.CompleteAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.FinalizeAsync(new QueueCompletionRequest() { Source = applicationSource }),
                     "save" => await controller.SaveAsync(persistence),
+                    "queue-status" => await controller.GetQueueStatusAsync(GetSummary(0)),
+                    "queue-summary" => await controller.GetQueueSummaryAsync(GetSummary(0)),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not BadRequestObjectResult _)
@@ -182,6 +190,16 @@ namespace permissions.api.tests.Contollers
 
             });
             Assert.Null(error);
+        }
+        
+        private static QueueSummaryRequest GetSummary(int? index, bool hasSource = true)
+        {
+            var source = hasSource ? applicationSource : string.Empty;
+            return new()
+            {
+                StatusId = index,
+                Source = source
+            };
         }
 
         private static ApplicationRequestModel GetRequest()
