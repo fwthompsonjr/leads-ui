@@ -152,9 +152,9 @@ namespace legallead.jdbc.implementations
 
         private static readonly Dictionary<QueueStatusTypes, string> statusProcs = new()
         {
-            { QueueStatusTypes.Error, "USP_QUEUE_GET_ERRORS_BY_COUNTY" },
-            { QueueStatusTypes.Submitted, "USP_QUEUE_GET_WAITING_BY_COUNTY" },
-            { QueueStatusTypes.Purchased, "USP_QUEUE_GET_PURCHASED_BY_COUNTY" }
+            { QueueStatusTypes.Error, "CALL USP_QUEUE_GET_ERRORS_BY_COUNTY();" },
+            { QueueStatusTypes.Submitted, "CALL USP_QUEUE_GET_WAITING_BY_COUNTY();" },
+            { QueueStatusTypes.Purchased, "CALL USP_QUEUE_GET_PURCHASED_BY_COUNTY();" }
         };
     }
 }
