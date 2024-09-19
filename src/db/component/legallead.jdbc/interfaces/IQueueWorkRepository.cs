@@ -11,5 +11,7 @@ namespace legallead.jdbc.interfaces
         QueueWorkingUserBo? GetUserBySearchId(string? searchId);
         Task<List<StatusSummaryByCountyBo>> GetSummary(QueueStatusTypes statusType);
         Task<List<StatusSummaryBo>> GetStatus();
+        Task<List<QueueNonPersonBo>> GetNonPersonData();
+        QueuePersonDataBo? UpdatePersonData(QueuePersonDataBo bo);
     }
 }
