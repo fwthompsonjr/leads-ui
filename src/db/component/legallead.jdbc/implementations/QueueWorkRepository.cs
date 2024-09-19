@@ -46,10 +46,28 @@ namespace legallead.jdbc.implementations
                 };
                 var json = JsonConvert.SerializeObject(obj);
                 parms.Add("jspayload", json);
-                        using var connection = _context.CreateConnection();
+                using var connection = _context.CreateConnection();
                 var list = _command.QueryAsync<QueueWorkingDto>(connection, prc, parms).GetAwaiter().GetResult();
                 if (list == null || !list.Any()) return null;
                 return TranslateTo<QueueWorkingBo>(list.First());
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public QueuePersonDataBo? UpdatePersonData(QueuePersonDataBo bo)
+        {
+            try
+            {
+                const string prc = "CALL USP_QUEUE_STAGE_PERSON_DATA( ?, ? );";
+                var parms = new DynamicParameters();
+                parms.Add("indx", bo.Id);
+                parms.Add("data_bin", bo.Data);
+                using var connection = _context.CreateConnection();
+                _command.ExecuteAsync(connection, prc, parms).GetAwaiter().GetResult();
+                return bo;
             }
             catch (Exception)
             {
@@ -125,6 +143,22 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<List<QueueNonPersonBo>> GetNonPersonData()
+        {
+            try
+            {
+                var prc = Procs[ProcedureNames.GetNonPerson];
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<QueueNonPersonDto>(connection, prc);
+                if (response == null || !response.Any()) return new();
+                return TranslateTo<List<QueueNonPersonBo>>(response);
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
         private static T TranslateTo<T>(object source) where T : class, new()
         {
 
@@ -138,6 +172,7 @@ namespace legallead.jdbc.implementations
             { ProcedureNames.Fetch, "CALL USP_FETCH_QUEUEWORKING();" },
             { ProcedureNames.GetUser, "CALL USP_FETCH_ACCOUNT_BY_SEARCH_INDEX( ? );" },
             { ProcedureNames.GetStatus, "CALL USP_QUEUE_GET_PROGRESS_SUMMARY_YTD();" },
+            { ProcedureNames.GetNonPerson, "CALL USP_QUEUE_GET_NON_PERSON_DATA();" }
             };
 
         private enum ProcedureNames
@@ -147,6 +182,7 @@ namespace legallead.jdbc.implementations
             Fetch = 2,
             GetUser = 3,
             GetStatus = 4,
+            GetNonPerson = 5,
         }
 
 

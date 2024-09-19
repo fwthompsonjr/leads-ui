@@ -7,6 +7,7 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
+using System.Text;
 
 namespace legallead.jdbc.tests.implementations
 {
@@ -53,6 +54,23 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.SearchProgress, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Total, y => y.Random.Int(0, 125000));
+
+        private static readonly Faker<QueueNonPersonDto> nonpersonfaker =
+            new Faker<QueueNonPersonDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.UserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ExpectedRows, y => y.Random.Int(0, 750000))
+            .RuleFor(x => x.SearchProgress, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.StateCode, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CountyName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.EndDate, y => y.Date.Recent())
+            .RuleFor(x => x.StartDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent())
+            .RuleFor(x => x.ExcelData, y =>
+            {
+                var text = y.Hacker.Phrase();
+                return Encoding.UTF8.GetBytes(text);
+            });
 
         private static readonly Faker faker = new();
 
@@ -130,6 +148,42 @@ namespace legallead.jdbc.tests.implementations
             }
             _ = service.UpdateStatus(request);
             mock.Verify(m => m.QueryAsync<QueueWorkingDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void RepoCanUpdatePersonData(bool hasException)
+        {
+            var request = new QueuePersonDataBo
+            {
+                Id = "123",
+                Name = "abc"
+            };
+            var exception = faker.System.Exception();
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<QueueWorkingDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Verifiable();
+            }
+            _ = service.UpdatePersonData(request);
+            mock.Verify(m => m.ExecuteAsync(
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));
@@ -276,6 +330,38 @@ namespace legallead.jdbc.tests.implementations
             }
             _ = service.GetStatus();
             mock.Verify(m => m.QueryAsync<StatusDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(false, 0)]
+        [InlineData(true)]
+        public void RepoCanGetNonPersonData(bool hasException, int recordCount = 5)
+        {
+            var exception = faker.System.Exception();
+            var container = new RepoContainer();
+            var response = nonpersonfaker.Generate(recordCount);
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            if (hasException)
+            {
+                mock.Setup(m => m.QueryAsync<QueueNonPersonDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.QueryAsync<QueueNonPersonDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            _ = service.GetNonPersonData();
+            mock.Verify(m => m.QueryAsync<QueueNonPersonDto>(
                 It.IsAny<IDbConnection>(),
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()));

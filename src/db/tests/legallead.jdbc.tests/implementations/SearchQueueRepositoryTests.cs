@@ -51,7 +51,7 @@ namespace legallead.jdbc.tests.implementations
         [InlineData(5, true)]
         public async Task RepoGetQueueItem(int count, bool hasError = false)
         {
-            int[] noexecute = new [] { 1, 2, 3 };
+            int[] noexecute = new[] { 1, 2, 3 };
             var faker = new Faker();
             var error = faker.System.Exception();
             var request = count switch
