@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using legallead.jdbc.entities;
-using System.Text;
 
 namespace legallead.jdbc.tests.entities
 {
@@ -11,11 +10,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<QueuePersonDataBo>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Name, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Data, y =>
-            {
-                var txt = y.Hacker.Phrase();
-                return Encoding.UTF8.GetBytes(txt);
-            });
+            .RuleFor(x => x.Data, y => y.Hacker.Phrase());
 
         [Fact]
         public void QueuePersonDataBoCanBeCreated()
