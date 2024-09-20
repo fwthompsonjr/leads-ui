@@ -14,5 +14,7 @@ namespace legallead.permissions.api.Interfaces
         Task ContentAsync(string id, byte[] bytes);
         Task<List<StatusSummaryByCountyBo>> GetQueueStatusAsync(QueueSummaryRequest request);
         Task<List<StatusSummaryBo>> GetQueueSummaryAsync(QueueSummaryRequest request);
+        Task<List<QueueNonPersonBo>> FetchNonPersonQueuewAsync();
+        bool UpdatePersonList(QueueNonPersonBo bo, string json);
     }
 }

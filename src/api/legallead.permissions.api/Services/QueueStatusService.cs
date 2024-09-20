@@ -27,6 +27,7 @@ namespace legallead.permissions.api.Services
         {
             _notificationSvc = notification;
         }
+
         public List<QueueWorkingBo> Insert(QueueInitializeRequest request)
         {
             try
@@ -74,6 +75,38 @@ namespace legallead.permissions.api.Services
             catch (Exception)
             {
                 return [];
+            }
+        }
+
+        public async Task<List<QueueNonPersonBo>> FetchNonPersonQueuewAsync()
+        {
+            try
+            {
+                var data = await _repo.GetNonPersonData();
+                if (data.Count == 0) return [];
+                return data;
+            }
+            catch (Exception)
+            {
+                return [];
+            }
+        }
+
+        public bool UpdatePersonList(QueueNonPersonBo bo, string json)
+        {
+            try
+            {
+                _ = _repo.UpdatePersonData(new()
+                {
+                    Id = bo.Id ?? string.Empty,
+                    Name = "UpdatePersonList",
+                    Data = json
+                });
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
@@ -138,7 +171,7 @@ namespace legallead.permissions.api.Services
         {
             var statusId = request.StatusId.GetValueOrDefault(-1);
             if (!Enum.IsDefined(typeof(QueueStatusTypes), statusId)) return [];
-            var status = Enum.Parse< QueueStatusTypes>(statusId.ToString());
+            var status = Enum.Parse<QueueStatusTypes>(statusId.ToString());
             var list = await _repo.GetSummary(status);
             return list;
         }
