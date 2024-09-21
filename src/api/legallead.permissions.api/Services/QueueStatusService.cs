@@ -78,7 +78,7 @@ namespace legallead.permissions.api.Services
             }
         }
 
-        public async Task<List<QueueNonPersonBo>> FetchNonPersonQueuewAsync()
+        public async Task<List<QueueNonPersonBo>> FetchNonPersonQueueAsync()
         {
             try
             {

@@ -61,6 +61,24 @@ namespace permissions.api.tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to UEsDBBQACAgIAJoQEFkVWNoVRwEAAKEEAAATAAAAW0NvbnRlbnRfVHlwZXNdLnhtbLWUy07DMBBFfyXyFiVuWSCEmnbBYwmVKB9g7Elj1S95pqX9eyYuIISKVES7cpw7c891JvJktvWu2kBGG0Mrxs1IVBB0NDYsW/GyeKivRYWkglEuBmjFDlDMppPFLgFW3BuwFT1RupESdQ9eYRMTBFa6mL0i3ualTEqv1BLk5Wh0JXUMBIFqGjzEdHIHnVo7qm737wfrVqiUnNWKOJZkM1Hdb1ncpxz28oi+TTA/wtQfQZoMrtRgbxNe/ASwigPhiT9Mtgb+hIhdZzWYqNeeWxpMGZTBHoC8a8raeGXDHjpXmR6VZ1e5dfIt5tVrjKumaGcJMCDK82/8IqIsy/iMQZB2DvBQir3yP/TnnHXMUKfMaiZ7AMfh5qyiHApPeloYficD5ig6W58UrtdI0R938FJ6zkH3KoN5psxXyuF5fy/4CiLLFTN9B1BLBwgVWNoV [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string denton_excel_file {
+            get {
+                return ResourceManager.GetString("denton-excel-file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UEsDBBQABgAIAAAAIQBi7p1oXgEAAJAEAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string denton_excel_file_01 {
+            get {
+                return ResourceManager.GetString("denton-excel-file-01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {
         ///    &quot;requestId&quot;: &quot;e8983cfb-0a68-11ef-99ce-0af7a01f52e9&quot;,
         ///    &quot;request&quot;: {

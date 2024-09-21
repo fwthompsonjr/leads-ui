@@ -180,6 +180,7 @@ namespace permissions.api.tests.Contollers
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
                     queueStatusServiceMock.Setup(s => s.GetQueueStatusAsync(It.IsAny<QueueSummaryRequest>())).ReturnsAsync(summary);
                     queueStatusServiceMock.Setup(s => s.GetQueueSummaryAsync(It.IsAny<QueueSummaryRequest>())).ReturnsAsync(stslist);
+                    queueStatusServiceMock.Setup(s => s.UpdatePersonList(It.IsAny<QueueNonPersonBo>(), It.IsAny<string>())).Returns(true);
                     var status = a.GetRequiredService<IQueueStatusService>();
                     
                     return new QueueController(status)
