@@ -1,5 +1,6 @@
 ﻿using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
+using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -55,6 +56,24 @@ namespace legallead.permissions.api.Controllers
             return new JsonResult(message) { StatusCode = 200 };
         }
 
+
+        [HttpPost("fetch-non-person")]
+        public async Task<IActionResult> FetchNonPersonQueueAsync(ApplicationRequestModel request)
+        {
+            var applicationCheck = Request.Validate(invalidapplicationmessage);
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
+            var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.BadRequest };
+            if (!IsNameValid(request.Name))
+            {
+                message.Message = invalidapplicationmessage;
+                return new JsonResult(message) { StatusCode = 400 };
+            }
+            var response = await _statusSvc.FetchNonPersonQueueAsync();
+            message.Message = response.ToJsonString();
+            message.StatusCode = (int)HttpStatusCode.OK;
+            return new JsonResult(message) { StatusCode = 200 };
+        }
+        
         [HttpPost("start")]
         public async Task<IActionResult> StartAsync(QueuedRecord request)
         {
@@ -97,6 +116,21 @@ namespace legallead.permissions.api.Controllers
             if (request.Content == null || !request.IsValid() || !request.CanExecute()) return InvalidPayloadResult(message);
             await _statusSvc.ContentAsync(request.Id, request.Content);
             return new JsonResult(message) { StatusCode = 200 };
+        }
+
+        [HttpPost("save-non-person")]
+        public IActionResult SaveNonPerson(QueuePersistenceRequest request)
+        {
+            var applicationCheck = Request.Validate(invalidapplicationmessage);
+            if (!applicationCheck.Key) { return BadRequest(applicationCheck.Value); }
+            var message = new QueueRecordResponse { StatusCode = (int)HttpStatusCode.OK };
+            if (request.Content == null || !request.IsValid() || !request.CanExecute()) return InvalidPayloadResult(message);
+            var bo = new QueueNonPersonBo { Id = request.Id, ExcelData = request.Content };
+            var json = NonPersonQueueService.GetPeople(bo);
+            var processed = !string.IsNullOrEmpty(json) && _statusSvc.UpdatePersonList(bo, json);
+            var statusCode = processed ? 200 : 422;
+            message.StatusCode = statusCode;
+            return new JsonResult(message) { StatusCode = statusCode };
         }
 
         [HttpPost("finalize")]

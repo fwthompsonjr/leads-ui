@@ -19,6 +19,8 @@ namespace permissions.api.tests.Contollers
         [InlineData("complete")]
         [InlineData("finalize")]
         [InlineData("save")]
+        [InlineData("save-non-person")]
+        [InlineData("save-non-person-no-data")]
         [InlineData("queue-status")]
         [InlineData("queue-summary")]
         public async Task ControllerCanPostAsync(string landing)
@@ -32,6 +34,8 @@ namespace permissions.api.tests.Contollers
                 var expectedCode = landing switch
                 {
                     "fetch" => 400,
+                    "fetch-non-person" => 400,
+                    "save-non-person-no-data" => 422,
                     _ => 200
                 };
                 var action = landing switch
@@ -39,11 +43,14 @@ namespace permissions.api.tests.Contollers
                     "initialize" => controller.Initialize(new QueueInitializeRequest() { Source = applicationSource }),
                     "update" => await controller.UpdateAsync(new QueueUpdateRequest() { Source = applicationSource }),
                     "fetch" => await controller.FetchAsync(GetRequest()),
+                    "fetch-non-person" => await controller.FetchAsync(GetRequest()),
                     "start" => await controller.StartAsync(new QueuedRecord() { Source = applicationSource }),
                     "status" => await controller.StatusAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "complete" => await controller.CompleteAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.FinalizeAsync(new QueueCompletionRequest() { Source = applicationSource }),
                     "save" => await controller.SaveAsync(persistence),
+                    "save-non-person" => controller.SaveNonPerson(GetNonPersonRequest(1, true)),
+                    "save-non-person-no-data" => controller.SaveNonPerson(GetNonPersonRequest(0, true)),
                     "queue-status" => await controller.GetQueueStatusAsync(GetSummary(0)),
                     "queue-summary" => await controller.GetQueueSummaryAsync(GetSummary(0)),
                     _ => new StatusCodeResult(500)
@@ -64,11 +71,14 @@ namespace permissions.api.tests.Contollers
         [InlineData("initialize")]
         [InlineData("update")]
         [InlineData("fetch")]
+        [InlineData("fetch-non-person")]
         [InlineData("start")]
         [InlineData("status")]
         [InlineData("complete")]
         [InlineData("finalize")]
         [InlineData("save")]
+        [InlineData("save-non-person")]
+        [InlineData("save-non-person-no-data")]
         [InlineData("queue-status")]
         [InlineData("queue-summary")]
         public async Task ControllerPostRequiresHeaderAsync(string landing)
@@ -87,11 +97,14 @@ namespace permissions.api.tests.Contollers
                     "initialize" => controller.Initialize(new QueueInitializeRequest() { Source = applicationSource }),
                     "update" => await controller.UpdateAsync(new QueueUpdateRequest() { Source = applicationSource }),
                     "fetch" => await controller.FetchAsync(GetRequest()),
+                    "fetch-non-person" => await controller.FetchNonPersonQueueAsync(GetRequest()),
                     "start" => await controller.StartAsync(new QueuedRecord() { Source = applicationSource }),
                     "status" => await controller.StatusAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "complete" => await controller.CompleteAsync(new QueueRecordStatusRequest() { Source = applicationSource }),
                     "finalize" => await controller.FinalizeAsync(new QueueCompletionRequest() { Source = applicationSource }),
                     "save" => await controller.SaveAsync(persistence),
+                    "save-non-person" => controller.SaveNonPerson(GetNonPersonRequest(1, true)),
+                    "save-non-person-no-data" => controller.SaveNonPerson(GetNonPersonRequest(0, true)),
                     "queue-status" => await controller.GetQueueStatusAsync(GetSummary(0)),
                     "queue-summary" => await controller.GetQueueSummaryAsync(GetSummary(0)),
                     _ => new StatusCodeResult(500)
@@ -149,14 +162,17 @@ namespace permissions.api.tests.Contollers
         [InlineData("complete")]
         [InlineData("finalize")]
         [InlineData("save")]
+        [InlineData("save-non-person")]
+        [InlineData("save-non-person-no-id")]
+        [InlineData("save-non-person-no-content")]
         [InlineData("save-invalid")]
         [InlineData("save-no-id")]
         [InlineData("save-no-content")]
         public async Task ControllerPostNeedsSourceAsync(string landing)
         {
             var persistence = GetPersistence();
-            if (landing == "save-no-id") persistence.Id = string.Empty;
-            if (landing == "save-no-content") persistence.Content = null;
+            if (landing.EndsWith("-no-id")) persistence.Id = string.Empty;
+            if (landing.EndsWith("-no-content")) persistence.Content = null;
             var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
@@ -179,6 +195,9 @@ namespace permissions.api.tests.Contollers
                     "save-invalid" => await controller.SaveAsync(new QueuePersistenceRequest()),
                     "save-no-id" => await controller.SaveAsync(persistence),
                     "save-no-content" => await controller.SaveAsync(persistence),
+                    "save-non-person" => controller.SaveNonPerson(GetNonPersonRequest()),
+                    "save-non-person-no-id" => controller.SaveNonPerson(persistence),
+                    "save-non-person-no-content" => controller.SaveNonPerson(persistence),
                     _ => new StatusCodeResult(500)
                 };
                 if (action is not JsonResult jsonResult)
@@ -225,6 +244,32 @@ namespace permissions.api.tests.Contollers
             return fk.PickRandom(names);
         }
 
+
+        private static QueuePersistenceRequest GetNonPersonRequest(int index = 1, bool withSource = false)
+        {
+            var content = index switch
+            {
+                0 => Encoding.UTF8.GetBytes("oxford.test.client"),
+                _ => GetDenton(index)
+            };
+            var source = withSource ? applicationSource : string.Empty;
+            var request = new QueuePersistenceRequest
+            {
+                Id = Guid.NewGuid().ToString(),
+                Content = content,
+                Source = source
+            };
+            return request;
+        }
+
+        private static byte[] GetDenton(int index = 0)
+        {
+            var source = index == 0 ? dentonSample : dentonSample01;
+            var content = Convert.FromBase64String(source);
+            return content;
+        }
+        private static readonly string dentonSample = Properties.Resources.denton_excel_file;
+        private static readonly string dentonSample01 = Properties.Resources.denton_excel_file_01;
 
     }
 }

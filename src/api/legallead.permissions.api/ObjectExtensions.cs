@@ -256,6 +256,7 @@ namespace legallead.permissions.api
             services.AddHostedService(s => s.GetRequiredService<PaymentAccountCreationService>());
             services.AddHostedService(s => s.GetRequiredService<PricingSyncService>());
             services.AddHostedService(s => s.GetRequiredService<SubscriptionSyncService>());
+            
             loggerFactory.Dispose();
         }
 
