@@ -179,6 +179,25 @@ namespace legallead.permissions.api.Controllers
             return Ok(searches);
         }
 
+        [HttpPost]
+        [Route("search-extend-restriction")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType<bool?>(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ExtendRestrictionAsync(ApplicationModel context)
+        {
+            var user = await infrastructure.GetUserAsync(Request);
+            var guid = context.Id;
+            if (user == null || !Guid.TryParse(guid, out var _)) { return Unauthorized(); }
+            var isLocked = await _lockingDb.IsAccountLockedAsync(user.Id);
+            if (isLocked)
+            {
+                return Forbid("Account is locked. Contact system administrator to unlock.");
+            }
+            var searches = await infrastructure.ExtendRestrictionAsync(Request);
+            return Ok(searches);
+        }
+
         [HttpGet]
         [Route("list-my-purchases")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

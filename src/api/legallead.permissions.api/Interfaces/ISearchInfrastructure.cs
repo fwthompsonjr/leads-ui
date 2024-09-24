@@ -27,5 +27,6 @@ namespace legallead.permissions.api.Interfaces
         Task<IEnumerable<PurchasedSearchBo>?> GetPurchasesAsync(string userId);
         Task<SearchRestrictionModel?> GetRestrictionStatusAsync(HttpRequest http);
         Task<bool> FlagErrorAsync(string searchId);
+        Task<bool?> ExtendRestrictionAsync(HttpRequest http);
     }
 }
