@@ -37,5 +37,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> CompleteAdHocSession(string externalId);
         Task<AdHocSessionBo?> FindAdHocSession(string externalId);
         Task<bool> FlagError(string searchId);
+        Task<bool> ExtendRestriction(string userId);
     }
 }
