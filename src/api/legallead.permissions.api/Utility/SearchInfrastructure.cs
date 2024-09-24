@@ -28,6 +28,14 @@ namespace legallead.permissions.api.Utility
             return restrictions.ToModel();
         }
 
+        public async Task<bool?> ExtendRestrictionAsync(HttpRequest http)
+        {
+            var user = await GetUserAsync(http);
+            if (user == null) return null;
+            var isSubmitted = await _repo.ExtendRestriction(user.Id);
+            return isSubmitted;
+        }
+
         public async Task<UserSearchBeginResponse?> BeginAsync(HttpRequest http, UserSearchRequest request)
         {
             var user = await GetUserAsync(http);

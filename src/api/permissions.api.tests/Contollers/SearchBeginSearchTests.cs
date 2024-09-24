@@ -222,6 +222,36 @@ namespace permissions.api.tests.Contollers
             Assert.NotNull(result);
             if (!hasUser) Assert.IsAssignableFrom<UnauthorizedResult>(result);
         }
+
+        [Theory]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, false, true, true)]
+        [InlineData(true, true, true, true)]
+        [InlineData(true, false, true, false)]
+        public async Task ControllerCanExtendRestrictionAsync(
+            bool hasUser,
+            bool isAccountLocked,
+            bool isValid,
+            bool hasResponse)
+        {
+            var request = modelfaker.Generate();
+            var provider = GetServiceProvider();
+            var valid = provider.GetRequiredService<Mock<IUserSearchValidator>>();
+            var infra = provider.GetRequiredService<Mock<ISearchInfrastructure>>();
+            var lockDb = provider.GetRequiredService<Mock<ICustomerLockInfrastructure>>();
+            var validation = new KeyValuePair<bool, string>(isValid, "unit testing");
+            User? user = hasUser ? userfaker.Generate() : null;
+            SearchRestrictionModel? response = hasResponse ? new() : null;
+            infra.Setup(s => s.GetUserAsync(It.IsAny<HttpRequest>())).ReturnsAsync(user);
+            infra.Setup(s => s.GetRestrictionStatusAsync(It.IsAny<HttpRequest>())).ReturnsAsync(response);
+            infra.Setup(s => s.ExtendRestrictionAsync(It.IsAny<HttpRequest>())).ReturnsAsync(true);
+            lockDb.Setup(s => s.IsAccountLockedAsync(It.IsAny<string>())).ReturnsAsync(isAccountLocked);
+            valid.Setup(s => s.IsValid(It.IsAny<UserSearchRequest>())).Returns(validation);
+            var controller = provider.GetRequiredService<SearchController>();
+            var result = await controller.ExtendRestrictionAsync(request);
+            Assert.NotNull(result);
+            if (!hasUser) Assert.IsAssignableFrom<UnauthorizedResult>(result);
+        }
         [Theory]
         [InlineData(true, false, true, true)]
         [InlineData(false, false, true, true)]
