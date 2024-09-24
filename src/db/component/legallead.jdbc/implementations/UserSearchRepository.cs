@@ -23,6 +23,21 @@ namespace legallead.jdbc.implementations
             var response = await _command.QuerySingleOrDefaultAsync<SearchRestrictionDto>(connection, command);
             return response ?? new();
         }
+        public async Task<bool> ExtendRestriction(string userId)
+        {
+            const string prc = "CALL USP_APPEND_SEARCH_RESTRICTION_MULTIPLIER( '{0}' );";
+            try
+            {
+                var cmd = string.Format(prc, userId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, cmd);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<bool> RequeueSearches()
         {
             const string prc1 = "CALL PRC__VERIFY_SEARCH_STATUS( );";

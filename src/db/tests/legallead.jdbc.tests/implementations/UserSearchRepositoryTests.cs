@@ -221,6 +221,40 @@ namespace legallead.jdbc.tests.implementations
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
+        public async Task RepoCanExtendRestriction(int condition)
+        {
+            var uid = faker.Random.Guid().ToString();
+            var exception = faker.System.Exception;
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            var expected = condition != 0;
+            if (condition == 0)
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()))
+                        .Throws(exception);
+            }
+            else
+            {
+                mock.Setup(m => m.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Verifiable();
+            }
+            var result = await service.ExtendRestriction(uid);
+            Assert.Equal(expected, result);
+            mock.Verify(m => m.ExecuteAsync(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
         public async Task RepoRequeueSearchesExceptionPath(int condition)
         {
             var exception = faker.System.Exception;
