@@ -69,34 +69,17 @@ namespace legallead.records.search.Classes
             var searches = new List<string>(extractTypes);
             if (searchTypeId == 1) searches.Remove("criminal");
             if (searchTypeId == 2) searches.Remove("civil");
+            var range = GetBusinessDays(startingDate, endingDate);
             try
             {
                 ElementAssertion assertion = new(driver);
                 string caseList = string.Empty;
                 ElementActions.ForEach(x => x.GetAssertion = assertion);
                 ElementActions.ForEach(x => x.GetWeb = driver);
-                searches.ForEach(searchtype =>
+                range.ForEach(dte =>
                 {
-                    var courtIndexes = extractCourtIndexes[searchtype].Split(',').ToList();
-                    courtIndexes.ForEach(indx =>
-                    {
-
-                        var navigation = new JpNavigationParameters
-                        {
-                            ExtractType = searchtype,
-                            ExtractToRequest = extractRequestIndexes[searchtype],
-                            CourtIndex = indx,
-                            CaseTypeIndex = extractCaseType[searchtype],
-                            EndingDate = endingDate.ToString("MM/dd/yyyy"),
-                            StartingDate = startingDate.ToString("MM/dd/yyyy")
-                        };
-                        if (navigation.IsValid())
-                        {
-                            navigation.Populate(steps);
-                            var searchresults = PerformSearching(steps);
-                            people.AddRange(searchresults);
-                        }
-                    });
+                    var subset = PerformSearching(searches, steps, dte);
+                    people.AddRange(subset);
                 });
 
                 caseList = people.ToHtml();
@@ -139,6 +122,48 @@ namespace legallead.records.search.Classes
                 }
             }
             return found;
+        }
+
+        private static List<PersonAddress> PerformSearching(List<string> searches, List<NavigationStep> steps, DateTime searchDate)
+        {
+            const string dformat = "MM/dd/yyyy";
+            var people = new List<PersonAddress>();
+            searches.ForEach(searchtype =>
+            {
+                var courtIndexes = extractCourtIndexes[searchtype].Split(',').ToList();
+                courtIndexes.ForEach(indx =>
+                {
+                    var navigation = new JpNavigationParameters
+                    {
+                        ExtractType = searchtype,
+                        ExtractToRequest = extractRequestIndexes[searchtype],
+                        CourtIndex = indx,
+                        CaseTypeIndex = extractCaseType[searchtype],
+                        EndingDate = searchDate.ToString(dformat),
+                        StartingDate = searchDate.ToString(dformat)
+                    };
+                    if (navigation.IsValid())
+                    {
+                        navigation.Populate(steps);
+                        var searchresults = PerformSearching(steps);
+                        people.AddRange(searchresults);
+                    }
+                });
+            });
+            return people;
+        }
+
+        private static List<DateTime> GetBusinessDays(DateTime startDate, DateTime endingDate)
+        {
+            var list = new List<DateTime>();
+            var begin = startDate.Date;
+            var weekends = new List<DayOfWeek> { DayOfWeek.Saturday, DayOfWeek.Sunday };
+            while (begin <= endingDate.Date)
+            {
+                if (!weekends.Contains(begin.DayOfWeek)) list.Add(begin);
+                begin = begin.AddDays(1);
+            }
+            return list.Distinct().ToList();
         }
 
         private static readonly List<string> extractTypes = new() { "criminal", "civil" };
