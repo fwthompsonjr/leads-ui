@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using legallead.models.Search;
-using legallead.permissions.api.Model;
 using legallead.records.search.Classes;
 using legallead.records.search.Models;
 using Newtonsoft.Json;

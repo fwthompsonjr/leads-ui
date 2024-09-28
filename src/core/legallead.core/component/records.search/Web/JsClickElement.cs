@@ -39,12 +39,14 @@ namespace legallead.records.search.Web
             };
             wait.IgnoreExceptionTypes(typeof(ElementNotInteractableException));
 
-            wait.Until(d => {
+            wait.Until(d =>
+            {
                 try
                 {
                     var isfound = d.TryFindElement(selector) != null;
                     return isfound;
-                } catch { return false; }
+                }
+                catch { return false; }
             });
         }
         [ExcludeFromCodeCoverage]
@@ -52,7 +54,7 @@ namespace legallead.records.search.Web
         {
             int retries = 5;
             while (retries > 0)
-            {   
+            {
                 var elementToClick = driver.TryFindElement(selector);
                 if (elementToClick != null) { return elementToClick; }
                 retries--;

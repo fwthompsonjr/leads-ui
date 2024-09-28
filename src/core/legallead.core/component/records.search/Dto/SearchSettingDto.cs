@@ -127,9 +127,10 @@ namespace legallead.records.search.Dto
             if (ResourceFileService.Exists(dataFile))
             {
                 var response = ResourceFileService.Get(dataFile);
-                if (!string.IsNullOrEmpty(response)) {
+                if (!string.IsNullOrEmpty(response))
+                {
                     var tmp = JsonConvert.DeserializeObject<Example>(response) ?? new();
-                    return tmp.SearchSetting; 
+                    return tmp.SearchSetting;
                 }
             }
             var localized = GetSettingFromService(dataFile);

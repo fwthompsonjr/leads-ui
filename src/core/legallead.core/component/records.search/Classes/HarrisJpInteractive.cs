@@ -52,7 +52,7 @@ namespace legallead.records.search.Classes
 
         private int GetSearchIndex()
         {
-            int[] indicies = new [] { 0, 1, 2 };
+            int[] indicies = new[] { 0, 1, 2 };
             try
             {
                 int courtIndex = GetParameterValue<int>("courtIndex");
@@ -194,7 +194,7 @@ namespace legallead.records.search.Classes
             public string EndingDate { get; set; } = string.Empty;
             public bool IsValid()
             {
-                if(string.IsNullOrEmpty(ExtractType)) return false;
+                if (string.IsNullOrEmpty(ExtractType)) return false;
                 if (string.IsNullOrEmpty(ExtractToRequest)) return false;
                 if (string.IsNullOrEmpty(CourtIndex)) return false;
                 if (string.IsNullOrEmpty(CaseTypeIndex)) return false;

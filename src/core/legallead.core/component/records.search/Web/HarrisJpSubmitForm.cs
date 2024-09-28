@@ -29,7 +29,7 @@
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }
-            string selector = item.Locator.Query; 
+            string selector = item.Locator.Query;
             string form = item.Locator.Query.Replace("#", "");
             if (string.IsNullOrEmpty(selector))
             {
@@ -52,14 +52,14 @@
             var action = Convert.ToString(jse.ExecuteScript(string.Join(Environment.NewLine, getaction)));
             var values = Convert.ToString(jse.ExecuteScript(string.Join(Environment.NewLine, getvalues))) ?? "{}";
             var court = Convert.ToString(jse.ExecuteScript(getcourt)) ?? " - ";
-            var items = JsonConvert.DeserializeObject<Dictionary<string,string>>(values) ?? [];
+            var items = JsonConvert.DeserializeObject<Dictionary<string, string>>(values) ?? [];
             var keys = items.Keys.ToList();
-            _ = items.TryGetValue("casetype", out string? extractType); 
+            _ = items.TryGetValue("casetype", out string? extractType);
             _ = items.TryGetValue("fdate", out string? filingDt);
             if (string.IsNullOrEmpty(extractType) || !extractType.Contains("CRCIT")) extractType = "civil";
             else extractType = "criminal";
 
-            var querystring =string.Join("", keys.Select(x =>
+            var querystring = string.Join("", keys.Select(x =>
             {
                 var id = keys.IndexOf(x);
                 var prefix = id == 0 ? "?" : "&";
