@@ -160,7 +160,7 @@ namespace legallead.records.search.Classes
                         caseList = action.OuterHtml;
                     }
                 }
-         
+
                 people = ExtractPeople(cases);
                 var items = people.GroupBy(
                     x => x.CaseNumber,

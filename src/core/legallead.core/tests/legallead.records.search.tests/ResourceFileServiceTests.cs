@@ -49,7 +49,7 @@ namespace legallead.records.search.tests
                 finally
                 {
                     ResourceFileService.Clear();
-                } 
+                }
             }
         }
 
@@ -66,7 +66,7 @@ namespace legallead.records.search.tests
                         Assert.True(string.IsNullOrEmpty(actual));
                         ResourceFileService.Expire();
                     });
-                Assert.Null(error); 
+                Assert.Null(error);
             }
         }
 

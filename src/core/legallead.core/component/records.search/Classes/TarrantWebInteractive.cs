@@ -5,7 +5,6 @@ using legallead.records.search.Models;
 using legallead.records.search.Web;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Xml;
 
@@ -614,7 +613,7 @@ namespace legallead.records.search.Classes
                 suffix);
 
             var fallback = GetFallbackContent(suffix);
-            var data = SettingFileService.GetContentOrDefault (dataFile,  fallback);
+            var data = SettingFileService.GetContentOrDefault(dataFile, fallback);
             if (string.IsNullOrEmpty(data))
             {
                 throw new FileNotFoundException(

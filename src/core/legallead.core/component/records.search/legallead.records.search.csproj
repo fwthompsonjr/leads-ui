@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;Local;Zip</Configurations>
@@ -16,6 +16,22 @@
 
 		<IsPackable>true</IsPackable>
 		<IsTestProject>false</IsTestProject>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>1701;1702;NU5100;5100;NU1701</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>1701;1702;NU5100;5100;NU1701</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Local|AnyCPU'">
+	  <NoWarn>1701;1702;NU5100;5100;NU1701</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Zip|AnyCPU'">
+	  <NoWarn>1701;1702;NU5100;5100;NU1701</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -101,6 +117,7 @@
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.54" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
 		<PackageReference Include="Microsoft.CodeCoverage" Version="17.8.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.11.40262" />
 		<PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.*" />
 		<PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.*" />
 		<PackageReference Include="Microsoft.VisualStudio.Validation" Version="17.*" />
