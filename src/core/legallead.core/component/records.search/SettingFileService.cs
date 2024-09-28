@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace legallead.records.search
+﻿namespace legallead.records.search
 {
     internal static class SettingFileService
     {

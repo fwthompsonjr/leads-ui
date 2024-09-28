@@ -120,7 +120,7 @@ namespace legallead.records.search.DriverFactory
                     var binaryFile = GetBinaryFileName();
                     profile.BrowserExecutableLocation = binaryFile;
                 }
-                
+
                 profile.AddArguments("-headless");
                 profile.AddArguments("--headless");
                 profile.AddAdditionalCapability("platform", "LINUX", true);

@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{
 		..\..\..\pipeline-build-solutions.ps1 = ..\..\..\pipeline-build-solutions.ps1
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "legallead.models.v1", "..\..\api\legallead.models\legallead.models.v1.csproj", "{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{8B679B84-4F7C-4398-AD70-D7438D576125}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B679B84-4F7C-4398-AD70-D7438D576125}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B679B84-4F7C-4398-AD70-D7438D576125}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{49DEDE5B-74E9-4C51-B383-534FAF7A81BC} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
 		{45757FC1-1601-4A22-9FE5-E4EFCF835004} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
 		{8B679B84-4F7C-4398-AD70-D7438D576125} = {FFBB3C0E-DBA3-4E30-96D7-429002F0ACA9}
+		{68E1D719-AD5E-416C-9EC2-41C2ADBD11B6} = {FBAF2BD6-D54E-4A57-BD4E-B7201E241AFC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1D899A1-E010-46C7-AEAE-3F3119AED6E4}

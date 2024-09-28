@@ -12,7 +12,8 @@ namespace legallead.records.search
         }
         public static void Expire()
         {
-            lock (_locker) {
+            lock (_locker)
+            {
                 var currentDt = DateTime.UtcNow;
                 var found = Models.Count(x => x.ExpirationDate <= currentDt);
                 if (found == 0) return;
