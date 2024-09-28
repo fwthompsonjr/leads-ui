@@ -1,4 +1,5 @@
-﻿using legallead.records.search.Classes;
+﻿using legallead.permissions.api.Model;
+using legallead.records.search.Classes;
 using legallead.records.search.tests.Mapper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
