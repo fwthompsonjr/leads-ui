@@ -52,7 +52,7 @@
 		<PackageReference Include="EPPlus" Version="4.5.3.2">
 		  <NoWarn>NU5104</NoWarn>
 		</PackageReference>
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.66" />
 		<PackageReference Include="legallead.email" Version="3.2.*" />
 		<PackageReference Include="legallead.jdbc" Version="3.2.*" />
 		<PackageReference Include="legallead.json.db" Version="3.2.*" />
@@ -61,15 +61,15 @@
 		<!-- 
 			legallead.models is fixed at 3.2.179 and should not get latest			
 		-->
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.1.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.11.40262" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="Polly" Version="8.4.0" />
-		<PackageReference Include="Stripe.net" Version="44.9.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.0" />
+		<PackageReference Include="Polly" Version="8.4.2" />
+		<PackageReference Include="Stripe.net" Version="45.14.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.0" />
 	</ItemGroup>
 	
 	<ItemGroup>
