@@ -3,7 +3,6 @@
     using legallead.records.search.Dto;
     using legallead.records.search.Models;
     using legallead.records.search.Tools;
-    using Microsoft.VisualStudio.Shell;
     using Newtonsoft.Json;
     using OpenQA.Selenium;
     using System.Diagnostics.CodeAnalysis;
@@ -18,14 +17,14 @@
 
         public override string ActionName => actionName;
 
-        public List<PersonAddress> People { get; private set; } = new();
+        public List<PersonAddress> People { get; private set; } = [];
 
+        [SuppressMessage("Usage",
+            "VSTHRD002:Avoid problematic synchronous waits",
+            Justification = "Async pattern failed to return proper result")]
         public override void Act(NavigationStep item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }
@@ -68,8 +67,7 @@
             var uri = string.Concat(action, querystring);
             var ms = new MemoryStream();
             var client = new HttpClient();
-            var response = GetStream(client, uri);
-            if (response == null) return;
+            var response = client.GetStreamAsync(uri).GetAwaiter().GetResult();
             response.CopyTo(ms);
             var contents = Encoding.UTF8.GetString(ms.ToArray());
             var doc = new XmlDocument();
@@ -81,25 +79,6 @@
                 if (string.IsNullOrEmpty(p.DateFiled) && !string.IsNullOrEmpty(filingDt)) p.DateFiled = filingDt;
             });
             if (item.Wait > 0) { Thread.Sleep(item.Wait); }
-        }
-        [ExcludeFromCodeCoverage]
-        [SuppressMessage("Usage", "VSTHRD102:Implement internal logic asynchronously", Justification = "Process is tested in integration")]
-        private static Stream? GetStream(HttpClient client, string uri)
-        {
-            try
-            {
-                var jwt = ThreadHelper.JoinableTaskFactory;
-                var stream = jwt.Run(async delegate
-                {
-                    var response = await client.GetStreamAsync(uri);
-                    return response;
-                });
-                return stream;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
     }
 }
