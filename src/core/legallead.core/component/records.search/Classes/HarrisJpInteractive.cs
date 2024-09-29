@@ -1,4 +1,5 @@
-﻿using legallead.records.search.Dto;
+﻿using legallead.harriscriminal.db;
+using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
@@ -76,10 +77,13 @@ namespace legallead.records.search.Classes
                 string caseList = string.Empty;
                 ElementActions.ForEach(x => x.GetAssertion = assertion);
                 ElementActions.ForEach(x => x.GetWeb = driver);
+                
                 range.ForEach(dte =>
                 {
-                    var subset = PerformSearching(searches, steps, dte);
-                    people.AddRange(subset);
+                    var criminallist = (searchTypeId == 0 || searchTypeId == 1) ? PerformSearching(searches, steps, dte) : [];
+                    var civillist = (range.IndexOf(dte) == 0 && searchTypeId == 0 || searchTypeId == 2) ? PerformCivilSearch(steps, range) : [];
+                    if (criminallist.Count > 0) people.AddRange(criminallist);
+                    if (civillist.Count > 0) people.AddRange(civillist);
                 });
 
                 caseList = people.ToHtml();
@@ -128,29 +132,57 @@ namespace legallead.records.search.Classes
         {
             const string dformat = "MM/dd/yyyy";
             var people = new List<PersonAddress>();
-            searches.ForEach(searchtype =>
+            var crimes = searches.Where(s => s.Equals("civil")).ToList();
+            var dte = searchDate.ToString(dformat);
+            crimes.ForEach(searchtype =>
             {
                 var courtIndexes = extractCourtIndexes[searchtype].Split(',').ToList();
                 courtIndexes.ForEach(indx =>
                 {
-                    var navigation = new JpNavigationParameters
-                    {
-                        ExtractType = searchtype,
-                        ExtractToRequest = extractRequestIndexes[searchtype],
-                        CourtIndex = indx,
-                        CaseTypeIndex = extractCaseType[searchtype],
-                        EndingDate = searchDate.ToString(dformat),
-                        StartingDate = searchDate.ToString(dformat)
-                    };
-                    if (navigation.IsValid())
-                    {
-                        navigation.Populate(steps);
-                        var searchresults = PerformSearching(steps);
-                        people.AddRange(searchresults);
-                    }
+                    var nav = GetNavParameters(searchtype, indx, dte, dte);
+                    AppendSearchResult(steps, people, nav);
                 });
             });
             return people;
+        }
+        private static List<PersonAddress> PerformCivilSearch(List<NavigationStep> steps, List<DateTime> dateRange)
+        {
+            const string dformat = "MM/dd/yyyy";
+            var startDt = dateRange[0].ToString(dformat);
+            var endDt = dateRange[^1].ToString(dformat);
+            var people = new List<PersonAddress>();
+            var searchtype = extractTypes[1];
+            var courtIndexes = extractCourtIndexes[searchtype].Split(',').ToList();
+            courtIndexes.ForEach(indx =>
+            {
+                var nav = GetNavParameters(searchtype, indx, startDt, endDt);
+                AppendSearchResult(steps, people, nav);
+            });
+            return people;
+        }
+
+        private static void AppendSearchResult(List<NavigationStep> steps, List<PersonAddress> people, JpNavigationParameters nav)
+        {
+            if (nav.IsValid())
+            {
+                nav.Populate(steps);
+                var searchresults = PerformSearching(steps);
+                people.AddRange(searchresults);
+            }
+        }
+
+        private static JpNavigationParameters GetNavParameters(string searchtype, string indx, string startDt, string endDt)
+        {
+            var navigation = new JpNavigationParameters
+            {
+                ExtractType = searchtype,
+                ExtractToRequest = extractRequestIndexes[searchtype],
+                CourtIndex = indx,
+                CaseTypeIndex = extractCaseType[searchtype],
+                EndingDate = endDt,
+                StartingDate = startDt
+            };
+            return navigation;
         }
 
         private static List<DateTime> GetBusinessDays(DateTime startDate, DateTime endingDate)

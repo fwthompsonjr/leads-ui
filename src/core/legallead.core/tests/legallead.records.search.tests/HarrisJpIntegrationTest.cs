@@ -30,8 +30,7 @@ namespace legallead.records.search.tests.Web
         [TestCategory("harris.jp.county.actions")]
         public void CanGetNavigationSteps()
         {
-            var interactive = GetHarrisJpInteractive();
-            var steps = interactive.GetDto();
+            var steps = MockHarrisJpWeb.GetDto();
             Assert.IsNotNull(steps);
             Assert.IsNotNull(steps.Steps);
             Assert.AreEqual(9, steps.Steps.Count);
@@ -50,19 +49,20 @@ namespace legallead.records.search.tests.Web
             var result = interactive.Fetch();
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.PeopleList);
-            Assert.IsTrue(result.PeopleList.Any());
+            Assert.IsTrue(result.PeopleList.Count != 0);
         }
 
         private static MockHarrisJpWeb GetHarrisJpInteractive(string courtIndex = "0")
         {
 
-            DayOfWeek[] weekends = new[] { DayOfWeek.Sunday, DayOfWeek.Saturday };
+            DayOfWeek[] weekends = [DayOfWeek.Sunday, DayOfWeek.Saturday];
             var dte = DateTime.Now.Date.AddDays(-4);
             while (weekends.Contains(dte.DayOfWeek))
             {
                 dte = dte.AddDays(-1);
             }
-            var webParameter = BaseWebIneractive.GetWebNavigation(HarrisJpId, dte, dte);
+            var dteEnd = dte.AddDays(4);
+            var webParameter = BaseWebIneractive.GetWebNavigation(HarrisJpId, dte, dteEnd);
             var custom = new List<WebNavigationKey>
             {
                 new () { Name = "courtIndex", Value = courtIndex },
@@ -83,15 +83,9 @@ namespace legallead.records.search.tests.Web
             found.Value = model.Value;
         }
 
-        private sealed class MockHarrisJpWeb : HarrisJpInteractive
+        private sealed class MockHarrisJpWeb(WebNavigationParameter parameters) : HarrisJpInteractive(parameters)
         {
-            public MockHarrisJpWeb(WebNavigationParameter parameters) : base(parameters)
-            {
-            }
-            public NavigationInstructionDto GetDto()
-            {
-                return GetAppSteps("harrisJpMapping");
-            }
+            public static NavigationInstructionDto GetDto() => GetAppSteps("harrisJpMapping");
         }
     }
 }
