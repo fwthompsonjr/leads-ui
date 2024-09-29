@@ -18,7 +18,7 @@ namespace legallead.reader.component.utility
 
         public void Status(string searchid, string message)
         {
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 await _repo.Append(targetType, searchid, message);
             }).ConfigureAwait(false);
