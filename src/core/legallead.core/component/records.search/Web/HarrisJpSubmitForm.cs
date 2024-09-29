@@ -18,8 +18,11 @@
 
         public override string ActionName => actionName;
 
-        public List<PersonAddress> People { get; private set; } = new();
+        public List<PersonAddress> People { get; private set; } = [];
 
+        [SuppressMessage("Usage", 
+            "VSTHRD002:Avoid problematic synchronous waits", 
+            Justification = "Async pattern failed to return proper result")]
         public override void Act(NavigationStep item)
         {
             if (item == null)
