@@ -3,7 +3,6 @@
     using legallead.records.search.Dto;
     using legallead.records.search.Models;
     using legallead.records.search.Tools;
-    using Microsoft.VisualStudio.Shell;
     using Newtonsoft.Json;
     using OpenQA.Selenium;
     using System.Diagnostics.CodeAnalysis;
@@ -20,15 +19,12 @@
 
         public List<PersonAddress> People { get; private set; } = [];
 
-        [SuppressMessage("Usage", 
-            "VSTHRD002:Avoid problematic synchronous waits", 
+        [SuppressMessage("Usage",
+            "VSTHRD002:Avoid problematic synchronous waits",
             Justification = "Async pattern failed to return proper result")]
         public override void Act(NavigationStep item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             IWebDriver? driver = GetWeb;
             if (driver == null) { return; }

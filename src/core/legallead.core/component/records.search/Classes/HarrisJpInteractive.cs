@@ -1,5 +1,4 @@
-﻿using legallead.harriscriminal.db;
-using legallead.records.search.Dto;
+﻿using legallead.records.search.Dto;
 using legallead.records.search.Interfaces;
 using legallead.records.search.Models;
 using legallead.records.search.Web;
@@ -30,15 +29,15 @@ namespace legallead.records.search.Classes
             DateTime startingDate = GetParameterValue<DateTime>(CommonKeyIndexes.StartDate);
             DateTime endingDate = GetParameterValue<DateTime>(CommonKeyIndexes.EndDate);
             int courtIndex = GetSearchIndex();
-            List<PersonAddress> peopleList = new();
+            List<PersonAddress> peopleList = [];
             WebFetchResult webFetch = new();
             XmlContentHolder results = new SettingsManager().GetOutput(this);
 
             // need to open the navigation file(s)
-            List<NavigationStep> steps = new();
+            List<NavigationStep> steps = [];
             string? navigationFile = GetParameterValue<string>(CommonKeyIndexes.NavigationControlFile);
             if (string.IsNullOrEmpty(navigationFile)) return webFetch;
-            List<string> sources = navigationFile.Split(',').ToList();
+            List<string> sources = [.. navigationFile.Split(',')];
             sources.ForEach(s => steps.AddRange(GetAppSteps(s).Steps));
             webFetch = SearchWeb(courtIndex, results, steps, startingDate, endingDate, peopleList);
             peopleList.ForEach(p =>
@@ -53,7 +52,7 @@ namespace legallead.records.search.Classes
 
         private int GetSearchIndex()
         {
-            int[] indicies = new[] { 0, 1, 2 };
+            int[] indicies = [0, 1, 2];
             try
             {
                 int courtIndex = GetParameterValue<int>("courtIndex");
@@ -77,7 +76,7 @@ namespace legallead.records.search.Classes
                 string caseList = string.Empty;
                 ElementActions.ForEach(x => x.GetAssertion = assertion);
                 ElementActions.ForEach(x => x.GetWeb = driver);
-                
+
                 range.ForEach(dte =>
                 {
                     var criminallist = (searchTypeId == 0 || searchTypeId == 1) ? PerformSearching(searches, steps, dte) : [];
@@ -198,7 +197,7 @@ namespace legallead.records.search.Classes
             return list.Distinct().ToList();
         }
 
-        private static readonly List<string> extractTypes = new() { "criminal", "civil" };
+        private static readonly List<string> extractTypes = ["criminal", "civil"];
         private static readonly Dictionary<string, string> extractRequestIndexes = new()
         {
             { "civil", "7" },

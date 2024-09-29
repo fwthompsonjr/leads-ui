@@ -14,8 +14,8 @@ namespace legallead.records.search.tests.Mapper
     {
         public static T? MapFrom<TK, T>(TK source) where T : class, new()
         {
-            return object.Equals(source, default(TK)) ? 
-                default : 
+            return object.Equals(source, default(TK)) ?
+                default :
                 Mapper.Map<T>(source);
         }
 
