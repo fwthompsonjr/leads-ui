@@ -51,6 +51,7 @@ namespace legallead.permissions.api
             var stripeConfig = MapStripeKey(configuration);
             services.AddSingleton(payment);
             services.AddSingleton(stripeConfig);
+            services.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
             services.AddScoped<IStripeInfrastructure, StripeInfrastructure>();
             services.AddScoped<IPaymentHtmlTranslator, PaymentHtmlTranslator>();
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
