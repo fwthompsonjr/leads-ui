@@ -134,54 +134,57 @@
     <value>..\_text\description-role-silver.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="page_invoice_discount_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-discount-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-discount-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_invoice_discount_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-discount-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-discount-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_invoice_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_invoice_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_invoice_subscription_html" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-subscription-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-subscription-html.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_invoice_subscription_js" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-invoice-subscription-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-invoice-subscription-js.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_level_request_completed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-level-request-completed.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-level-request-completed.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_payment_completed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-payment-completed.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-payment-completed.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="page_payment_detail_invalid" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\page-payment-detail-invalid.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\page-payment-detail-invalid.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="README" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\README.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\README.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="tx_collin_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_counties\tx-collin-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_counties\tx-collin-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="tx_denton_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_counties\tx-denton-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_counties\tx-denton-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="tx_harris_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_counties\tx-harris-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_counties\tx-harris-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="tx_harris_jp_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_counties\tx-harris-jp-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_counties\tx-harris-jp-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="tx_tarrant_drop_down" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_counties\tx-tarrant-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_counties\tx-tarrant-drop-down.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="workbook_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\workbook_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\workbook_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
   </data>
   <data name="worksheet_address_functions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\_text\worksheet_address_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+    <value>..\_text\worksheet_address_functions.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;iso-8859-1</value>
+  </data>
+  <data name="county_code_definition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\county_code_definition.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -5,11 +5,13 @@ using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Newtonsoft.Json;
+using Stripe;
 
 namespace permissions.api.tests.Contollers
 {
@@ -71,6 +73,7 @@ namespace permissions.api.tests.Contollers
                 var lockInfrastructure = new Mock<ICustomerLockInfrastructure>();
                 var queueStatusServiceMock = new Mock<IQueueStatusService>();
                 var collection = new ServiceCollection();
+                collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped(s => request);
                 collection.AddScoped(s => userMk);
                 collection.AddScoped(s => permissionMk);
@@ -188,6 +191,7 @@ namespace permissions.api.tests.Contollers
                         ControllerContext = controllerContext
                     };
                 });
+                collection.AddScoped<AppController>();
                 return collection.BuildServiceProvider();
             }
         }
