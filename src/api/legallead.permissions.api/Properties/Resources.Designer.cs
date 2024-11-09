@@ -593,6 +593,19 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;keyCode&quot;: &quot;user.authentication.list&quot;,
+        ///	&quot;vector&quot;: &quot;8w7/GGidNsThfBLCS5yNtQ==&quot;,
+        ///	&quot;data&quot;: &quot;1oVTptILwRvbXCtgmgtAMyk2evbu/UkiLRPfCHUtNKTLuGCPp+B4+cvyYMbJjb1lV6i2aNru9EulaRrsNTfXd1dThZwMFHU8CS7syeShDyorJcLPo379/42OoaFK0sg40a8HvGHaKoHEeSQxJqxmDq5CjupqeFWPdmPssHei20SDRJnht/JVyUneAAvSSG7ds4Q4eEg0zww9mTdxOl8MepHT5idDFoVLp6ykMfAnnOk98cSZHWWnnBbXsD8i10qJ&quot;
+        ///}.
+        /// </summary>
+        internal static string user_authentication_list {
+            get {
+                return ResourceManager.GetString("user_authentication_list", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Private Sub Workbook_Activate()
         ///Application.CutCopyMode = False
         ///Application.OnKey &quot;^c&quot;, &quot;&quot;

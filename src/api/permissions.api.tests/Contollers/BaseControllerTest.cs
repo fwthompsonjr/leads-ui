@@ -74,6 +74,7 @@ namespace permissions.api.tests.Contollers
                 var queueStatusServiceMock = new Mock<IQueueStatusService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
+                collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
                 collection.AddScoped(s => request);
                 collection.AddScoped(s => userMk);
                 collection.AddScoped(s => permissionMk);

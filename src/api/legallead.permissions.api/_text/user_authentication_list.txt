@@ -1,0 +1,5 @@
+{
+	"keyCode": "user.authentication.list",
+	"vector": "8w7/GGidNsThfBLCS5yNtQ==",
+	"data": "1oVTptILwRvbXCtgmgtAMyk2evbu/UkiLRPfCHUtNKTLuGCPp+B4+cvyYMbJjb1lV6i2aNru9EulaRrsNTfXd1dThZwMFHU8CS7syeShDyorJcLPo379/42OoaFK0sg40a8HvGHaKoHEeSQxJqxmDq5CjupqeFWPdmPssHei20SDRJnht/JVyUneAAvSSG7ds4Q4eEg0zww9mTdxOl8MepHT5idDFoVLp6ykMfAnnOk98cSZHWWnnBbXsD8i10qJ"
+}
