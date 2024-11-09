@@ -79,6 +79,18 @@ namespace permissions.api.tests.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [
+        ///	{ &quot;id&quot;: 0, &quot;code&quot;: &quot;gngzk9uwkn2h&quot; },
+        ///	{ &quot;id&quot;: 1, &quot;code&quot;: &quot;8aho433rvgkb&quot; }
+        ///].
+        /// </summary>
+        internal static string internal_user_secrets {
+            get {
+                return ResourceManager.GetString("internal_user_secrets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {
         ///    &quot;requestId&quot;: &quot;e8983cfb-0a68-11ef-99ce-0af7a01f52e9&quot;,
         ///    &quot;request&quot;: {

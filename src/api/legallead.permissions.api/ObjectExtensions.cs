@@ -52,6 +52,7 @@ namespace legallead.permissions.api
             services.AddSingleton(payment);
             services.AddSingleton(stripeConfig);
             services.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
+            services.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
             services.AddScoped<IStripeInfrastructure, StripeInfrastructure>();
             services.AddScoped<IPaymentHtmlTranslator, PaymentHtmlTranslator>();
             services.AddSingleton<IJwtManagerRepository, JwtManagerRepository>();
@@ -158,6 +159,7 @@ namespace legallead.permissions.api
             services.AddScoped<SettingsController>();
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
+            services.AddScoped<AppController>();
             services.AddScoped(p =>
             {
                 return new PaymentController(payment,

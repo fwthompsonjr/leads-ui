@@ -96,6 +96,7 @@ namespace permissions.api.tests
         [InlineData(typeof(IQueueNotificationService))]
         [InlineData(typeof(IQueueStatusService))]
         [InlineData(typeof(QueueController))]
+        [InlineData(typeof(AppController))]
         public void ProviderCanConstructInstance(Type type)
         {
             var exclusions = new List<Type>
