@@ -1,4 +1,5 @@
-﻿using legallead.jdbc.entities;
+﻿using Dapper;
+using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using Newtonsoft.Json;
@@ -8,6 +9,24 @@ namespace legallead.jdbc.implementations
 {
     public class LeadUserRepository(DataContext context) : BaseRepository<SearchDto>(context), ILeadUserRepository
     {
+        public async Task<string> AddAccount(LeadUserDto user)
+        {
+            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT ( ?, ?, ?, ? )";
+            return await AddOrUpdateAccount(user, command);
+        }
+
+        public async Task<bool> AddCountyPermissions(LeadUserCountyIndexDto userPermissions)
+        {
+            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT_PERMISSION ( ?, ? )";
+            return await AddOrUpdatePermissions(userPermissions, command);
+        }
+
+        public async Task<bool> AddCountyToken(LeadUserCountyDto userCounty)
+        {
+            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT_TOKEN ( ?, ?, ?, ?, ? )";
+            return await AddOrUpdateToken(userCounty, command);
+        }
+
         public async Task<LeadUserBo?> GetUser(string userName)
         {
             const string prc = "CALL USP_GET_LEADUSER_BY_USERNAME( '{0}' );";
@@ -20,25 +39,94 @@ namespace legallead.jdbc.implementations
                 Id = response.Id,
                 UserName = response.UserName ?? string.Empty,
             };
-            bo.Keys.ForEach(async key =>
+            for (var i = 0; i < bo.Keys.Count; i++)
             {
-                var id = bo.Keys.IndexOf(key);
-                switch (id)
+                if (i > 2) break;
+                if (i == 0)
                 {
-                    case 0:
-                        bo.UserData = JsonConvert.SerializeObject(response);
-                        break;
-                    case 1:
-                        bo.CountyData = await GetJson<LeadUserCountyDto>("USP_GET_LEADUSER_COUNTY_SECRETS", response.Id, connection);
-                        break;
-                    case 2:
-                        bo.IndexData = await GetJson<LeadUserCountyIndexDto>("USP_GET_LEADUSER_COUNTY_INDEXES", response.Id, connection);
-                        break;
-                    default:
-                        break;
+                    bo.UserData = JsonConvert.SerializeObject(response);
+                    continue;
                 }
-            });
+                if (i == 1)
+                {
+                    bo.CountyData = await GetJson<LeadUserCountyDto>("USP_GET_LEADUSER_COUNTY_SECRETS", response.Id, connection);
+                    continue;
+                }
+                bo.IndexData = await GetJson<LeadUserCountyIndexDto>("USP_GET_LEADUSER_COUNTY_INDEXES", response.Id, connection);
+            }
             return bo;
+        }
+
+        public async Task<bool> UpdateAccount(LeadUserDto user)
+        {
+            const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT ( ?, ?, ?, ? )";
+            var indx = await AddOrUpdateAccount(user, command);
+            return !string.IsNullOrEmpty(indx);
+        }
+
+        public async Task<bool> UpdateCountyPermissions(LeadUserCountyIndexDto userPermissions)
+        {
+            const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT_PERMISSION ( ?, ? )";
+            return await AddOrUpdatePermissions(userPermissions, command);
+        }
+
+        public async Task<bool> UpdateCountyToken(LeadUserCountyDto userCounty)
+        {
+            const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT_TOKEN ( ?, ?, ?, ?, ? )";
+            return await AddOrUpdateToken(userCounty, command);
+        }
+
+
+
+        private async Task<string> AddOrUpdateAccount(LeadUserDto user, string command)
+        {
+            if (string.IsNullOrEmpty(user.UserName)) return string.Empty;
+            if (string.IsNullOrEmpty(user.Phrase)) return string.Empty;
+            if (string.IsNullOrEmpty(user.Vector)) return string.Empty;
+            if (string.IsNullOrEmpty(user.Token)) return string.Empty;
+            var parameters = new DynamicParameters();
+            parameters.Add("accountName", user.UserName);
+            parameters.Add("passPhrase", user.Phrase);
+            parameters.Add("tokenKey", user.Vector);
+            parameters.Add("tokenCode", user.Token);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserDto>(connection, command, parameters);
+            if (response == null || string.IsNullOrEmpty(response.Id)) return string.Empty;
+            return response.Id;
+        }
+
+        private async Task<bool> AddOrUpdatePermissions(LeadUserCountyIndexDto userPermissions, string command)
+        {
+            if (string.IsNullOrEmpty(userPermissions.LeadUserId)) return false;
+            if (string.IsNullOrEmpty(userPermissions.CountyList)) return false;
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userPermissions.LeadUserId);
+            parameters.Add("county_list", userPermissions.CountyList);
+
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyIndexDto>(connection, command, parameters);
+            if (response == null || string.IsNullOrEmpty(response.Id)) return false;
+            return true;
+        }
+
+        private async Task<bool> AddOrUpdateToken(LeadUserCountyDto userCounty, string command)
+        {
+            if (string.IsNullOrEmpty(userCounty.LeadUserId)) return false;
+            if (string.IsNullOrEmpty(userCounty.CountyName)) return false;
+            if (string.IsNullOrEmpty(userCounty.Phrase)) return false;
+            if (string.IsNullOrEmpty(userCounty.Vector)) return false;
+            if (string.IsNullOrEmpty(userCounty.Token)) return false;
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userCounty.LeadUserId);
+            parameters.Add("county_name", userCounty.CountyName);
+            parameters.Add("passPhrase", userCounty.Phrase);
+            parameters.Add("tokenKey", userCounty.Vector);
+            parameters.Add("tokenCode", userCounty.Token);
+
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyDto>(connection, command, parameters);
+            if (response == null || string.IsNullOrEmpty(response.Id)) return false;
+            return true;
         }
 
         private async Task<string> GetJson<D>(string procedureName, string userId, IDbConnection connection) where D : BaseDto, new()
