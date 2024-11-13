@@ -9,9 +9,7 @@ using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using Newtonsoft.Json;
-using Stripe;
 
 namespace permissions.api.tests.Contollers
 {
@@ -186,7 +184,7 @@ namespace permissions.api.tests.Contollers
                     queueStatusServiceMock.Setup(s => s.GetQueueSummaryAsync(It.IsAny<QueueSummaryRequest>())).ReturnsAsync(stslist);
                     queueStatusServiceMock.Setup(s => s.UpdatePersonList(It.IsAny<QueueNonPersonBo>(), It.IsAny<string>())).Returns(true);
                     var status = a.GetRequiredService<IQueueStatusService>();
-                    
+
                     return new QueueController(status)
                     {
                         ControllerContext = controllerContext

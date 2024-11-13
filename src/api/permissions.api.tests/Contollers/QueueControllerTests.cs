@@ -210,7 +210,7 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
-        
+
         private static QueueSummaryRequest GetSummary(int? index, bool hasSource = true)
         {
             var source = hasSource ? applicationSource : string.Empty;

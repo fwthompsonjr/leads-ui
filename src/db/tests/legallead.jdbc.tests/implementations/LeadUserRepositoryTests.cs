@@ -139,6 +139,44 @@ namespace legallead.jdbc.tests.implementations
             Assert.Equal(expected, actual);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async Task RepoCanGetUserGetId(int conditionId)
+        {
+            var expected = conditionId == 1;
+            var request = userfaker.Generate().UserName ?? "test.account";
+            var account = conditionId == 1 ? null : userfaker.Generate();
+            var countyTokens = conditionId == 2 ? [] : tokenfaker.Generate(2);
+            var countyIndexes = conditionId == 3 ? [] : permissionfaker.Generate(2);
+
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LeadUserDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(account);
+            mock.Setup(m => m.QueryAsync<LeadUserCountyDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(countyTokens);
+            mock.Setup(m => m.QueryAsync<LeadUserCountyIndexDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(countyIndexes);
+            var response = await service.GetUserById(request);
+            var actual = response == null;
+            Assert.Equal(expected, actual);
+            if (response != null) Assert.False(string.IsNullOrEmpty(response.UserData));
+            if (conditionId != 2 && response != null) Assert.False(string.IsNullOrEmpty(response.CountyData));
+            if (conditionId != 3 && response != null) Assert.False(string.IsNullOrEmpty(response.IndexData));
+        }
 
         [Theory]
         [InlineData(0)]

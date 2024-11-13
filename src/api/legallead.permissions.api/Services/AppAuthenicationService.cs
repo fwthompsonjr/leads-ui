@@ -38,7 +38,7 @@ namespace legallead.permissions.api.Services
                         .Where(x => x != null)
                         .Cast<AppAuthenicationItemDto>()
                         .ToList();
-                    return list; 
+                    return list;
                 }
             }
         }
