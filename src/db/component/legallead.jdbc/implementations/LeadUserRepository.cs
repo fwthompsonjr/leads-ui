@@ -27,6 +27,21 @@ namespace legallead.jdbc.implementations
             return await AddOrUpdateToken(userCounty, command);
         }
 
+        public async Task<LeadUserBo?> GetUserById(string userId)
+        {
+            const string prc = "CALL USP_GET_LEADUSER_BY_Id( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserDto>(connection, command);
+            if (response == null) return null;
+            var bo = new LeadUserBo
+            {
+                Id = response.Id,
+                UserName = response.UserName ?? string.Empty,
+            };
+            return await GetUserAttributes(connection, response, bo);
+        }
+
         public async Task<LeadUserBo?> GetUser(string userName)
         {
             const string prc = "CALL USP_GET_LEADUSER_BY_USERNAME( '{0}' );";
@@ -39,22 +54,7 @@ namespace legallead.jdbc.implementations
                 Id = response.Id,
                 UserName = response.UserName ?? string.Empty,
             };
-            for (var i = 0; i < bo.Keys.Count; i++)
-            {
-                if (i > 2) break;
-                if (i == 0)
-                {
-                    bo.UserData = JsonConvert.SerializeObject(response);
-                    continue;
-                }
-                if (i == 1)
-                {
-                    bo.CountyData = await GetJson<LeadUserCountyDto>("USP_GET_LEADUSER_COUNTY_SECRETS", response.Id, connection);
-                    continue;
-                }
-                bo.IndexData = await GetJson<LeadUserCountyIndexDto>("USP_GET_LEADUSER_COUNTY_INDEXES", response.Id, connection);
-            }
-            return bo;
+            return await GetUserAttributes(connection, response, bo);
         }
 
         public async Task<bool> UpdateAccount(LeadUserDto user)
@@ -127,6 +127,26 @@ namespace legallead.jdbc.implementations
             var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyDto>(connection, command, parameters);
             if (response == null || string.IsNullOrEmpty(response.Id)) return false;
             return true;
+        }
+
+        private async Task<LeadUserBo?> GetUserAttributes(IDbConnection connection, LeadUserDto? response, LeadUserBo bo)
+        {
+            for (var i = 0; i < bo.Keys.Count; i++)
+            {
+                if (i > 2) break;
+                if (i == 0)
+                {
+                    bo.UserData = JsonConvert.SerializeObject(response);
+                    continue;
+                }
+                if (i == 1)
+                {
+                    bo.CountyData = await GetJson<LeadUserCountyDto>("USP_GET_LEADUSER_COUNTY_SECRETS", response.Id, connection);
+                    continue;
+                }
+                bo.IndexData = await GetJson<LeadUserCountyIndexDto>("USP_GET_LEADUSER_COUNTY_INDEXES", response.Id, connection);
+            }
+            return bo;
         }
 
         private async Task<string> GetJson<D>(string procedureName, string userId, IDbConnection connection) where D : BaseDto, new()
