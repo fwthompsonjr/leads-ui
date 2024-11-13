@@ -23,12 +23,13 @@ namespace permissions.api.tests.Services
 
         private static byte[]? GetDenton(int index = 0)
         {
-            var source = index switch {
-				0 => dentonSample,
-				1 => null,
-				2 => string.Empty,
-				_ => dentonSample01
-			};
+            var source = index switch
+            {
+                0 => dentonSample,
+                1 => null,
+                2 => string.Empty,
+                _ => dentonSample01
+            };
             var content = source == null ? null : Convert.FromBase64String(source);
             return content;
         }

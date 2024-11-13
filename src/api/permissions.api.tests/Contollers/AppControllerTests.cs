@@ -1,12 +1,8 @@
 using legallead.permissions.api.Controllers;
-using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
 
 namespace permissions.api.tests.Contollers
 {

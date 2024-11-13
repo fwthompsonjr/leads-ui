@@ -1,7 +1,6 @@
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Newtonsoft.Json;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace permissions.api.tests.Services
 {
@@ -78,9 +77,9 @@ namespace permissions.api.tests.Services
         {
             const string listName = "user.authentication.list";
             var faker = new Faker();
-            var list = new List<string>() { 
+            var list = new List<string>() {
                 "lead.administrator",
-                "Kerri@kdphillipslaw.com" 
+                "Kerri@kdphillipslaw.com"
             };
             var service = new SecureStringService();
             for (int i = 0; i < list.Count; i++)

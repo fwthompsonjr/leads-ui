@@ -4,7 +4,6 @@ using legallead.permissions.api.Models;
 using Microsoft.VisualStudio.Shell;
 using Newtonsoft.Json;
 using Stripe;
-using System.Text.Json;
 
 namespace legallead.permissions.api.Utility
 {

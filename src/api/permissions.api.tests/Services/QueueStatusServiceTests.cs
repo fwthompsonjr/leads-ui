@@ -363,7 +363,7 @@ namespace permissions.api.tests.Services
         }
 
 
-    private sealed class TheHarness
+        private sealed class TheHarness
         {
             public TheHarness()
             {

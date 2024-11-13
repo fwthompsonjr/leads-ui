@@ -73,7 +73,7 @@ namespace legallead.permissions.api.Controllers
             message.StatusCode = (int)HttpStatusCode.OK;
             return new JsonResult(message) { StatusCode = 200 };
         }
-        
+
         [HttpPost("start")]
         public async Task<IActionResult> StartAsync(QueuedRecord request)
         {

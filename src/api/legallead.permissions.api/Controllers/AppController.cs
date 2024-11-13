@@ -18,7 +18,7 @@ namespace legallead.permissions.api.Controllers
             const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
             if (!ModelState.IsValid) return BadRequest();
             var response = _authorizationService.Models
-                .Find(x => x.Name.Equals(model.Name, comparison) && 
+                .Find(x => x.Name.Equals(model.Name, comparison) &&
                 x.UserId.Equals(model.UserId, comparison)) ?? new();
             return Ok(response);
         }
