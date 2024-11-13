@@ -6,9 +6,10 @@ namespace legallead.permissions.api.Interfaces
         Task<bool> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
         Task<bool> ChangeCountyPermissionAsync(string userId, string countyList);
 
+        Task<string> CreateLoginAsync(string userName, string password);
         Task<string> LoginAsync(string userName, string password);
 
-        Task<bool> GetCountyCredentialAsync(string userId, string county);
-        Task<bool> GetCountyPermissionAsync(string userId);
+        Task<string> GetCountyCredentialAsync(string userId, string county);
+        Task<string> GetCountyPermissionAsync(string userId);
     }
 }
