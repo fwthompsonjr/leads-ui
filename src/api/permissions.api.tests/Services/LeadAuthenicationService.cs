@@ -3,6 +3,8 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Services;
+using Newtonsoft.Json;
+using StructureMap.Query;
 
 namespace permissions.api.tests.Services
 {
@@ -40,14 +42,24 @@ namespace permissions.api.tests.Services
             return response ?? string.Empty;
         }
 
-        public Task<string> GetCountyCredentialAsync(string userId, string county)
+        public async Task<string> GetCountyCredentialAsync(string userId, string county)
         {
-            throw new NotImplementedException();
+            var bo = await _repo.GetUserById(userId);
+            if (bo == null) return string.Empty;
+            var model = _svc.GetModel(bo);
+            var json = _svc.GetCountyData(model);
+            var data = json.ToInstance<List<LeadUserCountyDto>>();
+            if (data == null) return string.Empty;
+            var requested = data.FindAll(x => x.CountyName == county);
+            return JsonConvert.SerializeObject(requested);
         }
 
-        public Task<string> GetCountyPermissionAsync(string userId)
+        public async Task<string> GetCountyPermissionAsync(string userId)
         {
-            throw new NotImplementedException();
+            var bo = await _repo.GetUserById(userId);
+            if (bo == null) return string.Empty;
+            var model = _svc.GetModel(bo);
+            return _svc.GetCountyPermissionData(model);
         }
 
         public async Task<string> LoginAsync(string userName, string password)
