@@ -61,7 +61,8 @@ namespace permissions.api.tests.Contollers
         {
             var auth = new Mock<IAppAuthenicationService>();
             var county = new Mock<ICountyAuthorizationService>();
-            var sut = new AppController(auth.Object, county.Object);
+            var svcs = new Mock<ILeadAuthenicationService>().Object;
+            var sut = new AppController(auth.Object, county.Object, svcs);
             var isok = name.Equals("lead.administrator");
             var dto = isok ? new AppAuthenicationItemDto { Id = 10, UserName = "test.account" } : null;
             auth.Setup(s => s.Authenicate(It.IsAny<string>(), It.IsAny<string>())).Returns(dto);

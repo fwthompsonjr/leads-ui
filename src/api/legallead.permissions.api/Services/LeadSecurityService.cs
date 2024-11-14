@@ -86,7 +86,7 @@ namespace legallead.permissions.api.Services
             var decoded = secureSvcs.Decrypt(model.Token, model.Phrase, model.Vector);
             return decoded;
         }
-        private static string ToIntegerString(string? countyList)
+        public static string ToIntegerString(string? countyList)
         {
             const char comma = ',';
             if (string.IsNullOrWhiteSpace(countyList)) return string.Empty;

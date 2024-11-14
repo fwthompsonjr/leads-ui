@@ -7,10 +7,12 @@ namespace legallead.permissions.api.Controllers
     [ApiController]
     public class AppController(
         IAppAuthenicationService appservice,
-        ICountyAuthorizationService service) : ControllerBase
+        ICountyAuthorizationService service,
+        ILeadAuthenicationService lead) : ControllerBase
     {
         private readonly IAppAuthenicationService _authenticationService = appservice;
         private readonly ICountyAuthorizationService _authorizationService = service;
+        private readonly ILeadAuthenicationService _leadService = lead;
 
         [HttpPost("get-county-code")]
         public IActionResult GetCounty(CountyCodeRequest model)
@@ -30,6 +32,16 @@ namespace legallead.permissions.api.Controllers
             var response = _authenticationService.FindUser(obj.UserName, obj.Id);
             return Ok(response);
         }
-
+        /*
+        
+        [HttpPost("account-login")]
+        public async Task<IActionResult> AccountAuthenicate(AppAuthenicateRequest request)
+        {
+            var obj = await _leadService.LoginAsync(request.UserName, request.Password);
+            if (string.IsNullOrEmpty(obj)) return Unauthorized();
+            var response = _authenticationService.FindUser(obj.UserName, obj.Id);
+            return Ok(response);
+        }
+        */
     }
 }

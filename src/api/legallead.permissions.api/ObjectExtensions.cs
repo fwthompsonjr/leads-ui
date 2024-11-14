@@ -91,6 +91,9 @@ namespace legallead.permissions.api
             services.AddScoped<IMailBoxRepository, MailBoxRepository>();
             services.AddScoped<IUserMailbox, UserMailboxService>();
             services.AddScoped<IAppSettingService, AppSettingService>();
+            services.AddScoped<ILeadUserRepository, LeadUserRepository>();
+            services.AddScoped<ILeadSecurityService, LeadSecurityService>();
+            services.AddScoped<ILeadAuthenicationService, LeadAuthenicationService>();
             services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {
