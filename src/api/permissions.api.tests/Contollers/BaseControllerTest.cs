@@ -27,9 +27,9 @@ namespace permissions.api.tests.Contollers
 
         protected static readonly Faker<UserChangePasswordModel> changeFaker =
             new Faker<UserChangePasswordModel>()
-            .RuleFor(x => x.UserName, y => y.Random.AlphaNumeric(22))
-            .RuleFor(x => x.OldPassword, y => y.Random.AlphaNumeric(30))
-            .RuleFor(x => x.NewPassword, y => y.Random.AlphaNumeric(30))
+            .RuleFor(x => x.UserName, y => y.Person.UserName)
+            .RuleFor(x => x.OldPassword, y => LeadUserBoGenerator.AppendSpecialCharacter(y.Random.AlphaNumeric(30)))
+            .RuleFor(x => x.NewPassword, y => LeadUserBoGenerator.AppendSpecialCharacter(y.Random.AlphaNumeric(30)))
             .FinishWith((a, b) => b.ConfirmPassword = b.NewPassword);
 
         protected static IServiceProvider GetProvider()

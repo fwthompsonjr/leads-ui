@@ -1,6 +1,7 @@
 ﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
+using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 
 namespace legallead.permissions.api.Services
@@ -52,11 +53,12 @@ namespace legallead.permissions.api.Services
             return !string.IsNullOrEmpty(verification);
         }
 
-        public async Task<string> CreateLoginAsync(string userName, string password)
+        public async Task<string> CreateLoginAsync(string userName, string password, string email)
         {
             var dto = new LeadUserDto
             {
                 UserName = userName,
+                Email = email,
             };
             SetDtoCredential(dto, userName, password);
             var response = await _repo.AddAccount(dto);
@@ -89,6 +91,18 @@ namespace legallead.permissions.api.Services
             return JsonConvert.SerializeObject(model);
         }
 
+
+        public LeadUserModel? GetUserModel(HttpRequest? request, string reason)
+        {
+            if (request == null) return null;
+            var tmp = request.GetObjectFromHeader<string>("LEAD_IDENTITY");
+            if (tmp == null) return null;
+            var validations = LeadTokenService.GetValidationModel(tmp, reason);
+            if (!validations.Validated) return null;
+            var identity = LeadTokenService.GetModel(tmp, out var _);
+            if (identity == null) return null;
+            return identity.User;
+        }
         private string CheckCredential(LeadUserModel model, string password)
         {
             var user = _svc.GetUserData(model);

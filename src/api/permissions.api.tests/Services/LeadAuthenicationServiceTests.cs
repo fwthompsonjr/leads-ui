@@ -111,14 +111,16 @@ namespace permissions.api.tests.Services
                 {
                     userId = fkr.Random.Guid().ToString("D"),
                     userName = fkr.Person.UserName,
-                    password = fkr.Random.AlphaNumeric(15)
+                    password = fkr.Random.AlphaNumeric(15),
+                    email = fkr.Person.Email,
                 };
                 var service = new MockLeadAuthenicationService();
                 service.SetupLogin(request.userId, isCreated);
                 // Act
                 _ = await service.Svc.CreateLoginAsync(
                     request.userName,
-                    request.password);
+                    request.password,
+                    request.email);
             });
             Assert.Null(error);
         }

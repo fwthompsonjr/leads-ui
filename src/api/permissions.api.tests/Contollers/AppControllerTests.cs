@@ -3,6 +3,7 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -107,6 +108,107 @@ namespace permissions.api.tests.Contollers
             else Assert.IsType<UnauthorizedResult>(response);
         }
 
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(7)]
+        [InlineData(9)]
+        [InlineData(11)]
+        public async Task ControllerCanCreateAccountAsync(int conditionId)
+        {
+            var exclusions = new int[] { 0, 11 };
+            var request = LeadUserBoGenerator.GetAccount();
+            var loginrsp = Guid.NewGuid().ToString();
+            if (conditionId == 1) { request.UserName = "admin"; } // min length error
+            if (conditionId == 2) { request.UserName = fkr.Random.AlphaNumeric(55); } // max length error
+            if (conditionId == 3) { request.UserName = string.Empty; } // required error
+
+            if (conditionId == 4) { request.Password = "weak"; } // min length error
+            if (conditionId == 5) { request.Password = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 6) { request.Password = string.Empty; } // required error
+            if (conditionId == 7) { request.Password = "abcdefghijklmnop"; } // password strength error
+
+            if (conditionId == 8) { request.Email = "admin"; } // min length error
+            if (conditionId == 9) { request.Email = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 11) { loginrsp = string.Empty; }
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
+                var json = GetLoginResponse(true);
+                mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(json);
+                mock.Setup(m => m.CreateLoginAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(loginrsp);
+                var response = await sut.CreateAccountAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                if (conditionId == 11) Assert.IsAssignableFrom<ConflictResult>(response);
+                if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(10)]
+        [InlineData(11)]
+        [InlineData(12)]
+        public async Task ControllerCanChangePasswordAsync(int conditionId)
+        {
+            var exclusions = new int[] { 0, 12 };
+            var request = changeFaker.Generate();
+            LeadUserModel? loginrsp = GetModel();
+            var changed = true;
+            if (conditionId == 1) { request.UserName = "admin"; } // min length error
+            if (conditionId == 2) { request.UserName = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 3) { request.UserName = string.Empty; } // required error
+
+            if (conditionId == 8) { request.NewPassword = "weak"; } // min length error
+            if (conditionId == 9) { request.NewPassword = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 10) { request.NewPassword = string.Empty; } // required error
+            if (conditionId == 11) { request.NewPassword = "abcdefghijklmnop"; } // password strength error
+
+            if (conditionId == 12) { loginrsp = null; }
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
+                var json = GetLoginResponse(true);
+
+                mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(json);
+
+                mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
+                    .Returns(loginrsp);
+
+                mock.Setup(m => m.ChangePasswordAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                    .ReturnsAsync(changed);
+
+                var response = await sut.ChangePasswordAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                if (conditionId == 12) Assert.IsAssignableFrom<UnauthorizedResult>(response);
+                if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
+
         private static string GetLoginResponse(bool authorized)
         {
             if (!authorized) return string.Empty;
@@ -120,6 +222,6 @@ namespace permissions.api.tests.Contollers
         }
 
         private static readonly LeadSecurityService securityService = new();
-
+        private static readonly Faker fkr = new ();
     }
 }
