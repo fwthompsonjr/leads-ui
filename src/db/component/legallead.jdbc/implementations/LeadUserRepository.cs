@@ -11,7 +11,7 @@ namespace legallead.jdbc.implementations
     {
         public async Task<string> AddAccount(LeadUserDto user)
         {
-            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT ( ?, ?, ?, ? )";
+            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT ( ?, ?, ?, ?, ? )";
             return await AddOrUpdateAccount(user, command);
         }
 
@@ -59,7 +59,7 @@ namespace legallead.jdbc.implementations
 
         public async Task<bool> UpdateAccount(LeadUserDto user)
         {
-            const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT ( ?, ?, ?, ? )";
+            const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT ( ?, ?, ?, ?, ? )";
             var indx = await AddOrUpdateAccount(user, command);
             return !string.IsNullOrEmpty(indx);
         }
@@ -86,6 +86,7 @@ namespace legallead.jdbc.implementations
             if (string.IsNullOrEmpty(user.Token)) return string.Empty;
             var parameters = new DynamicParameters();
             parameters.Add("accountName", user.UserName);
+            parameters.Add("email_address", user.Email ?? string.Empty);
             parameters.Add("passPhrase", user.Phrase);
             parameters.Add("tokenKey", user.Vector);
             parameters.Add("tokenCode", user.Token);
