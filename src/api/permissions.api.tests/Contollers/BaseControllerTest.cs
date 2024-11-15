@@ -69,7 +69,7 @@ namespace permissions.api.tests.Contollers
                 var userSearchValidator = new Mock<IUserSearchValidator>();
                 var searchInfrastructure = new Mock<ISearchInfrastructure>();
                 var lockInfrastructure = new Mock<ICustomerLockInfrastructure>();
-                var queueStatusServiceMock = new Mock<IQueueStatusService>(); 
+                var queueStatusServiceMock = new Mock<IQueueStatusService>();
                 var leadRepoMock = new Mock<ILeadUserRepository>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();

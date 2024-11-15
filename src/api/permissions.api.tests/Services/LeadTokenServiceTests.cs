@@ -1,10 +1,6 @@
 ﻿using legallead.permissions.api.Entities;
 using legallead.permissions.api.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Services
 {
@@ -47,7 +43,7 @@ namespace permissions.api.tests.Services
                 Assert.Null(model);
             }
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
@@ -66,7 +62,7 @@ namespace permissions.api.tests.Services
             return securityService.GetModel(bo);
         }
 
-        private static readonly LeadSecurityService securityService = new ();
-        private static readonly Faker faker = new ();
+        private static readonly LeadSecurityService securityService = new();
+        private static readonly Faker faker = new();
     }
 }
