@@ -2,7 +2,7 @@ namespace legallead.permissions.api.Interfaces
 {
     public interface ILeadAuthenicationService
     {
-        Task<bool> ChangeCountyCredentialAsync(string userId, string oldPassword, string newPassword);
+        Task<bool> ChangeCountyCredentialAsync(string userId, string county, string userName, string password);
         Task<bool> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
         Task<bool> ChangeCountyPermissionAsync(string userId, string countyList);
 

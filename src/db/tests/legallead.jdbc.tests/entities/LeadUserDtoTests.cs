@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using legallead.jdbc.entities;
-using System.Text;
 
 namespace legallead.jdbc.tests.entities
 {
@@ -11,6 +10,7 @@ namespace legallead.jdbc.tests.entities
             new Faker<LeadUserDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Email, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Phrase, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Vector, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Token, y => y.Random.Guid().ToString("D"))
@@ -39,6 +39,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserName")]
+        [InlineData("Email")]
         [InlineData("Phrase")]
         [InlineData("Vector")]
         [InlineData("Token")]
@@ -59,6 +60,7 @@ namespace legallead.jdbc.tests.entities
         [Theory]
         [InlineData("Id")]
         [InlineData("UserName")]
+        [InlineData("Email")]
         [InlineData("Phrase")]
         [InlineData("Vector")]
         [InlineData("Token")]

@@ -8,6 +8,7 @@
         public string? Vector { get; set; }
         public string? Token { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string? Email { get; internal set; }
 
         public override object? this[string field]
         {
@@ -18,6 +19,7 @@
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
                 if (fieldName.Equals("UserName", Comparison)) return UserName;
+                if (fieldName.Equals("Email", Comparison)) return Email;
                 if (fieldName.Equals("Phrase", Comparison)) return Phrase;
                 if (fieldName.Equals("Vector", Comparison)) return Vector;
                 if (fieldName.Equals("Token", Comparison)) return Token;
@@ -34,6 +36,7 @@
                     return;
                 }
                 if (fieldName.Equals("UserName", Comparison)) { UserName = ChangeType<string>(value); return; }
+                if (fieldName.Equals("Email", Comparison)) { Email = ChangeType<string>(value); return; }
                 if (fieldName.Equals("Phrase", Comparison)) { Phrase = ChangeType<string>(value); return; }
                 if (fieldName.Equals("Vector", Comparison)) { Vector = ChangeType<string>(value); return; }
                 if (fieldName.Equals("Token", Comparison)) { Token = ChangeType<string>(value); return; }
