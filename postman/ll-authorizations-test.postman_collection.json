@@ -743,6 +743,48 @@
 					"response": []
 				},
 				{
+					"name": "GetPaymentIntent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {  \r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"32CBC942AAED-GBMH-662A1B38\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/payment-fetch-intent",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"payment-fetch-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GetDownload-Valid",
 					"event": [
 						{
@@ -2488,7 +2530,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"harris-jp\",\r\n\t\t\"value\": 32190\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Search Type\",\r\n\t\t\t\"text\": \"All Civil Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": {{start_date_ts}},\r\n\t\"end\": {{end_date_ts}}\r\n}",
+							"raw": "{\r\n\t\"state\": \"tx\",\r\n\t\"county\": {\r\n\t\t\"name\": \"harris-jp\",\r\n\t\t\"value\": 32190\r\n\t},\r\n\t\"details\": [\r\n\t\t{\r\n\t\t\t\"name\": \"Court Selection\",\r\n\t\t\t\"text\": \"All JP Courts\",\r\n\t\t\t\"value\": \"0\"\r\n\t\t}\r\n\t],\r\n\t\"start\": {{start_date_ts}},\r\n\t\"end\": {{end_date_ts}}\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3856,6 +3898,68 @@
 							"response": []
 						},
 						{
+							"name": "fetch-non-person",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{{app_identity}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_FETCH_NP_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_FETCH_NP_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Initialize",
 							"event": [
 								{
@@ -3974,6 +4078,130 @@
 									],
 									"path": [
 										"{{QUEUE_UPDATE_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Status Summary",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"{{QUEUE_SAMPLE_INDEX}}\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": 1,\r\n\t\"Source\": \"{{QUEUE_SOURCE_NAME}}\",\r\n\t\"SearchId\" : \"{{QUEUE_SAMPLE_SEARCH_INDEX}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_STATUS_SUMMARY_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_STATUS_SUMMARY_URL}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Status Overview",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is an acceptable value\", function () {\r",
+											"    var acceptable = [ 200 ];\r",
+											"    var code = pm.response.code;\r",
+											"    pm.expect(acceptable).to.include(code);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "APP_IDENTITY",
+										"value": "{{app_identity}}",
+										"description": "App service header",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Id\": \"{{QUEUE_SAMPLE_INDEX}}\",\r\n\t\"Message\": \"This is a test message\",\r\n\t\"StatusId\": 1,\r\n\t\"Source\": \"{{QUEUE_SOURCE_NAME}}\",\r\n\t\"SearchId\" : \"{{QUEUE_SAMPLE_SEARCH_INDEX}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{app_url}}/{{QUEUE_STATUS_OVERVIEW_URL}}",
+									"host": [
+										"{{app_url}}"
+									],
+									"path": [
+										"{{QUEUE_STATUS_OVERVIEW_URL}}"
 									]
 								}
 							},
@@ -4533,6 +4761,406 @@
 					"description": "folder consists of api calls to queue api in order to test the liveliness of the endpoints"
 				}
 			]
+		},
+		{
+			"name": "web",
+			"item": [
+				{
+					"name": "county-code-dallas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"dallas\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{WEB_UI_URL}}/app/get-county-code",
+							"host": [
+								"{{WEB_UI_URL}}"
+							],
+							"path": [
+								"app",
+								"get-county-code"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "app",
+			"item": [
+				{
+					"name": "AuthenicateFail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 401\", function () {\r",
+									"    var acceptable = [ 401 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"string\",\r\n  \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppRegistration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 409\", function () {\r",
+									"    var acceptable = [ 200, 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{UserAccountName}}\",\r\n  \"password\": \"{{UserPassword}}\",\r\n  \"email\": \"{{UserEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/create-account",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"create-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppLogin-Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 409\", function () {\r",
+									"    var acceptable = [ 200, 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{UserAccountName}}\",\r\n  \"password\": \"{{UserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/account-login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"account-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppChangePassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"    var acceptable = [ 200, 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "LEAD_IDENTITY",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{UserAccountName}}\",\r\n  \"oldPassword\": \"{{UserPassword}}\",\r\n  \"newPassword\": \"{{UserPassword}}\",\r\n  \"confirmPassword\": \"{{UserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/change-password",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppLogin-Failed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 401\", function () {\r",
+									"    var acceptable = [ 401 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{$randomEmail}}\",\r\n  \"password\": \"{{UserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/account-login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"account-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    var code = js.code\r",
+									"    pm.expect(code != null).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"dallas\",\r\n  \"userId\": \"default\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/get-county-code",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"get-county-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCodeNegative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    var code = js.code\r",
+									"    pm.expect(code != null).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response code should be empty\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    var code = String(js.code);\r",
+									"    pm.expect(code.length == 0).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"dallas\",\r\n  \"userId\": \"unmapped\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/get-county-code",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"get-county-code"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -4633,12 +5261,45 @@
 					"        console.debug(error);",
 					"    }",
 					"}",
-					"",
+					"function doApplicationLogin() {",
+					"    try {",
+					"        var target = \"\".concat(basurl, \"/app/account-login\");",
+					"        var uid = pm.collectionVariables.get('UserAccountName');",
+					"        var pwd = pm.collectionVariables.get('UserPassword');",
+					"        ",
+					"        var payload = JSON.stringify({ \"userName\": uid, \"password\": pwd });",
+					"            ",
+					"        pm.sendRequest({",
+					"        url: target,",
+					"        method: 'POST',",
+					"        header: {",
+					"            \"Content-Type\": \"application/json\"",
+					"        },",
+					"        body: { ",
+					"            mode: 'raw',",
+					"            raw: payload",
+					"            }",
+					"        },",
+					"        function (err, response) {  ",
+					"            var jstring = response.json();",
+					"            var atoken = jstring[\"token\"];",
+					"            pm.environment.set(\"user_access_token\", atoken);",
+					"            });",
+					"    } catch (error) {",
+					"        console.debug(error);",
+					"    }",
+					"}",
 					"function execPreRequest() {",
 					"    try {",
 					"        if (folderName == \"search\" && methodName.indexOf(\"RemoteSearch\") >= 0) { return; }",
 					"        if (folderName == \"application\") { return; }",
 					"        if (folderName == \"home\") { return; }",
+					"        if (folderName == \"app\") { ",
+					"            if (methodName.indexOf('Change') >= 0 || methodName.indexOf('Set') >= 0){",
+					"                doApplicationLogin()",
+					"            }",
+					"\t\t\treturn; ",
+					"\t\t}",
 					"        getAppId();",
 					"        ",
 					"        if (folderName == \"signon\" && methodName.indexOf(\"Login\") >= 0) { return; }",
@@ -4671,7 +5332,7 @@
 		},
 		{
 			"key": "UseLocal",
-			"value": "True",
+			"value": "False",
 			"type": "string"
 		},
 		{
@@ -4884,6 +5545,41 @@
 		{
 			"key": "QUEUE_SAVE_URL",
 			"value": "api/queue/save",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_STATUS_SUMMARY_URL",
+			"value": "api/queue/queue-status",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_STATUS_OVERVIEW_URL",
+			"value": "api/queue/queue-summary",
+			"type": "string"
+		},
+		{
+			"key": "QUEUE_FETCH_NP_URL",
+			"value": "api/queue/fetch-non-person",
+			"type": "string"
+		},
+		{
+			"key": "WEB_UI_URL",
+			"value": "https://oxfordlegalleads.com",
+			"type": "string"
+		},
+		{
+			"key": "UserAccountName",
+			"value": "app.testing.account",
+			"type": "string"
+		},
+		{
+			"key": "UserPassword",
+			"value": "Abcd-123Four",
+			"type": "string"
+		},
+		{
+			"key": "UserEmail",
+			"value": "app.testing.account@testing.com",
 			"type": "string"
 		}
 	]

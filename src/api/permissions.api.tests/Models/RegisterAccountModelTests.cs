@@ -6,12 +6,6 @@ namespace permissions.api.tests.Models
 {
     public class RegisterAccountModelTests
     {
-        private static readonly Faker<RegisterAccountModel> faker =
-            new Faker<RegisterAccountModel>()
-            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
-            .RuleFor(x => x.Email, y => y.Person.Email);
-
         [Fact]
         public void ModelCanConstruct()
         {
@@ -27,7 +21,7 @@ namespace permissions.api.tests.Models
         {
             var exception = Record.Exception(() =>
             {
-                _ = faker.Generate();
+                _ = LeadUserBoGenerator.GetAccount();
             });
             Assert.Null(exception);
         }
@@ -35,15 +29,15 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelCanGetUserName()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             Assert.False(string.IsNullOrEmpty(test.UserName));
         }
 
         [Fact]
         public void ModelCanSetUserName()
         {
-            var test = faker.Generate();
-            var source = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
+            var source = LeadUserBoGenerator.GetAccount();
             test.UserName = source.UserName;
             Assert.Equal(source.UserName, test.UserName);
         }
@@ -51,15 +45,15 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelCanGetPassword()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             Assert.False(string.IsNullOrEmpty(test.Password));
         }
 
         [Fact]
         public void ModelCanSetPassword()
         {
-            var test = faker.Generate();
-            var source = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
+            var source = LeadUserBoGenerator.GetAccount();
             test.Password = source.Password;
             Assert.Equal(source.Password, test.Password);
         }
@@ -67,15 +61,15 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelCanGetEmail()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             Assert.False(string.IsNullOrEmpty(test.Email));
         }
 
         [Fact]
         public void ModelCanSetEmail()
         {
-            var test = faker.Generate();
-            var source = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
+            var source = LeadUserBoGenerator.GetAccount();
             test.Email = source.Email;
             Assert.Equal(source.Email, test.Email);
         }
@@ -83,7 +77,7 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelIsInValidWithEmptyUserName()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             test.UserName = string.Empty;
             var results = test.Validate(out bool isValid);
             Assert.False(isValid);
@@ -93,7 +87,7 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelIsInValidWithEmptyPassword()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             test.Password = string.Empty;
             var results = test.Validate(out bool isValid);
             Assert.False(isValid);
@@ -103,7 +97,7 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelIsInValidWithEmptyEmail()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             test.Email = string.Empty;
             var results = test.Validate(out bool isValid);
             Assert.False(isValid);
@@ -113,39 +107,11 @@ namespace permissions.api.tests.Models
         [Fact]
         public void ModelDefaultIsValid()
         {
-            var test = faker.Generate();
+            var test = LeadUserBoGenerator.GetAccount();
             var results = test.Validate(out bool isValid);
             Assert.True(isValid);
             Assert.Empty(results);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell",
-            "S2589:Boolean expressions should not be gratuitous",
-            Justification = "Lint eror. Int variable is incremented")]
-        private static string AppendSpecialCharacter(string source)
-        {
-            const string special = ".!#$%^*_+-=";
-            var tmpFaker = new Faker();
-            var charlist = special.ToCharArray();
-            if (string.IsNullOrWhiteSpace(source)) return source;
-            var items = source.ToCharArray();
-            var builder = new StringBuilder();
-            var additions = 0;
-            var upperCase = 0;
-            for (int i = 0; i < items.Length; i++)
-            {
-                var item = items[i];
-                if (!char.IsDigit(item) && upperCase < 2)
-                {
-                    builder.Append(tmpFaker.Lorem.Word()[..1].ToUpper());
-                    upperCase++;
-                }
-                builder.Append(items[i]);
-                if (additions > 2) continue;
-                builder.Append(tmpFaker.PickRandom(charlist));
-                additions++;
-            }
-            return builder.ToString();
-        }
     }
 }

@@ -60,7 +60,10 @@ namespace legallead.jdbc.implementations
         public async Task<bool> UpdateAccount(LeadUserDto user)
         {
             const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT ( ?, ?, ?, ?, ? )";
+            var tmpUserName = user.UserName ?? string.Empty;
+            user.UserName = user.Id;
             var indx = await AddOrUpdateAccount(user, command);
+            user.UserName = tmpUserName;
             return !string.IsNullOrEmpty(indx);
         }
 
@@ -84,16 +87,25 @@ namespace legallead.jdbc.implementations
             if (string.IsNullOrEmpty(user.Phrase)) return string.Empty;
             if (string.IsNullOrEmpty(user.Vector)) return string.Empty;
             if (string.IsNullOrEmpty(user.Token)) return string.Empty;
-            var parameters = new DynamicParameters();
-            parameters.Add("accountName", user.UserName);
-            parameters.Add("email_address", user.Email ?? string.Empty);
-            parameters.Add("passPhrase", user.Phrase);
-            parameters.Add("tokenKey", user.Vector);
-            parameters.Add("tokenCode", user.Token);
-            using var connection = _context.CreateConnection();
-            var response = await _command.QuerySingleOrDefaultAsync<LeadUserDto>(connection, command, parameters);
-            if (response == null || string.IsNullOrEmpty(response.Id)) return string.Empty;
-            return response.Id;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("accountName", user.UserName);
+                parameters.Add("email_address", user.Email ?? string.Empty);
+                parameters.Add("passPhrase", user.Phrase);
+                parameters.Add("tokenKey", user.Vector);
+                parameters.Add("tokenCode", user.Token);
+                using var connection = _context.CreateConnection();
+
+                var response = await _command.QuerySingleOrDefaultAsync<LeadUserDto>(connection, command, parameters);
+                if (response == null || string.IsNullOrEmpty(response.Id)) return string.Empty;
+                return response.Id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
         private async Task<bool> AddOrUpdatePermissions(LeadUserCountyIndexDto userPermissions, string command)
