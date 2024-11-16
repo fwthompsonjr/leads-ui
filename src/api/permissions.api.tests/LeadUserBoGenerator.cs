@@ -1,5 +1,6 @@
 ﻿using legallead.jdbc.entities;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Newtonsoft.Json;
 using System.Text;
@@ -54,12 +55,15 @@ namespace permissions.api.tests
             return faker.Generate();
         }
 
-        private static readonly Faker<RegisterAccountModel> faker =
-            new Faker<RegisterAccountModel>()
-            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
-            .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
-            .RuleFor(x => x.Email, y => y.Person.Email);
+        public static UserCountyCredentialModel GetCountyLoginRequest()
+        {
+            return countyFaker.Generate();
+        }
 
+        public static UserCountyPermissionModel GetCountyPermissionRequest()
+        {
+            return countyListFaker.Generate();
+        }
         public static string AppendSpecialCharacter(string source)
         {
             const string special = ".!#$%^*_+-=";
@@ -85,6 +89,38 @@ namespace permissions.api.tests
             }
             return builder.ToString();
         }
+
+        private static readonly List<string> supportedCounties =
+        [
+            "collin",
+            "tarrant",
+            "dallas",
+            "bexar",
+            "hidalgo",
+            "fort bend",
+            "el paso",
+            "travis",
+            "denton"
+        ];
+
+        private static readonly Faker<RegisterAccountModel> faker =
+            new Faker<RegisterAccountModel>()
+            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
+            .RuleFor(x => x.Email, y => y.Person.Email);
+
+        private static readonly Faker<UserCountyCredentialModel> countyFaker =
+            new Faker<UserCountyCredentialModel>()
+            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
+            .RuleFor(x => x.CountyName, y => y.PickRandom(supportedCounties));
+
+
+        private static readonly Faker<UserCountyPermissionModel> countyListFaker =
+            new Faker<UserCountyPermissionModel>()
+            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CountyList, y => y.Random.AlphaNumeric(22));
+
 
         private static string GetNumericList(int indexCount, Faker faker)
         {

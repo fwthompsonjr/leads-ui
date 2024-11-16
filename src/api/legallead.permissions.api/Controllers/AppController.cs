@@ -6,6 +6,7 @@ using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -98,13 +99,14 @@ namespace legallead.permissions.api.Controllers
         [HttpPost("set-county-login")]
         public async Task<IActionResult> SetCountyCredentialAsync(UserCountyCredentialModel model)
         {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             var merrors = model.Validate(out bool isModelValid);
             if (!isModelValid)
             {
                 var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var countyId = UsStateCountyList.All.Find(x => (x.ShortName ?? "").Equals(model.CountyName));
+            var countyId = UsStateCountyList.All.Find(x => (x.Name ?? "").Equals(model.CountyName, oic));
             if (countyId == null) return BadRequest($"Invalid county name {model.CountyName}");
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
@@ -115,6 +117,24 @@ namespace legallead.permissions.api.Controllers
                 model.Password);
             if (!registration) return Conflict();
             return Ok(countyId);
+        }
+
+        [HttpPost("set-county-permission")]
+        public async Task<IActionResult> SetCountyPermisionAsync(UserCountyPermissionModel model)
+        {
+            var merrors = model.Validate(out bool isModelValid);
+            if (!isModelValid)
+            {
+                var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
+                return BadRequest(response);
+            }
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var registration = await _leadService.ChangeCountyPermissionAsync(
+                user.Id,
+                model.CountyList);
+            if (!registration) return Conflict();
+            return Ok(model.CountyList);
         }
         private const string UserAccountAccess = "user account access credential";
     }

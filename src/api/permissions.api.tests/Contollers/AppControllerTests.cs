@@ -209,6 +209,111 @@ namespace permissions.api.tests.Contollers
             Assert.Null(error);
         }
 
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(8)]
+        [InlineData(9)]
+        [InlineData(10)]
+        public async Task ControllerCanSetCountyCredentialAsync(int conditionId)
+        {
+            var exclusions = new int[] { 0, 10 };
+            var request = LeadUserBoGenerator.GetCountyLoginRequest();
+            LeadUserModel? loginrsp = GetModel();
+            var changed = true;
+            if (conditionId == 2) { request.UserName = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 3) { request.UserName = string.Empty; } // required error
+
+            if (conditionId == 4) { request.CountyName = "admin"; } // min length error
+            if (conditionId == 5) { request.CountyName = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 6) { request.CountyName = string.Empty; } // required error
+
+            if (conditionId == 8) { request.Password = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 9) { request.Password = string.Empty; } // required error
+
+
+            if (conditionId == 10) { loginrsp = null; }
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
+                var json = GetLoginResponse(true);
+
+                mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(json);
+
+                mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
+                    .Returns(loginrsp);
+
+                mock.Setup(m => m.ChangeCountyCredentialAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                    .ReturnsAsync(changed);
+
+                var response = await sut.SetCountyCredentialAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                if (conditionId == 10) Assert.IsAssignableFrom<UnauthorizedResult>(response);
+                if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(5)]
+        [InlineData(6)]
+        [InlineData(10)]
+        public async Task ControllerCanSetCountyPermisionAsync(int conditionId)
+        {
+            var exclusions = new int[] { 0, 10 };
+            var request = LeadUserBoGenerator.GetCountyPermissionRequest();
+            LeadUserModel? loginrsp = GetModel();
+            var changed = true;
+            if (conditionId == 2) { request.UserName = fkr.Random.AlphaNumeric(300); } // max length error
+            if (conditionId == 3) { request.UserName = string.Empty; } // required error
+
+            if (conditionId == 5) { request.CountyList = fkr.Random.AlphaNumeric(600); } // max length error
+            if (conditionId == 6) { request.CountyList = string.Empty; } // required error
+
+
+            if (conditionId == 10) { loginrsp = null; }
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
+                var json = GetLoginResponse(true);
+
+                mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(json);
+
+                mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
+                    .Returns(loginrsp);
+
+                mock.Setup(m => m.ChangeCountyPermissionAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
+                    .ReturnsAsync(changed);
+
+                var response = await sut.SetCountyPermisionAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                if (conditionId == 10) Assert.IsAssignableFrom<UnauthorizedResult>(response);
+                if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
+
         private static string GetLoginResponse(bool authorized)
         {
             if (!authorized) return string.Empty;
