@@ -7,6 +7,6 @@ using legallead.jdbc.interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 var instance = ServiceSetup.AppServices.GetRequiredService<ILeadUserRepository>();
-var account = TestAccountProvider.GetChangePasswordAccount();
-var actual = await instance.UpdateAccount(account);
+var account = TestAccountProvider.GetChangeCountyAccount();
+var actual = await instance.UpdateCountyToken(account);
 Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
