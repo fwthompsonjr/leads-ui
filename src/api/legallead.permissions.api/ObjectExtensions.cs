@@ -303,6 +303,7 @@ namespace legallead.permissions.api
                 if (!request.Headers.TryGetValue(headerName, out var strings)) return default;
                 var source = strings.ToString();
                 if (string.IsNullOrEmpty(source)) return default;
+                if (typeof(T) == typeof(string)) return source as T;
                 var response = JsonConvert.DeserializeObject<T>(source);
                 return response;
             }
