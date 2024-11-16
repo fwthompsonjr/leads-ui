@@ -91,6 +91,10 @@ namespace legallead.permissions.api.Services
             return JsonConvert.SerializeObject(model);
         }
 
+        public async Task<LeadUserModel?> GetModelByIdAsync(string id)
+        {
+            return await GetLeadUserModelAsync(id);
+        }
 
         public LeadUserModel? GetUserModel(HttpRequest? request, string reason)
         {

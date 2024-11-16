@@ -15,5 +15,6 @@ namespace legallead.permissions.api.Interfaces
 
         Task<string> GetCountyCredentialAsync(string userId, string county);
         Task<string> GetCountyPermissionAsync(string userId);
+        Task<LeadUserModel?> GetModelByIdAsync(string id);
     }
 }

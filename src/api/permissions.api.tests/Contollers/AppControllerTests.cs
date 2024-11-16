@@ -181,7 +181,7 @@ namespace permissions.api.tests.Contollers
             if (conditionId == 10) { request.NewPassword = string.Empty; } // required error
             if (conditionId == 11) { request.NewPassword = "abcdefghijklmnop"; } // password strength error
 
-            if (conditionId == 12) { loginrsp = null; }
+            if (conditionId == 12) { changed = false; }
             var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
@@ -191,6 +191,10 @@ namespace permissions.api.tests.Contollers
 
                 mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
                     .ReturnsAsync(json);
+
+
+                mock.Setup(m => m.GetModelByIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync(loginrsp);
 
                 mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
                     .Returns(loginrsp);
@@ -203,7 +207,7 @@ namespace permissions.api.tests.Contollers
 
                 var response = await sut.ChangePasswordAsync(request);
                 if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
-                if (conditionId == 12) Assert.IsAssignableFrom<UnauthorizedResult>(response);
+                if (conditionId == 12) Assert.IsAssignableFrom<ConflictResult>(response);
                 if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
             });
             Assert.Null(error);
@@ -250,6 +254,9 @@ namespace permissions.api.tests.Contollers
 
                 mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
                     .Returns(loginrsp);
+
+                mock.Setup(m => m.GetModelByIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync(loginrsp);
 
                 mock.Setup(m => m.ChangeCountyCredentialAsync(
                     It.IsAny<string>(),
@@ -300,6 +307,11 @@ namespace permissions.api.tests.Contollers
 
                 mock.Setup(m => m.GetUserModel(It.IsAny<HttpRequest>(), It.IsAny<string>()))
                     .Returns(loginrsp);
+
+
+
+                mock.Setup(m => m.GetModelByIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync(loginrsp);
 
                 mock.Setup(m => m.ChangeCountyPermissionAsync(
                     It.IsAny<string>(),

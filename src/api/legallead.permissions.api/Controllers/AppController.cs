@@ -116,7 +116,10 @@ namespace legallead.permissions.api.Controllers
                 model.UserName,
                 model.Password);
             if (!registration) return Conflict();
-            return Ok(countyId);
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { county = countyId, token });
         }
 
         [HttpPost("set-county-permission")]
@@ -130,11 +133,15 @@ namespace legallead.permissions.api.Controllers
             }
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
+            var counties = model.CountyList;
             var registration = await _leadService.ChangeCountyPermissionAsync(
                 user.Id,
                 model.CountyList);
             if (!registration) return Conflict();
-            return Ok(model.CountyList);
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { counties, token });
         }
         private const string UserAccountAccess = "user account access credential";
     }
