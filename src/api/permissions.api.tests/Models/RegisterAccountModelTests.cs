@@ -1,6 +1,5 @@
 ﻿using legallead.permissions.api;
 using legallead.permissions.api.Model;
-using System.Text;
 
 namespace permissions.api.tests.Models
 {

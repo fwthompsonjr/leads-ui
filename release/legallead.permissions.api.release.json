@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.425.--",
+		"description": "API - authenication - allow lead user login",
+		"date": "2024-11-16 19:30:00"
+	},
+	{
 		"name": "3.2.424.--",
 		"description": "API - search - update restriction status",
 		"date": "2024-09-24 15:30:00"

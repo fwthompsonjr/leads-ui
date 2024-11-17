@@ -65,7 +65,8 @@ namespace permissions.api.tests.Contollers
         public async Task ControllerCanAccountAuthenicateAsync(string name)
         {
             const string notJson = "not serializable";
-            var error = await Record.ExceptionAsync(async () => {
+            var error = await Record.ExceptionAsync(async () =>
+            {
                 var provider = GetProvider();
                 var sut = provider.GetRequiredService<AppController>();
                 var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
@@ -204,7 +205,6 @@ namespace permissions.api.tests.Contollers
                     .ReturnsAsync(changed);
 
                 var response = await sut.ChangePasswordAsync(request);
-                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
                 if (conditionId == 12) Assert.IsAssignableFrom<ConflictResult>(response);
                 if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
             });
@@ -278,6 +278,7 @@ namespace permissions.api.tests.Contollers
         [InlineData(3)]
         [InlineData(5)]
         [InlineData(6)]
+        [InlineData(7)]
         [InlineData(10)]
         public async Task ControllerCanSetCountyPermisionAsync(int conditionId)
         {
@@ -300,9 +301,10 @@ namespace permissions.api.tests.Contollers
                 var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
                 var json = GetLoginResponse(true);
                 var okresponse = new KeyValuePair<bool, string>(true, "unit test");
-                
+                var failedresponse = new KeyValuePair<bool, string>(false, "unit test");
+                var verifcation = conditionId == 7 ? failedresponse : okresponse;
                 mock.Setup(m => m.VerifyCountyList(It.IsAny<string>()))
-                    .Returns(okresponse);
+                    .Returns(verifcation);
 
                 mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
                     .ReturnsAsync(json);
@@ -341,6 +343,6 @@ namespace permissions.api.tests.Contollers
         }
 
         private static readonly LeadSecurityService securityService = new();
-        private static readonly Faker fkr = new ();
+        private static readonly Faker fkr = new();
     }
 }

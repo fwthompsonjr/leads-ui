@@ -4950,7 +4950,7 @@
 									"});\r",
 									"\r",
 									"pm.test(\"Status code should be 200\", function () {\r",
-									"    var acceptable = [ 200, 409 ];\r",
+									"    var acceptable = [ 200 ];\r",
 									"    var code = pm.response.code;\r",
 									"    pm.expect(acceptable).to.include(code);\r",
 									"});"
@@ -4972,6 +4972,165 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n  \"userName\": \"{{UserAccountName}}\",\r\n  \"oldPassword\": \"{{UserPassword}}\",\r\n  \"newPassword\": \"{{UserPassword}}\",\r\n  \"confirmPassword\": \"{{UserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/change-password",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppSetCountyLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "LEAD_IDENTITY",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"countyName\": \"collin\",\r\n  \"userName\": \"county-login-name\",\r\n  \"password\": \"{{UserPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/set-county-login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"set-county-login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppSetCountyPermission",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "LEAD_IDENTITY",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"countyList\": \"-1\",\r\n  \"userName\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/set-county-permission",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"set-county-permission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AppChangePasswordFailure",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 409\", function () {\r",
+									"    var acceptable = [ 409 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "LEAD_IDENTITY",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"{{UserAccountName}}\",\r\n  \"oldPassword\": \"{{UserPasswordInvalid}}\",\r\n  \"newPassword\": \"{{UserPassword}}\",\r\n  \"confirmPassword\": \"{{UserPassword}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5580,6 +5739,11 @@
 		{
 			"key": "UserEmail",
 			"value": "app.testing.account@testing.com",
+			"type": "string"
+		},
+		{
+			"key": "UserPasswordInvalid",
+			"value": "Wxyz-525Wrong",
 			"type": "string"
 		}
 	]

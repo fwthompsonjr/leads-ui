@@ -1,18 +1,16 @@
-﻿using legallead.jdbc.entities;
-using legallead.json.db;
+﻿using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("/app")]
     [ApiController]
-    public class AppController: ControllerBase
+    public class AppController : ControllerBase
     {
         private readonly IAppAuthenicationService _authenticationService;
         private readonly ICountyAuthorizationService _authorizationService;
