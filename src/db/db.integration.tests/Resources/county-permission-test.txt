@@ -1,0 +1,37 @@
+{
+	"LeadUserId": "4411c3b7-a44d-11ef-99ce-0af7a01f52e9",
+	"CountyName": "collin",
+	"Phrase": "copying.the.card.won't.d",
+	"Vector": "Lw50QBpMJxBQbQLgB4h6Dw==",
+	"Token": "MW1BphJIs2YFqhN7uuAwSeZB9/Rt7GgxKUrXjA0K+yY=",
+	"CreateDate": null,
+	"InsertFieldList": [
+		"LeadUserId",
+		"CountyName",
+		"Phrase",
+		"Vector",
+		"Token",
+		"CreateDate",
+		"Id"
+	],
+	"UpdateFieldList": [
+		"LeadUserId",
+		"CountyName",
+		"Phrase",
+		"Vector",
+		"Token",
+		"CreateDate",
+		"Id"
+	],
+	"Id": "",
+	"TableName": "LEADUSERCOUNTY",
+	"FieldList": [
+		"LeadUserId",
+		"CountyName",
+		"Phrase",
+		"Vector",
+		"Token",
+		"CreateDate",
+		"Id"
+	]
+}

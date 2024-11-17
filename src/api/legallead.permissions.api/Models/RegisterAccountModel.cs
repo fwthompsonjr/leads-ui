@@ -2,7 +2,7 @@
 
 namespace legallead.permissions.api.Model
 {
-    public class    RegisterAccountModel
+    public class RegisterAccountModel
     {
         private const string Pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,255}$";
 

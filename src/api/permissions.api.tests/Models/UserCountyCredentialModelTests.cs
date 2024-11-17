@@ -1,11 +1,5 @@
 ﻿using legallead.permissions.api;
-using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Models
 {

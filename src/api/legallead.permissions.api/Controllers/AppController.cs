@@ -1,18 +1,16 @@
-﻿using legallead.jdbc.entities;
-using legallead.json.db;
+﻿using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("/app")]
     [ApiController]
-    public class AppController: ControllerBase
+    public class AppController : ControllerBase
     {
         private readonly IAppAuthenicationService _authenticationService;
         private readonly ICountyAuthorizationService _authorizationService;
@@ -116,7 +114,10 @@ namespace legallead.permissions.api.Controllers
                 model.UserName,
                 model.Password);
             if (!registration) return Conflict();
-            return Ok(countyId);
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { county = countyId, token });
         }
 
         [HttpPost("set-county-permission")]
@@ -128,13 +129,22 @@ namespace legallead.permissions.api.Controllers
                 var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
+            var counties = model.CountyList;
+            var validation = _leadService.VerifyCountyList(counties);
+            if (!validation.Key)
+            {
+                return BadRequest(validation);
+            }
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
             var registration = await _leadService.ChangeCountyPermissionAsync(
                 user.Id,
                 model.CountyList);
             if (!registration) return Conflict();
-            return Ok(model.CountyList);
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { counties, token });
         }
         private const string UserAccountAccess = "user account access credential";
     }

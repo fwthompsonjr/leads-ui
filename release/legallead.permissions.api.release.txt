@@ -59,3 +59,4 @@ Release information - legallead.permissions.api
 09/24/2024 15:30:00 PM Add method to update restriction status
 09/28/2024 14:45:00 PM Update assemblies to support harris-jp revision
 11/08/2024 14:30:00 PM Update api to support county code post
+11/16/2024 19:30:00 PM Update api to db authentication for lead accounts

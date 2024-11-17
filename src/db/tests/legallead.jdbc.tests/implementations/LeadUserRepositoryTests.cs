@@ -229,7 +229,7 @@ namespace legallead.jdbc.tests.implementations
         {
             var request = userfaker.Generate();
             var result = conditionId == 5 ? null : userfaker.Generate();
-            if (conditionId == 1) { request.UserName = string.Empty; }
+            if (conditionId == 1) { request.Id = string.Empty; }
             if (conditionId == 2) { request.Phrase = string.Empty; }
             if (conditionId == 3) { request.Vector = string.Empty; }
             if (conditionId == 4) { request.Token = string.Empty; }
