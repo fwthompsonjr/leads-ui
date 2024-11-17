@@ -32,10 +32,27 @@ namespace db.integration.tests
             }
         }
 
+        public static LeadUserCountyIndexDto GetChangeCountyIndex()
+        {
+            if (_changePermissionDto != null) return _changePermissionDto;
+            lock (locker)
+            {
+                var builder = new StringBuilder(changePermission);
+                builder.Replace("'", '"'.ToString());
+                builder.Replace("?", "'");
+                var js = builder.ToString();
+                var tmp = JsonConvert.DeserializeObject<LeadUserCountyIndexDto>(js) ?? new();
+                _changePermissionDto = tmp;
+                return _changePermissionDto;
+            }
+        }
+
         private static LeadUserDto? _changePasswordDto = null;
         private static LeadUserCountyDto? _changeCountyDto = null;
+        private static LeadUserCountyIndexDto? _changePermissionDto = null;
         private static readonly string changePasswordJson = Properties.Resources.change_password_test;
         private static readonly object locker = new();
+        private static readonly string changePermission = "{'LeadUserId':'4411c3b7-a44d-11ef-99ce-0af7a01f52e9','CountyList':'-1','CreateDate':null,'InsertFieldList':['LeadUserId','CountyList','CreateDate','Id'],'UpdateFieldList':['LeadUserId','CountyList','CreateDate','Id'],'Id':'','TableName':'LEADUSERCOUNTYINDEXES','FieldList':['LeadUserId','CountyList','CreateDate','Id']}";
         private static readonly string changeCounty = "{" + Environment.NewLine +
         "'LeadUserId': '4411c3b7-a44d-11ef-99ce-0af7a01f52e9'," + Environment.NewLine +
         "'CountyName': 'collin'," + Environment.NewLine +

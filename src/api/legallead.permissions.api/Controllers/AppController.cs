@@ -131,9 +131,14 @@ namespace legallead.permissions.api.Controllers
                 var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
+            var counties = model.CountyList;
+            var validation = _leadService.VerifyCountyList(counties);
+            if (!validation.Key)
+            {
+                return BadRequest(validation);
+            }
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
-            var counties = model.CountyList;
             var registration = await _leadService.ChangeCountyPermissionAsync(
                 user.Id,
                 model.CountyList);

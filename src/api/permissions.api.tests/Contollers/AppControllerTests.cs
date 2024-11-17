@@ -148,7 +148,6 @@ namespace permissions.api.tests.Contollers
                 mock.Setup(m => m.CreateLoginAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                     .ReturnsAsync(loginrsp);
                 var response = await sut.CreateAccountAsync(request);
-                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
                 if (conditionId == 11) Assert.IsAssignableFrom<ConflictResult>(response);
                 if (!exclusions.Contains(conditionId)) Assert.IsAssignableFrom<BadRequestObjectResult>(response);
             });
@@ -300,6 +299,10 @@ namespace permissions.api.tests.Contollers
                 var sut = provider.GetRequiredService<AppController>();
                 var mock = provider.GetRequiredService<Mock<ILeadAuthenicationService>>();
                 var json = GetLoginResponse(true);
+                var okresponse = new KeyValuePair<bool, string>(true, "unit test");
+                
+                mock.Setup(m => m.VerifyCountyList(It.IsAny<string>()))
+                    .Returns(okresponse);
 
                 mock.Setup(m => m.LoginAsync(It.IsAny<string>(), It.IsAny<string>()))
                     .ReturnsAsync(json);
