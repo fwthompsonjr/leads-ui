@@ -3,6 +3,7 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Services;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace permissions.api.tests.Services
@@ -41,6 +42,25 @@ namespace permissions.api.tests.Services
                     request.password);
             });
             Assert.Null(error);
+        }
+        [Theory]
+        [InlineData("-1", true)]
+        [InlineData("1,10,20", true)]
+        [InlineData("30,40,60", true)]
+        [InlineData("70,80,90", true)]
+        [InlineData("100,110,120,130", true)]
+        [InlineData("100", true)]
+        [InlineData("100,110,120,130,150", false)]
+        [InlineData("invalid", false)]
+        [InlineData("-5", false)]
+        [InlineData("100,110,120,130,alpha", false)]
+        [InlineData("", false)]
+        public void ServiceCanVerifyCountyList(string countyList, bool expected)
+        {
+            var service = new MockLeadAuthenicationService();
+            var result = service.Svc.VerifyCountyList(countyList);
+            var actual = result.Key;
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
@@ -125,6 +145,60 @@ namespace permissions.api.tests.Services
             Assert.Null(error);
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task ServiceCanGetModelByIdAsync(bool isCreated)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var fkr = new Faker();
+                var request = new
+                {
+                    userId = fkr.Random.Guid().ToString("D"),
+                    county = fkr.Address.County(),
+                    userName = fkr.Person.UserName,
+                    password = fkr.Random.AlphaNumeric(15)
+                };
+                var service = new MockLeadAuthenicationService();
+                service.SetupCountyCredential(request.county, request.userName, request.password, isCreated);
+                // Act
+                _ = await service.Svc.GetModelByIdAsync(
+                    request.userName);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public void ServiceCanGetUserModelFromRequest(int conditionId)
+        {
+            //Arrange
+
+            var fkr = new Faker();
+            var bo = LeadUserBoGenerator.GetBo(1, 1);
+            var model = securityService.GetModel(bo);
+            var reason = fkr.Lorem.Sentence();
+            var token = LeadTokenService.GenerateToken(reason, model);
+            var request = new Mock<HttpRequest>();
+            request.Setup(x => x.Scheme).Returns("http");
+            request.Setup(x => x.Host).Returns(HostString.FromUriComponent("http://localhost:8080"));
+            request.Setup(x => x.PathBase).Returns(PathString.FromUriComponent("/api"));
+            var headers = new HeaderDictionary
+            {
+            { "LEAD_IDENTITY", new Microsoft.Extensions.Primitives.StringValues(token) }
+            };
+            request.SetupGet(m => m.Headers).Returns(headers);
+            var error = Record.Exception(() =>
+            {
+                var service = new MockLeadAuthenicationService();
+                // Act
+                _ = service.Svc.GetUserModel(
+                    request.Object,
+                    reason);
+            });
+            Assert.Null(error);
+        }
         private sealed class MockLeadAuthenicationService
         {
             private Mock<ILeadUserRepository> MqRepo { get; } = new();
@@ -205,5 +279,6 @@ namespace permissions.api.tests.Services
             }
             private readonly LeadAuthenicationService _service;
         }
+        private static readonly LeadSecurityService securityService = new();
     }
 }

@@ -3,6 +3,7 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
+using Stripe.Events;
 
 namespace legallead.permissions.api.Services
 {
@@ -10,6 +11,48 @@ namespace legallead.permissions.api.Services
     {
         private readonly ILeadUserRepository _repo = repo;
         private readonly ILeadSecurityService _svc = svc;
+
+
+        public KeyValuePair<bool, string> VerifyCountyList(string countyList)
+        {
+            const char comma = ',';
+            var ispassed = true;
+            var reason = string.Empty;
+            var fallback = new KeyValuePair<bool, string>(ispassed, reason);
+            if (string.IsNullOrWhiteSpace(countyList))
+            {
+                ispassed = false;
+                reason = "County list is blank";
+                return new KeyValuePair<bool, string>(ispassed, reason);
+            }
+            if (countyList.Equals("-1"))
+            {
+                return fallback;
+            }
+            var entries = countyList.Split(comma, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var hasnonumeric = entries.Exists(x => !int.TryParse(x, out var value));
+            if (hasnonumeric)
+            {
+                ispassed = false;
+                reason = "County list contains non-numeric value.";
+                return new KeyValuePair<bool, string>(ispassed, reason);
+            }
+            var values = Enum.GetValues(typeof(SourceType)).Cast<int>().ToList();
+            var numerics = entries
+                .FindAll(x => int.TryParse(x, out var value))
+                .Select(x => Convert.ToInt32(x))
+                .Where(w => !values.Contains(w))
+                .ToList();
+
+            if (numerics.Count > 0)
+            {
+                ispassed = false;
+                reason = "County list contains invalid county index value.";
+                return new KeyValuePair<bool, string>(ispassed, reason);
+            }
+
+            return fallback;
+        }
 
         public async Task<bool> ChangeCountyCredentialAsync(string userId, string county, string userName, string password)
         {
@@ -158,5 +201,21 @@ namespace legallead.permissions.api.Services
         }
 
         private static readonly SecureStringService secureSvcs = new();
+        private enum SourceType
+        {
+            DentonCounty = 1,
+            CollinCounty = 20,
+            TarrantCounty = 10,
+            HarrisCivil = 30,
+            HarrisCriminal = 40,
+            DallasCounty = 60,
+            TravisCounty = 70,
+            BexarCounty = 80,
+            HidalgoCounty = 90,
+            ElPasoCounty = 100,
+            FortBendCounty = 110,
+            WilliamsonCounty = 120,
+            GraysonCounty = 130,
+        }
     }
 }

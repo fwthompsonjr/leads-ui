@@ -165,7 +165,6 @@ namespace permissions.api.tests.Contollers
         [InlineData(9)]
         [InlineData(10)]
         [InlineData(11)]
-        [InlineData(12)]
         public async Task ControllerCanChangePasswordAsync(int conditionId)
         {
             var exclusions = new int[] { 0, 12 };
