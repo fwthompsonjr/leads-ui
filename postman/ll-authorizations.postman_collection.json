@@ -4763,42 +4763,10 @@
 			]
 		},
 		{
-			"name": "web",
-			"item": [
-				{
-					"name": "county-code-dallas",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"dallas\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{WEB_UI_URL}}/app/get-county-code",
-							"host": [
-								"{{WEB_UI_URL}}"
-							],
-							"path": [
-								"app",
-								"get-county-code"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "app",
 			"item": [
 				{
-					"name": "AuthenicateFail",
+					"name": "AuthenicateNegative",
 					"event": [
 						{
 							"listen": "test",
@@ -5098,7 +5066,7 @@
 					"response": []
 				},
 				{
-					"name": "AppChangePasswordFailure",
+					"name": "AppChangePasswordNegtive",
 					"event": [
 						{
 							"listen": "test",
@@ -5151,7 +5119,7 @@
 					"response": []
 				},
 				{
-					"name": "AppLogin-Failed",
+					"name": "AppLoginNegative",
 					"event": [
 						{
 							"listen": "test",
