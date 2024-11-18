@@ -26,6 +26,7 @@ namespace permissions.api.tests.Services
         [Fact]
         public void SerivceCanGetUserData()
         {
+            // thread check
             var error = Record.Exception(() =>
             {
                 var bo = GetBo();

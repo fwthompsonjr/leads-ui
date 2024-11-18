@@ -10,22 +10,14 @@ namespace legallead.permissions.api.Controllers
 {
     [Route("/app")]
     [ApiController]
-    public class AppController : ControllerBase
+    public class AppController(
+    IAppAuthenicationService appservice,
+    ICountyAuthorizationService service,
+    ILeadAuthenicationService lead) : ControllerBase
     {
-        private readonly IAppAuthenicationService _authenticationService;
-        private readonly ICountyAuthorizationService _authorizationService;
-        private readonly ILeadAuthenicationService _leadService;
-
-        public AppController(
-        IAppAuthenicationService appservice,
-        ICountyAuthorizationService service,
-        ILeadAuthenicationService lead)
-        {
-            _authenticationService = appservice;
-            _authorizationService = service;
-            _leadService = lead;
-            UsStateCounty.Initialize();
-        }
+        private readonly IAppAuthenicationService _authenticationService = appservice;
+        private readonly ICountyAuthorizationService _authorizationService = service;
+        private readonly ILeadAuthenicationService _leadService = lead;
 
         [HttpPost("get-county-code")]
         public IActionResult GetCounty(CountyCodeRequest model)
@@ -104,7 +96,7 @@ namespace legallead.permissions.api.Controllers
                 var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
                 return BadRequest(response);
             }
-            var countyId = UsStateCountyList.All.Find(x => (x.Name ?? "").Equals(model.CountyName, oic));
+            var countyId = GetCounties.Find(x => (x.Name ?? "").Equals(model.CountyName, oic));
             if (countyId == null) return BadRequest($"Invalid county name {model.CountyName}");
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
@@ -139,13 +131,87 @@ namespace legallead.permissions.api.Controllers
             if (user == null) return Unauthorized();
             var registration = await _leadService.ChangeCountyPermissionAsync(
                 user.Id,
-                model.CountyList);
+                counties);
             if (!registration) return Conflict();
             var updated = await _leadService.GetModelByIdAsync(user.Id);
             if (updated == null) return UnprocessableEntity();
             var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
             return Ok(new { counties, token });
         }
+
+
+        [HttpPost("set-county-usage-limit")]
+        public async Task<IActionResult> SetCountyUsageAsync(UserCountyUsageModel model)
+        {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+            var merrors = model.Validate(out bool isModelValid);
+            if (!isModelValid)
+            {
+                var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
+                return BadRequest(response);
+            }
+            var countyId = GetCounties.Find(x => (x.Name ?? "").Equals(model.CountyName, oic));
+            if (countyId == null) return BadRequest($"Invalid county name {model.CountyName}");
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var registration = await _leadService.AddCountyUsageAsync(
+                user.Id,
+                model.CountyName,
+                model.MonthlyUsage);
+            if (!registration) return Conflict();
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { county = countyId, usage = model.MonthlyUsage, token });
+        }
+
+
+        [HttpPost("add-county-usage-record")]
+        public async Task<IActionResult> AddCountyUsageRecordAsync(UserCountyUsageModel model)
+        {
+            var merrors = model.Validate(out bool isModelValid);
+            if (!isModelValid)
+            {
+                var response = string.Join(';', merrors.Select(m => m.ErrorMessage));
+                return BadRequest(response);
+            }
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var registration = await _leadService.AddCountyUsageIncidentAsync(
+                user.Id,
+                model.CountyName,
+                model.MonthlyUsage);
+            if (!registration) return Conflict();
+            var updated = await _leadService.GetModelByIdAsync(user.Id);
+            if (updated == null) return UnprocessableEntity();
+            var token = LeadTokenService.GenerateToken(UserAccountAccess, updated);
+            return Ok(new { county = model.CountyName, usage = model.MonthlyUsage, token });
+        }
+
+
+        [HttpPost("get-usage-list")]
+        public async Task<IActionResult> GetUserUsageAsync(UserCountyUsageRequest model)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var registration = await _leadService.GetUsageUserByIdAsync(
+                user.Id);
+            registration = registration.FindAll(x => x.IncidentMonth == model.CreateDate.Month
+                && x.IncidentYear == model.CreateDate.Year);
+            return Ok(registration);
+        }
+
         private const string UserAccountAccess = "user account access credential";
+        private static List<UsStateCounty> GetCounties
+        {
+            get
+            {
+                if (txcounties != null) return txcounties;
+                UsStateCounty.Initialize();
+                txcounties = new(UsStateCountyList.All.FindAll(x => x.StateCode == "TX"));
+                return txcounties;
+            }
+        }
+        private static List<UsStateCounty>? txcounties;
     }
 }
