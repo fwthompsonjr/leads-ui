@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.427.--",
+		"description": "API - authenication - setup usage limits - fix",
+		"date": "2024-11-18 08:30:00"
+	},
+	{
 		"name": "3.2.426.--",
 		"description": "API - authenication - setup usage limits by month",
 		"date": "2024-11-17 20:45:00"

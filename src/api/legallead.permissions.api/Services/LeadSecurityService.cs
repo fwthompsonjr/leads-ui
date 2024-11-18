@@ -26,7 +26,7 @@ namespace legallead.permissions.api.Services
             if (data == null || data.Count == 0) return string.Empty;
             var items = data.Select(d =>
             {
-                return new { d.LeadUserId, d.CountyName, Model = GetDecodedString(MapFrom(d)) };
+                return new { d.LeadUserId, d.CountyName, MonthlyLimit = d.MonthlyUsage, Model = GetDecodedString(MapFrom(d)) };
             });
             return JsonConvert.SerializeObject(items);
         }
