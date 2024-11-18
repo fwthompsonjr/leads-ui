@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc.entities;
+using legallead.permissions.api.Entities;
 using legallead.permissions.api.Model;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
@@ -64,6 +65,13 @@ namespace permissions.api.tests
         {
             return countyListFaker.Generate();
         }
+
+
+        public static UserCountyUsageModel GetCountyUsageRequest()
+        {
+            return countyLimitFaker.Generate();
+        }
+
         public static string AppendSpecialCharacter(string source)
         {
             const string special = ".!#$%^*_+-=";
@@ -115,6 +123,12 @@ namespace permissions.api.tests
             .RuleFor(x => x.Password, y => AppendSpecialCharacter(y.Random.AlphaNumeric(22)))
             .RuleFor(x => x.CountyName, y => y.PickRandom(supportedCounties));
 
+
+        private static readonly Faker<UserCountyUsageModel> countyLimitFaker =
+            new Faker<UserCountyUsageModel>()
+            .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.MonthlyUsage, y => y.Random.Int(0, 2500))
+            .RuleFor(x => x.CountyName, y => y.PickRandom(supportedCounties));
 
         private static readonly Faker<UserCountyPermissionModel> countyListFaker =
             new Faker<UserCountyPermissionModel>()

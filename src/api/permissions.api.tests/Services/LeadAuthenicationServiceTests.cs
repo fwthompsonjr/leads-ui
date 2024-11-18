@@ -199,6 +199,89 @@ namespace permissions.api.tests.Services
             });
             Assert.Null(error);
         }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async Task ServiceCanAddCountyUsageAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var expected = testId == 0;
+                var fkr = new Faker();
+                var request = new
+                {
+                    userId = (testId == 1) ? string.Empty : fkr.Random.Guid().ToString("D"),
+                    county = (testId == 2) ? string.Empty : fkr.Address.County(),
+                    usage = (testId == 3) ? 1000000 : fkr.Random.Int(0, 500)
+                };
+                var service = new MockLeadAuthenicationService();
+                service.SetupAddCountyUsage();
+                // Act
+                var actual = await service.Svc.AddCountyUsageAsync(
+                    request.userId,
+                    request.county,
+                    request.usage);
+                Assert.Equal(expected, actual);
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public async Task ServiceCanAddCountyUsageIncidentAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var expected = testId == 0;
+                var fkr = new Faker();
+                var request = new
+                {
+                    userId = (testId == 1) ? string.Empty : fkr.Random.Guid().ToString("D"),
+                    county = (testId == 2) ? string.Empty : fkr.Address.County(),
+                    usage = (testId == 3) ? 1000000 : fkr.Random.Int(0, 500)
+                };
+                var service = new MockLeadAuthenicationService();
+                service.SetupAddCountyUsage();
+                // Act
+                var actual = await service.Svc.AddCountyUsageIncidentAsync(
+                    request.userId,
+                    request.county,
+                    request.usage);
+                Assert.Equal(expected, actual);
+            });
+            Assert.Null(error);
+        }
+
+        [Fact]
+        public async Task ServiceCanGetUsageByIdAsync()
+        {
+
+            var fkr = new Faker();
+            var request = new
+            {
+                userId = fkr.Random.Guid().ToString("D")
+            };
+            var list = new List<LeadUserCountyUsageDto> {
+                new() { CountyName = "a", MonthlyUsage = 1, CreateDate = DateTime.Now },
+                new() { CountyName = "b", MonthlyUsage = 5, CreateDate = DateTime.Now }
+            };
+
+            var service = new MockLeadAuthenicationService();
+            service.SetupGetCountyUsage(list);
+            // Act
+            var actual = await service.Svc.GetUsageUserByIdAsync(
+                request.userId);
+            Assert.Equal(list.Count, actual.Count);
+        }
+
+
         private sealed class MockLeadAuthenicationService
         {
             private Mock<ILeadUserRepository> MqRepo { get; } = new();
@@ -276,6 +359,24 @@ namespace permissions.api.tests.Services
                 var addResponse = apiResponse ? userId : string.Empty;
                 MqRepo.Setup(x => x.AddAccount(It.IsAny<LeadUserDto>()))
                     .ReturnsAsync(addResponse);
+            }
+
+
+            public void SetupAddCountyUsage()
+            {
+                MqRepo.Setup(x => x.AddCountyUsage(
+                    It.IsAny<LeadUserCountyDto>()
+                    )).ReturnsAsync(true);
+                MqRepo.Setup(x => x.AppendUsageIncident(
+                    It.IsAny<LeadUserCountyDto>()
+                    )).ReturnsAsync(true);
+            }
+
+            public void SetupGetCountyUsage(List<LeadUserCountyUsageDto> list)
+            {
+                MqRepo.Setup(x => x.GetUsageUserById(
+                    It.IsAny<string>()
+                    )).ReturnsAsync(list);
             }
             private readonly LeadAuthenicationService _service;
         }

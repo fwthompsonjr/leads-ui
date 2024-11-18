@@ -52,6 +52,37 @@ namespace legallead.permissions.api.Services
             return fallback;
         }
 
+        public async Task<bool> AddCountyUsageAsync(string userId, string county, int monthlyUsage)
+        {
+            if (string.IsNullOrEmpty(userId) ||
+                string.IsNullOrEmpty(county) ||
+                monthlyUsage > 100000) return false;
+            var dto = new LeadUserCountyDto
+            {
+                LeadUserId = userId,
+                CountyName = county,
+                MonthlyUsage = monthlyUsage
+            };
+
+            var response = await _repo.AddCountyUsage(dto);
+            return response;
+        }
+
+        public async Task<bool> AddCountyUsageIncidentAsync(string userId, string county, int monthlyUsage)
+        {
+            if (string.IsNullOrEmpty(userId) ||
+                string.IsNullOrEmpty(county) ||
+                monthlyUsage > 100000) return false;
+            var dto = new LeadUserCountyDto
+            {
+                LeadUserId = userId,
+                CountyName = county,
+                MonthlyUsage = monthlyUsage
+            };
+
+            var response = await _repo.AppendUsageIncident(dto);
+            return response;
+        }
         public async Task<bool> ChangeCountyCredentialAsync(string userId, string county, string userName, string password)
         {
             var model = await GetLeadUserModelAsync(userId);
@@ -123,7 +154,19 @@ namespace legallead.permissions.api.Services
             if (model == null) return string.Empty;
             return _svc.GetCountyPermissionData(model);
         }
-
+        public async Task<List<GetUsageUserByIdResponse>> GetUsageUserByIdAsync(string userId)
+        {
+            var list = new List<GetUsageUserByIdResponse>();
+            var response = await _repo.GetUsageUserById(userId);
+            var items = response.Select(s => new GetUsageUserByIdResponse
+            {
+                CountyName = s.CountyName,
+                MonthlyUsage = s.MonthlyUsage.GetValueOrDefault(),
+                CreateDate = s.CreateDate,
+            });
+            list.AddRange(items);
+            return list;
+        }
         public async Task<string> LoginAsync(string userName, string password)
         {
             var model = await GetLeadUserModelAsync(userName, false);
