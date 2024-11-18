@@ -29,6 +29,16 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Phrase, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Vector, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Token, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.MonthlyUsage, y => y.Random.Int(0, 1000000))
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
+
+        private static readonly Faker<LeadUserCountyUsageDto> usagefaker =
+            new Faker<LeadUserCountyUsageDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LeadUserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CountyName, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.MonthlyUsage, y => y.Random.Int(0, 1000000))
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
         private static readonly Faker<LeadUserCountyIndexDto> permissionfaker =
@@ -112,6 +122,60 @@ namespace legallead.jdbc.tests.implementations
             Assert.Equal(expected, actual);
         }
 
+
+        [Theory]
+        [InlineData(0, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        [InlineData(3, false)]
+        [InlineData(6, false)]
+        [InlineData(7, false)]
+        public async Task RepoCanAddCountyUsage(int conditionId, bool expected)
+        {
+            var request = tokenfaker.Generate();
+            var result = conditionId == 6 ? null: tokenfaker.Generate();
+            if (conditionId == 1) { request.LeadUserId = string.Empty; }
+            if (conditionId == 2) { request.CountyName = string.Empty; }
+            if (conditionId == 3) { request.MonthlyUsage = null; }
+            if (conditionId == 7 && result != null) { result.Id = string.Empty; }
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LeadUserCountyDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            var actual = await service.AddCountyUsage(request);
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        [InlineData(3, false)]
+        [InlineData(6, false)]
+        [InlineData(7, false)]
+        public async Task RepoCanAppendUsageIncident(int conditionId, bool expected)
+        {
+            var request = tokenfaker.Generate();
+            var result = conditionId == 6 ? null : usagefaker.Generate();
+            if (conditionId == 1) { request.LeadUserId = string.Empty; }
+            if (conditionId == 2) { request.CountyName = string.Empty; }
+            if (conditionId == 3) { request.MonthlyUsage = null; }
+            if (conditionId == 7 && result != null) { result.Id = string.Empty; }
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<LeadUserCountyUsageDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            var actual = await service.AppendUsageIncident(request);
+            Assert.Equal(expected, actual);
+        }
 
         [Theory]
         [InlineData(0)]
@@ -217,6 +281,29 @@ namespace legallead.jdbc.tests.implementations
             if (conditionId != 3 && response != null) Assert.False(string.IsNullOrEmpty(response.IndexData));
         }
 
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(6)]
+        public async Task RepoCanGetUsageUserById(int conditionId)
+        {
+            var request = usagefaker.Generate().Id;
+            var result = conditionId == 6 ? [] : usagefaker.Generate(5);
+            var container = new RepoContainer();
+            var service = container.Repo;
+            var mock = container.CommandMock;
+            mock.Setup(m => m.QueryAsync<LeadUserCountyUsageDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            )).ReturnsAsync(result);
+            _ = await service.GetUsageUserById(request);
+            mock.Verify(m => m.QueryAsync<LeadUserCountyUsageDto>(
+                It.IsAny<IDbConnection>(),
+                It.IsAny<string>(),
+                It.IsAny<DynamicParameters>()
+            ));
+        }
         [Theory]
         [InlineData(0, true)]
         [InlineData(1, false)]

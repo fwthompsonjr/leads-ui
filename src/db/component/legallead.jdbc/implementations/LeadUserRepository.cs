@@ -27,6 +27,38 @@ namespace legallead.jdbc.implementations
             return await AddOrUpdateToken(userCounty, command);
         }
 
+        public async Task<bool> AddCountyUsage(LeadUserCountyDto userCounty)
+        {
+            const string command = "CALL USP_LEADUSER_ADD_ACCOUNT_USAGE ( ?, ?, ? )";
+            if (string.IsNullOrEmpty(userCounty.LeadUserId)) return false;
+            if (string.IsNullOrEmpty(userCounty.CountyName)) return false;
+            if (!userCounty.MonthlyUsage.HasValue) return false;
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", userCounty.LeadUserId);
+            parameters.Add("county_name", userCounty.CountyName);
+            parameters.Add("monthly_usage", userCounty.MonthlyUsage);
+
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyDto>(connection, command, parameters);
+            if (response == null || string.IsNullOrEmpty(response.Id)) return false;
+            return true;
+        }
+        public async Task<bool> AppendUsageIncident(LeadUserCountyDto dto)
+        {
+            const string command = "CALL USP_LEADUSER_ADD_USAGE_RECORD ( ?, ?, ? )";
+            if (string.IsNullOrEmpty(dto.LeadUserId)) return false;
+            if (string.IsNullOrEmpty(dto.CountyName)) return false;
+            if (!dto.MonthlyUsage.HasValue) return false;
+            var parameters = new DynamicParameters();
+            parameters.Add("userId", dto.LeadUserId);
+            parameters.Add("county_name", dto.CountyName);
+            parameters.Add("monthly_usage", dto.MonthlyUsage);
+
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyUsageDto>(connection, command, parameters);
+            if (response == null || string.IsNullOrEmpty(response.Id)) return false;
+            return true;
+        }
         public async Task<LeadUserBo?> GetUserById(string userId)
         {
             const string prc = "CALL USP_GET_LEADUSER_BY_Id( '{0}' );";
@@ -57,6 +89,14 @@ namespace legallead.jdbc.implementations
             return await GetUserAttributes(connection, response, bo);
         }
 
+        public async Task<List<LeadUserCountyUsageDto>> GetUsageUserById(string userId)
+        {
+            const string prc = "CALL USP_GET_LEADUSER_USAGE_BY_ID( '{0}' );";
+            var command = string.Format(prc, userId);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QueryAsync<LeadUserCountyUsageDto>(connection, command);
+            return response.ToList();
+        }
         public async Task<bool> UpdateAccount(LeadUserDto user)
         {
             const string command = "CALL USP_LEADUSER_UPDATE_ACCOUNT ( ?, ?, ?, ?, ? )";
