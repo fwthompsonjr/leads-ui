@@ -14,5 +14,8 @@ namespace legallead.jdbc.interfaces
         Task<bool> UpdateCountyToken(LeadUserCountyDto userCounty);
         Task<bool> UpdateCountyPermissions(LeadUserCountyIndexDto userPermissions);
         Task<LeadUserBo?> GetUserById(string userId);
+        Task<bool> AddCountyUsage(LeadUserCountyDto userCounty);
+        Task<List<LeadUserCountyUsageDto>> GetUsageUserById(string userId);
+        Task<bool> AppendUsageIncident(LeadUserCountyDto dto);
     }
 }
