@@ -5066,6 +5066,59 @@
 					"response": []
 				},
 				{
+					"name": "AppSetCountyPermission Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code should be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "LEAD_IDENTITY",
+								"value": "{{user_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"countyList\": \"-1\",\r\n  \"userName\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/app/set-county-permission",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"set-county-permission"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "AppChangePasswordNegtive",
 					"event": [
 						{
@@ -5388,12 +5441,19 @@
 					"        console.debug(error);",
 					"    }",
 					"}",
-					"function doApplicationLogin() {",
+					"function doApplicationLogin(index) {",
 					"    try {",
 					"        var target = \"\".concat(basurl, \"/app/account-login\");",
 					"        var uid = pm.collectionVariables.get('UserAccountName');",
 					"        var pwd = pm.collectionVariables.get('UserPassword');",
-					"        ",
+					"        if (null != index && index == '0') {",
+					"            uid = pm.collectionVariables.get('LeadAccount00');",
+					"            pwd = pm.collectionVariables.get('LeadPassword00');",
+					"        }",
+					"        if (null != index && index == '1') {",
+					"            uid = pm.collectionVariables.get('LeadAccount01');",
+					"            pwd = pm.collectionVariables.get('LeadPassword01');",
+					"        }",
 					"        var payload = JSON.stringify({ \"userName\": uid, \"password\": pwd });",
 					"            ",
 					"        pm.sendRequest({",
@@ -5423,7 +5483,17 @@
 					"        if (folderName == \"home\") { return; }",
 					"        if (folderName == \"app\") { ",
 					"            if (methodName.indexOf('Change') >= 0 || methodName.indexOf('Set') >= 0){",
-					"                doApplicationLogin()",
+					"                if (methodName.indexOf('00') > 0)",
+					"                {",
+					"                    doApplicationLogin('0');",
+					"                    return; ",
+					"                }",
+					"                if (methodName.indexOf('01') > 0)",
+					"                {",
+					"                    doApplicationLogin('1');",
+					"                    return; ",
+					"                }",
+					"                doApplicationLogin();",
 					"            }",
 					"\t\t\treturn; ",
 					"\t\t}",
@@ -5712,6 +5782,26 @@
 		{
 			"key": "UserPasswordInvalid",
 			"value": "Wxyz-525Wrong",
+			"type": "string"
+		},
+		{
+			"key": "LeadAccount00",
+			"value": "lead.administrator",
+			"type": "string"
+		},
+		{
+			"key": "LeadPassword00",
+			"value": "secret",
+			"type": "string"
+		},
+		{
+			"key": "LeadAccount01",
+			"value": "kerri@kdphillipslaw.com",
+			"type": "string"
+		},
+		{
+			"key": "LeadPassword01",
+			"value": "secret",
 			"type": "string"
 		}
 	]
