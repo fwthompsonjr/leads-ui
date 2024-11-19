@@ -185,8 +185,7 @@ namespace legallead.permissions.api.Services
             if (request == null) return null;
             var tmp = request.GetObjectFromHeader<string>("LEAD_IDENTITY");
             if (tmp == null) return null;
-            var validations = LeadTokenService.GetValidationModel(tmp, reason);
-            if (!validations.Validated) return null;
+            _ = LeadTokenService.GetValidationModel(tmp, reason);
             var identity = LeadTokenService.GetModel(tmp, out var _);
             if (identity == null) return null;
             return identity.User;
