@@ -19,6 +19,6 @@ namespace legallead.permissions.api.Interfaces
         KeyValuePair<bool, string> VerifyCountyList(string countyList);
         Task<bool> AddCountyUsageAsync(string userId, string county, int monthlyUsage);
         Task<List<GetUsageUserByIdResponse>> GetUsageUserByIdAsync(string userId);
-        Task<bool> AddCountyUsageIncidentAsync(string userId, string county, int monthlyUsage);
+        Task<bool> AddCountyUsageIncidentAsync(string userId, string county, int monthlyUsage, string searchRange = "");
     }
 }

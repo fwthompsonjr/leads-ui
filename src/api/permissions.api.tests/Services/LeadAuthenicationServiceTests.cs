@@ -169,9 +169,8 @@ namespace permissions.api.tests.Services
             Assert.Null(error);
         }
 
-        [Theory]
-        [InlineData(0)]
-        public void ServiceCanGetUserModelFromRequest(int conditionId)
+        [Fact]
+        public void ServiceCanGetUserModelFromRequest()
         {
             //Arrange
 
@@ -368,7 +367,8 @@ namespace permissions.api.tests.Services
                     It.IsAny<LeadUserCountyDto>()
                     )).ReturnsAsync(true);
                 MqRepo.Setup(x => x.AppendUsageIncident(
-                    It.IsAny<LeadUserCountyDto>()
+                    It.IsAny<LeadUserCountyDto>(),
+                    It.IsAny<string>()
                     )).ReturnsAsync(true);
             }
 

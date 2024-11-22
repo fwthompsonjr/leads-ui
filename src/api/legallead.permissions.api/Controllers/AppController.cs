@@ -180,7 +180,8 @@ namespace legallead.permissions.api.Controllers
             var registration = await _leadService.AddCountyUsageIncidentAsync(
                 user.Id,
                 model.CountyName,
-                model.MonthlyUsage);
+                model.MonthlyUsage,
+                model.DateRange ?? "");
             if (!registration) return Conflict();
             var updated = await _leadService.GetModelByIdAsync(user.Id);
             if (updated == null) return UnprocessableEntity();

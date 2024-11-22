@@ -13,31 +13,31 @@ namespace permissions.api.tests
 
         public static LeadUserBo GetBo(int countiesCount = 2, int indexCount = 0)
         {
-            var faker = new Faker();
+            var thefaker = new Faker();
             var person = dtofaker.Generate();
             var uid = person.Id;
             var tokens = new List<LeadUserCountyDto>();
             var permissions = new List<LeadUserCountyIndexDto>{
                 new ()
                 {
-                    Id = faker.Random.Guid().ToString("D"),
-                    CreateDate = faker.Date.Recent(),
+                    Id = thefaker.Random.Guid().ToString("D"),
+                    CreateDate = thefaker.Date.Recent(),
                     LeadUserId = uid,
-                    CountyList = indexCount < 0 ? "-1" : GetNumericList(indexCount, faker)
+                    CountyList = indexCount < 0 ? "-1" : GetNumericList(indexCount, thefaker)
                 }
             };
             for (int i = 0; i < countiesCount; i++)
             {
-                var countyName = faker.Address.County();
-                var login = new { username = faker.Person.Email, password = faker.Random.AlphaNumeric(20) };
+                var countyName = thefaker.Address.County();
+                var login = new { username = thefaker.Person.Email, password = thefaker.Random.AlphaNumeric(20) };
                 var credential = $"{login.username}|{login.password}";
                 var model = leadSvcs.CreateSecurityModel(credential);
                 tokens.Add(new()
                 {
-                    Id = faker.Random.Guid().ToString("D"),
+                    Id = thefaker.Random.Guid().ToString("D"),
                     LeadUserId = uid,
                     CountyName = countyName,
-                    CreateDate = faker.Date.Recent(),
+                    CreateDate = thefaker.Date.Recent(),
                     Phrase = model.Phrase,
                     Token = model.Token,
                     Vector = model.Vector,
@@ -128,6 +128,7 @@ namespace permissions.api.tests
             new Faker<UserCountyUsageModel>()
             .RuleFor(x => x.UserName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.MonthlyUsage, y => y.Random.Int(0, 2500))
+            .RuleFor(x => x.DateRange, y => y.Random.AlphaNumeric(10))
             .RuleFor(x => x.CountyName, y => y.PickRandom(supportedCounties));
 
         private static readonly Faker<UserCountyPermissionModel> countyListFaker =
