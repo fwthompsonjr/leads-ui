@@ -17,5 +17,8 @@ namespace legallead.permissions.api.Entities
         [Required]
         [Range(-1, 100000)]
         public int MonthlyUsage { get; set; } = 0;
+
+        [MaxLength(50, ErrorMessage = "{0} must have a maximum length of {1} characters")]
+        public string? DateRange { get; set; } = string.Empty;
     }
 }

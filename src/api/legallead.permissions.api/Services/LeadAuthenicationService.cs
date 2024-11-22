@@ -68,7 +68,7 @@ namespace legallead.permissions.api.Services
             return response;
         }
 
-        public async Task<bool> AddCountyUsageIncidentAsync(string userId, string county, int monthlyUsage)
+        public async Task<bool> AddCountyUsageIncidentAsync(string userId, string county, int monthlyUsage, string searchRange = "")
         {
             if (string.IsNullOrEmpty(userId) ||
                 string.IsNullOrEmpty(county) ||
@@ -80,7 +80,7 @@ namespace legallead.permissions.api.Services
                 MonthlyUsage = monthlyUsage
             };
 
-            var response = await _repo.AppendUsageIncident(dto);
+            var response = await _repo.AppendUsageIncident(dto, searchRange);
             return response;
         }
         public async Task<bool> ChangeCountyCredentialAsync(string userId, string county, string userName, string password)

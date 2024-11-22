@@ -436,7 +436,8 @@ namespace permissions.api.tests.Contollers
                 mock.Setup(m => m.AddCountyUsageIncidentAsync(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<int>()))
+                    It.IsAny<int>(),
+                    It.IsAny<string>()))
                     .ReturnsAsync(changed);
 
                 var response = await sut.AddCountyUsageRecordAsync(request);
