@@ -161,6 +161,7 @@ namespace legallead.permissions.api.Services
             var items = response.Select(s => new GetUsageUserByIdResponse
             {
                 CountyName = s.CountyName,
+                DateRange = s.DateRange,
                 MonthlyUsage = s.MonthlyUsage.GetValueOrDefault(),
                 CreateDate = s.CreateDate,
             });
