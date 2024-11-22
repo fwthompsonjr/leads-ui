@@ -43,9 +43,9 @@ namespace legallead.jdbc.implementations
             if (response == null || string.IsNullOrEmpty(response.Id)) return false;
             return true;
         }
-        public async Task<bool> AppendUsageIncident(LeadUserCountyDto dto)
+        public async Task<bool> AppendUsageIncident(LeadUserCountyDto dto, string searchRange = "")
         {
-            const string command = "CALL USP_LEADUSER_ADD_USAGE_RECORD ( ?, ?, ? )";
+            const string command = "CALL USP_LEADUSER_ADD_USAGE_RECORD ( ?, ?, ?, ? )";
             if (string.IsNullOrEmpty(dto.LeadUserId)) return false;
             if (string.IsNullOrEmpty(dto.CountyName)) return false;
             if (!dto.MonthlyUsage.HasValue) return false;
@@ -53,6 +53,7 @@ namespace legallead.jdbc.implementations
             parameters.Add("userId", dto.LeadUserId);
             parameters.Add("county_name", dto.CountyName);
             parameters.Add("monthly_usage", dto.MonthlyUsage);
+            parameters.Add("date_range", searchRange);
 
             using var connection = _context.CreateConnection();
             var response = await _command.QuerySingleOrDefaultAsync<LeadUserCountyUsageDto>(connection, command, parameters);
@@ -184,6 +185,7 @@ namespace legallead.jdbc.implementations
 
         private async Task<LeadUserBo?> GetUserAttributes(IDbConnection connection, LeadUserDto? response, LeadUserBo bo)
         {
+            if (response == null) return bo;
             for (var i = 0; i < bo.Keys.Count; i++)
             {
                 if (i > 2) break;

@@ -6,7 +6,6 @@ using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
 using Moq;
 using System.Data;
-using System.Text;
 
 namespace legallead.jdbc.tests.implementations
 {
@@ -37,8 +36,10 @@ namespace legallead.jdbc.tests.implementations
             new Faker<LeadUserCountyUsageDto>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.LeadUserId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.LeadUserCountyId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.CountyName, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.MonthlyUsage, y => y.Random.Int(0, 1000000))
+            .RuleFor(x => x.DateRange, y => y.Random.AlphaNumeric(20))
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
         private static readonly Faker<LeadUserCountyIndexDto> permissionfaker =
@@ -133,7 +134,7 @@ namespace legallead.jdbc.tests.implementations
         public async Task RepoCanAddCountyUsage(int conditionId, bool expected)
         {
             var request = tokenfaker.Generate();
-            var result = conditionId == 6 ? null: tokenfaker.Generate();
+            var result = conditionId == 6 ? null : tokenfaker.Generate();
             if (conditionId == 1) { request.LeadUserId = string.Empty; }
             if (conditionId == 2) { request.CountyName = string.Empty; }
             if (conditionId == 3) { request.MonthlyUsage = null; }
@@ -173,7 +174,7 @@ namespace legallead.jdbc.tests.implementations
                 It.IsAny<string>(),
                 It.IsAny<DynamicParameters>()
             )).ReturnsAsync(result);
-            var actual = await service.AppendUsageIncident(request);
+            var actual = await service.AppendUsageIncident(request, "to - from");
             Assert.Equal(expected, actual);
         }
 

@@ -7,6 +7,7 @@
         public string? LeadUserCountyId { get; set; }
         public string? CountyName { get; set; }
         public int? MonthlyUsage { get; set; }
+        public string? DateRange { get; set; }
         public DateTime? CreateDate { get; set; }
 
         public override object? this[string field]
@@ -21,6 +22,7 @@
                 if (fieldName.Equals("LeadUserCountyId", Comparison)) return LeadUserCountyId;
                 if (fieldName.Equals("CountyName", Comparison)) return CountyName;
                 if (fieldName.Equals("MonthlyUsage", Comparison)) return MonthlyUsage.GetValueOrDefault();
+                if (fieldName.Equals("DateRange", Comparison)) return DateRange;
                 return CreateDate;
             }
             set
@@ -37,6 +39,7 @@
                 if (fieldName.Equals("LeadUserCountyId", Comparison)) { LeadUserCountyId = ChangeType<string>(value); return; }
                 if (fieldName.Equals("CountyName", Comparison)) { CountyName = ChangeType<string>(value); return; }
                 if (fieldName.Equals("MonthlyUsage", Comparison)) { MonthlyUsage = ChangeType<int?>(value); return; }
+                if (fieldName.Equals("DateRange", Comparison)) { DateRange = ChangeType<string>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) CreateDate = ChangeType<DateTime?>(value);
             }
         }

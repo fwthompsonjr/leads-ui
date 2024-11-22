@@ -16,6 +16,6 @@ namespace legallead.jdbc.interfaces
         Task<LeadUserBo?> GetUserById(string userId);
         Task<bool> AddCountyUsage(LeadUserCountyDto userCounty);
         Task<List<LeadUserCountyUsageDto>> GetUsageUserById(string userId);
-        Task<bool> AppendUsageIncident(LeadUserCountyDto dto);
+        Task<bool> AppendUsageIncident(LeadUserCountyDto dto, string searchRange = "");
     }
 }
