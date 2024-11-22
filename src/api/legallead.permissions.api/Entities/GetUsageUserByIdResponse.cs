@@ -5,6 +5,7 @@
 
         public string? CountyName { get; set; }
         public int MonthlyUsage { get; set; }
+        public string? DateRange { get; set; }
         public DateTime? CreateDate { get; set; }
 
         public int IncidentMonth => CreateDate.GetValueOrDefault().Month;
