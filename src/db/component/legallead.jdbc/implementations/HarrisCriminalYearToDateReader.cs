@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using legallead.jdbc.helpers;
+using Newtonsoft.Json;
+using System.Diagnostics;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.implementations
 {
-    public class HarrisCriminalYearToDateReader : IDisposable
+    public class HarrisCriminalYearToDateReader(string zipname) : IDisposable
     {
-        private readonly string zipFileName;
-        private readonly string tempFileName;
+        private readonly string zipFileName = zipname;
+        private readonly string tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
         private List<List<string>>? rawData = null;
-        private string zipContent = string.Empty;
         private bool disposedValue;
 
-        public HarrisCriminalYearToDateReader(string zipname)
-        {
-            zipFileName = zipname;
-            tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
-        }
+        internal List<HarrisCriminalRecordDto> MappedData { get; private set; } = [];
 
         public void Read()
         {
@@ -51,16 +44,32 @@ namespace legallead.jdbc.implementations
             if (rawData == null) return;
             if (rawData.Count <= 1) return;
             var header = rawData[0];
-            for ( var r = 1; r < rawData.Count; r++)
+            var records = new List<HarrisCriminalRecordDto>();
+            for (var r = 1; r < rawData.Count; r++)
             {
+                var datum = new HarrisCriminalRecordDto();
                 var data = rawData[r];
-                for (var c = 0; c < header.Count; c++) 
-                { 
+                for (var c = 0; c < header.Count; c++)
+                {
                     var fld = header[c];
                     var item = data[c];
-                    // var mapped = HarrisLookupService.
+                    var mapped = HarrisLookupService.Translate(fld, item);
+                    datum[c] = mapped;
+                }
+                records.Add(datum);
+                if (records.Count == 100)
+                {
+                    Post(records);
+                    records.Clear();
                 }
             }
+            MappedData = records;
+        }
+
+        private void Post(List<HarrisCriminalRecordDto> records)
+        {
+            var js = JsonConvert.SerializeObject(records, Formatting.Indented);
+            Debug.WriteLine(js);
         }
 
         protected virtual void Dispose(bool disposing)

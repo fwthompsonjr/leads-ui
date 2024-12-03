@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace legallead.jdbc.tests.helpers
+namespace legallead.jdbc.helpers
 {
     internal static class HarrisLookupService
     {
@@ -261,7 +261,7 @@ namespace legallead.jdbc.tests.helpers
         "{ 'key': 'CNC', 'code': 'TD', 'value': 'TRIAL DOCKET' }," + NL +
         "{ 'key': 'CNC', 'code': 'TR', 'value': 'TRANSFER DOCKET' }," + NL +
         "{ 'key': 'CNC', 'code': 'V1', 'value': 'VTC JAIL DOCKET' }," + NL +
-        "{ 'key': 'CNC', 'code': 'VC', 'value': 'VETERAN'S COURT' }," + NL +
+        "{ 'key': 'CNC', 'code': 'VC', 'value': 'VETERANS COURT' }," + NL +
         "{ 'key': 'CNC', 'code': 'WD', 'value': 'WAIVER DOCKET' }," + NL +
         "{ 'key': 'CNC', 'code': 'WH', 'value': 'WRIT HEARING DOCKET' }," + NL +
         "{ 'key': 'CNC', 'code': 'XX', 'value': 'CTI-MH' }," + NL +

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace legallead.jdbc.tests.helpers
+namespace legallead.jdbc.helpers
 {
     internal class HarrisCriminalRecordDto
     {
@@ -107,7 +107,7 @@ namespace legallead.jdbc.tests.helpers
                 if (index == 47) return DefendantPlaceOfBirth;
                 return string.Empty;
             }
-            set 
+            set
             {
                 if (index == 0) CourtDivisionIndicator = value;
                 if (index == 1) CaseNumber = value;

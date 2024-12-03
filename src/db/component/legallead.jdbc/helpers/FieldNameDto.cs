@@ -1,4 +1,4 @@
-﻿namespace legallead.jdbc.tests.helpers
+﻿namespace legallead.jdbc.helpers
 {
     internal class FieldNameDto
     {
