@@ -1,10 +1,5 @@
 ﻿using Bogus;
 using legallead.jdbc.entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.tests.entities
 {
@@ -147,6 +142,7 @@ namespace legallead.jdbc.tests.entities
 
         private static readonly Faker<HarrisCriminalUploadDto> dfaker
             = new Faker<HarrisCriminalUploadDto>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CourtDivisionIndicator, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CaseNumber, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CaseFileDate, y => y.Random.AlphaNumeric(25))

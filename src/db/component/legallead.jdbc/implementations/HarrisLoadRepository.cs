@@ -3,12 +3,7 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace legallead.jdbc.implementations
 {
@@ -35,8 +30,9 @@ namespace legallead.jdbc.implementations
         public async Task<List<HarrisCriminalUploadBo>> Find(DateTime dte)
         {
             const string prc = "CALL USP_FIND_HARRISDB_BY_DATE ( ? );";
+            var filingDate = dte.ToString("yyyyMMdd", CultureInfo.CurrentCulture);
             var parameters = new DynamicParameters();
-            parameters.Add("filingDt", dte.ToString("yyyyMMdd", CultureInfo.CurrentCulture));
+            parameters.Add("filingDt", filingDate);
             using var connection = _context.CreateConnection();
             var response = await _command.QueryAsync<HarrisCriminalUploadDto>(connection, prc, parameters);
             if (!response.Any()) return [];

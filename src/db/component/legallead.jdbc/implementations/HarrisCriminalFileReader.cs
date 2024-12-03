@@ -1,13 +1,17 @@
 ﻿using legallead.jdbc.helpers;
+using legallead.jdbc.interfaces;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using System.IO.Compression;
 
 namespace legallead.jdbc.implementations
 {
-    public class HarrisCriminalYearToDateReader(string zipname) : IDisposable
+    public class HarrisCriminalFileReader(
+        string zipname,
+        IHarrisLoadRepository repo) : IDisposable
     {
+        private const int MxRecords = 500;
         private readonly string zipFileName = zipname;
+        private readonly IHarrisLoadRepository _db = repo;
         private readonly string tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
         private List<List<string>>? rawData = null;
         private bool disposedValue;
@@ -45,7 +49,8 @@ namespace legallead.jdbc.implementations
             if (rawData.Count <= 1) return;
             var header = rawData[0];
             var records = new List<HarrisCriminalRecordDto>();
-            for (var r = 1; r < rawData.Count; r++)
+            var lastidnx = rawData.Count - 1;
+            for (var r = lastidnx; r >= 1; r--)
             {
                 var datum = new HarrisCriminalRecordDto();
                 var data = rawData[r];
@@ -57,19 +62,20 @@ namespace legallead.jdbc.implementations
                     datum[c] = mapped;
                 }
                 records.Add(datum);
-                if (records.Count == 100)
+                if (records.Count == MxRecords)
                 {
                     Post(records);
                     records.Clear();
                 }
             }
+            if (records.Count != 0) { Post(records); }
             MappedData = records;
         }
 
         private void Post(List<HarrisCriminalRecordDto> records)
         {
             var js = JsonConvert.SerializeObject(records, Formatting.Indented);
-            Debug.WriteLine(js);
+            _ = _db.Append(js).GetAwaiter().GetResult();
         }
 
         protected virtual void Dispose(bool disposing)

@@ -1,5 +1,10 @@
-﻿using legallead.jdbc.helpers;
+﻿using Castle.Core.Configuration;
+using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
+using legallead.jdbc.interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using System.Diagnostics;
 
 namespace legallead.jdbc.tests.implementations
 {
@@ -11,7 +16,7 @@ namespace legallead.jdbc.tests.implementations
         {
             var error = Record.Exception(() =>
             {
-                using var service = new HarrisCriminalYearToDateReader(sourceFile);
+                using var service = GetReader(sourceFile);
                 service.Read();
             });
             Assert.Null(error);
@@ -22,7 +27,7 @@ namespace legallead.jdbc.tests.implementations
         {
             var error = Record.Exception(() =>
             {
-                using var service = new HarrisCriminalYearToDateReader(sourceFile);
+                using var service = GetReader(sourceFile);
                 service.Translate();
             });
             Assert.Null(error);
@@ -34,7 +39,7 @@ namespace legallead.jdbc.tests.implementations
         {
             var error = Record.Exception(() =>
             {
-                using var service = new HarrisCriminalYearToDateReader(sourceFile);
+                using var service = GetReader(sourceFile);
                 service.Transfer();
             });
             Assert.Null(error);
@@ -49,7 +54,48 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(error);
         }
+        private static HarrisCriminalFileReader GetReader(string sourceFile)
+        {
+            var response = new KeyValuePair<bool, string>(true, "test");
+            var completion = Task.FromResult(response);
+            var mock = new Mock<IHarrisLoadRepository>();
+            mock.Setup(x => x.Append(It.IsAny<string>())).Returns(completion);
+            return new HarrisCriminalFileReader(sourceFile, mock.Object);
+        }
 
+
+        [Theory]
+        [InlineData(historyData)]
+        public void ServiceCanTransferRealTime(string sourceFile)
+        {
+            var svc = TheProvider.GetRequiredService<IHarrisLoadRepository>();
+            if (!Debugger.IsAttached) return;
+            var error = Record.Exception(() =>
+            {
+                using var service = new HarrisCriminalFileReader(sourceFile, svc);
+                service.Transfer();
+            });
+            Assert.Null(error);
+        }
+        private static IServiceProvider TheProvider => _services ??= GetProvider();
+
+        private static IServiceProvider? _services = null;
+        private static ServiceProvider GetProvider()
+        {
+            const string environ = "Test";
+            var services = new ServiceCollection();
+            services.AddSingleton<IDataInitializer, DataInitializer>();
+            services.AddSingleton<IDapperCommand, DapperExecutor>(); 
+            services.AddScoped(d =>
+            {
+                var command = d.GetRequiredService<IDapperCommand>();
+                var dbint = d.GetRequiredService<IDataInitializer>();
+                return new DataContext(command, dbint, environ);
+            });
+            services.AddScoped<IHarrisLoadRepository, HarrisLoadRepository>();
+            return services.BuildServiceProvider();
+        }
+        
         private const string historyData = "C:\\_d\\lead-old\\_notes\\Weekly_Historical_Criminal.zip";
     }
 }
