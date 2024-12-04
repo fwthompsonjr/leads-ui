@@ -3,10 +3,13 @@ using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
+using legallead.jdbc.interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using legallead.jdbc.entities;
+using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -98,7 +101,8 @@ namespace permissions.api.tests.Contollers
             var auth = new Mock<IAppAuthenicationService>();
             var county = new Mock<ICountyAuthorizationService>();
             var svcs = new Mock<ILeadAuthenicationService>().Object;
-            var sut = new AppController(auth.Object, county.Object, svcs);
+            var hccdb = new Mock<IHarrisLoadRepository>().Object;
+            var sut = new AppController(auth.Object, county.Object, svcs, hccdb);
             var isok = name.Equals("lead.administrator");
             var dto = isok ? new AppAuthenicationItemDto { Id = 10, UserName = "test.account" } : null;
             auth.Setup(s => s.Authenicate(It.IsAny<string>(), It.IsAny<string>())).Returns(dto);
@@ -488,6 +492,53 @@ namespace permissions.api.tests.Contollers
         }
 
 
+        [Theory]
+        [InlineData(0)]
+        public void ControllerCanLoadHccData(int conditionId)
+        {
+            var appendOk = new KeyValuePair<bool, string>(true, "test load response");
+            var request = new LoadHccDataRequest { Content = fkr.Random.AlphaNumeric(15) };
+            var error = Record.Exception(() =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<IHarrisLoadRepository>>();
+                mock.Setup(s => s.Append(It.IsAny<string>())).ReturnsAsync(appendOk);
+
+                var response = sut.LoadHccData(request);
+                if (conditionId == 10) Assert.IsAssignableFrom<OkResult>(response);
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanFindHccDataAsync(int conditionId)
+        {
+            var list = new List<HarrisCriminalUploadBo>();
+            var request = new FindHccDataRequest { FilingDate = fkr.Date.Recent() };
+            var issue = fkr.System.Exception();
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<IHarrisLoadRepository>>();
+                if (conditionId == 0)
+                {
+                    mock.Setup(s => s.Find(It.IsAny<DateTime>())).ReturnsAsync(list);
+                }
+                else
+                {
+                    mock.Setup(s => s.Find(It.IsAny<DateTime>())).ThrowsAsync(issue);
+                }
+                var response = await sut.FindHccDataAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                else Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
         private static string GetLoginResponse(bool authorized)
         {
             if (!authorized) return string.Empty;
