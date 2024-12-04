@@ -11,7 +11,7 @@ namespace db.integration.tests
         {
             get
             {
-                while(Provider == null) { Init(); }
+                while (Provider == null) { Init(); }
                 return Provider;
             }
         }
@@ -31,7 +31,7 @@ namespace db.integration.tests
                     return new DataContext(command, dbint, environ);
                 });
                 services.AddScoped<ILeadUserRepository, LeadUserRepository>();
-                Provider = services.BuildServiceProvider(); 
+                Provider = services.BuildServiceProvider();
             }
         }
 
