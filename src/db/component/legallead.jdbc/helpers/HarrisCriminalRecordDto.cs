@@ -2,7 +2,7 @@
 
 namespace legallead.jdbc.helpers
 {
-    internal class HarrisCriminalRecordDto
+    public class HarrisCriminalRecordDto
     {
         [JsonProperty("cdi")] public string CourtDivisionIndicator { get; set; } = string.Empty;
         [JsonProperty("cas")] public string CaseNumber { get; set; } = string.Empty;
