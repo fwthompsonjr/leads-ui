@@ -42,6 +42,7 @@ namespace legallead.jdbc.implementations
 
         public void Transfer()
         {
+            const StringComparison oic = StringComparison.OrdinalIgnoreCase;
             if (rawData == null) Translate();
             if (rawData == null) return;
             if (rawData.Count <= 1) return;
@@ -54,10 +55,13 @@ namespace legallead.jdbc.implementations
                 var data = rawData[r];
                 for (var c = 0; c < header.Count; c++)
                 {
-                    var fld = header[c];
+                    var fld = header[c]; 
                     var item = data[c];
+                    // fetch field number
+                    var fieldId = HarrisCriminalFieldName.Fields.FindIndex(x => x.Key.Equals(fld, oic));
+                    if (fieldId < 0) { fieldId = c; }
                     var mapped = HarrisLookupService.Translate(fld, item);
-                    datum[c] = mapped;
+                    datum[fieldId] = mapped;
                 }
                 records.Add(datum);
                 if (records.Count == MxRecords)
