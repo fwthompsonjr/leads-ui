@@ -1,4 +1,6 @@
-﻿using legallead.json.db;
+﻿using legallead.jdbc.implementations;
+using legallead.jdbc.interfaces;
+using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
@@ -13,11 +15,13 @@ namespace legallead.permissions.api.Controllers
     public class AppController(
     IAppAuthenicationService appservice,
     ICountyAuthorizationService service,
-    ILeadAuthenicationService lead) : ControllerBase
+    ILeadAuthenicationService lead,
+    IHarrisLoadRepository harrisdb) : ControllerBase
     {
         private readonly IAppAuthenicationService _authenticationService = appservice;
         private readonly ICountyAuthorizationService _authorizationService = service;
         private readonly ILeadAuthenicationService _leadService = lead;
+        private readonly IHarrisLoadRepository _hccDataService = harrisdb;
 
         [HttpPost("get-county-code")]
         public IActionResult GetCounty(CountyCodeRequest model)
@@ -202,6 +206,34 @@ namespace legallead.permissions.api.Controllers
             return Ok(registration);
         }
 
+        [HttpPost("load-hcc-data")]
+        public IActionResult LoadHccData(LoadHccDataRequest model)
+        {
+            try
+            {
+                using var reader = new HarrisCriminalTextReader(model.Content, _hccDataService);
+                reader.Transfer();
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return UnprocessableEntity();
+            }
+        }
+
+        [HttpPost("find-hcc-data")]
+        public async Task<IActionResult> FindHccDataAsync(FindHccDataRequest model)
+        {
+            try
+            {
+                var response = await _hccDataService.Find(model.FilingDate);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(ex.Message);
+            }
+        }
         private const string UserAccountAccess = "user account access credential";
         private static List<UsStateCounty> GetCounties
         {

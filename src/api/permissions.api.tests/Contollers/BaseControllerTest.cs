@@ -72,6 +72,7 @@ namespace permissions.api.tests.Contollers
                 var queueStatusServiceMock = new Mock<IQueueStatusService>();
                 var leadRepoMock = new Mock<ILeadUserRepository>();
                 var leadAuthMock = new Mock<ILeadAuthenicationService>();
+                var harrisDbMock = new Mock<IHarrisLoadRepository>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -118,6 +119,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => leadRepoMock.Object);
                 collection.AddScoped(s => leadAuthMock);
                 collection.AddScoped(s => leadAuthMock.Object);
+                collection.AddScoped(s => harrisDbMock);
+                collection.AddScoped(s => harrisDbMock.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
