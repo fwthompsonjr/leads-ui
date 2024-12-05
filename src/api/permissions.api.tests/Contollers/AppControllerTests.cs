@@ -539,6 +539,34 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanCountHccDataAsync(int conditionId)
+        {
+            var list = new List<HarrisCriminalUploadBo>();
+            var request = new FindHccDataRequest { FilingDate = fkr.Date.Recent() };
+            var issue = fkr.System.Exception();
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<AppController>();
+                var mock = provider.GetRequiredService<Mock<IHarrisLoadRepository>>();
+                if (conditionId == 0)
+                {
+                    mock.Setup(s => s.Find(It.IsAny<DateTime>())).ReturnsAsync(list);
+                }
+                else
+                {
+                    mock.Setup(s => s.Find(It.IsAny<DateTime>())).ThrowsAsync(issue);
+                }
+                var response = await sut.CountHccDataAsync(request);
+                if (conditionId == 0) Assert.IsAssignableFrom<OkObjectResult>(response);
+                else Assert.IsAssignableFrom<UnprocessableEntityObjectResult>(response);
+            });
+            Assert.Null(error);
+        }
         private static string GetLoginResponse(bool authorized)
         {
             if (!authorized) return string.Empty;

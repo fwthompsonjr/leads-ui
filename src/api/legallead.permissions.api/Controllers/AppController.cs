@@ -234,6 +234,22 @@ namespace legallead.permissions.api.Controllers
                 return UnprocessableEntity(ex.Message);
             }
         }
+
+
+        [HttpPost("count-hcc-data")]
+        public async Task<IActionResult> CountHccDataAsync(FindHccDataRequest model)
+        {
+            try
+            {
+                var response = await _hccDataService.Find(model.FilingDate);
+                return Ok(new { RecordCount = response.Count });
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(ex.Message);
+            }
+        }
+
         private const string UserAccountAccess = "user account access credential";
         private static List<UsStateCounty> GetCounties
         {
