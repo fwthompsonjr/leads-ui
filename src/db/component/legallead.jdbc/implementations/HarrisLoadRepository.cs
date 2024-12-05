@@ -40,5 +40,17 @@ namespace legallead.jdbc.implementations
             var mapped = JsonConvert.DeserializeObject<List<HarrisCriminalUploadBo>>(data) ?? [];
             return mapped;
         }
+
+        public async Task<int> Count(DateTime dte)
+        {
+            const string prc = "CALL USP_COUNT_HARRISDB_BY_DATE ( ? );";
+            var filingDate = dte.ToString("yyyyMMdd", CultureInfo.CurrentCulture);
+            var parameters = new DynamicParameters();
+            parameters.Add("filingDt", filingDate);
+            using var connection = _context.CreateConnection();
+            var response = await _command.QuerySingleOrDefaultAsync<HarrisCriminalCountDto>(connection, prc, parameters);
+            if (response == null) return 0;
+            return response.RecordCount.GetValueOrDefault();
+        }
     }
 }
