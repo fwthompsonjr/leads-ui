@@ -5,16 +5,16 @@ namespace legallead.jdbc.implementations
 {
     public class HarrisCriminalTextReader(
         string zipname,
-        IHarrisLoadRepository repo) : HarrisCriminalZipFileReader(zipname, repo)
+        IHarrisLoadRepository repo) : HarrisCriminalZipFileReader(zipname, repo, false)
     {
+         
 
         public override void Read()
         {
             if (string.IsNullOrEmpty(zipFileName)) throw new InvalidOperationException();
             var content = DecodeContent();
             if (string.IsNullOrEmpty(content)) return;
-            if (File.Exists(tempFileName)) File.Delete(tempFileName);
-            File.WriteAllText(tempFileName, content);
+            decodedData = content;
         }
 
         private string DecodeContent()
