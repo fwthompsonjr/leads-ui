@@ -117,6 +117,34 @@ namespace legallead.jdbc.tests.implementations
             var response = await service.Find(DateTime.Now);
             Assert.NotNull(response);
         }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(15)]
+        public async Task RepoCanCount(int recordcount)
+        {
+            var completion = recordcount switch
+            {
+                -1 => null,
+                0 => new HarrisCriminalCountDto(),
+                _ => new HarrisCriminalCountDto { RecordCount = recordcount },
+            };
+            var provider = new RepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.Repository;
+            mock.Setup(m => m.QuerySingleOrDefaultAsync<HarrisCriminalCountDto>(
+                It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()))
+                    .ReturnsAsync(completion);
+            _ = await service.Count(DateTime.Now);
+            mock.Verify(m => m.QuerySingleOrDefaultAsync<HarrisCriminalCountDto>(
+                It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
         private sealed class RepoContainer
         {
             private readonly IHarrisLoadRepository repo;
