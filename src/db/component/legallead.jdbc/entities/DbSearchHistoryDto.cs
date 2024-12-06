@@ -48,6 +48,7 @@
                 if (fieldName.Equals("DistrictCourtId", Comparison)) { DistrictCourtId = ChangeType<int>(value); return; }
                 if (fieldName.Equals("DistrictSearchTypeId", Comparison)) { DistrictSearchTypeId = ChangeType<int>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) { CreateDate = ChangeType<DateTime?>(value); }
+                if (fieldName.Equals("CompleteDate", Comparison)) { CompleteDate = ChangeType<DateTime?>(value); }
             }
         }
 

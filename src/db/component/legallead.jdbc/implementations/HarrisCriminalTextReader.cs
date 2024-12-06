@@ -7,7 +7,7 @@ namespace legallead.jdbc.implementations
         string zipname,
         IHarrisLoadRepository repo) : HarrisCriminalZipFileReader(zipname, repo, false)
     {
-         
+
 
         public override void Read()
         {
