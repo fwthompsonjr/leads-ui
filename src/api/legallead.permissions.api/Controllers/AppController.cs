@@ -215,9 +215,9 @@ namespace legallead.permissions.api.Controllers
                 reader.Transfer();
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return UnprocessableEntity();
+                return UnprocessableEntity(ex.Message);
             }
         }
 
