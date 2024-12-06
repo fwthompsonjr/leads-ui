@@ -164,6 +164,7 @@ namespace legallead.permissions.api
             services.AddScoped<HomeController>();
             services.AddScoped<ProfilesController>();
             services.AddScoped<AppController>();
+            services.AddScoped<DbController>();
             services.AddScoped(p =>
             {
                 return new PaymentController(payment,
