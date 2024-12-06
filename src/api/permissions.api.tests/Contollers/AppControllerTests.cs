@@ -494,18 +494,18 @@ namespace permissions.api.tests.Contollers
 
         [Theory]
         [InlineData(0)]
-        public void ControllerCanLoadHccData(int conditionId)
+        public async Task ControllerCanLoadHccDataAsync(int conditionId)
         {
             var appendOk = new KeyValuePair<bool, string>(true, "test load response");
             var request = new LoadHccDataRequest { Content = fkr.Random.AlphaNumeric(15) };
-            var error = Record.Exception(() =>
+            var error = await Record.ExceptionAsync(async () =>
             {
                 var provider = GetProvider();
                 var sut = provider.GetRequiredService<AppController>();
                 var mock = provider.GetRequiredService<Mock<IHarrisLoadRepository>>();
                 mock.Setup(s => s.Append(It.IsAny<string>())).ReturnsAsync(appendOk);
 
-                var response = sut.LoadHccData(request);
+                var response = await sut.LoadHccDataAsync(request);
                 if (conditionId == 10) Assert.IsAssignableFrom<OkResult>(response);
             });
             Assert.Null(error);
