@@ -215,9 +215,9 @@ namespace legallead.permissions.api.Controllers
                 reader.Transfer();
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return UnprocessableEntity();
+                return UnprocessableEntity(ex.Message);
             }
         }
 
@@ -241,8 +241,8 @@ namespace legallead.permissions.api.Controllers
         {
             try
             {
-                var response = await _hccDataService.Find(model.FilingDate);
-                return Ok(new { RecordCount = response.Count });
+                var response = await _hccDataService.Count(model.FilingDate);
+                return Ok(new { RecordCount = response });
             }
             catch (Exception ex)
             {
