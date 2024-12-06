@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace legallead.jdbc.entities
+﻿namespace legallead.jdbc.entities
 {
     public class HarrisCriminalCountDto : BaseDto
     {
         public int? RecordCount { get; set; }
-        public override object? this[string field] 
+        public override object? this[string field]
         {
             get
             {

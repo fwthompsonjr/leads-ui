@@ -1,0 +1,15 @@
+﻿namespace legallead.jdbc.entities
+{
+    public class DbSearchHistoryDto
+    {
+        public int CountyId { get; set; }
+        public int RecordCount { get; set; }
+        public DateTime SearchDate { get; set; }
+        public int SearchTypeId { get; set; }
+        public int CaseTypeId { get; set; }
+        public int DistrictCourtId { get; set; }
+        public int DistrictSearchTypeId { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public DateTime? CompleteDate { get; set; }
+    }
+}

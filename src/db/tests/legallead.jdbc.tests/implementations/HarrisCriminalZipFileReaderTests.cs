@@ -99,7 +99,7 @@ namespace legallead.jdbc.tests.implementations
             const string environ = "Test";
             var services = new ServiceCollection();
             services.AddSingleton<IDataInitializer, DataInitializer>();
-            services.AddSingleton<IDapperCommand, DapperExecutor>(); 
+            services.AddSingleton<IDapperCommand, DapperExecutor>();
             services.AddScoped(d =>
             {
                 var command = d.GetRequiredService<IDapperCommand>();
@@ -109,7 +109,7 @@ namespace legallead.jdbc.tests.implementations
             services.AddScoped<IHarrisLoadRepository, HarrisLoadRepository>();
             return services.BuildServiceProvider();
         }
-        
+
         private const string historyData = "C:\\_d\\lead-old\\_notes\\Weekly_Historical_Criminal.zip";
     }
 }

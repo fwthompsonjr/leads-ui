@@ -5,29 +5,14 @@ using System.IO.Compression;
 
 namespace legallead.jdbc.implementations
 {
-    public class HarrisCriminalZipFileReader : IDisposable
+    public class HarrisCriminalZipFileReader(
+        string zipname,
+        IHarrisLoadRepository repo) : IDisposable
     {
-        public HarrisCriminalZipFileReader(string zipname,
-        IHarrisLoadRepository repo,
-        bool allowFileOperations = true)
-        {
-            zipFileName = zipname;
-            _db = repo;
-            useFileSystem = allowFileOperations;
-            if (allowFileOperations)
-            {
-                tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
-            } else
-            {
-                tempFileName = string.Empty;
-            }
-        }
         private const int MxRecords = 500;
-        protected readonly string zipFileName;
-        private readonly IHarrisLoadRepository _db;
-        protected readonly string tempFileName; 
-        protected readonly bool useFileSystem;
-        protected string decodedData = string.Empty;
+        protected readonly string zipFileName = zipname;
+        private readonly IHarrisLoadRepository _db = repo;
+        protected readonly string tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
         private List<List<string>>? rawData = null;
         private bool disposedValue;
 
@@ -44,17 +29,6 @@ namespace legallead.jdbc.implementations
         {
             Read();
             rawData = [];
-            if (!useFileSystem)
-            {
-                if (string.IsNullOrEmpty(decodedData)) return;
-                var items = decodedData.Split(Environment.NewLine).ToList();
-                items.ForEach(item =>
-                {
-                    var data = item.Split("\t").ToList();
-                    rawData.Add(data);
-                });
-                return;
-            }
             if (!File.Exists(tempFileName)) return;
             using var reader = new StreamReader(tempFileName);
             while ((!reader.EndOfStream))
@@ -81,7 +55,7 @@ namespace legallead.jdbc.implementations
                 var data = rawData[r];
                 for (var c = 0; c < header.Count; c++)
                 {
-                    var fld = header[c]; 
+                    var fld = header[c];
                     var item = data[c];
                     // fetch field number
                     var fieldId = HarrisCriminalFieldName.Fields.FindIndex(x => x.Key.Equals(fld, oic));
