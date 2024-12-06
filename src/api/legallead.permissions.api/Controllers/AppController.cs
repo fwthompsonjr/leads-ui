@@ -207,12 +207,12 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpPost("load-hcc-data")]
-        public IActionResult LoadHccData(LoadHccDataRequest model)
+        public async Task<IActionResult> LoadHccDataAsync(LoadHccDataRequest model)
         {
             try
             {
-                using var reader = new HarrisCriminalTextReader(model.Content, _hccDataService);
-                reader.Transfer();
+                var loader = new HccRecordLoadingService(model.Content, _hccDataService);
+                await loader.LoadAsync();
                 return Ok();
             }
             catch (Exception ex)

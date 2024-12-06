@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.432.--",
+		"description": "API - deserialize upload service - fix",
+		"date": "2024-12-05 19:45:00"
+	},
+	{
 		"name": "3.2.431.--",
 		"description": "API - publish hcc reader in memory - fix",
 		"date": "2024-12-05 18:30:00"
