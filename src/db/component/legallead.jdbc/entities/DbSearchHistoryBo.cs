@@ -1,6 +1,6 @@
 ﻿namespace legallead.jdbc.entities
 {
-    internal class DbSearchHistoryBo
+    public class DbSearchHistoryBo
     {
         public string Id { get; set; } = string.Empty;
         public int CountyId { get; set; }
