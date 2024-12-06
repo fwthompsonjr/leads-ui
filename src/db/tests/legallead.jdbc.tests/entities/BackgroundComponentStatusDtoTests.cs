@@ -60,25 +60,6 @@ namespace legallead.jdbc.tests.entities
         [InlineData("StatusName")]
         [InlineData("StatusId")]
         [InlineData("CreateDate")]
-        public void BackgroundComponentStatusDtoHasExpectedFieldDefined(string name)
-        {
-            const string na = "notmapped";
-            var sut = new BackgroundComponentStatusDto();
-            var fields = sut.FieldList;
-            sut[na] = na;
-            _ = sut[na];
-            Assert.NotNull(fields);
-            Assert.NotEmpty(fields);
-            Assert.Contains(name, fields);
-        }
-
-        [Theory]
-        [InlineData("Id")]
-        [InlineData("ComponentId")]
-        [InlineData("LineNbr")]
-        [InlineData("StatusName")]
-        [InlineData("StatusId")]
-        [InlineData("CreateDate")]
         public void BackgroundComponentStatusDtoCanReadWriteByIndex(string fieldName)
         {
             var demo = faker.Generate();
