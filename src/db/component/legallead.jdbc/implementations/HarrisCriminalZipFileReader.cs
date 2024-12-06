@@ -17,7 +17,8 @@ namespace legallead.jdbc.implementations
             if (allowFileOperations)
             {
                 tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), Guid.NewGuid().ToString() + ".tr5");
-            } else
+            }
+            else
             {
                 tempFileName = string.Empty;
             }
@@ -25,7 +26,7 @@ namespace legallead.jdbc.implementations
         private const int MxRecords = 500;
         protected readonly string zipFileName;
         private readonly IHarrisLoadRepository _db;
-        protected readonly string tempFileName; 
+        protected readonly string tempFileName;
         protected readonly bool useFileSystem;
         protected string decodedData = string.Empty;
         private List<List<string>>? rawData = null;
@@ -81,7 +82,7 @@ namespace legallead.jdbc.implementations
                 var data = rawData[r];
                 for (var c = 0; c < header.Count; c++)
                 {
-                    var fld = header[c]; 
+                    var fld = header[c];
                     var item = data[c];
                     // fetch field number
                     var fieldId = HarrisCriminalFieldName.Fields.FindIndex(x => x.Key.Equals(fld, oic));
