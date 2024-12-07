@@ -1,8 +1,10 @@
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
+using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -107,6 +109,13 @@ namespace permissions.api.tests.Contollers
                     It.IsAny<HttpRequest>(),
                     It.IsAny<string>())).Returns(user);
             }
+            var dbmock = provider.GetRequiredService<Mock<IDbHistoryService>>();
+            var rsp = new DataRequestResponse();
+            var rlist = new List<FindRequestResponse>();
+            dbmock.Setup(x => x.BeginAsync(It.IsAny<BeginDataRequest>())).ReturnsAsync(rsp);
+            dbmock.Setup(x => x.CompleteAsync(It.IsAny<CompleteDataRequest>())).ReturnsAsync(rsp);
+            dbmock.Setup(x => x.FindAsync(It.IsAny<FindDataRequest>())).ReturnsAsync(rlist);
+            dbmock.Setup(x => x.UploadAsync(It.IsAny<UploadDataRequest>())).ReturnsAsync(true);
         }
 
     }

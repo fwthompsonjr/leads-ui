@@ -6,10 +6,11 @@ namespace legallead.permissions.api.Controllers
     [Route("/db")]
     [ApiController]
     public class DbController(
-    ILeadAuthenicationService lead) : ControllerBase
+    ILeadAuthenicationService lead,
+    IDbHistoryService db) : ControllerBase
     {
         private readonly ILeadAuthenicationService _leadService = lead;
-
+        private readonly IDbHistoryService _dataService = db;
         [HttpPost("begin")]
         public async Task<IActionResult> BeginAsync(BeginDataRequest model)
         {
@@ -17,7 +18,8 @@ namespace legallead.permissions.api.Controllers
             {
                 var user = _leadService.GetUserModel(Request, UserAccountAccess);
                 if (user == null) return Unauthorized();
-                return Ok();
+                var response = await _dataService.BeginAsync(model);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -32,7 +34,8 @@ namespace legallead.permissions.api.Controllers
             {
                 var user = _leadService.GetUserModel(Request, UserAccountAccess);
                 if (user == null) return Unauthorized();
-                return Ok();
+                var response = await _dataService.CompleteAsync(model);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -46,7 +49,8 @@ namespace legallead.permissions.api.Controllers
             {
                 var user = _leadService.GetUserModel(Request, UserAccountAccess);
                 if (user == null) return Unauthorized();
-                return Ok();
+                var response = await _dataService.FindAsync(model);
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -61,7 +65,8 @@ namespace legallead.permissions.api.Controllers
             {
                 var user = _leadService.GetUserModel(Request, UserAccountAccess);
                 if (user == null) return Unauthorized();
-                return Ok();
+                var response = await _dataService.UploadAsync(model);
+                return Ok(response);
             }
             catch (Exception ex)
             {
