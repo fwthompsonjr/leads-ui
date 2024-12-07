@@ -119,6 +119,9 @@ namespace legallead.permissions.api
 
                 c.CreateMap<UploadHistoryItem, DbSearchHistoryResultBo>();
                 c.CreateMap<DbSearchHistoryResultBo, UploadHistoryItem>();
+
+                c.CreateMap<DataRequestResponse, DbSearchHistoryBo>();
+                c.CreateMap<DbSearchHistoryBo, DataRequestResponse>();
             });
         }
 
