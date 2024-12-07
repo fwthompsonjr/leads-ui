@@ -1,15 +1,14 @@
+using legallead.jdbc.entities;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
-using legallead.jdbc.interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using legallead.jdbc.entities;
-using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -392,7 +391,7 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(2)]

@@ -1,5 +1,4 @@
-﻿using legallead.jdbc.implementations;
-using legallead.jdbc.interfaces;
+﻿using legallead.jdbc.interfaces;
 using legallead.json.db;
 using legallead.json.db.entity;
 using legallead.permissions.api.Entities;

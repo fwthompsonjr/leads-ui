@@ -1,6 +1,5 @@
 using legallead.jdbc.interfaces;
 using legallead.permissions.api.Services;
-using Stripe;
 using System.Text;
 
 namespace permissions.api.tests.Services

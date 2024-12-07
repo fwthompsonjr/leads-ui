@@ -73,6 +73,7 @@ namespace permissions.api.tests.Contollers
                 var leadRepoMock = new Mock<ILeadUserRepository>();
                 var leadAuthMock = new Mock<ILeadAuthenicationService>();
                 var harrisDbMock = new Mock<IHarrisLoadRepository>();
+                var dbHistoryServiceMock = new Mock<IDbHistoryService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -121,6 +122,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => leadAuthMock.Object);
                 collection.AddScoped(s => harrisDbMock);
                 collection.AddScoped(s => harrisDbMock.Object);
+                collection.AddScoped(s => dbHistoryServiceMock);
+                collection.AddScoped(s => dbHistoryServiceMock.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
@@ -200,6 +203,27 @@ namespace permissions.api.tests.Contollers
                         ControllerContext = controllerContext
                     };
                 });
+                collection.AddScoped(a =>
+                {
+                    var bo = LeadUserBoGenerator.GetBo(1, 1);
+                    var model = securityService.GetModel(bo);
+                    var token = LeadTokenService.GenerateToken("user account access credential", model);
+                    var mqRequest = a.GetRequiredService<Mock<HttpRequest>>(); 
+                    var mqDb = a.GetRequiredService<IDbHistoryService>();
+                    var leadsvc = a.GetRequiredService<ILeadAuthenicationService>();
+                    var headers = new HeaderDictionary
+                    {
+                        {
+                            "LEAD_IDENTITY",
+                            new Microsoft.Extensions.Primitives.StringValues(token)
+                        }
+                    };
+                    mqRequest.SetupGet(m => m.Headers).Returns(headers);
+                    return new DbController(leadsvc, mqDb)
+                    {
+                        ControllerContext = controllerContext
+                    };
+                });
                 collection.AddScoped<AppController>();
                 return collection.BuildServiceProvider();
             }
@@ -238,5 +262,6 @@ namespace permissions.api.tests.Contollers
         }
 
         private static readonly object locker = new();
+        private static readonly LeadSecurityService securityService = new();
     }
 }
