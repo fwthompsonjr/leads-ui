@@ -210,11 +210,11 @@ namespace permissions.api.tests.Contollers
                     var headers = new HeaderDictionary
                     {
                         {
-                            "LEAD_IDENTITY", 
-                            new Microsoft.Extensions.Primitives.StringValues(token) 
+                            "LEAD_IDENTITY",
+                            new Microsoft.Extensions.Primitives.StringValues(token)
                         }
                     };
-                    mqRequest.SetupGet(m => m.Headers).Returns(headers); 
+                    mqRequest.SetupGet(m => m.Headers).Returns(headers);
                     return new DbController(leadsvc)
                     {
                         ControllerContext = controllerContext

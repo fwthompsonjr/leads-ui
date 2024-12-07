@@ -106,6 +106,19 @@ namespace legallead.permissions.api
                 c.CreateMap<LevelRequestBo, DiscountRequestBo>();
 
                 c.CreateMap<DiscountRequestBo, LevelRequestBo>();
+
+
+                c.CreateMap<BeginDataRequest, DbHistoryRequest>();
+                c.CreateMap<DbHistoryRequest, BeginDataRequest>();
+
+                c.CreateMap<CompleteDataRequest, DbHistoryRequest>();
+                c.CreateMap<DbHistoryRequest, CompleteDataRequest>();
+
+                c.CreateMap<FindRequestResponse, DbSearchHistoryResultBo>();
+                c.CreateMap<DbSearchHistoryResultBo, FindRequestResponse>();
+
+                c.CreateMap<UploadHistoryItem, DbSearchHistoryResultBo>();
+                c.CreateMap<DbSearchHistoryResultBo, UploadHistoryItem>();
             });
         }
 

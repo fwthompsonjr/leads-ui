@@ -24,7 +24,8 @@ namespace legallead.permissions.api.Services
             if (dataset.Count < 2) return;
             var subset = dataset.GetRange(1, dataset.Count - 1);
             var list = new List<UploadLineItem>();
-            foreach (var s in subset) {
+            foreach (var s in subset)
+            {
                 var values = s.Split('\t').ToList();
                 list.Add(new UploadLineItem
                 {
