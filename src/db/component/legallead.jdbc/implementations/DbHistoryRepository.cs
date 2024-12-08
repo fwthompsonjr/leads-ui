@@ -71,7 +71,7 @@ namespace legallead.jdbc.implementations
             }
         }
 
-        public async Task<bool> UploadAsync(DbUploadRequest request)
+        public async Task<KeyValuePair<bool, string>> UploadAsync(DbUploadRequest request)
         {
             var prc = ProcedureNames.UploadProc;
             var parameters = new DynamicParameters();
@@ -81,11 +81,11 @@ namespace legallead.jdbc.implementations
             {
                 using var connection = _context.CreateConnection();
                 await _command.ExecuteAsync(connection, prc, parameters);
-                return true;
+                return new(true,"");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                return new(false, ex.Message);
             }
         }
 
