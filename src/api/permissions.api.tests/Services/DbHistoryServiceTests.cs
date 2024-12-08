@@ -82,7 +82,7 @@ namespace permissions.api.tests.Services
             var requestid = fkr.Random.Guid().ToString();
             var data = uploadfaker.Generate(responseId);
             var request = new UploadDataRequest { Id = requestid, Contents = data };
-            var response = fkr.Random.Bool();
+            var response = new KeyValuePair<bool, string>(fkr.Random.Bool(), "unit testing");
             var mock = provider.GetRequiredService<Mock<IDbHistoryRepository>>();
             mock.Setup(m => m.UploadAsync(It.IsAny<DbUploadRequest>())).ReturnsAsync(response);
             await service.UploadAsync(request);
