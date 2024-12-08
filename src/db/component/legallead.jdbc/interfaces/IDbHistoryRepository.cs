@@ -8,6 +8,6 @@ namespace legallead.jdbc.interfaces
         Task<DbSearchHistoryBo?> BeginAsync(DbHistoryRequest request);
         Task<DbSearchHistoryBo?> CompleteAsync(DbHistoryRequest request);
         Task<List<DbSearchHistoryResultBo>?> FindAsync(string id);
-        Task<bool> UploadAsync(DbUploadRequest request);
+        Task<KeyValuePair<bool, string>> UploadAsync(DbUploadRequest request);
     }
 }
