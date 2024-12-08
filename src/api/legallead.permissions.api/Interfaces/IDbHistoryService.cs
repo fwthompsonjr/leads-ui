@@ -7,6 +7,6 @@ namespace legallead.permissions.api.Interfaces
         Task<DataRequestResponse?> BeginAsync(BeginDataRequest model);
         Task<DataRequestResponse?> CompleteAsync(CompleteDataRequest model);
         Task<IEnumerable<FindRequestResponse>?> FindAsync(FindDataRequest model);
-        Task<bool> UploadAsync(UploadDataRequest model);
+        Task<KeyValuePair<bool, string>> UploadAsync(UploadDataRequest model);
     }
 }

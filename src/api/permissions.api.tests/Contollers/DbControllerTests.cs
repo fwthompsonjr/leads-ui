@@ -112,10 +112,11 @@ namespace permissions.api.tests.Contollers
             var dbmock = provider.GetRequiredService<Mock<IDbHistoryService>>();
             var rsp = new DataRequestResponse();
             var rlist = new List<FindRequestResponse>();
+            var response = new KeyValuePair<bool, string>(true, "unit testing");
             dbmock.Setup(x => x.BeginAsync(It.IsAny<BeginDataRequest>())).ReturnsAsync(rsp);
             dbmock.Setup(x => x.CompleteAsync(It.IsAny<CompleteDataRequest>())).ReturnsAsync(rsp);
             dbmock.Setup(x => x.FindAsync(It.IsAny<FindDataRequest>())).ReturnsAsync(rlist);
-            dbmock.Setup(x => x.UploadAsync(It.IsAny<UploadDataRequest>())).ReturnsAsync(true);
+            dbmock.Setup(x => x.UploadAsync(It.IsAny<UploadDataRequest>())).ReturnsAsync(response);
         }
 
     }

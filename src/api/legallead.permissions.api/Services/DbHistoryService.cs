@@ -34,7 +34,7 @@ namespace legallead.permissions.api.Services
             return list;
         }
 
-        public async Task<bool> UploadAsync(UploadDataRequest model)
+        public async Task<KeyValuePair<bool, string>> UploadAsync(UploadDataRequest model)
         {
             var src = new DbUploadRequest { Id = model.Id };
             model.Contents.ForEach(m =>
