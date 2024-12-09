@@ -5,7 +5,6 @@ namespace legallead.jdbc.entities
     public class DbSearchHistoryResultBo
     {
         public string Id { get; set; } = string.Empty;
-        public string SearchHistoryId { get; set; } = string.Empty;
         [JsonProperty("name")] public string Name { get; set; } = string.Empty;
         [JsonProperty("zip")] public string Zip { get; set; } = string.Empty;
         [JsonProperty("add1")] public string Address1 { get; set; } = string.Empty;

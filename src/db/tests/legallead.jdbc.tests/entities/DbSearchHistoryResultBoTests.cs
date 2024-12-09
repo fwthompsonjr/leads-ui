@@ -21,7 +21,6 @@ namespace legallead.jdbc.tests.entities
             {
                 var sut = dfaker.Generate();
                 Assert.False(string.IsNullOrEmpty(sut.Id));
-                Assert.False(string.IsNullOrEmpty(sut.SearchHistoryId));
                 Assert.False(string.IsNullOrEmpty(sut.Name));
                 Assert.False(string.IsNullOrEmpty(sut.Zip));
                 Assert.False(string.IsNullOrEmpty(sut.Address1));
@@ -41,7 +40,6 @@ namespace legallead.jdbc.tests.entities
         private static readonly Faker<DbSearchHistoryResultBo> dfaker
             = new Faker<DbSearchHistoryResultBo>()
             .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
-            .RuleFor(x => x.SearchHistoryId, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Name, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Zip, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Address1, y => y.Random.AlphaNumeric(25))

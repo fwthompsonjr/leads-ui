@@ -111,7 +111,6 @@ namespace legallead.jdbc.implementations
             return new()
             {
                 Id = response.Id,
-                SearchHistoryId = response.SearchHistoryId ?? string.Empty,
                 Name = response.Name ?? string.Empty,
                 Zip = response.Zip ?? string.Empty,
                 Address1 = response.Address1 ?? string.Empty,
