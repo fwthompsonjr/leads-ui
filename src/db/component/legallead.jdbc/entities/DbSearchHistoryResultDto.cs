@@ -2,7 +2,6 @@
 {
     public class DbSearchHistoryResultDto : BaseDto
     {
-        public string? SearchHistoryId { get; set; } = string.Empty;
         public string? Name { get; set; } = string.Empty;
         public string? Zip { get; set; } = string.Empty;
         public string? Address1 { get; set; } = string.Empty;
@@ -25,7 +24,6 @@
                 var fieldName = FieldList.Find(x => x.Equals(field, Comparison));
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
-                if (fieldName.Equals("SearchHistoryId", Comparison)) return SearchHistoryId;
                 if (fieldName.Equals("Name", Comparison)) return Name;
                 if (fieldName.Equals("Zip", Comparison)) return Zip;
                 if (fieldName.Equals("Address1", Comparison)) return Address1;
@@ -49,7 +47,6 @@
                     Id = ChangeType<string>(value) ?? string.Empty;
                     return;
                 }
-                if (fieldName.Equals("SearchHistoryId", Comparison)) { SearchHistoryId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("Name", Comparison)) { Name = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("Zip", Comparison)) { Zip = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("Address1", Comparison)) { Address1 = ChangeType<string?>(value); return; }

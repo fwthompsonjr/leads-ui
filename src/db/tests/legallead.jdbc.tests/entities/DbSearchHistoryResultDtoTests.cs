@@ -17,7 +17,6 @@ namespace legallead.jdbc.tests.entities
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("SearchHistoryId")]
         [InlineData("Name")]
         [InlineData("Zip")]
         [InlineData("Address1")]
@@ -45,7 +44,6 @@ namespace legallead.jdbc.tests.entities
 
         [Theory]
         [InlineData("Id")]
-        [InlineData("SearchHistoryId")]
         [InlineData("Name")]
         [InlineData("Zip")]
         [InlineData("Address1")]
@@ -71,7 +69,6 @@ namespace legallead.jdbc.tests.entities
         private static readonly Faker<DbSearchHistoryResultDto> dfaker
             = new Faker<DbSearchHistoryResultDto>()
             .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
-            .RuleFor(x => x.SearchHistoryId, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Name, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Zip, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.Address1, y => y.Random.AlphaNumeric(25))
