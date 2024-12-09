@@ -265,7 +265,6 @@ namespace permissions.api.tests.Services
                 var tmp = ModelMapper.Mapper.Map<DbSearchHistoryResultBo>(src);
                 tmp.Id = fk.Random.Guid().ToString();
                 tmp.CreateDate = fk.Date.Recent();
-                tmp.SearchHistoryId = fk.Random.Guid().ToString();
                 dest = tmp;
             });
     }
