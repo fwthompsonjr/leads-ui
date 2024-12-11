@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.435.--",
+		"description": "API - add holiday date services",
+		"date": "2024-12-10 21:15:00"
+	},
+	{
 		"name": "3.2.434.--",
 		"description": "API - add message to upload response",
 		"date": "2024-12-08 17:30:00"

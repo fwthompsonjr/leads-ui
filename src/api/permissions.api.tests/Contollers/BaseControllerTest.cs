@@ -74,6 +74,7 @@ namespace permissions.api.tests.Contollers
                 var leadAuthMock = new Mock<ILeadAuthenicationService>();
                 var harrisDbMock = new Mock<IHarrisLoadRepository>();
                 var dbHistoryServiceMock = new Mock<IDbHistoryService>();
+                var holidayServiceMock = new Mock<IHolidayService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -124,6 +125,10 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => harrisDbMock.Object);
                 collection.AddScoped(s => dbHistoryServiceMock);
                 collection.AddScoped(s => dbHistoryServiceMock.Object);
+                collection.AddScoped(s => dbHistoryServiceMock);
+                collection.AddScoped(s => dbHistoryServiceMock.Object);
+                collection.AddScoped(s => holidayServiceMock);
+                collection.AddScoped(s => holidayServiceMock.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
@@ -208,9 +213,10 @@ namespace permissions.api.tests.Contollers
                     var bo = LeadUserBoGenerator.GetBo(1, 1);
                     var model = securityService.GetModel(bo);
                     var token = LeadTokenService.GenerateToken("user account access credential", model);
-                    var mqRequest = a.GetRequiredService<Mock<HttpRequest>>(); 
+                    var mqRequest = a.GetRequiredService<Mock<HttpRequest>>();
                     var mqDb = a.GetRequiredService<IDbHistoryService>();
                     var leadsvc = a.GetRequiredService<ILeadAuthenicationService>();
+                    var datesvc = a.GetRequiredService<IHolidayService>();
                     var headers = new HeaderDictionary
                     {
                         {
@@ -219,7 +225,7 @@ namespace permissions.api.tests.Contollers
                         }
                     };
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
-                    return new DbController(leadsvc, mqDb)
+                    return new DbController(leadsvc, mqDb, datesvc)
                     {
                         ControllerContext = controllerContext
                     };

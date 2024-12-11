@@ -122,6 +122,9 @@ namespace legallead.permissions.api
 
                 c.CreateMap<DataRequestResponse, DbSearchHistoryBo>();
                 c.CreateMap<DbSearchHistoryBo, DataRequestResponse>();
+
+                c.CreateMap<HoliDateBo, HolidayResponse>()
+                    .ForMember(a => a.HoliDate, opt => opt.MapFrom(b => b.HoliDate));
             });
         }
 
