@@ -100,6 +100,7 @@ namespace legallead.permissions.api
             // holiday services
             services.AddScoped<IHolidayRepository, HolidayRepository>();
             services.AddScoped<IHolidayService, HolidayService>();
+            services.AddScoped<IUserUsageRepository, UserUsageRepository>();
             services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {

@@ -4,11 +4,9 @@ using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
-using System.Reflection;
 
 namespace legallead.jdbc.implementations
 {
-    [TargetTable(TableName = "DBCOUNTYUSAGEREQUEST")]
     public class UserUsageRepository(DataContext context) :
         BaseRepository<DbCountyUsageRequestDto>(context), IUserUsageRepository
     {
@@ -31,7 +29,7 @@ namespace legallead.jdbc.implementations
             }
         }
 
-        public async Task<KeyValuePair<bool, string>> CompleteUsageRecord(UserUsageAppendRecordModel model)
+        public async Task<KeyValuePair<bool, string>> CompleteUsageRecord(UserUsageCompleteRecordModel model)
         {
             const string prc = ProcNames.COMPLETE_USAGE_RECORD;
             try
@@ -60,7 +58,7 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QueryAsync<DbCountyUsageLimitDto>(connection, prc, parameters);
                 if (response == null) return default;
                 var list = new List<DbCountyUsageLimitBo>();
-                response.ToList().ForEach(r => 
+                response.ToList().ForEach(r =>
                     list.Add(GenericMap<DbCountyUsageLimitDto, DbCountyUsageLimitBo>(r)));
                 return list;
             }
@@ -164,7 +162,7 @@ namespace legallead.jdbc.implementations
             return new() { Id = source.Id };
         }
 
-        private static T GenericMap<S,T>(S source) where T : class, new()
+        private static T GenericMap<S, T>(S source) where T : class, new()
         {
             try
             {

@@ -1,5 +1,6 @@
 ﻿namespace legallead.jdbc.entities
 {
+    [TargetTable(TableName = "DBCOUNTYUSAGEREQUEST")]
     public class DbCountyUsageRequestDto : BaseDto
     {
         public string? LeadUserId { get; set; }
