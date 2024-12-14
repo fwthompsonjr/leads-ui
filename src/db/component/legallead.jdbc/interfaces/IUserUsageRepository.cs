@@ -3,7 +3,7 @@ using legallead.jdbc.models;
 
 namespace legallead.jdbc.interfaces
 {
-    internal interface IUserUsageRepository
+    public interface IUserUsageRepository
     {
         /// <summary>
         /// adds user search request details to database
