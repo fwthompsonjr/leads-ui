@@ -21,8 +21,7 @@ namespace legallead.permissions.api.Services
         {
             var request = mapper.Map<UserUsageAppendRecordModel>(model);
             var response = await db.CompleteUsageRecord(request);
-            if (response == null) return new();
-            var dest = mapper.Map<AppendUsageRecordResponse>(response);
+            var dest = mapper.Map<CompleteUsageRecordResponse>(response);
             return dest;
         }
 
