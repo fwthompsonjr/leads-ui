@@ -20,7 +20,7 @@ namespace legallead.jdbc.interfaces
         /// true when completion is success,
         /// otherwise false and message about failure state
         /// </returns>
-        Task<KeyValuePair<bool, string>> CompleteUsageRecord(UserUsageAppendRecordModel model);
+        Task<KeyValuePair<bool, string>> CompleteUsageRecord(UserUsageCompleteRecordModel model);
 
         /// <summary>
         /// gets list of monthly limits for specified user for all counties
