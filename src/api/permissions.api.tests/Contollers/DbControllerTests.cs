@@ -1,7 +1,11 @@
+using legallead.jdbc.entities;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
+using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
+using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +40,7 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
+
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
@@ -157,6 +162,160 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task ControllerCanAppendUsageAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(0).ToInstance<AppendUsageRecordRequest>() ?? new();
+                if (testId == 0) request.LeadUserId = string.Empty;
+                if (testId == 1) request.CountyId = 0;
+                var response = await sut.UsageAppendAsync(request);
+                if (testId == 1 || testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task ControllerCanCompleteUsageAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(1).ToInstance<CompleteUsageRecordRequest>() ?? new();
+                if (testId == 0) request.UsageRecordId = string.Empty;
+                if (testId == 1) request.RecordCount = 0;
+                var response = await sut.UsageCompleteAsync(request);
+                if (testId == 1 || testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanGetUsageLimitAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(2).ToInstance<GetMonthlyLimitRequest>() ?? new();
+                if (testId == 0) request.LeadId = string.Empty;
+                var response = await sut.UsageGetLimitAsync(request);
+                if (testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanGetUsageHistoryAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(4).ToInstance<GetUsageRequest>() ?? new();
+                if (testId == 0) request.LeadId = string.Empty;
+                var response = await sut.UsageGetHistoryAsync(request);
+                if (testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanGetUsageSummaryAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(4).ToInstance<GetUsageRequest>() ?? new();
+                if (testId == 0) request.LeadId = string.Empty;
+                var response = await sut.UsageGetSummaryAsync(request);
+                if (testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanSetUsageLimitAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var request = UsageServiceMock.GetRequestJson(6).ToInstance<SetMonthlyLimitRequest>() ?? new();
+                if (testId == 0) request.LeadId = string.Empty;
+                var response = await sut.UsageSetLimitAsync(request);
+                if (testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
         private static readonly Faker<HolidayResponse> listFaker
             = new Faker<HolidayResponse>()
             .RuleFor(x => x.HoliDate, y => y.Date.Past());
@@ -233,6 +392,75 @@ namespace permissions.api.tests.Contollers
             response = listFaker.Generate(historyId);
             svc.Setup(x => x.GetHolidaysAsync()).ReturnsAsync(response);
         }
+
+
+        private static class UsageServiceMock
+        {
+
+            public static string GetRequestJson(int requestId)
+            {
+                if (requestId == 0) return appendFaker.Generate().ToJsonString();
+                if (requestId == 1) return completeFaker.Generate().ToJsonString();
+                if (requestId == 2 || requestId == 3)
+                {
+                    var obj = getlimitFaker.Generate();
+                    obj.GetAllCounties = requestId == 2;
+                    return obj.ToJsonString();
+                }
+                if (requestId == 4 || requestId == 5)
+                {
+                    var obj = getusageFaker.Generate();
+                    obj.GetAllCounties = requestId == 4;
+                    return obj.ToJsonString();
+                }
+                if (requestId == 6) return setlimitFaker.Generate().ToJsonString();
+                return string.Empty;
+            }
+
+            private static readonly Faker<AppendUsageRecordRequest> appendFaker =
+                new Faker<AppendUsageRecordRequest>()
+                .RuleFor(x => x.LeadUserId, y => y.Random.AlphaNumeric(16))
+                .RuleFor(x => x.CountyId, y => y.Random.Int(1, 50))
+                .RuleFor(x => x.CountyName, y => y.Address.County())
+                .RuleFor(x => x.StartDate, y => y.Date.Recent())
+                .RuleFor(x => x.EndDate, y => y.Date.Recent())
+                .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 100) * 10);
+
+            private static readonly Faker<CompleteUsageRecordRequest> completeFaker =
+                new Faker<CompleteUsageRecordRequest>()
+                .RuleFor(x => x.UsageRecordId, y => y.Random.AlphaNumeric(16))
+                .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 100) * 10);
+
+            private static readonly Faker<GetMonthlyLimitRequest> getlimitFaker =
+                new Faker<GetMonthlyLimitRequest>()
+                .RuleFor(x => x.LeadId, y => y.Random.AlphaNumeric(16))
+                .RuleFor(x => x.CountyId, y => y.Random.Int(1, 50));
+
+            private static readonly Faker<DbCountyUsageLimitBo> limitBo =
+                new Faker<DbCountyUsageLimitBo>()
+                .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
+                .RuleFor(x => x.LeadUserId, y => y.Random.Guid().ToString())
+                .RuleFor(x => x.CountyId, y => y.Random.Int(1, 101))
+                .RuleFor(x => x.IsActive, y => y.Random.Bool())
+                .RuleFor(x => x.MaxRecords, y => y.Random.Int(5, 2500))
+                .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
+                .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
+            private static readonly Faker<GetUsageRequest> getusageFaker =
+                new Faker<GetUsageRequest>()
+                .RuleFor(x => x.LeadId, y => y.Random.AlphaNumeric(16))
+                .RuleFor(x => x.SearchDate, y => y.Date.Recent());
+
+            private static readonly Faker<SetMonthlyLimitRequest> setlimitFaker =
+                new Faker<SetMonthlyLimitRequest>()
+                .RuleFor(x => x.LeadId, y => y.Random.AlphaNumeric(16))
+                .RuleFor(x => x.CountyId, y => y.Random.Int(1, 50))
+                .RuleFor(x => x.MonthLimit, y => y.Random.Int(1, 5000));
+
+
+        }
+
+
     }
 }
 
