@@ -16,8 +16,10 @@ namespace legallead.permissions.api
             return new MapperConfiguration(c =>
             {
                 c.CreateMap<AppendUsageRecordRequest, UserUsageAppendRecordModel>();
-                c.CreateMap<CompleteUsageRecordRequest, UserUsageAppendRecordModel>();
-
+                c.CreateMap<CompleteUsageRecordRequest, UserUsageCompleteRecordModel>();
+                c.CreateMap<GetMonthlyLimitRequest, GetMonthlyLimitResponse>();
+                c.CreateMap<GetUsageRequest, GetUsageResponse>();
+                c.CreateMap<SetMonthlyLimitRequest, SetMonthlyLimitResponse>();
             });
         }
     }

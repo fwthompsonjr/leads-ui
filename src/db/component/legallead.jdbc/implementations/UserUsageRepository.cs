@@ -4,6 +4,7 @@ using legallead.jdbc.helpers;
 using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
 
 namespace legallead.jdbc.implementations
 {
@@ -156,12 +157,14 @@ namespace legallead.jdbc.implementations
         }
 
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
         private static DbCountyAppendLimitBo? MapFrom(DbCountyAppendLimitDto? source)
         {
             if (source == null) return default;
             return new() { Id = source.Id };
         }
 
+        [ExcludeFromCodeCoverage(Justification = "Private member tested from public accessor")]
         private static T GenericMap<S, T>(S source) where T : class, new()
         {
             try
