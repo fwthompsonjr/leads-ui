@@ -20,6 +20,12 @@ namespace legallead.permissions.api
                 c.CreateMap<GetMonthlyLimitRequest, GetMonthlyLimitResponse>();
                 c.CreateMap<GetUsageRequest, GetUsageResponse>();
                 c.CreateMap<SetMonthlyLimitRequest, SetMonthlyLimitResponse>();
+
+                c.CreateMap<DbCountyAppendLimitBo, AppendUsageRecordResponse>();
+                c.CreateMap<CompleteUsageRecordRequest, CompleteUsageRecordResponse>()
+                    .ForMember(x => x.Id, y => y.MapFrom(m => m.UsageRecordId))
+                    .ForMember(x => x.IsCompleted, y => y.MapFrom(m => false))
+                    .ForMember(x => x.Message, y => y.MapFrom(m => string.Empty));
             });
         }
     }

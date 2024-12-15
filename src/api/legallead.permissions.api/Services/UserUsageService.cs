@@ -8,12 +8,12 @@ namespace legallead.permissions.api.Services
     public class UserUsageService(IUserUsageRepository repository) : IUserUsageService
     {
         private readonly IUserUsageRepository db = repository;
-        private static IMapper mapper = UserUsageMapper.Mapper;
+        private static readonly IMapper mapper = UserUsageMapper.Mapper;
         public async Task<AppendUsageRecordResponse?> AppendUsageRecordAsync(AppendUsageRecordRequest model)
         {
             var request = mapper.Map<UserUsageAppendRecordModel>(model);
             var response = await db.AppendUsageRecord(request);
-            if (response == null) return null;
+            if (response == null) return new();
             var dest = mapper.Map<AppendUsageRecordResponse>(response);
             return dest;
         }
@@ -22,7 +22,9 @@ namespace legallead.permissions.api.Services
         {
             var request = mapper.Map<UserUsageCompleteRecordModel>(model);
             var response = await db.CompleteUsageRecord(request);
-            var dest = mapper.Map<CompleteUsageRecordResponse>(response);
+            var dest = mapper.Map<CompleteUsageRecordResponse>(model);
+            dest.IsCompleted = response.Key;
+            dest.Message = response.Value;
             return dest;
         }
 
