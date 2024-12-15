@@ -75,6 +75,7 @@ namespace permissions.api.tests.Contollers
                 var harrisDbMock = new Mock<IHarrisLoadRepository>();
                 var dbHistoryServiceMock = new Mock<IDbHistoryService>();
                 var holidayServiceMock = new Mock<IHolidayService>();
+                var usageServiceMock = new Mock<IUserUsageService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -129,6 +130,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => dbHistoryServiceMock.Object);
                 collection.AddScoped(s => holidayServiceMock);
                 collection.AddScoped(s => holidayServiceMock.Object);
+                collection.AddScoped(s => usageServiceMock);
+                collection.AddScoped(s => usageServiceMock.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
@@ -217,6 +220,7 @@ namespace permissions.api.tests.Contollers
                     var mqDb = a.GetRequiredService<IDbHistoryService>();
                     var leadsvc = a.GetRequiredService<ILeadAuthenicationService>();
                     var datesvc = a.GetRequiredService<IHolidayService>();
+                    var usagesvc = a.GetRequiredService<IUserUsageService>();
                     var headers = new HeaderDictionary
                     {
                         {
@@ -225,7 +229,7 @@ namespace permissions.api.tests.Contollers
                         }
                     };
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
-                    return new DbController(leadsvc, mqDb, datesvc)
+                    return new DbController(leadsvc, mqDb, datesvc, usagesvc)
                     {
                         ControllerContext = controllerContext
                     };
