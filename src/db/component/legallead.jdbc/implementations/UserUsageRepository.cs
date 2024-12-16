@@ -5,6 +5,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.jdbc.implementations
 {
@@ -16,7 +17,8 @@ namespace legallead.jdbc.implementations
             const string prc = ProcNames.APPEND_USAGE_RECORD;
             try
             {
-                var payload = JsonConvert.SerializeObject(model);
+                var list = new List<UserUsageAppendRecordModel> { model };
+                var payload = JsonConvert.SerializeObject(list);
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.Js, payload);
                 using var connection = _context.CreateConnection();
@@ -181,15 +183,15 @@ namespace legallead.jdbc.implementations
 
         private static class ProcNames
         {
-            public const string APPEND_USAGE_RECORD = "USP_USER_USAGE_APPEND_RECORD ( ? );";
-            public const string COMPLETE_USAGE_RECORD = "USP_USER_USAGE_COMPLETE_RECORD ( ? );";
-            public const string GET_MONTHLY_LIMIT_ALL = "USP_USER_USAGE_GET_MONTHLY_LIMIT_ALL ( ? );";
-            public const string GET_MONTHLY_LIMIT_BY_COUNTY = "USP_USER_USAGE_GET_MONTHLY_LIMIT ( ?, ? );";
-            public const string GET_USAGE_DETAIL_MTD = "USP_USER_USAGE_GET_DETAIL_MTD ( ?, ? );";
-            public const string GET_USAGE_DETAIL_YTD = "USP_USER_USAGE_GET_DETAIL_YTD ( ?, ? );";
-            public const string GET_USAGE_SUMMARY_MTD = "USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
-            public const string GET_USAGE_SUMMARY_YTD = "USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
-            public const string SET_USAGE_LIMIT = "USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
+            public const string APPEND_USAGE_RECORD = "CALL USP_USER_USAGE_APPEND_RECORD ( ? );";
+            public const string COMPLETE_USAGE_RECORD = "CALL USP_USER_USAGE_COMPLETE_RECORD ( ? );";
+            public const string GET_MONTHLY_LIMIT_ALL = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT_ALL ( ? );";
+            public const string GET_MONTHLY_LIMIT_BY_COUNTY = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT ( ?, ? );";
+            public const string GET_USAGE_DETAIL_MTD = "CALL USP_USER_USAGE_GET_DETAIL_MTD ( ?, ? );";
+            public const string GET_USAGE_DETAIL_YTD = "CALL USP_USER_USAGE_GET_DETAIL_YTD ( ?, ? );";
+            public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
+            public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
+            public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
         }
 
         private static class ProcParameterNames
