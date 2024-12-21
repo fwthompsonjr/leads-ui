@@ -11,6 +11,7 @@ namespace legallead.jdbc
         {
             lock (locker)
             {
+                databaseName = ConnectionStringHelper.GetDbName(databaseName);
                 DbConnectProvider.Target = connectionType;
                 return DbConnectProvider.ConnectionString(databaseName);
             }
