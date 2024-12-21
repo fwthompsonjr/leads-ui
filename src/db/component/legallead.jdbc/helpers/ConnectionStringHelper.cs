@@ -6,7 +6,7 @@ namespace legallead.jdbc.helpers
     {
         internal static string GetDbName(string databaseName = "app")
         {
-            if (GetCurrent.ConnectId == 1) return GetCurrent.DataSource;
+            if (GetCurrent.ConnectId == 1 && databaseName.StartsWith("app")) return GetCurrent.DataSource;
             return databaseName;
         }
         internal static string GetConfiguration()
