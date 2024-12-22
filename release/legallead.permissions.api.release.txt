@@ -62,3 +62,4 @@ Release information - legallead.permissions.api
 11/16/2024 19:30:00 PM Update api to db authentication for lead accounts
 11/18/2024 21:15:00 PM Update api to remove timestamp from check
 12/21/2024 10:45:00 PM Update api to use scaled down db
+12/22/2024 10:45:00 PM Update api to removing unsued services and background operations

@@ -267,10 +267,6 @@ namespace legallead.permissions.api
                 var logging = s.GetRequiredService<ILogger<SubscriptionSyncService>>();
                 return new SubscriptionSyncService(logging, repo);
             });
-            services.AddHostedService(s => s.GetRequiredService<QueueResetService>());
-            services.AddHostedService(s => s.GetRequiredService<PaymentAccountCreationService>());
-            services.AddHostedService(s => s.GetRequiredService<PricingSyncService>());
-            services.AddHostedService(s => s.GetRequiredService<SubscriptionSyncService>());
 
             loggerFactory.Dispose();
         }
