@@ -73,73 +73,8 @@ namespace legallead.permissions.api.Utility
             string priceId)
         {
             var response = new SubscriptionCreatedModel();
-            // Automatically save the payment method to the subscription
-            // when the first payment is successful.
-            var paymentSettings = new SubscriptionPaymentSettingsOptions
-            {
-                SaveDefaultPaymentMethod = "on_subscription",
-            };
-            // Create the subscription. Note we're expanding the Subscription's
-            // latest invoice and that invoice's payment_intent
-            // so we can pass it to the front end to confirm the payment
-            var dat = new Dictionary<string, string>(){
-                    { "SubscriptionType", "account-permissions" },
-                    { "SuccessUrl", successUrl },
-                    { "CancelUrl", cancelUrl },
-                    { "ExternalId", externalId },
-                };
-            var options = new SubscriptionCreateOptions
-            {
-                Customer = cust.CustomerId,
-                Items =
-                [
-                    new()
-                    {
-                        Price = priceId,
-                        Quantity = 1,
-                    },
-                ],
-                InvoiceSettings = new() { Issuer = new() { Type = "self" } },
-                PaymentSettings = paymentSettings,
-                PaymentBehavior = "default_incomplete",
-                Metadata = dat
-            };
-            options.AddExpand("latest_invoice.payment_intent");
-            var service = new SubscriptionService();
-            try
-            {
-                var returnUri = GetSubscriptionPaymentUrl(successUrl);
-                returnUri = returnUri.Replace("~0", externalId);
-                var session = await service.CreateAsync(options);
-                returnUri = returnUri.Replace("~1", session.Id);
-                dat["SuccessUrl"] = successUrl.Replace("~0", externalId).Replace("~1", session.Id);
-                dat["CancelUrl"] = cancelUrl.Replace("~0", externalId).Replace("~1", session.Id);
-                dat.Add("InitializeUrl", returnUri);
-                service.Update(session.Id, new() { Metadata = dat });
-                response.Id = session.Id;
-                response.Url = returnUri;
-                return response;
-            }
-            catch (StripeException e)
-            {
-                Console.WriteLine($"Failed to create subscription.{e}");
-                return response;
-            }
+            return response;
         }
-
-        private static string GetSubscriptionPaymentUrl(string landing)
-        {
-            if (!Uri.TryCreate(landing, UriKind.Absolute, out var url)) return landing;
-            var host = (url.Scheme) switch
-            {
-                "https" => url.Port == 443 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
-                "http" => url.Port == 80 ? url.Host : string.Concat(url.Host, ":", url.Port.ToString()),
-                _ => url.Host,
-            };
-            var constructedUrl = $"{url.Scheme}://{host}/subscription-checkout?sessionid=~1&id=~0";
-            return constructedUrl;
-        }
-
         [ExcludeFromCodeCoverage(Justification = "Item to be refactored.")]
         private static string GetPermissionCode(string level, PaymentStripeOption payment)
         {
