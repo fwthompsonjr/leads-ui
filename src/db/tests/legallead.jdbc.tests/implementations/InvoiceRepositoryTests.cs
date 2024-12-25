@@ -215,7 +215,7 @@ namespace legallead.jdbc.tests.implementations
             var response = await service.UpdateAsync(query);
             var expected = conditionId == 1;
             Assert.Equal(expected, response.Key);
-            if (conditionId != 0) 
+            if (conditionId != 0)
                 mock.Verify(x => x.ExecuteAsync(
                         It.IsAny<IDbConnection>(),
                         It.Is<string>(s => s.Equals(proc)),
