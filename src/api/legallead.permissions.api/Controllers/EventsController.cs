@@ -7,10 +7,12 @@ namespace legallead.permissions.api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [ExcludeFromCodeCoverage(Justification = "This controller and component are not used. Future development.")]
-    public class EventsController(StripeKeyEntity config) : ControllerBase
+    public class EventsController(
+        StripeKeyEntity config,
+        ILeadInvoiceService svcs) : ControllerBase
     {
         private readonly string endpointSecret = config.WebhookId ?? string.Empty;
-
+        private readonly ILeadInvoiceService db = svcs;
         [HttpPost]
         public async Task<IActionResult> IndexAsync()
         {
@@ -25,10 +27,11 @@ namespace legallead.permissions.api.Controllers
                         // You should provision the subscription and save the customer ID to your database.
                         break;
                     case "invoice.paid":
-                        // Continue to provision the subscription as payments continue to be made.
-                        // Store the status in your database and check when a user accesses your service.
-                        // This approach helps you avoid hitting rate limits.
-                        break;
+                        if (stripeEvent.Data.Object is not Invoice invc) break;
+                        var hasIndex = invc.Metadata.TryGetValue("RecordIndex", out var invoiceId);
+                        if (!hasIndex || string.IsNullOrEmpty(invoiceId)) break;
+                        var updated = db.CloseInvoiceAsync(invoiceId);
+                        return Ok(updated);
                     case "invoice.payment_failed":
                         // The payment failed or the customer does not have a valid payment method.
                         // The subscription becomes past_due. Notify your customer and send them to the
