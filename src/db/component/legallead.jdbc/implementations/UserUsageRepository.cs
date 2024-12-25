@@ -5,7 +5,6 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace legallead.jdbc.implementations
 {
