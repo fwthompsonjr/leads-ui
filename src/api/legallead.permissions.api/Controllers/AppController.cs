@@ -15,12 +15,14 @@ namespace legallead.permissions.api.Controllers
     IAppAuthenicationService appservice,
     ICountyAuthorizationService service,
     ILeadAuthenicationService lead,
-    IHarrisLoadRepository harrisdb) : ControllerBase
+    IHarrisLoadRepository harrisdb,
+    ILeadInvoiceService invoiceDb) : ControllerBase
     {
         private readonly IAppAuthenicationService _authenticationService = appservice;
         private readonly ICountyAuthorizationService _authorizationService = service;
         private readonly ILeadAuthenicationService _leadService = lead;
         private readonly IHarrisLoadRepository _hccDataService = harrisdb;
+        private readonly ILeadInvoiceService _invoiceDb = invoiceDb;
 
         [HttpPost("get-county-code")]
         public IActionResult GetCounty(CountyCodeRequest model)
@@ -48,9 +50,17 @@ namespace legallead.permissions.api.Controllers
             if (string.IsNullOrEmpty(obj)) return Unauthorized();
             var model = obj.ToInstance<LeadUserModel>();
             if (model == null) return Conflict("Failed To Serialize Object");
-            var token = LeadTokenService.GenerateToken(UserAccountAccess, model);
-            return Ok(new { request.UserName, token });
+            try
+            {
+                var token = LeadTokenService.GenerateToken(UserAccountAccess, model);
+                return Ok(new { request.UserName, token });
+            }
+            finally
+            {
+                await TryCreateCustomerAccountAsync(model);
+            }
         }
+
         [HttpPost("create-account")]
         public async Task<IActionResult> CreateAccountAsync(RegisterAccountModel model)
         {
@@ -249,6 +259,20 @@ namespace legallead.permissions.api.Controllers
             }
         }
 
+
+        private async Task TryCreateCustomerAccountAsync(LeadUserModel model)
+        {
+            var itm = model.UserData.ToInstance<LocalLeadAcct>();
+            if (itm == null) return;
+            if (string.IsNullOrEmpty(itm.Email)) return;
+            var request = new CreateInvoiceAccountModel
+            {
+                LeadId = itm.Id,
+                EmailAcct = itm.Email
+            };
+            await _invoiceDb.GetOrCreateAccountAsync(request);
+        }
+
         private const string UserAccountAccess = "user account access credential";
         private static List<UsStateCounty> GetCounties
         {
@@ -261,5 +285,12 @@ namespace legallead.permissions.api.Controllers
             }
         }
         private static List<UsStateCounty>? txcounties;
+
+        private sealed class LocalLeadAcct
+        {
+            public string Id { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+        }
+
     }
 }

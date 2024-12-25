@@ -5,6 +5,7 @@ using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Model;
+using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +77,8 @@ namespace permissions.api.tests.Contollers
                 var dbHistoryServiceMock = new Mock<IDbHistoryService>();
                 var holidayServiceMock = new Mock<IHolidayService>();
                 var usageServiceMock = new Mock<IUserUsageService>();
+                var mkoption = new Mock<PaymentStripeOption>();
+                var mkInvoiceSvc = new Mock<ILeadInvoiceService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -132,6 +135,10 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => holidayServiceMock.Object);
                 collection.AddScoped(s => usageServiceMock);
                 collection.AddScoped(s => usageServiceMock.Object);
+                collection.AddScoped(s => mkoption);
+                collection.AddScoped(s => mkoption.Object);
+                collection.AddScoped(s => mkInvoiceSvc);
+                collection.AddScoped(s => mkInvoiceSvc.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
