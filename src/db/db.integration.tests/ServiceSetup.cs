@@ -31,6 +31,7 @@ namespace db.integration.tests
                     return new DataContext(command, dbint, environ);
                 });
                 services.AddScoped<ILeadUserRepository, LeadUserRepository>();
+                services.AddScoped<IInvoiceRepository, InvoiceRepository>();
                 Provider = services.BuildServiceProvider();
             }
         }
