@@ -1,0 +1,12 @@
+﻿using legallead.permissions.api.Models;
+
+namespace legallead.permissions.api.Interfaces
+{
+    public interface ILeadInvoiceService
+    {
+        Task<GetInvoiceResponse?> GetByCustomerIdAsync(string id);
+        Task<GetInvoiceResponse?> GetByInvoiceIdAsync(string id);
+        Task<List<LeadCustomerBo>?> GetOrCreateAccountAsync(CreateInvoiceAccountModel query);
+        Task<UpdateInvoiceResponse> UpdateInvoiceAsync(UpdateInvoiceRequest request);
+    }
+}

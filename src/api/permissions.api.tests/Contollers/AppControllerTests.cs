@@ -101,7 +101,8 @@ namespace permissions.api.tests.Contollers
             var county = new Mock<ICountyAuthorizationService>();
             var svcs = new Mock<ILeadAuthenicationService>().Object;
             var hccdb = new Mock<IHarrisLoadRepository>().Object;
-            var sut = new AppController(auth.Object, county.Object, svcs, hccdb);
+            var pmt = new Mock<ILeadInvoiceService>();
+            var sut = new AppController(auth.Object, county.Object, svcs, hccdb, pmt.Object);
             var isok = name.Equals("lead.administrator");
             var dto = isok ? new AppAuthenicationItemDto { Id = 10, UserName = "test.account" } : null;
             auth.Setup(s => s.Authenicate(It.IsAny<string>(), It.IsAny<string>())).Returns(dto);
