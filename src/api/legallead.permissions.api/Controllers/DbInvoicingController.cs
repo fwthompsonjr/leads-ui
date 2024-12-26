@@ -12,6 +12,13 @@ namespace legallead.permissions.api.Controllers
         private readonly ILeadInvoiceService _leadService = lead;
         private static readonly string[] sourceArray = ["Customer", "Invoice"];
 
+        [HttpPost("create-customer-invoice")]
+        public async Task<IActionResult> CreateRemoteInvoiceAsync(GetInvoiceRequest request)
+        {
+            var response = await _leadService.CreateRemoteInvoiceAsync(request);
+            return Ok(response ?? new());
+        }
+
         [HttpPost("get-invoice-list")]
         public async Task<IActionResult> GetInvoicesAsync(GetInvoiceRequest request)
         {

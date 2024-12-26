@@ -36,6 +36,26 @@ namespace legallead.permissions.api.Services
             if (string.IsNullOrEmpty(customerId)) return null;
             var invoice = CreateInvoice(customerId, header, lines);
             if (invoice == null) return null;
+            if (invoice.Id == lessThanMinIndex)
+            {
+                var completion = await PostInvoiceDetailsAsync(requestId, invoice);
+                if (completion == null) return null;
+                var finalDto = new UpdateInvoiceRequest
+                {
+                    UpdateType = "Complete",
+                    InvoiceId = requestId,
+                    InvoiceStatus = "SENT",
+                    InvoiceUri = invoice.InvoicePdf
+                };
+                return await UpdateInvoiceAsync(finalDto);
+            }
+            return await PostInvoiceDetailsAsync(requestId, invoice);
+        }
+
+        private async Task<UpdateInvoiceResponse?> PostInvoiceDetailsAsync(string? requestId, Invoice? invoice)
+        {
+            if (invoice == null) return null;
+            if (string.IsNullOrEmpty(requestId)) return null;
             var updateDto = new UpdateInvoiceRequest
             {
                 UpdateType = "Status",
@@ -155,7 +175,7 @@ namespace legallead.permissions.api.Services
             return response;
         }
 
-        protected static string CreatePaymentAccount(CreateInvoiceAccountModel model)
+        protected virtual string CreatePaymentAccount(CreateInvoiceAccountModel model)
         {
             if (string.IsNullOrWhiteSpace(model.EmailAcct)) return string.Empty;
             try
@@ -233,11 +253,20 @@ namespace legallead.permissions.api.Services
             return list;
         }
 
-        private static Invoice? CreateInvoice(string customerId, InvoiceHeaderModel model, List<InvoiceDetailModel> lines)
+        protected virtual Invoice? CreateInvoice(string customerId, InvoiceHeaderModel model, List<InvoiceDetailModel> lines)
         {
             try
             {
-
+                // minimum amount check
+                if (model.InvoiceTotal < 0.50m)
+                {
+                    var min = new Invoice
+                    {
+                        Id = lessThanMinIndex,
+                        InvoicePdf = "http://api.legallead.co"
+                    };
+                    return min;
+                }
                 // Create an Invoice
                 var invoiceOptions = new InvoiceCreateOptions
                 {
@@ -278,6 +307,7 @@ namespace legallead.permissions.api.Services
         }
 
         private static readonly List<string> updatetypes = [.. "Status,Uri,Complete".Split(',')];
+        private const string lessThanMinIndex = "less_than_min_billable_amount";
         private bool IsTestPayment
         {
             get
