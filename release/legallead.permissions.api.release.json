@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.441.--",
+		"description": "API - support invoicing for customers",
+		"date": "2024-12-25 18:45:00"
+	},
+	{
 		"name": "3.2.440.--",
 		"description": "API - remove background services for queue and pricing",
 		"date": "2024-12-22 11:45:00"

@@ -4,6 +4,8 @@ namespace legallead.permissions.api.Interfaces
 {
     public interface ILeadInvoiceService
     {
+        Task<bool> CloseInvoiceAsync(string invoiceId);
+        Task<UpdateInvoiceResponse?> CreateRemoteInvoiceAsync(GetInvoiceRequest request);
         Task<GetInvoiceResponse?> GetByCustomerIdAsync(string id);
         Task<GetInvoiceResponse?> GetByInvoiceIdAsync(string id);
         Task<List<LeadCustomerBo>?> GetOrCreateAccountAsync(CreateInvoiceAccountModel query);
