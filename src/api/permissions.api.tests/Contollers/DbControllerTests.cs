@@ -427,22 +427,13 @@ namespace permissions.api.tests.Contollers
             private static readonly Faker<CompleteUsageRecordRequest> completeFaker =
                 new Faker<CompleteUsageRecordRequest>()
                 .RuleFor(x => x.UsageRecordId, y => y.Random.AlphaNumeric(16))
-                .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 100) * 10);
+                .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 100) * 10)
+                .RuleFor(x => x.ExcelName, y=> y.System.FileName(".xlsx"));
 
             private static readonly Faker<GetMonthlyLimitRequest> getlimitFaker =
                 new Faker<GetMonthlyLimitRequest>()
                 .RuleFor(x => x.LeadId, y => y.Random.AlphaNumeric(16))
                 .RuleFor(x => x.CountyId, y => y.Random.Int(1, 50));
-
-            private static readonly Faker<DbCountyUsageLimitBo> limitBo =
-                new Faker<DbCountyUsageLimitBo>()
-                .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
-                .RuleFor(x => x.LeadUserId, y => y.Random.Guid().ToString())
-                .RuleFor(x => x.CountyId, y => y.Random.Int(1, 101))
-                .RuleFor(x => x.IsActive, y => y.Random.Bool())
-                .RuleFor(x => x.MaxRecords, y => y.Random.Int(5, 2500))
-                .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
-                .RuleFor(x => x.CreateDate, y => y.Date.Recent());
 
             private static readonly Faker<GetUsageRequest> getusageFaker =
                 new Faker<GetUsageRequest>()
