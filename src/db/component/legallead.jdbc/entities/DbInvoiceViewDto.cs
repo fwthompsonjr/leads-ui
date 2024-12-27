@@ -38,6 +38,7 @@
                 if (fieldName.Equals("Description", Comparison)) return Description;
                 if (fieldName.Equals("ItemCount", Comparison)) return ItemCount;
                 if (fieldName.Equals("ItemPrice", Comparison)) return ItemPrice;
+                if (fieldName.Equals("ItemTotal", Comparison)) return ItemTotal;
                 if (fieldName.Equals("InvoiceTotal", Comparison)) return InvoiceTotal;
                 if (fieldName.Equals("CompleteDate", Comparison)) return CompleteDate;
                 return CreateDate;
@@ -66,7 +67,6 @@
                 if (fieldName.Equals("ItemTotal", Comparison)) { ItemTotal = ChangeType<decimal?>(value); return; }
                 if (fieldName.Equals("InvoiceTotal", Comparison)) { InvoiceTotal = ChangeType<decimal?>(value); return; }
                 if (fieldName.Equals("CompleteDate", Comparison)) { CompleteDate = ChangeType<DateTime?>(value); return; }
-
                 if (fieldName.Equals("CreateDate", Comparison)) { CreateDate = ChangeType<DateTime?>(value); }
             }
         }

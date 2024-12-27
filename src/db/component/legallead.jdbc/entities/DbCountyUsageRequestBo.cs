@@ -12,5 +12,6 @@
         public int RecordCount { get; set; }
         public DateTime? CompleteDate { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string? ExcelName { get; set; }
     }
 }

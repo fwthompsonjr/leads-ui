@@ -6,8 +6,24 @@ using db.integration.tests;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
 using Microsoft.Extensions.DependencyInjection;
-int testId = 7;
+int testId = 9;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
+if (testId == 9)
+{
+    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
+    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+    var actual = await instance.GetUsageSummary(leadId, dte);
+    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
+}
+if (testId == 8)
+{
+    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
+    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+    var actual = await instance.GetUsage(leadId, dte);
+    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
+}
 if (testId == 0)
 {
     var instance = ServiceSetup.AppServices.GetRequiredService<ILeadUserRepository>();

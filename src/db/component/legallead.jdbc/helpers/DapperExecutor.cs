@@ -99,11 +99,18 @@ namespace legallead.jdbc.helpers
         }
 
         [ExcludeFromCodeCoverage(Justification = "Private static testing from parent method.")]
-        private static object GetFieldValue(IDataReader reader, int index)
+        private static object? GetFieldValue(IDataReader reader, int index)
         {
-            var data = reader[index];
-            if (data is not Guid guid) return data;
-            return guid.ToString("D");
+            try
+            {
+                var data = reader.GetValue(index);
+                if (data is not Guid guid) return data;
+                return guid.ToString("D");
+            } 
+            catch
+            {
+                return null;
+            }
         }
     }
 }

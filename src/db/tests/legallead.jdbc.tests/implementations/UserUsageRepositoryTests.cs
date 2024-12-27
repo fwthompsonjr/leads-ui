@@ -150,6 +150,7 @@ namespace legallead.jdbc.tests.implementations
         [InlineData(1)]
         [InlineData(100)]
         [InlineData(25, true)]
+        [InlineData(30)]
         public async Task RepoCanGetUsageAsync(int conditionId, bool isMonthlyRequest = false)
         {
             var dto = conditionId < 0 ? null : recordfaker.Generate(conditionId);
@@ -158,6 +159,24 @@ namespace legallead.jdbc.tests.implementations
             var mock = provider.DbCommandMock;
             var leadId = provider.LeadId;
             var searchDate = provider.SearchDate;
+            
+            var names = exlfaker.Generate(10);
+            if (conditionId != 30)
+            {
+                mock.Setup(x => x.QueryAsync<DbExcelNameDto>(
+                        It.IsAny<IDbConnection>(),
+                        It.IsAny<string>(),
+                        It.IsAny<DynamicParameters>())).ReturnsAsync(names);
+            } 
+            else
+            {
+                mock.Setup(x => x.QueryAsync<DbExcelNameDto>(
+                        It.IsAny<IDbConnection>(),
+                        It.IsAny<string>(),
+                        It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+
+            }
+
             if (conditionId < 0)
             {
                 mock.Setup(x => x.QueryAsync<DbCountyUsageRequestDto>(
@@ -188,30 +207,38 @@ namespace legallead.jdbc.tests.implementations
         [InlineData(25, true)]
         public async Task RepoCanGetUsageSummaryAsync(int conditionId, bool isMonthlyRequest = false)
         {
+            const string prcExcel = "CALL USP_LEADUSER_EXL_GET_FILENAMES_BY_USERID ( ? );";
+            var summaries = new[] { "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );", "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );" };
             var dto = conditionId < 0 ? null : summaryfaker.Generate(conditionId);
             var provider = new RepoContainer();
             var service = provider.Repository;
             var mock = provider.DbCommandMock;
             var leadId = provider.LeadId;
             var searchDate = provider.SearchDate;
+            var names = exlfaker.Generate(10);
+            mock.Setup(x => x.QueryAsync<DbExcelNameDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Equals(prcExcel)),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(names);
+
             if (conditionId < 0)
             {
                 mock.Setup(x => x.QueryAsync<DbUsageSummaryDto>(
                     It.IsAny<IDbConnection>(),
-                    It.IsAny<string>(),
+                    It.Is<string>(s => summaries.Contains(s)),
                     It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
             }
             else
             {
                 mock.Setup(x => x.QueryAsync<DbUsageSummaryDto>(
                     It.IsAny<IDbConnection>(),
-                    It.IsAny<string>(),
+                    It.Is<string>(s => summaries.Contains(s)),
                     It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
             }
             _ = await service.GetUsageSummary(leadId, searchDate, isMonthlyRequest);
             mock.Verify(x => x.QueryAsync<DbUsageSummaryDto>(
                     It.IsAny<IDbConnection>(),
-                    It.IsAny<string>(),
+                    It.Is<string>(s => summaries.Contains(s)),
                     It.IsAny<DynamicParameters>()));
         }
 
@@ -315,5 +342,13 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.CountyName, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.MTD, y => y.Random.Int())
             .RuleFor(x => x.MonthlyLimit, y => y.Random.Int(1, 555555));
+
+        private static readonly Faker<DbExcelNameDto> exlfaker
+            = new Faker<DbExcelNameDto>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.LeadUserId, y => y.Random.AlphaNumeric(10))
+            .RuleFor(x => x.ShortFileName, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent());
     }
 }
