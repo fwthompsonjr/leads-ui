@@ -10,15 +10,6 @@ namespace legallead.permissions.api.Extensions
 {
     internal static class InvoiceExtensions
     {
-        /*
-        <li class="list-group-item text-white" style="background: transparent">
-			Search - Level: Guest<br/>
-			248 records<br/>
-			$ 0.00
-		</li>
-        background: transparent; border-color: #444
-        
-        */
         private static readonly object locker = new();
         private static IStripeInfrastructure? stripeServices;
         internal static IStripeInfrastructure? GetInfrastructure
@@ -209,6 +200,71 @@ namespace legallead.permissions.api.Extensions
             return doc.DocumentNode.OuterHtml;
         }
 
+        public static string GetHtml(
+            this GetInvoiceResponse response)
+        {
+            const string liOpen = "<li style='background: transparent; border-color: #444' class='list-group-item text-white'>";
+            const string liClose = "</li>";
+            var html = GetDraftHtml;
+            var invoice = response.Headers.FirstOrDefault();
+            var detail = response.Lines.FirstOrDefault(x => x.LineNbr == 1);
+            if (invoice == null) return string.Empty;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            var parentNode = doc.DocumentNode;
+            var detailNode = parentNode.SelectSingleNode("//ul[@name='invoice-line-items']");
+            if (detailNode != null) detailNode.InnerHtml = string.Empty;
+            var createDate = invoice.CreateDate.GetValueOrDefault(DateTime.UtcNow).ToString("f");
+            var amount = response.Lines.Sum(x => x.ItemTotal.GetValueOrDefault()).ToString("c");
+            var replacements = new Dictionary<string, string>()
+            {
+                { "//span[@name='invoice']", GetInvoiceNumber(invoice) },
+                { "//span[@name='invoice-date']", createDate },
+                { "//span[@name='invoice-description']", detail?.Description ?? "Record Seacrch" },
+                { "//span[@name='invoice-total']", amount },
+                { "//span[@name='invoice-status']", invoice.InvoiceNbr ?? "UNKOWN" },
+                { "//span[@name='payment-link-url']", GetInvoiceAddress(invoice) }
+            };
+            var keys = replacements.Keys.ToList();
+            keys.ForEach(key =>
+            {
+                var content = replacements[key];
+                var span = parentNode.SelectSingleNode(key);
+                if (span != null)
+                {
+                    span.InnerHtml = content;
+                    if (key.Contains("invoice-status", oic)
+                      && content.Equals("PAID"))
+                    {
+                        var attr = span.Attributes.FirstOrDefault(x => x.Name == "class");
+                        if (attr != null) attr.Value += " text-success";
+                    }
+                }
+            });
+            var lines = response.Lines.Select(s =>
+            {
+                var title = s.Description ?? string.Empty;
+                var tbl = new[]
+                {
+                    title,
+                    $"{s.ItemCount.GetValueOrDefault(0)} @ {s.ItemPrice.GetValueOrDefault(0)} per record",
+                    s.ItemTotal.GetValueOrDefault(0).ToString("c2")
+                }.ToList();
+                if (title.Contains("Sales Tax", oic))
+                {
+                    tbl.RemoveAt(1);
+                }
+                return string.Join("<br>" + Environment.NewLine, tbl);
+            });
+            var items = lines.Select(s =>
+            {
+                var arr = new[] { liOpen, s, liClose };
+                return string.Join(Environment.NewLine, arr);
+            });
+            if (detailNode != null) detailNode.InnerHtml = string.Join(Environment.NewLine, items);
+            return doc.DocumentNode.OuterHtml;
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static void RemoveCheckout(HtmlNode parentNode)
         {
@@ -319,6 +375,24 @@ namespace legallead.permissions.api.Extensions
         }
 
 
+        private static string GetInvoiceNumber(InvoiceHeaderModel invoice)
+        {
+            const char pipe = '|';
+            const string fallback = "&nbsp;";
+            if (string.IsNullOrWhiteSpace(invoice.InvoiceUri) || !invoice.InvoiceUri.Contains(pipe)) return fallback;
+            var collection = invoice.InvoiceUri.Split(pipe);
+            if (collection.Length < 3) return fallback;
+            return collection[1];
+        }
+
+        private static string GetInvoiceAddress(InvoiceHeaderModel invoice)
+        {
+            const char pipe = '|';
+            const string fallback = "link to payment";
+            if (string.IsNullOrWhiteSpace(invoice.InvoiceUri) || !invoice.InvoiceUri.Contains(pipe)) return fallback;
+            return invoice.InvoiceUri.Split(pipe)[0];
+        }
+
         [ExcludeFromCodeCoverage(Justification = "Private member is accessed from public method")]
         private static string GetPaymentIntentUrl(string landing)
         {
@@ -334,9 +408,20 @@ namespace legallead.permissions.api.Extensions
         }
 
         private const string InvoiceScriptTag = "<!-- stripe payment script -->";
+        private static string? _draftInvoiceHtml;
+        private static string GetDraftHtml
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_draftInvoiceHtml)) return _draftInvoiceHtml;
+                _draftInvoiceHtml = Properties.Resources.draft_invoice_blank;
+                return _draftInvoiceHtml;
+            }
+        }
         private static string? _invoiceScript;
         private static string? _invoiceSubscriptionScript;
         private static string? _invoiceDiscountScript;
         private static readonly TextInfo englishText = new CultureInfo("en-US", false).TextInfo;
+        private static readonly StringComparison oic = StringComparison.OrdinalIgnoreCase;
     }
 }

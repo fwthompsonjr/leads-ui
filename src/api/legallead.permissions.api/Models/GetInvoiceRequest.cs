@@ -6,7 +6,7 @@ namespace legallead.permissions.api.Models
     {
         [GetInvoiceType]
         public string RequestType { get; set; } = string.Empty;
-        
+
         public string CustomerId { get; set; } = string.Empty;
         public string InvoiceId { get; set; } = string.Empty;
     }

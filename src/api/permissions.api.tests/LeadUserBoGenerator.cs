@@ -51,7 +51,7 @@ namespace permissions.api.tests
                     CountyData = JsonConvert.SerializeObject(tokens),
                     UserData = JsonConvert.SerializeObject(person),
                     IndexData = JsonConvert.SerializeObject(permissions),
-                }; 
+                };
             }
         }
         public static RegisterAccountModel GetAccount()

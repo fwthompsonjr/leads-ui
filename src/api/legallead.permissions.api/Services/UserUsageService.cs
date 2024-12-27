@@ -31,7 +31,7 @@ namespace legallead.permissions.api.Services
         public async Task<GetMonthlyLimitResponse> GetMonthlyLimitAsync(GetMonthlyLimitRequest model)
         {
             var response = mapper.Map<GetMonthlyLimitResponse>(model);
-            response.Content = 
+            response.Content =
                 model.GetAllCounties ?
                 Serialize(await db.GetMonthlyLimit(model.LeadId)) :
                 Serialize(await db.GetMonthlyLimit(model.LeadId, model.CountyId));
