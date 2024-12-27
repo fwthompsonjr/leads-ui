@@ -12,5 +12,6 @@
         public string CountyName { get; set; } = string.Empty;
         public int MTD { get; set; }
         public int MonthlyLimit { get; set; }
+        public string? ExcelName { get; set; }
     }
 }

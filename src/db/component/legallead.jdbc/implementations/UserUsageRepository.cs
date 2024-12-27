@@ -96,6 +96,7 @@ namespace legallead.jdbc.implementations
                 ProcNames.GET_USAGE_DETAIL_YTD;
             try
             {
+                var names = await GetExcelNames(leadId);
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.LeadId, leadId);
                 parameters.Add(ProcParameterNames.SearchDate, searchDate);
@@ -105,6 +106,11 @@ namespace legallead.jdbc.implementations
                 var list = new List<DbCountyUsageRequestBo>();
                 response.ToList().ForEach(r =>
                     list.Add(GenericMap<DbCountyUsageRequestDto, DbCountyUsageRequestBo>(r)));
+                list.ForEach(r =>
+                {
+                    var name = names.Find(x => (x.RequestId ?? "").Equals(x.RequestId ?? "-"));
+                    if (name != null) r.ExcelName = name.ShortFileName ?? string.Empty;
+                });
                 return list;
             }
             catch (Exception)
@@ -120,6 +126,7 @@ namespace legallead.jdbc.implementations
                 ProcNames.GET_USAGE_SUMMARY_YTD;
             try
             {
+                var names = await GetExcelNames(leadId);
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.LeadId, leadId);
                 parameters.Add(ProcParameterNames.SearchDate, searchDate);
@@ -129,6 +136,11 @@ namespace legallead.jdbc.implementations
                 var list = new List<DbUsageSummaryBo>();
                 response.ToList().ForEach(r =>
                     list.Add(GenericMap<DbUsageSummaryDto, DbUsageSummaryBo>(r)));
+                list.ForEach(r =>
+                {
+                    var name = names.Find(x => (x.RequestId ?? "").Equals(x.RequestId ?? "-"));
+                    if (name != null) r.ExcelName = name.ShortFileName ?? string.Empty;
+                });
                 return list;
             }
             catch (Exception)
@@ -136,6 +148,8 @@ namespace legallead.jdbc.implementations
                 return default;
             }
         }
+
+
 
         public async Task<DbCountyUsageLimitBo?> SetMonthlyLimit(string leadId, int countyId, int monthLimit)
         {
@@ -154,6 +168,24 @@ namespace legallead.jdbc.implementations
             catch (Exception)
             {
                 return default;
+            }
+        }
+
+        private async Task<List<DbExcelNameDto>> GetExcelNames(string leadId)
+        {
+            const string prc = ProcNames.GET_USAGE_FILE_NAME;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<DbExcelNameDto>(connection, prc, parameters);
+                if (response == null) return [];
+                return response.ToList();
+            }
+            catch (Exception)
+            {
+                return [];
             }
         }
 
@@ -188,6 +220,7 @@ namespace legallead.jdbc.implementations
             public const string GET_MONTHLY_LIMIT_BY_COUNTY = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT ( ?, ? );";
             public const string GET_USAGE_DETAIL_MTD = "CALL USP_USER_USAGE_GET_DETAIL_MTD ( ?, ? );";
             public const string GET_USAGE_DETAIL_YTD = "CALL USP_USER_USAGE_GET_DETAIL_YTD ( ?, ? );";
+            public const string GET_USAGE_FILE_NAME = "CALL USP_LEADUSER_EXL_GET_FILENAMES_BY_USERID ( ? );";
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";

@@ -32,6 +32,7 @@ namespace db.integration.tests
                 });
                 services.AddScoped<ILeadUserRepository, LeadUserRepository>();
                 services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+                services.AddScoped<IUserUsageRepository, UserUsageRepository>();
                 Provider = services.BuildServiceProvider();
             }
         }
