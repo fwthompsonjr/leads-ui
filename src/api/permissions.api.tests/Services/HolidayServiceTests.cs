@@ -1,6 +1,5 @@
 ﻿using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
 using legallead.permissions.api;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
@@ -32,7 +31,8 @@ namespace permissions.api.tests.Services
             var service = provider.GetRequiredService<IHolidayService>();
             var mock = provider.GetRequiredService<Mock<IHolidayRepository>>();
             mock.Setup(m => m.IsHolidayAsync(It.IsAny<DateTime>())).ReturnsAsync(response);
-            var error = await Record.ExceptionAsync(async () => {
+            var error = await Record.ExceptionAsync(async () =>
+            {
                 await service.IsHolidayAsync(request);
             });
             Assert.Null(error);
@@ -52,7 +52,8 @@ namespace permissions.api.tests.Services
             var service = provider.GetRequiredService<IHolidayService>();
             var mock = provider.GetRequiredService<Mock<IHolidayRepository>>();
             mock.Setup(m => m.GetHolidaysAsync()).ReturnsAsync(response);
-            var error = await Record.ExceptionAsync(async () => {
+            var error = await Record.ExceptionAsync(async () =>
+            {
                 await service.GetHolidaysAsync();
             });
             Assert.Null(error);

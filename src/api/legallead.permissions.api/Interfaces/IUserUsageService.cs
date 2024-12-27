@@ -23,8 +23,8 @@ namespace legallead.permissions.api.Interfaces
         /// sets monthly limits for specified user and county
         /// </summary>
         Task<SetMonthlyLimitResponse> SetMonthlyLimitAsync(SetMonthlyLimitRequest model);
-        
-		/// <summary>
+
+        /// <summary>
         /// gets monthly usage history for specified user
         /// </summary>
         Task<GetUsageResponse> GetUsageAsync(GetUsageRequest model);

@@ -1,4 +1,5 @@
-﻿using legallead.jdbc.interfaces;
+﻿using AngleSharp.Dom;
+using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using Stripe;
 
@@ -21,7 +22,18 @@ namespace legallead.permissions.api.Services
             var header = details.Headers[0];
             var requestId = header.Id;
             if (string.IsNullOrEmpty(requestId)) return null;
-            if (header.InvoiceNbr == "SENT") return null;
+            if (completiontypes.Contains(header.InvoiceNbr, StringComparer.OrdinalIgnoreCase))
+            {
+                return new()
+                {
+                    IsUpdated = true,
+                    Message = "Invoice previously created",
+                    InvoiceId = request.InvoiceId,
+                    InvoiceStatus = header.InvoiceNbr ?? string.Empty,
+                    InvoiceUri = header.InvoiceUri ?? string.Empty,
+                    UpdateType = expected
+                };
+            }
             var lines = details.Lines.FindAll(x => x.Id == requestId);
             if (lines.Count == 0) return null;
             var model = new CreateInvoiceAccountModel
@@ -44,32 +56,12 @@ namespace legallead.permissions.api.Services
                 {
                     UpdateType = "Complete",
                     InvoiceId = requestId,
-                    InvoiceStatus = "SENT",
+                    InvoiceStatus = "PAID",
                     InvoiceUri = invoice.InvoicePdf
                 };
                 return await UpdateInvoiceAsync(finalDto);
             }
             return await PostInvoiceDetailsAsync(requestId, invoice);
-        }
-
-        private async Task<UpdateInvoiceResponse?> PostInvoiceDetailsAsync(string? requestId, Invoice? invoice)
-        {
-            if (invoice == null) return null;
-            if (string.IsNullOrEmpty(requestId)) return null;
-            var updateDto = new UpdateInvoiceRequest
-            {
-                UpdateType = "Status",
-                InvoiceId = requestId,
-                InvoiceStatus = "SENT",
-                InvoiceUri = invoice.InvoicePdf
-            };
-
-            var sent = await UpdateInvoiceAsync(updateDto);
-            if (sent == null || !sent.IsUpdated) return null;
-            updateDto.UpdateType = "Uri";
-            var addressed = await UpdateInvoiceAsync(updateDto);
-            if (addressed == null || !addressed.IsUpdated) return null;
-            return addressed;
         }
 
         public async Task<bool> CloseInvoiceAsync(string invoiceId)
@@ -96,16 +88,14 @@ namespace legallead.permissions.api.Services
 
         public async Task<GetInvoiceResponse?> GetByCustomerIdAsync(string id)
         {
-            var response = new GetInvoiceResponse();
             var payload = new DbInvoiceViewBo { LeadUserId = id };
-            return await MapResponseAsync(response, payload);
+            return await MapResponseAsync(payload);
         }
 
         public async Task<GetInvoiceResponse?> GetByInvoiceIdAsync(string id)
         {
-            var response = new GetInvoiceResponse();
-            var payload = new DbInvoiceViewBo { RequestId = id };
-            return await MapResponseAsync(response, payload);
+            var payload = new DbInvoiceViewBo { Id = id };
+            return await MapResponseAsync(payload);
         }
 
         public async Task<List<LeadCustomerBo>?> GetOrCreateAccountAsync(CreateInvoiceAccountModel query)
@@ -137,6 +127,40 @@ namespace legallead.permissions.api.Services
             return added;
         }
 
+        public async Task<string?> GetInvoiceStatusAsync(GetInvoiceRequest request)
+        {
+            const char pipe = '|';
+            var data = await GetByInvoiceIdAsync(request.InvoiceId);
+            var header = data?.Headers.FirstOrDefault();
+            var fallback = header?.InvoiceNbr ?? "UNKNOWN";
+            try
+            {
+                if (header != null && header.InvoiceTotal < 0.05m) return fallback;
+                if (header == null ||
+                    string.IsNullOrEmpty(header.InvoiceUri) ||
+                    !header.InvoiceUri.Contains(pipe)) return fallback;
+
+                var invoiceId = header.InvoiceUri.Split(pipe)[^1];
+                var svc = new InvoiceService();
+                var invoice = await svc.GetAsync(invoiceId);
+                var sts = invoice.Status.ToUpper();
+                if (sts != "PAID") return sts;
+                var finalDto = new UpdateInvoiceRequest
+                {
+                    UpdateType = "Complete",
+                    InvoiceId = request.InvoiceId,
+                    InvoiceStatus = "PAID",
+                    InvoiceUri = header.InvoiceUri
+                };
+                _ = await UpdateInvoiceAsync(finalDto);
+                return sts;
+            }
+            catch (Exception)
+            {
+                return fallback;
+            }
+        }
+
         public async Task<UpdateInvoiceResponse> UpdateInvoiceAsync(UpdateInvoiceRequest request)
         {
             var response = new UpdateInvoiceResponse
@@ -161,9 +185,9 @@ namespace legallead.permissions.api.Services
                 response.Message = $"Invoice Update {request.UpdateType} is not valid request type";
                 return response;
             }
-            if (index == 1) payload.InvoiceNbr = request.InvoiceStatus;
-            if (index == 2) payload.InvoiceUri = request.InvoiceUri;
-            if (index == 3)
+            if (index == 0) payload.InvoiceNbr = request.InvoiceStatus;
+            if (index == 1) payload.InvoiceUri = request.InvoiceUri;
+            if (index == 2)
             {
                 payload.InvoiceNbr = "PAID";
                 payload.InvoiceUri = request.InvoiceUri;
@@ -202,14 +226,82 @@ namespace legallead.permissions.api.Services
         }
 
 
-        private async Task<GetInvoiceResponse?> MapResponseAsync(GetInvoiceResponse response, DbInvoiceViewBo payload)
+
+        private async Task<UpdateInvoiceResponse?> PostInvoiceDetailsAsync(string? requestId, Invoice? invoice)
         {
+            if (invoice == null) return null;
+            if (string.IsNullOrEmpty(requestId)) return null;
+            var updateDto = new UpdateInvoiceRequest
+            {
+                UpdateType = "Status",
+                InvoiceId = requestId,
+                InvoiceStatus = "SENT",
+                InvoiceUri = GetPaymentLanding(invoice)
+            };
+
+            var sent = await UpdateInvoiceAsync(updateDto);
+            if (sent == null || !sent.IsUpdated) return null;
+            updateDto.UpdateType = "Uri";
+            var addressed = await UpdateInvoiceAsync(updateDto);
+            if (addressed == null || !addressed.IsUpdated) return null;
+            return addressed;
+        }
+
+        private static string GetPaymentLanding(Invoice invoice)
+        {
+            const string suffix = "?s=ap";
+            const string find = "/pdf";
+            var id = invoice.Id;
+            var landing = invoice.InvoicePdf;
+            var nbr = invoice.Number;
+            if (string.IsNullOrWhiteSpace(landing)) return string.Empty;
+            if (!Uri.TryCreate(landing, UriKind.Absolute, out var _)) return $"{landing}|{nbr}|{id}";
+            var translation = landing;
+            if (landing.Contains(find, StringComparison.OrdinalIgnoreCase))
+            {
+                var lidx = landing.LastIndexOf(find, StringComparison.OrdinalIgnoreCase);
+                translation = string.Concat(landing.Substring(0, lidx), suffix);
+            }
+            return $"{translation}|{nbr}|{id}";
+        }
+        private async Task<GetInvoiceResponse?> MapResponseAsync(DbInvoiceViewBo payload)
+        {
+            var response = new GetInvoiceResponse();
             _ = await db.GenerateInvoicesAsync();
             var data = await db.QueryAsync(payload);
             if (data == null || data.Count == 0) return response;
-            response.Headers.AddRange(MapFrom(data));
+            var headings = MapFrom(data);
+            var completed = headings.FindAll(x =>
+                !completiontypes.Contains(x.InvoiceNbr, StringComparer.OrdinalIgnoreCase) &&
+                x.InvoiceTotal < 0.50m);
+            response.Headers.AddRange(headings);
             response.Lines.AddRange(MapDetail(data));
-            return response;
+            if (completed.Count == 0) return response;
+            return await UpdateInvoicesLessThanMinimumBillableAsync(payload, response, completed);
+        }
+
+        private async Task<GetInvoiceResponse?> UpdateInvoicesLessThanMinimumBillableAsync(
+            DbInvoiceViewBo payload,
+            GetInvoiceResponse response,
+            List<InvoiceHeaderModel> completed)
+        {
+            var successes = 0;
+            foreach (var item in completed)
+            {
+                if (string.IsNullOrEmpty(item.Id)) continue;
+                var bo = new UpdateInvoiceRequest
+                {
+                    InvoiceId = item.Id,
+                    InvoiceStatus = "PAID",
+                    InvoiceUri = "http://www.completed.com",
+                    UpdateType = "Complete"
+                };
+                var added = await UpdateInvoiceAsync(bo);
+                if (added != null && added.IsUpdated) successes++;
+            }
+            if (successes == 0) return response;
+
+            return await MapResponseAsync(payload);
         }
 
         private static List<InvoiceHeaderModel> MapFrom(List<DbInvoiceViewBo> response)
@@ -232,7 +324,7 @@ namespace legallead.permissions.api.Services
                     UserName = r.UserName,
                 });
             });
-            return list;
+            return list.GroupBy(x => x.Id).Select(x => x.First()).ToList();
         }
 
         private static List<InvoiceDetailModel> MapDetail(List<DbInvoiceViewBo> response)
@@ -270,34 +362,44 @@ namespace legallead.permissions.api.Services
                 // Create an Invoice
                 var invoiceOptions = new InvoiceCreateOptions
                 {
+                    AutoAdvance = true,
                     AutomaticallyFinalizesAt = DateTime.UtcNow.AddMinutes(2),
                     Customer = customerId,
                     CollectionMethod = "send_invoice",
                     DaysUntilDue = 30,
+                    PaymentSettings = new(),
                     Currency = "usd",
                     AutomaticTax = new() { Enabled = false },
                     Description = $"Record Search {model.CreateDate:d}",
                     Metadata = new()
                     {
                         { "RecordIndex", model.Id },
-                    }
+                    },
                 };
+                invoiceOptions.PaymentSettings.PaymentMethodTypes = ["card", "customer_balance"];
                 var service = new InvoiceService();
                 var invoice = service.Create(invoiceOptions);
-                var items = new StripeList<InvoiceLineItem>();
+                var lineService = new InvoiceItemService();
                 lines.ForEach(line =>
                 {
-                    var item = new InvoiceLineItem
+                    var lineOptions = new InvoiceItemCreateOptions
                     {
+                        Customer = customerId,
                         Invoice = invoice.Id,
                         Description = line.Description,
-                        Amount = Convert.ToInt64(line.ItemTotal.GetValueOrDefault() * 100),
                         Quantity = Convert.ToInt64(line.ItemCount.GetValueOrDefault()),
+                        Currency = "usd",
+                        UnitAmount = Convert.ToInt64(line.ItemPrice.GetValueOrDefault() * 100),
                     };
-                    _ = items.Append(item);
+                    if (line.LineNbr.GetValueOrDefault() != 1)
+                    {
+                        lineOptions.Quantity = 1;
+                        lineOptions.UnitAmount = Convert.ToInt64(line.ItemTotal.GetValueOrDefault() * 100);
+                    }
+                    lineService.Create(lineOptions);
                 });
-                invoice.Lines = items;
-                service.FinalizeInvoice(invoice.Id);
+
+                invoice = service.FinalizeInvoice(invoice.Id);
                 return invoice;
             }
             catch (Exception)
@@ -307,6 +409,7 @@ namespace legallead.permissions.api.Services
         }
 
         private static readonly List<string> updatetypes = [.. "Status,Uri,Complete".Split(',')];
+        private static readonly List<string> completiontypes = [.. "SENT,PAID".Split(',')];
         private const string lessThanMinIndex = "less_than_min_billable_amount";
         private bool IsTestPayment
         {

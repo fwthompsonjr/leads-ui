@@ -206,6 +206,26 @@ namespace legallead.permissions.api.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
+        ///		&lt;meta charset=&quot;utf-8&quot;&gt;
+        ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+        ///		&lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+        ///		&lt;meta name=&quot;author&quot; content=&quot;&quot;&gt;
+        ///		&lt;title&gt;records request: invoice&lt;/title&gt;
+        ///		
+        ///		&lt;!-- googleapis : fonts --&gt;
+        ///		&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+        ///		
+        ///		&lt;!-- popper --&gt;
+        ///		&lt;script src=&quot;https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min. [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string draft_invoice_blank {
+            get {
+                return ResourceManager.GetString("draft-invoice-blank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;
         ///            try { 
         ///            CefSharp.BindObjectAsync(&quot;jsHandler&quot;, &quot;jsHandler&quot;); 

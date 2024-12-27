@@ -1,16 +1,7 @@
-﻿using legallead.jdbc.entities;
-using legallead.jdbc.interfaces;
-using legallead.jdbc.models;
-using legallead.permissions.api.Extensions;
+﻿using legallead.jdbc.interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
-using Moq;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Services
 {

@@ -1,6 +1,5 @@
 ﻿using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
-using Stripe;
 using System.Security.Cryptography;
 
 namespace legallead.permissions.api.Utility

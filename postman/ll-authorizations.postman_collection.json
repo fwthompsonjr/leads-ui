@@ -4246,6 +4246,219 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "invoice",
+			"item": [
+				{
+					"name": "CreateInvoice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"RequestType\": \"Invoice\",\r\n  \"CustomerId\": \"fef29532-a487-11ef-99ce-0af7a01f52e9\",\r\n  \"InvoiceId\": \"36cad15a-c0b7-11ef-b422-0af36f7c981d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/db-invoice/create-customer-invoice",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"db-invoice",
+								"create-customer-invoice"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"RequestType\": \"Invoice\",\r\n  \"CustomerId\": \"fef29532-a487-11ef-99ce-0af7a01f52e9\",\r\n  \"InvoiceId\": \"36cad15a-c0b7-11ef-b422-0af36f7c981d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/db-invoice/get-invoice-status",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"db-invoice",
+								"get-invoice-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInvoiceByCustomerId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"RequestType\": \"Customer\",\r\n  \"CustomerId\": \"fef29532-a487-11ef-99ce-0af7a01f52e9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/db-invoice/get-invoice-list",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"db-invoice",
+								"get-invoice-list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInvoiceByInvoiceId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is not 500 (InternalError)\", function () {\r",
+									"  pm.response.to.not.have.status(500) \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code can be 200\", function () {\r",
+									"    var acceptable = [ 200 ];\r",
+									"    var code = pm.response.code;\r",
+									"    pm.expect(acceptable).to.include(code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response should not be null\", function () {\r",
+									"    var js = pm.response.json();\r",
+									"    pm.expect(js != null).to.equal(true);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"RequestType\": \"Invoice\",\r\n  \"CustomerId\": \"fef29532-a487-11ef-99ce-0af7a01f52e9\",\r\n  \"InvoiceId\": \"36cad15a-c0b7-11ef-b422-0af36f7c981d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{app_url}}/db-invoice/get-invoice-list",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"db-invoice",
+								"get-invoice-list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [

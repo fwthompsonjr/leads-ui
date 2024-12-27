@@ -13,11 +13,13 @@ namespace permissions.api.tests
 
         public static LeadUserBo GetBo(int countiesCount = 2, int indexCount = 0)
         {
-            var thefaker = new Faker();
-            var person = dtofaker.Generate();
-            var uid = person.Id;
-            var tokens = new List<LeadUserCountyDto>();
-            var permissions = new List<LeadUserCountyIndexDto>{
+            lock (sync)
+            {
+                var thefaker = new Faker();
+                var person = dtofaker.Generate();
+                var uid = person.Id;
+                var tokens = new List<LeadUserCountyDto>();
+                var permissions = new List<LeadUserCountyIndexDto>{
                 new ()
                 {
                     Id = thefaker.Random.Guid().ToString("D"),
@@ -26,30 +28,31 @@ namespace permissions.api.tests
                     CountyList = indexCount < 0 ? "-1" : GetNumericList(indexCount, thefaker)
                 }
             };
-            for (int i = 0; i < countiesCount; i++)
-            {
-                var countyName = thefaker.Address.County();
-                var login = new { username = thefaker.Person.Email, password = thefaker.Random.AlphaNumeric(20) };
-                var credential = $"{login.username}|{login.password}";
-                var model = leadSvcs.CreateSecurityModel(credential);
-                tokens.Add(new()
+                for (int i = 0; i < countiesCount; i++)
                 {
-                    Id = thefaker.Random.Guid().ToString("D"),
-                    LeadUserId = uid,
-                    CountyName = countyName,
-                    CreateDate = thefaker.Date.Recent(),
-                    Phrase = model.Phrase,
-                    Token = model.Token,
-                    Vector = model.Vector,
-                });
+                    var countyName = thefaker.Address.County();
+                    var login = new { username = thefaker.Person.Email, password = thefaker.Random.AlphaNumeric(20) };
+                    var credential = $"{login.username}|{login.password}";
+                    var model = leadSvcs.CreateSecurityModel(credential);
+                    tokens.Add(new()
+                    {
+                        Id = thefaker.Random.Guid().ToString("D"),
+                        LeadUserId = uid,
+                        CountyName = countyName,
+                        CreateDate = thefaker.Date.Recent(),
+                        Phrase = model.Phrase,
+                        Token = model.Token,
+                        Vector = model.Vector,
+                    });
+                }
+                return new LeadUserBo
+                {
+                    Id = uid,
+                    CountyData = JsonConvert.SerializeObject(tokens),
+                    UserData = JsonConvert.SerializeObject(person),
+                    IndexData = JsonConvert.SerializeObject(permissions),
+                };
             }
-            return new LeadUserBo
-            {
-                Id = uid,
-                CountyData = JsonConvert.SerializeObject(tokens),
-                UserData = JsonConvert.SerializeObject(person),
-                IndexData = JsonConvert.SerializeObject(permissions),
-            };
         }
         public static RegisterAccountModel GetAccount()
         {
@@ -146,6 +149,7 @@ namespace permissions.api.tests
             }
             return string.Join(',', list);
         }
+        private static readonly object sync = new();
         private static readonly LeadSecurityService leadSvcs = new();
         private readonly static Faker<LeadUserDto> dtofaker =
             new Faker<LeadUserDto>()

@@ -1,6 +1,5 @@
 // AppendUsageRecordRequest
 using Newtonsoft.Json;
-using System;
 
 namespace legallead.permissions.api.Models
 {

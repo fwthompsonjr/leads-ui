@@ -1,6 +1,4 @@
 // AppendUsageRecordRequest
-using System;
-
 namespace legallead.permissions.api.Models
 {
     public class AppendUsageRecordRequest
