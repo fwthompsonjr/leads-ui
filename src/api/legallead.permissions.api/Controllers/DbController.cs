@@ -169,6 +169,14 @@ namespace legallead.permissions.api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("usage-get-excel-file-detail")]
+        public async Task<IActionResult> GetExcelDetailByIdAsync(CompleteUsageRecordRequest request)
+        {
+            if (string.IsNullOrEmpty(request.UsageRecordId)) return BadRequest();
+            var response = await _usageService.GetExcelDetailAsync(request.UsageRecordId);
+            return Ok(response);
+        }
+
         [HttpPost("usage-set-monthly-limit")]
         public async Task<IActionResult> UsageSetLimitAsync(SetMonthlyLimitRequest request)
         {
