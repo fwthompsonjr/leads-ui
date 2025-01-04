@@ -23,90 +23,11 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.20.0/dist/jquery.validate.min.js"></script>
 		
-		<!-- common styles -->
-		<link rel="stylesheet" name="cover-css" href="https://getbootstrap.com/docs/4.0/examples/cover/cover.css">
-		
-		<!-- common styles -->
-		<style name="base-css">
-                    /* 
-                    * Header 
-                    */ 
-                         div[name="header"] { 
-                         height: 50px; 
-                         border-bottom: #444 solid 1px; 
-                         margin-top: 5px; 
-                         } 
-                    /* 
-                    * Card 
-                    */ 
-                         .card { 
-                         background-color: transparent; 
-                         border-color: #444; 
-                         color: #fff; 
-                         } 
-                         .card .card-body .card-title { 
-                         border-bottom: #444 solid 1px; 
-                         padding-bottom: 5px; 
-                         } 
-                         .card .card-footer { 
-                         border-top: #555 solid 1px; 
-                         } 
-                         @media screen and (max-width: 500px) { 
-                              .card { 
-                              width: 300px; 
-                              margin-left: 40px; 
-                              } 
-                         } 
-
-
-		</style>
-		<style name="subcontent-css">
-                         div.subcontent { 
-                         width: 50%; 
-                         min-width: 400px; 
-                         max-width: 1200px; 
-                         margin-bottom: 20px; 
-                         display: none; 
-                         } 
-                         div.subcontent.active { 
-                         display: block; 
-                         } 
-                         div[name="subcontent-home-bullet-list"] { 
-                         width: 50%; 
-                         margin-left: 35%; 
-                         text-align: left; 
-                         justify-content: left; 
-                         } 
-                         div[name="main-content"] { 
-                         width: 70%; 
-                         min-width: 800px; 
-                         max-width: 1200px; 
-                         } 
-					#dv-subcontent-invoice {
-						position: absolute;
-						top: 65px;
-						left: 60px;
-						width: 850;
-					}
-					span.text-primary {
-						display: inline-block;
-						width: 130px;
-						padding-left: 2px;
-					}
-
-		</style>
 	</head>
 	<body class="text-center">
 		
 		<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-			<header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
-				<div class="inner">
-					<h3 class="masthead-brand">
-						<i class="bi bi-bank2"></i>
-						<span>Record Search</span>
-					</h3>
-				</div>
-			</header>
+			
 			<main role="main" class="inner cover">
 				<div id="dv-main-content" name="main-content" style="margin-top: 20px;">
 					<div id="dv-subcontent-invoice" name="subcontent-invoice" class="card">
@@ -139,17 +60,17 @@
 									<span name="invoice-total" class="ml-2">-</span>
 								</h6>
 								<ul name="invoice-line-items" class="list-group text-start w-85 m-2" style="background: transparent">
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
+									<li style="background: transparent; " class="list-group-item text-secondary">
 										Search - Level: Guest<br>
 										15 records<br>
 										$0.00
 									</li>
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
+									<li style="background: transparent; " class="list-group-item text-secondary">
 										County Discount<br>
 										10.00 %<br>
 										$0.00
 									</li>
-									<li style="background: transparent; border-color: #444" class="list-group-item text-white">
+									<li style="background: transparent; " class="list-group-item text-secondary">
 										State Discount<br>
 										15.00 %<br>
 										$0.00
@@ -158,16 +79,6 @@
 							</div>
 							<div class="row">
 							</div>
-						</div>
-						<div class="card-footer">
-							<div id="frm-invoice-error-message" class="d-none">
-								
-								<!-- Error messages -->
-							</div>
-							<button id="frm-invoice-submit-button" class="btn btn-primary" onclick="navigate_invoice()">
-								<i id="form-invoice-icon" class="bi bi-pencil-square"></i>
-								<i id="form-invoice-icon-spin" class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Pay Now
-							</button>
 						</div>
 					</div>
 				</div>
