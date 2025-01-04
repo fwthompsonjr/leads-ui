@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.445.--",
+		"description": "API - return status of excel generated file",
+		"date": "2025-01-04 15:00:00"
+	},
+	{
 		"name": "3.2.444.--",
 		"description": "API - allow persistence of excel generated file name",
 		"date": "2024-12-26 20:15:00"

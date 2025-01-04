@@ -33,6 +33,6 @@ namespace legallead.permissions.api.Interfaces
         /// gets monthly usage summary for specified user
         /// </summary>
         Task<GetUsageResponse> GetUsageSummaryAsync(GetUsageRequest model);
-
+        Task<GetExcelDetailByIdResponse> GetExcelDetailAsync(string id);
     }
 }

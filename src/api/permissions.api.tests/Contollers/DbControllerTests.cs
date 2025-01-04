@@ -294,6 +294,33 @@ namespace permissions.api.tests.Contollers
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
+        public async Task ControllerCanGetExcelDetailByIdAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                var mock = provider.GetRequiredService<Mock<IUserUsageService>>();
+                var request = "get-record-test";
+                var data = new GetExcelDetailByIdResponse { };
+                mock.Setup(m => m.GetExcelDetailAsync(It.IsAny<string>())).ReturnsAsync(data);
+                if (testId == 0) request = string.Empty;
+                var response = await sut.GetExcelDetailByIdAsync(new() { UsageRecordId = request });
+                if (testId == 0)
+                {
+                    Assert.IsAssignableFrom<BadRequestResult>(response);
+                }
+                else
+                {
+                    Assert.IsAssignableFrom<OkObjectResult>(response);
+                }
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
         public async Task ControllerCanSetUsageLimitAsync(int testId)
         {
             var error = await Record.ExceptionAsync(async () =>

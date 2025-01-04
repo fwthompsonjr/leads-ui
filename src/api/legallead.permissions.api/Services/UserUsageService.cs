@@ -52,6 +52,19 @@ namespace legallead.permissions.api.Services
             return response;
         }
 
+        public async Task<GetExcelDetailByIdResponse> GetExcelDetailAsync(string id)
+        {
+            var dto = await db.GetUsageFileDetails(id);
+            var response = new GetExcelDetailByIdResponse
+            {
+                Id = id,
+                IsCompleted = dto.IsCompleted,
+                Name = dto.Name,
+                Password = dto.Password,
+            };
+            return response;
+        }
+
         public async Task<SetMonthlyLimitResponse> SetMonthlyLimitAsync(SetMonthlyLimitRequest model)
         {
             var response = mapper.Map<SetMonthlyLimitResponse>(model);

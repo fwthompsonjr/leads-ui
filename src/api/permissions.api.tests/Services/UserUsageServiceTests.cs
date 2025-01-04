@@ -140,6 +140,18 @@ namespace permissions.api.tests.Services
             mock.Verify(s => s.GetUsageSummary(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<bool>()));
         }
 
+        [Fact]
+        public async Task ServicCanGetExcelDetailAsync()
+        {
+            const string request = "test-request-id";
+            var sut = new UsageServiceMock();
+            var service = sut.Service;
+            var mock = sut.Repository;
+            var response = new ExcelFileNameResponse { };
+            mock.Setup(s => s.GetUsageFileDetails(It.IsAny<string>())).ReturnsAsync(response);
+            await service.GetExcelDetailAsync(request);
+            mock.Verify(s => s.GetUsageFileDetails(It.IsAny<string>()));
+        }
 
         [Theory]
         [InlineData(0)]
