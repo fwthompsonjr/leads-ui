@@ -63,6 +63,11 @@ namespace legallead.jdbc.interfaces
         /// <param name="monthOnly">limit search to month of search-date</param>
         /// <returns></returns>
         Task<List<DbUsageSummaryBo>?> GetUsageSummary(string leadId, DateTime searchDate, bool monthOnly = false);
-
+        /// <summary>
+        /// gets excel file details for specified request id
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <returns></returns>
+        Task<ExcelFileNameResponse> GetUsageFileDetails(string requestId);
     }
 }
