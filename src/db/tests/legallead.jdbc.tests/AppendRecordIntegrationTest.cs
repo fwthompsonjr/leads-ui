@@ -105,6 +105,19 @@ namespace legallead.jdbc.tests
             Assert.True(actual.Count > 5);
         }
 
+        [Fact]
+        public async Task ServiceCanGetUsageFileDetailsAsync()
+        {
+            if (!Debugger.IsAttached) return;
+            var service = GetRepo();
+            var payload = new
+            {
+                LeadId = "fef29532-a487-11ef-99ce-0af7a01f52e9",
+                RequestId = "cd2f517a-bb59-11ef-99ce-0af7a01f52e9"
+            };
+            var actual = await service.GetUsageFileDetails(payload.RequestId);
+            Assert.NotEmpty(actual.Id);
+        }
 
         [Fact]
         public async Task ServiceGetAnnualSummaryByIdCheckAsync()

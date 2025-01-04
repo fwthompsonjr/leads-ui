@@ -4,7 +4,9 @@ using legallead.jdbc.entities;
 using legallead.jdbc.helpers;
 using legallead.jdbc.implementations;
 using legallead.jdbc.interfaces;
+using legallead.jdbc.models;
 using Moq;
+using Newtonsoft.Json;
 using System.Data;
 
 namespace legallead.jdbc.tests.implementations
@@ -80,6 +82,30 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()));
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void RepoCompleteUsageRecordSerializationCheck(int conditionId)
+        {
+            var model = new UserUsageCompleteRecordModel
+            {
+                UsageRecordId = "123-456-789",
+                RecordCount = 5,
+                ExcelName = "excelfile.xlsx",
+                Password = "abcd1234!"
+            };
+            var fields = new string[]{
+                "\"idx\":",
+                "\"rc\":",
+                "\"exlname\":",
+                "\"pwd\":"
+            };
+            var find = fields[conditionId];
+            var json = JsonConvert.SerializeObject(model);
+            Assert.Contains(find, json);
+        }
 
         [Theory]
         [InlineData(-1)]
@@ -348,6 +374,7 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.LeadUserId, y => y.Random.AlphaNumeric(10))
             .RuleFor(x => x.ShortFileName, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.FileToken, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
     }

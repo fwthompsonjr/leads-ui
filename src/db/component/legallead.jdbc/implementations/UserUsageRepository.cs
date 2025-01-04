@@ -150,6 +150,23 @@ namespace legallead.jdbc.implementations
         }
 
 
+        public async Task<ExcelFileNameResponse> GetUsageFileDetails(string requestId)
+        {
+            var response = new ExcelFileNameResponse { Id = requestId };
+            try
+            {
+                var name = await GetExcelDetail(requestId);
+                if (name == null) return response;
+                response.Name = name.ShortFileName ?? string.Empty;
+                response.Password = name.FileToken ?? string.Empty;
+                response.IsCompleted = name.CompleteDate.HasValue;
+                return response;
+            }
+            catch (Exception)
+            {
+                return response;
+            }
+        }
 
         public async Task<DbCountyUsageLimitBo?> SetMonthlyLimit(string leadId, int countyId, int monthLimit)
         {
@@ -164,6 +181,24 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QuerySingleOrDefaultAsync<DbCountyUsageLimitDto>(connection, prc, parameters);
                 if (response == null) return default;
                 return GenericMap<DbCountyUsageLimitDto, DbCountyUsageLimitBo>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
+        {
+            const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
+            try
+            {
+                var json = JsonConvert.SerializeObject(new { idx = requestId });
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, json);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<DbExcelNameDto>(connection, prc, parameters);
+                return response;
             }
             catch (Exception)
             {
@@ -221,6 +256,7 @@ namespace legallead.jdbc.implementations
             public const string GET_USAGE_DETAIL_MTD = "CALL USP_USER_USAGE_GET_DETAIL_MTD ( ?, ? );";
             public const string GET_USAGE_DETAIL_YTD = "CALL USP_USER_USAGE_GET_DETAIL_YTD ( ?, ? );";
             public const string GET_USAGE_FILE_NAME = "CALL USP_LEADUSER_EXL_GET_FILENAMES_BY_USERID ( ? );";
+            public const string GET_USAGE_FILE_BY_ID = "CALL USP_LEADUSER_EXL_GET_FILENAME_BY_ID ( ? );";
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
