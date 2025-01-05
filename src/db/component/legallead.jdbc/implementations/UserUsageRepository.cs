@@ -96,7 +96,6 @@ namespace legallead.jdbc.implementations
                 ProcNames.GET_USAGE_DETAIL_YTD;
             try
             {
-                var names = await GetExcelNames(leadId);
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.LeadId, leadId);
                 parameters.Add(ProcParameterNames.SearchDate, searchDate);
@@ -106,11 +105,7 @@ namespace legallead.jdbc.implementations
                 var list = new List<DbCountyUsageRequestBo>();
                 response.ToList().ForEach(r =>
                     list.Add(GenericMap<DbCountyUsageRequestDto, DbCountyUsageRequestBo>(r)));
-                list.ForEach(r =>
-                {
-                    var name = names.Find(x => (x.RequestId ?? "").Equals(x.RequestId ?? "-"));
-                    if (name != null) r.ExcelName = name.ShortFileName ?? string.Empty;
-                });
+                list.ForEach(r => r.ExcelName = r.ShortFileName);
                 return list;
             }
             catch (Exception)
