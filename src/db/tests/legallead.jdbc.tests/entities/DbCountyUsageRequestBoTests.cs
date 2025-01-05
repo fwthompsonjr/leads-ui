@@ -45,6 +45,8 @@ namespace legallead.jdbc.tests.entities
             .RuleFor(x => x.DateRange, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 555555))
             .RuleFor(x => x.CreateDate, y => y.Date.Recent())
-            .RuleFor(x => x.CompleteDate, y => y.Date.Recent());
+            .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
+            .RuleFor(x => x.ShortFileName, y => y.System.FileName())
+            .RuleFor(x => x.FileCompletedDate, y => y.Date.Recent());
     }
 }

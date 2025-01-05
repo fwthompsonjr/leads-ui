@@ -185,7 +185,7 @@ namespace legallead.jdbc.tests.implementations
             var mock = provider.DbCommandMock;
             var leadId = provider.LeadId;
             var searchDate = provider.SearchDate;
-            
+
             var names = exlfaker.Generate(10);
             if (conditionId != 30)
             {
@@ -193,7 +193,7 @@ namespace legallead.jdbc.tests.implementations
                         It.IsAny<IDbConnection>(),
                         It.IsAny<string>(),
                         It.IsAny<DynamicParameters>())).ReturnsAsync(names);
-            } 
+            }
             else
             {
                 mock.Setup(x => x.QueryAsync<DbExcelNameDto>(
