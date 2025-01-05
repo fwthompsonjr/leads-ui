@@ -13,5 +13,7 @@
         public DateTime? CompleteDate { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? ExcelName { get; set; }
+        public string? ShortFileName { get; set; }
+        public DateTime? FileCompletedDate { get; set; }
     }
 }

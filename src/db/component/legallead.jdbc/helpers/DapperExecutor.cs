@@ -106,7 +106,7 @@ namespace legallead.jdbc.helpers
                 var data = reader.GetValue(index);
                 if (data is not Guid guid) return data;
                 return guid.ToString("D");
-            } 
+            }
             catch
             {
                 return null;

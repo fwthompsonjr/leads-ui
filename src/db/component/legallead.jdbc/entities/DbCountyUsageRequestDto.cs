@@ -12,6 +12,8 @@
         public int? RecordCount { get; set; }
         public DateTime? CompleteDate { get; set; }
         public DateTime? CreateDate { get; set; }
+        public string? ShortFileName { get; set; }
+        public DateTime? FileCompletedDate { get; set; }
 
         public override object? this[string field]
         {
@@ -29,6 +31,8 @@
                 if (fieldName.Equals("DateRange", Comparison)) return DateRange;
                 if (fieldName.Equals("RecordCount", Comparison)) return RecordCount;
                 if (fieldName.Equals("CompleteDate", Comparison)) return CompleteDate;
+                if (fieldName.Equals("ShortFileName", Comparison)) return ShortFileName;
+                if (fieldName.Equals("FileCompletedDate", Comparison)) return FileCompletedDate;
                 return CreateDate;
             }
             set
@@ -50,6 +54,8 @@
                 if (fieldName.Equals("DateRange", Comparison)) { DateRange = ChangeType<string>(value); return; }
                 if (fieldName.Equals("RecordCount", Comparison)) { RecordCount = ChangeType<int?>(value); return; }
                 if (fieldName.Equals("CompleteDate", Comparison)) { CompleteDate = ChangeType<DateTime?>(value); return; }
+                if (fieldName.Equals("ShortFileName", Comparison)) { ShortFileName = ChangeType<string>(value); return; }
+                if (fieldName.Equals("FileCompletedDate", Comparison)) { FileCompletedDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) { CreateDate = ChangeType<DateTime?>(value); }
             }
         }
