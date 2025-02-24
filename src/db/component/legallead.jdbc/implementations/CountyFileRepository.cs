@@ -48,7 +48,7 @@ namespace legallead.jdbc.implementations
             var current = await GetContentAsync(request);
             if (current == null)
             {
-                return new(false, "Invalid record index.");
+                return new(false, invalidIndexMessage);
             }
             var prc = ProcedureNames.SetContentAndStatusProc;
             var parameters = new DynamicParameters();
@@ -90,7 +90,7 @@ namespace legallead.jdbc.implementations
             var current = await GetContentAsync(request);
             if (current == null)
             {
-                return new(false, "Invalid record index.");
+                return new(false, invalidIndexMessage);
             }
             var prc = ProcedureNames.SetContentAndStatusProc;
             var parameters = new DynamicParameters();
@@ -132,6 +132,7 @@ namespace legallead.jdbc.implementations
         private const string fileTypeName = "fileTypeName";
         private const string fileStatusName = "fileStatusName";
         private const string fileContent = "fileContent";
+        private const string invalidIndexMessage = "Invalid record index.";
         private static readonly Dictionary<int, string> statusNames = new()
         {
             {0, "EMPTY" },

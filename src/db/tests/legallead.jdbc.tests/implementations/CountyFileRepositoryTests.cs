@@ -16,6 +16,13 @@ namespace legallead.jdbc.tests.implementations
             = new Faker<DbCountyFileModel>()
             .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25));
 
+        private static readonly Faker<DbCountyFileDto> dtofaker
+            = new Faker<DbCountyFileDto>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.DbCountyFileId, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.FileStatusId, y => y.PickRandom(indexes))
+            .RuleFor(x => x.FileTypeId, y => y.PickRandom(indexes))
+            .RuleFor(x => x.Content, y => y.Hacker.Phrase());
         [Fact]
         public void RepoCanBeConstructed()
         {
@@ -120,6 +127,174 @@ namespace legallead.jdbc.tests.implementations
             });
             Assert.Null(err);
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        [InlineData(true, false)]
+        [InlineData(true, true, false)]
+        public async Task RepoCanUpdateContentAsync(
+            bool canInitialize = true,
+            bool canFetch = true,
+            bool canUpdate = true)
+        {
+
+            var error = new Faker().System.Exception();
+            var provider = new RepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.Repository;
+            var request = modelfaker.Generate();
+            var response = dtofaker.Generate();
+            if (canInitialize)
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_INITIALIZE_DATA")),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_INITIALIZE_DATA")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            if (canFetch)
+            {
+                mock.Setup(s => s.QuerySingleOrDefaultAsync<DbCountyFileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_GET_BY_ID")),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            else
+            {
+                mock.Setup(s => s.QuerySingleOrDefaultAsync<DbCountyFileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_GET_BY_ID")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            if (canUpdate)
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_SET_CONTENT_AND_STATUS")),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_SET_CONTENT_AND_STATUS")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            var err = await Record.ExceptionAsync(async () =>
+            {
+                await service.UpdateContentAsync(request);
+            });
+            Assert.Null(err);
+        }
+
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task RepoCanUpdateTypeAsync(
+            bool canUpdate = true)
+        {
+
+            var error = new Faker().System.Exception();
+            var provider = new RepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.Repository;
+            var request = modelfaker.Generate();
+            if (canUpdate)
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            var err = await Record.ExceptionAsync(async () =>
+            {
+                await service.UpdateTypeAsync(request);
+            });
+            Assert.Null(err);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        [InlineData(true, false)]
+        [InlineData(true, true, false)]
+        public async Task RepoCanUpdateStatusAsync(
+            bool canInitialize = true,
+            bool canFetch = true,
+            bool canUpdate = true)
+        {
+
+            var error = new Faker().System.Exception();
+            var provider = new RepoContainer();
+            var mock = provider.CommandMock;
+            var service = provider.Repository;
+            var request = modelfaker.Generate();
+            var response = dtofaker.Generate();
+            if (canInitialize)
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_INITIALIZE_DATA")),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_INITIALIZE_DATA")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            if (canFetch)
+            {
+                mock.Setup(s => s.QuerySingleOrDefaultAsync<DbCountyFileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_GET_BY_ID")),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(response);
+            }
+            else
+            {
+                mock.Setup(s => s.QuerySingleOrDefaultAsync<DbCountyFileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_GET_BY_ID")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            if (canUpdate)
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_SET_CONTENT_AND_STATUS")),
+                    It.IsAny<DynamicParameters>()));
+            }
+            else
+            {
+                mock.Setup(s => s.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.Is<string>(s => s.Contains("USP_COUNTY_FILE_SET_CONTENT_AND_STATUS")),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(error);
+            }
+            var err = await Record.ExceptionAsync(async () =>
+            {
+                await service.UpdateStatusAsync(request);
+            });
+            Assert.Null(err);
+        }
+
+        private static readonly List<int> indexes = [0, 10, 20, 30];
         private sealed class RepoContainer
         {
             private readonly ICountyFileRepository repo;
