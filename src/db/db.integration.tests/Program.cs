@@ -5,25 +5,10 @@
 using db.integration.tests;
 using legallead.jdbc.entities;
 using legallead.jdbc.interfaces;
+using legallead.jdbc.models;
 using Microsoft.Extensions.DependencyInjection;
-int testId = 9;
+int testId = 10;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
-if (testId == 9)
-{
-    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
-    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
-    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
-    var actual = await instance.GetUsageSummary(leadId, dte);
-    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
-}
-if (testId == 8)
-{
-    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
-    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
-    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
-    var actual = await instance.GetUsage(leadId, dte);
-    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
-}
 if (testId == 0)
 {
     var instance = ServiceSetup.AppServices.GetRequiredService<ILeadUserRepository>();
@@ -90,4 +75,56 @@ if (testId == 7)
     var actual = await invoicing.UpdateAsync(updateComplete);
     var count = actual.Key;
     Console.WriteLine("Hello, World! {0}. Db result {1}", invoicing.GetType().FullName, count);
+}
+if (testId == 8)
+{
+    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
+    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+    var actual = await instance.GetUsage(leadId, dte);
+    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
+}
+if (testId == 9)
+{
+    var instance = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var leadId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
+    var dte = new DateTime(2024, 11, 1, 0, 0, 0, DateTimeKind.Utc);
+    var actual = await instance.GetUsageSummary(leadId, dte);
+    Console.WriteLine("Hello, World! {0}. Db result {1}", instance.GetType().FullName, actual);
+}
+if (testId == 10)
+{
+    var request = new DbCountyFileModel
+    {
+        FileContent = "integration test data",
+        Id = "5711f02d-c401-11ef-b422-0af36f7c981d"
+    };
+    var instance = ServiceSetup.AppServices.GetRequiredService<ICountyFileRepository>();
+    var isInitialized = await instance.InitializeAsync();
+    Console.WriteLine("Initialization response: {0}", isInitialized);
+    // update types
+    var typeNames = new string[] { "EXL", "CSV", "JSON", "NONE" };
+    for (int i = 0; i < typeNames.Length; i++)
+    {
+        var type = typeNames[i];
+        request.FileType = type;
+        var isTypeSet = await instance.UpdateTypeAsync(request);
+        Console.WriteLine("Type update response: {0}: {1}", isTypeSet.Key, isTypeSet.Value);
+    }
+    // update status
+    var statusNames = new string[] { "ENCODED", "DECODED", "DOWNLOADED", "EMPTY" };
+    for (int i = 0; i < statusNames.Length; i++)
+    {
+        var status = statusNames[i];
+        request.FileStatus = status;
+        var isStatusSet = await instance.UpdateStatusAsync(request);
+        Console.WriteLine("Status update response: {0}: {1}", isStatusSet.Key, isStatusSet.Value);
+    }
+    // update content
+    for (int i = 0; i < 2; i++)
+    {
+        if (i > 0) request.FileContent = "";
+        var isContentSet = await instance.UpdateContentAsync(request);
+        Console.WriteLine("Content update response: {0}: {1}", isContentSet.Key, isContentSet.Value);
+    }
 }
