@@ -10,12 +10,14 @@ namespace legallead.permissions.api.Controllers
     ILeadAuthenicationService lead,
     IDbHistoryService db,
     IHolidayService holidayDb,
-    IUserUsageService usageDb) : ControllerBase
+    IUserUsageService usageDb,
+    ICountyFileService fileDb) : ControllerBase
     {
         private readonly ILeadAuthenicationService _leadService = lead;
         private readonly IDbHistoryService _dataService = db;
         private readonly IHolidayService _holidayService = holidayDb;
         private readonly IUserUsageService _usageService = usageDb;
+        private readonly ICountyFileService _fileService = fileDb;
 
         [HttpPost("begin")]
         public async Task<IActionResult> BeginAsync(BeginDataRequest model)
@@ -185,6 +187,23 @@ namespace legallead.permissions.api.Controllers
             return Ok(response);
         }
 
+        [HttpPost("save-search-file")]
+        public async Task<IActionResult> SaveContentAsync(DbCountyFileModel request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var response = await _fileService.SaveAsync(request);
+            return Ok(response);
+        }
+
+        [HttpPost("get-search-file")]
+        public async Task<IActionResult> GetContentAsync(DbCountyFileModel request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var response = await _fileService.GetAsync(request);
+            return Ok(response);
+        }
         private const string UserAccountAccess = "user account access credential";
         private readonly static CultureInfo _culture = new("en-us");
 
