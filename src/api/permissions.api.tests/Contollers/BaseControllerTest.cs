@@ -79,6 +79,7 @@ namespace permissions.api.tests.Contollers
                 var usageServiceMock = new Mock<IUserUsageService>();
                 var mkoption = new Mock<PaymentStripeOption>();
                 var mkInvoiceSvc = new Mock<ILeadInvoiceService>();
+                var mkFileSvc = new Mock<ICountyFileService>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -139,6 +140,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => mkoption.Object);
                 collection.AddScoped(s => mkInvoiceSvc);
                 collection.AddScoped(s => mkInvoiceSvc.Object);
+                collection.AddScoped(s => mkFileSvc);
+                collection.AddScoped(s => mkFileSvc.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
@@ -228,6 +231,7 @@ namespace permissions.api.tests.Contollers
                     var leadsvc = a.GetRequiredService<ILeadAuthenicationService>();
                     var datesvc = a.GetRequiredService<IHolidayService>();
                     var usagesvc = a.GetRequiredService<IUserUsageService>();
+                    var fileSvc = a.GetRequiredService<ICountyFileService>();
                     var headers = new HeaderDictionary
                     {
                         {
@@ -236,7 +240,7 @@ namespace permissions.api.tests.Contollers
                         }
                     };
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
-                    return new DbController(leadsvc, mqDb, datesvc, usagesvc)
+                    return new DbController(leadsvc, mqDb, datesvc, usagesvc, fileSvc)
                     {
                         ControllerContext = controllerContext
                     };

@@ -1,4 +1,5 @@
 using legallead.jdbc.entities;
+using legallead.jdbc.models;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
 using legallead.permissions.api.Extensions;
@@ -7,6 +8,7 @@ using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -341,6 +343,38 @@ namespace permissions.api.tests.Contollers
             });
             Assert.Null(error);
         }
+
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanSaveContentAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                SetupUserInteractions(testId, provider);
+                _ = await sut.SaveContentAsync(new());
+            });
+            Assert.Null(error);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public async Task ControllerCanGetContentAsync(int testId)
+        {
+            var error = await Record.ExceptionAsync(async () =>
+            {
+                var provider = GetProvider();
+                var sut = provider.GetRequiredService<DbController>();
+                SetupUserInteractions(testId, provider);
+                _ = await sut.GetContentAsync(new());
+            });
+            Assert.Null(error);
+        }
+
         private static readonly Faker<HolidayResponse> listFaker
             = new Faker<HolidayResponse>()
             .RuleFor(x => x.HoliDate, y => y.Date.Past());
@@ -368,6 +402,9 @@ namespace permissions.api.tests.Contollers
                     It.IsAny<HttpRequest>(),
                     It.IsAny<string>())).Returns(user);
             }
+            var fileServiceMock = provider.GetRequiredService<Mock<ICountyFileService>>();
+            var fileSaveResult = new KeyValuePair<bool, string>(true, "");
+            var getFileResult = new DbCountyFileModel();
             var dbmock = provider.GetRequiredService<Mock<IDbHistoryService>>();
             var rsp = new DataRequestResponse();
             var rlist = new List<FindRequestResponse>();
@@ -376,6 +413,8 @@ namespace permissions.api.tests.Contollers
             dbmock.Setup(x => x.CompleteAsync(It.IsAny<CompleteDataRequest>())).ReturnsAsync(rsp);
             dbmock.Setup(x => x.FindAsync(It.IsAny<FindDataRequest>())).ReturnsAsync(rlist);
             dbmock.Setup(x => x.UploadAsync(It.IsAny<UploadDataRequest>())).ReturnsAsync(response);
+            fileServiceMock.Setup(x => x.SaveAsync(It.IsAny<DbCountyFileModel>())).ReturnsAsync(fileSaveResult);
+            fileServiceMock.Setup(x => x.GetAsync(It.IsAny<DbCountyFileModel>())).ReturnsAsync(getFileResult);
         }
 
 

@@ -105,6 +105,8 @@ namespace legallead.permissions.api
             services.AddScoped<ILeadInvoiceService, LeadInvoiceService>();
             services.AddScoped<IUserUsageRepository, UserUsageRepository>();
             services.AddScoped<IUserUsageService, UserUsageService>();
+            services.AddScoped<ICountyFileRepository, CountyFileRepository>();
+            services.AddScoped<ICountyFileService, CountyFileService>();
             services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {
