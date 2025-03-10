@@ -160,8 +160,45 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> UpdateProfileAsync(UserManagementRequest request)
+        {
+            var prc = ProcedureNames.UpdateProfileProc;
+            var parameters = new DynamicParameters();
+            parameters.Add(requestorIndex, request.RequestId);
+            parameters.Add(jsPayload, request.Payload);
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUsageLimitAsync(UserManagementRequest request)
+        {
+            var prc = ProcedureNames.UpdateUsageLimitProc;
+            var parameters = new DynamicParameters();
+            parameters.Add(requestorIndex, request.RequestId);
+            parameters.Add(jsPayload, request.Payload);
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         private const string requestorIndex = "requestorIndex";
         private const string userIndex = "userIndex";
+        private const string jsPayload = "jsPayload";
 
         private static class ProcedureNames
         {
@@ -172,6 +209,8 @@ namespace legallead.jdbc.implementations
             public const string GetProfileProc = "CALL ADM_USP_GET_LEADUSER_PROFILE( ?, ? );";
             public const string GetSearchProc = "CALL ADM_USP_GET_LEADUSER_SEARCH_HISTORY( ?, ? );";
             public const string GetInvoiceProc = "CALL ADM_USP_GET_LEADUSER_INVOICE_HISTORY( ?, ? );";
+            public const string UpdateProfileProc = "CALL ADM_USP_UPSERT_LEADUSER_PROFILE( ?, ? );";
+            public const string UpdateUsageLimitProc = "CALL ADM_USP_UPSERT_LEADUSER_MONTHLY_LIMIT( ?, ? );";
         }
     }
 }

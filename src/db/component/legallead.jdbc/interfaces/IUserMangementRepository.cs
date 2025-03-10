@@ -16,5 +16,7 @@ namespace legallead.jdbc.interfaces
         Task<List<LeadCountyPricingBo>?> GetPricingAsync(UserManagementRequest request);
         Task<List<LeadUserProfileBo>?> GetProfileAsync(UserManagementRequest request);
         Task<List<LeadUserSearchBo>?> GetSearchAsync(UserManagementRequest request);
+        Task<bool> UpdateProfileAsync(UserManagementRequest request);
+        Task<bool> UpdateUsageLimitAsync(UserManagementRequest request);
     }
 }
