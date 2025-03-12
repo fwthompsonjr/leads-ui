@@ -107,6 +107,8 @@ namespace legallead.permissions.api
             services.AddScoped<IUserUsageService, UserUsageService>();
             services.AddScoped<ICountyFileRepository, CountyFileRepository>();
             services.AddScoped<ICountyFileService, CountyFileService>();
+            services.AddScoped<IUserMangementRepository, UserMangementRepository>();
+            services.AddScoped<IUserManagementService, UserManagementService>();
             services.AddScoped<MailboxController>();
             services.AddScoped(d =>
             {
@@ -177,6 +179,7 @@ namespace legallead.permissions.api
             services.AddScoped<ProfilesController>();
             services.AddScoped<AppController>();
             services.AddScoped<DbController>();
+            services.AddScoped<AdminController>();
             services.AddScoped(p =>
             {
                 return new PaymentController(payment,
