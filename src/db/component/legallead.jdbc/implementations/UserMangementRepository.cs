@@ -34,7 +34,6 @@ namespace legallead.jdbc.implementations
             var prc = ProcedureNames.GetAccountsProc;
             var parameters = new DynamicParameters();
             parameters.Add(requestorIndex, request.RequestId);
-            parameters.Add(userIndex, request.UserId);
             try
             {
                 using var connection = _context.CreateConnection();
@@ -56,7 +55,6 @@ namespace legallead.jdbc.implementations
             var prc = ProcedureNames.GetPricingProc;
             var parameters = new DynamicParameters();
             parameters.Add(requestorIndex, request.RequestId);
-            parameters.Add(userIndex, request.UserId);
             try
             {
                 using var connection = _context.CreateConnection();
@@ -203,8 +201,8 @@ namespace legallead.jdbc.implementations
         private static class ProcedureNames
         {
             public const string InitProc = "CALL ADM_USP_CLONE_LEADUSER_ACCT_TO_USER( ? );";
-            public const string GetAccountsProc = "CALL ADM_USP_GET_LEADUSER_ACCT_LIST( ?, ? );";
-            public const string GetPricingProc = "CALL ADM_USP_GET_COUNTY_PRICING_LIST( ?, ? );";
+            public const string GetAccountsProc = "CALL ADM_USP_GET_LEADUSER_ACCT_LIST( ? );";
+            public const string GetPricingProc = "CALL ADM_USP_GET_COUNTY_PRICING_LIST( ? );";
             public const string GetCountyProc = "CALL ADM_USP_GET_COUNTY_LIST_BY_USER_ID( ?, ? );";
             public const string GetProfileProc = "CALL ADM_USP_GET_LEADUSER_PROFILE( ?, ? );";
             public const string GetSearchProc = "CALL ADM_USP_GET_LEADUSER_SEARCH_HISTORY( ?, ? );";
