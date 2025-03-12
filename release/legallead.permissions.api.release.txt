@@ -64,3 +64,4 @@ Release information - legallead.permissions.api
 12/21/2024 10:45:00 PM Update api to use scaled down db
 12/22/2024 10:45:00 PM Update api to removing unsued services and background operations
 02/25/2025 04:20:00 PM Update api to save/fetch file content
+03/12/2025 09:50:00 PM Update db for user admin fetch
