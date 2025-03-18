@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.452.--",
+		"description": "API - save/fetch - admin - profile",
+		"date": "2025-03-18 13:30:00"
+	},
+	{
 		"name": "3.2.450.--",
 		"description": "API - sync myget packages",
 		"date": "2025-03-12 11:00:00"

@@ -25,7 +25,7 @@ namespace legallead.permissions.api.Services
                 UserManagementMethod.GetCounty => GetData(await db.GetCountyAsync(userManagementRequest)),
                 UserManagementMethod.GetInvoice => GetData(await db.GetInvoiceAsync(userManagementRequest)),
                 UserManagementMethod.GetPricing => GetData(await db.GetPricingAsync(userManagementRequest)),
-                UserManagementMethod.GetProfile => GetData(await db.GetPricingAsync(userManagementRequest)),
+                UserManagementMethod.GetProfile => GetData(await db.GetProfileAsync(userManagementRequest)),
                 UserManagementMethod.GetSearch => GetData(await db.GetSearchAsync(userManagementRequest)),
                 UserManagementMethod.UpdateProfile => GetData(await db.UpdateProfileAsync(userManagementRequest)),
                 UserManagementMethod.UpdateUsageLimit => GetData(await db.UpdateUsageLimitAsync(userManagementRequest)),
