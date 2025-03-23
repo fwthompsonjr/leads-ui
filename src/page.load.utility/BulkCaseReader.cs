@@ -83,7 +83,7 @@
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                int ms = (idx % 5 == 0) ? 3500: 2000;
+                int ms = (idx % 5 == 0) ? 2500: 1000;
                 Thread.Sleep(ms);
                 return;
             }
@@ -94,13 +94,13 @@
 
         private static async Task<string> GetContentWithPollyAsync(string href, ReadOnlyCollection<SRC> cookies)
         {
-            var timeoutPolicy = Policy.TimeoutAsync(6, TimeoutStrategy.Pessimistic);
+            var timeoutPolicy = Policy.TimeoutAsync(8, TimeoutStrategy.Pessimistic);
             var fallbackPolicy = Policy<string>
                 .Handle<Exception>()
                 .Or<TimeoutRejectedException>() // Handle timeout exceptions
                 .FallbackAsync(async (cancellationToken) =>
                 {
-                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMinutes(1)); }, cancellationToken);
+                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMilliseconds(500)); }, cancellationToken);
                     return string.Empty;
                 });
 
@@ -141,7 +141,7 @@
             try
             {
                 using var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromMilliseconds(3500) };
+                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
                 var result = await client.GetAsync(baseAddress);
                 if (result.IsSuccessStatusCode)
                 {
