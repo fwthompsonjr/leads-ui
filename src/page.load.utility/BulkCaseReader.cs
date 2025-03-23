@@ -47,12 +47,13 @@
                     OnStatusUpdated?.Invoke(this, Log);
                     break; 
                 }
+                var delay = unresloved > 10 ? seconds * 3 : seconds;
                 Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                 Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
-                Log.Messages.Add($"{currentDate:G}: Waiting {seconds:F2} seconds before retry.");
+                Log.Messages.Add($"{currentDate:G}: Waiting {delay:F2} seconds before retry.");
                 OnStatusUpdated?.Invoke(this, Log);
-                var wait = TimeSpan.FromSeconds(seconds);
+                var wait = TimeSpan.FromSeconds(delay);
                 Thread.Sleep(wait);
                 retries++;
             }
