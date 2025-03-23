@@ -31,6 +31,7 @@
             var retries = 0;
             var count = Workload.Count;
             const int seconds = 15;
+            Log.RecordCount = count;
             while (list.Any(x => !x.Value.IsMapped()))
             {
                 Workload.ForEach(c =>
@@ -41,15 +42,18 @@
                 var unresloved = list.Count(x => !x.Value.IsMapped());
                 var currentDate = DateTime.Now;
                 if (unresloved == 0) {
+                    Log.TotalProcessed = Log.RecordCount;
                     Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                     OnStatusUpdated?.Invoke(this, Log);
                     break; 
                 }
+                var delay = unresloved > 10 ? seconds * 3 : seconds;
+                Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                 Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
-                Log.Messages.Add($"{currentDate:G}: Waiting {seconds:F2} seconds before retry.");
+                Log.Messages.Add($"{currentDate:G}: Waiting {delay:F2} seconds before retry.");
                 OnStatusUpdated?.Invoke(this, Log);
-                var wait = TimeSpan.FromSeconds(seconds);
+                var wait = TimeSpan.FromSeconds(delay);
                 Thread.Sleep(wait);
                 retries++;
             }
@@ -69,20 +73,18 @@
         {
             var instance = cases[idx];
             if (instance.IsMapped()) return;
-            if (idx % 5 == 0)
-            {
-                Thread.Sleep(1000);
-            }
             var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
             var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
             var currentDate = DateTime.Now;
             var msg = $"{currentDate:G}: Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
             if (readFailed) msg += ". FAIL - Adding to retry";
+            Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
             Log.Messages.Add(msg);
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                Thread.Sleep(1500);
+                int ms = (idx % 5 == 0) ? 2500: 1000;
+                Thread.Sleep(ms);
                 return;
             }
             var data = GetPageContent(content);
@@ -92,13 +94,13 @@
 
         private static async Task<string> GetContentWithPollyAsync(string href, ReadOnlyCollection<SRC> cookies)
         {
-            var timeoutPolicy = Policy.TimeoutAsync(6, TimeoutStrategy.Pessimistic);
+            var timeoutPolicy = Policy.TimeoutAsync(8, TimeoutStrategy.Pessimistic);
             var fallbackPolicy = Policy<string>
                 .Handle<Exception>()
                 .Or<TimeoutRejectedException>() // Handle timeout exceptions
                 .FallbackAsync(async (cancellationToken) =>
                 {
-                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMinutes(1)); }, cancellationToken);
+                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMilliseconds(500)); }, cancellationToken);
                     return string.Empty;
                 });
 
@@ -139,7 +141,7 @@
             try
             {
                 using var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromMilliseconds(3500) };
+                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
                 var result = await client.GetAsync(baseAddress);
                 if (result.IsSuccessStatusCode)
                 {

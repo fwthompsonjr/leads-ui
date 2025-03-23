@@ -246,6 +246,8 @@ namespace legallead.permissions.api.Controllers
         {
             var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
             if (find == null) return;
+            find.TotalProcessed = e.TotalProcessed;
+            find.RecordCount = e.RecordCount;
             find.Messages.Clear();
             find.Messages.AddRange(e.Messages);
         }
