@@ -279,7 +279,7 @@ namespace permissions.api.tests.Contollers
         {
             public Component App { get; set; } = new();
             public ApplicationRequestModel AppHeading { get; set; } = new();
-            public HeaderDictionary Headers { get; set; } = new();
+            public HeaderDictionary Headers { get; set; } = [];
         }
 
         private static readonly object locker = new();

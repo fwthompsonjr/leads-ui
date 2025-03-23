@@ -78,6 +78,10 @@
 			<_Parameter1>permissions.api.tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\page.load.utility\page.load.utility.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Compile Update="Properties\Resources.Designer.cs">
