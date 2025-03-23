@@ -31,6 +31,7 @@
             var retries = 0;
             var count = Workload.Count;
             const int seconds = 15;
+            Log.RecordCount = count;
             while (list.Any(x => !x.Value.IsMapped()))
             {
                 Workload.ForEach(c =>
@@ -41,10 +42,12 @@
                 var unresloved = list.Count(x => !x.Value.IsMapped());
                 var currentDate = DateTime.Now;
                 if (unresloved == 0) {
+                    Log.TotalProcessed = Log.RecordCount;
                     Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                     OnStatusUpdated?.Invoke(this, Log);
                     break; 
                 }
+                Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                 Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
                 Log.Messages.Add($"{currentDate:G}: Waiting {seconds:F2} seconds before retry.");
@@ -69,20 +72,18 @@
         {
             var instance = cases[idx];
             if (instance.IsMapped()) return;
-            if (idx % 5 == 0)
-            {
-                Thread.Sleep(1000);
-            }
             var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
             var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
             var currentDate = DateTime.Now;
             var msg = $"{currentDate:G}: Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
             if (readFailed) msg += ". FAIL - Adding to retry";
+            Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
             Log.Messages.Add(msg);
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                Thread.Sleep(1500);
+                int ms = (idx % 5 == 0) ? 3500: 2000;
+                Thread.Sleep(ms);
                 return;
             }
             var data = GetPageContent(content);
