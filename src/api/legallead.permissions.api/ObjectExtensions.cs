@@ -403,7 +403,7 @@ namespace legallead.permissions.api
             const string fallback = "None";
             var user = await request.GetUserAsync(db);
             if (user == null) return fallback;
-            var userlevel = (await db.UserPermissionVw.GetAll(user)) ?? Array.Empty<UserPermissionView>();
+            var userlevel = (await db.UserPermissionVw.GetAll(user)) ?? [];
             var level = userlevel.FirstOrDefault(x => x.KeyName == "Account.Permission.Level");
             string levelName = level?.KeyValue ?? fallback;
             return levelName;

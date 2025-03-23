@@ -1,5 +1,9 @@
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
+using page.load.utility;
+using page.load.utility.Entities;
+using page.load.utility.Extensions;
+using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace legallead.permissions.api.Controllers
@@ -204,8 +208,82 @@ namespace legallead.permissions.api.Controllers
             var response = await _fileService.GetAsync(request);
             return Ok(response);
         }
+
+        [HttpPost("process-offline")]
+        public IActionResult ProcessOffline(BulkReadRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var response = new BulkReadResponse { RequestId = request.RequestId };
+            var settings = request.Cookies.ToInstance<List<CookieModel>>();
+            var items = request.Workload.ToInstance<List<CaseItemDto>>();
+            if (settings == null || items == null) return Ok(response);
+            var cookies = settings.Select(s => s.Cookie()).ToList();
+            response.IsValid = true;
+            var objRequestGuid = Guid.NewGuid().ToString("D");
+            response.OfflineRequestId = objRequestGuid;
+            offlineRequests.Add(response);
+            var service = new BulkCaseReader(
+                new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies), 
+                items, 
+                new BulkReadMessages { OfflineRequestId = objRequestGuid });
+            service.OnStatusUpdated = StatusChanged;
+            _ = Task.Run(() =>
+            {
+                var rsp = service.Execute();
+                if (rsp is not string json) return;
+                var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == response.OfflineRequestId);
+                if (find != null)
+                {
+                    find.IsCompleted = true;
+                    find.Content = json;
+                }
+            });
+            return Ok(response);
+        }
+
+        private static void StatusChanged(object? sender, BulkReadMessages e)
+        {
+            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
+            if (find == null) return;
+            find.Messages.Clear();
+            find.Messages.AddRange(e.Messages);
+        }
+
+        [HttpPost("process-offline-status")]
+        public IActionResult ProcessOfflineStatus(BulkReadResponse request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == request.OfflineRequestId);
+            if (find == null) return Unauthorized();
+            if (find.IsCompleted)
+            {
+                offlineRequests.RemoveAll(x => x.OfflineRequestId == request.OfflineRequestId);
+            }
+            return Ok(find);
+        }
         private const string UserAccountAccess = "user account access credential";
         private readonly static CultureInfo _culture = new("en-us");
+        private readonly static List<BulkReadResponse> offlineRequests = [];
 
+
+
+        private class CookieModel
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public string Domain { get; set; }
+            public string Path { get; set; }
+            public string SameSite { get; set; }
+            public string Expiry { get; set; }
+
+            public OpenQA.Selenium.Cookie Cookie()
+            {
+                var hasDate = DateTime.TryParse(Expiry, CultureInfo.CurrentCulture, out var date);
+                DateTime? expirationDt = hasDate ? date : null;
+                return new OpenQA.Selenium.Cookie(Name, Value, Domain, Path, expirationDt, false, false, SameSite);
+            }
+        }
     }
 }
