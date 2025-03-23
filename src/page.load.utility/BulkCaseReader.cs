@@ -71,7 +71,7 @@
             if (instance.IsMapped()) return;
             if (idx % 5 == 0)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
             var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
@@ -80,7 +80,11 @@
             if (readFailed) msg += ". FAIL - Adding to retry";
             Log.Messages.Add(msg);
             OnStatusUpdated?.Invoke(this, Log);
-            if (readFailed) return;
+            if (readFailed)
+            {
+                Thread.Sleep(1500);
+                return;
+            }
             var data = GetPageContent(content);
             instance.MappedContent = data;
             instance.Map();
