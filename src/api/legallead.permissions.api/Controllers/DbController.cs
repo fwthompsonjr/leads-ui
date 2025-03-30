@@ -224,8 +224,8 @@ namespace legallead.permissions.api.Controllers
             response.OfflineRequestId = objRequestGuid;
             offlineRequests.Add(response);
             var service = new BulkCaseReader(
-                new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies), 
-                items, 
+                new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies),
+                items,
                 new BulkReadMessages { OfflineRequestId = objRequestGuid });
             service.OnStatusUpdated = StatusChanged;
             _ = Task.Run(() =>

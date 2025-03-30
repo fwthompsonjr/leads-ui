@@ -1,4 +1,3 @@
-using legallead.jdbc.entities;
 using legallead.jdbc.models;
 using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Entities;
@@ -8,7 +7,6 @@ using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace permissions.api.tests.Contollers
 {
@@ -494,7 +492,7 @@ namespace permissions.api.tests.Contollers
                 new Faker<CompleteUsageRecordRequest>()
                 .RuleFor(x => x.UsageRecordId, y => y.Random.AlphaNumeric(16))
                 .RuleFor(x => x.RecordCount, y => y.Random.Int(1, 100) * 10)
-                .RuleFor(x => x.ExcelName, y=> y.System.FileName(".xlsx"));
+                .RuleFor(x => x.ExcelName, y => y.System.FileName(".xlsx"));
 
             private static readonly Faker<GetMonthlyLimitRequest> getlimitFaker =
                 new Faker<GetMonthlyLimitRequest>()
