@@ -30,7 +30,6 @@
             });
             var retries = 0;
             var count = Workload.Count;
-            const int seconds = 15;
             Log.RecordCount = count;
             while (list.Any(x => !x.Value.IsMapped()))
             {
@@ -48,7 +47,7 @@
                     OnStatusUpdated?.Invoke(this, Log);
                     break;
                 }
-                var delay = unresloved > 10 ? seconds * 3 : seconds;
+                var delay = unresloved > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
                 Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                 Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
@@ -84,7 +83,7 @@
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                int ms = (idx % 5 == 0) ? Timings.FailedResponseWaitMax : Timings.FailedResponseWaitMin;
+                int ms = (idx % 15 == 0) ? Timings.FailedResponseWaitMax : Timings.FailedResponseWaitMin;
                 Thread.Sleep(ms);
                 return;
             }
@@ -262,6 +261,7 @@
             public const int HttpTimeInMilliSeconds = 3000;
             public const int FailedResponseWaitMax = 2000;
             public const int FailedResponseWaitMin = 500;
+            public const int UnresolvedRecordWaitMin = 20;
         }
     }
 }
