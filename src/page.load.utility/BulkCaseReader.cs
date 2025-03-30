@@ -75,7 +75,7 @@
             if (instance.IsMapped()) return;
             var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
             var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
-            var currentDate = DateTime.Now;
+            var currentDate = GetCentralTime();
             var msg = $"{currentDate:G}: Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
             if (readFailed) msg += ". FAIL - Adding to retry";
             Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
@@ -83,7 +83,7 @@
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                int ms = (idx % 5 == 0) ? 2500: 1000;
+                int ms = (idx % 5 == 0) ? 5500: 2500;
                 Thread.Sleep(ms);
                 return;
             }
@@ -245,6 +245,14 @@
             public const string Paragragh = "//p";
             public const string ParagraghTextPrimary = "//p[@class='text-primary']";
             public const string Span = "//span";
+        }
+
+        private static DateTime GetCentralTime()
+        {
+            DateTime utcTime = DateTime.UtcNow;
+            TimeZoneInfo centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            DateTime centralTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, centralTimeZone);
+            return centralTime;
         }
     }
 }
