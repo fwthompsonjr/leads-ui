@@ -47,6 +47,7 @@ namespace legallead.permissions.api.Controllers
                 var view = GetUserView(d);
                 return new
                 {
+                    d.Id,
                     d.RwId,
                     d.CountyId,
                     d.LeadUserId,
