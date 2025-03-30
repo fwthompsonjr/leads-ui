@@ -1,5 +1,4 @@
-﻿using EnvDTE;
-using legallead.permissions.api.Extensions;
+﻿using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +74,8 @@ namespace legallead.permissions.api.Controllers
                 Credential = items[^1],
             };
         }
-        private class UserViewBo { 
+        private class UserViewBo
+        {
             public string UserName { get; set; }
             public string Credential { get; set; }
         }

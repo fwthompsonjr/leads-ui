@@ -3,11 +3,6 @@ using legallead.jdbc.models;
 using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace permissions.api.tests.Services
 {
@@ -121,7 +116,7 @@ namespace permissions.api.tests.Services
             return services.BuildServiceProvider();
         }
 
-        private static readonly Faker<DbCountyFileModel> modelfaker = 
+        private static readonly Faker<DbCountyFileModel> modelfaker =
             new Faker<DbCountyFileModel>()
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString())
             .RuleFor(x => x.FileType, y => y.PickRandom(_fileTypes))

@@ -1,18 +1,18 @@
 ﻿namespace page.load.utility
 {
+    using HtmlAgilityPack;
     using page.load.utility.Entities;
     using page.load.utility.Extensions;
-    using Polly.Timeout;
     using Polly;
+    using Polly.Timeout;
     using System.Collections.Concurrent;
     using System.Collections.ObjectModel;
-    using SRC = OpenQA.Selenium.Cookie;
     using System.Net;
     using DST = System.Net.Cookie;
-    using HtmlAgilityPack;
+    using SRC = OpenQA.Selenium.Cookie;
 
     public class BulkCaseReader(
-        ReadOnlyCollection<SRC> settings, 
+        ReadOnlyCollection<SRC> settings,
         List<CaseItemDto> items,
         BulkReadMessages response)
     {
@@ -41,11 +41,12 @@
                 });
                 var unresloved = list.Count(x => !x.Value.IsMapped());
                 var currentDate = DateTime.Now;
-                if (unresloved == 0) {
+                if (unresloved == 0)
+                {
                     Log.TotalProcessed = Log.RecordCount;
                     Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                     OnStatusUpdated?.Invoke(this, Log);
-                    break; 
+                    break;
                 }
                 var delay = unresloved > 10 ? seconds * 3 : seconds;
                 Log.TotalProcessed = count - unresloved;
@@ -83,7 +84,7 @@
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                int ms = (idx % 5 == 0) ? 5500: 2500;
+                int ms = (idx % 5 == 0) ? 5500 : 2500;
                 Thread.Sleep(ms);
                 return;
             }
