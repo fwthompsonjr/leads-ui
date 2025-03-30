@@ -30,7 +30,6 @@
             });
             var retries = 0;
             var count = Workload.Count;
-            const int seconds = 15;
             Log.RecordCount = count;
             while (list.Any(x => !x.Value.IsMapped()))
             {
@@ -48,7 +47,7 @@
                     OnStatusUpdated?.Invoke(this, Log);
                     break;
                 }
-                var delay = unresloved > 10 ? seconds * 3 : seconds;
+                var delay = unresloved > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
                 Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
                 Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
@@ -84,7 +83,7 @@
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
-                int ms = (idx % 5 == 0) ? 5500 : 2500;
+                int ms = (idx % 15 == 0) ? Timings.FailedResponseWaitMax : Timings.FailedResponseWaitMin;
                 Thread.Sleep(ms);
                 return;
             }
@@ -95,13 +94,13 @@
 
         private static async Task<string> GetContentWithPollyAsync(string href, ReadOnlyCollection<SRC> cookies)
         {
-            var timeoutPolicy = Policy.TimeoutAsync(8, TimeoutStrategy.Pessimistic);
+            var timeoutPolicy = Policy.TimeoutAsync(Timings.ProcessTimeInSeconds, TimeoutStrategy.Pessimistic);
             var fallbackPolicy = Policy<string>
                 .Handle<Exception>()
                 .Or<TimeoutRejectedException>() // Handle timeout exceptions
                 .FallbackAsync(async (cancellationToken) =>
                 {
-                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMilliseconds(500)); }, cancellationToken);
+                    await Task.Run(() => { Thread.Sleep(TimeSpan.FromMilliseconds(100)); }, cancellationToken);
                     return string.Empty;
                 });
 
@@ -142,7 +141,7 @@
             try
             {
                 using var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
+                using var client = new HttpClient(handler) { Timeout = TimeSpan.FromMilliseconds(Timings.HttpTimeInMilliSeconds) };
                 var result = await client.GetAsync(baseAddress);
                 if (result.IsSuccessStatusCode)
                 {
@@ -254,6 +253,15 @@
             TimeZoneInfo centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
             DateTime centralTime = TimeZoneInfo.ConvertTimeFromUtc(utcTime, centralTimeZone);
             return centralTime;
+        }
+
+        private static class Timings
+        {
+            public const int ProcessTimeInSeconds = 5;
+            public const int HttpTimeInMilliSeconds = 3000;
+            public const int FailedResponseWaitMax = 2000;
+            public const int FailedResponseWaitMin = 500;
+            public const int UnresolvedRecordWaitMin = 20;
         }
     }
 }
