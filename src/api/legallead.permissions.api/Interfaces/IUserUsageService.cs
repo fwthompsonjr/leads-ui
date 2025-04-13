@@ -34,5 +34,7 @@ namespace legallead.permissions.api.Interfaces
         /// </summary>
         Task<GetUsageResponse> GetUsageSummaryAsync(GetUsageRequest model);
         Task<GetExcelDetailByIdResponse> GetExcelDetailAsync(string id);
+        Task<OfflineDataModel> AppendOfflineRecordAsync(OfflineDataModel model);
+        Task<OfflineDataModel> UpdateOfflineRecordAsync(OfflineDataModel model);
     }
 }

@@ -6,7 +6,9 @@
     using Polly;
     using Polly.Timeout;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Globalization;
     using System.Net;
     using DST = System.Net.Cookie;
     using SRC = OpenQA.Selenium.Cookie;
@@ -19,6 +21,8 @@
         private readonly ReadOnlyCollection<SRC> cookies = settings;
         private readonly List<CaseItemDto> Workload = items;
         private readonly BulkReadMessages Log = response;
+        private readonly List<string> FileDates = items.Select(x => x.FileDate).Distinct().ToList();
+
         public EventHandler<BulkReadMessages>? OnStatusUpdated;
 
         public object? Execute()
@@ -39,20 +43,24 @@
                     IterateWorkLoad(id, c, cookies, list, count);
                 });
                 var unresloved = list.Count(x => !x.Value.IsMapped());
-                var currentDate = DateTime.Now;
+                var currentDate = GetCentralTime();
                 if (unresloved == 0)
                 {
                     Log.TotalProcessed = Log.RecordCount;
-                    Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
+                    Log.Messages.Add($"{currentDate:G}| Processed {count - unresloved} items.");
                     OnStatusUpdated?.Invoke(this, Log);
                     break;
                 }
-                var delay = unresloved > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
+                var unresolvedCount = Math.Round(Convert.ToDouble(unresloved) / Convert.ToDouble(count), 3) * 100;
+                var delay = unresolvedCount > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
+                var isRetryNeeded = IsRetryNeeded(retries, Log.TotalProcessed, count, Log.Messages, FileDates.Count);
+                Log.RetryCount = isRetryNeeded ? retries + 1 : retries;
                 Log.TotalProcessed = count - unresloved;
-                Log.Messages.Add($"{currentDate:G}: Processed {count - unresloved} items.");
-                Log.Messages.Add($"{currentDate:G}: Found {unresloved} items needing review.");
-                Log.Messages.Add($"{currentDate:G}: Waiting {delay:F2} seconds before retry.");
+                Log.Messages.Add($"{currentDate:G}| Processed {count - unresloved} items.");
+                Log.Messages.Add($"{currentDate:G}| Found {unresloved} items needing review.");
+                Log.Messages.Add($"{currentDate:G}| Waiting {delay:F2} seconds before retry.");
                 OnStatusUpdated?.Invoke(this, Log);
+                if (!isRetryNeeded) break;
                 var wait = TimeSpan.FromSeconds(delay);
                 Thread.Sleep(wait);
                 retries++;
@@ -76,10 +84,11 @@
             var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
             var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
             var currentDate = GetCentralTime();
-            var msg = $"{currentDate:G}: Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
+            var msg = $"{currentDate:G}| Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
             if (readFailed) msg += ". FAIL - Adding to retry";
             Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
             Log.Messages.Add(msg);
+            Log.Workload = cases.Select(x => x.Value.Dto ?? new()).ToJsonString() ?? string.Empty;
             OnStatusUpdated?.Invoke(this, Log);
             if (readFailed)
             {
@@ -257,11 +266,31 @@
 
         private static class Timings
         {
-            public const int ProcessTimeInSeconds = 5;
+            public const int ProcessTimeInSeconds = 4;
             public const int HttpTimeInMilliSeconds = 3000;
-            public const int FailedResponseWaitMax = 2000;
-            public const int FailedResponseWaitMin = 500;
+            public const int FailedResponseWaitMax = 200;
+            public const int FailedResponseWaitMin = 75;
             public const int UnresolvedRecordWaitMin = 20;
+            public const int TotalProcessTimeInMinutes = 30;
         }
+
+        private static bool IsRetryNeeded(int retryCount, int processed, int expected, List<string> messages, int dateCount) {
+            const int tolerance = 95;
+            if (retryCount > 3) { 
+                return false;
+            }
+            var startTime = ParseDateFromMessage(messages[0]);
+            var endTime = ParseDateFromMessage(messages[^1]);
+            var elapsedMinutes = endTime.Subtract(startTime).TotalMinutes;
+            var totalProcessAllowedTime = Timings.TotalProcessTimeInMinutes * dateCount;
+            if (elapsedMinutes > totalProcessAllowedTime) return false;
+            var percentComplete = Convert.ToInt32( Math.Round(Convert.ToDouble(processed) / Convert.ToDouble(expected), 3) * 100);
+            return percentComplete < tolerance;
+        }
+        private static DateTime ParseDateFromMessage(string message) { 
+            var dte = message.Split('|')[0];
+            return DateTime.Parse(dte, CultureInfo.CurrentCulture);
+        }
+
     }
 }
