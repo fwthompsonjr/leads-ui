@@ -276,16 +276,15 @@
 
         private static bool IsRetryNeeded(int retryCount, int processed, int expected, List<string> messages, int dateCount) {
             const int tolerance = 95;
-            if (retryCount > 3) { 
-                return false;
-            }
+            if (retryCount > 4) return false; // max retries 5
             var startTime = ParseDateFromMessage(messages[0]);
             var endTime = ParseDateFromMessage(messages[^1]);
             var elapsedMinutes = endTime.Subtract(startTime).TotalMinutes;
             var totalProcessAllowedTime = Timings.TotalProcessTimeInMinutes * dateCount;
             if (elapsedMinutes > totalProcessAllowedTime) return false;
             var percentComplete = Convert.ToInt32( Math.Round(Convert.ToDouble(processed) / Convert.ToDouble(expected), 3) * 100);
-            return percentComplete < tolerance;
+            if (percentComplete < tolerance) return true; // retry if less than 95% collected
+            return retryCount >= 3;
         }
         private static DateTime ParseDateFromMessage(string message) { 
             var dte = message.Split('|')[0];
