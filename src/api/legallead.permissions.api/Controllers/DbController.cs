@@ -1,3 +1,4 @@
+using AngleSharp.Dom;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
 using page.load.utility;
@@ -210,7 +211,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpPost("process-offline")]
-        public IActionResult ProcessOffline(BulkReadRequest request)
+        public async Task<IActionResult> ProcessOfflineAsync(BulkReadRequest request)
         {
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
@@ -218,16 +219,28 @@ namespace legallead.permissions.api.Controllers
             var settings = request.Cookies.ToInstance<List<CookieModel>>();
             var items = request.Workload.ToInstance<List<CaseItemDto>>();
             if (settings == null || items == null) return Ok(response);
+            var model = new OfflineDataModel
+            {
+                RequestId = request.RequestId,
+                Cookie = request.Cookies,
+                Workload = request.Workload,
+                RowCount = items.Count
+            };
+            model = await _usageService.AppendOfflineRecordAsync(model);
             var cookies = settings.Select(s => s.Cookie()).ToList();
             response.IsValid = true;
-            var objRequestGuid = Guid.NewGuid().ToString("D");
+            var objRequestGuid =
+                string.IsNullOrEmpty(model.OfflineId) ?
+                Guid.NewGuid().ToString("D") : model.OfflineId;
             response.OfflineRequestId = objRequestGuid;
             offlineRequests.Add(response);
             var service = new BulkCaseReader(
                 new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies),
                 items,
-                new BulkReadMessages { OfflineRequestId = objRequestGuid });
-            service.OnStatusUpdated = StatusChanged;
+                new BulkReadMessages { OfflineRequestId = objRequestGuid })
+            {
+                OnStatusUpdated = StatusChanged
+            };
             _ = Task.Run(() =>
             {
                 var rsp = service.Execute();
@@ -242,7 +255,7 @@ namespace legallead.permissions.api.Controllers
             return Ok(response);
         }
 
-        private static void StatusChanged(object? sender, BulkReadMessages e)
+        private void StatusChanged(object? sender, BulkReadMessages e)
         {
             var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
             if (find == null) return;
@@ -250,6 +263,16 @@ namespace legallead.permissions.api.Controllers
             find.RecordCount = e.RecordCount;
             find.Messages.Clear();
             find.Messages.AddRange(e.Messages);
+            if (string.IsNullOrEmpty(e.Workload) || e.TotalProcessed == 0) { return; }
+            var model = new OfflineDataModel
+            {
+                RequestId = e.OfflineRequestId,
+                Message = string.Join(Environment.NewLine, e.Messages),
+                Workload = e.Workload,
+                RowCount = e.TotalProcessed,
+                RetryCount = e.RetryCount,
+            };
+            _ = Task.Run(async () => { await _usageService.UpdateOfflineRecordAsync(model); });
         }
 
         [HttpPost("process-offline-status")]

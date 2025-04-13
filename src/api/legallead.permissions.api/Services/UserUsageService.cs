@@ -72,6 +72,26 @@ namespace legallead.permissions.api.Services
             return response;
         }
 
+        public async Task<OfflineDataModel> AppendOfflineRecordAsync(OfflineDataModel model)
+        {
+            var response = await Task.Run(() =>
+            {
+                model.OfflineId = Guid.NewGuid().ToString("D");
+                return model;
+            });
+            return response;
+        }
+
+        public async Task<OfflineDataModel> UpdateOfflineRecordAsync(OfflineDataModel model)
+        {
+            var response = await Task.Run(() =>
+            {
+                if (string.IsNullOrWhiteSpace(model.OfflineId))
+                    model.OfflineId = Guid.NewGuid().ToString("D");
+                return model;
+            });
+            return response;
+        }
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
