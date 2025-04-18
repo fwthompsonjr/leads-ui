@@ -196,7 +196,8 @@ namespace legallead.jdbc.implementations
                 parameters.Add(ProcParameterNames.Cookies, model.Cookie);
                 parameters.Add(ProcParameterNames.ItemCount, model.RowCount);
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc, parameters);
+                var dto = await _command.QuerySingleOrDefaultAsync<OfflineBeginDto>(connection, prc, parameters);
+                if (dto != null) model.OfflineId = dto.Id;
                 return model;
             }
             catch (Exception) {
@@ -233,8 +234,13 @@ namespace legallead.jdbc.implementations
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.RequestId, model.RequestId);
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc, parameters);
-                return new();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return new()
+                {
+                    OfflineId = response.Id,
+
+                };
             }
             catch (Exception)
             {
@@ -244,13 +250,14 @@ namespace legallead.jdbc.implementations
 
         public async Task<List<OfflineStatusModel>?> GetOfflineStatusAsync(string userId)
         {
-            const string prc = ProcNames.OFFLINE_GET_BY_ID;
+            const string prc = ProcNames.OFFLINE_GET_FOR_USER_ID;
             try
             {
                 var parameters = new DynamicParameters();
                 parameters.Add(ProcParameterNames.LeadId, userId);
                 using var connection = _context.CreateConnection();
-                await _command.ExecuteAsync(connection, prc, parameters);
+                var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null || !response.Any()) return [];
                 return new();
             }
             catch (Exception)
