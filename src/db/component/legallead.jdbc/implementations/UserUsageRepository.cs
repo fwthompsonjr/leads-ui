@@ -236,11 +236,7 @@ namespace legallead.jdbc.implementations
                 using var connection = _context.CreateConnection();
                 var response = await _command.QuerySingleOrDefaultAsync<OfflineStatusDto>(connection, prc, parameters);
                 if (response == null) return default;
-                return new()
-                {
-                    OfflineId = response.Id,
-
-                };
+                return GenericMap<OfflineStatusDto, OfflineStatusModel>(response);
             }
             catch (Exception)
             {
@@ -258,7 +254,7 @@ namespace legallead.jdbc.implementations
                 using var connection = _context.CreateConnection();
                 var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc, parameters);
                 if (response == null || !response.Any()) return [];
-                return new();
+                return GenericMap<IEnumerable<OfflineStatusDto>, List<OfflineStatusModel>>(response);
             }
             catch (Exception)
             {
