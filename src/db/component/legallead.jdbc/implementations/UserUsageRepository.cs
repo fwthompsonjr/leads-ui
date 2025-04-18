@@ -5,6 +5,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace legallead.jdbc.implementations
 {
@@ -183,6 +184,83 @@ namespace legallead.jdbc.implementations
             }
         }
 
+
+        public async Task<OfflineRequestModel> OfflineRequestBeginAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_BEGIN;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Workload, model.Workload);
+                parameters.Add(ProcParameterNames.Cookies, model.Cookie);
+                parameters.Add(ProcParameterNames.ItemCount, model.RowCount);
+                using var connection = _context.CreateConnection();
+                var dto = await _command.QuerySingleOrDefaultAsync<OfflineBeginDto>(connection, prc, parameters);
+                if (dto != null) model.OfflineId = dto.Id;
+                return model;
+            }
+            catch (Exception) {
+                return model;
+            }
+        }
+
+        public async Task<bool> OfflineRequestUpdateAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_UPDATE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Workload, model.Workload);
+                parameters.Add(ProcParameterNames.Logs, model.Message);
+                parameters.Add(ProcParameterNames.ItemCount, model.RowCount);
+                parameters.Add(ProcParameterNames.RetryCount, model.RetryCount);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<OfflineStatusModel?> GetOfflineStatusAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_GET_BY_ID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<OfflineStatusDto, OfflineStatusModel>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<List<OfflineStatusModel>?> GetOfflineStatusAsync(string userId)
+        {
+            const string prc = ProcNames.OFFLINE_GET_FOR_USER_ID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, userId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null || !response.Any()) return [];
+                return GenericMap<IEnumerable<OfflineStatusDto>, List<OfflineStatusModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -255,6 +333,10 @@ namespace legallead.jdbc.implementations
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
+            public const string OFFLINE_BEGIN = "CALL USP_OFFLINESEARCH_BEGIN ( ?, ?, ?, ? );";
+            public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
+            public const string OFFLINE_GET_BY_ID = "CALL USP_OFFLINESEARCH_FETCH ( ? );";
+            public const string OFFLINE_GET_FOR_USER_ID = "CALL USP_OFFLINESEARCH_FETCH_BY_USER_ID ( ? );";
         }
 
         private static class ProcParameterNames
@@ -264,6 +346,12 @@ namespace legallead.jdbc.implementations
             public const string CountyId = "county_id";
             public const string MonthLimit = "month_limit";
             public const string SearchDate = "search_date";
+            public const string RequestId = "request_index";
+            public const string Workload = "work_load";
+            public const string Logs = "js_logs";
+            public const string Cookies = "js_cookie";
+            public const string ItemCount = "item_count";
+            public const string RetryCount = "retry_count";
         }
     }
 }
