@@ -34,6 +34,7 @@ namespace db.integration.tests
                 services.AddScoped<IInvoiceRepository, InvoiceRepository>();
                 services.AddScoped<IUserUsageRepository, UserUsageRepository>();
                 services.AddScoped<ICountyFileRepository, CountyFileRepository>();
+                services.AddScoped<IUserUsageRepository, UserUsageRepository>();
                 Provider = services.BuildServiceProvider();
             }
         }

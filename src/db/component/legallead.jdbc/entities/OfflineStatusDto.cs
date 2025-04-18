@@ -3,6 +3,7 @@
     [TargetTable(TableName = "OFF_STATUS_RSP")]
     public class OfflineStatusDto : BaseDto
     {
+        public bool? IsCompleted { get; set; }
         public string? RequestId { get; set; }
         public string? Workload { get; set; }
         public string? Cookie { get; set; }
@@ -26,6 +27,7 @@
                 var fieldName = FieldList.Find(x => x.Equals(field, Comparison));
                 if (fieldName == null) return null;
                 if (fieldName.Equals("Id", Comparison)) return Id;
+                if (fieldName.Equals("IsCompleted", Comparison)) return IsCompleted;
                 if (fieldName.Equals("OfflineId", Comparison)) return OfflineId;
                 if (fieldName.Equals("RequestId", Comparison)) return RequestId;
                 if (fieldName.Equals("LeadUserId", Comparison)) return LeadUserId;
@@ -52,6 +54,7 @@
                     return;
                 }
                 if (fieldName.Equals("OfflineId", Comparison)) { OfflineId = ChangeType<string?>(value); return; }
+                if (fieldName.Equals("IsCompleted", Comparison)) { IsCompleted = ChangeType<bool?>(value); return; }
                 if (fieldName.Equals("RequestId", Comparison)) { RequestId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("LeadUserId", Comparison)) { LeadUserId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("CountyName", Comparison)) { CountyName = ChangeType<string?>(value); return; }
@@ -60,7 +63,7 @@
                 if (fieldName.Equals("RowCount", Comparison)) { RowCount = ChangeType<int?>(value); return; }
                 if (fieldName.Equals("PercentComplete", Comparison)) { PercentComplete = ChangeType<decimal?>(value); return; }
                 if (fieldName.Equals("RetryCount", Comparison)) { RetryCount = ChangeType<int?>(value); return; }
-                if (fieldName.Equals("Message", Comparison)) { Cookie = ChangeType<string?>(value); return; }
+                if (fieldName.Equals("Message", Comparison)) { Message = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("Workload", Comparison)) { Workload = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("Cookie", Comparison)) { Cookie = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("LastUpdate", Comparison)) { LastUpdate = ChangeType<DateTime?>(value); return; }

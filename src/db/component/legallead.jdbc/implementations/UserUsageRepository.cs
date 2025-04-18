@@ -333,7 +333,7 @@ namespace legallead.jdbc.implementations
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
-            public const string OFFLINE_BEGIN = "CALL USP_OFFLINESEARCH_BEGIN ( ? );";
+            public const string OFFLINE_BEGIN = "CALL USP_OFFLINESEARCH_BEGIN ( ?, ?, ?, ? );";
             public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
             public const string OFFLINE_GET_BY_ID = "CALL USP_OFFLINESEARCH_FETCH ( ? );";
             public const string OFFLINE_GET_FOR_USER_ID = "CALL USP_OFFLINESEARCH_FETCH_BY_USER_ID ( ? );";

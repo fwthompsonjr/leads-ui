@@ -2,6 +2,7 @@
 {
     public class OfflineStatusModel : OfflineRequestModel
     {
+        public bool? IsCompleted { get; set; }
         public string LeadUserId { get; set; } = string.Empty;
         public string CountyName { get; set; } = string.Empty;
         public DateTime? SearchStartDate { get; set; }
