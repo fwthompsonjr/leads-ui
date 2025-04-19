@@ -96,5 +96,6 @@ namespace legallead.jdbc.interfaces
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<List<OfflineStatusModel>?> GetOfflineStatusAsync(string userId);
+        Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model);
     }
 }

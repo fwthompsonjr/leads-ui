@@ -144,14 +144,14 @@ if (testId == 11)
     });
     var model = new OfflineRequestModel
     {
-        RequestId = "998123f2-1c28-11f0-b422-0af36f7c981d",
+        OfflineId = "fef29532-a487-11ef-99ce-0af7a01f52e9",
+        RequestId = "44b807b9-1d35-11f0-b422-0af36f7c981d",
         RowCount = 16, 
         RetryCount = 2,
         Message = logs,
         Workload = tmp,
     };
-    // var usrId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
-    _ = await svc.OfflineRequestUpdateAsync(model);
+    _ = await svc.OfflineRequestTerminateAsync(model);
     var actual = await svc.GetOfflineStatusAsync(model);
     var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
     Console.WriteLine(js);

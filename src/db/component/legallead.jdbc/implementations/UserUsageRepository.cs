@@ -261,6 +261,23 @@ namespace legallead.jdbc.implementations
                 return default;
             }
         }
+
+        public async Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_TERMINATE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -337,6 +354,7 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
             public const string OFFLINE_GET_BY_ID = "CALL USP_OFFLINESEARCH_FETCH ( ? );";
             public const string OFFLINE_GET_FOR_USER_ID = "CALL USP_OFFLINESEARCH_FETCH_BY_USER_ID ( ? );";
+            public const string OFFLINE_TERMINATE = "CALL USP_OFFLINESEARCH_TERMINATE ( ? );";
         }
 
         private static class ProcParameterNames
