@@ -5,6 +5,7 @@
         public bool? IsCompleted { get; set; }
         public string LeadUserId { get; set; } = string.Empty;
         public string CountyName { get; set; } = string.Empty;
+        public string CourtType { get; set; } = string.Empty;
         public DateTime? SearchStartDate { get; set; }
         public DateTime? SearchEndDate { get; set; }
         public decimal? PercentComplete { get; set; }

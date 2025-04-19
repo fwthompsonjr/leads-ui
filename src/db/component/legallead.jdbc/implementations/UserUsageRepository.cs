@@ -184,6 +184,27 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> OfflineRequestFlagAsDownloadedAsync(OfflineDownloadModel model)
+        {
+            const string prc = ProcNames.OFFLINE_FLAG_DOWNLOADED;
+            try
+            {
+                if (!Guid.TryParse(model.Id, out var _)) return false;
+                if (!Guid.TryParse(model.RequestId, out var _)) return false;
+                if (!model.CanDownload) return false;
+                if (string.IsNullOrWhiteSpace(model.Workload)) return false;
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Logs, model.Workload);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         public async Task<OfflineRequestModel> OfflineRequestBeginAsync(OfflineRequestModel model)
         {
@@ -255,6 +276,58 @@ namespace legallead.jdbc.implementations
                 var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc, parameters);
                 if (response == null || !response.Any()) return [];
                 return GenericMap<IEnumerable<OfflineStatusDto>, List<OfflineStatusModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_TERMINATE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_SET_COURTTYPE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Logs, model.Workload);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        
+        public async Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_CAN_DOWNLOAD;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineDownloadDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<OfflineDownloadDto, OfflineDownloadModel>(response);
             }
             catch (Exception)
             {
@@ -337,6 +410,10 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
             public const string OFFLINE_GET_BY_ID = "CALL USP_OFFLINESEARCH_FETCH ( ? );";
             public const string OFFLINE_GET_FOR_USER_ID = "CALL USP_OFFLINESEARCH_FETCH_BY_USER_ID ( ? );";
+            public const string OFFLINE_TERMINATE = "CALL USP_OFFLINESEARCH_TERMINATE ( ? );";
+            public const string OFFLINE_CAN_DOWNLOAD = "CALL USP_OFFLINESEARCH_CAN_DOWNLOAD ( ? );";
+            public const string OFFLINE_FLAG_DOWNLOADED = "CALL USP_OFFLINESEARCH_FLAG_DOWNLOAD ( ?, ? );";
+            public const string OFFLINE_SET_COURTTYPE = "CALL USP_OFFLINESEARCH_SET_COURT_TYPE ( ?, ? );";
         }
 
         private static class ProcParameterNames

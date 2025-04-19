@@ -8,7 +8,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-int testId = 12;
+int testId = 11;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
 if (testId == 0)
 {
@@ -137,22 +137,25 @@ if (testId == 11)
         "This log is your log",
         "Cant be updated",
     });
-    var tmp = JsonConvert.SerializeObject(new List<string>
-    {
-        "record 1",
-        "record 2",
-    });
     var model = new OfflineRequestModel
     {
-        RequestId = "998123f2-1c28-11f0-b422-0af36f7c981d",
+        OfflineId = "fef29532-a487-11ef-99ce-0af7a01f52e9",
+        RequestId = "44b807b9-1d35-11f0-b422-0af36f7c981d",
         RowCount = 16, 
         RetryCount = 2,
         Message = logs,
-        Workload = tmp,
+        Workload = "COUNTY",
     };
-    // var usrId = "fef29532-a487-11ef-99ce-0af7a01f52e9";
-    _ = await svc.OfflineRequestUpdateAsync(model);
-    var actual = await svc.GetOfflineStatusAsync(model);
+    await svc.OfflineRequestSetCourtTypeAsync(model);
+    var actual = await svc.GetOfflineStatusAsync(model.OfflineId);
+    if (actual != null)
+    {
+        actual.ForEach(x => { 
+            x.Workload = string.Empty; 
+            x.Message = string.Empty;
+            x.Cookie = string.Empty;
+        });
+    }
     var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
     Console.WriteLine(js);
 }
