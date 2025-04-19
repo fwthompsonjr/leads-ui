@@ -99,5 +99,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model);
         Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model);
         Task<bool> OfflineRequestFlagAsDownloadedAsync(OfflineDownloadModel model);
+        Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model);
     }
 }

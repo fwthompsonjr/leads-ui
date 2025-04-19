@@ -299,7 +299,24 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
-
+        public async Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_SET_COURTTYPE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Logs, model.Workload);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        
         public async Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model)
         {
             const string prc = ProcNames.OFFLINE_CAN_DOWNLOAD;
@@ -396,6 +413,7 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_TERMINATE = "CALL USP_OFFLINESEARCH_TERMINATE ( ? );";
             public const string OFFLINE_CAN_DOWNLOAD = "CALL USP_OFFLINESEARCH_CAN_DOWNLOAD ( ? );";
             public const string OFFLINE_FLAG_DOWNLOADED = "CALL USP_OFFLINESEARCH_FLAG_DOWNLOAD ( ?, ? );";
+            public const string OFFLINE_SET_COURTTYPE = "CALL USP_OFFLINESEARCH_SET_COURT_TYPE ( ?, ? );";
         }
 
         private static class ProcParameterNames

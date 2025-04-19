@@ -13,6 +13,7 @@
         public int? RetryCount { get; set; }
         public string? LeadUserId { get; set; } = string.Empty;
         public string? CountyName { get; set; } = string.Empty;
+        public string? CourtType { get; set; } = string.Empty;
         public DateTime? SearchStartDate { get; set; }
         public DateTime? SearchEndDate { get; set; }
         public decimal? PercentComplete { get; set; }
@@ -32,6 +33,7 @@
                 if (fieldName.Equals("RequestId", Comparison)) return RequestId;
                 if (fieldName.Equals("LeadUserId", Comparison)) return LeadUserId;
                 if (fieldName.Equals("CountyName", Comparison)) return CountyName;
+                if (fieldName.Equals("CourtType", Comparison)) return CourtType;
                 if (fieldName.Equals("SearchStartDate", Comparison)) return SearchStartDate;
                 if (fieldName.Equals("SearchEndDate", Comparison)) return SearchEndDate;
                 if (fieldName.Equals("RowCount", Comparison)) return RowCount;
@@ -58,6 +60,7 @@
                 if (fieldName.Equals("RequestId", Comparison)) { RequestId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("LeadUserId", Comparison)) { LeadUserId = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("CountyName", Comparison)) { CountyName = ChangeType<string?>(value); return; }
+                if (fieldName.Equals("CourtType", Comparison)) { CourtType = ChangeType<string?>(value); return; }
                 if (fieldName.Equals("SearchStartDate", Comparison)) { SearchStartDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("SearchEndDate", Comparison)) { SearchEndDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("RowCount", Comparison)) { RowCount = ChangeType<int?>(value); return; }

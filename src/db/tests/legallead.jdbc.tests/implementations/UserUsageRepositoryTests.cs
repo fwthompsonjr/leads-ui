@@ -473,6 +473,37 @@ namespace legallead.jdbc.tests.implementations
 
         [Theory]
         [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSetCourtTypeAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel();
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSetCourtTypeAsync(rqst);
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
         [InlineData(0)] // happy path id returned
         [InlineData(1)] // return null
         public async Task RepoCanOfflineRequestCanDownload(int conditionId)

@@ -137,11 +137,6 @@ if (testId == 11)
         "This log is your log",
         "Cant be updated",
     });
-    var tmp = JsonConvert.SerializeObject(new List<string>
-    {
-        "record 1",
-        "record 2",
-    });
     var model = new OfflineRequestModel
     {
         OfflineId = "fef29532-a487-11ef-99ce-0af7a01f52e9",
@@ -149,11 +144,18 @@ if (testId == 11)
         RowCount = 16, 
         RetryCount = 2,
         Message = logs,
-        Workload = tmp,
+        Workload = "COUNTY",
     };
-    var actual = await svc.OfflineRequestCanDownload(model) ?? new();
-    if (!string.IsNullOrEmpty(actual.Workload))
-        actual.Workload = "<!-- removed -->";
+    await svc.OfflineRequestSetCourtTypeAsync(model);
+    var actual = await svc.GetOfflineStatusAsync(model.OfflineId);
+    if (actual != null)
+    {
+        actual.ForEach(x => { 
+            x.Workload = string.Empty; 
+            x.Message = string.Empty;
+            x.Cookie = string.Empty;
+        });
+    }
     var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
     Console.WriteLine(js);
 }
