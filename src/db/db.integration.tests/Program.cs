@@ -8,7 +8,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-int testId = 12;
+int testId = 11;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
 if (testId == 0)
 {
@@ -151,8 +151,9 @@ if (testId == 11)
         Message = logs,
         Workload = tmp,
     };
-    _ = await svc.OfflineRequestTerminateAsync(model);
-    var actual = await svc.GetOfflineStatusAsync(model);
+    var actual = await svc.OfflineRequestCanDownload(model) ?? new();
+    if (!string.IsNullOrEmpty(actual.Workload))
+        actual.Workload = "<!-- removed -->";
     var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
     Console.WriteLine(js);
 }
