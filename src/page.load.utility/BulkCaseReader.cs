@@ -24,7 +24,7 @@
         private readonly List<string> FileDates = items.Select(x => x.FileDate).Distinct().ToList();
 
         public EventHandler<BulkReadMessages>? OnStatusUpdated;
-
+        public EventHandler<BulkReadMessages>? OnStatusTimeOut;
         public object? Execute()
         {
             var list = new ConcurrentDictionary<int, CaseItemDtoMapper>();
@@ -53,7 +53,7 @@
                 }
                 var unresolvedCount = Math.Round(Convert.ToDouble(unresloved) / Convert.ToDouble(count), 3) * 100;
                 var delay = unresolvedCount > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
-                var isRetryNeeded = IsRetryNeeded(retries, Log.TotalProcessed, count, Log.Messages, FileDates.Count);
+                var isRetryNeeded = IsRetryNeeded(retries, Log.Messages, FileDates.Count);
                 Log.RetryCount = isRetryNeeded ? retries + 1 : retries;
                 Log.TotalProcessed = count - unresloved;
                 Log.Messages.Add($"{currentDate:G}| Processed {count - unresloved} items.");
@@ -68,8 +68,12 @@
             Workload.Clear();
             var dtos = list.Select(x => x.Value.Dto ?? new());
             Workload.AddRange(dtos);
-            // Cast ConcurrentDictionary to Dictionary before returning
-            return Workload.ToJsonString();
+            var workload = Workload.ToJsonString() ?? Log.Workload;
+            Log.Workload = workload;
+            var dateCurrent = GetCentralTime();
+            Log.Messages.Add($"{dateCurrent:G}| Processed completed {dtos.Count()} items.");
+            OnStatusUpdated?.Invoke(this, Log);
+            return workload;
         }
 
         private void IterateWorkLoad(
@@ -271,20 +275,22 @@
             public const int FailedResponseWaitMax = 200;
             public const int FailedResponseWaitMin = 75;
             public const int UnresolvedRecordWaitMin = 20;
-            public const int TotalProcessTimeInMinutes = 30;
+            public const int TotalProcessTimeInMinutes = 45;
         }
 
-        private static bool IsRetryNeeded(int retryCount, int processed, int expected, List<string> messages, int dateCount) {
-            const int tolerance = 95;
+        private bool IsRetryNeeded(int retryCount, List<string> messages, int dateCount) {
             if (retryCount > 4) return false; // max retries 5
+            var dtCount = Math.Max(1, dateCount);
             var startTime = ParseDateFromMessage(messages[0]);
             var endTime = ParseDateFromMessage(messages[^1]);
             var elapsedMinutes = endTime.Subtract(startTime).TotalMinutes;
-            var totalProcessAllowedTime = Timings.TotalProcessTimeInMinutes * dateCount;
-            if (elapsedMinutes > totalProcessAllowedTime) return false;
-            var percentComplete = Convert.ToInt32( Math.Round(Convert.ToDouble(processed) / Convert.ToDouble(expected), 3) * 100);
-            if (percentComplete < tolerance) return true; // retry if less than 95% collected
-            return retryCount >= 3;
+            var totalProcessAllowedTime = Timings.TotalProcessTimeInMinutes * dtCount;
+            if (elapsedMinutes > totalProcessAllowedTime)
+            {
+                OnStatusTimeOut?.Invoke(this, Log);
+                return false;
+            }
+            return true;
         }
         private static DateTime ParseDateFromMessage(string message) { 
             var dte = message.Split('|')[0];

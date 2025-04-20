@@ -26,6 +26,8 @@ namespace legallead.permissions.api
                     .ForMember(x => x.Id, y => y.MapFrom(m => m.UsageRecordId))
                     .ForMember(x => x.IsCompleted, y => y.MapFrom(m => false))
                     .ForMember(x => x.Message, y => y.MapFrom(m => string.Empty));
+                c.CreateMap<OfflineDataModel, OfflineRequestModel>();
+                c.CreateMap<OfflineRequestModel, OfflineDataModel>();
             });
         }
     }

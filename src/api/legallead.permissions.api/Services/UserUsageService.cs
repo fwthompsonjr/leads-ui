@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using legallead.jdbc.interfaces;
+using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
 
@@ -74,23 +75,47 @@ namespace legallead.permissions.api.Services
 
         public async Task<OfflineDataModel> AppendOfflineRecordAsync(OfflineDataModel model)
         {
-            var response = await Task.Run(() =>
-            {
-                model.OfflineId = Guid.NewGuid().ToString("D");
-                return model;
-            });
-            return response;
+            var request = mapper.Map<OfflineRequestModel>(model);
+            var data = await db.OfflineRequestBeginAsync(request);
+            if (data == null) return model;
+            model.OfflineId = data.OfflineId;
+            return model;
         }
 
         public async Task<OfflineDataModel> UpdateOfflineRecordAsync(OfflineDataModel model)
         {
-            var response = await Task.Run(() =>
-            {
-                if (string.IsNullOrWhiteSpace(model.OfflineId))
-                    model.OfflineId = Guid.NewGuid().ToString("D");
-                return model;
-            });
-            return response;
+            var request = mapper.Map<OfflineRequestModel>(model);
+            await db.OfflineRequestUpdateAsync(request);
+            return model;
+        }
+
+        public async Task<IEnumerable<UserOfflineStatusResponse>?> GetOfflineStatusAsync(string userId)
+        {
+            var response = await db.GetOfflineStatusAsync(userId);
+            if (response == null) return default;
+            var json = Serialize(response);
+            return JsonConvert.DeserializeObject<List<UserOfflineStatusResponse>>(json);
+        }
+
+        public async Task<bool> SetOfflineCourtTypeAsync(OfflineDataModel model)
+        {
+            var request = mapper.Map<OfflineRequestModel>(model);
+            var updated = await db.OfflineRequestSetCourtTypeAsync(request);
+            return updated;
+        }
+        public async Task<bool> TerminateOfflineRequestAsync(OfflineDataModel model)
+        {
+            var request = mapper.Map<OfflineRequestModel>(model);
+            var updated = await db.OfflineRequestTerminateAsync(request);
+            return updated;
+        }
+
+        public async Task<string> GetDownloadStatusAsync(OfflineDataModel model)
+        {
+            var request = mapper.Map<OfflineRequestModel>(model);
+            var response = (await db.OfflineRequestCanDownload(request)) ?? new();
+            var json = Serialize(response);
+            return json;
         }
         private static string Serialize(object? value)
         {

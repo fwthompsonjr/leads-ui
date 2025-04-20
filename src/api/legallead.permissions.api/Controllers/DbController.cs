@@ -239,7 +239,8 @@ namespace legallead.permissions.api.Controllers
                 items,
                 new BulkReadMessages { OfflineRequestId = objRequestGuid })
             {
-                OnStatusUpdated = StatusChanged
+                OnStatusUpdated = StatusChanged,
+                OnStatusTimeOut = StatusTerminated
             };
             _ = Task.Run(() =>
             {
@@ -255,24 +256,28 @@ namespace legallead.permissions.api.Controllers
             return Ok(response);
         }
 
-        private void StatusChanged(object? sender, BulkReadMessages e)
+        [HttpPost("get-offline-requests")]
+        public async Task<IActionResult> GetOfflineStatusAsync(UserOfflineStatusRequest request)
         {
-            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
-            if (find == null) return;
-            find.TotalProcessed = e.TotalProcessed;
-            find.RecordCount = e.RecordCount;
-            find.Messages.Clear();
-            find.Messages.AddRange(e.Messages);
-            if (string.IsNullOrEmpty(e.Workload) || e.TotalProcessed == 0) { return; }
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!Guid.TryParse(request.LeadId, out var _)) return BadRequest("Invalid Lead Id");
+            var data = await _usageService.GetOfflineStatusAsync(request.LeadId);
+            return Ok(data);
+        }
+
+        [HttpPost("process-offline-set-context")]
+        public async Task<IActionResult> ProcessOfflineSetContextAsync(BulkReadRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
             var model = new OfflineDataModel
             {
-                RequestId = e.OfflineRequestId,
-                Message = string.Join(Environment.NewLine, e.Messages),
-                Workload = e.Workload,
-                RowCount = e.TotalProcessed,
-                RetryCount = e.RetryCount,
+                RequestId = request.RequestId,
+                Workload = request.Workload
             };
-            _ = Task.Run(async () => { await _usageService.UpdateOfflineRecordAsync(model); });
+            var rsp = await _usageService.SetOfflineCourtTypeAsync(model);
+            return Ok(new { IsValid = rsp });
         }
 
         [HttpPost("process-offline-status")]
@@ -287,6 +292,67 @@ namespace legallead.permissions.api.Controllers
                 offlineRequests.RemoveAll(x => x.OfflineRequestId == request.OfflineRequestId);
             }
             return Ok(find);
+        }
+
+        [HttpPost("get-offline-download-status")]
+        public async Task<IActionResult> GetDownloadStatusAsync(BulkReadRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var model = new OfflineDataModel
+            {
+                RequestId = request.RequestId
+            };
+            var rsp = await _usageService.GetDownloadStatusAsync(model);
+            return Ok(new { request.RequestId, Content = rsp });
+        }
+
+        private void StatusChanged(object? sender, BulkReadMessages e)
+        {
+            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
+            if (find == null) return;
+            find.TotalProcessed = e.TotalProcessed;
+            find.RecordCount = e.RecordCount;
+            find.Messages.Clear();
+            find.Messages.AddRange(e.Messages);
+            if (string.IsNullOrEmpty(e.Workload) || e.TotalProcessed == 0) { return; }
+            var isCompleted = e.TotalProcessed == e.RecordCount && e.RecordCount > 0;
+            var model = new OfflineDataModel
+            {
+                RequestId = find.RequestId, // e.OfflineRequestId,
+                Message = string.Join(Environment.NewLine, e.Messages),
+                Workload = e.Workload,
+                RowCount = isCompleted ? e.TotalProcessed - 1 : e.TotalProcessed,
+                RetryCount = e.RetryCount,
+            };
+            _ = Task.Run(async () => {
+                await _usageService.UpdateOfflineRecordAsync(model);
+                if (isCompleted)
+                {
+                    model.RowCount = e.TotalProcessed;
+                    await _usageService.UpdateOfflineRecordAsync(model);
+                }
+            });
+        }
+
+        private void StatusTerminated(object? sender, BulkReadMessages e)
+        {
+            var messages = new string[] {
+                "Process terminated due to server timeout",
+                $"Total records processed: {e.TotalProcessed}",
+                $"Total retries {e.RetryCount}"
+            };
+            var model = new OfflineDataModel
+            {
+                RequestId = e.OfflineRequestId,
+                Message = string.Empty,
+                Workload = string.Join(Environment.NewLine, messages),
+                RowCount = e.TotalProcessed,
+                RetryCount = e.RetryCount,
+            };
+            _ = Task.Run(async () => {
+                await _usageService.TerminateOfflineRequestAsync(model);
+            });
         }
         private const string UserAccountAccess = "user account access credential";
         private readonly static CultureInfo _culture = new("en-us");
