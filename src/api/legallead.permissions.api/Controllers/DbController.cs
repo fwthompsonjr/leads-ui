@@ -306,7 +306,14 @@ namespace legallead.permissions.api.Controllers
             var rsp = await _usageService.GetDownloadStatusAsync(model);
             return Ok(new { request.RequestId, Content = rsp });
         }
-
+        [HttpPost("set-offline-download-complete")]
+        public async Task<IActionResult> SetDownloadCompletedAsync(OfflineDataModel request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var rsp = await _usageService.SetDownloadCompletedAsync(request);
+            return Ok(new { request.RequestId, Content = rsp });
+        }
         private void StatusChanged(object? sender, BulkReadMessages e)
         {
             var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);

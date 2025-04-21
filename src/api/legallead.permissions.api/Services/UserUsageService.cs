@@ -117,6 +117,22 @@ namespace legallead.permissions.api.Services
             var json = Serialize(response);
             return json;
         }
+        public async Task<string> SetDownloadCompletedAsync(OfflineDataModel model)
+        {
+            var request = new OfflineDownloadModel
+            {
+                Id = model.OfflineId,
+                RequestId = model.RequestId,
+                CanDownload = true,
+                Workload = model.Message
+            };
+            var response = await db.OfflineRequestFlagAsDownloadedAsync(request);
+            return new
+            {
+                model.RequestId,
+                IsCompleted = response
+            }.ToJsonString();
+        }
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;

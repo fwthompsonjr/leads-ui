@@ -40,5 +40,6 @@ namespace legallead.permissions.api.Interfaces
         Task<bool> SetOfflineCourtTypeAsync(OfflineDataModel model);
         Task<bool> TerminateOfflineRequestAsync(OfflineDataModel model);
         Task<string> GetDownloadStatusAsync(OfflineDataModel model);
+        Task<string> SetDownloadCompletedAsync(OfflineDataModel model);
     }
 }
