@@ -91,6 +91,8 @@ namespace legallead.permissions.api.Services
 
         public async Task<IEnumerable<UserOfflineStatusResponse>?> GetOfflineStatusAsync(string userId)
         {
+            // update search types before fetching offline statuses
+            await UpdateOfflineSearchTypesAsync();
             var response = await db.GetOfflineStatusAsync(userId);
             if (response == null) return default;
             var json = Serialize(response);
@@ -127,12 +129,24 @@ namespace legallead.permissions.api.Services
                 Workload = model.Message
             };
             var response = await db.OfflineRequestFlagAsDownloadedAsync(request);
+            await UpdateOfflineHistoryAsync();
             return new
             {
                 model.RequestId,
                 IsCompleted = response
             }.ToJsonString();
         }
+
+        public async Task UpdateOfflineHistoryAsync()
+        {
+            await UpdateOfflineSearchTypesAsync();
+            await db.OfflineRequestSyncHistoryAsync();
+        }
+        public async Task UpdateOfflineSearchTypesAsync()
+        {
+            await db.OfflineRequestSetSearchTypeAsync();
+        }
+
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
