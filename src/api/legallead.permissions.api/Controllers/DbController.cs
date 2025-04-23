@@ -338,6 +338,7 @@ namespace legallead.permissions.api.Controllers
                 {
                     model.RowCount = e.TotalProcessed;
                     await _usageService.UpdateOfflineRecordAsync(model);
+                    await _usageService.UpdateOfflineHistoryAsync();
                 }
             });
         }
