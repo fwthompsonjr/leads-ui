@@ -578,6 +578,65 @@ namespace legallead.jdbc.tests.implementations
                         It.IsAny<string>(),
                         It.IsAny<DynamicParameters>()));
         }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSetSearchTypeAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSetSearchTypeAsync();
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSyncHistoryAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSyncHistoryAsync();
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
         private sealed class RepoContainer
         {
             private readonly IUserUsageRepository repo;
