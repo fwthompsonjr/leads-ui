@@ -299,6 +299,20 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
+        public async Task<bool> OfflineRequestSetSearchTypeAsync()
+        {
+            const string prc = ProcNames.OFFLINE_SET_SEARCHTYPE;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public async Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model)
         {
             const string prc = ProcNames.OFFLINE_SET_COURTTYPE;
@@ -332,6 +346,21 @@ namespace legallead.jdbc.implementations
             catch (Exception)
             {
                 return default;
+            }
+        }
+
+        public async Task<bool> OfflineRequestSyncHistoryAsync()
+        {
+            const string prc = ProcNames.OFFLINE_SYNC_HISTORY;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
@@ -414,6 +443,8 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_CAN_DOWNLOAD = "CALL USP_OFFLINESEARCH_CAN_DOWNLOAD ( ? );";
             public const string OFFLINE_FLAG_DOWNLOADED = "CALL USP_OFFLINESEARCH_FLAG_DOWNLOAD ( ?, ? );";
             public const string OFFLINE_SET_COURTTYPE = "CALL USP_OFFLINESEARCH_SET_COURT_TYPE ( ?, ? );";
+            public const string OFFLINE_SET_SEARCHTYPE = "CALL USP_OFFLINE_SET_SEARCH_TYPE_INTERNAL();";
+            public const string OFFLINE_SYNC_HISTORY = "CALL USP_OFFLINESEARCH_SYNC_HISTORY();";
         }
 
         private static class ProcParameterNames
