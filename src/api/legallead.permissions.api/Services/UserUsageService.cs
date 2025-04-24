@@ -3,6 +3,8 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace legallead.permissions.api.Services
 {
@@ -147,10 +149,28 @@ namespace legallead.permissions.api.Services
             await db.OfflineRequestSetSearchTypeAsync();
         }
 
+        public async Task<List<OfflineSearchTypeBo>> GetOfflineSearchTypesByIdAsync(string leadId)
+        {
+            var data = await db.GetOfflineGetSearchTypeAsync(leadId);
+            if (data == null || data.Count == 0) return [];
+            return DeSerialize<List<OfflineSearchTypeBo>>(Serialize(data)) ?? [];
+        }
+
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
             return JsonConvert.SerializeObject(value);
+        }
+        private static T? DeSerialize<T>(string json)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }
