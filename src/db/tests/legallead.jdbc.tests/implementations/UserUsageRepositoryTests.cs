@@ -442,6 +442,45 @@ namespace legallead.jdbc.tests.implementations
 
         [Theory]
         [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        [InlineData(2)] // return empty
+        public async Task RepoCanGetOfflineGetSearchTypeAsync(int conditionId)
+        {
+            var dto = conditionId switch
+            {
+                1 => default,
+                2 => [],
+                _ => searchtypefaker.Generate(5)
+            };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = "testing";
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetOfflineGetSearchTypeAsync(rqst);
+            mock.Verify(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
         [InlineData(0)] // happy path 
         public async Task RepoCanOfflineRequestTerminateAsync(int conditionId)
         {
@@ -745,5 +784,11 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.RequestId, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.Workload, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CanDownload, y => true);
+
+        private static readonly Faker<OfflineSearchTypeDto> searchtypefaker
+            = new Faker<OfflineSearchTypeDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ItemCount, y => y.Random.Int(1, 2600))
+            .RuleFor(x => x.SearchType, y => y.Random.AlphaNumeric(25));
     }
 }

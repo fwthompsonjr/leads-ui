@@ -5,7 +5,6 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace legallead.jdbc.implementations
 {
@@ -221,7 +220,8 @@ namespace legallead.jdbc.implementations
                 if (dto != null) model.OfflineId = dto.Id;
                 return model;
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 return model;
             }
         }
@@ -330,7 +330,7 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
-        
+
         public async Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model)
         {
             const string prc = ProcNames.OFFLINE_CAN_DOWNLOAD;
@@ -363,6 +363,24 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
+        public async Task<List<OfflineSearchTypeModel>?> GetOfflineGetSearchTypeAsync(string leadId)
+        {
+            const string prc = ProcNames.OFFLINE_SEARCH_TYPE_BY_USERID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<OfflineSearchTypeDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<IEnumerable<OfflineSearchTypeDto>, List<OfflineSearchTypeModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -391,7 +409,7 @@ namespace legallead.jdbc.implementations
                 using var connection = _context.CreateConnection();
                 var response = await _command.QueryAsync<DbExcelNameDto>(connection, prc, parameters);
                 if (response == null) return [];
-                return response.ToList();
+                return [.. response];
             }
             catch (Exception)
             {
@@ -445,6 +463,7 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_SET_COURTTYPE = "CALL USP_OFFLINESEARCH_SET_COURT_TYPE ( ?, ? );";
             public const string OFFLINE_SET_SEARCHTYPE = "CALL USP_OFFLINE_SET_SEARCH_TYPE_INTERNAL();";
             public const string OFFLINE_SYNC_HISTORY = "CALL USP_OFFLINESEARCH_SYNC_HISTORY();";
+            public const string OFFLINE_SEARCH_TYPE_BY_USERID = "CALL USP_OFFLINESEARCH_SEARCHTYPE_BY_USER_ID ( ? );";
         }
 
         private static class ProcParameterNames
