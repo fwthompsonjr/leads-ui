@@ -102,5 +102,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model);
         Task<bool> OfflineRequestSetSearchTypeAsync();
         Task<bool> OfflineRequestSyncHistoryAsync();
+        Task<List<OfflineSearchTypeModel>?> GetOfflineGetSearchTypeAsync(string leadId);
     }
 }

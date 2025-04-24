@@ -141,7 +141,7 @@ if (testId == 11)
     {
         OfflineId = "fef29532-a487-11ef-99ce-0af7a01f52e9",
         RequestId = "44b807b9-1d35-11f0-b422-0af36f7c981d",
-        RowCount = 16, 
+        RowCount = 16,
         RetryCount = 2,
         Message = logs,
         Workload = "COUNTY",
@@ -150,8 +150,9 @@ if (testId == 11)
     var actual = await svc.GetOfflineStatusAsync(model.OfflineId);
     if (actual != null)
     {
-        actual.ForEach(x => { 
-            x.Workload = string.Empty; 
+        actual.ForEach(x =>
+        {
+            x.Workload = string.Empty;
             x.Message = string.Empty;
             x.Cookie = string.Empty;
         });
