@@ -43,5 +43,6 @@ namespace legallead.permissions.api.Interfaces
         Task<string> SetDownloadCompletedAsync(OfflineDataModel model);
         Task UpdateOfflineHistoryAsync();
         Task UpdateOfflineSearchTypesAsync();
+        Task<List<OfflineSearchTypeBo>> GetOfflineSearchTypesByIdAsync(string leadId);
     }
 }

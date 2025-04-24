@@ -265,7 +265,15 @@ namespace legallead.permissions.api.Controllers
             var data = await _usageService.GetOfflineStatusAsync(request.LeadId);
             return Ok(data);
         }
-
+        [HttpPost("get-offline-request-search-details")]
+        public async Task<IActionResult> GetOfflineStatusDetailAsync(UserOfflineStatusRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!Guid.TryParse(request.LeadId, out var _)) return BadRequest("Invalid Lead Id");
+            var data = await _usageService.GetOfflineSearchTypesByIdAsync(request.LeadId);
+            return Ok(data);
+        }
         [HttpPost("process-offline-set-context")]
         public async Task<IActionResult> ProcessOfflineSetContextAsync(BulkReadRequest request)
         {
@@ -367,15 +375,15 @@ namespace legallead.permissions.api.Controllers
         private readonly static List<BulkReadResponse> offlineRequests = [];
 
 
-
         private class CookieModel
         {
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public string Domain { get; set; }
-            public string Path { get; set; }
-            public string SameSite { get; set; }
-            public string Expiry { get; set; }
+            
+            public string Name { get; set; } = string.Empty;
+            public string Value { get; set; } = string.Empty;
+            public string Domain { get; set; } = string.Empty;
+            public string Path { get; set; } = string.Empty;
+            public string SameSite { get; set; } = string.Empty;
+            public string Expiry { get; set; } = string.Empty;
 
             public OpenQA.Selenium.Cookie Cookie()
             {

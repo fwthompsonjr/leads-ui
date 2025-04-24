@@ -21,10 +21,10 @@
         private readonly ReadOnlyCollection<SRC> cookies = settings;
         private readonly List<CaseItemDto> Workload = items;
         private readonly BulkReadMessages Log = response;
-        private readonly List<string> FileDates = items.Select(x => x.FileDate).Distinct().ToList();
+        private readonly List<string> FileDates = [.. items.Select(x => x.FileDate).Distinct()];
 
-        public EventHandler<BulkReadMessages>? OnStatusUpdated;
-        public EventHandler<BulkReadMessages>? OnStatusTimeOut;
+        public EventHandler<BulkReadMessages>? OnStatusUpdated { get; set; }
+        public EventHandler<BulkReadMessages>? OnStatusTimeOut { get; set; }
         public object? Execute()
         {
             var list = new ConcurrentDictionary<int, CaseItemDtoMapper>();
@@ -52,7 +52,7 @@
                     break;
                 }
                 var unresolvedCount = Math.Round(Convert.ToDouble(unresloved) / Convert.ToDouble(count), 3) * 100;
-                var delay = unresolvedCount > 10 ? Timings.UnresolvedRecordWaitMin * 3 : Timings.UnresolvedRecordWaitMin;
+                var delay = unresolvedCount > 10 ? Math.Min(Timings.UnresolvedRecordWaitMinimumSeconds * 3, 75) : Timings.UnresolvedRecordWaitMinimumSeconds;
                 var isRetryNeeded = IsRetryNeeded(retries, Log.Messages, FileDates.Count);
                 Log.RetryCount = isRetryNeeded ? retries + 1 : retries;
                 Log.TotalProcessed = count - unresloved;
@@ -274,7 +274,7 @@
             public const int HttpTimeInMilliSeconds = 3000;
             public const int FailedResponseWaitMax = 200;
             public const int FailedResponseWaitMin = 75;
-            public const int UnresolvedRecordWaitMin = 20;
+            public const int UnresolvedRecordWaitMinimumSeconds = 20;
             public const int TotalProcessTimeInMinutes = 45;
         }
 

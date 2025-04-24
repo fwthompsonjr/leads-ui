@@ -77,8 +77,8 @@ namespace legallead.permissions.api.Controllers
         }
         private class UserViewBo
         {
-            public string UserName { get; set; }
-            public string Credential { get; set; }
+            public string UserName { get; set; } = string.Empty;
+            public string Credential { get; set; } = string.Empty;
         }
         private static readonly SecureStringService secureSvcs = new();
         private const string UserAccountAccess = "user account access credential";
