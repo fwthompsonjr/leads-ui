@@ -301,6 +301,381 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
         }
+
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        public async Task RepoCanOfflineRequestBeginAsync(int conditionId)
+        {
+            var guid = Guid.NewGuid().ToString("D");
+            var dto = conditionId < 0 ? null : new OfflineBeginDto { Id = guid };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel();
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineBeginDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineBeginDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.OfflineRequestBeginAsync(rqst);
+            mock.Verify(x => x.QuerySingleOrDefaultAsync<OfflineBeginDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestUpdateAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel();
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestUpdateAsync(rqst);
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        public async Task RepoCanGetOfflineStatusAsync(int conditionId)
+        {
+            var dto = conditionId == 1 ? null : offlinefaker.Generate();
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel { RequestId = "testing" };
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetOfflineStatusAsync(rqst);
+            mock.Verify(x => x.QuerySingleOrDefaultAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        [InlineData(2)] // return empty
+        public async Task RepoCanGetOfflineStatuByIdAsync(int conditionId)
+        {
+            var dto = conditionId switch
+            {
+                1 => default,
+                2 => [],
+                _ => offlinefaker.Generate(5)
+            };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = "testing";
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetOfflineStatusAsync(rqst);
+            mock.Verify(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        [InlineData(2)] // return empty
+        public async Task RepoCanGetOfflineGetSearchTypeAsync(int conditionId)
+        {
+            var dto = conditionId switch
+            {
+                1 => default,
+                2 => [],
+                _ => searchtypefaker.Generate(5)
+            };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = "testing";
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetOfflineGetSearchTypeAsync(rqst);
+            mock.Verify(x => x.QueryAsync<OfflineSearchTypeDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestTerminateAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel();
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestTerminateAsync(rqst);
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSetCourtTypeAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel();
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSetCourtTypeAsync(rqst);
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        public async Task RepoCanOfflineRequestCanDownload(int conditionId)
+        {
+            var dto = conditionId == 1 ? null : downloadfaker.Generate();
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineRequestModel { RequestId = "testing" };
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineDownloadDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineDownloadDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.OfflineRequestCanDownload(rqst);
+            mock.Verify(x => x.QuerySingleOrDefaultAsync<OfflineDownloadDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        [InlineData(1)] // id is empty
+        [InlineData(11)] // id is not a guid
+        [InlineData(2)] // request id is empty
+        [InlineData(22)] // request id is not a guid
+        [InlineData(3)] // workload is empty
+        [InlineData(4)] // can download is false 
+        public async Task RepoCanOfflineRequestFlagAsDownloadedAsync(int conditionId)
+        {
+            var model = downloadmodelfaker.Generate();
+            model.CanDownload = conditionId != 4;
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            if (conditionId == 1) model.Id = string.Empty;
+            if (conditionId == 11) model.Id = "not-a-guid";
+            if (conditionId == 2) model.RequestId = string.Empty;
+            if (conditionId == 22) model.RequestId = "not-a-guid";
+            if (conditionId == 3) model.Workload = string.Empty;
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            var actual = await service.OfflineRequestFlagAsDownloadedAsync(model);
+            Assert.Equal(conditionId == 0, actual);
+            if (conditionId <= 0)
+                mock.Verify(x => x.ExecuteAsync(
+                        It.IsAny<IDbConnection>(),
+                        It.IsAny<string>(),
+                        It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSetSearchTypeAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSetSearchTypeAsync();
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanOfflineRequestSyncHistoryAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.OfflineRequestSyncHistoryAsync();
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+
         private sealed class RepoContainer
         {
             private readonly IUserUsageRepository repo;
@@ -377,5 +752,43 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.FileToken, y => y.Random.AlphaNumeric(25))
             .RuleFor(x => x.CompleteDate, y => y.Date.Recent())
             .RuleFor(x => x.CreateDate, y => y.Date.Recent());
+
+        private static readonly Faker<OfflineStatusDto> offlinefaker
+            = new Faker<OfflineStatusDto>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.RequestId, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.Workload, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.Cookie, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.Message, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.OfflineId, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.LeadUserId, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.RowCount, y => y.Random.Int(1, 555555))
+            .RuleFor(x => x.RetryCount, y => y.Random.Int(1, 555555))
+            .RuleFor(x => x.CountyName, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.SearchStartDate, y => y.Date.Recent())
+            .RuleFor(x => x.SearchEndDate, y => y.Date.Recent())
+            .RuleFor(x => x.PercentComplete, y => y.Random.Int(1, 555555))
+            .RuleFor(x => x.CreateDate, y => y.Date.Recent())
+            .RuleFor(x => x.LastUpdate, y => y.Date.Recent());
+
+        private static readonly Faker<OfflineDownloadDto> downloadfaker
+            = new Faker<OfflineDownloadDto>()
+            .RuleFor(x => x.Id, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.RequestId, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.Workload, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.CanDownload, y => y.Random.Bool());
+
+        private static readonly Faker<OfflineDownloadModel> downloadmodelfaker
+            = new Faker<OfflineDownloadModel>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.RequestId, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.Workload, y => y.Random.AlphaNumeric(25))
+            .RuleFor(x => x.CanDownload, y => true);
+
+        private static readonly Faker<OfflineSearchTypeDto> searchtypefaker
+            = new Faker<OfflineSearchTypeDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.ItemCount, y => y.Random.Int(1, 2600))
+            .RuleFor(x => x.SearchType, y => y.Random.AlphaNumeric(25));
     }
 }

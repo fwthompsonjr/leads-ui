@@ -1,3 +1,4 @@
+using AngleSharp.Dom;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
 using page.load.utility;
@@ -210,7 +211,7 @@ namespace legallead.permissions.api.Controllers
         }
 
         [HttpPost("process-offline")]
-        public IActionResult ProcessOffline(BulkReadRequest request)
+        public async Task<IActionResult> ProcessOfflineAsync(BulkReadRequest request)
         {
             var user = _leadService.GetUserModel(Request, UserAccountAccess);
             if (user == null) return Unauthorized();
@@ -218,16 +219,29 @@ namespace legallead.permissions.api.Controllers
             var settings = request.Cookies.ToInstance<List<CookieModel>>();
             var items = request.Workload.ToInstance<List<CaseItemDto>>();
             if (settings == null || items == null) return Ok(response);
+            var model = new OfflineDataModel
+            {
+                RequestId = request.RequestId,
+                Cookie = request.Cookies,
+                Workload = request.Workload,
+                RowCount = items.Count
+            };
+            model = await _usageService.AppendOfflineRecordAsync(model);
             var cookies = settings.Select(s => s.Cookie()).ToList();
             response.IsValid = true;
-            var objRequestGuid = Guid.NewGuid().ToString("D");
+            var objRequestGuid =
+                string.IsNullOrEmpty(model.OfflineId) ?
+                Guid.NewGuid().ToString("D") : model.OfflineId;
             response.OfflineRequestId = objRequestGuid;
             offlineRequests.Add(response);
             var service = new BulkCaseReader(
-                new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies), 
-                items, 
-                new BulkReadMessages { OfflineRequestId = objRequestGuid });
-            service.OnStatusUpdated = StatusChanged;
+                new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies),
+                items,
+                new BulkReadMessages { OfflineRequestId = objRequestGuid })
+            {
+                OnStatusUpdated = StatusChanged,
+                OnStatusTimeOut = StatusTerminated
+            };
             _ = Task.Run(() =>
             {
                 var rsp = service.Execute();
@@ -242,14 +256,36 @@ namespace legallead.permissions.api.Controllers
             return Ok(response);
         }
 
-        private static void StatusChanged(object? sender, BulkReadMessages e)
+        [HttpPost("get-offline-requests")]
+        public async Task<IActionResult> GetOfflineStatusAsync(UserOfflineStatusRequest request)
         {
-            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
-            if (find == null) return;
-            find.TotalProcessed = e.TotalProcessed;
-            find.RecordCount = e.RecordCount;
-            find.Messages.Clear();
-            find.Messages.AddRange(e.Messages);
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!Guid.TryParse(request.LeadId, out var _)) return BadRequest("Invalid Lead Id");
+            var data = await _usageService.GetOfflineStatusAsync(request.LeadId);
+            return Ok(data);
+        }
+        [HttpPost("get-offline-request-search-details")]
+        public async Task<IActionResult> GetOfflineStatusDetailAsync(UserOfflineStatusRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!Guid.TryParse(request.LeadId, out var _)) return BadRequest("Invalid Lead Id");
+            var data = await _usageService.GetOfflineSearchTypesByIdAsync(request.LeadId);
+            return Ok(data);
+        }
+        [HttpPost("process-offline-set-context")]
+        public async Task<IActionResult> ProcessOfflineSetContextAsync(BulkReadRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var model = new OfflineDataModel
+            {
+                RequestId = request.RequestId,
+                Workload = request.Workload
+            };
+            var rsp = await _usageService.SetOfflineCourtTypeAsync(model);
+            return Ok(new { IsValid = rsp });
         }
 
         [HttpPost("process-offline-status")]
@@ -265,20 +301,89 @@ namespace legallead.permissions.api.Controllers
             }
             return Ok(find);
         }
+
+        [HttpPost("get-offline-download-status")]
+        public async Task<IActionResult> GetDownloadStatusAsync(BulkReadRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var model = new OfflineDataModel
+            {
+                RequestId = request.RequestId
+            };
+            var rsp = await _usageService.GetDownloadStatusAsync(model);
+            return Ok(new { request.RequestId, Content = rsp });
+        }
+        [HttpPost("set-offline-download-complete")]
+        public async Task<IActionResult> SetDownloadCompletedAsync(OfflineDataModel request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var rsp = await _usageService.SetDownloadCompletedAsync(request);
+            return Ok(new { request.RequestId, Content = rsp });
+        }
+        private void StatusChanged(object? sender, BulkReadMessages e)
+        {
+            var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
+            if (find == null) return;
+            find.TotalProcessed = e.TotalProcessed;
+            find.RecordCount = e.RecordCount;
+            find.Messages.Clear();
+            find.Messages.AddRange(e.Messages);
+            if (string.IsNullOrEmpty(e.Workload) || e.TotalProcessed == 0) { return; }
+            var isCompleted = e.TotalProcessed == e.RecordCount && e.RecordCount > 0;
+            var model = new OfflineDataModel
+            {
+                RequestId = find.RequestId, // e.OfflineRequestId,
+                Message = string.Join(Environment.NewLine, e.Messages),
+                Workload = e.Workload,
+                RowCount = isCompleted ? e.TotalProcessed - 1 : e.TotalProcessed,
+                RetryCount = e.RetryCount,
+            };
+            _ = Task.Run(async () => {
+                await _usageService.UpdateOfflineRecordAsync(model);
+                if (isCompleted)
+                {
+                    model.RowCount = e.TotalProcessed;
+                    await _usageService.UpdateOfflineRecordAsync(model);
+                    await _usageService.UpdateOfflineHistoryAsync();
+                }
+            });
+        }
+
+        private void StatusTerminated(object? sender, BulkReadMessages e)
+        {
+            var messages = new string[] {
+                "Process terminated due to server timeout",
+                $"Total records processed: {e.TotalProcessed}",
+                $"Total retries {e.RetryCount}"
+            };
+            var model = new OfflineDataModel
+            {
+                RequestId = e.OfflineRequestId,
+                Message = string.Empty,
+                Workload = string.Join(Environment.NewLine, messages),
+                RowCount = e.TotalProcessed,
+                RetryCount = e.RetryCount,
+            };
+            _ = Task.Run(async () => {
+                await _usageService.TerminateOfflineRequestAsync(model);
+            });
+        }
         private const string UserAccountAccess = "user account access credential";
         private readonly static CultureInfo _culture = new("en-us");
         private readonly static List<BulkReadResponse> offlineRequests = [];
 
 
-
         private class CookieModel
         {
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public string Domain { get; set; }
-            public string Path { get; set; }
-            public string SameSite { get; set; }
-            public string Expiry { get; set; }
+            
+            public string Name { get; set; } = string.Empty;
+            public string Value { get; set; } = string.Empty;
+            public string Domain { get; set; } = string.Empty;
+            public string Path { get; set; } = string.Empty;
+            public string SameSite { get; set; } = string.Empty;
+            public string Expiry { get; set; } = string.Empty;
 
             public OpenQA.Selenium.Cookie Cookie()
             {

@@ -47,6 +47,7 @@
                 if (fieldName.Equals("StartDate", Comparison)) { StartDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("EndDate", Comparison)) { EndDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("DateRange", Comparison)) { DateRange = ChangeType<string>(value); return; }
+                if (fieldName.Equals("RecordCount", Comparison)) { RecordCount = ChangeType<int?>(value); return; }
                 if (fieldName.Equals("CompleteDate", Comparison)) { CompleteDate = ChangeType<DateTime?>(value); return; }
                 if (fieldName.Equals("CreateDate", Comparison)) CreateDate = ChangeType<DateTime?>(value);
             }

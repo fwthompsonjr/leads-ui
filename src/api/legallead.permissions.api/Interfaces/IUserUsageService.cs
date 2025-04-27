@@ -34,5 +34,15 @@ namespace legallead.permissions.api.Interfaces
         /// </summary>
         Task<GetUsageResponse> GetUsageSummaryAsync(GetUsageRequest model);
         Task<GetExcelDetailByIdResponse> GetExcelDetailAsync(string id);
+        Task<OfflineDataModel> AppendOfflineRecordAsync(OfflineDataModel model);
+        Task<OfflineDataModel> UpdateOfflineRecordAsync(OfflineDataModel model);
+        Task<IEnumerable<UserOfflineStatusResponse>?> GetOfflineStatusAsync(string userId);
+        Task<bool> SetOfflineCourtTypeAsync(OfflineDataModel model);
+        Task<bool> TerminateOfflineRequestAsync(OfflineDataModel model);
+        Task<string> GetDownloadStatusAsync(OfflineDataModel model);
+        Task<string> SetDownloadCompletedAsync(OfflineDataModel model);
+        Task UpdateOfflineHistoryAsync();
+        Task UpdateOfflineSearchTypesAsync();
+        Task<List<OfflineSearchTypeBo>> GetOfflineSearchTypesByIdAsync(string leadId);
     }
 }

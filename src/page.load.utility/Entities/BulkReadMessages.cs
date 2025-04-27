@@ -6,5 +6,7 @@
         public List<string> Messages { get; set; } = [];
         public int RecordCount { get; set; }
         public int TotalProcessed { get; set; }
+        public string Workload { get; set; } = string.Empty;
+        public int RetryCount { get; set; }
     }
 }

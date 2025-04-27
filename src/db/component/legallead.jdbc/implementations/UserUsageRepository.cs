@@ -183,6 +183,204 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> OfflineRequestFlagAsDownloadedAsync(OfflineDownloadModel model)
+        {
+            const string prc = ProcNames.OFFLINE_FLAG_DOWNLOADED;
+            try
+            {
+                if (!Guid.TryParse(model.Id, out var _)) return false;
+                if (!Guid.TryParse(model.RequestId, out var _)) return false;
+                if (!model.CanDownload) return false;
+                if (string.IsNullOrWhiteSpace(model.Workload)) return false;
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Logs, model.Workload);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<OfflineRequestModel> OfflineRequestBeginAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_BEGIN;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Workload, model.Workload);
+                parameters.Add(ProcParameterNames.Cookies, model.Cookie);
+                parameters.Add(ProcParameterNames.ItemCount, model.RowCount);
+                using var connection = _context.CreateConnection();
+                var dto = await _command.QuerySingleOrDefaultAsync<OfflineBeginDto>(connection, prc, parameters);
+                if (dto != null) model.OfflineId = dto.Id;
+                return model;
+            }
+            catch (Exception)
+            {
+                return model;
+            }
+        }
+
+        public async Task<bool> OfflineRequestUpdateAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_UPDATE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Workload, model.Workload);
+                parameters.Add(ProcParameterNames.Logs, model.Message);
+                parameters.Add(ProcParameterNames.ItemCount, model.RowCount);
+                parameters.Add(ProcParameterNames.RetryCount, model.RetryCount);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<OfflineStatusModel?> GetOfflineStatusAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_GET_BY_ID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<OfflineStatusDto, OfflineStatusModel>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<List<OfflineStatusModel>?> GetOfflineStatusAsync(string userId)
+        {
+            const string prc = ProcNames.OFFLINE_GET_FOR_USER_ID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, userId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc, parameters);
+                if (response == null || !response.Any()) return [];
+                return GenericMap<IEnumerable<OfflineStatusDto>, List<OfflineStatusModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_TERMINATE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> OfflineRequestSetSearchTypeAsync()
+        {
+            const string prc = ProcNames.OFFLINE_SET_SEARCHTYPE;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_SET_COURTTYPE;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                parameters.Add(ProcParameterNames.Logs, model.Workload);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model)
+        {
+            const string prc = ProcNames.OFFLINE_CAN_DOWNLOAD;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.RequestId, model.RequestId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineDownloadDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<OfflineDownloadDto, OfflineDownloadModel>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<bool> OfflineRequestSyncHistoryAsync()
+        {
+            const string prc = ProcNames.OFFLINE_SYNC_HISTORY;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public async Task<List<OfflineSearchTypeModel>?> GetOfflineGetSearchTypeAsync(string leadId)
+        {
+            const string prc = ProcNames.OFFLINE_SEARCH_TYPE_BY_USERID;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<OfflineSearchTypeDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<IEnumerable<OfflineSearchTypeDto>, List<OfflineSearchTypeModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -211,7 +409,7 @@ namespace legallead.jdbc.implementations
                 using var connection = _context.CreateConnection();
                 var response = await _command.QueryAsync<DbExcelNameDto>(connection, prc, parameters);
                 if (response == null) return [];
-                return response.ToList();
+                return [.. response];
             }
             catch (Exception)
             {
@@ -255,6 +453,17 @@ namespace legallead.jdbc.implementations
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
+            public const string OFFLINE_BEGIN = "CALL USP_OFFLINESEARCH_BEGIN ( ?, ?, ?, ? );";
+            public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
+            public const string OFFLINE_GET_BY_ID = "CALL USP_OFFLINESEARCH_FETCH ( ? );";
+            public const string OFFLINE_GET_FOR_USER_ID = "CALL USP_OFFLINESEARCH_FETCH_BY_USER_ID ( ? );";
+            public const string OFFLINE_TERMINATE = "CALL USP_OFFLINESEARCH_TERMINATE ( ? );";
+            public const string OFFLINE_CAN_DOWNLOAD = "CALL USP_OFFLINESEARCH_CAN_DOWNLOAD ( ? );";
+            public const string OFFLINE_FLAG_DOWNLOADED = "CALL USP_OFFLINESEARCH_FLAG_DOWNLOAD ( ?, ? );";
+            public const string OFFLINE_SET_COURTTYPE = "CALL USP_OFFLINESEARCH_SET_COURT_TYPE ( ?, ? );";
+            public const string OFFLINE_SET_SEARCHTYPE = "CALL USP_OFFLINE_SET_SEARCH_TYPE_INTERNAL();";
+            public const string OFFLINE_SYNC_HISTORY = "CALL USP_OFFLINESEARCH_SYNC_HISTORY();";
+            public const string OFFLINE_SEARCH_TYPE_BY_USERID = "CALL USP_OFFLINESEARCH_SEARCHTYPE_BY_USER_ID ( ? );";
         }
 
         private static class ProcParameterNames
@@ -264,6 +473,12 @@ namespace legallead.jdbc.implementations
             public const string CountyId = "county_id";
             public const string MonthLimit = "month_limit";
             public const string SearchDate = "search_date";
+            public const string RequestId = "request_index";
+            public const string Workload = "work_load";
+            public const string Logs = "js_logs";
+            public const string Cookies = "js_cookie";
+            public const string ItemCount = "item_count";
+            public const string RetryCount = "retry_count";
         }
     }
 }

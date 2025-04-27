@@ -69,5 +69,39 @@ namespace legallead.jdbc.interfaces
         /// <param name="requestId"></param>
         /// <returns></returns>
         Task<ExcelFileNameResponse> GetUsageFileDetails(string requestId);
+        /// <summary>
+        /// initialize offline search record and fetch search uid
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<OfflineRequestModel> OfflineRequestBeginAsync(OfflineRequestModel model);
+
+        /// <summary>
+        /// update offline search record details
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<bool> OfflineRequestUpdateAsync(OfflineRequestModel model);
+
+        /// <summary>
+        /// get offline search record details for single request
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<OfflineStatusModel?> GetOfflineStatusAsync(OfflineRequestModel model);
+
+        /// <summary>
+        /// get offline search record details for user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<OfflineStatusModel>?> GetOfflineStatusAsync(string userId);
+        Task<bool> OfflineRequestTerminateAsync(OfflineRequestModel model);
+        Task<OfflineDownloadModel?> OfflineRequestCanDownload(OfflineRequestModel model);
+        Task<bool> OfflineRequestFlagAsDownloadedAsync(OfflineDownloadModel model);
+        Task<bool> OfflineRequestSetCourtTypeAsync(OfflineRequestModel model);
+        Task<bool> OfflineRequestSetSearchTypeAsync();
+        Task<bool> OfflineRequestSyncHistoryAsync();
+        Task<List<OfflineSearchTypeModel>?> GetOfflineGetSearchTypeAsync(string leadId);
     }
 }
