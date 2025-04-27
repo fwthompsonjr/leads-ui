@@ -112,6 +112,9 @@ namespace legallead.permissions.api.Services
             builder.AppendLine("    <td>Name</td>");
             builder.AppendLine("    <td>Date</td>");
             builder.AppendLine("  </tr>");
+            builder.AppendLine("  <tr id='tr-download-status' style='display: none'>");
+            builder.AppendLine("    <td colspan='3'>Download in progress ...</td>");
+            builder.AppendLine("  </tr>");
             builder.AppendLine("</thead>");
             builder.AppendLine("<tbody>");
 

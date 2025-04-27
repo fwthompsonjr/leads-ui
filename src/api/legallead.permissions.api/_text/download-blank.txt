@@ -110,7 +110,7 @@
             <div class="inner">
                 <h3 class="masthead-brand">
                     <i class="fa fa-download"></i>
-                    <span>Downloads</span>
+                    <span style="cursor: pointer" onclick="goToReleases();">Download Release</span>
                 </h3>
             </div>
         </header>
@@ -120,7 +120,7 @@
                     <div class="card-body">
                         <h5 class="card-title text-start">
                             <span name="invoice-label">
-                                View Latest Downloads:
+                                Releases:
                             </span>
                             <span automationid="search-uuid" name="invoice" class="text-light">&nbsp;</span>
                         </h5>
@@ -154,11 +154,16 @@
         var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/downloads/release/", indx);
         document.location.href = navigateTo;
       }
-      
-      let isDownloading = false;
+      function clearMessage() {
+        echoMessage('');
+      }
 
       function downloadAsset(indx) {
 
+
+      
+        isDownloading = true;
+        echoMessage('Download item is in progress...');
         let address = document.location.href;
         let pnd = address.indexOf('#')
         if (pnd > 0) { address = address.substr(0, pnd) }
@@ -169,17 +174,38 @@
                 if (response.ok) {
                     // If the response is OK, navigate to the URL to download the asset
                     console.log('Download completed:', indx);
+                    echoMessage('Download item is verified...');
                     document.location.href = navigateTo;
+                    echoMessage('Download completed.');
+                    isDownloading = false;
+                    setTimeout(clearMessage, 15000);
+
                 } else {
                     // If the response is not OK, display an error message
+                    isDownloading = false;
+                    echoMessage('Download failed.');
                     alert("Failed to download asset. Please try again later.");
                 }
             })
             .catch(error => {
                 // Handle any errors that occurred during the fetch
+                isDownloading = false;
                 console.error('Error:', error);
+                echoMessage('Download encountered error.');
                 alert("An error occurred while trying to download the asset.");
-            });
+            })
+        }
+
+        function echoMessage(msg) {
+        try {
+            var tr = document.getElementById('tr-download-status');
+            if (null == tr) return;
+            var td = tr.children[0];
+            if (null == td) return;
+            var trstyle = msg.length == 0 ? "display:none" : "";
+            td.innerText = msg;
+            tr.setAttribute("style", trstyle);
+            } catch {}
         }
     </script>
 </body>
