@@ -3,11 +3,7 @@ using git.project.reader.models;
 using git.project.reader.Properties;
 using Newtonsoft.Json;
 using Octokit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace git.project.reader.assets
 {
@@ -36,7 +32,8 @@ namespace git.project.reader.assets
             var releases = await _client.Repository.Release.GetAll(owner, repo);
             if (releases == null || releases.Count == 0) return [];
             var items = new List<ReleaseModel>();
-            foreach (var release in releases) {
+            foreach (var release in releases)
+            {
                 items.Add(new ReleaseModel
                 {
                     Url = release.Url,
@@ -75,7 +72,7 @@ namespace git.project.reader.assets
                 Id = x.Id,
                 DownloadUrl = x.BrowserDownloadUrl
             });
-            return [..assets];
+            return [.. assets];
         }
 
         public async Task<byte[]?> DownloadAssetAsync(long releaseId, string assetName)

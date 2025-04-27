@@ -204,6 +204,6 @@ namespace legallead.permissions.api.Services
 
         private static readonly ReleasesManager manager = new();
         private static readonly Dictionary<long, ReleaseAssetBo> ReleaseDetails = new();
-        
+
     }
 }

@@ -1,8 +1,6 @@
-﻿using legallead.permissions.api.Interfaces;
-using legallead.permissions.api.Models;
+﻿using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -16,14 +14,15 @@ namespace legallead.permissions.api.Controllers
         [HttpGet("")]
         public async Task<IActionResult> IndexAsync()
         {
-            if (_current != null && DateTime.UtcNow.Subtract(_current.CreationDate).TotalMinutes < 30) {
+            if (_current != null && DateTime.UtcNow.Subtract(_current.CreationDate).TotalMinutes < 30)
+            {
                 return GetAction(_current);
             }
 
             var newContent = await _downloadService.GetDownloadsAsync("Home");
             lock (_lock)
             {
-                _current = newContent; 
+                _current = newContent;
             }
             return GetAction(_current);
         }

@@ -278,7 +278,8 @@
             public const int TotalProcessTimeInMinutes = 45;
         }
 
-        private bool IsRetryNeeded(int retryCount, List<string> messages, int dateCount) {
+        private bool IsRetryNeeded(int retryCount, List<string> messages, int dateCount)
+        {
             if (retryCount > 4) return false; // max retries 5
             var dtCount = Math.Max(1, dateCount);
             var startTime = ParseDateFromMessage(messages[0]);
@@ -292,7 +293,8 @@
             }
             return true;
         }
-        private static DateTime ParseDateFromMessage(string message) { 
+        private static DateTime ParseDateFromMessage(string message)
+        {
             var dte = message.Split('|')[0];
             return DateTime.Parse(dte, CultureInfo.CurrentCulture);
         }

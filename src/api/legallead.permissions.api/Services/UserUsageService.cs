@@ -3,8 +3,6 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace legallead.permissions.api.Services
 {
