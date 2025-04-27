@@ -193,4 +193,7 @@
   <data name="draft-invoice-blank" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\draft-invoice-blank.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="download-blank" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\download-blank.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

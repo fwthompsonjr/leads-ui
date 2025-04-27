@@ -81,6 +81,7 @@
 	
 	<ItemGroup>
 	  <ProjectReference Include="..\..\page.load.utility\page.load.utility.csproj" />
+	  <ProjectReference Include="..\git.project.reader\git.project.reader.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
