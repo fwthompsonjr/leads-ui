@@ -64,6 +64,7 @@ namespace legallead.permissions.api.Utility
         }
 
         [ExcludeFromCodeCoverage(Justification = "Interacts with 3rd party. Item to be refactored.")]
+        [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private static async Task<SubscriptionCreatedModel> CreatePaymentSessionAsync(
             PaymentCustomerBo cust,
             string successUrl,
@@ -71,8 +72,13 @@ namespace legallead.permissions.api.Utility
             string externalId,
             string priceId)
         {
-            var response = new SubscriptionCreatedModel();
-            return response;
+            var item = await Task.Run(() =>
+            {
+                var response = new SubscriptionCreatedModel();
+                return response;
+
+            });
+            return item;
         }
         [ExcludeFromCodeCoverage(Justification = "Item to be refactored.")]
         private static string GetPermissionCode(string level, PaymentStripeOption payment)

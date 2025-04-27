@@ -1,5 +1,5 @@
 {
-  "pat": "Z2hwX09lQU1SUVZtbXdQZFFGdWNlVHhiSFBJVU91NThEaTFNRUw5YQ==",
+  "pat": "Z2hwX2duTHRJUnZzbzJZcnVrOGpwOXY3R05HRFdUZlM1SjRjZjBjNw==",
   "owner": "fwthompsonjr",
   "repo": "leads-desktop"
 }

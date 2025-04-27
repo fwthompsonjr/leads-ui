@@ -154,6 +154,33 @@
         var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/downloads/release/", indx);
         document.location.href = navigateTo;
       }
+      
+      let isDownloading = false;
+
+      function downloadAsset(indx) {
+
+        let address = document.location.href;
+        let pnd = address.indexOf('#')
+        if (pnd > 0) { address = address.substr(0, pnd) }
+        var navigateTo = "".concat(address, "/", indx);
+
+        fetch(navigateTo)
+            .then(response => {
+                if (response.ok) {
+                    // If the response is OK, navigate to the URL to download the asset
+                    console.log('Download completed:', indx);
+                    document.location.href = navigateTo;
+                } else {
+                    // If the response is not OK, display an error message
+                    alert("Failed to download asset. Please try again later.");
+                }
+            })
+            .catch(error => {
+                // Handle any errors that occurred during the fetch
+                console.error('Error:', error);
+                alert("An error occurred while trying to download the asset.");
+            });
+        }
     </script>
 </body>
 </html>

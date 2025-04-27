@@ -2,6 +2,7 @@
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -11,6 +12,7 @@ namespace legallead.permissions.api.Controllers
         private static readonly object _lock = new();
         private static DownloadContentResponse? _current = null;
         private readonly DownloadContentService _downloadService = new();
+        // private static 
         [HttpGet("")]
         public async Task<IActionResult> IndexAsync()
         {
@@ -41,6 +43,20 @@ namespace legallead.permissions.api.Controllers
             };
         }
 
+
+        [HttpGet("release/{id}/{assetId}")]
+        public async Task<IActionResult> GetAssetAsync(long id, long assetId)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            var bo = _downloadService.GetAssetDetail(id, assetId);
+            if (bo == null) return BadRequest();
+            var assetName = bo.Assets.Find(x => x.Id == assetId)?.Name;
+            if (string.IsNullOrEmpty(assetName)) return BadRequest();
+            var assetContent = await _downloadService.GetAssetsAsync(id, assetName);
+            if (assetContent == null) return NotFound();
+
+            return File(assetContent, "application/octet-stream", assetName);
+        }
         private static ContentResult GetAction(DownloadContentResponse current)
         {
             return new ContentResult
