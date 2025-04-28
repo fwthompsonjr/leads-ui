@@ -1,11 +1,11 @@
 
     <script name="js_navigation">
       function goToReleases() {
-        var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/downloads");
+        var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/releases");
         document.location.href = navigateTo;
       }
       function goToReleaseDetail(indx) {
-        var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/downloads/release/", indx);
+        var navigateTo = "".concat(document.location.protocol, "//", document.location.host, "/releases/release/", indx);
         document.location.href = navigateTo;
       }
       function clearMessage() {

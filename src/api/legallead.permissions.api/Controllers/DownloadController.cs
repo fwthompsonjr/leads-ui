@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace legallead.permissions.api.Controllers
 {
-    [Route("/downloads")]
+    [Route("/releases")]
     public class DownloadController : Controller
     {
         private static readonly object _lock = new();

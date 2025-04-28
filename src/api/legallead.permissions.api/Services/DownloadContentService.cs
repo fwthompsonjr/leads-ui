@@ -111,7 +111,7 @@ namespace legallead.permissions.api.Services
             if (children == null || children.Count == 0 || children[0].ChildNodes.Count < 4) return html;
             var child = children[0].ChildNodes[3];
 
-            var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-releases'>");
+            var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-release-assets'>");
             builder.AppendLine("<colgroup>");
             builder.AppendLine("  <col name='index' style='width: 115px'>");
             builder.AppendLine("  <col />");
@@ -167,7 +167,7 @@ namespace legallead.permissions.api.Services
             if (ReleaseDetails.TryGetValue(model.Id, out var bo) && bo.Assets.Count > 0)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine("<tr><td colspan='3'><h2>Assets</h2></td></tr>");
+                sb.AppendLine("<tr><td colspan='3'><h4>Assets</h4></td></tr>");
                 sb.AppendLine("</tr>");
                 bo.Assets.ForEach(a =>
                 {
@@ -200,14 +200,15 @@ namespace legallead.permissions.api.Services
             var nde = doc.DocumentNode.SelectSingleNode("//*[@id=\"repo-content-pjax-container\"]/div/div/div/div[1]/div[3]");
             if (nde == null) return content;
             var notes = new StringBuilder(nde.InnerHtml);
-            notes.Replace("<h4", "<h6");
-            notes.Replace("</h4", "</h6");
-            notes.Replace("<h3", "<h5");
-            notes.Replace("</h3", "</h5");
-            notes.Replace("<h2", "<h4");
-            notes.Replace("</h2", "</h4");
-            notes.Replace("<h1", "<h3");
-            notes.Replace("</h1", "</h3");
+            foreach (var key in HeadingSubstitions.Keys) {
+                var replacment = HeadingSubstitions[key];
+                var openTag = $"<{key}";
+                var closeTag = $"</{key}";
+                var newOpenTag = $"<{replacment}";
+                var newCloseTag = $"</{replacment}";
+                notes.Replace(openTag, newOpenTag);
+                notes.Replace(closeTag, newCloseTag);
+            }
             var bo = new ReleaseAssetBo { ReleaseId = index, Html = notes.ToString() };
             if (index != 0) ReleaseDetails.Add(index, bo);
             return notes.ToString();
@@ -215,6 +216,13 @@ namespace legallead.permissions.api.Services
 
         private static readonly ReleasesManager manager = new();
         private static readonly Dictionary<long, ReleaseAssetBo> ReleaseDetails = new();
+        private static readonly Dictionary<string, string> HeadingSubstitions = new()
+        {
+            {"h4", "h6" },
+            {"h3", "h5" },
+            {"h2", "h4" },
+            {"h1", "h3" },
+        };
 
     }
 }
