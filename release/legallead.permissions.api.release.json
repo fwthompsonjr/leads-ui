@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.468.--",
+		"description": "API - download - release artifacts",
+		"date": "2025-04-24 16:45:00"
+	},
+	{
 		"name": "3.2.467.--",
 		"description": "API - remote processing - offline management",
 		"date": "2025-04-24 16:45:00"

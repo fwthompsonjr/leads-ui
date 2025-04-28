@@ -1,4 +1,5 @@
 using legallead.permissions.api;
+using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Health;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -33,7 +34,7 @@ services.AddSingleton<ProfileChanged>();
 services.AddSingleton<PermissionChangeRequested>();
 services.AddSingleton<PasswordChanged>();
 services.AddControllers();
-
+services.AddScoped<DownloadController>();
 services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,0 +1,47 @@
+<html>
+<!-- append head section -->
+<body class="text-center">
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+        <header class="masthead mb-auto" style="border-bottom: #444 solid 1px; padding-bottom: 2px">
+            <div class="inner">
+                <h3 class="masthead-brand">
+                    <i class="fa fa-download"></i>
+                    <span style="cursor: pointer" onclick="goToReleases();">Download Release</span>
+                </h3>
+            </div>
+        </header>
+        <main role="main" class="inner cover">
+            <div id="dv-main-content" name="main-content" style="margin-top: 20px;">
+                <div id="dv-subcontent-invoice" name="subcontent-invoice" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-start">
+                            <span name="invoice-label">
+                                Releases:
+                            </span>
+                            <span automationid="search-uuid" name="invoice" class="text-light">&nbsp;</span>
+                        </h5>
+                        <div class="row">
+                            This is default landing page for downloads
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div id="frm-invoice-error-message" class="d-none">
+
+                            <!-- Error messages -->
+                        </div>
+                        <button id="frm-invoice-submit-button" class="btn btn-primary" onclick="goToReleases();">
+                            <i id="form-invoice-icon" class="bi bi-pencil-square"></i>
+                            <i id="form-invoice-icon-spin" 
+                               class="bi bi-arrow-clockwise fa fa-spin d-none"></i>Get List
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- append scripts section -->
+</body>
+</html>

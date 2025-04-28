@@ -1,4 +1,3 @@
-using AngleSharp.Dom;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
 using page.load.utility;
@@ -340,7 +339,8 @@ namespace legallead.permissions.api.Controllers
                 RowCount = isCompleted ? e.TotalProcessed - 1 : e.TotalProcessed,
                 RetryCount = e.RetryCount,
             };
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await _usageService.UpdateOfflineRecordAsync(model);
                 if (isCompleted)
                 {
@@ -366,7 +366,8 @@ namespace legallead.permissions.api.Controllers
                 RowCount = e.TotalProcessed,
                 RetryCount = e.RetryCount,
             };
-            _ = Task.Run(async () => {
+            _ = Task.Run(async () =>
+            {
                 await _usageService.TerminateOfflineRequestAsync(model);
             });
         }
@@ -377,7 +378,7 @@ namespace legallead.permissions.api.Controllers
 
         private class CookieModel
         {
-            
+
             public string Name { get; set; } = string.Empty;
             public string Value { get; set; } = string.Empty;
             public string Domain { get; set; } = string.Empty;
