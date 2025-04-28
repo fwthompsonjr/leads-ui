@@ -28,11 +28,22 @@ namespace legallead.permissions.api.Services
             {
                 _ => "download-blank"
             };
-            var blank = Properties.Resources.ResourceManager.GetObject(pageId);
-            if (blank is not byte[] data) return string.Empty;
-            var html = Encoding.UTF8.GetString(data);
+            string html = GetResourceText(pageId);
+            string head = GetResourceText("download-css");
+            string js = GetResourceText("download-jscript");
+            var sb = new StringBuilder(html);
+            sb.Replace("<!-- append head section -->", head);
+            sb.Replace("<!-- append scripts section -->", js);
+            html = sb.ToString();
             if (model == null) return html;
             return GetTable(html, model);
+        }
+
+        private static string GetResourceText(string pageId)
+        {
+            var blank = Properties.Resources.ResourceManager.GetObject(pageId);
+            if (blank is not byte[] data) return string.Empty;
+            return Encoding.UTF8.GetString(data);
         }
 
         public async Task<DownloadContentResponse> GetDownloadsAsync(string page)
@@ -130,7 +141,7 @@ namespace legallead.permissions.api.Services
                 string data = DownloadDescription(url, model.Id);
 
                 builder.AppendLine("  <tr>");
-                builder.AppendLine($"    <td colspan='3' style='padding: 4px;'>");
+                builder.AppendLine($"    <td name='release-notes' colspan='3' style='padding: 4px;'>");
                 builder.AppendLine(data);
                 builder.AppendLine($"    </td>");
                 builder.AppendLine("  </tr>");

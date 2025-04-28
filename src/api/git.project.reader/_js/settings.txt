@@ -1,5 +1,9 @@
 {
-  "pat": "Z2hwX3k4dlZvWURxRGZiMFJnUDdqTFUxV0JDUGhDem5VUTRiYTVGWQ==",
+  "pat": "xxxyyyxxxx==",
   "owner": "fwthompsonjr",
   "repo": "leads-desktop",
+  "codes": {
+	"name": "eeP7Rn23tPut2y9zrXaGWvVN0eawXOgeILeezioqWx8AWUxz3rCsnWBP+mhDDRnE",
+	"vector": "YcY8LPdEgAF0j9CZrpiF1A=="
+  }
 }
