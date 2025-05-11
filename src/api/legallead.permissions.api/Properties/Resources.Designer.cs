@@ -215,6 +215,26 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] download_css {
+            get {
+                object obj = ResourceManager.GetObject("download-css", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] download_jscript {
+            get {
+                object obj = ResourceManager.GetObject("download-jscript", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///		&lt;meta charset=&quot;utf-8&quot;&gt;
         ///		&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;

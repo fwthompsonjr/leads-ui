@@ -1,8 +1,7 @@
-﻿namespace git.project.reader.models
+﻿namespace legallead.permissions.api.Models
 {
-    public class AssetModel
+    public class ReleaseAssetDto
     {
-        public long ReleaseId { get; set; }
         public long Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string DownloadUrl { get; set; } = string.Empty;

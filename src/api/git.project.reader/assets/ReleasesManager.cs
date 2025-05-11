@@ -3,11 +3,7 @@ using git.project.reader.models;
 using git.project.reader.Properties;
 using Newtonsoft.Json;
 using Octokit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace git.project.reader.assets
 {
@@ -36,7 +32,8 @@ namespace git.project.reader.assets
             var releases = await _client.Repository.Release.GetAll(owner, repo);
             if (releases == null || releases.Count == 0) return [];
             var items = new List<ReleaseModel>();
-            foreach (var release in releases) {
+            foreach (var release in releases)
+            {
                 items.Add(new ReleaseModel
                 {
                     Url = release.Url,
@@ -75,9 +72,27 @@ namespace git.project.reader.assets
                 Id = x.Id,
                 DownloadUrl = x.BrowserDownloadUrl
             });
-            return [..assets];
+            return [.. assets];
         }
 
+        public async Task<byte[]?> DownloadAssetAsync(long releaseId, string assetName)
+        {
+            if (_client == null) return null;
+
+            string owner = Settings.UserName;
+            string repo = Settings.Repository;
+            var release = await _client.Repository.Release.Get(owner, repo, releaseId);
+            var asset = release.Assets.ToList().Find(a => a.Name.Equals(assetName));
+            if (asset == null) return null;
+            var response = await _client.Connection.Get<object>(new Uri(asset.BrowserDownloadUrl), TimeSpan.FromMinutes(2));
+            if (response == null) return null;
+            var httpResponseMessage = response.HttpResponse;
+            if (httpResponseMessage.Body is not Stream httpResponse) return null;
+
+            using var memoryStream = new MemoryStream();
+            await httpResponse.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
+        }
 
         private static SettingsModel? model;
         private static SettingsModel Settings => model ??= GetSettings();

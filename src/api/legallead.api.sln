@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_solution", "_solution", "{
 	ProjectSection(SolutionItems) = preProject
 		..\CodeCoverage.runsettings = ..\CodeCoverage.runsettings
 		..\..\release\legallead.content.api.release.txt = ..\..\release\legallead.content.api.release.txt
+		..\..\release\legallead.permissions.api.release.json = ..\..\release\legallead.permissions.api.release.json
 		..\..\release\legallead.permissions.api.release.txt = ..\..\release\legallead.permissions.api.release.txt
 		postman-testing-01.ps1 = postman-testing-01.ps1
 		postman-testing-02.ps1 = postman-testing-02.ps1
