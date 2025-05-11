@@ -260,7 +260,7 @@ namespace legallead.permissions.api.Services
             if (landing.Contains(find, StringComparison.OrdinalIgnoreCase))
             {
                 var lidx = landing.LastIndexOf(find, StringComparison.OrdinalIgnoreCase);
-                translation = string.Concat(landing.Substring(0, lidx), suffix);
+                translation = string.Concat(landing[..lidx], suffix);
             }
             return $"{translation}|{nbr}|{id}";
         }
@@ -324,7 +324,7 @@ namespace legallead.permissions.api.Services
                     UserName = r.UserName,
                 });
             });
-            return list.GroupBy(x => x.Id).Select(x => x.First()).ToList();
+            return [.. list.GroupBy(x => x.Id).Select(x => x.First())];
         }
 
         private static List<InvoiceDetailModel> MapDetail(List<DbInvoiceViewBo> response)
