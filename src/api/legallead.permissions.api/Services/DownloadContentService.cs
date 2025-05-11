@@ -7,17 +7,12 @@ namespace legallead.permissions.api.Services
 {
     public class DownloadContentService : IDownloadContentService
     {
-        public ReleaseAssetBo? GetAssetDetail(long releaseId, long assetId)
+        public async Task<string> GetAssetsAsync(string page)
         {
-            if (!ReleaseDetails.TryGetValue(releaseId, out var assetbo)) return null;
-            if (!assetbo.IsAssetChecked) return null;
-            var expected = assetbo.Assets.Find(x => x.Id == assetId);
-            if (expected == null) return null;
-            return assetbo;
-        }
-        public async Task<byte[]?> GetAssetsAsync(long releaseId, string assetName)
-        {
-            var response = await manager.DownloadAssetAsync(releaseId, assetName);
+            var response = await Task.Run(() =>
+            {
+                return GetContent("");
+            });
             return response;
 
         }
@@ -28,22 +23,11 @@ namespace legallead.permissions.api.Services
             {
                 _ => "download-blank"
             };
-            string html = GetResourceText(pageId);
-            string head = GetResourceText("download-css");
-            string js = GetResourceText("download-jscript");
-            var sb = new StringBuilder(html);
-            sb.Replace("<!-- append head section -->", head);
-            sb.Replace("<!-- append scripts section -->", js);
-            html = sb.ToString();
-            if (model == null) return html;
-            return GetTable(html, model);
-        }
-
-        private static string GetResourceText(string pageId)
-        {
             var blank = Properties.Resources.ResourceManager.GetObject(pageId);
             if (blank is not byte[] data) return string.Empty;
-            return Encoding.UTF8.GetString(data);
+            var html = Encoding.UTF8.GetString(data);
+            if (model == null) return html;
+            return GetTable(html, model);
         }
 
         public async Task<DownloadContentResponse> GetDownloadsAsync(string page)
@@ -71,7 +55,6 @@ namespace legallead.permissions.api.Services
 
         private static string GetTable(List<ReleaseModel> releases)
         {
-            const string linkText = "    <td><a href='javascript:void(0)' class='link-primary' onclick=\"goToReleaseDetail('{0}');\">{0}</a></td>";
             var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-releases'>");
             builder.AppendLine("<colgroup>");
             builder.AppendLine("  <col name='index' style='width: 115px'>");
@@ -90,7 +73,7 @@ namespace legallead.permissions.api.Services
             {
 
                 builder.AppendLine("  <tr>");
-                builder.AppendLine(string.Format(linkText, r.Id));
+                builder.AppendLine($"    <td><a href='#' class='link-primary' onclick=\"goToReleaseDetail('{r.Id}');\">{r.Id}</a></td>");
                 builder.AppendLine($"    <td>{r.Name}</td>");
                 builder.AppendLine($"    <td>{r.CreatedAt.DateTime:g}</td>");
                 builder.AppendLine("  </tr>");
@@ -111,7 +94,7 @@ namespace legallead.permissions.api.Services
             if (children == null || children.Count == 0 || children[0].ChildNodes.Count < 4) return html;
             var child = children[0].ChildNodes[3];
 
-            var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-release-assets'>");
+            var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-releases'>");
             builder.AppendLine("<colgroup>");
             builder.AppendLine("  <col name='index' style='width: 115px'>");
             builder.AppendLine("  <col />");
@@ -122,9 +105,6 @@ namespace legallead.permissions.api.Services
             builder.AppendLine("    <td>Id</td>");
             builder.AppendLine("    <td>Name</td>");
             builder.AppendLine("    <td>Date</td>");
-            builder.AppendLine("  </tr>");
-            builder.AppendLine("  <tr id='tr-download-status' style='display: none'>");
-            builder.AppendLine("    <td colspan='3'>Download in progress ...</td>");
             builder.AppendLine("  </tr>");
             builder.AppendLine("</thead>");
             builder.AppendLine("<tbody>");
@@ -141,7 +121,7 @@ namespace legallead.permissions.api.Services
                 string data = DownloadDescription(url, model.Id);
 
                 builder.AppendLine("  <tr>");
-                builder.AppendLine($"    <td name='release-notes' colspan='3' style='padding: 4px;'>");
+                builder.AppendLine($"    <td colspan='3' style='padding: 4px;'>");
                 builder.AppendLine(data);
                 builder.AppendLine($"    </td>");
                 builder.AppendLine("  </tr>");
@@ -153,7 +133,7 @@ namespace legallead.permissions.api.Services
                 {
                     var converted = assets.Select(x =>
                     {
-                        return new ReleaseAssetDto
+                        return new AssetDto
                         {
                             Name = x.Name,
                             Id = x.Id,
@@ -167,12 +147,12 @@ namespace legallead.permissions.api.Services
             if (ReleaseDetails.TryGetValue(model.Id, out var bo) && bo.Assets.Count > 0)
             {
                 var sb = new StringBuilder();
-                sb.AppendLine("<tr><td colspan='3'><h4>Assets</h4></td></tr>");
+                sb.AppendLine("<tr><td colspan='3'><h2>Assets</h2></td></tr>");
                 sb.AppendLine("</tr>");
                 bo.Assets.ForEach(a =>
                 {
                     sb.AppendLine("<tr>");
-                    sb.AppendLine($"  <td><a class='link-primary' href='javascript:void(0)' onclick=\"downloadAsset('{a.Id}')\">{a.Id}</a></td>");
+                    sb.AppendLine($"  <td><a href='#'>{a.Id}</a></td>");
                     sb.AppendLine($"  <td colspan='2'>{a.Name}</td>");
                     sb.AppendLine("</tr>");
                 });
@@ -200,29 +180,33 @@ namespace legallead.permissions.api.Services
             var nde = doc.DocumentNode.SelectSingleNode("//*[@id=\"repo-content-pjax-container\"]/div/div/div/div[1]/div[3]");
             if (nde == null) return content;
             var notes = new StringBuilder(nde.InnerHtml);
-            foreach (var key in HeadingSubstitions.Keys) {
-                var replacment = HeadingSubstitions[key];
-                var openTag = $"<{key}";
-                var closeTag = $"</{key}";
-                var newOpenTag = $"<{replacment}";
-                var newCloseTag = $"</{replacment}";
-                notes.Replace(openTag, newOpenTag);
-                notes.Replace(closeTag, newCloseTag);
-            }
-            var bo = new ReleaseAssetBo { ReleaseId = index, Html = notes.ToString() };
+            notes.Replace("<h4", "<h6");
+            notes.Replace("</h4", "</h6");
+            notes.Replace("<h3", "<h5");
+            notes.Replace("</h3", "</h5");
+            notes.Replace("<h2", "<h4");
+            notes.Replace("</h2", "</h4");
+            notes.Replace("<h1", "<h3");
+            notes.Replace("</h1", "</h3");
+            var bo = new AssetBo { ReleaseId = index, Html = notes.ToString() };
             if (index != 0) ReleaseDetails.Add(index, bo);
             return notes.ToString();
         }
 
         private static readonly ReleasesManager manager = new();
-        private static readonly Dictionary<long, ReleaseAssetBo> ReleaseDetails = new();
-        private static readonly Dictionary<string, string> HeadingSubstitions = new()
+        private static readonly Dictionary<long, AssetBo> ReleaseDetails = new();
+        private class AssetDto
         {
-            {"h4", "h6" },
-            {"h3", "h5" },
-            {"h2", "h4" },
-            {"h1", "h3" },
-        };
-
+            public long Id { get; set; }
+            public string Name { get; set; } = string.Empty;
+            public string DownloadUrl { get; set; } = string.Empty;
+        }
+        private class AssetBo
+        {
+            public long ReleaseId { get; set; }
+            public string Html { get; set; } = string.Empty;
+            public List<AssetDto> Assets { get; set; } = [];
+            public bool IsAssetChecked { get; set; }
+        }
     }
 }
