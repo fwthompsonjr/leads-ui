@@ -68,7 +68,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Shell.Framework" Version="17.13.40008" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Polly" Version="8.5.2" />
-		<PackageReference Include="Stripe.net" Version="48.1.0" />
+		<PackageReference Include="Stripe.net" Version="47.4.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
 	</ItemGroup>
