@@ -45,5 +45,6 @@ namespace legallead.permissions.api.Interfaces
         Task UpdateOfflineSearchTypesAsync();
         Task<List<OfflineSearchTypeBo>> GetOfflineSearchTypesByIdAsync(string leadId);
         Task<string?> FindCaseItemByCaseNumberAsync(int countyId, string caseNumber);
+        Task<IEnumerable<OfflineDataModel>?> GetOfflineWorkQueueAsync();
     }
 }

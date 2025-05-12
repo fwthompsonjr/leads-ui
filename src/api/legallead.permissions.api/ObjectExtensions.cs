@@ -282,7 +282,15 @@ namespace legallead.permissions.api
                 var logging = s.GetRequiredService<ILogger<SubscriptionSyncService>>();
                 return new SubscriptionSyncService(logging, repo);
             });
-
+            services.AddSingleton<IStartupTask>(s =>
+            {
+                var exec = new DapperExecutor();
+                var context = new DataContext(exec);
+                var usageDb = new UserUsageRepository(context);
+                var usageService = new UserUsageService(usageDb);
+                var fetchService = new CaseDetailLookupService(usageService);
+                return new BackgroundBulkReaderService(fetchService, usageService);
+            });
             loggerFactory.Dispose();
         }
 

@@ -160,7 +160,13 @@ namespace legallead.permissions.api.Services
             if (data == null) return null;
             return data.ToJsonString();
         }
-
+        public async Task<IEnumerable<OfflineDataModel>?> GetOfflineWorkQueueAsync()
+        {
+            var data = await Task.Run(() => { 
+                return new List<OfflineDataModel>(); 
+            });
+            return data;
+        }
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;

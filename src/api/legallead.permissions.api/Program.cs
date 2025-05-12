@@ -91,7 +91,7 @@ foreach (var startupTask in startupTasks)
 {
     _ = Task.Factory.StartNew(async () => await startupTask.ExecuteAsync().ConfigureAwait(false)).ConfigureAwait(false);
 }
-app.Run();
+await app.RunAsync();
 
 [ExcludeFromCodeCoverage]
 internal static partial class Program
