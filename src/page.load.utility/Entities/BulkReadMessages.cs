@@ -11,5 +11,6 @@ namespace page.load.utility.Entities
         public string Workload { get; set; } = string.Empty;
         public int RetryCount { get; set; }
         public IFetchDbAddress? AddressSerice { get; set; } = null;
+        public int CountyId { get; set; } = 60;
     }
 }

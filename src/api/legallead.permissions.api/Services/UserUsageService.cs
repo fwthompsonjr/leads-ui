@@ -155,12 +155,10 @@ namespace legallead.permissions.api.Services
         }
         public async Task<string?> FindCaseItemByCaseNumberAsync(int countyId, string caseNumber)
         {
-            var model = new { CountyId = countyId, CaseNumber = caseNumber };
-            var response = await Task.Run(() =>
-            {
-                return model.CountyId % 2 == 0 ? model.CaseNumber : null;
-            });
-            return response;
+            var model = new OfflineCaseItemModel { CountyId = countyId, CaseNumber = caseNumber };
+            var data = await db.OfflineFindByCaseNumber(model);
+            if (data == null) return null;
+            return data.ToJsonString();
         }
 
         private static string Serialize(object? value)
