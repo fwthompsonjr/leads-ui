@@ -711,6 +711,45 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
         }
+
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        [InlineData(2)] // return empty
+        public async Task RepoCanGetOfflineWorkQueueAsync(int conditionId)
+        {
+            var dto = conditionId switch
+            {
+                1 => default,
+                2 => [],
+                _ => offlinefaker.Generate(5)
+            };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetOfflineWorkQueueAsync();
+            mock.Verify(x => x.QueryAsync<OfflineStatusDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
 #pragma warning restore CS8604 // Possible null reference argument.
         private sealed class RepoContainer
         {

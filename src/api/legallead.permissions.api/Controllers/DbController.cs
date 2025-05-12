@@ -378,7 +378,6 @@ namespace legallead.permissions.api.Controllers
         private readonly static CultureInfo _culture = new("en-us");
         private readonly static List<BulkReadResponse> offlineRequests = [];
 
-
         private class CookieModel
         {
 
