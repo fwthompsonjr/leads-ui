@@ -400,6 +400,21 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<List<OfflineStatusModel>?> GetOfflineWorkQueueAsync()
+        {
+            const string prc = ProcNames.OFFLINE_GET_ABANDONED_QUEUE;
+            try
+            {
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<OfflineStatusDto>(connection, prc);
+                if (response == null || !response.Any()) return [];
+                return GenericMap<IEnumerable<OfflineStatusDto>, List<OfflineStatusModel>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -484,6 +499,7 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_SYNC_HISTORY = "CALL USP_OFFLINESEARCH_SYNC_HISTORY();";
             public const string OFFLINE_SEARCH_TYPE_BY_USERID = "CALL USP_OFFLINESEARCH_SEARCHTYPE_BY_USER_ID ( ? );";
             public const string OFFLINE_FIND_BY_CASENUMBER = "CALL USP_OFFLINE_TRY_FIND_BY_CASENUMBER ( ?, ? );";
+            public const string OFFLINE_GET_ABANDONED_QUEUE = "CALL USP_OFFLINESEARCH_FETCH_ABANDONED_ITEMS ( );";
         }
 
         private static class ProcParameterNames

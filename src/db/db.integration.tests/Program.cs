@@ -8,7 +8,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-int testId = 11;
+int testId = 12;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
 if (testId == 0)
 {
@@ -148,6 +148,22 @@ if (testId == 11)
     };
     await svc.OfflineRequestSetCourtTypeAsync(model);
     var actual = await svc.GetOfflineStatusAsync(model.OfflineId);
+    if (actual != null)
+    {
+        actual.ForEach(x =>
+        {
+            x.Workload = string.Empty;
+            x.Message = string.Empty;
+            x.Cookie = string.Empty;
+        });
+    }
+    var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
+    Console.WriteLine(js);
+}
+if (testId == 12)
+{
+    var svc = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var actual = await svc.GetOfflineWorkQueueAsync();
     if (actual != null)
     {
         actual.ForEach(x =>
