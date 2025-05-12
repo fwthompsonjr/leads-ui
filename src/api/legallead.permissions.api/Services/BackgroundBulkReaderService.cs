@@ -31,8 +31,14 @@ namespace legallead.permissions.api.Services
                     var usageDb = svc._usageService;
                     var addressSvc = svc._addressSvc;
                     var queue = await usageDb.GetOfflineWorkQueueAsync();
-                    if (queue == null || !queue.Any()) return;
+                    if (queue == null || queue.Count == 0) return;
                     var list = queue.ToList();
+                    var working = offlineRequests.Select(x => x.OfflineRequestId);
+                    list.RemoveAll(x => string.IsNullOrEmpty(x.RequestId));
+                    list.RemoveAll(x => string.IsNullOrEmpty(x.Cookie));
+                    list.RemoveAll(x => string.IsNullOrEmpty(x.Workload));
+                    list.RemoveAll(x => working.Contains(x.OfflineId));
+                    if (list.Count == 0) return;
                     foreach (var request in list)
                     {
                         var response = new BulkReadResponse { RequestId = request.RequestId };

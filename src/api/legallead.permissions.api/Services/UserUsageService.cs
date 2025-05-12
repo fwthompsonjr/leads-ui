@@ -3,6 +3,7 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
+using StructureMap.Query;
 
 namespace legallead.permissions.api.Services
 {
@@ -160,12 +161,11 @@ namespace legallead.permissions.api.Services
             if (data == null) return null;
             return data.ToJsonString();
         }
-        public async Task<IEnumerable<OfflineDataModel>?> GetOfflineWorkQueueAsync()
+        public async Task<List<OfflineDataModel>?> GetOfflineWorkQueueAsync()
         {
-            var data = await Task.Run(() => { 
-                return new List<OfflineDataModel>(); 
-            });
-            return data;
+            var data = await db.GetOfflineWorkQueueAsync();
+            if (data == null || data.Count == 0) return [];
+            return DeSerialize<List<OfflineDataModel>>(Serialize(data)) ?? [];
         }
         private static string Serialize(object? value)
         {
