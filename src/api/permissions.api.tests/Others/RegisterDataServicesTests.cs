@@ -139,7 +139,7 @@ namespace permissions.api.tests
         [Fact]
         public void ProviderCanGetStartupTasks()
         {
-            const int expected = 2;
+            const int expected = 3;
             var startupTasks = _serviceProvider?.GetServices<IStartupTask>();
             Assert.NotNull(startupTasks);
             Assert.Equal(expected, startupTasks.Count());
