@@ -16,6 +16,7 @@ using legallead.Profiles.api.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using page.load.utility.Interfaces;
 using Stripe;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -228,6 +229,12 @@ namespace legallead.permissions.api
             {
                 var lg = p.GetRequiredService<ILoggingService>();
                 return new LoggingInfrastructure(lg);
+            });
+            // case detail lookup service
+            services.AddScoped<IFetchDbAddress>(p =>
+            {
+                var lg = p.GetRequiredService<IUserUsageService>();
+                return new CaseDetailLookupService(lg);
             });
 
             var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder

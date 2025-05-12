@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using page.load.utility;
 using page.load.utility.Entities;
 using page.load.utility.Extensions;
+using page.load.utility.Interfaces;
 using System.Collections.ObjectModel;
 using System.Globalization;
 
@@ -15,13 +16,15 @@ namespace legallead.permissions.api.Controllers
     IDbHistoryService db,
     IHolidayService holidayDb,
     IUserUsageService usageDb,
-    ICountyFileService fileDb) : ControllerBase
+    ICountyFileService fileDb,
+    IFetchDbAddress findAddressService) : ControllerBase
     {
         private readonly ILeadAuthenicationService _leadService = lead;
         private readonly IDbHistoryService _dataService = db;
         private readonly IHolidayService _holidayService = holidayDb;
         private readonly IUserUsageService _usageService = usageDb;
         private readonly ICountyFileService _fileService = fileDb;
+        private readonly IFetchDbAddress _addressService = findAddressService;
 
         [HttpPost("begin")]
         public async Task<IActionResult> BeginAsync(BeginDataRequest model)
@@ -233,13 +236,10 @@ namespace legallead.permissions.api.Controllers
                 Guid.NewGuid().ToString("D") : model.OfflineId;
             response.OfflineRequestId = objRequestGuid;
             offlineRequests.Add(response);
-            // need to create an instance of new interface that fetches address from db
-            // this allows the reader to get from db in place of http call when data
-            // has already been read
             var service = new BulkCaseReader(
                 new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies),
                 items,
-                new BulkReadMessages { OfflineRequestId = objRequestGuid })
+                new BulkReadMessages { OfflineRequestId = objRequestGuid, AddressSerice = _addressService })
             {
                 OnStatusUpdated = StatusChanged,
                 OnStatusTimeOut = StatusTerminated

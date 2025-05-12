@@ -8,6 +8,8 @@ namespace page.load.utility.Entities
         [JsonProperty("plaintiff")] public string Plaintiff { get; set; } = string.Empty;
         [JsonProperty("casenbr")] public string CaseNumber { get; set; } = string.Empty;
         [JsonProperty("caseheader")] public string CaseHeader { get; set; } = string.Empty;
+        public string PersonName { get; set; } = string.Empty;
+        public string Zip { get; set; } = string.Empty;
         public bool IsValid
         {
             get

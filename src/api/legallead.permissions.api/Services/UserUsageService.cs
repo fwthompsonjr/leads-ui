@@ -153,6 +153,15 @@ namespace legallead.permissions.api.Services
             if (data == null || data.Count == 0) return [];
             return DeSerialize<List<OfflineSearchTypeBo>>(Serialize(data)) ?? [];
         }
+        public async Task<string?> FindCaseItemByCaseNumberAsync(int countyId, string caseNumber)
+        {
+            var model = new { CountyId = countyId, CaseNumber = caseNumber };
+            var response = await Task.Run(() =>
+            {
+                return model.CountyId % 2 == 0 ? model.CaseNumber : null;
+            });
+            return response;
+        }
 
         private static string Serialize(object? value)
         {
