@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.470.--",
+		"description": "API - offline - allow db lookup support",
+		"date": "2025-05-12 16:30:00"
+	},
+	{
 		"name": "3.2.469.--",
 		"description": "API - offline - allow db lookup support",
 		"date": "2025-05-12 13:15:00"
