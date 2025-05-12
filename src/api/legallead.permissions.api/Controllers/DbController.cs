@@ -233,6 +233,9 @@ namespace legallead.permissions.api.Controllers
                 Guid.NewGuid().ToString("D") : model.OfflineId;
             response.OfflineRequestId = objRequestGuid;
             offlineRequests.Add(response);
+            // need to create an instance of new interface that fetches address from db
+            // this allows the reader to get from db in place of http call when data
+            // has already been read
             var service = new BulkCaseReader(
                 new ReadOnlyCollection<OpenQA.Selenium.Cookie>(cookies),
                 items,
