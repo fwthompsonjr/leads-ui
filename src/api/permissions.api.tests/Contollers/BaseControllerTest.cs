@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using page.load.utility.Interfaces;
 
 namespace permissions.api.tests.Contollers
 {
@@ -80,6 +81,7 @@ namespace permissions.api.tests.Contollers
                 var mkoption = new Mock<PaymentStripeOption>();
                 var mkInvoiceSvc = new Mock<ILeadInvoiceService>();
                 var mkFileSvc = new Mock<ICountyFileService>();
+                var caseLookupService = new Mock<IFetchDbAddress>();
                 var collection = new ServiceCollection();
                 collection.AddScoped<ICountyAuthorizationService, CountyAuthorizationService>();
                 collection.AddScoped<IAppAuthenicationService, AppAuthenicationService>();
@@ -142,6 +144,8 @@ namespace permissions.api.tests.Contollers
                 collection.AddScoped(s => mkInvoiceSvc.Object);
                 collection.AddScoped(s => mkFileSvc);
                 collection.AddScoped(s => mkFileSvc.Object);
+                collection.AddScoped(s => caseLookupService);
+                collection.AddScoped(s => caseLookupService.Object);
                 collection.AddScoped<ILeadSecurityService, LeadSecurityService>();
                 collection.AddScoped(p =>
                 {
@@ -232,6 +236,7 @@ namespace permissions.api.tests.Contollers
                     var datesvc = a.GetRequiredService<IHolidayService>();
                     var usagesvc = a.GetRequiredService<IUserUsageService>();
                     var fileSvc = a.GetRequiredService<ICountyFileService>();
+                    var addressSvc = a.GetRequiredService<IFetchDbAddress>();
                     var headers = new HeaderDictionary
                     {
                         {
@@ -240,7 +245,7 @@ namespace permissions.api.tests.Contollers
                         }
                     };
                     mqRequest.SetupGet(m => m.Headers).Returns(headers);
-                    return new DbController(leadsvc, mqDb, datesvc, usagesvc, fileSvc)
+                    return new DbController(leadsvc, mqDb, datesvc, usagesvc, fileSvc, addressSvc)
                     {
                         ControllerContext = controllerContext
                     };

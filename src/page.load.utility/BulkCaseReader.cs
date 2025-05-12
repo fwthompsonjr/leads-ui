@@ -1,8 +1,10 @@
 ﻿namespace page.load.utility
 {
     using HtmlAgilityPack;
+    using Newtonsoft.Json;
     using page.load.utility.Entities;
     using page.load.utility.Extensions;
+    using page.load.utility.Interfaces;
     using Polly;
     using Polly.Timeout;
     using System.Collections.Concurrent;
@@ -22,6 +24,8 @@
         private readonly List<CaseItemDto> Workload = items;
         private readonly BulkReadMessages Log = response;
         private readonly List<string> FileDates = [.. items.Select(x => x.FileDate).Distinct()];
+        private readonly IFetchDbAddress? AddressService = response.AddressSerice;
+        private readonly int CountyId = response.CountyId;
 
         public EventHandler<BulkReadMessages>? OnStatusUpdated { get; set; }
         public EventHandler<BulkReadMessages>? OnStatusTimeOut { get; set; }
@@ -85,15 +89,21 @@
         {
             var instance = cases[idx];
             if (instance.IsMapped()) return;
-            var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
-            var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
             var currentDate = GetCentralTime();
             var msg = $"{currentDate:G}| Reading item {idx + 1} of {count}. Case {instance.Dto?.CaseNumber ?? "---"}";
+            var address = AddressService?.FindAddress(CountyId, c.CaseNumber);
+            if (address != null)
+            {
+                var jsaddress = JsonConvert.SerializeObject(address);
+                instance.MappedContent = jsaddress;
+                instance.Map();
+                UpdateCaseStatus(cases, count, msg);
+                return;
+            }
+            var content = GetContentWithPollyAsync(c.Href, cookies).GetAwaiter().GetResult();
+            var readFailed = string.IsNullOrEmpty(content) || content.Equals("error");
             if (readFailed) msg += ". FAIL - Adding to retry";
-            Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
-            Log.Messages.Add(msg);
-            Log.Workload = cases.Select(x => x.Value.Dto ?? new()).ToJsonString() ?? string.Empty;
-            OnStatusUpdated?.Invoke(this, Log);
+            UpdateCaseStatus(cases, count, msg);
             if (readFailed)
             {
                 int ms = (idx % 15 == 0) ? Timings.FailedResponseWaitMax : Timings.FailedResponseWaitMin;
@@ -103,6 +113,14 @@
             var data = GetPageContent(content);
             instance.MappedContent = data;
             instance.Map();
+        }
+
+        private void UpdateCaseStatus(ConcurrentDictionary<int, CaseItemDtoMapper> cases, int count, string msg)
+        {
+            Log.TotalProcessed = count - cases.Count(x => !x.Value.IsMapped());
+            Log.Messages.Add(msg);
+            Log.Workload = cases.Select(x => x.Value.Dto ?? new()).ToJsonString() ?? string.Empty;
+            OnStatusUpdated?.Invoke(this, Log);
         }
 
         private static async Task<string> GetContentWithPollyAsync(string href, ReadOnlyCollection<SRC> cookies)

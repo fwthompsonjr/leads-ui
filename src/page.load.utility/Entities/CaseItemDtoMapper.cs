@@ -15,6 +15,7 @@ namespace page.load.utility.Entities
             Dto.CaseStyle = src.CaseHeader;
             Dto.Plaintiff = src.Plaintiff;
             if (!string.IsNullOrWhiteSpace(src.Address)) Dto.Address = src.Address;
+            if (string.IsNullOrEmpty(Dto.PartyName) && !string.IsNullOrEmpty(src.PersonName)) Dto.PartyName = src.PersonName;
         }
         public bool IsMapped()
         {
