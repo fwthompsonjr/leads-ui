@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.469.--",
+		"description": "API - offline - allow db lookup support",
+		"date": "2025-05-12 13:15:00"
+	},
+	{
 		"name": "3.2.468.--",
 		"description": "API - download - release artifacts",
 		"date": "2025-04-24 16:45:00"
