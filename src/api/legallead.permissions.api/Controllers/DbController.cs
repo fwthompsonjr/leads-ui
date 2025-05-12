@@ -377,7 +377,7 @@ namespace legallead.permissions.api.Controllers
         private const string UserAccountAccess = "user account access credential";
         private readonly static CultureInfo _culture = new("en-us");
         private readonly static List<BulkReadResponse> offlineRequests = [];
-
+        internal static List<BulkReadResponse> OfflineRequests => offlineRequests;
         private class CookieModel
         {
 
