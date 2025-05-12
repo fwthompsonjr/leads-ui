@@ -1,4 +1,5 @@
 ﻿
+using legallead.permissions.api.Controllers;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using page.load.utility;
@@ -33,7 +34,7 @@ namespace legallead.permissions.api.Services
                     var queue = await usageDb.GetOfflineWorkQueueAsync();
                     if (queue == null || queue.Count == 0) return;
                     var list = queue.ToList();
-                    var working = offlineRequests.Select(x => x.OfflineRequestId);
+                    var working = GetRequestList();
                     list.RemoveAll(x => string.IsNullOrEmpty(x.RequestId));
                     list.RemoveAll(x => string.IsNullOrEmpty(x.Cookie));
                     list.RemoveAll(x => string.IsNullOrEmpty(x.Workload));
@@ -159,6 +160,15 @@ namespace legallead.permissions.api.Services
                 await service._usageService.TerminateOfflineRequestAsync(model);
             });
         }
+
+        private static List<string> GetRequestList()
+        {
+            var controller = DbController.OfflineRequests.Select(x => x.OfflineRequestId).Distinct().ToList();
+            var working = offlineRequests.Select(x => x.OfflineRequestId);
+            controller.AddRange(working);
+            return [.. controller.Distinct()];
+        }
+
         private static bool isRunning = false;
         private readonly static object locker = new ();
 

@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.471.--",
+		"description": "API - offline - fix lookup issue returning no address",
+		"date": "2025-05-12 17:55:00"
+	},
+	{
 		"name": "3.2.470.--",
 		"description": "API - offline - allow db lookup support",
 		"date": "2025-05-12 16:30:00"
