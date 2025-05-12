@@ -349,6 +349,25 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<OfflineCaseItemModel?> OfflineFindByCaseNumber(OfflineCaseItemModel model)
+        {
+            const string prc = ProcNames.OFFLINE_FIND_BY_CASENUMBER;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.CountyId, model.CountyId);
+                parameters.Add(ProcParameterNames.CaseNo, model.CaseNumber);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<OfflineCaseItemDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<OfflineCaseItemDto, OfflineCaseItemModel>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public async Task<bool> OfflineRequestSyncHistoryAsync()
         {
             const string prc = ProcNames.OFFLINE_SYNC_HISTORY;
@@ -464,6 +483,7 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_SET_SEARCHTYPE = "CALL USP_OFFLINE_SET_SEARCH_TYPE_INTERNAL();";
             public const string OFFLINE_SYNC_HISTORY = "CALL USP_OFFLINESEARCH_SYNC_HISTORY();";
             public const string OFFLINE_SEARCH_TYPE_BY_USERID = "CALL USP_OFFLINESEARCH_SEARCHTYPE_BY_USER_ID ( ? );";
+            public const string OFFLINE_FIND_BY_CASENUMBER = "CALL USP_OFFLINE_TRY_FIND_BY_CASENUMBER ( ?, ? );";
         }
 
         private static class ProcParameterNames
@@ -479,6 +499,7 @@ namespace legallead.jdbc.implementations
             public const string Cookies = "js_cookie";
             public const string ItemCount = "item_count";
             public const string RetryCount = "retry_count";
+            public const string CaseNo = "case_number";
         }
     }
 }

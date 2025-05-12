@@ -13,6 +13,9 @@ namespace legallead.jdbc.tests.implementations
 {
     public class UserUsageRepositoryTests
     {
+        // disabling warning for null reference in mock response
+        // this is needed to simulate a null db response
+        #pragma warning disable CS8604 // Possible null reference argument.
 
         [Fact]
         public void RepoCanBeConstructed()
@@ -676,6 +679,39 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<DynamicParameters>()));
         }
 
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        public async Task RepoCanOfflineFindByCaseNumber(int conditionId)
+        {
+            var dto = conditionId == 1 ? null : caseitemfaker.Generate();
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var rqst = new OfflineCaseItemModel { CountyId = 0, CaseNumber = "testing" };
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineCaseItemDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QuerySingleOrDefaultAsync<OfflineCaseItemDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.OfflineFindByCaseNumber(rqst);
+            mock.Verify(x => x.QuerySingleOrDefaultAsync<OfflineCaseItemDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+#pragma warning restore CS8604 // Possible null reference argument.
         private sealed class RepoContainer
         {
             private readonly IUserUsageRepository repo;
@@ -790,5 +826,16 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
             .RuleFor(x => x.ItemCount, y => y.Random.Int(1, 2600))
             .RuleFor(x => x.SearchType, y => y.Random.AlphaNumeric(25));
+
+        private static readonly Faker<OfflineCaseItemDto> caseitemfaker
+            = new Faker<OfflineCaseItemDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.CountyId, y => y.Random.Int(1, 2600))
+            .RuleFor(x => x.CaseNumber, y => y.Random.AlphaNumeric(15))
+            .RuleFor(x => x.CaseHeader, y => y.Random.AlphaNumeric(150))
+            .RuleFor(x => x.Plaintiff, y => y.Random.AlphaNumeric(150))
+            .RuleFor(x => x.Address, y => y.Random.AlphaNumeric(150))
+            .RuleFor(x => x.Zip, y => y.Random.AlphaNumeric(5))
+            .RuleFor(x => x.PersonName, y => y.Random.AlphaNumeric(25));
     }
 }
