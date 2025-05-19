@@ -7,6 +7,7 @@ namespace legallead.permissions.api.Interfaces
     {
         string GetContent(string page, ReleaseModel? model = null);
         Task<DownloadContentResponse> GetDownloadsAsync(string page);
-        Task<string> GetAssetsAsync(string page);
+        Task<byte[]?> GetAssetsAsync(long releaseId, string assetName);
+        ReleaseAssetBo? GetAssetDetail(long releaseId, long assetId);
     }
 }
