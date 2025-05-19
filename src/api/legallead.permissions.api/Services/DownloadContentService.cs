@@ -7,12 +7,17 @@ namespace legallead.permissions.api.Services
 {
     public class DownloadContentService : IDownloadContentService
     {
-        public async Task<string> GetAssetsAsync(string page)
+        public ReleaseAssetBo? GetAssetDetail(long releaseId, long assetId)
         {
-            var response = await Task.Run(() =>
-            {
-                return GetContent("");
-            });
+            if (!ReleaseDetails.TryGetValue(releaseId, out var assetbo)) return null;
+            if (!assetbo.IsAssetChecked) return null;
+            var expected = assetbo.Assets.Find(x => x.Id == assetId);
+            if (expected == null) return null;
+            return assetbo;
+        }
+        public async Task<byte[]?> GetAssetsAsync(long releaseId, string assetName)
+        {
+            var response = await manager.DownloadAssetAsync(releaseId, assetName);
             return response;
 
         }
@@ -23,9 +28,9 @@ namespace legallead.permissions.api.Services
             {
                 _ => "download-blank"
             };
-            var blank = Properties.Resources.ResourceManager.GetObject(pageId);
-            if (blank is not byte[] data) return string.Empty;
-            var html = Encoding.UTF8.GetString(data);
+            var html = new StringBuilder(GetResourceText(pageId))
+                .Replace("<!-- append head section -->", GetResourceText("download-css"))
+                .Replace("<!-- append scripts section -->", GetResourceText("download-jscript")).ToString();
             if (model == null) return html;
             return GetTable(html, model);
         }
@@ -55,6 +60,7 @@ namespace legallead.permissions.api.Services
 
         private static string GetTable(List<ReleaseModel> releases)
         {
+            const string linkText = "    <td><a href='javascript:void(0)' class='link-primary' onclick=\"goToReleaseDetail('{0}');\">{0}</a></td>";
             var builder = new StringBuilder("<table style='margin-left: 60px; width: 85%' name='table-releases'>");
             builder.AppendLine("<colgroup>");
             builder.AppendLine("  <col name='index' style='width: 115px'>");
@@ -73,7 +79,7 @@ namespace legallead.permissions.api.Services
             {
 
                 builder.AppendLine("  <tr>");
-                builder.AppendLine($"    <td><a href='#' class='link-primary' onclick=\"goToReleaseDetail('{r.Id}');\">{r.Id}</a></td>");
+                builder.AppendLine(string.Format(linkText, r.Id));
                 builder.AppendLine($"    <td>{r.Name}</td>");
                 builder.AppendLine($"    <td>{r.CreatedAt.DateTime:g}</td>");
                 builder.AppendLine("  </tr>");
@@ -106,6 +112,9 @@ namespace legallead.permissions.api.Services
             builder.AppendLine("    <td>Name</td>");
             builder.AppendLine("    <td>Date</td>");
             builder.AppendLine("  </tr>");
+            builder.AppendLine("  <tr id='tr-download-status' style='display: none'>");
+            builder.AppendLine("    <td colspan='3'>Download in progress ...</td>");
+            builder.AppendLine("  </tr>");
             builder.AppendLine("</thead>");
             builder.AppendLine("<tbody>");
 
@@ -133,7 +142,7 @@ namespace legallead.permissions.api.Services
                 {
                     var converted = assets.Select(x =>
                     {
-                        return new AssetDto
+                        return new ReleaseAssetDto
                         {
                             Name = x.Name,
                             Id = x.Id,
@@ -152,7 +161,7 @@ namespace legallead.permissions.api.Services
                 bo.Assets.ForEach(a =>
                 {
                     sb.AppendLine("<tr>");
-                    sb.AppendLine($"  <td><a href='#'>{a.Id}</a></td>");
+                    sb.AppendLine($"  <td><a class='link-primary' href='javascript:void(0)' onclick=\"downloadAsset('{a.Id}')\">{a.Id}</a></td>");
                     sb.AppendLine($"  <td colspan='2'>{a.Name}</td>");
                     sb.AppendLine("</tr>");
                 });
@@ -188,25 +197,18 @@ namespace legallead.permissions.api.Services
             notes.Replace("</h2", "</h4");
             notes.Replace("<h1", "<h3");
             notes.Replace("</h1", "</h3");
-            var bo = new AssetBo { ReleaseId = index, Html = notes.ToString() };
+            var bo = new ReleaseAssetBo { ReleaseId = index, Html = notes.ToString() };
             if (index != 0) ReleaseDetails.Add(index, bo);
             return notes.ToString();
         }
-
+        private static string GetResourceText(string name)
+        {
+            var blank = Properties.Resources.ResourceManager.GetObject(name);
+            if (blank is not byte[] data) return string.Empty;
+            return Encoding.UTF8.GetString(data);
+        }
         private static readonly ReleasesManager manager = new();
-        private static readonly Dictionary<long, AssetBo> ReleaseDetails = new();
-        private class AssetDto
-        {
-            public long Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public string DownloadUrl { get; set; } = string.Empty;
-        }
-        private class AssetBo
-        {
-            public long ReleaseId { get; set; }
-            public string Html { get; set; } = string.Empty;
-            public List<AssetDto> Assets { get; set; } = [];
-            public bool IsAssetChecked { get; set; }
-        }
+        private static readonly Dictionary<long, ReleaseAssetBo> ReleaseDetails = new();
+
     }
 }
