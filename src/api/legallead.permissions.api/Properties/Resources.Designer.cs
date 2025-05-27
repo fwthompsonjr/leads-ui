@@ -255,6 +255,56 @@ namespace legallead.permissions.api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_base_layout {
+            get {
+                object obj = ResourceManager.GetObject("help-base-layout", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_base_topics {
+            get {
+                object obj = ResourceManager.GetObject("help-base-topics", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_css_base {
+            get {
+                object obj = ResourceManager.GetObject("help-css-base", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_js_base {
+            get {
+                object obj = ResourceManager.GetObject("help-js-base", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_section_getting_started {
+            get {
+                object obj = ResourceManager.GetObject("help-section-getting-started", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///		&lt;script type=&quot;text/javascript&quot;&gt;
         ///            try { 

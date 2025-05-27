@@ -202,4 +202,19 @@
   <data name="download-jscript" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_text\download-jscript.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="help-base-layout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-base-layout.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-css-base" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-css-base.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-base-topics" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-base-topics.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-js-base" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-js-base.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-getting-started" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-getting-started.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
