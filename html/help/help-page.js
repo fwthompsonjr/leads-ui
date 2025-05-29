@@ -1,4 +1,4 @@
-﻿<script name="help-page-js">
+
 const actv = "active"
 const storage_key = 'theme';
 const toggleButton = document.getElementById('darkModeToggle');
@@ -30,39 +30,8 @@ const toggle_icons = {
 }
 let account_settings = {
     "onload": function () {
-        const listItems = document.querySelectorAll("ul[name='account-settings-options'] li");
+        const listItems = document.querySelectorAll('.account-settings ul li');
         const accordionItems = document.querySelectorAll('.accordion-item');
-        if (listItems.length == 0) { return; }
-        listItems.forEach(li => {
-            li.style.cursor = 'pointer';
-            li.addEventListener('click', () => {
-                const selectedText = li.textContent.trim();
-
-                // Remove active class from all list items
-                listItems.forEach(item => item.classList.remove('text-primary'));
-                li.classList.add('text-primary');
-
-                accordionItems.forEach(item => {
-                    const button = item.querySelector('.accordion-button');
-                    const collapse = item.querySelector('.accordion-collapse');
-                    const buttonText = button.textContent.trim();
-
-                    if (buttonText === selectedText) {
-                        // Expand if not already shown
-                        if (!collapse.classList.contains('show')) {
-                            new bootstrap.Collapse(collapse, { toggle: true });
-                        }
-                        button.classList.add('text-primary');
-                    } else {
-                        // Collapse if currently shown
-                        if (collapse.classList.contains('show')) {
-                            new bootstrap.Collapse(collapse, { toggle: true });
-                        }
-                        button.classList.remove('text-primary');
-                    }
-                });
-            });
-        });
 
         accordionItems.forEach((item, index) => {
             const button = item.querySelector('.accordion-button');
@@ -156,4 +125,3 @@ let orchestrator = {
     }
 }
 orchestrator.initialize();
-    </script>

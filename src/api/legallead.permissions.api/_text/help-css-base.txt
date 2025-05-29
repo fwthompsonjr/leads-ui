@@ -66,5 +66,40 @@
         body.dark-mode .form-control::placeholder {
           color: grey;
         }
+        /* Accordion header and button in dark mode */
+body.dark-mode .accordion-button {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  border: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Accordion button hover/focus in dark mode */
+body.dark-mode .accordion-button:not(.collapsed):hover,
+body.dark-mode .accordion-button:focus {
+  background-color: #3a3a3a;
+  color: #ffffff;
+}
+
+/* Accordion button when expanded in dark mode */
+body.dark-mode .accordion-button:not(.collapsed) {
+  background-color: #3a3a3a;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+/* Accordion body in dark mode */
+body.dark-mode .accordion-body {
+  background-color: #1e1e1e;
+  color: #dcdcdc;
+  border-top: 1px solid #444;
+}
+
+/* Optional: border and rounded corners */
+body.dark-mode .accordion-item {
+  border: 1px solid #444;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+}
 
     </style>

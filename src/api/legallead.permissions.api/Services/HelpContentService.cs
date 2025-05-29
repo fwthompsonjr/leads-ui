@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using legallead.permissions.api.Extensions;
+using System.Text;
 
 namespace legallead.permissions.api.Services
 {
@@ -39,7 +40,7 @@ namespace legallead.permissions.api.Services
                     builder.Replace(find, replacement);
                 }
             });
-            return builder.ToString();
+            return builder.ToString().StandardizeBody();
         }
 
         public static string GetChildPage(string name)
@@ -47,13 +48,14 @@ namespace legallead.permissions.api.Services
             var topics = new List<string>()
             {
                 SectionNames.TopicGettingStarted,
+                SectionNames.TopicAccountSettings,
             };
             if (!topics.Contains(name)) return string.Empty;
 
             var builder = new StringBuilder( GetKey(SectionNames.BaseLayout) ?? string.Empty);
             if (!_resources.TryGetValue(name, out var key)) return builder.ToString();
             builder.Replace(SectionNames.TopicsPlaceHolder, key);
-            return builder.ToString();
+            return builder.ToString().StandardizeBody();
 
         }
 
@@ -64,6 +66,7 @@ namespace legallead.permissions.api.Services
             { SectionNames.BaseJs, "" },
             { SectionNames.BaseMenu, "" },
             { SectionNames.TopicGettingStarted, "" },
+            { SectionNames.TopicAccountSettings, "" },
         };
         internal static class SectionNames
         {
@@ -72,6 +75,7 @@ namespace legallead.permissions.api.Services
             public const string BaseJs = "help-js-base";
             public const string BaseMenu = "help-base-topics";
             public const string TopicsPlaceHolder = "<!-- include section topic details -->";
+            public const string TopicAccountSettings = "help-section-account-settings";
             public const string TopicGettingStarted = "help-section-getting-started";
         }
     }
