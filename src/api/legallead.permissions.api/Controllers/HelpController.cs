@@ -27,6 +27,7 @@ namespace legallead.permissions.api.Controllers
 
         private static readonly Dictionary<string, string> topicsMap = new()
         {
+            { "account-settings", HelpContentService.SectionNames.TopicAccountSettings },
             { "getting-started", HelpContentService.SectionNames.TopicGettingStarted },
         };
     }

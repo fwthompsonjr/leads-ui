@@ -41,6 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "page.load.utility", "..\pag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "git.project.reader", "git.project.reader\git.project.reader.csproj", "{2F6B7943-9B5C-4EAD-81D2-D7F2E27E0D06}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_mockups", "_mockups", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\html\help\accordion-toggle.js = ..\..\html\help\accordion-toggle.js
+		..\..\html\help\base-help.html = ..\..\html\help\base-help.html
+		..\..\html\help\help-page.js = ..\..\html\help\help-page.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

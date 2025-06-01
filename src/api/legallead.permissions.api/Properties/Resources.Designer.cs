@@ -257,6 +257,76 @@ namespace legallead.permissions.api.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] help_account_settings_change_password_00 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-00", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_01 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-01", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_02 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-02", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_03 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-03", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_04 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-04", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_05 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-05", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_change_password_06 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-change-password-06", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] help_base_layout {
             get {
                 object obj = ResourceManager.GetObject("help-base-layout", resourceCulture);
@@ -290,6 +360,16 @@ namespace legallead.permissions.api.Properties {
         internal static byte[] help_js_base {
             get {
                 object obj = ResourceManager.GetObject("help-js-base", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_section_account_settings {
+            get {
+                object obj = ResourceManager.GetObject("help-section-account-settings", resourceCulture);
                 return ((byte[])(obj));
             }
         }
