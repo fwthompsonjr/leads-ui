@@ -167,6 +167,21 @@ namespace legallead.permissions.api.Services
             if (data == null || data.Count == 0) return [];
             return DeSerialize<List<OfflineDataModel>>(Serialize(data)) ?? [];
         }
+
+        public async Task<List<MyProfileBo>> GetUserProfileAsync(string leadId)
+        {
+            var data = await db.GetMyProfileAsync(leadId);
+            if (data == null || data.Count == 0) return [];
+            return data;
+        }
+
+        public async Task<List<MyProfileBo>> UpdateUserProfileAsync(string leadId, List<MyProfileBo> updates)
+        {
+            _ = await db.UpdateMyProfileAsync(leadId, updates);
+            var data = await db.GetMyProfileAsync(leadId);
+            if (data == null || data.Count == 0) return [];
+            return data;
+        }
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
