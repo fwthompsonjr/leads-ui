@@ -1,0 +1,127 @@
+
+const actv = "active"
+const storage_key = 'theme';
+const toggleButton = document.getElementById('darkModeToggle');
+// Get current URL path
+const currentPath = window.location.pathname.replace('/help', '');
+// Get all nav links
+const navLinks = document.querySelectorAll('.nav-link');
+// Get content placeholder
+const placeHolder = document.getElementById('help-content-place-holder');
+const toggle_icons = {
+    "dark": '🌙',
+    "light": '☀️',
+    "name": 'dark-mode',
+    "types": {
+        "dark": 'dark',
+        "light": 'light'
+    },
+    getStatus: function () {
+        return document.body.classList.contains(toggle_icons.name);
+    },
+    getStatusCode: function () {
+        let isDark = toggle_icons.getStatus();
+        return isDark ? toggle_icons.types.dark : toggle_icons.types.light;
+    },
+    getToggleIcon: function () {
+        let isDark = toggle_icons.getStatus();
+        return isDark ? toggle_icons.light : toggle_icons.dark;
+    }
+}
+let account_settings = {
+    "onload": function () {
+        const listItems = document.querySelectorAll('.account-settings ul li');
+        const accordionItems = document.querySelectorAll('.accordion-item');
+
+        accordionItems.forEach((item, index) => {
+            const button = item.querySelector('.accordion-button');
+            const collapse = item.querySelector('.accordion-collapse');
+
+            // When accordion is shown
+            collapse.addEventListener('show.bs.collapse', () => {
+                button.classList.add('text-primary');
+
+                // Match <li> by innerText
+                const label = button.textContent.trim();
+                listItems.forEach(li => {
+                    if (li.textContent.trim() === label) {
+                        li.classList.add('text-primary');
+                    }
+                });
+            });
+
+            // When accordion is hidden
+            collapse.addEventListener('hide.bs.collapse', () => {
+                button.classList.remove('text-primary');
+
+                const label = button.textContent.trim();
+                listItems.forEach(li => {
+                    if (li.textContent.trim() === label) {
+                        li.classList.remove('text-primary');
+                    }
+                });
+            });
+        });
+    }
+}
+
+let orchestrator = {
+    "title": function () {
+        let links = Array.prototype.slice.call(navLinks, 0);
+        let target = links.find(f => f.classList.contains(actv));
+        if (undefined === target || null === target) { return }
+        let txt = "".concat("Topic: ", target.innerText);
+        document.title = txt;
+    },
+    "toggle": function () {
+        // Apply click event handler for dark mode
+        toggleButton.addEventListener('click', () => {
+            let isDark = toggle_icons.getStatus();
+            if (isDark) { document.body.classList.remove(toggle_icons.name) }
+            else { document.body.classList.toggle(toggle_icons.name); }
+            localStorage.setItem(storage_key, toggle_icons.getStatusCode());
+            toggleButton.innerText = toggle_icons.getToggleIcon();
+        });
+    },
+    "placeholder": function () {
+        placeHolder.style.display = 'block';
+        let links = Array.prototype.slice.call(navLinks, 0);
+        let target = links.find(f => f.classList.contains(actv));
+        if (undefined === target || null === target) { return; }
+        placeHolder.style.display = 'none';
+    },
+    "navigation": function () {
+        navLinks.forEach(link => {
+            let linkRef = link.href.replace('#', '');
+            // Compare href with current path
+            if (currentPath.length > 0 && linkRef.length > 0 && linkRef.indexOf(currentPath) >= 0) {
+                link.classList.add(actv);
+            } else {
+                link.classList.remove(actv);
+            }
+        });
+        orchestrator.title();
+    },
+    "window": function () {
+        // Apply saved theme on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const theme = localStorage.getItem(storage_key);
+            if (theme != toggle_icons.types.dark) {
+                document.body.classList.remove(toggle_icons.name);
+                toggleButton.textContent = toggle_icons.dark;
+                localStorage.setItem(storage_key, toggle_icons.types.light);
+            } else {
+                toggleButton.textContent = toggle_icons.light;
+                localStorage.setItem(storage_key, toggle_icons.types.dark);
+            }
+        });
+    },
+    "initialize": function () {
+        orchestrator.window();
+        orchestrator.toggle();
+        orchestrator.navigation();
+        orchestrator.placeholder();
+        window.addEventListener('DOMContentLoaded', account_settings.onload);
+    }
+}
+orchestrator.initialize();

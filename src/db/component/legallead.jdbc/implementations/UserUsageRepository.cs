@@ -5,6 +5,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Newtonsoft.Json;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace legallead.jdbc.implementations
 {
@@ -415,6 +416,42 @@ namespace legallead.jdbc.implementations
                 return default;
             }
         }
+        public async Task<List<MyProfileBo>?> GetMyProfileAsync(string leadId)
+        {
+            const string prc = ProcNames.PROFILE_USER_GET;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<MyProfileDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<IEnumerable<MyProfileDto>, List<MyProfileBo>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+        public async Task<bool> UpdateMyProfileAsync(string leadId, IEnumerable<MyProfileBo> data)
+        {
+            const string prc = ProcNames.PROFILE_USER_UPDATE;
+            try
+            {
+                var js = JsonConvert.SerializeObject(data);
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                parameters.Add(ProcParameterNames.Js, js);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -500,6 +537,8 @@ namespace legallead.jdbc.implementations
             public const string OFFLINE_SEARCH_TYPE_BY_USERID = "CALL USP_OFFLINESEARCH_SEARCHTYPE_BY_USER_ID ( ? );";
             public const string OFFLINE_FIND_BY_CASENUMBER = "CALL USP_OFFLINE_TRY_FIND_BY_CASENUMBER ( ?, ? );";
             public const string OFFLINE_GET_ABANDONED_QUEUE = "CALL USP_OFFLINESEARCH_FETCH_ABANDONED_ITEMS ( );";
+            public const string PROFILE_USER_GET = "CALL USP_LEADUSER_PROFILE_GET ( ? )";
+            public const string PROFILE_USER_UPDATE = "CALL USP_LEADUSER_PROFILE_UPDATE ( ?, ? )";
         }
 
         private static class ProcParameterNames

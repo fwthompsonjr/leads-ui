@@ -1,0 +1,36 @@
+﻿<div class="getting-started">
+  <h2>🛠️ Getting Started</h2>
+  <p>Welcome! Follow these steps to get up and running with our software.</p>
+
+  <h4>✅ Step 1: Ensure Firefox Browser is Installed</h4>
+  <p>Our application is optimized for the latest version of <strong>Mozilla Firefox</strong>.</p>
+  <ul>
+    <li>If you already have Firefox installed, make sure it's up to date.</li>
+    <li>If not, you can download it here: <a href="https://www.mozilla.org/firefox" target="_blank">https://www.mozilla.org/firefox</a></li>
+  </ul>
+  <blockquote class="blockquote">
+    <p><em>💡 Why Firefox?</em><br>Firefox offers enhanced privacy, performance, and compatibility with our platform.</p>
+  </blockquote>
+
+  <h4>✅ Step 2: Download the Latest Version of the Software</h4>
+  <p>To get the most secure and feature-rich experience:</p>
+  <ol>
+    <li>Visit our <a href="../releases">Releases Page</a>.</li>
+    <li>Follow the installation instructions provided.</li>
+  </ol>
+  <blockquote class="blockquote">
+    <p><em>📦 Tip:</em> Always download from our official site to avoid security risks.</p>
+  </blockquote>
+
+  <h4>✅ Step 3: Create Your User Account</h4>
+  <p>Once the software is installed:</p>
+  <ol>
+    <li>Launch the application.</li>
+    <li>Click <strong>"Create Account"</strong> on the login screen.</li>
+    <li>Fill in your name, email, and a secure password.</li>
+    <li>Verify your email address to activate your account.</li>
+  </ol>
+  <blockquote class="blockquote">
+    <p><em>🔐 Note:</em> Your account gives you access to personalized settings, support, and cloud features.</p>
+  </blockquote>
+</div>

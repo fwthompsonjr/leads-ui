@@ -750,6 +750,74 @@ namespace legallead.jdbc.tests.implementations
                     It.IsAny<string>(),
                     It.IsAny<DynamicParameters>()));
         }
+
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path id returned
+        [InlineData(1)] // return null
+        [InlineData(2)] // return empty
+        public async Task RepoCanGetMyProfileAsync(int conditionId)
+        {
+            var dto = conditionId switch
+            {
+                1 => default,
+                2 => [],
+                _ => myprofilefaker.Generate(5)
+            };
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.QueryAsync<MyProfileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.QueryAsync<MyProfileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ReturnsAsync(dto);
+            }
+            _ = await service.GetMyProfileAsync("");
+            mock.Verify(x => x.QueryAsync<MyProfileDto>(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
+        [Theory]
+        [InlineData(-1)] // exception
+        [InlineData(0)] // happy path 
+        public async Task RepoCanUpdateMyProfileAsync(int conditionId)
+        {
+            var provider = new RepoContainer();
+            var service = provider.Repository;
+            var mock = provider.DbCommandMock;
+            var dto = JsonConvert.SerializeObject(myprofilefaker.Generate(5));
+            var list = JsonConvert.DeserializeObject<List<MyProfileBo>>(dto);
+            if (conditionId < 0)
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).ThrowsAsync(provider.Error);
+            }
+            else
+            {
+                mock.Setup(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>())).Returns(Task.CompletedTask);
+            }
+            _ = await service.UpdateMyProfileAsync("", list);
+            mock.Verify(x => x.ExecuteAsync(
+                    It.IsAny<IDbConnection>(),
+                    It.IsAny<string>(),
+                    It.IsAny<DynamicParameters>()));
+        }
 #pragma warning restore CS8604 // Possible null reference argument.
         private sealed class RepoContainer
         {
@@ -876,5 +944,15 @@ namespace legallead.jdbc.tests.implementations
             .RuleFor(x => x.Address, y => y.Random.AlphaNumeric(150))
             .RuleFor(x => x.Zip, y => y.Random.AlphaNumeric(5))
             .RuleFor(x => x.PersonName, y => y.Random.AlphaNumeric(25));
+
+        private static readonly Faker<MyProfileDto> myprofilefaker
+            = new Faker<MyProfileDto>()
+            .RuleFor(x => x.Id, y => y.Random.Guid().ToString("D"))
+            .RuleFor(x => x.OrderId, y => y.Random.Int(1, 26000))
+            .RuleFor(x => x.UserId, y => y.Random.AlphaNumeric(15))
+            .RuleFor(x => x.ProfileId, y => y.Random.AlphaNumeric(15))
+            .RuleFor(x => x.ProfileGroup, y => y.Random.AlphaNumeric(15))
+            .RuleFor(x => x.KeyValue, y => y.Random.AlphaNumeric(150))
+            .RuleFor(x => x.KeyName, y => y.Random.AlphaNumeric(150));
     }
 }
