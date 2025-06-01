@@ -8,7 +8,7 @@ using legallead.jdbc.interfaces;
 using legallead.jdbc.models;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-int testId = 12;
+int testId = 13;
 var invoicing = ServiceSetup.AppServices.GetRequiredService<IInvoiceRepository>();
 if (testId == 0)
 {
@@ -175,4 +175,19 @@ if (testId == 12)
     }
     var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
     Console.WriteLine(js);
+}
+if (testId == 13)
+{
+    var svc = ServiceSetup.AppServices.GetRequiredService<IUserUsageRepository>();
+    var dfid = "fef29532-a487-11ef-99ce-0af7a01f52e9";
+    var actual = await svc.GetMyProfileAsync(dfid);
+    var js = JsonConvert.SerializeObject(actual, Formatting.Indented);
+    var item = actual?.Find(x => (x.KeyName ?? string.Empty).Equals("First Name"));
+    Console.WriteLine(js);
+    if (item != null && (item.KeyValue ?? string.Empty).Equals(""))
+    {
+        item.KeyValue = "Testing";
+        var update = await svc.UpdateMyProfileAsync(dfid, [item]);
+        Console.WriteLine(update);
+    }
 }
