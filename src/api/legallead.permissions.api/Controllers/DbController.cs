@@ -324,6 +324,29 @@ namespace legallead.permissions.api.Controllers
             var rsp = await _usageService.SetDownloadCompletedAsync(request);
             return Ok(new { request.RequestId, Content = rsp });
         }
+
+        [HttpPost("get-my-profile")]
+        public async Task<IActionResult> GetMyProfileAsync(GetMyProfileRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!request.LeadId.Equals(user.Id)) return BadRequest($"Invalid lead user account id");
+            var rsp = await _usageService.GetUserProfileAsync(request.LeadId);
+            return Ok(new { request.LeadId, Content = rsp });
+        }
+
+        [HttpPost("update-my-profile")]
+        public async Task<IActionResult> UpdateMyProfileAsync(UpdateMyProfileRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            if (!request.LeadId.Equals(user.Id)) return BadRequest($"Invalid lead user account id");
+            if (string.IsNullOrEmpty(request.Updates)) return BadRequest($"Invalid profile update sequence");
+            var data = request.Updates.ToInstance<List<MyProfileBo>>();
+            if (data == null) return BadRequest($"Invalid profile update sequence");
+            var rsp = await _usageService.UpdateUserProfileAsync(request.LeadId, data);
+            return Ok(new { request.LeadId, Content = rsp });
+        }
         private void StatusChanged(object? sender, BulkReadMessages e)
         {
             var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
