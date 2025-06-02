@@ -3,33 +3,16 @@
 	<p>From the [Settings] menu you can view and edit details about your account.</p>
 	<p>The following options are available to manage your account: </p>
 	<ul name='account-settings-options'>
-		<li class="text-primary">Change Password</li>
-		<li>View Profile</li>
-		<li>View Search History</li>
-		<li>View Invoices</li>
+		<li name='account-settings-option' class="text-primary">Change Password</li>
+		<li name='account-settings-option'>View Profile</li>
+		<li name='account-settings-option'>View Search History</li>
+		<li name='account-settings-option'>View Invoices</li>
 	</ul>
 	<div class="accordion" id="accountSettingsAccordion">
 		<!-- Change Password -->
 		<!-- help-section-account-settings-change-password -->
 		<!-- View Profile -->
-		<div id="dv-accordion-item-view-profile" class="accordion-item">
-			<h2 class="accordion-header" id="headingProfile">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
-				View Profile
-				</button>
-			</h2>
-			<div id="collapseProfile" class="accordion-collapse collapse" aria-labelledby="headingProfile" data-bs-parent="#accountSettingsAccordion">
-				<div class="accordion-body">
-				<p>Here you can view and update your personal information such as:</p>        
-					<ul>
-					<li>Name</li>
-					<li>Phone Number</li>
-					<li>Email Address</li>
-					<li>Physical Address</li>
-					</ul>
-				</div>
-			</div>
-		</div> <!-- end of dv-accordion-item-view-profile -->
+		<!-- help-section-account-settings-view-profile -->
 
 		<!-- View Search History -->
 		<div id="dv-accordion-item-search-history" class="accordion-item">

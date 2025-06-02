@@ -28,6 +28,64 @@ const toggle_icons = {
         return isDark ? toggle_icons.light : toggle_icons.dark;
     }
 }
+let view_profile = {
+    onload: function () {
+        const carousel = document.getElementById('viewProfileCarousel');
+
+        if (null == carousel || undefined == carousel) return;
+        view_profile.set_section('name');
+        view_profile.set_action('name');
+        view_profile.set_item(0);
+        const dvitems = carousel.querySelectorAll(".carousel-item")
+        
+        carousel.addEventListener('slid.bs.carousel', function (event) {
+            const activeIndex = event.to;
+            const dv = dvitems[activeIndex];
+            view_profile.set_item(activeIndex);
+            let dcontext = dv.getAttribute('data-context');
+            if (null != dcontext && undefined != dcontext) {
+                view_profile.set_section(dcontext);
+                view_profile.set_action(dcontext);
+            }
+        });
+    },
+    set_section: function (name) {
+        const sections = document.getElementById('view-profile-sections');
+        let li = sections.querySelectorAll('li[data-context]');
+        li.forEach(l => {
+            let isactive = l.getAttribute('data-context') == name;
+            if (isactive) {
+                l.classList.add('text-primary');
+            } else {
+                l.classList.remove('text-primary');
+            }
+        });
+    },
+    set_action: function (name) {
+        const sections = document.getElementById('dv-view-profile-actions');
+        let lists = sections.querySelectorAll('ol');
+        lists.forEach(l => {
+            let isactive = l.getAttribute('data-context') == name;
+            if (isactive) {
+                l.classList.remove('d-none');
+            } else {
+                l.classList.add('d-none');
+            }
+        });
+    },
+    set_item: function (id) {
+        const sections = document.getElementById('dv-view-profile-actions');
+        let lists = sections.querySelectorAll('li[data-index]');
+        lists.forEach(l => {
+            let isactive = l.getAttribute('data-index') == id;
+            if (isactive) {
+                l.classList.add('text-info');
+            } else {
+                l.classList.remove('text-info');
+            }
+        });
+    }
+}
 let account_settings = {
     "onload": function () {
         const listItems = document.querySelectorAll('.account-settings ul li');
@@ -99,6 +157,28 @@ let account_settings = {
                 li.classList.remove('text-primary');
             }
         }
+    },
+    "handle_click": function () {
+        document.querySelectorAll("li[name='account-settings-option']").forEach((item, index) => {
+            item.style.cursor = 'pointer';
+            item.addEventListener("click", () => {
+                const accordionIds = ["collapsePassword", "collapseProfile", "collapseSearchHistory", "collapseInvoices"];
+                const targetId = accordionIds[index];
+                const target = document.getElementById(targetId);
+
+                if (target) {
+                    const bsCollapse = new bootstrap.Collapse(target, {
+                        toggle: false
+                    });
+
+                    if (target.classList.contains("show")) {
+                        bsCollapse.hide();
+                    } else {
+                        bsCollapse.show();
+                    }
+                }
+            });
+        });
     }
 }
 
@@ -159,6 +239,8 @@ let orchestrator = {
         orchestrator.navigation();
         orchestrator.placeholder();
         window.addEventListener('DOMContentLoaded', account_settings.onload);
+        window.addEventListener('DOMContentLoaded', view_profile.onload);
+        account_settings.handle_click();
     }
 }
 orchestrator.initialize();
