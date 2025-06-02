@@ -55,6 +55,8 @@ namespace legallead.permissions.api.Services
             var builder = new StringBuilder( GetKey(SectionNames.BaseLayout) ?? string.Empty);
             if (!_resources.TryGetValue(name, out var key)) return builder.ToString();
             builder.Replace(SectionNames.TopicsPlaceHolder, key);
+            var changePwd = GetKey(SectionNames.TopicAccountSettingsChangePwd) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountChangePwdPlaceHolder, changePwd);
             return builder.ToString().StandardizeBody();
 
         }
@@ -67,6 +69,7 @@ namespace legallead.permissions.api.Services
             { SectionNames.BaseMenu, "" },
             { SectionNames.TopicGettingStarted, "" },
             { SectionNames.TopicAccountSettings, "" },
+            { SectionNames.TopicAccountSettingsChangePwd, "" },
         };
         internal static class SectionNames
         {
@@ -75,7 +78,9 @@ namespace legallead.permissions.api.Services
             public const string BaseJs = "help-js-base";
             public const string BaseMenu = "help-base-topics";
             public const string TopicsPlaceHolder = "<!-- include section topic details -->";
+            public const string TopicAccountChangePwdPlaceHolder = "<!-- help-section-account-settings-change-password -->";
             public const string TopicAccountSettings = "help-section-account-settings";
+            public const string TopicAccountSettingsChangePwd = "help-section-account-settings-change-password";
             public const string TopicGettingStarted = "help-section-getting-started";
         }
     }
