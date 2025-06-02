@@ -25,12 +25,18 @@
 	<div class="col-4">
 		<p>To change your password, enter your current password and then choose a new one. Make sure your new password is strong and secure.</p>
 		<h4>Steps</h4>
-		<ol>
-			<li>Enter your current password</li>
-			<li>Enter your new password</li>
-			<li>Confirm the new password in the confirmation box.</li>
-			<li>Click the submit button.</li>
+		<ol id="change-password-steps">
+			<li data-index="0">Select [Settings] Menu</li>
+			<li data-index="1">Choose [Change Password] Menu</li>
+			<li data-index="2">Enter your current password</li>
+			<li data-index="3">Enter your new password and confirm</li>
+			<li data-index="4">Click [Change Password] Button</li>
+			<li data-index="5">Review and correct any errors</li>
+			<li data-index="6">Confirmation</li>
 		</ol>
+        <h4>Action</h4>
+        <p id='change-password-action'></p>
+        <h4>Notes</h4>
 		<i>If any validation errors occur, they will be displayed in RED and must be corrected before your changes will be accepted.</i>
 	</div>
     <div class="col-8">
@@ -38,12 +44,12 @@
         <!-- Indicators -->
         <div class="carousel-indicators">
           <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='0' class='active' aria-current='true' aria-label='Choose Settings'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='1' aria-label='Select [Change Password] Menu'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='2' aria-label='Enter Current Password'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='3' aria-label='Enter New Password And Confirm'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='4' aria-label='Click [Change Password] Button'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='5' aria-label='Correct Errors'></button>
-<button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='6' aria-label='Change Confirmation'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='1' aria-label='Select [Change Password] Menu'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='2' aria-label='Enter Current Password'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='3' aria-label='Enter New Password And Confirm'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='4' aria-label='Click [Change Password] Button'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='5' aria-label='Correct Errors'></button>
+            <button type='button' data-bs-target='#changePasswordCarousel' data-bs-slide-to='6' aria-label='Change Confirmation'></button>
         </div>
 
         <!-- Slides -->
@@ -55,42 +61,42 @@
               <p>From top menu click Settings</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-01.png" class="d-block w-100" alt="Select [Change Password] Menu">
             <div class="carousel-caption d-none d-md-block">
               <h5>Select [Change Password] Menu</h5>
               <p>Choose [Change Password] and the Settings Window will open.</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-02.png" class="d-block w-100" alt="Enter Current Password">
             <div class="carousel-caption d-none d-md-block">
               <h5>Enter Current Password</h5>
               <p>Enter your current password in the first text box</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-03.png" class="d-block w-100" alt="Enter New Password And Confirm">
             <div class="carousel-caption d-none d-md-block">
               <h5>Enter New Password And Confirm</h5>
               <p>Enter your new password in the second text box and confirm in the third text box</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-04.png" class="d-block w-100" alt="Click [Change Password] Button">
             <div class="carousel-caption d-none d-md-block">
               <h5>Click [Change Password] Button</h5>
               <p>Click [Change Password] Button to submit and change password.</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-05.png" class="d-block w-100" alt="Correct Errors">
             <div class="carousel-caption d-none d-md-block">
               <h5>Correct Errors</h5>
               <p>Correct any errors if found, and click [Change Password] again to retry.</p>
             </div>
           </div>
-<div class="carousel-item">
+        <div class="carousel-item">
             <img src="../img/help-account-settings-change-password-06.png" class="d-block w-100" alt="Change Confirmation">
             <div class="carousel-caption d-none d-md-block">
               <h5>Change Confirmation</h5>

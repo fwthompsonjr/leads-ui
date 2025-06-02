@@ -32,7 +32,30 @@ let account_settings = {
     "onload": function () {
         const listItems = document.querySelectorAll('.account-settings ul li');
         const accordionItems = document.querySelectorAll('.accordion-item');
+        const carousel = document.getElementById('changePasswordCarousel');
+        const steps = document.querySelectorAll('#change-password-steps li');
+        const dvpwdcaptions = carousel.querySelectorAll(".carousel-caption")
 
+        dvpwdcaptions.forEach(dvi => {
+            let childern = Array.prototype.slice.call(dvi.children, 0);
+            childern.forEach(c => c.classList.add('d-none'));
+        });
+        carousel.addEventListener('slid.bs.carousel', function (event) {
+            const activeIndex = event.to;
+
+            steps.forEach((step, index) => {
+                let dvi = dvpwdcaptions[index];
+                let childern = Array.prototype.slice.call(dvi.children, 0);
+                let txt = childern[1].innerText;
+                let actionTbx = document.getElementById('change-password-action');
+                if (null !== actionTbx) { actionTbx.innerText = txt; }
+                if (index === activeIndex) {
+                    step.classList.add('text-primary');
+                } else {
+                    step.classList.remove('text-primary');
+                }
+            });
+        });
         accordionItems.forEach((item, index) => {
             const button = item.querySelector('.accordion-button');
             const collapse = item.querySelector('.accordion-collapse');
@@ -40,7 +63,6 @@ let account_settings = {
             // When accordion is shown
             collapse.addEventListener('show.bs.collapse', () => {
                 button.classList.add('text-primary');
-
                 // Match <li> by innerText
                 const label = button.textContent.trim();
                 listItems.forEach(li => {
@@ -62,6 +84,21 @@ let account_settings = {
                 });
             });
         });
+    },
+    "highlight_selection": function (indx) {
+        if (isNaN(indx)) { return; }
+        let ul = Array.prototype.slice.call(document.getElementsByTagName('ul'), 0);
+        let ulsteps = ul.find(x => x.getAttribute('name') == 'change-password-steps');
+        if (null == ulsteps) { return; }
+        let items = Array.prototype.slice.call(ulsteps.getElementsByTagName('li'), 0);
+        for (let i = 0; i < items.length; i++) {
+            let li = items[i];
+            if (i == indx) {
+                li.classList.add('text-primary');
+            } else {
+                li.classList.remove('text-primary');
+            }
+        }
     }
 }
 
