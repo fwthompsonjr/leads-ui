@@ -322,4 +322,37 @@
   <data name="help-account-settings-view-searches-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help-account-settings-view-searches-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="help-account-settings-view-invoices-00" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-00.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-07" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-07.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-09" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-09.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-account-settings-view-invoices" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-view-invoices.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

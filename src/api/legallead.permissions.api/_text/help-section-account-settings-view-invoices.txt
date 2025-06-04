@@ -1,0 +1,107 @@
+
+		<!-- begin of dv-accordion-item-view-invoices -->
+		<div id="dv-accordion-item-view-invoices" class="accordion-item">
+			<h2 class="accordion-header" id="headingInvoices">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInvoices" aria-expanded="false" aria-controls="collapseInvoices">
+				View Invoices
+				</button>
+			</h2>
+			<div id="collapseInvoices" class="accordion-collapse collapse" aria-labelledby="headingInvoices" data-bs-parent="#accountSettingsAccordion">
+				<div class="accordion-body">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-4">
+								<p>Here you can view any and manage your invoices with following options:</p>        
+								<ul id="view-invoices-sections">
+									<li data-context='display'>Display list of all invoices for your account</li>
+									<li data-context='select'>Select an invoice</li>
+									<li data-context='payment'>Paying an open invoice</li>
+									<li data-context='reload'>Reload invoice details</li>
+								</ul>
+								<div id="dv-view-invoices-actions">
+									<h4>Action</h4>
+									<ol id='ol-view-invoices-actions-fields' data-context='display' class=''>
+										<li data-index='0'>Choose [Invoice History] from the [Settings] menu</li>
+										<li data-index='1'>Data is sorted by County and Invoice Date</li>
+										<li data-index='2'>The number of items is displayed in RecordCount column</li>
+										<li data-index='3'>The total number of leads found is displayed in top menu.</li>
+									</ol>
+									<ol id='ol-view-invoices-actions-filter' data-context='select' class='d-none'>
+										<li data-index='4'>Click on a row in grid to view/manage invoice</li>
+										<li data-index='5'>Click [View Invoice] to see details</li>
+									</ol>
+									<ol id='ol-view-invoices-actions-payment' data-context='payment' class='d-none'>
+										<li data-index='6'>When an invoice is selected [Pay Invoice] may be enabled</li>
+										<li data-index='7'>Click [Pay Invoice] to load payment processing view</li>
+									</ol>
+									<ol id='ol-view-invoices-actions-reload' data-context='reload' class='d-none'>
+										<li data-index='8'>Click the [Reload] button</li>
+										<li data-index='9'>List content is refreshed with latest details.</li>
+									</ol>
+								</div>
+							</div>
+							<div class="col-8">
+								<div id="viewInvoicesCarousel" class="carousel slide" data-bs-ride="carousel">
+									<!-- Indicators -->
+									<div class="carousel-indicators">
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='0' class='active' aria-current='true' aria-label='Select [My Profile] Menu'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='1' aria-label='Select [Name] Option'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='2' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='3' aria-label='Handle Errors And Complete'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='4' aria-label='Select [Phone] Option'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='5' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='6' aria-label='Handle Errors'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='7' aria-label='Confirmation'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='8' aria-label='Select [Email] Option'></button>
+										<button type='button' data-bs-target='#viewInvoicesCarousel' data-bs-slide-to='9' aria-label='Select [Email] Option'></button>
+									</div>
+									<!-- Slides -->
+									<div class="carousel-inner">
+										  <div data-context='display' class="carousel-item active">
+											<img src="../img/help-account-settings-view-invoices-00.png" class="d-block w-100" alt="Select [My Profile] Menu">
+										  </div>
+										  <div data-context='display' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-01.png" class="d-block w-100" alt="Select [Name] Option">
+										  </div>
+										  <div data-context='display' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-02.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='display' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-03.png" class="d-block w-100" alt="Handle Errors And Complete">
+										  </div>
+										  <div data-context='select' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-04.png" class="d-block w-100" alt="Select [Phone] Option">
+										  </div>
+										  <div data-context='select' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-05.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='select' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-06.png" class="d-block w-100" alt="Handle Errors">
+										  </div>
+										  <div data-context='select' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-07.png" class="d-block w-100" alt="Confirmation">
+										  </div>
+										  <div data-context='payment' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-08.png" class="d-block w-100" alt="Select [Email] Option">
+										  </div>
+										  <div data-context='payment' class="carousel-item">
+											<img src="../img/help-account-settings-view-invoices-09.png" class="d-block w-100" alt="Select [Email] Option">
+										  </div>
+									</div>
+									<!-- Controls -->
+									<button class="carousel-control-prev" type="button" data-bs-target="#viewInvoicesCarousel" data-bs-slide="prev">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Previous</span>
+									</button>
+									<button class="carousel-control-next" type="button" data-bs-target="#viewInvoicesCarousel" data-bs-slide="next">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Next</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div> 
+		<!-- end of dv-accordion-item-view-invoices -->

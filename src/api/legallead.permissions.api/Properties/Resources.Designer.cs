@@ -327,6 +327,106 @@ namespace legallead.permissions.api.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] help_account_settings_view_invoices_00 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-00", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_01 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-01", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_02 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-02", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_03 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-03", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_04 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-04", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_05 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-05", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_06 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-06", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_07 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-07", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_08 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-08", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_invoices_09 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-invoices-09", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] help_account_settings_view_profile_00 {
             get {
                 object obj = ResourceManager.GetObject("help-account-settings-view-profile-00", resourceCulture);
@@ -620,6 +720,16 @@ namespace legallead.permissions.api.Properties {
         internal static byte[] help_section_account_settings_change_password {
             get {
                 object obj = ResourceManager.GetObject("help-section-account-settings-change-password", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_section_account_settings_view_invoices {
+            get {
+                object obj = ResourceManager.GetObject("help-section-account-settings-view-invoices", resourceCulture);
                 return ((byte[])(obj));
             }
         }
