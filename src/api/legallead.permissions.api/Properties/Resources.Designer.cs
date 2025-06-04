@@ -477,6 +477,96 @@ namespace legallead.permissions.api.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] help_account_settings_view_searches_00 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-00", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_01 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-01", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_02 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-02", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_03 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-03", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_04 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-04", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_05 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-05", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_06 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-06", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_07 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-07", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_account_settings_view_searches_08 {
+            get {
+                object obj = ResourceManager.GetObject("help-account-settings-view-searches-08", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] help_base_layout {
             get {
                 object obj = ResourceManager.GetObject("help-base-layout", resourceCulture);
@@ -540,6 +630,16 @@ namespace legallead.permissions.api.Properties {
         internal static byte[] help_section_account_settings_view_profile {
             get {
                 object obj = ResourceManager.GetObject("help-section-account-settings-view-profile", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] help_section_account_settings_view_searches {
+            get {
+                object obj = ResourceManager.GetObject("help-section-account-settings-view-searches", resourceCulture);
                 return ((byte[])(obj));
             }
         }

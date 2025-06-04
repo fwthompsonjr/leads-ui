@@ -292,4 +292,34 @@
   <data name="help-section-account-settings-view-profile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_text\help-section-account-settings-view-profile.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="help-section-account-settings-view-searches" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-view-searches.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-00" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-00.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-07" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-07.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

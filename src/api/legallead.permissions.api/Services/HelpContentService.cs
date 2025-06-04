@@ -59,6 +59,8 @@ namespace legallead.permissions.api.Services
             builder.Replace(SectionNames.TopicAccountChangePwdPlaceHolder, changePwd);
             var myprofile = GetKey(SectionNames.TopicAccountSettingsMyProfile) ?? string.Empty;
             builder.Replace(SectionNames.TopicAccountMyProfilePlaceHolder, myprofile);
+            var mysearches = GetKey(SectionNames.TopicAccountSettingsMySearches) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountMySearchesPlaceHolder, mysearches);
             return builder.ToString().StandardizeBody();
 
         }
@@ -73,6 +75,7 @@ namespace legallead.permissions.api.Services
             { SectionNames.TopicAccountSettings, "" },
             { SectionNames.TopicAccountSettingsChangePwd, "" },
             { SectionNames.TopicAccountSettingsMyProfile, "" },
+            { SectionNames.TopicAccountSettingsMySearches, "" },
         };
         internal static class SectionNames
         {
@@ -83,10 +86,12 @@ namespace legallead.permissions.api.Services
             public const string TopicsPlaceHolder = "<!-- include section topic details -->";
             public const string TopicAccountChangePwdPlaceHolder = "<!-- help-section-account-settings-change-password -->";
             public const string TopicAccountMyProfilePlaceHolder = "<!-- help-section-account-settings-view-profile -->";
+            public const string TopicAccountMySearchesPlaceHolder = "<!-- help-section-account-settings-view-searches -->";
             public const string TopicAccountSettings = "help-section-account-settings";
             public const string TopicAccountSettingsChangePwd = "help-section-account-settings-change-password";
             public const string TopicGettingStarted = "help-section-getting-started";
             public const string TopicAccountSettingsMyProfile = "help-section-account-settings-view-profile";
+            public const string TopicAccountSettingsMySearches = "help-section-account-settings-view-searches";
         }
     }
 }

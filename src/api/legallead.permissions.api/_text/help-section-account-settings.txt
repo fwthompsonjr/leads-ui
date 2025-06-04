@@ -15,18 +15,7 @@
 		<!-- help-section-account-settings-view-profile -->
 
 		<!-- View Search History -->
-		<div id="dv-accordion-item-search-history" class="accordion-item">
-			<h2 class="accordion-header" id="headingSearchHistory">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSearchHistory" aria-expanded="false" aria-controls="collapseSearchHistory">
-				View Search History
-				</button>
-			</h2>
-			<div id="collapseSearchHistory" class="accordion-collapse collapse" aria-labelledby="headingSearchHistory" data-bs-parent="#accountSettingsAccordion">
-				<div class="accordion-body">
-				<p>Review your recent searches and manage your search history. You can clear individual items or your entire history.</p>
-				</div>
-			</div>
-		</div> <!-- end of dv-accordion-item-search-history -->
+		<!-- help-section-account-settings-view-searches -->
 
 		<!-- View Invoices -->
 		<div id="dv-accordion-item-view-invoices" class="accordion-item">

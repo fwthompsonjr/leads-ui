@@ -1,7 +1,5 @@
 ﻿<script name="help-page-js">
 
-
-
 const actv = "active"
 const storage_key = 'theme';
 const toggleButton = document.getElementById('darkModeToggle');
@@ -89,6 +87,66 @@ let view_profile = {
         });
     }
 }
+
+let view_searches = {
+    onload: function () {
+        const carousel = document.getElementById('viewSearchHistoryCarousel');
+
+        if (null == carousel || undefined == carousel) return;
+        view_searches.set_section('fields');
+        view_searches.set_action('fields');
+        view_searches.set_item(0);
+        const dvitems = carousel.querySelectorAll(".carousel-item")
+
+        carousel.addEventListener('slid.bs.carousel', function (event) {
+            const activeIndex = event.to;
+            const dv = dvitems[activeIndex];
+            view_searches.set_item(activeIndex);
+            let dcontext = dv.getAttribute('data-context');
+            if (null != dcontext && undefined != dcontext) {
+                view_searches.set_section(dcontext);
+                view_searches.set_action(dcontext);
+            }
+        });
+    },
+    set_section: function (name) {
+        const sections = document.getElementById('view-searches-sections');
+        let li = sections.querySelectorAll('li[data-context]');
+        li.forEach(l => {
+            let isactive = l.getAttribute('data-context') == name;
+            if (isactive) {
+                l.classList.add('text-primary');
+            } else {
+                l.classList.remove('text-primary');
+            }
+        });
+    },
+    set_action: function (name) {
+        const sections = document.getElementById('dv-view-searches-actions');
+        let lists = sections.querySelectorAll('ol');
+        lists.forEach(l => {
+            let isactive = l.getAttribute('data-context') == name;
+            if (isactive) {
+                l.classList.remove('d-none');
+            } else {
+                l.classList.add('d-none');
+            }
+        });
+    },
+    set_item: function (id) {
+        const sections = document.getElementById('dv-view-searches-actions');
+        let lists = sections.querySelectorAll('li[data-index]');
+        lists.forEach(l => {
+            let isactive = l.getAttribute('data-index') == id;
+            if (isactive) {
+                l.classList.add('text-info');
+            } else {
+                l.classList.remove('text-info');
+            }
+        });
+    }
+}
+
 let account_settings = {
     "onload": function () {
         const listItems = document.querySelectorAll('.account-settings ul li');
@@ -243,6 +301,7 @@ let orchestrator = {
         orchestrator.placeholder();
         window.addEventListener('DOMContentLoaded', account_settings.onload);
         window.addEventListener('DOMContentLoaded', view_profile.onload);
+        window.addEventListener('DOMContentLoaded', view_searches.onload);
         account_settings.handle_click();
     }
 }
