@@ -29,6 +29,7 @@ namespace legallead.permissions.api.Controllers
         {
             { "account-settings", HelpContentService.SectionNames.TopicAccountSettings },
             { "getting-started", HelpContentService.SectionNames.TopicGettingStarted },
+            { "billing", HelpContentService.SectionNames.TopicBilling },
         };
     }
 }

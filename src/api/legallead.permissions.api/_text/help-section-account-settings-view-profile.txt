@@ -1,0 +1,132 @@
+
+		<!-- begin of dv-accordion-item-view-profile -->
+		<div id="dv-accordion-item-view-profile" class="accordion-item">
+			<h2 class="accordion-header" id="headingProfile">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
+				View Profile
+				</button>
+			</h2>
+			<div id="collapseProfile" class="accordion-collapse collapse" aria-labelledby="headingProfile" data-bs-parent="#accountSettingsAccordion">
+				<div class="accordion-body">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-4">
+								<p>Here you can view and update your personal information such as:</p>        
+								<ul id="view-profile-sections">
+									<li data-context='name'>Name</li>
+									<li data-context='phone'>Phone Number</li>
+									<li data-context='email'>Email Address</li>
+									<li data-context='address'>Physical Address</li>
+								</ul>
+								<div id="dv-view-profile-actions">
+									<h4>Action</h4>
+									<ol id='ol-view-profile-actions-name' data-context='name' class=''>
+										<li data-index='0'>Choose [My Profile] from the [Settings] menu</li>
+										<li data-index='1'>Edit Name fields by entering First Name, Last Name and Company Name</li>
+										<li data-index='2'>Click [Submit] to validate/continue</li>
+										<li data-index='3'>Repeat [Submit], if needed until confirmation is shown.</li>
+									</ol>
+									<ol id='ol-view-profile-actions-phone' data-context='phone' class='d-none'>
+										<li data-index='4'>Select [Phone] in Group Name list</li>
+										<li data-index='5'>Edit Phone fields by entering entering a valid or blank phone number</li>
+										<li data-index='6'>Handle any errors displayed after clicking [Submit]</li>
+										<li data-index='7'>Repeat [Submit], if needed until confirmation is shown.</li>
+									</ol>
+									<ol id='ol-view-profile-actions-email' data-context='email' class='d-none'>
+										<li data-index='8'>Select [Email] in Group Name list</li>
+										<li data-index='9'>Edit Email fields by entering entering a valid or blank email address</li>
+										<li data-index='10'>Handle any errors displayed after clicking [Submit]</li>
+										<li data-index='11'>Repeat [Submit], if needed until confirmation is shown.</li>
+									</ol>
+									<ol id='ol-view-profile-actions-address' data-context='address' class='d-none'>
+										<li data-index='12'>Select [Address Type] in Group Name list</li>
+										<li data-index='13'>Edit Address fields by entering entering a US postal address, using two-digit state code</li>
+										<li data-index='14'>Repeat [Submit], if needed until confirmation is shown.</li>
+									</ol>
+								</div>
+							</div>
+							<div class="col-8">
+								<div id="viewProfileCarousel" class="carousel slide" data-bs-ride="carousel">
+									<!-- Indicators -->
+									<div class="carousel-indicators">
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='0' class='active' aria-current='true' aria-label='Select [My Profile] Menu'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='1' aria-label='Select [Name] Option'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='2' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='3' aria-label='Handle Errors And Complete'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='4' aria-label='Select [Phone] Option'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='5' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='6' aria-label='Handle Errors'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='7' aria-label='Confirmation'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='8' aria-label='Select [Email] Option'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='9' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='10' aria-label='Handle Errors'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='11' aria-label='Confirmation'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='12' aria-label='Select an [Address] Option'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='13' aria-label='Populate Fields'></button>
+										<button type='button' data-bs-target='#viewProfileCarousel' data-bs-slide-to='14' aria-label='Confirmation'></button>
+									</div>
+									<!-- Slides -->
+									<div class="carousel-inner">
+										  <div data-context='name' class="carousel-item active">
+											<img src="../img/help-account-settings-view-profile-00.png" class="d-block w-100" alt="Select [My Profile] Menu">
+										  </div>
+										  <div data-context='name' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-01.png" class="d-block w-100" alt="Select [Name] Option">
+										  </div>
+										  <div data-context='name' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-02.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='name' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-03.png" class="d-block w-100" alt="Handle Errors And Complete">
+										  </div>
+										  <div data-context='phone' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-04.png" class="d-block w-100" alt="Select [Phone] Option">
+										  </div>
+										  <div data-context='phone' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-05.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='phone' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-06.png" class="d-block w-100" alt="Handle Errors">
+										  </div>
+										  <div data-context='phone' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-07.png" class="d-block w-100" alt="Confirmation">
+										  </div>
+										  <div data-context='email' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-08.png" class="d-block w-100" alt="Select [Email] Option">
+										  </div>
+										  <div data-context='email' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-09.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='email' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-10.png" class="d-block w-100" alt="Handle Errors">
+										  </div>
+										  <div data-context='email' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-11.png" class="d-block w-100" alt="Confirmation">
+										  </div>
+										  <div data-context='address' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-12.png" class="d-block w-100" alt="Select an [Address] Option">
+										  </div>
+										  <div data-context='address' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-13.png" class="d-block w-100" alt="Populate Fields">
+										  </div>
+										  <div data-context='address' class="carousel-item">
+											<img src="../img/help-account-settings-view-profile-14.png" class="d-block w-100" alt="Confirmation">
+										  </div>
+									</div>
+									<!-- Controls -->
+									<button class="carousel-control-prev" type="button" data-bs-target="#viewProfileCarousel" data-bs-slide="prev">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Previous</span>
+									</button>
+									<button class="carousel-control-next" type="button" data-bs-target="#viewProfileCarousel" data-bs-slide="next">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="visually-hidden">Next</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div> 
+		<!-- end of dv-accordion-item-view-profile -->

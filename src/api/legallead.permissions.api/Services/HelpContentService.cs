@@ -47,6 +47,7 @@ namespace legallead.permissions.api.Services
         {
             var topics = new List<string>()
             {
+                SectionNames.TopicBilling,
                 SectionNames.TopicGettingStarted,
                 SectionNames.TopicAccountSettings,
             };
@@ -55,6 +56,14 @@ namespace legallead.permissions.api.Services
             var builder = new StringBuilder( GetKey(SectionNames.BaseLayout) ?? string.Empty);
             if (!_resources.TryGetValue(name, out var key)) return builder.ToString();
             builder.Replace(SectionNames.TopicsPlaceHolder, key);
+            var changePwd = GetKey(SectionNames.TopicAccountSettingsChangePwd) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountChangePwdPlaceHolder, changePwd);
+            var myprofile = GetKey(SectionNames.TopicAccountSettingsMyProfile) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountMyProfilePlaceHolder, myprofile);
+            var mysearches = GetKey(SectionNames.TopicAccountSettingsMySearches) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountMySearchesPlaceHolder, mysearches);
+            var myinvoices = GetKey(SectionNames.TopicAccountSettingsMyInvoices) ?? string.Empty;
+            builder.Replace(SectionNames.TopicAccountMyInvoicesPlaceHolder, myinvoices);
             return builder.ToString().StandardizeBody();
 
         }
@@ -65,8 +74,13 @@ namespace legallead.permissions.api.Services
             { SectionNames.BaseCss, "" },
             { SectionNames.BaseJs, "" },
             { SectionNames.BaseMenu, "" },
+            { SectionNames.TopicBilling, "" },
             { SectionNames.TopicGettingStarted, "" },
             { SectionNames.TopicAccountSettings, "" },
+            { SectionNames.TopicAccountSettingsChangePwd, "" },
+            { SectionNames.TopicAccountSettingsMyProfile, "" },
+            { SectionNames.TopicAccountSettingsMySearches, "" },
+            { SectionNames.TopicAccountSettingsMyInvoices, "" },
         };
         internal static class SectionNames
         {
@@ -75,8 +89,17 @@ namespace legallead.permissions.api.Services
             public const string BaseJs = "help-js-base";
             public const string BaseMenu = "help-base-topics";
             public const string TopicsPlaceHolder = "<!-- include section topic details -->";
+            public const string TopicAccountChangePwdPlaceHolder = "<!-- help-section-account-settings-change-password -->";
+            public const string TopicAccountMyProfilePlaceHolder = "<!-- help-section-account-settings-view-profile -->";
+            public const string TopicAccountMySearchesPlaceHolder = "<!-- help-section-account-settings-view-searches -->";
+            public const string TopicAccountMyInvoicesPlaceHolder = "<!-- help-section-account-settings-view-invoices -->";
             public const string TopicAccountSettings = "help-section-account-settings";
+            public const string TopicAccountSettingsChangePwd = "help-section-account-settings-change-password";
+            public const string TopicBilling = "help-section-billing";
             public const string TopicGettingStarted = "help-section-getting-started";
+            public const string TopicAccountSettingsMyProfile = "help-section-account-settings-view-profile";
+            public const string TopicAccountSettingsMySearches = "help-section-account-settings-view-searches";
+            public const string TopicAccountSettingsMyInvoices = "help-section-account-settings-view-invoices";
         }
     }
 }

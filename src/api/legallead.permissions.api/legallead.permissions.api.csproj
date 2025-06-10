@@ -99,10 +99,6 @@
 	  </EmbeddedResource>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="_images\" />
-	</ItemGroup>
-
 	<Target Name="ZipOutputPath" AfterTargets="Build" Condition="'$(Configuration)' == 'Zip'">
 		<ZipDirectory SourceDirectory="$(OutputPath)" DestinationFile="$(MSBuildProjectDirectory)\$(ProjectName).zip" />
 	</Target>

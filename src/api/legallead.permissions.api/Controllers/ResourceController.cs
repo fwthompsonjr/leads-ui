@@ -15,8 +15,20 @@ namespace legallead.permissions.api.Controllers
             if (ImageContent.TryGetValue(shortName, out var scriptObj)) return File(scriptObj, mimeType);
             var imageObj = Properties.Resources.ResourceManager.GetObject(shortName);
             if (imageObj is not byte[] image) return NotFound($"Image {name} not found.");
-            ImageContent.Add(shortName, image);
+            AppendImage(shortName, image);
             return File(image, mimeType);
+        }
+
+        private static void AppendImage(string shortName, byte[] image)
+        {
+            try
+            {
+                ImageContent.Add(shortName, image);
+            }
+            catch (Exception)
+            {
+                // no action on error
+            }
         }
 
         [HttpGet]

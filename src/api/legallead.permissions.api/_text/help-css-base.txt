@@ -102,4 +102,37 @@ body.dark-mode .accordion-item {
   margin-bottom: 0.5rem;
 }
 
+/* Custom styles for carousel controls and inner buttons */
+button.carousel-control-prev,
+button.carousel-control-next,
+div.carousel-inner button {
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark background */
+    border: none;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.9;
+    transition: background-color 0.3s ease;
+    color: white; /* ensures text/icons are visible */
+}
+
+button.carousel-control-prev:hover,
+button.carousel-control-next:hover,
+div.carousel-inner button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1); /* makes the icon white */
+    width: 20px;
+    height: 20px;
+}
+div.billing p {
+    max-width: 75%;
+    margin-left: 10px;
+}
+
     </style>

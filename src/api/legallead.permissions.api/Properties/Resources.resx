@@ -241,4 +241,121 @@
   <data name="help-account-settings-change-password-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_images\help-account-settings-change-password-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="help-section-account-settings-change-password" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-change-password.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-00" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-00.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-07" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-07.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-09" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-09.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-10.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-11.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-12.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-13.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-profile-14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-profile-14.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-account-settings-view-profile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-view-profile.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-account-settings-view-searches" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-view-searches.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-00" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-00.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-07" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-07.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-searches-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-searches-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-00" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-00.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-01.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-02" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-02.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-03" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-03.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-04" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-04.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-05" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-05.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-06" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-06.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-07" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-07.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-08" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-08.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-account-settings-view-invoices-09" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\help-account-settings-view-invoices-09.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-account-settings-view-invoices" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-account-settings-view-invoices.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="help-section-billing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-billing.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

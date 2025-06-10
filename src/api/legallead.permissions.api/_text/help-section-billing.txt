@@ -1,0 +1,24 @@
+﻿<div class="billing">
+  <h2>🛠️ Billing: How Our Billing Works</h2>
+  <p>Welcome to our billing information page. 
+  The goal is to be transparent about the billing for the software and services.</p>
+
+  <h4>✅ Step 1. Initial Setup and Account Representative Support Fee:</h4>
+  <p>A one-time initial fee is required to set up an account.
+This fee covers the initial configuration of the software and includes support from a dedicated account representative to ensure a smooth onboarding process.
+This initial setup may involve data migration and tailoring the software to specific requirements, depending on the complexity of implementation.</p>
+  
+  <h4>✅ Step 2: Ad-Hoc Search Billing (Pay-Per-Record):</h4>
+  <p>After the initial setup, software usage is billed on an ad-hoc basis.
+A fee will be charged for each record searched within the software.
+This allows control over costs and the ability to scale usage based on business needs.
+The aim is to provide a fair and transparent pricing structure that reflects the value received from using the software.</p>
+  
+  <h4>✅ Step 3: Billing Cycle and Invoices:</h4>
+  <p>Invoices are generated on a per request basis.
+The invoice will detail the initial setup fee (if applicable) and a breakdown of ad-hoc search usage, including the number of records searched and the corresponding cost.
+Payment is due within 30 days of the invoice date.</p>
+
+  <h4>❓ Questions or Concerns:</h4>
+  <p>Contact your account representative or the customer support team with any billing questions.</p>
+</div>
