@@ -47,6 +47,7 @@ namespace legallead.permissions.api.Services
         {
             var topics = new List<string>()
             {
+                SectionNames.TopicBilling,
                 SectionNames.TopicGettingStarted,
                 SectionNames.TopicAccountSettings,
             };
@@ -73,6 +74,7 @@ namespace legallead.permissions.api.Services
             { SectionNames.BaseCss, "" },
             { SectionNames.BaseJs, "" },
             { SectionNames.BaseMenu, "" },
+            { SectionNames.TopicBilling, "" },
             { SectionNames.TopicGettingStarted, "" },
             { SectionNames.TopicAccountSettings, "" },
             { SectionNames.TopicAccountSettingsChangePwd, "" },
@@ -93,6 +95,7 @@ namespace legallead.permissions.api.Services
             public const string TopicAccountMyInvoicesPlaceHolder = "<!-- help-section-account-settings-view-invoices -->";
             public const string TopicAccountSettings = "help-section-account-settings";
             public const string TopicAccountSettingsChangePwd = "help-section-account-settings-change-password";
+            public const string TopicBilling = "help-section-billing";
             public const string TopicGettingStarted = "help-section-getting-started";
             public const string TopicAccountSettingsMyProfile = "help-section-account-settings-view-profile";
             public const string TopicAccountSettingsMySearches = "help-section-account-settings-view-searches";

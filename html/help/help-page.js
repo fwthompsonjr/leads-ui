@@ -209,6 +209,7 @@ let account_settings = {
         const listItems = document.querySelectorAll('.account-settings ul li');
         const accordionItems = document.querySelectorAll('.accordion-item');
         const carousel = document.getElementById('changePasswordCarousel');
+        if (null == carousel || undefined == carousel) return;
         const steps = document.querySelectorAll('#change-password-steps li');
         const dvpwdcaptions = carousel.querySelectorAll(".carousel-caption")
 

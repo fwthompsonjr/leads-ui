@@ -355,4 +355,7 @@
   <data name="help-section-account-settings-view-invoices" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_text\help-section-account-settings-view-invoices.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="help-section-billing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\_text\help-section-billing.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

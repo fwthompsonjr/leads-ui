@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.474.--",
+		"description": "API - help content",
+		"date": "2025-06-09 19:15:00"
+	},
+	{
 		"name": "3.2.473.--",
 		"description": "API - user profile - read write operations",
 		"date": "2025-06-01 15:05:00"

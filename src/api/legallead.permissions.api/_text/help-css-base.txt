@@ -130,6 +130,9 @@ div.carousel-inner button:hover {
     width: 20px;
     height: 20px;
 }
-
+div.billing p {
+    max-width: 75%;
+    margin-left: 10px;
+}
 
     </style>

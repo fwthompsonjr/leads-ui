@@ -757,6 +757,16 @@ namespace legallead.permissions.api.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] help_section_billing {
+            get {
+                object obj = ResourceManager.GetObject("help-section-billing", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] help_section_getting_started {
             get {
                 object obj = ResourceManager.GetObject("help-section-getting-started", resourceCulture);
