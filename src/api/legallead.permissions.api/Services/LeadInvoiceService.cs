@@ -85,7 +85,12 @@ namespace legallead.permissions.api.Services
             var updated = await UpdateInvoiceAsync(payload);
             return updated.IsUpdated;
         }
-
+        public async Task<bool> RemoveAdminDiscountAsync(string? invoiceId)
+        {
+            if (string.IsNullOrEmpty(invoiceId)) return false;
+            var response = await db.DeleteInvoiceAsync(invoiceId);
+            return response;
+        }
         public async Task<GetInvoiceResponse?> GetByCustomerIdAsync(string id)
         {
             var payload = new DbInvoiceViewBo { LeadUserId = id };
