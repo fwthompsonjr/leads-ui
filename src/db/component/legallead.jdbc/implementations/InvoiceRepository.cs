@@ -94,6 +94,23 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<bool> DeleteInvoiceAsync(string invoiceId)
+        {
+            try
+            {
+                var prc = ProcNames.ROLLBACK_INVOICE;
+                var parms = new DynamicParameters();
+                parms.Add(ProcParameterNames.InvoiceId, invoiceId);
+                using var connection = _context.CreateConnection();
+                await _command.ExecuteAsync(connection, prc, parms);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<List<DbInvoiceViewBo>?> QueryAsync(DbInvoiceViewBo query)
         {
             try
@@ -211,11 +228,13 @@ namespace legallead.jdbc.implementations
             public const string FIND_ALL = "CALL USP_LEADUSER_LIST_INVOICES ( );";
             public const string QUERY_ALL = "CALL USP_LEADUSER_QUERY_INVOICES ( ? );";
             public const string UPDATE_INVOICE = "CALL USP_LEADUSER_UPDATE_INVOICE ( ? );";
+            public const string ROLLBACK_INVOICE = "CALL USP_LEADUSER_ROLLBACK_INVOICE ( ? );";
         }
 
         private static class ProcParameterNames
         {
             public const string Js = "js_parameter";
+            public const string InvoiceId = "invoice_index";
         }
     }
 }
