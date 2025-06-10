@@ -1,15 +1,18 @@
 ﻿using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace legallead.permissions.api.Controllers
 {
     [Route("/db-invoice")]
     [ApiController]
     public class DbInvoicingController(
-    ILeadInvoiceService lead) : ControllerBase
+    ILeadInvoiceService lead,
+    ILeadAuthenicationService auth) : ControllerBase
     {
         private readonly ILeadInvoiceService _leadService = lead;
+        private readonly ILeadAuthenicationService _authService = auth;
         private static readonly string[] sourceArray = ["Customer", "Invoice"];
 
         [HttpPost("preview-invoice")]
@@ -46,10 +49,29 @@ namespace legallead.permissions.api.Controllers
             var id = index == 0 ? request.CustomerId : request.InvoiceId;
             if (string.IsNullOrEmpty(id))
                 return BadRequest($"Requested search index for {request.RequestType} is not provided");
-            var response = index == 0 ?
+            var response = (index == 0 ?
                 await _leadService.GetByCustomerIdAsync(id) :
-                await _leadService.GetByInvoiceIdAsync(id);
-            return Ok(response ?? new());
+                await _leadService.GetByInvoiceIdAsync(id)) ?? new();
+            if (index == 0 && HasZeroInvoice(Request, response))
+            {
+                RebuildInvoices(request, response);
+            }
+            return Ok(response);
+        }
+
+        private void RebuildInvoices(GetInvoiceRequest request, GetInvoiceResponse response)
+        {
+            // throw new NotImplementedException();
+        }
+
+        private bool HasZeroInvoice(HttpRequest request, GetInvoiceResponse response)
+        {
+            var user = _authService.GetUserModel(request, UserAccountAccess);
+            if (user == null) return false;
+            var hasZero = response.Headers.Any(x => x.InvoiceTotal.GetValueOrDefault() < 0.02m);
+            if (!hasZero) return false;
+            Debug.WriteLine(user.CountyData);
+            return false;
         }
 
         [HttpPost("get-invoice-status")]
@@ -73,5 +95,6 @@ namespace legallead.permissions.api.Controllers
 
         private static readonly StringComparer ooic = StringComparer.OrdinalIgnoreCase;
         private const StringComparison oic = StringComparison.OrdinalIgnoreCase;
+        private const string UserAccountAccess = "user account access credential";
     }
 }
