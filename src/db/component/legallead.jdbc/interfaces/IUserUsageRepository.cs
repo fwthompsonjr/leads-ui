@@ -107,5 +107,7 @@ namespace legallead.jdbc.interfaces
         Task<List<OfflineStatusModel>?> GetOfflineWorkQueueAsync();
         Task<List<MyProfileBo>?> GetMyProfileAsync(string leadId);
         Task<bool> UpdateMyProfileAsync(string leadId, IEnumerable<MyProfileBo> data);
+        Task<string> GetUserBillingTypeAsync(string leadId);
+        Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
     }
 }
