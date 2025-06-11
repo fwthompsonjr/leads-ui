@@ -1,7 +1,6 @@
 ﻿using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace legallead.permissions.api.Controllers
 {
@@ -54,14 +53,21 @@ namespace legallead.permissions.api.Controllers
                 await _leadService.GetByInvoiceIdAsync(id)) ?? new();
             if (index == 0 && HasZeroInvoice(Request, response))
             {
-                RebuildInvoices(request, response);
+                RebuildInvoices(response);
+                return await GetInvoicesAsync(request);
             }
             return Ok(response);
         }
 
-        private void RebuildInvoices(GetInvoiceRequest request, GetInvoiceResponse response)
+        private void RebuildInvoices(GetInvoiceResponse response)
         {
-            // throw new NotImplementedException();
+            var items = response.Headers.FindAll(x => x.InvoiceTotal.GetValueOrDefault() < 0.02m)
+                .Select(x => x.Id).Distinct().ToList();
+            items.ForEach(x =>
+            {
+                _ = Task.Run(() => { _ = _leadService.RemoveAdminDiscountAsync(x).Result; });
+            });
+
         }
 
         private bool HasZeroInvoice(HttpRequest request, GetInvoiceResponse response)
@@ -70,8 +76,9 @@ namespace legallead.permissions.api.Controllers
             if (user == null) return false;
             var hasZero = response.Headers.Any(x => x.InvoiceTotal.GetValueOrDefault() < 0.02m);
             if (!hasZero) return false;
-            Debug.WriteLine(user.CountyData);
-            return false;
+            var data = user.CountyData.ToInstance<List<CountyDataModel>>();
+            if (data == null || data.Count == 0) return false;
+            return data.Exists(x => x.MonthlyLimit.GetValueOrDefault() != -1);
         }
 
         [HttpPost("get-invoice-status")]
@@ -96,5 +103,11 @@ namespace legallead.permissions.api.Controllers
         private static readonly StringComparer ooic = StringComparer.OrdinalIgnoreCase;
         private const StringComparison oic = StringComparison.OrdinalIgnoreCase;
         private const string UserAccountAccess = "user account access credential";
+        private class CountyDataModel
+        {
+            public string LeadUserId { get; set; } = string.Empty;
+            public string CountyName { get; set; } = string.Empty;
+            public int? MonthlyLimit { get; set; }
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace legallead.permissions.api.Interfaces
         Task<GetInvoiceResponse?> GetByInvoiceIdAsync(string id);
         Task<string?> GetInvoiceStatusAsync(GetInvoiceRequest request);
         Task<List<LeadCustomerBo>?> GetOrCreateAccountAsync(CreateInvoiceAccountModel query);
+        Task<bool> RemoveAdminDiscountAsync(string? invoiceId);
         Task<UpdateInvoiceResponse> UpdateInvoiceAsync(UpdateInvoiceRequest request);
     }
 }
