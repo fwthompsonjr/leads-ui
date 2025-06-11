@@ -452,6 +452,50 @@ namespace legallead.jdbc.implementations
                 return false;
             }
         }
+
+        public async Task<string> GetUserBillingTypeAsync(string leadId)
+        {
+            const string testAccount = "TEST";
+            const string prc = ProcNames.BILLING_TYPE_GET; 
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.UserId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<UserPermissionView>(connection, prc, parameters);
+                if (response == null || !response.Any()) return testAccount;
+                var item = response.FirstOrDefault() ?? new();
+                if (string.IsNullOrWhiteSpace(item.KeyValue)) return testAccount;
+                return item.KeyValue.ToUpper();
+            }
+            catch (Exception)
+            {
+                return testAccount;
+            }
+        }
+
+        public async Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode)
+        {
+            const string testAccount = "TEST";
+            const string prc = ProcNames.BILLING_TYPE_SET;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.UserId, leadId);
+                parameters.Add(ProcParameterNames.BillingCode, paymentCode);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<UserPermissionView>(connection, prc, parameters);
+                if (response == null || !response.Any()) return testAccount;
+                var item = response.FirstOrDefault() ?? new();
+                if (string.IsNullOrWhiteSpace(item.KeyValue)) return testAccount;
+                return item.KeyValue.ToUpper();
+            }
+            catch (Exception)
+            {
+                return testAccount;
+            }
+        }
+
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -514,6 +558,8 @@ namespace legallead.jdbc.implementations
         private static class ProcNames
         {
             public const string APPEND_USAGE_RECORD = "CALL USP_USER_USAGE_APPEND_RECORD ( ? );";
+            public const string BILLING_TYPE_GET = "CALL USP_LEADUSER_GET_BILLING_TYPE ( ? )";
+            public const string BILLING_TYPE_SET = "CALL USP_LEADUSER_SET_BILLING_TYPE ( ?, ? )";
             public const string COMPLETE_USAGE_RECORD = "CALL USP_USER_USAGE_COMPLETE_RECORD ( ? );";
             public const string GET_MONTHLY_LIMIT_ALL = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT_ALL ( ? );";
             public const string GET_MONTHLY_LIMIT_BY_COUNTY = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT ( ?, ? );";
@@ -555,6 +601,8 @@ namespace legallead.jdbc.implementations
             public const string ItemCount = "item_count";
             public const string RetryCount = "retry_count";
             public const string CaseNo = "case_number";
+            public const string UserId = "user_index";
+            public const string BillingCode = "billing_code";
         }
     }
 }
