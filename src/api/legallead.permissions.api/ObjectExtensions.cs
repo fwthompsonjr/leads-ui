@@ -503,6 +503,8 @@ namespace legallead.permissions.api
                 ActiveName = keytype,
                 Items = items
             };
+            PaymentCodeService.SetCode("TEST", test);
+            PaymentCodeService.SetCode("PROD", prd);
             return _stripeKeyEntity;
         }
 

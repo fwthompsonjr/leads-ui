@@ -182,6 +182,23 @@ namespace legallead.permissions.api.Services
             if (data == null || data.Count == 0) return [];
             return data;
         }
+
+        public async Task<string> GetUserBillingTypeAsync(string leadId)
+        {
+            const string billingMode = "TEST";
+            var response = await db.GetUserBillingTypeAsync(leadId);
+            if (string.IsNullOrEmpty(response)) return billingMode;
+            return response.ToUpper();
+        }
+        
+        public async Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode)
+        {
+            const string billingMode = "TEST";
+            var response = await db.SetUserBillingTypeAsync(leadId, paymentCode);
+            if (string.IsNullOrEmpty(response)) return billingMode;
+            return response.ToUpper();
+        }
+
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
