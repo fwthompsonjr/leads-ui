@@ -109,5 +109,6 @@ namespace legallead.jdbc.interfaces
         Task<bool> UpdateMyProfileAsync(string leadId, IEnumerable<MyProfileBo> data);
         Task<string> GetUserBillingTypeAsync(string leadId);
         Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
+        Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId);
     }
 }

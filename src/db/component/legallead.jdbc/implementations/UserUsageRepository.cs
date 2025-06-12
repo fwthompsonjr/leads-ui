@@ -496,6 +496,23 @@ namespace legallead.jdbc.implementations
             }
         }
 
+        public async Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId)
+        {
+            const string prc = ProcNames.GET_USER_ADMIN_STATUS;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.LeadId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QuerySingleOrDefaultAsync<GetAdminStatusDto>(connection, prc, parameters);
+                if (response == null) return default;
+                return new() { Id = response.Id, IsAdmin = response.IsAdmin };
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -569,6 +586,7 @@ namespace legallead.jdbc.implementations
             public const string GET_USAGE_FILE_BY_ID = "CALL USP_LEADUSER_EXL_GET_FILENAME_BY_ID ( ? );";
             public const string GET_USAGE_SUMMARY_MTD = "CALL USP_USER_USAGE_GET_SUMMARY_MTD ( ?, ? );";
             public const string GET_USAGE_SUMMARY_YTD = "CALL USP_USER_USAGE_GET_SUMMARY_YTD ( ?, ? );";
+            public const string GET_USER_ADMIN_STATUS = "CALL USP_GET_LEADUSER_ADMIN_STATUS ( ? );";
             public const string SET_USAGE_LIMIT = "CALL USP_USER_USAGE_SET_MONTHLY_LIMIT ( ?, ?, ? );";
             public const string OFFLINE_BEGIN = "CALL USP_OFFLINESEARCH_BEGIN ( ?, ?, ?, ? );";
             public const string OFFLINE_UPDATE = "CALL USP_OFFLINESEARCH_UPDATE ( ?, ?, ?, ?, ? );";
