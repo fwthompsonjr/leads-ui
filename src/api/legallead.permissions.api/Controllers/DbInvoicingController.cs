@@ -125,6 +125,25 @@ namespace legallead.permissions.api.Controllers
         }
 
 
+        [HttpPost("get-billing-mode")]
+        public IActionResult GetBillingMode(GetInvoiceRequest request)
+        {
+            var allowed = sourceArray.ToList();
+            if (!allowed.Contains(request.RequestType, ooic))
+                return BadRequest($"Invoice search request type: {request.RequestType}");
+            var user = GetLead(Request);
+            var mode = GetBillingType(Request);
+            var obj = new { UserName = user?.UserName ?? "", BillingMode = mode };
+            return Ok(obj);
+        }
+
+        [HttpPost("set-billing-mode")]
+        public async Task<IActionResult> SetBillingModeAsync(SetBillingModeModel model)
+        {
+            var actual = await _usageService.SetUserBillingTypeAsync(model.Id, model.BillingCode);
+            var obj = new { RequestedCode = model.BillingCode, BillingMode = actual };
+            return Ok(obj);
+        }
         private void RebuildInvoices(GetInvoiceResponse response)
         {
             var items = response.Headers.FindAll(x => x.InvoiceTotal.GetValueOrDefault() < 0.02m)
