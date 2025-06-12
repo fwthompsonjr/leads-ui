@@ -48,5 +48,7 @@ namespace legallead.permissions.api.Interfaces
         Task<List<OfflineDataModel>?> GetOfflineWorkQueueAsync();
         Task<List<MyProfileBo>> GetUserProfileAsync(string leadId);
         Task<List<MyProfileBo>> UpdateUserProfileAsync(string leadId, List<MyProfileBo> updates);
+        Task<string> GetUserBillingTypeAsync(string leadId);
+        Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
     }
 }
