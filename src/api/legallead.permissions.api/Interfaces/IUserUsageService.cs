@@ -50,5 +50,6 @@ namespace legallead.permissions.api.Interfaces
         Task<List<MyProfileBo>> UpdateUserProfileAsync(string leadId, List<MyProfileBo> updates);
         Task<string> GetUserBillingTypeAsync(string leadId);
         Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
+        Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId);
     }
 }
