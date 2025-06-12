@@ -142,9 +142,10 @@ namespace legallead.permissions.api.Controllers
             if (user == null) return false;
             var hasZero = response.Headers.Any(x => x.InvoiceTotal.GetValueOrDefault() < 0.02m);
             if (!hasZero) return false;
-            var data = user.CountyData.ToInstance<List<CountyDataModel>>();
-            if (data == null || data.Count == 0) return false;
-            return data.Exists(x => x.MonthlyLimit.GetValueOrDefault() != -1);
+            var data = _usageService.GetUserAdminStatusAsync(user.Id).Result;
+            if (data == null) return false;
+            if (data.IsAdmin.GetValueOrDefault()) return false;
+            return true;
         }
 
         private string GetBillingType(HttpRequest request)
@@ -166,11 +167,5 @@ namespace legallead.permissions.api.Controllers
         private static readonly StringComparer ooic = StringComparer.OrdinalIgnoreCase;
         private const StringComparison oic = StringComparison.OrdinalIgnoreCase;
         private const string UserAccountAccess = "user account access credential";
-        private class CountyDataModel
-        {
-            public string LeadUserId { get; set; } = string.Empty;
-            public string CountyName { get; set; } = string.Empty;
-            public int? MonthlyLimit { get; set; }
-        }
     }
 }

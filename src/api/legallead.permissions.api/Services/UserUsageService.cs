@@ -199,6 +199,12 @@ namespace legallead.permissions.api.Services
             return response.ToUpper();
         }
 
+        public async Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId)
+        {
+            var data = await db.GetUserAdminStatusAsync(leadId);
+            return data;
+        }
+
         private static string Serialize(object? value)
         {
             if (value == null) return string.Empty;
