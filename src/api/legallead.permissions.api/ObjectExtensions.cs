@@ -13,6 +13,7 @@ using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using legallead.permissions.api.Utility;
 using legallead.Profiles.api.Controllers;
+using legallead.records.search.Classes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -489,10 +490,15 @@ namespace legallead.permissions.api
         private static StripeKeyEntity MapStripeKey(IConfiguration configuration)
         {
             if (_stripeKeyEntity != null) { return _stripeKeyEntity; }
+            const string decodeKey = "legal.lead.last.passcode";
             var webid = configuration.GetValue<string>("Payment:keys:webhook");
             var keytype = configuration.GetValue<string>("Payment:keys:active") ?? string.Empty;
             var test = configuration.GetValue<string>("Payment:keys:values:test") ?? string.Empty;
+            var testCode = configuration.GetValue<string>("Payment:keys:values:test-code") ?? string.Empty;
             var prd = configuration.GetValue<string>("Payment:keys:values:prod") ?? string.Empty;
+            var prdCode = configuration.GetValue<string>("Payment:keys:values:prod-code") ?? string.Empty;
+            test = CryptoEngine.Decrypt(test, decodeKey, testCode);
+            prd = CryptoEngine.Decrypt(prd, decodeKey, prdCode);
             var items = new List<StripeKeyItem> {
                 new() { Name="test", Value= test },
                 new() { Name="prod", Value= prd }
