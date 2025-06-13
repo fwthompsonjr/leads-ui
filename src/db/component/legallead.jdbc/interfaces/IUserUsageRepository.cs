@@ -110,5 +110,6 @@ namespace legallead.jdbc.interfaces
         Task<string> GetUserBillingTypeAsync(string leadId);
         Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
         Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId);
+        Task<List<UserPermissionHistoryBo>?> GetUserBillingTypeHistoryAsync(string leadId);
     }
 }
