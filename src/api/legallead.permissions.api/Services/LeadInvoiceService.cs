@@ -7,9 +7,11 @@ namespace legallead.permissions.api.Services
 {
     public class LeadInvoiceService(
         IInvoiceRepository repo,
+        IUserUsageService usage,
         PaymentStripeOption payment) : ILeadInvoiceService
     {
         private readonly IInvoiceRepository db = repo;
+        private readonly IUserUsageService usagedb = usage;
         private readonly PaymentStripeOption stripeoption = payment;
 
         public async Task<UpdateInvoiceResponse?> CreateRemoteInvoiceAsync(GetInvoiceRequest request)
@@ -41,27 +43,50 @@ namespace legallead.permissions.api.Services
                 LeadId = header.LeadUserId,
                 EmailAcct = header.Email
             };
+
+            if (!string.IsNullOrEmpty(header.LeadUserId))
+            {
+                // get the payment type of this customer
+                var billingType = usagedb.GetUserBillingTypeAsync(header.LeadUserId);
+                if (!billingType.Equals("TEST")) model.IsTesting = false;
+
+            }
             var customer = await GetOrCreateAccountAsync(model);
             if (customer == null || customer.Count == 0) return null;
-            var customerId = customer[0].CustomerId;
-
+            var customerId = customer.FirstOrDefault(x => x.IsTest.GetValueOrDefault(true) == model.IsTesting.GetValueOrDefault(true))?.CustomerId ?? "";
+            if (string.IsNullOrEmpty(customerId)) customerId = customer[0].CustomerId;
             if (string.IsNullOrEmpty(customerId)) return null;
-            var invoice = CreateInvoice(customerId, header, lines);
-            if (invoice == null) return null;
-            if (invoice.Id == lessThanMinIndex)
+
+            var mode = model.IsTesting.GetValueOrDefault(true) ? "TEST" : "PROD";
+            var currentApiKey = StripeConfiguration.ApiKey;
+            var requestedApiKey = PaymentCodeService.GetCode(mode);
+            try
             {
-                var completion = await PostInvoiceDetailsAsync(requestId, invoice);
-                if (completion == null) return null;
-                var finalDto = new UpdateInvoiceRequest
+                if (!string.IsNullOrEmpty(requestedApiKey) && !requestedApiKey.Equals(currentApiKey))
                 {
-                    UpdateType = "Complete",
-                    InvoiceId = requestId,
-                    InvoiceStatus = "PAID",
-                    InvoiceUri = invoice.InvoicePdf
-                };
-                return await UpdateInvoiceAsync(finalDto);
+                    StripeConfiguration.ApiKey = requestedApiKey;
+                }
+                var invoice = CreateInvoice(customerId, header, lines);
+                if (invoice == null) return null;
+                if (invoice.Id == lessThanMinIndex)
+                {
+                    var completion = await PostInvoiceDetailsAsync(requestId, invoice);
+                    if (completion == null) return null;
+                    var finalDto = new UpdateInvoiceRequest
+                    {
+                        UpdateType = "Complete",
+                        InvoiceId = requestId,
+                        InvoiceStatus = "PAID",
+                        InvoiceUri = invoice.InvoicePdf
+                    };
+                    return await UpdateInvoiceAsync(finalDto);
+                }
+                return await PostInvoiceDetailsAsync(requestId, invoice);
             }
-            return await PostInvoiceDetailsAsync(requestId, invoice);
+            finally
+            {
+                StripeConfiguration.ApiKey = currentApiKey;
+            }
         }
 
         public async Task<bool> CloseInvoiceAsync(string invoiceId)
@@ -110,7 +135,7 @@ namespace legallead.permissions.api.Services
 
             if (string.IsNullOrEmpty(query.EmailAcct))
                 throw new ArgumentOutOfRangeException(nameof(query));
-            query.IsTesting = IsTestPayment;
+            if (!query.IsTesting.HasValue) query.IsTesting = IsTestPayment;
 
             var found = await db.FindAccountAsync(new LeadCustomerBo
             {
@@ -207,8 +232,15 @@ namespace legallead.permissions.api.Services
         protected virtual string CreatePaymentAccount(CreateInvoiceAccountModel model)
         {
             if (string.IsNullOrWhiteSpace(model.EmailAcct)) return string.Empty;
+            var mode = model.IsTesting.GetValueOrDefault(true) ? "TEST" : "PROD";
+            var currentApiKey = StripeConfiguration.ApiKey;
+            var requestedApiKey = PaymentCodeService.GetCode(mode);
             try
             {
+                if (!string.IsNullOrEmpty(requestedApiKey) && !requestedApiKey.Equals(currentApiKey))
+                {
+                    StripeConfiguration.ApiKey = requestedApiKey;
+                }
                 var service = new Stripe.CustomerService();
                 var options = GenerateCreateOption(model.EmailAcct);
                 var account = service.Create(options);
@@ -217,6 +249,10 @@ namespace legallead.permissions.api.Services
             catch (Exception)
             {
                 return string.Empty;
+            }
+            finally
+            {
+                StripeConfiguration.ApiKey = currentApiKey;
             }
         }
 
@@ -381,7 +417,7 @@ namespace legallead.permissions.api.Services
                         { "RecordIndex", model.Id },
                     },
                 };
-                invoiceOptions.PaymentSettings.PaymentMethodTypes = ["card", "customer_balance"];
+                invoiceOptions.PaymentSettings.PaymentMethodTypes = ["card"];
                 var service = new InvoiceService();
                 var invoice = service.Create(invoiceOptions);
                 var lineService = new InvoiceItemService();

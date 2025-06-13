@@ -1,4 +1,5 @@
 ﻿using legallead.jdbc.interfaces;
+using legallead.permissions.api.Interfaces;
 using legallead.permissions.api.Models;
 using legallead.permissions.api.Services;
 using Stripe;
@@ -35,7 +36,7 @@ namespace permissions.api.tests.Services
 
         private sealed class LeadServiceMock(
         IInvoiceRepository repo,
-        PaymentStripeOption payment) : LeadInvoiceService(repo, payment)
+        PaymentStripeOption payment) : LeadInvoiceService(repo, new Mock<IUserUsageService>().Object, payment)
         {
             protected override string CreatePaymentAccount(CreateInvoiceAccountModel model)
             {
