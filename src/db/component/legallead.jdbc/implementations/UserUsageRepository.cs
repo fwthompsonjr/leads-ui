@@ -513,6 +513,25 @@ namespace legallead.jdbc.implementations
                 return default;
             }
         }
+
+        public async Task<List<UserPermissionHistoryBo>?> GetUserBillingTypeHistoryAsync(string leadId)
+        {
+            const string prc = ProcNames.BILLING_TYPE_HISTORY;
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add(ProcParameterNames.UserId, leadId);
+                using var connection = _context.CreateConnection();
+                var response = await _command.QueryAsync<UserPermissionHistory>(connection, prc, parameters);
+                if (response == null) return default;
+                return GenericMap<IEnumerable<UserPermissionHistory>, List<UserPermissionHistoryBo>>(response);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         private async Task<DbExcelNameDto?> GetExcelDetail(string requestId)
         {
             const string prc = ProcNames.GET_USAGE_FILE_BY_ID;
@@ -577,6 +596,7 @@ namespace legallead.jdbc.implementations
             public const string APPEND_USAGE_RECORD = "CALL USP_USER_USAGE_APPEND_RECORD ( ? );";
             public const string BILLING_TYPE_GET = "CALL USP_LEADUSER_GET_BILLING_TYPE ( ? )";
             public const string BILLING_TYPE_SET = "CALL USP_LEADUSER_SET_BILLING_TYPE ( ?, ? )";
+            public const string BILLING_TYPE_HISTORY = "CALL USP_LEADUSER_GET_BILLING_HISTORY ( ? )";
             public const string COMPLETE_USAGE_RECORD = "CALL USP_USER_USAGE_COMPLETE_RECORD ( ? );";
             public const string GET_MONTHLY_LIMIT_ALL = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT_ALL ( ? );";
             public const string GET_MONTHLY_LIMIT_BY_COUNTY = "CALL USP_USER_USAGE_GET_MONTHLY_LIMIT ( ?, ? );";
