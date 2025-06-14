@@ -3,7 +3,6 @@ using legallead.jdbc.interfaces;
 using legallead.permissions.api.Extensions;
 using legallead.permissions.api.Models;
 using Newtonsoft.Json;
-using StructureMap.Query;
 
 namespace legallead.permissions.api.Services
 {
@@ -190,7 +189,7 @@ namespace legallead.permissions.api.Services
             if (string.IsNullOrEmpty(response)) return billingMode;
             return response.ToUpper();
         }
-        
+
         public async Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode)
         {
             const string billingMode = "TEST";
@@ -202,6 +201,12 @@ namespace legallead.permissions.api.Services
         public async Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId)
         {
             var data = await db.GetUserAdminStatusAsync(leadId);
+            return data;
+        }
+
+        public async Task<List<UserPermissionHistoryBo>?> GetBillTypeHistoryAsync(string leadId)
+        {
+            var data = await db.GetUserBillingTypeHistoryAsync(leadId);
             return data;
         }
 

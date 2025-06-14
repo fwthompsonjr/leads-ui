@@ -347,6 +347,15 @@ namespace legallead.permissions.api.Controllers
             var rsp = await _usageService.UpdateUserProfileAsync(request.LeadId, data);
             return Ok(new { request.LeadId, Content = rsp });
         }
+
+        [HttpPost("get-bill-type-history")]
+        public async Task<IActionResult> GetBillTypeHistoryAsync(GetMyProfileRequest request)
+        {
+            var user = _leadService.GetUserModel(Request, UserAccountAccess);
+            if (user == null) return Unauthorized();
+            var rsp = await _usageService.GetBillTypeHistoryAsync(request.LeadId);
+            return Ok(rsp);
+        }
         private void StatusChanged(object? sender, BulkReadMessages e)
         {
             var find = offlineRequests.FirstOrDefault(x => x.OfflineRequestId == e.OfflineRequestId);
