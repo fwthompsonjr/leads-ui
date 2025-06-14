@@ -51,5 +51,6 @@ namespace legallead.permissions.api.Interfaces
         Task<string> GetUserBillingTypeAsync(string leadId);
         Task<string> SetUserBillingTypeAsync(string leadId, string paymentCode);
         Task<GetAdminStatusBo?> GetUserAdminStatusAsync(string leadId);
+        Task<List<UserPermissionHistoryBo>?> GetBillTypeHistoryAsync(string leadId);
     }
 }

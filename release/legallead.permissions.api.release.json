@@ -1,5 +1,10 @@
 [
 	{
+		"name": "3.2.479.--",
+		"description": "API - billing - allow fetch billing history",
+		"date": "2025-06-13 21:45:00"
+	},
+	{
 		"name": "3.2.478.--",
 		"description": "API - lead - toggle payment context per request",
 		"date": "2025-06-12 20:45:00"
