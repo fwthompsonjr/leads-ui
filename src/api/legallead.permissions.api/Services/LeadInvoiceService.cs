@@ -47,7 +47,7 @@ namespace legallead.permissions.api.Services
             if (!string.IsNullOrEmpty(header.LeadUserId))
             {
                 // get the payment type of this customer
-                var billingType = usagedb.GetUserBillingTypeAsync(header.LeadUserId);
+                var billingType = await usagedb.GetUserBillingTypeAsync(header.LeadUserId);
                 if (!billingType.Equals("TEST")) model.IsTesting = false;
 
             }
