@@ -91,6 +91,22 @@ namespace legallead.permissions.api.Controllers
                 }
                 return Ok(response);
         }
+
+        [HttpPost("get-invoice-by-tracking-index")]
+        public async Task<IActionResult> GetInvoiceByRequestIdAsync(GetInvoiceRequest request)
+        {
+            var rsp = await GetInvoicesAsync(request);
+            if (rsp is not OkObjectResult okObject) return rsp;
+            if (okObject.Value is not GetInvoiceResponse invoiceResponse) return BadRequest();
+            var found = invoiceResponse.Headers.Find(x => x.RequestId == request.InvoiceId);
+            if (found == null) return BadRequest();
+            return Ok(new GetInvoiceResponse
+            {
+                Headers = invoiceResponse.Headers.FindAll(x => x.Id == found.Id),
+                Lines = invoiceResponse.Lines.FindAll(x => x.Id == found.Id)
+            });
+        }
+
         [HttpPost("get-invoice-status")]
         public async Task<IActionResult> GetInvoiceStatusAsync(GetInvoiceRequest request)
         {
